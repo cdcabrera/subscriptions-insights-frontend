@@ -90,11 +90,9 @@ runProxy()
   local RUN_DOMAIN=$1
   local RUN_PORT=$2
   local RUN_CONFIG=$3
-  #local RUN_HOST="${3:-localhost}"
 
   docker stop -t 0 $RUN_NAME >/dev/null
 
-  #"insights:proxy": "docker stop -t 0 insightsproxy >/dev/null;
   if [ -z "$(docker images -q $RUN_CONTAINER)" ]; then
     echo "Setting up development Docker proxy container"
     docker pull $RUN_CONTAINER
