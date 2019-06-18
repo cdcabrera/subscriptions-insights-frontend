@@ -3,42 +3,42 @@
 #
 # Clone, build for local development
 #
-gitProxy()
+gitRepo()
 {
-  local REPO=$PROXY_REPO
-  local PROXYDIR=$DATADIR
-  local PROXYDIR_REPO=$DATADIR_REPO
+  local GITREPO=$1
+  local DIR=$2
+  local DIR_REPO=$3
 
-  mkdir -p $PROXYDIR
-  rm -rf $PROXYDIR/temp
-  (cd $PROXYDIR && git clone --depth=1 $REPO temp > /dev/null 2>&1)
+  mkdir -p $DIR
+  rm -rf $DIR/temp
+  (cd $DIR && git clone --depth=1 $GITREPO temp > /dev/null 2>&1)
 
   if [ $? -eq 0 ]; then
-    printf "\n${GREEN}Cloning Proxy repo...${NOCOLOR}"
+    printf "\n${GREEN}Cloning ${GITREPO}...${NOCOLOR}"
 
-    rm -rf $PROXYDIR_REPO
-    cp -R  $PROXYDIR/temp $PROXYDIR_REPO
+    rm -rf $DIR_REPO
+    cp -R  $DIR/temp $DIR_REPO
 
-    rm -rf $PROXYDIR/temp
-    rm -rf $PROXYDIR_REPO/.git
+    rm -rf $DIR/temp
+    rm -rf $DIR_REPO/.git
 
-    printf "${GREEN} clone success${NOCOLOR}\n"
+    printf "${GREEN}Clone SUCCESS${NOCOLOR}\n"
 
-  elif [ -d $PROXYDIR_REPO ]; then
-    printf "${YELLOW}Unable to connect, using cached Proxy repo...${NOCOLOR}\n"
+  elif [ -d $DIR_REPO ]; then
+    printf "${YELLOW}Unable to connect, using cached ${GITREPO}...${NOCOLOR}\n"
   else
-    printf "${RED}Build Error, cloning Proxy repo, unable to setup Docker${NOCOLOR}\n"
+    printf "${RED}Build Error cloning ${GITREPO}, unable to setup Docker${NOCOLOR}\n"
     exit 1
   fi
 }
 #
 #
-# Update hosts
+# Update hosts, use proxy repo script
 #
 updateHosts()
 {
-  local PROXYDIR=$DATADIR
-  local PROXYDIR_REPO=$DATADIR_REPO
+  local PROXYDIR=$1
+  local PROXYDIR_REPO=$2
 
   if [ $(cat /private/etc/hosts | grep -c "redhat.com") -eq 4 ]; then
     printf "${BLUE}Hosts already up-to-date${NOCOLOR}\n"
@@ -85,11 +85,11 @@ checkContainerRunning()
 #
 runProxy()
 {
-  local RUN_CONTAINER=$CONTAINER
-  local RUN_NAME=$CONTAINER_NAME
-  local RUN_DOMAIN=$1
-  local RUN_PORT=$2
-  local RUN_CONFIG=$3
+  local RUN_CONTAINER=$1
+  local RUN_NAME=$2
+  local RUN_DOMAIN=$3
+  local RUN_PORT=$4
+  local RUN_CONFIG=$5
 
   docker stop -t 0 $RUN_NAME >/dev/null
 
@@ -106,7 +106,7 @@ runProxy()
       RUN_CONFIG="-e CUSTOM_CONF=true -v ${RUN_CONFIG}:/config/spandx.config.js"
     fi
 
-    docker run -d --rm -p $RUN_PORT:1337 $RUN_CONFIG -e LOCAL_CHROME -e PLATFORM -e PORT -e LOCAL_API -e SPANDX_HOST -e SPANDX_PORT --name $RUN_NAME $RUN_CONTAINER >/dev/null
+    docker run -d --rm -p $RUN_PORT:1337 $RUN_CONFIG -e PLATFORM -e PORT -e LOCAL_API -e SPANDX_HOST -e SPANDX_PORT --name $RUN_NAME $RUN_CONTAINER >/dev/null
   fi
 
   checkContainerRunning $RUN_NAME
@@ -133,24 +133,36 @@ runProxy()
   DOMAIN="localhost"
   PORT=1337
   CONFIG=""
+  UPDATE=false
 
 
-  PROXY_REPO="https://github.com/RedHatInsights/insights-proxy.git"
+  REPO="https://github.com/RedHatInsights/insights-proxy.git"
   DATADIR="$(pwd)/.proxy"
   DATADIR_REPO="$(pwd)/.proxy/insights-proxy"
   CONTAINER="redhatinsights/insights-proxy"
   CONTAINER_NAME="insightsproxy"
 
-  while getopts p:c:d: option;
+  while getopts p:c:d:u option;
     do
       case $option in
         p ) PORT="$OPTARG";;
         c ) CONFIG="$OPTARG";;
         d ) DOMAIN="$OPTARG";;
+        u ) UPDATE=true;;
       esac
   done
 
-  gitProxy
-  updateHosts
-  runProxy $DOMAIN $PORT $CONFIG
+  if [ "$UPDATE" = true ]; then
+    printf "${YELLOW}Updating ${CONTAINER_NAME}, Docker and data...${NOCOLOR}\n"
+    docker stop -t 0 $CONTAINER_NAME
+    docker rmi -f $CONTAINER
+    printf "${GREEN}${CONTAINER_NAME} updated...${NOCOLOR}\n"
+    exit 0
+  fi
+
+  printf "${YELLOW}The review environment requires being able to proxy secure resources at runtime.${NOCOLOR}\n"
+
+  gitRepo $REPO $DATADIR $DATADIR_REPO
+  updateHosts $DATADIR $DATADIR_REPO
+  runProxy $CONTAINER $CONTAINER_NAME $DOMAIN $PORT $CONFIG
 }

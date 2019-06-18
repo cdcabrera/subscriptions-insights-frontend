@@ -18,9 +18,11 @@ coverage
 # repo
 dist
 build
+public/apps
 public/locales/*.json
 !public/locales/locales.json
 !public/locales/en.json
-.env
+!.env
 .env*.local
+.chrome
 .proxy
