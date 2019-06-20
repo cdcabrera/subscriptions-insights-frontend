@@ -18,12 +18,7 @@
   "insights": {
     "appname": "subscriptions-insights"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
+  "browserslist": [],
   "jest": {
     "coverageThreshold": {
       "global": {
@@ -64,9 +59,10 @@
     "build:pre": "rm -rf -- \"$(pwd)\"/build",
     "build:version": "sh ./scripts/version.sh",
     "release": "standard-version",
-    "start": "sh ./scripts/dev.chrome.sh; run-s -l api:dev start:js",
+    "start": "sh -ac '. ./.env.review; open https://ci.foo.redhat.com:1337/; run-p -l start:js api:review'",
     "start:js": "react-scripts start",
-    "start:review": "sh -ac '. ./.env.review; open https://ci.foo.redhat.com:1337/; run-p -l start:js api:review'",
+    "start:local": "sh ./scripts/dev.chrome.sh; run-s -l api:dev start:js",
+    "start:standalone": "rm ./.env.development.local; run-s -l api:dev start:js",
     "test": "run-s test:lint test:ci",
     "test:ci": "export CI=true; react-scripts test --env=jsdom --coverage",
     "test:clearCache": "react-scripts test --clearCache",
