@@ -14,7 +14,7 @@ gitRepo()
   (cd $DIR && git clone --depth=1 $GITREPO temp > /dev/null 2>&1)
 
   if [ $? -eq 0 ]; then
-    printf "\n${GREEN}Cloning ${GITREPO}...${NOCOLOR}"
+    printf "\n${GREEN}Cloning ${GITREPO} ...${NOCOLOR}"
 
     rm -rf $DIR_REPO
     cp -R  $DIR/temp $DIR_REPO
@@ -160,7 +160,7 @@ runProxy()
     exit 0
   fi
 
-  printf "${YELLOW}The review environment requires being able to proxy secure resources at runtime.${NOCOLOR}\n"
+  printf "${YELLOW}The proxy environment requires being able to access secure resources at runtime.${NOCOLOR}\n"
 
   gitRepo $REPO $DATADIR $DATADIR_REPO
   updateHosts $DATADIR $DATADIR_REPO

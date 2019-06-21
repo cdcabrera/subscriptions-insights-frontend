@@ -27,15 +27,32 @@ Specific uses:
 To serve content you'll need to have Docker, Node, and Yarn installed.
 
 Serving content comes in 3 variations
-- `$ yarn start`, Styled local run WITH the Insights proxy. 
-   
-  This requires access in order to be used, and you may be asked for your credentials during initial repository setup. The credentials are used to modify your `hosts` for local run.
-- `$ yarn start:local`, Styled local run, without the Insights proxy. 
+- `$ yarn start`, Styled local run, without the Insights proxy. 
   
   The cons to this are a lack of chroming aspects such as functional login and left navigation.
+- `$ yarn start:proxy`, Styled local run WITH the Insights proxy. 
+   
+  This requires access in order to be used, and you may be asked for your credentials during initial repository setup. The credentials are used to modify your `hosts` for local run.
 - `$ yarn start:standalone`, No Insights styling, just the straight GUI. 
   
   Useful for confirming issues between the Insights parent app vs the Subscriptions Insights GUI.
+  
+### Proxy failing to run?
+Occasionally the proxy setup will attempt to connect, acknowledge that it's connected, but then fail to load the GUI.
+Things to try:
+
+#### It's Docker?
+1. Stop the build
+1. Restart Docker
+1. Run the build again, `$ yarn start:proxy`
+
+#### It's Authentication?
+1. Stop the build
+1. Confirm you're logged in, connect if necessary
+1. Run the build again, `$ yarn start:proxy`
+
+#### It's still failing, and now I'm frustrated!
+You can take the easy way out and just run, `$ yarn start`, it'll be styled and use mock data but you'll have enough access to continue development. 
 
 ## Testing
 To test content you'll need to have Node and Yarn installed.

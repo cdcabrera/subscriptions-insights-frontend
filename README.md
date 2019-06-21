@@ -45,7 +45,7 @@ Setting Docker up on a Linux machine can include an additional convenience step.
      ```
 
 ### Serving Content
-This is the default context for running a local UI against the Insights proxy.
+This is the default context for running a local UI against mock styling.
 
   ```
   $ yarn start
