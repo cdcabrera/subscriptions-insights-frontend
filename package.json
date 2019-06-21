@@ -68,7 +68,7 @@
     "test:ci": "export CI=true; react-scripts test --env=jsdom --roots=./src --coverage",
     "test:clearCache": "react-scripts test --clearCache",
     "test:dev": "run-s test:lint test:local",
-    "test:integration": "jest ./tests/*",
+    "test:integration": "jest --roots=./tests",
     "test:integration-dev": "jest ./tests/* --watchAll",
     "test:lint": "eslint --ext=json --ext=js --ext=jsx src",
     "test:local": "react-scripts test --env=jsdom --roots=./src"
