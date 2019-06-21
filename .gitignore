@@ -26,3 +26,4 @@ public/locales/*.json
 .env*.local
 .chrome
 .proxy
+.docs
