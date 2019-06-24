@@ -14,3 +14,9 @@ jobs:
       env:
         - NAME=yarn
       script: yarn build
+      after_success: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/bootstrap.sh | bash -s
+env:
+  global:
+    - REPO="git@github.com:RedHatInsights/subscriptions-insights-frontend-build"
+    - REPO_DIR="subscriptions-insights-frontend-build"
+    - BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
