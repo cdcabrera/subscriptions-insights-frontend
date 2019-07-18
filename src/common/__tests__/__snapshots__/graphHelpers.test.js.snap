@@ -8,13 +8,13 @@ Array [
     "y": 56,
   },
   Object {
-    "label": "30 sockets on Jun 2 
+    "label": "30 sockets on Jun 2
  -26 from previous day",
     "x": "Jun 2",
     "y": 30,
   },
   Object {
-    "label": "40 sockets on Jun 3 
+    "label": "40 sockets on Jun 3
  +10 from previous day",
     "x": "Jun 3",
     "y": 40,
@@ -26,23 +26,23 @@ exports[`GraphHelpers should convert graph data and return zeroed usage array if
 Array [
   Object {
     "x": "Jun 1",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 2",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 3",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 4",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 5",
-    "y": 0,
+    "y": "0",
   },
 ]
 `;
@@ -51,34 +51,35 @@ exports[`GraphHelpers should convert graph data and returned zeroed array when u
 Array [
   Object {
     "x": "Jun 1",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 2",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 3",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 4",
-    "y": 0,
+    "y": "0",
   },
   Object {
     "x": "Jun 5",
-    "y": 0,
+    "y": "0",
   },
 ]
 `;
 
 exports[`GraphHelpers should have specific functions: helpers 1`] = `
 Object {
+  "chartDateFormat": "MMM D",
   "convertGraphData": [Function],
   "getGraphHeight": [Function],
   "getTooltipDimensions": [Function],
   "getTooltipFontSize": [Function],
-  "zeroedUsageArray": [Function],
+  "zeroedUsageData": [Function],
 }
 `;
 

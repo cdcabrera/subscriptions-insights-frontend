@@ -6,8 +6,8 @@ describe('GraphHelpers', () => {
   const { breakpoints } = helpers;
   const startDate = moment.utc(new Date('2019-06-01T00:00:00Z'));
   const endDate = moment.utc(new Date('2019-06-05T00:00:00Z'));
-  const tSockectsOn = 'sockets on';
-  const tFromPrevious = 'from previous day';
+  const socketLabel = 'sockets on';
+  const previousLabel = 'from previous day';
 
   it('should have specific functions', () => {
     expect(graphHelpers).toMatchSnapshot('helpers');
@@ -15,7 +15,7 @@ describe('GraphHelpers', () => {
 
   it('should convert graph data and return zeroed usage array if usage is empty', () => {
     expect(
-      graphHelpers.convertGraphData({ usage: [], startDate, endDate, tSockectsOn, tFromPrevious })
+      graphHelpers.convertGraphData({ usage: [], startDate, endDate, socketLabel, previousLabel })
     ).toMatchSnapshot('zeroed array');
   });
 
@@ -29,8 +29,8 @@ describe('GraphHelpers', () => {
         ],
         startDate,
         endDate,
-        tSockectsOn,
-        tFromPrevious
+        socketLabel,
+        previousLabel
       })
     ).toMatchSnapshot('usage populated');
   });
@@ -41,8 +41,8 @@ describe('GraphHelpers', () => {
         usage: [null], // unexpected usage, will throw exception
         startDate,
         endDate,
-        tSockectsOn,
-        tFromPrevious
+        socketLabel,
+        previousLabel
       })
     ).toMatchSnapshot('throws error');
   });

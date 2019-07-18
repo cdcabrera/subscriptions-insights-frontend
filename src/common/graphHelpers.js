@@ -1,54 +1,97 @@
 import moment from 'moment';
+import { rhelApiTypes } from '../types/rhelApiTypes';
+import { helpers } from './helpers';
 
 const chartDateFormat = 'MMM D';
 
-const zeroedUsageArray = (startDate, endDate) => {
+/**
+ * Generate a fallback graph with zeroed data
+ *
+ * @param startDate {string}
+ * @param endDate {string}
+ * @returns {Array}
+ */
+const zeroedUsageData = (startDate, endDate) => {
   const zeroedArray = [];
-  const diff = endDate.diff(startDate, 'days');
-  for (let i = 0; i < diff + 1; i++) {
-    const clone = moment(startDate);
-    zeroedArray.push({ x: clone.add(i, 'days').format(chartDateFormat), y: 0 });
+  const endDateStartDateDiff = moment(endDate).diff(startDate, 'days');
+
+  // todo: convert "y" back towards a number if/when we handle "chartDomain.y = [0, 100]" within helpers
+  for (let i = 0; i <= endDateStartDateDiff; i++) {
+    const clonedStartDate = moment(startDate);
+    zeroedArray.push({
+      x: clonedStartDate.add(i, 'days').format(chartDateFormat),
+      y: '0'
+    });
   }
+
   return zeroedArray;
 };
 
-const getLabel = (i, cores, previousCores, formattedDate, tSockectsOn, tFromPrevious) => {
-  if (i === 0) {
-    return `${cores} ${tSockectsOn} ${formattedDate}`;
-  }
+/**
+ * Apply label formatting
+ *
+ * @param cores {number}
+ * @param previousCores {number}
+ * @param formattedDate {string}
+ * @param socketLabel {string}
+ * @param previousLabel {string}
+ * @returns {string}
+ */
+const getLabel = ({ cores, previousCores, formattedDate, socketLabel, previousLabel }) => {
   const prev = cores - previousCores;
-  return `${cores} ${tSockectsOn} ${formattedDate} \r\n ${prev > -1 ? `+${prev}` : prev} ${tFromPrevious}`;
+  const label = `${cores} ${socketLabel} ${formattedDate}`;
+
+  if (previousCores === null) {
+    return label;
+  }
+
+  return `${label}\n ${prev > -1 ? '+' : ''}${prev} ${previousLabel}`;
 };
 
-const convertGraphData = ({ usage, startDate, endDate, tSockectsOn, tFromPrevious }) => {
-  /**
-   * convert json usage report from this format:
-   * {cores: 56, date: "2019-06-01T00:00:00Z", instance_count: 28}
-   * to this format:
-   * { x: 'Jun 1', y: 56, label: '56 Sockets on Jun 1 \r\n +5 from previous day' },
-   */
-  if (usage === undefined || usage.length === 0) {
-    return zeroedUsageArray(startDate, endDate);
-  }
+/**
+ * Convert graph data to usable format
+ * convert json usage report from this format:
+ *  {cores: 56, date: "2019-06-01T00:00:00Z", instance_count: 28}
+ * to this format:
+ *  { x: 'Jun 1', y: 56, label: '56 Sockets on Jun 1 \r\n +5 from previous day' }
+ *
+ * @param usage {Array}
+ * @param startDate {string}
+ * @param endDate {string}
+ * @param socketLabel {string}
+ * @param previousLabel {string}
+ * @returns {Array}
+ */
+const convertGraphData = ({ usage, startDate, endDate, socketLabel, previousLabel }) => {
+  let chartData = [];
+
   try {
-    const chartData = [];
     for (let i = 0; i < usage.length; i++) {
-      const formattedDate = moment.utc(usage[i].date).format(chartDateFormat);
-      const label = getLabel(
-        i,
-        usage[i].cores,
-        i > 0 ? usage[i - 1].cores : null,
+      const formattedDate = moment
+        .utc(usage[i][rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_DATE])
+        .format(chartDateFormat);
+
+      const label = getLabel({
+        cores: usage[i][rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_CORES],
+        previousCores: i > 0 ? usage[i - 1][rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_CORES] : null,
         formattedDate,
-        tSockectsOn,
-        tFromPrevious
-      );
-      chartData.push({ x: formattedDate, y: usage[i].cores, label });
+        socketLabel,
+        previousLabel
+      });
+
+      chartData.push({ x: formattedDate, y: usage[i][rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_CORES], label });
     }
-    return chartData;
   } catch (e) {
-    // todo: show error toast ?
-    return zeroedUsageArray(startDate, endDate);
+    if (!helpers.TEST_MODE) {
+      console.warn(`Malformed API response ${e.message}`);
+    }
   }
+
+  if (!chartData.length) {
+    chartData = zeroedUsageData(startDate, endDate);
+  }
+
+  return chartData;
 };
 
 const getGraphHeight = (breakpoints, currentBreakpoint) =>
@@ -83,15 +126,22 @@ const getTooltipFontSize = (breakpoints, currentBreakpoint) => {
   return 14;
 };
 
-const graphHelpers = { convertGraphData, getGraphHeight, getTooltipDimensions, getTooltipFontSize, zeroedUsageArray };
-
-export {
-  graphHelpers as default,
-  graphHelpers,
-  zeroedUsageArray,
+const graphHelpers = {
   chartDateFormat,
   convertGraphData,
   getGraphHeight,
   getTooltipDimensions,
-  getTooltipFontSize
+  getTooltipFontSize,
+  zeroedUsageData
+};
+
+export {
+  graphHelpers as default,
+  graphHelpers,
+  chartDateFormat,
+  convertGraphData,
+  getGraphHeight,
+  getTooltipDimensions,
+  getTooltipFontSize,
+  zeroedUsageData
 };

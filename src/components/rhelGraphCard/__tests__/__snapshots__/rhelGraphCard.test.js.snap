@@ -247,124 +247,124 @@ exports[`RhelGraphCard Component should render multiple states: error shows zero
 Object {
   "chartBarData": Array [
     Object {
+      "x": "May 31",
+      "y": "0",
+    },
+    Object {
       "x": "Jun 1",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 2",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 3",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 4",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 5",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 6",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 7",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 8",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 9",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 10",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 11",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 12",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 13",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 14",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 15",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 16",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 17",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 18",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 19",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 20",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 21",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 22",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 23",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 24",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 25",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 26",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 27",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 28",
-      "y": 0,
+      "y": "0",
     },
     Object {
       "x": "Jun 29",
-      "y": 0,
-    },
-    Object {
-      "x": "Jun 30",
-      "y": 0,
+      "y": "0",
     },
   ],
 }
@@ -441,124 +441,124 @@ exports[`RhelGraphCard Component should render multiple states: fulfilled 1`] = 
             data={
               Array [
                 Object {
+                  "x": "May 31",
+                  "y": "0",
+                },
+                Object {
                   "x": "Jun 1",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 2",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 3",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 4",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 5",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 6",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 7",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 8",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 9",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 10",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 11",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 12",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 13",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 14",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 15",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 16",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 17",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 18",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 19",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 20",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 21",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 22",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 23",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 24",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 25",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 26",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 27",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 28",
-                  "y": 0,
+                  "y": "0",
                 },
                 Object {
                   "x": "Jun 29",
-                  "y": 0,
-                },
-                Object {
-                  "x": "Jun 30",
-                  "y": 0,
+                  "y": "0",
                 },
               ]
             }

@@ -19,53 +19,58 @@ import { graphHelpers } from '../../common/graphHelpers';
 import { rhelApiTypes } from '../../types/rhelApiTypes';
 
 class RhelGraphCard extends React.Component {
-  state = { isOpen: false };
-
-  constructor(props) {
-    super(props);
-    const { startDate, endDate } = props;
-    this.endDate = endDate ? moment.utc(endDate) : moment();
-    this.startDate = startDate ? moment.utc(startDate) : moment().subtract(1, 'months');
-  }
+  state = { dropdownIsOpen: false };
 
   componentDidMount() {
-    const { getGraphReports } = this.props;
+    const { getGraphReports, startDate, endDate } = this.props;
 
     getGraphReports({
       [rhelApiTypes.RHSM_API_QUERY_GRANULARITY]: 'daily',
-      [rhelApiTypes.RHSM_API_QUERY_START_DATE]: this.startDate.toISOString(),
-      [rhelApiTypes.RHSM_API_QUERY_END_DATE]: this.endDate.toISOString()
+      [rhelApiTypes.RHSM_API_QUERY_START_DATE]: startDate.toISOString(),
+      [rhelApiTypes.RHSM_API_QUERY_END_DATE]: endDate.toISOString()
     });
   }
 
-  onToggle = isOpen => {
+  onToggle = dropdownIsOpen => {
     this.setState({
-      isOpen
+      dropdownIsOpen
     });
   };
 
   onSelect = () => {
     this.setState(prevState => ({
-      isOpen: !prevState.state.isOpen
+      dropdownIsOpen: !prevState.state.dropdownIsOpen
     }));
   };
 
   render() {
-    const { error, fulfilled, graphData, pending, t, breakpoints, currentBreakpoint } = this.props;
-    const { isOpen } = this.state;
+    const { error, fulfilled, graphData, pending, t, breakpoints, currentBreakpoint, startDate, endDate } = this.props;
+    const { dropdownIsOpen } = this.state;
+
+    const graphHeight = graphHelpers.getGraphHeight(breakpoints, currentBreakpoint);
+    const tooltipDimensions = graphHelpers.getTooltipDimensions(breakpoints, currentBreakpoint);
+
+    // todo: evaluate the granularity here: "daily" "weekly" etc. this may need to move towards the helpers
+    const chartDomain = { x: [0, 31] };
+
     let chartData;
 
     if (error) {
-      // todo: show error toast?
-      chartData = graphHelpers.zeroedUsageArray(this.startDate, this.endDate);
+      // todo: evaluate show error toast
+      // todo: this only fires on error, not in the event an array with a valid zero length.
+      // todo: we may need to combine error and fulfilled checks and handle the x and y axis defaults in the helpers
+      // note: specify a y range if we are showing the zeroed view
+      chartDomain.y = [0, 100];
+      chartData = graphHelpers.zeroedUsageData(startDate, endDate);
     }
+
     if (fulfilled) {
       chartData = graphHelpers.convertGraphData({
-        ...graphData,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        tSockectsOn: t('curiosity-graph.socketsOn', 'sockets on'),
-        tFromPrevious: t('curiosity-graph.fromPrevious', 'from previous day')
+        usage: graphData.usage,
+        startDate,
+        endDate,
+        socketLabel: t('curiosity-graph.socketsOn', 'sockets on'),
+        previousLabel: t('curiosity-graph.fromPrevious', 'from previous day')
       });
     }
 
@@ -75,14 +80,6 @@ class RhelGraphCard extends React.Component {
       </DropdownToggle>
     );
 
-    // heights are breakpoint specific since they are scaled via svg
-    const graphHeight = graphHelpers.getGraphHeight(breakpoints, currentBreakpoint);
-    const tooltipDimensions = graphHelpers.getTooltipDimensions(breakpoints, currentBreakpoint);
-    const chartDomain = { x: [0, 31] };
-    if (error) {
-      // specify a y range if we are showing the zeroed view
-      chartDomain.y = [0, 100];
-    }
     const tooltipTheme = {
       ...ChartBaseTheme,
       tooltip: {
@@ -91,6 +88,7 @@ class RhelGraphCard extends React.Component {
         pointerWidth: 15
       }
     };
+
     const textStyle = {
       // note: fontSize will also determine vertical space between tooltip tspans
       fontSize: graphHelpers.getTooltipFontSize(breakpoints, currentBreakpoint)
@@ -114,7 +112,7 @@ class RhelGraphCard extends React.Component {
               onSelect={this.onSelect}
               position={DropdownPosition.right}
               toggle={dropdownToggle}
-              isOpen={isOpen}
+              isOpen={dropdownIsOpen}
               dropdownItems={[]}
             />
           </CardActions>
@@ -178,8 +176,8 @@ RhelGraphCard.defaultProps = {
   t: helpers.noopTranslate,
   breakpoints: {},
   currentBreakpoint: '',
-  startDate: null,
-  endDate: null
+  startDate: moment.utc().subtract(1, 'months'),
+  endDate: moment()
 };
 
 const mapStateToProps = state => ({
