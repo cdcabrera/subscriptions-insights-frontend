@@ -17,7 +17,7 @@ const zeroedUsageData = (startDate, endDate) => {
 
   // todo: convert "y" back towards a number if/when we handle "chartDomain.y = [0, 100]" within helpers
   for (let i = 0; i <= endDateStartDateDiff; i++) {
-    const clonedStartDate = moment(startDate);
+    const clonedStartDate = moment.utc(startDate);
     zeroedArray.push({
       x: clonedStartDate.add(i, 'days').format(chartDateFormat),
       y: '0'

@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { Chart, ChartBar } from '@patternfly/react-charts';
 import { RhelGraphCard } from '../rhelGraphCard';
-import { helpers } from '../../../common/helpers';
+import { helpers } from '../../../common';
 
 describe('RhelGraphCard Component', () => {
   const { breakpoints } = helpers;

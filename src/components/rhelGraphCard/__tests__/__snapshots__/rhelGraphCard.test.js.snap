@@ -247,10 +247,6 @@ exports[`RhelGraphCard Component should render multiple states: error shows zero
 Object {
   "chartBarData": Array [
     Object {
-      "x": "May 31",
-      "y": "0",
-    },
-    Object {
       "x": "Jun 1",
       "y": "0",
     },
@@ -366,6 +362,10 @@ Object {
       "x": "Jun 29",
       "y": "0",
     },
+    Object {
+      "x": "Jun 30",
+      "y": "0",
+    },
   ],
 }
 `;
@@ -440,10 +440,6 @@ exports[`RhelGraphCard Component should render multiple states: fulfilled 1`] = 
           <ChartBar
             data={
               Array [
-                Object {
-                  "x": "May 31",
-                  "y": "0",
-                },
                 Object {
                   "x": "Jun 1",
                   "y": "0",
@@ -558,6 +554,10 @@ exports[`RhelGraphCard Component should render multiple states: fulfilled 1`] = 
                 },
                 Object {
                   "x": "Jun 29",
+                  "y": "0",
+                },
+                Object {
+                  "x": "Jun 30",
                   "y": "0",
                 },
               ]

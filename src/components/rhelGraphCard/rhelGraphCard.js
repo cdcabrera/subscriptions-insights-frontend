@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withBreakpoints } from 'react-breakpoints';
-import moment from 'moment';
 import {
   Card,
   CardHead,
@@ -14,8 +13,7 @@ import {
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
 import { Chart, ChartBar, ChartBaseTheme, ChartLabel, ChartStack, ChartTooltip } from '@patternfly/react-charts';
 import { connectTranslate, reduxActions } from '../../redux';
-import { helpers } from '../../common/helpers';
-import { graphHelpers } from '../../common/graphHelpers';
+import { helpers, dateHelpers, graphHelpers } from '../../common';
 import { rhelApiTypes } from '../../types/rhelApiTypes';
 
 class RhelGraphCard extends React.Component {
@@ -176,8 +174,8 @@ RhelGraphCard.defaultProps = {
   t: helpers.noopTranslate,
   breakpoints: {},
   currentBreakpoint: '',
-  startDate: moment.utc().subtract(1, 'months'),
-  endDate: moment()
+  startDate: dateHelpers.defaultDateTime.start,
+  endDate: dateHelpers.defaultDateTime.end
 };
 
 const mapStateToProps = state => ({

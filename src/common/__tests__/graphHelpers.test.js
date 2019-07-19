@@ -1,27 +1,32 @@
-import moment from 'moment';
-import { graphHelpers, getGraphHeight, getTooltipDimensions, getTooltipFontSize } from '../graphHelpers';
+import {
+  graphHelpers,
+  convertGraphData,
+  getGraphHeight,
+  getTooltipDimensions,
+  getTooltipFontSize
+} from '../graphHelpers';
 import { helpers } from '../helpers';
 
 describe('GraphHelpers', () => {
   const { breakpoints } = helpers;
-  const startDate = moment.utc(new Date('2019-06-01T00:00:00Z'));
-  const endDate = moment.utc(new Date('2019-06-05T00:00:00Z'));
+  const startDate = new Date('2019-06-01T00:00:00Z');
+  const endDate = new Date('2019-06-05T00:00:00Z');
   const socketLabel = 'sockets on';
   const previousLabel = 'from previous day';
 
   it('should have specific functions', () => {
-    expect(graphHelpers).toMatchSnapshot('helpers');
+    expect(graphHelpers).toMatchSnapshot('graphHelpers');
   });
 
   it('should convert graph data and return zeroed usage array if usage is empty', () => {
-    expect(
-      graphHelpers.convertGraphData({ usage: [], startDate, endDate, socketLabel, previousLabel })
-    ).toMatchSnapshot('zeroed array');
+    expect(convertGraphData({ usage: [], startDate, endDate, socketLabel, previousLabel })).toMatchSnapshot(
+      'zeroed array'
+    );
   });
 
   it('should convert graph data and generate tooltips when usage is populated', () => {
     expect(
-      graphHelpers.convertGraphData({
+      convertGraphData({
         usage: [
           { cores: 56, date: '2019-06-01T00:00:00Z', instance_count: 28 },
           { cores: 30, date: '2019-06-02T00:00:00Z', instance_count: 28 },
@@ -37,7 +42,7 @@ describe('GraphHelpers', () => {
 
   it('should convert graph data and returned zeroed array when usage throws error', () => {
     expect(
-      graphHelpers.convertGraphData({
+      convertGraphData({
         usage: [null], // unexpected usage, will throw exception
         startDate,
         endDate,

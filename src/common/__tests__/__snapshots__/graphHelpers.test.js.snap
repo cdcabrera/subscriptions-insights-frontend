@@ -72,7 +72,7 @@ Array [
 ]
 `;
 
-exports[`GraphHelpers should have specific functions: helpers 1`] = `
+exports[`GraphHelpers should have specific functions: graphHelpers 1`] = `
 Object {
   "chartDateFormat": "MMM D",
   "convertGraphData": [Function],
