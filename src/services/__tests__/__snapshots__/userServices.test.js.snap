@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserServices should return default locale if no locale cookie is present 1`] = `
+Object {
+  "data": Object {
+    "key": "en_US",
+    "value": "en",
+  },
+}
+`;
+
+exports[`UserServices should return en locale if cookie is set to en_US 1`] = `
+Object {
+  "data": Object {
+    "key": "en_US",
+    "value": "en",
+  },
+}
+`;
+
+exports[`UserServices should return test locale if cookie is set to test_US 1`] = `
+Object {
+  "data": Object {
+    "key": "test_US",
+    "value": "test",
+  },
+}
+`;
