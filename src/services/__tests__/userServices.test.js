@@ -28,16 +28,22 @@ describe('UserServices', () => {
     });
   });
 
-  it('should return en locale if cookie is set to en_US', done => {
+  /**
+   * todo: evaluate some flavor of this format instead: Cookies.set(process.env.REACT_APP_CONFIG_SERVICE_LOCALES_COOKIE, 'en_US');
+   * either through a jest.fn mock or the actual method. It might help confirm cookie name config is being set and converted.
+   */
+  it('should return a specific locale cookie value', done => {
     Cookies.get = jest.fn().mockImplementation(() => 'en_US');
+
     userServices.getLocale().then(locale => {
       expect(locale).toMatchSnapshot();
       done();
     });
   });
 
-  it('should return test locale if cookie is set to test_US', done => {
+  it('should return the default locale with an invalid ISO_639 code', done => {
     Cookies.get = jest.fn().mockImplementation(() => 'test_US');
+
     userServices.getLocale().then(locale => {
       expect(locale).toMatchSnapshot();
       done();

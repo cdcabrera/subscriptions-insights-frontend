@@ -1,4 +1,5 @@
-import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
+import LocaleCode from 'locale-code';
 import { helpers } from '../common/helpers';
 
 const authorizeUser = () => {
@@ -16,38 +17,25 @@ const authorizeUser = () => {
 };
 
 const getLocaleFromCookie = () => {
-  try {
-    const supportedLocales = process.env.REACT_APP_CONFIG_SERVICE_SUPPORTED_LOCALES.split(',');
-    const cookieValue = Cookie.get(process.env.REACT_APP_CONFIG_SERVICE_LOCALES_COOKIE);
-    if (cookieValue && supportedLocales.indexOf(cookieValue) > -1) {
-      const majorLocaleValue = cookieValue.split('_')[0];
-      return { value: majorLocaleValue, key: cookieValue };
-    }
-    return null;
-  } catch (e) {
-    if (!helpers.TEST_MODE) {
-      console.warn(`Unable to parse locale ${e.message}`);
-    }
-    return null;
-  }
+  const value = (Cookies.get(process.env.REACT_APP_CONFIG_SERVICE_LOCALES_COOKIE) || '').replace('_', '-');
+  const key = (value && LocaleCode.getLanguageName(value)) || null;
+
+  return (key && { value, key }) || null;
 };
 
 const getLocale = () => {
   const defaultLocale = {
     value: process.env.REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG,
-    key: process.env.REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG_KEY
+    key: process.env.REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG_DESC
   };
-  const cookieLocale = getLocaleFromCookie();
-  const locale = cookieLocale || defaultLocale;
 
-  return new Promise(resolve => {
-    if (locale) {
-      return resolve({
-        data: getLocaleFromCookie() || defaultLocale
-      });
-    }
-    return resolve({});
-  });
+  const locale = getLocaleFromCookie() || defaultLocale;
+
+  return new Promise(resolve =>
+    resolve({
+      data: locale
+    })
+  );
 };
 
 const logoutUser = () =>
