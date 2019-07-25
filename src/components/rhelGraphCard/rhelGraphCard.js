@@ -8,7 +8,8 @@ import {
   CardBody,
   Dropdown,
   DropdownToggle,
-  DropdownPosition
+  DropdownPosition,
+  Label as PfLabel
 } from '@patternfly/react-core';
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
 import { Chart, ChartBar, ChartBaseTheme, ChartLabel, ChartStack, ChartTooltip } from '@patternfly/react-charts';
@@ -108,13 +109,17 @@ class RhelGraphCard extends React.Component {
         <CardHead>
           <h2>{t('curiosity-graph.heading', 'Daily CPU socket usage')}</h2>
           <CardActions>
-            <Dropdown
-              onSelect={this.onSelect}
-              position={DropdownPosition.right}
-              toggle={dropdownToggle}
-              isOpen={dropdownIsOpen}
-              dropdownItems={[]}
-            />
+            <PfLabel>{t('curiosity-graph.dropdownDefault', 'Last 30 Days')}</PfLabel>
+            {/* todo: revisit dropdown in future iterations */}
+            {false && (
+              <Dropdown
+                onSelect={this.onSelect}
+                position={DropdownPosition.right}
+                toggle={dropdownToggle}
+                isOpen={dropdownIsOpen}
+                dropdownItems={[]}
+              />
+            )}
           </CardActions>
         </CardHead>
         {pending && (
