@@ -100,6 +100,7 @@ exports[`Authorization Component should render a non-connected component error: 
         className="layout-pf curiosity"
         header={null}
         isManagedSidebar={false}
+        mainContainerId={null}
         onPageResize={[Function]}
         sidebar={null}
         skipToContent={null}
@@ -109,7 +110,9 @@ exports[`Authorization Component should render a non-connected component error: 
         >
           <main
             className="pf-c-page__main"
+            id={null}
             role="main"
+            tabIndex={-1}
           >
             <PageSection
               noPadding={true}
@@ -156,6 +159,7 @@ exports[`Authorization Component should render a non-connected component error: 
                         aria-hidden="true"
                         className="pf-c-empty-state__icon"
                         color="currentColor"
+                        noVerticalAlign={false}
                         size="sm"
                         title={null}
                       >
@@ -182,11 +186,11 @@ exports[`Authorization Component should render a non-connected component error: 
                       </BanIcon>
                     </EmptyStateIcon>
                     <EmptyStateBody>
-                      <p
+                      <div
                         className="pf-c-empty-state__body"
                       >
                         You do not have permission to access reporting. Contact your administrator.
-                      </p>
+                      </div>
                     </EmptyStateBody>
                   </div>
                 </EmptyState>

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withBreakpoints } from 'react-breakpoints';
 import {
   Card,
   CardHead,
@@ -12,13 +11,18 @@ import {
   Label as PfLabel
 } from '@patternfly/react-core';
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
-import { Chart, ChartBar, ChartBaseTheme, ChartLabel, ChartStack, ChartTooltip } from '@patternfly/react-charts';
+import { Chart, ChartAxis, ChartBar, ChartStack, ChartTooltip } from '@patternfly/react-charts';
 import { connectTranslate, reduxActions } from '../../redux';
 import { helpers, dateHelpers, graphHelpers } from '../../common';
 import { rhelApiTypes } from '../../types/rhelApiTypes';
 
 class RhelGraphCard extends React.Component {
-  state = { dropdownIsOpen: false };
+  state = { dropdownIsOpen: false, width: 0 };
+
+  constructor(props) {
+    super(props);
+    this.containerRef = React.createRef();
+  }
 
   componentDidMount() {
     const { getGraphReports, startDate, endDate } = this.props;
@@ -28,6 +32,15 @@ class RhelGraphCard extends React.Component {
       [rhelApiTypes.RHSM_API_QUERY_START_DATE]: startDate.toISOString(),
       [rhelApiTypes.RHSM_API_QUERY_END_DATE]: endDate.toISOString()
     });
+
+    setTimeout(() => {
+      this.setState({ width: this.containerRef.current.clientWidth });
+      window.addEventListener('resize', this.handleResize);
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   }
 
   onToggle = dropdownIsOpen => {
@@ -42,15 +55,17 @@ class RhelGraphCard extends React.Component {
     }));
   };
 
-  renderChart() {
-    const { graphData, t, breakpoints, currentBreakpoint, startDate, endDate } = this.props;
+  handleResize = () => {
+    this.setState({ width: this.containerRef.current.clientWidth });
+  };
 
-    const graphHeight = graphHelpers.getGraphHeight(breakpoints, currentBreakpoint);
-    const tooltipDimensions = graphHelpers.getTooltipDimensions(breakpoints, currentBreakpoint);
+  renderChart() {
+    const { graphData, t, startDate, endDate } = this.props;
+    const { width } = this.state;
 
     // todo: evaluate show error toast
     // todo: evaluate the granularity here: "daily" "weekly" etc. and pass startDate/endDate
-    const { chartData, chartDomain } = graphHelpers.convertGraphUsageData({
+    const { chartData, chartDomain, tickValues } = graphHelpers.convertGraphUsageData({
       data: graphData.usage,
       startDate,
       endDate,
@@ -58,39 +73,26 @@ class RhelGraphCard extends React.Component {
       previousLabel: t('curiosity-graph.tooltipPreviousLabel', 'from previous day')
     });
 
-    const tooltipTheme = {
-      ...ChartBaseTheme,
-      tooltip: {
-        ...ChartBaseTheme.tooltip,
-        pointerLength: 3,
-        pointerWidth: 15
-      }
-    };
-
-    const textStyle = {
-      // note: fontSize will also determine vertical space between tooltip tspans
-      fontSize: graphHelpers.getTooltipFontSize(breakpoints, currentBreakpoint)
-    };
-
-    const chartTooltip = (
-      <ChartTooltip
-        {...tooltipDimensions}
-        style={textStyle}
-        theme={tooltipTheme}
-        labelComponent={<ChartLabel dy={-1} className="curiosity-usage-graph-tooltip-text" />}
-      />
-    );
-
     return (
-      <CardBody>
-        <div className="curiosity-stack-chart-container">
-          <Chart height={graphHeight} domainPadding={{ x: [10, 2], y: [1, 1] }} domain={chartDomain}>
-            <ChartStack>
-              <ChartBar data={chartData} labelComponent={chartTooltip} />
-            </ChartStack>
-          </Chart>
-        </div>
-      </CardBody>
+      <Chart
+        height={275}
+        domainPadding={{ x: [30, 25] }}
+        padding={{
+          bottom: 75, // Adjusted to accomodate legend
+          left: 50,
+          right: 50,
+          top: 50
+        }}
+        domain={chartDomain}
+        width={width}
+      >
+        {/** todo add tickValues prop and compute those in convertGraphData */}
+        <ChartAxis tickValues={tickValues} />
+        <ChartAxis dependentAxis showGrid />
+        <ChartStack>
+          <ChartBar data={chartData} labelComponent={<ChartTooltip />} />
+        </ChartStack>
+      </Chart>
     );
   }
 
@@ -124,17 +126,23 @@ class RhelGraphCard extends React.Component {
             )}
           </CardActions>
         </CardHead>
-        {pending && (
-          <CardBody>
-            <div className="curiosity-skeleton-container">
-              <Skeleton size={SkeletonSize.xs} />
-              <Skeleton size={SkeletonSize.sm} />
-              <Skeleton size={SkeletonSize.md} />
-              <Skeleton size={SkeletonSize.lg} />
-            </div>
-          </CardBody>
-        )}
-        {(fulfilled || error) && this.renderChart()}
+        <CardBody>
+          {/** todo: combine into a single class w/ --loading and BEM style */}
+          <div
+            className={pending ? 'curiosity-skeleton-container' : 'curiosity-skeleton-container'}
+            ref={this.containerRef}
+          >
+            {pending && (
+              <React.Fragment>
+                <Skeleton size={SkeletonSize.xs} />
+                <Skeleton size={SkeletonSize.sm} />
+                <Skeleton size={SkeletonSize.md} />
+                <Skeleton size={SkeletonSize.lg} />
+              </React.Fragment>
+            )}
+            {(fulfilled || error) && this.renderChart()}
+          </div>
+        </CardBody>
       </Card>
     );
   }
@@ -149,15 +157,6 @@ RhelGraphCard.propTypes = {
   }),
   pending: PropTypes.bool,
   t: PropTypes.func,
-  breakpoints: PropTypes.shape({
-    xs: PropTypes.number,
-    sm: PropTypes.number,
-    md: PropTypes.number,
-    lg: PropTypes.number,
-    xl: PropTypes.number,
-    xl2: PropTypes.number
-  }),
-  currentBreakpoint: PropTypes.string,
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date)
 };
@@ -171,8 +170,6 @@ RhelGraphCard.defaultProps = {
   },
   pending: false,
   t: helpers.noopTranslate,
-  breakpoints: {},
-  currentBreakpoint: '',
   startDate: dateHelpers.defaultDateTime.start,
   endDate: dateHelpers.defaultDateTime.end
 };
@@ -185,6 +182,6 @@ const mapDispatchToProps = dispatch => ({
   getGraphReports: query => dispatch(reduxActions.rhel.getGraphReports(query))
 });
 
-const ConnectedRhelGraphCard = connectTranslate(mapStateToProps, mapDispatchToProps)(withBreakpoints(RhelGraphCard));
+const ConnectedRhelGraphCard = connectTranslate(mapStateToProps, mapDispatchToProps)(RhelGraphCard);
 
 export { ConnectedRhelGraphCard as default, ConnectedRhelGraphCard, RhelGraphCard };

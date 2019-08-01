@@ -2,7 +2,15 @@ import moment from 'moment';
 import { rhelApiTypes } from '../types/rhelApiTypes';
 import { helpers } from './helpers';
 
+/**
+ * Chart Date Format (used in axis and tooltips)
+ */
 const chartDateFormat = 'MMM D';
+
+/**
+ * Show every nth tick in the x-axis.
+ */
+const xAxisTickInterval = 5;
 
 /**
  * Generate a fallback graph with zeroed data
@@ -117,6 +125,16 @@ const getChartDomain = ({ empty, maxY = 0 }) => {
 };
 
 /**
+ * Returns x axis ticks array for the xAxisTickInterval
+ * @param {*} chartData the converted chartData
+ */
+const getTickValues = chartData => {
+  return chartData.reduce((acc, current, index) => {
+    return index % xAxisTickInterval === 0 ? acc.concat(current.x) : acc;
+  }, []);
+};
+
+/**
  * Convert graph data to usable format
  * convert json usage report from this format:
  *  {cores: 56, date: "2019-06-01T00:00:00Z", instance_count: 28}
@@ -165,48 +183,16 @@ const convertGraphUsageData = ({ data, startDate, endDate, label, previousLabel 
     chartDomain = getChartDomain({ empty: true });
   }
 
-  return { chartData, chartDomain };
-};
+  const tickValues = getTickValues(chartData);
 
-const getGraphHeight = (breakpoints, currentBreakpoint) =>
-  (breakpoints[currentBreakpoint] > breakpoints.md && 200) || 400;
-
-const getTooltipDimensions = (breakpoints, currentBreakpoint) => {
-  if (breakpoints[currentBreakpoint] < breakpoints.sm) {
-    return { height: 60, width: 200 };
-  }
-  if (breakpoints[currentBreakpoint] < breakpoints.md) {
-    return { height: 50, width: 180 };
-  }
-  if (breakpoints[currentBreakpoint] < breakpoints.lg) {
-    return { height: 40, width: 140 };
-  }
-  if (breakpoints[currentBreakpoint] < breakpoints.xl) {
-    return { height: 40, width: 120 };
-  }
-  if (breakpoints[currentBreakpoint] < breakpoints.xl2) {
-    return { height: 30, width: 90 };
-  }
-  return { height: 20, width: 80 };
-};
-
-const getTooltipFontSize = (breakpoints, currentBreakpoint) => {
-  if (breakpoints[currentBreakpoint] > breakpoints.lg) {
-    return 8;
-  }
-  if (breakpoints[currentBreakpoint] > breakpoints.md) {
-    return 12;
-  }
-  return 14;
+  return { chartData, chartDomain, tickValues };
 };
 
 const graphHelpers = {
   chartDateFormat,
   convertGraphUsageData,
   getChartDomain,
-  getGraphHeight,
-  getTooltipDimensions,
-  getTooltipFontSize,
+  getTickValues,
   zeroedUsageData
 };
 
@@ -216,8 +202,6 @@ export {
   chartDateFormat,
   convertGraphUsageData,
   getChartDomain,
-  getGraphHeight,
-  getTooltipDimensions,
-  getTooltipFontSize,
+  getTickValues,
   zeroedUsageData
 };
