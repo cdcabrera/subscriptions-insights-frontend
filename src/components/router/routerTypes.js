@@ -3,20 +3,26 @@ import RhelView from '../rhelView/rhelView';
 
 /**
  * Return an assumed dynamic route baseName directory
- * based on a predictable directory depth.
+ * based on a predictable platform directory depth of
+ * /[OPTIONAL]/apps/[APP NAME]
  *
- * @type {string}
+ * @param pathName {string}
+ * @param pathPrefix {string}
+ * @return {string}
  */
-const baseName = (() => {
-  const pathPrefix = helpers.UI_DEPLOY_PATH_PREFIX;
-  const pathName = window.location.pathname.split('/');
+const dynamicBaseName = ({ pathName, pathPrefix }) => {
+  const path = pathName.split('/');
 
-  pathName.shift();
+  path.shift();
 
-  const pathSlice = pathPrefix && new RegExp(pathName[0]).test(pathPrefix) ? 2 : 1;
+  const pathSlice = pathPrefix && new RegExp(path[0]).test(pathPrefix) ? 3 : 2;
 
-  return `/${pathName.slice(0, pathSlice).join('/')}`;
-})();
+  return `/${path.slice(0, pathSlice).join('/')}`;
+};
+
+const baseName =
+  (helpers.TEST_MODE && '/') ||
+  dynamicBaseName({ pathName: window.location.pathname, pathPrefix: helpers.UI_DEPLOY_PATH_PREFIX });
 
 /**
  * Return array of objects that describe navigation
@@ -32,4 +38,4 @@ const routes = [
   }
 ];
 
-export { routes as default, baseName, routes };
+export { routes as default, baseName, dynamicBaseName, routes };
