@@ -19,10 +19,7 @@ import { rhelApiTypes } from '../../types/rhelApiTypes';
 class RhelGraphCard extends React.Component {
   state = { dropdownIsOpen: false, width: 0 };
 
-  constructor(props) {
-    super(props);
-    this.containerRef = React.createRef();
-  }
+  containerRef = React.createRef();
 
   componentDidMount() {
     const { getGraphReports, startDate, endDate } = this.props;
