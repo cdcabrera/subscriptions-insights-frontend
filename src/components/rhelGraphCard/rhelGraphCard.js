@@ -86,8 +86,7 @@ class RhelGraphCard extends React.Component {
         domain={chartDomain}
         width={width}
       >
-        {/** todo add tickValues prop and compute those in convertGraphData */}
-        <ChartAxis tickValues={tickValues} />
+        <ChartAxis tickValues={tickValues} fixLabelOverlap />
         <ChartAxis dependentAxis showGrid />
         <ChartStack>
           <ChartBar data={chartData} labelComponent={<ChartTooltip />} />

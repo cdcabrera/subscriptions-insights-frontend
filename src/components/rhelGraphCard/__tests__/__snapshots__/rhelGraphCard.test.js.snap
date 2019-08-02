@@ -274,6 +274,7 @@ exports[`RhelGraphCard Component should render multiple states: fulfilled 1`] = 
         width={0}
       >
         <ChartAxis
+          fixLabelOverlap={true}
           tickValues={
             Array [
               "Jun 1",

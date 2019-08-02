@@ -8,11 +8,6 @@ import { helpers } from './helpers';
 const chartDateFormat = 'MMM D';
 
 /**
- * Show every nth tick in the x-axis.
- */
-const xAxisTickInterval = 5;
-
-/**
  * Generate a fallback graph with zeroed data
  *
  * @param startDate {string}
@@ -128,7 +123,7 @@ const getChartDomain = ({ empty, maxY = 0 }) => {
  * Returns x axis ticks array for the xAxisTickInterval
  * @param {*} chartData the converted chartData
  */
-const getTickValues = chartData => {
+const getTickValues = ({ chartData, xAxisTickInterval }) => {
   return chartData.reduce((acc, current, index) => {
     return index % xAxisTickInterval === 0 ? acc.concat(current.x) : acc;
   }, []);
@@ -183,7 +178,7 @@ const convertGraphUsageData = ({ data, startDate, endDate, label, previousLabel 
     chartDomain = getChartDomain({ empty: true });
   }
 
-  const tickValues = getTickValues(chartData);
+  const tickValues = getTickValues({ chartData, xAxisTickInterval: 5 });
 
   return { chartData, chartDomain, tickValues };
 };
