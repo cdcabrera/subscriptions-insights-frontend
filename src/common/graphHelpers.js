@@ -103,14 +103,14 @@ const fillMissingValues = ({ startDate, endDate, values, label, previousLabel })
  *
  * the y axis returns large enough number that zeroed bars dont show
  *
- * @param empty {boolean} Chart data is empty
+ * @param entries {array} Number of chart data points
  * @param maxY {boolean} The max y-value
  * @returns {Object}
  */
-const getChartDomain = ({ empty, maxY = 0 }) => {
-  const chartDomain = { x: [0, 31] };
+const getChartDomain = ({ entries, maxY = 0 }) => {
+  const chartDomain = { x: [0, entries === 0 ? 31 : entries] };
 
-  if (empty || maxY < 50) {
+  if (entries === 0 || maxY < 50) {
     chartDomain.y = [0, Math.ceil((maxY + 1) / 10) * 10];
   } else {
     chartDomain.y = [0, Math.pow(10, maxY.toString().length)];
@@ -163,11 +163,10 @@ const convertGraphUsageData = ({ data, startDate, endDate, label, previousLabel,
       };
       maxY = values[formattedDate].y > maxY ? values[formattedDate].y : maxY;
     }
-    chartDomain = getChartDomain({ maxY });
-
     if (data.length) {
       chartData = fillMissingValues({ startDate, endDate, values, label, previousLabel });
     }
+    chartDomain = getChartDomain({ entries: chartData.length, maxY });
   } catch (e) {
     if (!helpers.TEST_MODE) {
       console.warn(`Malformed API response ${e.message}`);
@@ -176,7 +175,7 @@ const convertGraphUsageData = ({ data, startDate, endDate, label, previousLabel,
 
   if (!chartData.length) {
     chartData = zeroedUsageData(startDate, endDate);
-    chartDomain = getChartDomain({ empty: true });
+    chartDomain = getChartDomain({ chartData, entries: 0 });
   }
 
   const tickValues = getTickValues({ chartData, xAxisTickInterval });
