@@ -68,27 +68,22 @@ describe('RhelGraphCard Component', () => {
   });
 
   it('should set initial width to zero and then resize', () => {
-    jest.useFakeTimers();
     const component = shallow(<RhelGraphCard />);
 
+    expect(component.instance().onResizeContainer).toBeDefined();
+
     // initial state width should be zero
-    expect(component.state().width).toEqual(0);
+    expect(component.state().chartWidth).toEqual(0);
 
     // set the container size arbitrarily
     component.instance().containerRef.current = { clientWidth: 100 };
-
-    // ensure setTimeout fires in componentDidMount
-    jest.runAllTimers();
-
-    expect(component.state().width).toEqual(100);
-    expect(component.instance().handleResize).toBeDefined();
+    global.dispatchEvent(new Event('resize'));
+    expect(component.state().chartWidth).toEqual(100);
 
     // set the container size arbitrarily and force handleResize to fire
     component.instance().containerRef.current = { clientWidth: 1337 };
-
     global.dispatchEvent(new Event('resize'));
-
-    expect(component.state().width).toEqual(1337);
+    expect(component.state().chartWidth).toEqual(1337);
   });
 
   it('should run componentWillUnmount method successfully', () => {

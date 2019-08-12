@@ -206,7 +206,8 @@ Object {
   "empty array": Array [],
   "x axis interval": Array [
     "Jan 1",
-    "Jan 6",
+    "Jan 3",
+    "Jan 5",
   ],
 }
 `;

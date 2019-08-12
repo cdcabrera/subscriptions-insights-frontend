@@ -101,10 +101,10 @@ describe('GraphHelpers', () => {
 
   it('should get tick values array given chart data', () => {
     expect({
-      'empty array': getTickValues({ chartData: [], xAxisTickInterval: 5 }),
+      'empty array': getTickValues({ chartData: [], xAxisTickInterval: 2 }),
       'x axis interval': getTickValues({
         chartData: [{ x: 'Jan 1' }, { x: 'Jan 2' }, { x: 'Jan 3' }, { x: 'Jan 4' }, { x: 'Jan 5' }, { x: 'Jan 6' }],
-        xAxisTickInterval: 5
+        xAxisTickInterval: 2
       })
     }).toMatchSnapshot();
   });

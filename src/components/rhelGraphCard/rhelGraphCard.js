@@ -17,7 +17,7 @@ import { helpers, dateHelpers, graphHelpers } from '../../common';
 import { rhelApiTypes } from '../../types/rhelApiTypes';
 
 class RhelGraphCard extends React.Component {
-  state = { dropdownIsOpen: false, width: 0 };
+  state = { dropdownIsOpen: false, chartWidth: 0 };
 
   containerRef = React.createRef();
 
@@ -30,20 +30,20 @@ class RhelGraphCard extends React.Component {
       [rhelApiTypes.RHSM_API_QUERY_END_DATE]: endDate.toISOString()
     });
 
-    setTimeout(() => {
-      this.setState({ width: this.containerRef.current.clientWidth });
-      window.addEventListener('resize', this.handleResize);
-    });
+    this.onResizeContainer();
+    window.addEventListener('resize', this.onResizeContainer);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.onResizeContainer);
   }
 
-  onToggle = dropdownIsOpen => {
-    this.setState({
-      dropdownIsOpen
-    });
+  onResizeContainer = () => {
+    const containerElement = this.containerRef.current;
+
+    if (containerElement && containerElement.clientWidth) {
+      this.setState({ chartWidth: containerElement.clientWidth });
+    }
   };
 
   onSelect = () => {
@@ -52,13 +52,15 @@ class RhelGraphCard extends React.Component {
     }));
   };
 
-  handleResize = () => {
-    this.setState({ width: this.containerRef.current.clientWidth });
+  onToggle = dropdownIsOpen => {
+    this.setState({
+      dropdownIsOpen
+    });
   };
 
   renderChart() {
+    const { chartWidth } = this.state;
     const { graphData, t, startDate, endDate } = this.props;
-    const { width } = this.state;
 
     // todo: evaluate show error toast
     // todo: evaluate the granularity here: "daily" "weekly" etc. and pass startDate/endDate
@@ -75,13 +77,13 @@ class RhelGraphCard extends React.Component {
         height={275}
         domainPadding={{ x: [30, 25] }}
         padding={{
-          bottom: 75, // Adjusted to accomodate legend
+          bottom: 75, // Adjusted to accommodate legend
           left: 50,
           right: 50,
           top: 50
         }}
         domain={chartDomain}
-        width={width}
+        width={chartWidth}
       >
         <ChartAxis tickValues={tickValues} fixLabelOverlap />
         <ChartAxis dependentAxis showGrid />
@@ -124,10 +126,7 @@ class RhelGraphCard extends React.Component {
         </CardHead>
         <CardBody>
           {/** todo: combine into a single class w/ --loading and BEM style */}
-          <div
-            className={pending ? 'curiosity-skeleton-container' : 'curiosity-skeleton-container'}
-            ref={this.containerRef}
-          >
+          <div className="curiosity-skeleton-container" ref={this.containerRef}>
             {pending && (
               <React.Fragment>
                 <Skeleton size={SkeletonSize.xs} />
