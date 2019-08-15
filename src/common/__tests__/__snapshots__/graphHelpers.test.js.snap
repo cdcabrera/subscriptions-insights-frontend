@@ -68,7 +68,7 @@ Object {
   "chartDomain": Object {
     "x": Array [
       0,
-      31,
+      5,
     ],
     "y": Array [
       0,

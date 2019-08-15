@@ -4,34 +4,17 @@ import { Card, CardHead, CardActions, CardBody } from '@patternfly/react-core';
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
 import { Chart, ChartAxis, ChartBar, ChartStack, ChartTooltip } from '@patternfly/react-charts';
 import { Select } from '../select/select';
-import { connectTranslate, reduxActions } from '../../redux';
+import { connectTranslate, reduxActions, reduxTypes, store } from '../../redux';
 import { helpers, dateHelpers, graphHelpers } from '../../common';
 import { rhelApiTypes } from '../../types/rhelApiTypes';
+import { rhelGraphCardTypes } from './rhelGraphCardTypes';
 
 const GRANULARITY_TYPES = rhelApiTypes.RHSM_API_QUERY_GRANULARITY_TYPES;
 
 class RhelGraphCard extends React.Component {
-  constructor(props) {
-    super(props);
+  state = { chartWidth: 0 };
 
-    this.containerRef = React.createRef();
-
-    this.dateMenuOptions = [
-      { value: this.getMenuText(GRANULARITY_TYPES.DAILY), isPlaceholder: true, granularity: GRANULARITY_TYPES.DAILY },
-      { value: this.getMenuText(GRANULARITY_TYPES.WEEKLY), granularity: GRANULARITY_TYPES.WEEKLY },
-      { value: this.getMenuText(GRANULARITY_TYPES.MONTHLY), granularity: GRANULARITY_TYPES.MONTHLY },
-      { value: this.getMenuText(GRANULARITY_TYPES.QUARTERLY), granularity: GRANULARITY_TYPES.QUARTERLY }
-    ];
-
-    this.state = {
-      dateMenuIsExpanded: false,
-      activeDateMenuOption: this.getMenuText(GRANULARITY_TYPES.DAILY),
-      granularity: GRANULARITY_TYPES.DAILY,
-      startDate: dateHelpers.defaultDateTime.start,
-      endDate: dateHelpers.defaultDateTime.end,
-      chartWidth: 0
-    };
-  }
+  containerRef = React.createRef();
 
   componentDidMount() {
     this.onUpdateGraphData();
@@ -39,10 +22,10 @@ class RhelGraphCard extends React.Component {
     window.addEventListener('resize', this.onResizeContainer);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { granularity, startDate, endDate } = this.state;
+  componentDidUpdate(prevProps) {
+    const { graphGranularity } = this.props;
 
-    if (granularity !== prevState.granularity || startDate !== prevState.startDate || endDate !== prevState.endDate) {
+    if (graphGranularity !== prevProps.graphGranularity) {
       this.onUpdateGraphData();
     }
   }
@@ -52,11 +35,10 @@ class RhelGraphCard extends React.Component {
   }
 
   onUpdateGraphData = () => {
-    const { getGraphReports } = this.props;
-    const { granularity, startDate, endDate } = this.state;
+    const { getGraphReports, graphGranularity, startDate, endDate } = this.props;
 
     getGraphReports({
-      [rhelApiTypes.RHSM_API_QUERY_GRANULARITY]: granularity,
+      [rhelApiTypes.RHSM_API_QUERY_GRANULARITY]: graphGranularity,
       [rhelApiTypes.RHSM_API_QUERY_START_DATE]: startDate.toISOString(),
       [rhelApiTypes.RHSM_API_QUERY_END_DATE]: endDate.toISOString()
     });
@@ -70,50 +52,14 @@ class RhelGraphCard extends React.Component {
     }
   };
 
-  onToggle = isExpanded => {
-    this.setState({ dateMenuIsExpanded: isExpanded });
-  };
+  onSelect = event => {
+    const { value } = event;
 
-  onSelect = (event, selection) => {
-    const option = this.dateMenuOptions.find(o => o.value === selection);
-    const range = this.getRangedDateTime(option.granularity);
-
-    this.setState({
-      activeDateMenuOption: selection,
-      granularity: option.granularity,
-      startDate: range.startDate,
-      endDate: range.endDate
-    });
-  };
-
-  getRangedDateTime = granularity => {
-    switch (granularity) {
-      case GRANULARITY_TYPES.DAILY:
-        return { startDate: dateHelpers.defaultDateTime.start, endDate: dateHelpers.defaultDateTime.end };
-      case GRANULARITY_TYPES.WEEKLY:
-        return { startDate: dateHelpers.weeklyDateTime.start, endDate: dateHelpers.defaultDateTime.end };
-      case GRANULARITY_TYPES.MONTHLY:
-        return { startDate: dateHelpers.monthlyDateTime.start, endDate: dateHelpers.monthlyDateTime.end };
-      case GRANULARITY_TYPES.QUARTERLY:
-        return { startDate: dateHelpers.quarterlyDateTime.start, endDate: dateHelpers.quarterlyDateTime.end };
-      default:
-        return { startDate: dateHelpers.defaultDateTime.start, endDate: dateHelpers.defaultDateTime.end };
-    }
-  };
-
-  getMenuText = value => {
-    const { t } = this.props;
-    switch (value) {
-      case GRANULARITY_TYPES.DAILY:
-        return t('curiosity-graph.dropdownDaily', 'Daily');
-      case GRANULARITY_TYPES.WEEKLY:
-        return t('curiosity-graph.dropdownDaily', 'Weekly');
-      case GRANULARITY_TYPES.MONTHLY:
-        return t('curiosity-graph.dropdownDaily', 'Monthly');
-      case GRANULARITY_TYPES.QUARTERLY:
-        return t('curiosity-graph.dropdownDaily', 'Quarterly');
-      default:
-        return t('curiosity-graph.dropdownDaily', 'Daily');
+    if (event) {
+      store.dispatch({
+        type: reduxTypes.rhel.SET_GRAPH_RHEL_GRANULARITY,
+        graphGranularity: value
+      });
     }
   };
 
@@ -136,7 +82,7 @@ class RhelGraphCard extends React.Component {
         height={275}
         domainPadding={{ x: [30, 25] }}
         padding={{
-          bottom: 75, // Adjusted to accommodate legend
+          bottom: 80, // Adjusted to accommodate legend
           left: 50,
           right: 50,
           top: 50
@@ -154,8 +100,8 @@ class RhelGraphCard extends React.Component {
   }
 
   render() {
-    const { error, fulfilled, pending, t } = this.props;
-    const { dateMenuIsExpanded, activeDateMenuOption } = this.state;
+    const { error, fulfilled, graphGranularity, pending, t } = this.props;
+    const getDateMenuOptions = rhelGraphCardTypes.getDateMenuOptions();
 
     return (
       <Card className="curiosity-usage-graph fadein">
@@ -163,12 +109,11 @@ class RhelGraphCard extends React.Component {
           <h2>{t('curiosity-graph.heading', 'Daily CPU socket usage')}</h2>
           <CardActions>
             <Select
-              aria-label={t('curiosity-graph.dropdownAriaLabel', 'Select Date Range')}
-              onToggle={this.onToggle}
+              aria-label={t('curiosity-graph.dropdownPlaceholder', 'Select date range')}
               onSelect={this.onSelect}
-              selections={activeDateMenuOption}
-              isExpanded={dateMenuIsExpanded}
-              options={this.dateMenuOptions}
+              options={getDateMenuOptions}
+              selectedOptions={graphGranularity}
+              placeholder={t('curiosity-graph.dropdownPlaceholder', 'Select date range')}
             />
           </CardActions>
         </CardHead>
@@ -198,6 +143,12 @@ RhelGraphCard.propTypes = {
   graphData: PropTypes.shape({
     usage: PropTypes.array
   }),
+  graphGranularity: PropTypes.oneOf([
+    GRANULARITY_TYPES.DAILY,
+    GRANULARITY_TYPES.WEEKLY,
+    GRANULARITY_TYPES.MONTHLY,
+    GRANULARITY_TYPES.QUARTERLY
+  ]),
   pending: PropTypes.bool,
   t: PropTypes.func,
   startDate: PropTypes.instanceOf(Date),
@@ -211,6 +162,7 @@ RhelGraphCard.defaultProps = {
   graphData: {
     usage: []
   },
+  graphGranularity: GRANULARITY_TYPES.DAILY,
   pending: false,
   t: helpers.noopTranslate,
   startDate: dateHelpers.defaultDateTime.start,
