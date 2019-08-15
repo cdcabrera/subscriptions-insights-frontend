@@ -5,7 +5,7 @@
     "dropdownWeekly": "Weekly",
     "dropdownMonthly": "Monthly",
     "dropdownQuarterly": "Quarterly",
-    "dropdownAriaLabel": "Select Date Range",
+    "dropdownPlaceholder": "Select date range",
     "tooltipLabel": "sockets on",
     "tooltipPreviousLabel": "from previous day"
   }
