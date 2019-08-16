@@ -22,5 +22,6 @@ env:
     - REPO="git@github.com:RedHatInsights/curiosity-frontend-build"
     - REPO_DIR="curiosity-frontend-build"
     - BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
+    - COMMIT_MESSAGE=${TRAVIS_COMMIT_MESSAGE}
     - NODE_OPTIONS="--max-old-space-size=4096 --max_old_space_size=4096"
     - APP_BUILD_DIR="build"
