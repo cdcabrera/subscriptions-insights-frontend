@@ -55,35 +55,33 @@ class RhelGraphCard extends React.Component {
   onSelect = event => {
     const { value } = event;
 
-    if (event) {
-      store.dispatch({
-        type: reduxTypes.rhel.SET_GRAPH_RHEL_GRANULARITY,
-        graphGranularity: value
-      });
-    }
+    store.dispatch({
+      type: reduxTypes.rhel.SET_GRAPH_RHEL_GRANULARITY,
+      graphGranularity: value
+    });
   };
 
   renderChart() {
     const { chartWidth } = this.state;
-    const { graphData, t, startDate, endDate } = this.props;
+    // const { graphData, graphGranularity, startDate, endDate, t } = this.props;
+    const { graphData, graphGranularity, startDate, endDate } = this.props;
 
     // todo: evaluate show error toast
-    // todo: evaluate the granularity here: "daily" "weekly" etc. and pass startDate/endDate
     const { chartData, chartDomain, tickValues } = graphHelpers.convertGraphUsageData({
       data: graphData.usage,
       startDate,
       endDate,
-      label: t('curiosity-graph.tooltipLabel', 'sockets on'),
-      previousLabel: t('curiosity-graph.tooltipPreviousLabel', 'from previous day')
+      granularity: graphGranularity
     });
+
+    console.log('RESULTS - - - - - -------> ', chartData, chartDomain, tickValues);
 
     return (
       <Chart
         height={275}
-        domainPadding={{ x: [30, 25] }}
         padding={{
           bottom: 80, // Adjusted to accommodate legend
-          left: 50,
+          left: 60,
           right: 50,
           top: 50
         }}
@@ -152,7 +150,13 @@ RhelGraphCard.propTypes = {
   pending: PropTypes.bool,
   t: PropTypes.func,
   startDate: PropTypes.instanceOf(Date),
-  endDate: PropTypes.instanceOf(Date)
+  endDate: PropTypes.instanceOf(Date),
+  dateMeasurment: PropTypes.oneOf([
+    GRANULARITY_TYPES.DAILY,
+    GRANULARITY_TYPES.WEEKLY,
+    GRANULARITY_TYPES.MONTHLY,
+    GRANULARITY_TYPES.QUARTERLY
+  ])
 };
 
 RhelGraphCard.defaultProps = {
@@ -165,8 +169,8 @@ RhelGraphCard.defaultProps = {
   graphGranularity: GRANULARITY_TYPES.DAILY,
   pending: false,
   t: helpers.noopTranslate,
-  startDate: dateHelpers.defaultDateTime.start,
-  endDate: dateHelpers.defaultDateTime.end
+  startDate: dateHelpers.defaultDateTime.startDate,
+  endDate: dateHelpers.defaultDateTime.endDate
 };
 
 const mapStateToProps = state => ({

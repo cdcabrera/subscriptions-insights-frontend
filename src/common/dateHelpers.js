@@ -6,21 +6,23 @@ const getCurrentDate = () =>
   (helpers.TEST_MODE && '20190720') || (helpers.DEV_MODE && process.env.REACT_APP_DEBUG_DEFAULT_DATETIME) || new Date();
 
 const setRangedDateTime = ({ date, subtract, measurement }) => ({
-  start: moment
+  startDate: moment
     .utc(date)
-    .startOf('day')
+    .startOf(measurement)
     .subtract(subtract, measurement)
     .toDate(),
-  end: moment
+  endDate: moment
     .utc(date)
-    .endOf('day')
-    .toDate()
+    .startOf(measurement)
+    .toDate(),
+  dateMeasurement: measurement,
+  dateMeasurementCount: subtract
 });
 
 const defaultDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 30, measurement: 'days' });
 const weeklyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 12, measurement: 'weeks' });
 const monthlyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 12, measurement: 'months' });
-const quarterlyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 4, measurement: 'years' });
+const quarterlyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 36, measurement: 'months' });
 
 /**
  * Return a range of time based on granularity.
@@ -33,14 +35,14 @@ const GRANULARITY_TYPES = rhelApiTypes.RHSM_API_QUERY_GRANULARITY_TYPES;
 const getRangedDateTime = granularity => {
   switch (granularity) {
     case GRANULARITY_TYPES.WEEKLY:
-      return { startDate: weeklyDateTime.start, endDate: weeklyDateTime.end };
+      return { ...weeklyDateTime };
     case GRANULARITY_TYPES.MONTHLY:
-      return { startDate: monthlyDateTime.start, endDate: monthlyDateTime.end };
+      return { ...monthlyDateTime };
     case GRANULARITY_TYPES.QUARTERLY:
-      return { startDate: quarterlyDateTime.start, endDate: quarterlyDateTime.end };
+      return { ...quarterlyDateTime };
     case GRANULARITY_TYPES.DAILY:
     default:
-      return { startDate: defaultDateTime.start, endDate: defaultDateTime.end };
+      return { ...defaultDateTime };
   }
 };
 
