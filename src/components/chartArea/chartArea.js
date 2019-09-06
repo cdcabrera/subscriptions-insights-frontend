@@ -32,7 +32,7 @@ class ChartArea extends React.Component {
     }
   };
 
-  getChartTicks() {
+  setChartTicks() {
     const {
       xAxisLabelIncrement,
       yAxisLabelIncrement,
@@ -93,6 +93,43 @@ class ChartArea extends React.Component {
     };
   }
 
+  getChartTicks() {
+    const { xAxisFixLabelOverlap, yAxisFixLabelOverlap } = this.props;
+
+    const { xAxisTickValues, xAxisTickFormat, yAxisTickValues, yAxisTickFormat } = this.setChartTicks();
+    const updatedXAxisProps = {
+      fixLabelOverlap: xAxisFixLabelOverlap
+    };
+    const updatedYAxisProps = {
+      dependentAxis: true,
+      showGrid: true,
+      fixLabelOverlap: yAxisFixLabelOverlap
+    };
+
+    if (xAxisTickValues) {
+      updatedXAxisProps.tickValues = xAxisTickValues;
+    }
+
+    if (xAxisTickFormat) {
+      updatedXAxisProps.tickFormat = xAxisTickFormat;
+    }
+
+    if (yAxisTickValues) {
+      updatedYAxisProps.tickValues = yAxisTickValues;
+    }
+
+    if (yAxisTickFormat) {
+      updatedYAxisProps.tickFormat = yAxisTickFormat;
+    }
+
+    return {
+      isXAxisTicks: !!xAxisTickValues,
+      isYAxisTicks: !!yAxisTickValues,
+      xAxisProps: updatedXAxisProps,
+      yAxisProps: updatedYAxisProps
+    };
+  }
+
   // ToDo: the domain range needs to be update when additional datasets are added
   getChartDomain({ isXAxisTicks, isYAxisTicks }) {
     const { domain, dataSetOne } = this.props;
@@ -145,40 +182,11 @@ class ChartArea extends React.Component {
 
   render() {
     const { chartWidth } = this.state;
-    const { dataSetOne, padding, xAxisFixLabelOverlap, yAxisFixLabelOverlap } = this.props;
+    const { dataSetOne, padding } = this.props;
 
-    const { xAxisTickValues, xAxisTickFormat, yAxisTickValues, yAxisTickFormat } = this.getChartTicks();
-    const { chartDomain, maxY } = this.getChartDomain({
-      isXAxisTicks: !!xAxisTickValues,
-      isYAxisTicks: !!yAxisTickValues
-    });
+    const { isXAxisTicks, isYAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
+    const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks, isYAxisTicks });
     const chartLegendProps = this.getChartLegend();
-
-    const updatedXAxisProps = {
-      fixLabelOverlap: xAxisFixLabelOverlap
-    };
-    const updatedYAxisProps = {
-      dependentAxis: true,
-      showGrid: true,
-      fixLabelOverlap: yAxisFixLabelOverlap
-    };
-
-    if (xAxisTickValues) {
-      updatedXAxisProps.tickValues = xAxisTickValues;
-    }
-
-    if (xAxisTickFormat) {
-      updatedXAxisProps.tickFormat = xAxisTickFormat;
-    }
-
-    if (yAxisTickValues) {
-      updatedYAxisProps.tickValues = yAxisTickValues;
-    }
-
-    if (yAxisTickFormat) {
-      updatedYAxisProps.tickFormat = yAxisTickFormat;
-    }
-
     const chartProps = { padding, ...chartLegendProps, ...chartDomain };
 
     // FixMe: Check maxY has value, and conditionally apply ChartVoronoiContainer to avoid a massive memory leak?
@@ -189,8 +197,8 @@ class ChartArea extends React.Component {
     return (
       <div ref={this.containerRef}>
         <Chart width={chartWidth} {...chartProps}>
-          <ChartAxis {...updatedXAxisProps} />
-          <ChartAxis {...updatedYAxisProps} />
+          <ChartAxis {...xAxisProps} />
+          <ChartAxis {...yAxisProps} />
           {(dataSetOne.thresholds && dataSetOne.thresholds.length && (
             /** fixme: split this out into a new wrapper called ChartThreshold in PF React */
             <ChartLine data={dataSetOne.thresholds} style={dataSetOne.thresholdStyle} />
