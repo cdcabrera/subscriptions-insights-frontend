@@ -7,8 +7,6 @@ import {
 } from '../graphHelpers';
 import { rhelApiTypes } from '../../types/rhelApiTypes';
 
-import { translate } from '../../components/i18n/i18n';
-
 describe('GraphHelpers', () => {
   const GRANULARITY_TYPES = rhelApiTypes.RHSM_API_QUERY_GRANULARITY_TYPES;
 
@@ -20,8 +18,8 @@ describe('GraphHelpers', () => {
     const props = {
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
-      tooltipLabel: translate('curiosity-graph.tooltipSockets'),
-      tooltipThresholdLabel: translate('curiosity-graph.tooltipSocketsThreshold'),
+      tooltipLabel: 'lorem tooltip label',
+      tooltipThresholdLabel: 'ipsum threshhold label',
       granularity: GRANULARITY_TYPES.DAILY,
       startDate: new Date('2019-06-01T00:00:00Z'),
       endDate: new Date('2019-06-05T23:59:59Z')
@@ -34,8 +32,8 @@ describe('GraphHelpers', () => {
     const props = {
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
-      tooltipLabel: translate('curiosity-graph.tooltipSockets'),
-      tooltipThresholdLabel: translate('curiosity-graph.tooltipSocketsThreshold'),
+      tooltipLabel: 'lorem tooltip label',
+      tooltipThresholdLabel: 'ipsum threshhold label',
       granularity: GRANULARITY_TYPES.DAILY,
       startDate: new Date('2019-06-01T00:00:00Z'),
       endDate: new Date('2019-06-05T23:59:59Z'),
@@ -49,8 +47,8 @@ describe('GraphHelpers', () => {
     const props = {
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
-      tooltipLabel: translate('curiosity-graph.tooltipSockets'),
-      tooltipThresholdLabel: translate('curiosity-graph.tooltipSocketsThreshold'),
+      tooltipLabel: 'lorem tooltip label',
+      tooltipThresholdLabel: 'ipsum threshhold label',
       granularity: GRANULARITY_TYPES.DAILY,
       startDate: new Date('2019-06-01T00:00:00Z'),
       endDate: new Date('2019-06-05T23:59:59Z'),
@@ -100,8 +98,8 @@ describe('GraphHelpers', () => {
     const props = {
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
-      tooltipLabel: translate('curiosity-graph.tooltipSockets'),
-      tooltipThresholdLabel: translate('curiosity-graph.tooltipSocketsThreshold'),
+      tooltipLabel: 'lorem tooltip label',
+      tooltipThresholdLabel: 'ipsum threshhold label',
       granularity: GRANULARITY_TYPES.DAILY,
       startDate: new Date('2019-06-01T00:00:00Z'),
       endDate: new Date('2019-06-05T23:59:59Z'),
@@ -119,8 +117,8 @@ describe('GraphHelpers', () => {
     const props = {
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
-      tooltipLabel: translate('curiosity-graph.tooltipSockets'),
-      tooltipThresholdLabel: translate('curiosity-graph.tooltipSocketsThreshold'),
+      tooltipLabel: 'lorem tooltip label',
+      tooltipThresholdLabel: 'ipsum threshhold label',
       granularity: GRANULARITY_TYPES.DAILY,
       startDate: new Date('2018-12-31T00:00:00Z'),
       endDate: new Date('2019-01-06T00:00:00Z'),
@@ -184,8 +182,8 @@ describe('GraphHelpers', () => {
     const props = {
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
-      tooltipLabel: translate('curiosity-graph.tooltipSockets'),
-      tooltipThresholdLabel: translate('curiosity-graph.tooltipSocketsThreshold'),
+      tooltipLabel: 'lorem tooltip label',
+      tooltipThresholdLabel: 'ipsum threshhold label',
       granularity: GRANULARITY_TYPES.QUARTERLY,
       startDate: new Date('2018-04-01T00:00:00Z'),
       endDate: new Date('2019-04-01T00:00:00Z'),
@@ -236,14 +234,16 @@ describe('GraphHelpers', () => {
     const weekly = getChartXAxisLabelIncrement(GRANULARITY_TYPES.WEEKLY);
     const monthly = getChartXAxisLabelIncrement(GRANULARITY_TYPES.MONTHLY);
     const quarterly = getChartXAxisLabelIncrement(GRANULARITY_TYPES.QUARTERLY);
+
     expect({ daily, weekly, monthly, quarterly }).toMatchSnapshot('x axis tick increment');
   });
 
   it('should return a label based on granularity', () => {
-    const daily = getGraphLabels({ granularity: GRANULARITY_TYPES.DAILY, tooltipLabel: 'ipsum' });
-    const weekly = getGraphLabels({ granularity: GRANULARITY_TYPES.WEEKLY, tooltipLabel: 'ipsum' });
-    const monthly = getGraphLabels({ granularity: GRANULARITY_TYPES.MONTHLY, tooltipLabel: 'ipsum' });
-    const quarterly = getGraphLabels({ granularity: GRANULARITY_TYPES.QUARTERLY, tooltipLabel: 'ipsum' });
+    const daily = getGraphLabels({ granularity: GRANULARITY_TYPES.DAILY, tooltipLabel: 'ipsum tooltip label' });
+    const weekly = getGraphLabels({ granularity: GRANULARITY_TYPES.WEEKLY, tooltipLabel: 'ipsum tooltip label' });
+    const monthly = getGraphLabels({ granularity: GRANULARITY_TYPES.MONTHLY, tooltipLabel: 'ipsum tooltip label' });
+    const quarterly = getGraphLabels({ granularity: GRANULARITY_TYPES.QUARTERLY, tooltipLabel: 'ipsum tooltip label' });
+
     expect({ daily, weekly, monthly, quarterly }).toMatchSnapshot('granularity based label');
   });
 
@@ -252,6 +252,7 @@ describe('GraphHelpers', () => {
     const weekly = getGranularityDateType(GRANULARITY_TYPES.WEEKLY);
     const monthly = getGranularityDateType(GRANULARITY_TYPES.MONTHLY);
     const quarterly = getGranularityDateType(GRANULARITY_TYPES.QUARTERLY);
+
     expect({ daily, weekly, monthly, quarterly }).toMatchSnapshot('granularity date type');
   });
 });

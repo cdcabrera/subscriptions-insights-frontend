@@ -127,14 +127,14 @@ const getThresholdLabel = ({ yValue, tooltipThresholdLabel }) => {
  * @param {Date} startDate
  * @param {string} tooltipLabel
  * @param {string} tooltipThresholdLabel
- * @returns {Array}
+ * @returns {Object}
  */
 const fillFormatChartData = ({ data, endDate, granularity, startDate, tooltipLabel, tooltipThresholdLabel }) => {
   const granularityType = getGranularityDateType(granularity);
   const granularityTick = getChartXAxisLabelIncrement(granularity);
   const endDateStartDateDiff = moment(endDate).diff(startDate, granularityType);
   const chartData = [];
-  const dataThresholds = [];
+  const chartDataThresholds = [];
 
   let previousData = null;
   let previousYear = null;
@@ -164,26 +164,26 @@ const fillFormatChartData = ({ data, endDate, granularity, startDate, tooltipLab
     }
 
     const yAxis = (data[stringDate] && data[stringDate].data) || 0;
+    const yAxisThreshold = (data[stringDate] && data[stringDate].dataThreshold) || 0;
 
     const labelData = {
       data: yAxis,
       previousData,
       formattedDate,
-      granularity
+      granularity,
+      tooltipLabel
     };
 
-    if (data[stringDate] && data[stringDate].dataThreshold) {
-      dataThresholds.push({
-        x: chartData.length,
-        y: data[stringDate].dataThreshold,
-        tooltip: getThresholdLabel({ yValue: data[stringDate].dataThreshold, tooltipThresholdLabel })
-      });
-    }
+    chartDataThresholds.push({
+      x: chartData.length,
+      y: yAxisThreshold,
+      tooltip: getThresholdLabel({ yValue: yAxisThreshold, tooltipThresholdLabel })
+    });
 
     chartData.push({
       x: chartData.length,
       y: yAxis,
-      tooltip: getLabel({ ...labelData, tooltipLabel }),
+      tooltip: getLabel(labelData),
       xAxisLabel:
         granularityType === 'months' || granularityType === 'quarters'
           ? formattedDate.replace(/\s/, '\n')
@@ -197,7 +197,7 @@ const fillFormatChartData = ({ data, endDate, granularity, startDate, tooltipLab
     }
   }
 
-  return { chartData, dataThresholds };
+  return { chartData, chartDataThresholds };
 };
 
 /**
@@ -242,7 +242,7 @@ const convertChartData = ({
     }
   });
 
-  const { chartData, dataThresholds } = fillFormatChartData({
+  const { chartData, chartDataThresholds } = fillFormatChartData({
     data: formattedData,
     endDate,
     granularity,
@@ -253,7 +253,7 @@ const convertChartData = ({
 
   return {
     chartData,
-    dataThresholds,
+    chartDataThresholds,
     chartXAxisLabelIncrement: getChartXAxisLabelIncrement(granularity)
   };
 };

@@ -50,7 +50,7 @@ class RhelGraphCard extends React.Component {
   // ToDo: evaluate show error toast on chart error
   renderChart() {
     const { graphData, graphGranularity, startDate, endDate, t } = this.props;
-    const { chartXAxisLabelIncrement, chartData, dataThresholds } = graphHelpers.convertChartData({
+    const { chartXAxisLabelIncrement, chartData, chartDataThresholds } = graphHelpers.convertChartData({
       data: graphData.usage,
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS,
       dataThresholdFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_SOCKETS_THRESHOLD,
@@ -66,12 +66,14 @@ class RhelGraphCard extends React.Component {
         xAxisFixLabelOverlap
         xAxisLabelIncrement={chartXAxisLabelIncrement}
         yAxisTickFormat={({ tick }) => numeral(tick).format('0a')}
-        dataSetOne={{
-          data: chartData,
-          thresholds: dataThresholds,
-          dataLegend: { name: t('curiosity-graph.legendSocketsLabel') },
-          thresholdLegend: { name: t('curiosity-graph.legendSocketsThresholdLabel'), symbol: { type: 'dash' } }
-        }}
+        dataSets={[
+          {
+            data: chartData,
+            thresholds: chartDataThresholds,
+            legendThreshold: { name: t('curiosity-graph.legendSocketsThresholdLabel') },
+            legendData: { name: t('curiosity-graph.legendSocketsLabel') }
+          }
+        ]}
       />
     );
   }

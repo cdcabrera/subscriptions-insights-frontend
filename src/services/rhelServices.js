@@ -59,14 +59,14 @@ import serviceConfig from './config';
  *           "instance_count": 14,
  *           "cores": 28,
  *           "sockets": 28,
- *           "sockets_threshold": 30
+ *           "sockets_threshold": 0
  *         },
  *         {
  *           "date": "2019-07-23T00:00:00Z",
  *           "instance_count": 16,
  *           "cores": 32,
  *           "sockets": 32,
- *           "sockets_threshold": 50
+ *           "sockets_threshold": 0
  *         },
  *         {
  *           "date": "2019-07-24T00:00:00Z",
