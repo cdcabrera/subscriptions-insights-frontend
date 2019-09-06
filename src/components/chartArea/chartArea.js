@@ -102,6 +102,7 @@ class ChartArea extends React.Component {
     }
 
     const generatedDomain = {};
+    const updatedChartDomain = {};
     let dataSetOneMaxY = 0;
 
     dataSetOne.data.forEach(value => {
@@ -117,9 +118,13 @@ class ChartArea extends React.Component {
       generatedDomain.y = [0, Math.ceil((dataSetOneMaxY + 1) / floored) * floored];
     }
 
+    if (Object.keys(generatedDomain).length) {
+      updatedChartDomain.domain = generatedDomain;
+    }
+
     return {
       maxY: dataSetOneMaxY,
-      domain: generatedDomain
+      chartDomain: { ...updatedChartDomain }
     };
   }
 
@@ -143,6 +148,10 @@ class ChartArea extends React.Component {
     const { dataSetOne, padding, xAxisFixLabelOverlap, yAxisFixLabelOverlap } = this.props;
 
     const { xAxisTickValues, xAxisTickFormat, yAxisTickValues, yAxisTickFormat } = this.getChartTicks();
+    const { chartDomain, maxY } = this.getChartDomain({
+      isXAxisTicks: !!xAxisTickValues,
+      isYAxisTicks: !!yAxisTickValues
+    });
     const chartLegendProps = this.getChartLegend();
 
     const updatedXAxisProps = {
@@ -170,16 +179,11 @@ class ChartArea extends React.Component {
       updatedYAxisProps.tickFormat = yAxisTickFormat;
     }
 
-    const { domain, maxY } = this.getChartDomain({ isXAxisTicks: !!xAxisTickValues, isYAxisTicks: !!yAxisTickValues });
-    const chartProps = { padding, ...chartLegendProps };
+    const chartProps = { padding, ...chartLegendProps, ...chartDomain };
 
     // FixMe: Check maxY has value, and conditionally apply ChartVoronoiContainer to avoid a massive memory leak?
     if (maxY > 0) {
       chartProps.containerComponent = <ChartVoronoiContainer labels={d => d.tooltip} />;
-    }
-
-    if (Object.keys(domain).length) {
-      chartProps.domain = domain;
     }
 
     return (
