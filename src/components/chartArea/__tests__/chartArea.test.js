@@ -29,6 +29,7 @@ describe('ChartArea Component', () => {
             yAxisLabel: '2 y axis label'
           }
         ],
+        /*
         thresholds: [
           {
             x: 1,
@@ -40,9 +41,10 @@ describe('ChartArea Component', () => {
             y: 2,
             tooltip: '2 threshold tooltip'
           }
-        ],
-        dataLegend: { name: 'Arma virumque cano' },
-        thresholdLegend: { name: 'Arma virumque cano', symbol: { type: 'dash' } }
+        ]
+        */
+        // thresholdStyle: { data: { strokeDasharray: 3.3 } },
+        legend: [{ name: 'Arma virumque cano' }, { name: 'Arma virumque cano', symbol: { type: 'dash' } }]
       }
     };
 
@@ -67,21 +69,7 @@ describe('ChartArea Component', () => {
             tooltip: '2 lorem ipsum',
             xAxisLabel: '2 x axis label'
           }
-        ],
-        thresholds: [
-          {
-            x: 1,
-            y: 1,
-            tooltip: '1 threshold tooltip'
-          },
-          {
-            x: 1,
-            y: 2,
-            tooltip: '2 threshold tooltip'
-          }
-        ],
-        dataLegend: { name: 'Arma virumque cano' },
-        thresholdLegend: { name: 'Arma virumque cano', symbol: { type: 'dash' } }
+        ]
       }
     };
 

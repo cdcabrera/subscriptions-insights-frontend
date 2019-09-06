@@ -69,8 +69,11 @@ class RhelGraphCard extends React.Component {
         dataSetOne={{
           data: chartData,
           thresholds: dataThresholds,
-          dataLegend: { name: t('curiosity-graph.legendSocketsLabel') },
-          thresholdLegend: { name: t('curiosity-graph.legendSocketsThresholdLabel'), symbol: { type: 'dash' } }
+          thresholdStyle: { data: { strokeDasharray: 3.3 } },
+          legend: [
+            { name: t('curiosity-graph.legendSocketsLabel') },
+            { name: t('curiosity-graph.legendSocketsThresholdLabel'), symbol: { type: 'dash' } }
+          ]
         }}
       />
     );
