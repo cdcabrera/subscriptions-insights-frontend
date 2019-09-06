@@ -252,7 +252,7 @@ ChartArea.defaultProps = {
   },
   height: 275,
   padding: {
-    bottom: 50,
+    bottom: 75,
     left: 50,
     right: 50,
     top: 50
