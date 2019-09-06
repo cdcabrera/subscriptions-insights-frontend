@@ -187,12 +187,12 @@ class ChartArea extends React.Component {
         <Chart width={chartWidth} {...chartProps}>
           <ChartAxis {...updatedXAxisProps} />
           <ChartAxis {...updatedYAxisProps} />
+          {(dataSetOne.thresholds && dataSetOne.thresholds.length && (
+            /** fixme: split this out into a new wrapper called ChartThreshold in PF React */
+            <ChartLine data={dataSetOne.thresholds} style={dataSetOne.thresholdStyle} />
+          )) ||
+            null}
           <ChartStack>
-            {(dataSetOne.thresholds && dataSetOne.thresholds.length && (
-              /** fixme: split this out into a new wrapper called ChartThreshold in PF React */
-              <ChartLine data={dataSetOne.thresholds} style={dataSetOne.thresholdStyle} />
-            )) ||
-              null}
             {(dataSetOne.data && dataSetOne.data.length && <PfChartArea data={dataSetOne.data} />) || null}
           </ChartStack>
         </Chart>
