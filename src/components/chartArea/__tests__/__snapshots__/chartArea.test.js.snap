@@ -310,6 +310,80 @@ exports[`ChartArea Component should allow tick formatting: y tick format 1`] = `
           />
         </g>
       </g>
+      <g>
+        <rect
+          height="30.904999999999998"
+          role="presentation"
+          shape-rendering="auto"
+          style="fill:none"
+          vector-effect="non-scaling-stroke"
+          width="369.85743944636675"
+          x="0"
+          y="282"
+        />
+        <path
+          d="M 9.128, 300.872
+      h9.744
+      v-9.744
+      h-9.744
+      z"
+          role="presentation"
+          shape-rendering="auto"
+          style="type:square;fill:#06c"
+        />
+        <path
+          d="M 192.76871972318338, 298.156
+      h3.695999999999998
+      v-4.312
+      h-3.695999999999998
+      z
+      M 197.69671972318338, 298.156
+      h3.695999999999998
+      v-4.312
+      h-3.695999999999998
+      z
+      M 202.62471972318338, 298.156
+      h3.695999999999998
+      v-4.312
+      h-3.695999999999998
+      z"
+          role="presentation"
+          shape-rendering="auto"
+          style="type:dash;fill:#8bc1f7"
+        />
+        <text
+          direction="inherit"
+          dx="0"
+          dy="4.97"
+          x="30.8"
+          y="296"
+        >
+          <tspan
+            dx="0"
+            style="font-family:var(--pf-chart-global--FontFamily);font-size:14px;letter-spacing:var(--pf-chart-global--letter-spacing);padding:10px;stroke:transparent;fill:#252525"
+            text-anchor="start"
+            x="30.8"
+          >
+            Arma virumque cano
+          </tspan>
+        </text>
+        <text
+          direction="inherit"
+          dx="0"
+          dy="4.97"
+          x="215.7287197231834"
+          y="296"
+        >
+          <tspan
+            dx="0"
+            style="font-family:var(--pf-chart-global--FontFamily);font-size:14px;letter-spacing:var(--pf-chart-global--letter-spacing);padding:10px;stroke:transparent;fill:#252525"
+            text-anchor="start"
+            x="215.7287197231834"
+          >
+            Arma virumque cano
+          </tspan>
+        </text>
+      </g>
     </svg>
     <div
       style="z-index:99;position:absolute;top:0;left:0;width:100%;height:auto"
@@ -340,6 +414,9 @@ exports[`ChartArea Component should render a basic component: basic 1`] = `
         ],
       }
     }
+    legendData={Array []}
+    legendOrientation="horizontal"
+    legendPosition="bottom"
     padding={
       Object {
         "bottom": 50,
@@ -399,6 +476,21 @@ exports[`ChartArea Component should render basic data: data 1`] = `
         voronoiPadding={5}
       />
     }
+    legendData={
+      Array [
+        Object {
+          "name": "Arma virumque cano",
+        },
+        Object {
+          "name": "Arma virumque cano",
+          "symbol": Object {
+            "type": "dash",
+          },
+        },
+      ]
+    }
+    legendOrientation="horizontal"
+    legendPosition="bottom"
     padding={
       Object {
         "bottom": 50,

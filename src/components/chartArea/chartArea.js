@@ -171,7 +171,7 @@ class ChartArea extends React.Component {
     }
 
     const { domain, maxY } = this.getChartDomain({ isXAxisTicks: !!xAxisTickValues, isYAxisTicks: !!yAxisTickValues });
-    const chartProps = { padding };
+    const chartProps = { padding, ...chartLegendProps };
 
     // FixMe: Check maxY has value, and conditionally apply ChartVoronoiContainer to avoid a massive memory leak?
     if (maxY > 0) {

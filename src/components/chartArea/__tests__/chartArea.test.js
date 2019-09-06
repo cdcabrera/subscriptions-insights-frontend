@@ -69,7 +69,8 @@ describe('ChartArea Component', () => {
             tooltip: '2 lorem ipsum',
             xAxisLabel: '2 x axis label'
           }
-        ]
+        ],
+        legend: [{ name: 'Arma virumque cano' }, { name: 'Arma virumque cano', symbol: { type: 'dash' } }]
       }
     };
 
