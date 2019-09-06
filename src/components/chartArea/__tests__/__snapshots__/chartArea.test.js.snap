@@ -481,12 +481,6 @@ exports[`ChartArea Component should render basic data: data 1`] = `
         Object {
           "name": "Arma virumque cano",
         },
-        Object {
-          "name": "Arma virumque cano",
-          "symbol": Object {
-            "type": "dash",
-          },
-        },
       ]
     }
     legendOrientation="horizontal"

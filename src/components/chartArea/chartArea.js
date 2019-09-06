@@ -146,6 +146,12 @@ class ChartArea extends React.Component {
       dataSetOneMaxY = value.y > dataSetOneMaxY ? value.y : dataSetOneMaxY;
     });
 
+    if (dataSetOne.thresholds) {
+      dataSetOne.thresholds.forEach(value => {
+        dataSetOneMaxY = value.y > dataSetOneMaxY ? value.y : dataSetOneMaxY;
+      });
+    }
+
     if (!isXAxisTicks) {
       generatedDomain.x = [0, dataSetOne.data.length || 10];
     }
@@ -213,6 +219,7 @@ class ChartArea extends React.Component {
   }
 }
 
+// ToDo: restructure dataSetOne as an array of objects called dataSets
 ChartArea.propTypes = {
   dataSetOne: PropTypes.shape({
     data: PropTypes.arrayOf(
