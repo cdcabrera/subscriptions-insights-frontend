@@ -537,6 +537,7 @@ exports[`ChartArea Component should render basic data: data 1`] = `
             },
           ]
         }
+        key="generatedid-"
       />
     </ChartStack>
   </Chart>

@@ -12,25 +12,28 @@ describe('ChartArea Component', () => {
 
   it('should render basic data', () => {
     const props = {
-      dataSetOne: {
-        data: [
-          {
-            x: 1,
-            y: 1,
-            tooltip: '1 lorem ipsum',
-            xAxisLabel: '1 x axis label',
-            yAxisLabel: '1 y axis label'
-          },
-          {
-            x: 2,
-            y: 2,
-            tooltip: '2 lorem ipsum',
-            xAxisLabel: '2 x axis label',
-            yAxisLabel: '2 y axis label'
-          }
-        ],
-        legend: [{ name: 'Arma virumque cano' }]
-      }
+      dataSets: [
+        {
+          data: [
+            {
+              x: 1,
+              y: 1,
+              tooltip: '1 lorem ipsum',
+              xAxisLabel: '1 x axis label',
+              yAxisLabel: '1 y axis label'
+            },
+            {
+              x: 2,
+              y: 2,
+              tooltip: '2 lorem ipsum',
+              xAxisLabel: '2 x axis label',
+              yAxisLabel: '2 y axis label'
+            }
+          ],
+          // legendData: { name: 'Arma virumque cano' }
+          legend: [{ name: 'Arma virumque cano' }]
+        }
+      ]
     };
 
     const component = shallow(<ChartArea {...props} />);
@@ -40,23 +43,27 @@ describe('ChartArea Component', () => {
   it('should allow tick formatting', () => {
     const props = {
       yAxisTickFormat: ({ tick }) => `${tick} dolor sit`,
-      dataSetOne: {
-        data: [
-          {
-            x: 1,
-            y: 0,
-            tooltip: '1 lorem ipsum',
-            xAxisLabel: '1 x axis label'
-          },
-          {
-            x: 2,
-            y: 1,
-            tooltip: '2 lorem ipsum',
-            xAxisLabel: '2 x axis label'
-          }
-        ],
-        legend: [{ name: 'Arma virumque cano' }, { name: 'Arma virumque cano', symbol: { type: 'dash' } }]
-      }
+      dataSets: [
+        {
+          data: [
+            {
+              x: 1,
+              y: 0,
+              tooltip: '1 lorem ipsum',
+              xAxisLabel: '1 x axis label'
+            },
+            {
+              x: 2,
+              y: 1,
+              tooltip: '2 lorem ipsum',
+              xAxisLabel: '2 x axis label'
+            }
+          ],
+          // legendData: { name: 'Arma virumque cano' },
+          // legendThreshold: { name: 'Arma virumque cano', symbol: { type: 'dash' } }
+          legend: [{ name: 'Arma virumque cano' }, { name: 'Arma virumque cano', symbol: { type: 'dash' } }]
+        }
+      ]
     };
 
     const component = shallow(<ChartArea {...props} />);

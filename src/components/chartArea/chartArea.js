@@ -9,6 +9,7 @@ import {
   ChartArea as PfChartArea
 } from '@patternfly/react-charts';
 import _cloneDeep from 'lodash/cloneDeep';
+import { helpers } from '../../common';
 
 class ChartArea extends React.Component {
   state = { chartWidth: 0 };
@@ -33,33 +34,21 @@ class ChartArea extends React.Component {
   };
 
   setChartTicks() {
-    const {
-      xAxisLabelIncrement,
-      yAxisLabelIncrement,
-      xAxisLabelUseDataSet,
-      yAxisLabelUseDataSet,
-      xAxisTickFormat,
-      yAxisTickFormat,
-      dataSetOne
-    } = this.props;
+    const { xAxisLabelIncrement, yAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
     const xAxisProps = {};
     const yAxisProps = {};
-    let xAxisDataSet = [];
-    let yAxisDataSet = [];
+    let xAxisDataSet = (dataSets.length && dataSets[0].data) || [];
+    let yAxisDataSet = (dataSets.length && dataSets[0].data) || [];
 
-    switch (xAxisLabelUseDataSet) {
-      case 'one':
-      default:
-        xAxisDataSet = dataSetOne.data;
-        break;
-    }
+    dataSets.forEach(dataSet => {
+      if (dataSet.xAxisLabelUseDataSet) {
+        xAxisDataSet = dataSet.data;
+      }
 
-    switch (yAxisLabelUseDataSet) {
-      case 'one':
-      default:
-        yAxisDataSet = dataSetOne.data;
-        break;
-    }
+      if (dataSet.yAxisLabelUseDataSet) {
+        yAxisDataSet = dataSet.data;
+      }
+    });
 
     if (xAxisDataSet.find(value => value.xAxisLabel && value.xAxisLabel)) {
       xAxisProps.xAxisTickValues = xAxisDataSet.reduce(
@@ -132,7 +121,7 @@ class ChartArea extends React.Component {
 
   // ToDo: the domain range needs to be update when additional datasets are added
   getChartDomain({ isXAxisTicks, isYAxisTicks }) {
-    const { domain, dataSetOne } = this.props;
+    const { domain, dataSets } = this.props;
 
     if (Object.keys(domain).length) {
       return domain;
@@ -140,25 +129,30 @@ class ChartArea extends React.Component {
 
     const generatedDomain = {};
     const updatedChartDomain = {};
-    let dataSetOneMaxY = 0;
+    let dataSetMaxX = 0;
+    let dataSetMaxY = 0;
 
-    dataSetOne.data.forEach(value => {
-      dataSetOneMaxY = value.y > dataSetOneMaxY ? value.y : dataSetOneMaxY;
+    dataSets.forEach(dataSet => {
+      dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data : dataSetMaxX;
+
+      dataSet.data.forEach(value => {
+        dataSetMaxY = value.y > dataSetMaxY ? value.y : dataSetMaxY;
+      });
+
+      if (dataSet.thresholds) {
+        dataSet.thresholds.forEach(value => {
+          dataSetMaxY = value.y > dataSetMaxY ? value.y : dataSetMaxY;
+        });
+      }
     });
 
-    if (dataSetOne.thresholds) {
-      dataSetOne.thresholds.forEach(value => {
-        dataSetOneMaxY = value.y > dataSetOneMaxY ? value.y : dataSetOneMaxY;
-      });
-    }
-
     if (!isXAxisTicks) {
-      generatedDomain.x = [0, dataSetOne.data.length || 10];
+      generatedDomain.x = [0, dataSetMaxX || 10];
     }
 
     if (!isYAxisTicks) {
-      const floored = Math.pow(10, Math.floor(Math.log10(dataSetOneMaxY || 10)));
-      generatedDomain.y = [0, Math.ceil((dataSetOneMaxY + 1) / floored) * floored];
+      const floored = Math.pow(10, Math.floor(Math.log10(dataSetMaxY || 10)));
+      generatedDomain.y = [0, Math.ceil((dataSetMaxY + 1) / floored) * floored];
     }
 
     if (Object.keys(generatedDomain).length) {
@@ -166,18 +160,29 @@ class ChartArea extends React.Component {
     }
 
     return {
-      maxY: dataSetOneMaxY,
+      maxY: dataSetMaxY,
       chartDomain: { ...updatedChartDomain }
     };
   }
 
   getChartLegend() {
-    const { dataSetOne } = this.props;
+    const { dataSets } = this.props;
     let legendData = [];
 
-    if (dataSetOne.legend) {
-      legendData = legendData.concat(dataSetOne.legend);
-    }
+    dataSets.forEach(dataSet => {
+      if (dataSet.legend) {
+        legendData = legendData.concat(dataSet.legend);
+      }
+      /*
+      if (dataSet.legendThreshold) {
+        legendData.push(dataSet.legendThreshold);
+      }
+
+      if (dataSet.legendData) {
+        legendData.push(dataSet.legendData);
+      }
+      */
+    });
 
     return {
       legendData,
@@ -188,7 +193,7 @@ class ChartArea extends React.Component {
 
   render() {
     const { chartWidth } = this.state;
-    const { dataSetOne, padding } = this.props;
+    const { dataSets, padding } = this.props;
 
     const { isXAxisTicks, isYAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
     const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks, isYAxisTicks });
@@ -205,13 +210,28 @@ class ChartArea extends React.Component {
         <Chart width={chartWidth} {...chartProps}>
           <ChartAxis {...xAxisProps} />
           <ChartAxis {...yAxisProps} />
-          {(dataSetOne.thresholds && dataSetOne.thresholds.length && (
-            /** fixme: split this out into a new wrapper called ChartThreshold in PF React */
-            <ChartLine data={dataSetOne.thresholds} style={dataSetOne.thresholdStyle} />
-          )) ||
+          {(dataSets &&
+            dataSets.length &&
+            dataSets.map(
+              dataSet =>
+                (dataSet.thresholds && dataSet.thresholds.length && (
+                  /** fixme: split this out into a new wrapper called ChartThreshold in PF React */
+                  <ChartLine key={helpers.generateId()} data={dataSet.thresholds} style={dataSet.thresholdStyle} />
+                )) ||
+                null
+            )) ||
             null}
           <ChartStack>
-            {(dataSetOne.data && dataSetOne.data.length && <PfChartArea data={dataSetOne.data} />) || null}
+            {(dataSets &&
+              dataSets.length &&
+              dataSets.map(
+                dataSet =>
+                  (dataSet.data && dataSet.data.length && (
+                    <PfChartArea key={helpers.generateId()} data={dataSet.data} />
+                  )) ||
+                  null
+              )) ||
+              null}
           </ChartStack>
         </Chart>
       </div>
@@ -219,31 +239,35 @@ class ChartArea extends React.Component {
   }
 }
 
-// ToDo: restructure dataSetOne as an array of objects called dataSets
 ChartArea.propTypes = {
-  dataSetOne: PropTypes.shape({
-    data: PropTypes.arrayOf(
-      PropTypes.shape({
-        x: PropTypes.number,
-        y: PropTypes.number,
-        tooltip: PropTypes.string,
-        xAxisLabel: PropTypes.string,
-        yAxisLabel: PropTypes.string
-      })
-    ),
-    thresholds: PropTypes.arrayOf(
-      PropTypes.shape({
-        x: PropTypes.number,
-        y: PropTypes.number
-      })
-    ),
-    thresholdStyle: PropTypes.object,
-    legend: PropTypes.arrayOf(
-      PropTypes.shape({
+  dataSets: PropTypes.arrayOf(
+    PropTypes.shape({
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.number,
+          y: PropTypes.number,
+          tooltip: PropTypes.string,
+          xAxisLabel: PropTypes.string,
+          yAxisLabel: PropTypes.string
+        })
+      ),
+      threshold: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.number,
+          y: PropTypes.number
+        })
+      ),
+      thresholdStyle: PropTypes.object,
+      legendData: PropTypes.shape({
         name: PropTypes.string
-      })
-    )
-  }),
+      }),
+      legendThreshold: PropTypes.shape({
+        name: PropTypes.string
+      }),
+      xAxisLabelUseDataSet: PropTypes.bool,
+      yAxisLabelUseDataSet: PropTypes.bool
+    })
+  ),
   domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   height: PropTypes.number,
   padding: PropTypes.shape({
@@ -254,21 +278,15 @@ ChartArea.propTypes = {
   }),
   xAxisFixLabelOverlap: PropTypes.bool,
   xAxisLabelIncrement: PropTypes.number,
-  xAxisLabelUseDataSet: PropTypes.oneOf(['one']),
   xAxisTickFormat: PropTypes.func,
   yAxisFixLabelOverlap: PropTypes.bool,
   yAxisLabelIncrement: PropTypes.number,
-  yAxisLabelUseDataSet: PropTypes.oneOf(['one']),
   yAxisTickFormat: PropTypes.func
 };
 
 ChartArea.defaultProps = {
   domain: {},
-  dataSetOne: {
-    data: [],
-    thresholds: [],
-    legend: null
-  },
+  dataSets: [],
   height: 275,
   padding: {
     bottom: 75,
@@ -278,11 +296,9 @@ ChartArea.defaultProps = {
   },
   xAxisFixLabelOverlap: false,
   xAxisLabelIncrement: 1,
-  xAxisLabelUseDataSet: 'one',
   xAxisTickFormat: null,
   yAxisFixLabelOverlap: false,
   yAxisLabelIncrement: 1,
-  yAxisLabelUseDataSet: 'one',
   yAxisTickFormat: null
 };
 
