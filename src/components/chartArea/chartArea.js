@@ -167,13 +167,9 @@ class ChartArea extends React.Component {
 
   getChartLegend() {
     const { dataSets } = this.props;
-    let legendData = [];
+    const legendData = [];
 
     dataSets.forEach(dataSet => {
-      if (dataSet.legend) {
-        legendData = legendData.concat(dataSet.legend);
-      }
-      /*
       if (dataSet.legendThreshold) {
         legendData.push(dataSet.legendThreshold);
       }
@@ -181,7 +177,6 @@ class ChartArea extends React.Component {
       if (dataSet.legendData) {
         legendData.push(dataSet.legendData);
       }
-      */
     });
 
     return {

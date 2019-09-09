@@ -30,8 +30,7 @@ describe('ChartArea Component', () => {
               yAxisLabel: '2 y axis label'
             }
           ],
-          // legendData: { name: 'Arma virumque cano' }
-          legend: [{ name: 'Arma virumque cano' }]
+          legendData: { name: 'Arma virumque cano' }
         }
       ]
     };
@@ -59,9 +58,8 @@ describe('ChartArea Component', () => {
               xAxisLabel: '2 x axis label'
             }
           ],
-          // legendData: { name: 'Arma virumque cano' },
-          // legendThreshold: { name: 'Arma virumque cano', symbol: { type: 'dash' } }
-          legend: [{ name: 'Arma virumque cano', symbol: { type: 'dash' } }, { name: 'Arma virumque cano' }]
+          legendData: { name: 'Arma virumque cano' },
+          legendThreshold: { name: 'Arma virumque cano', symbol: { type: 'dash' } }
         }
       ]
     };
