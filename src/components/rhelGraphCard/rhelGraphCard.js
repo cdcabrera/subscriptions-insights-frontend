@@ -66,15 +66,14 @@ class RhelGraphCard extends React.Component {
         xAxisFixLabelOverlap
         xAxisLabelIncrement={chartXAxisLabelIncrement}
         yAxisTickFormat={({ tick }) => numeral(tick).format('0a')}
-        dataSetOne={{
-          data: chartData,
-          thresholds: dataThresholds,
-          thresholdStyle: { data: { strokeDasharray: 3.3 } },
-          legend: [
-            { name: t('curiosity-graph.legendSocketsThresholdLabel'), symbol: { type: 'dash' } },
-            { name: t('curiosity-graph.legendSocketsLabel') }
-          ]
-        }}
+        dataSets={[
+          {
+            data: chartData,
+            thresholds: dataThresholds,
+            legendThreshold: { name: t('curiosity-graph.legendSocketsThresholdLabel') },
+            legendData: { name: t('curiosity-graph.legendSocketsLabel') }
+          }
+        ]}
       />
     );
   }
