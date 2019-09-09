@@ -171,7 +171,7 @@ class ChartArea extends React.Component {
 
     dataSets.forEach(dataSet => {
       if (dataSet.legendThreshold) {
-        legendData.push(dataSet.legendThreshold);
+        legendData.push({ symbol: { type: 'dash' }, ...dataSet.legendThreshold });
       }
 
       if (dataSet.legendData) {
@@ -211,7 +211,11 @@ class ChartArea extends React.Component {
               dataSet =>
                 (dataSet.thresholds && dataSet.thresholds.length && (
                   /** fixme: split this out into a new wrapper called ChartThreshold in PF React */
-                  <ChartLine key={helpers.generateId()} data={dataSet.thresholds} style={dataSet.thresholdStyle} />
+                  <ChartLine
+                    key={helpers.generateId()}
+                    data={dataSet.thresholds}
+                    style={dataSet.thresholdStyle || { data: { strokeDasharray: 3.3 } }}
+                  />
                 )) ||
                 null
             )) ||

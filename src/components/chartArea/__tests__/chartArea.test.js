@@ -59,7 +59,7 @@ describe('ChartArea Component', () => {
             }
           ],
           legendData: { name: 'Arma virumque cano' },
-          legendThreshold: { name: 'Arma virumque cano', symbol: { type: 'dash' } }
+          legendThreshold: { name: 'Arma virumque cano' }
         }
       ]
     };
