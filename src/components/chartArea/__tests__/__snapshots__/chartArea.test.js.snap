@@ -312,37 +312,37 @@ exports[`ChartArea Component should allow tick formatting: y tick format 1`] = `
       </g>
       <g>
         <rect
-          height="30.904999999999998"
+          height="50.905"
           role="presentation"
           shape-rendering="auto"
           style="fill:none"
           vector-effect="non-scaling-stroke"
           width="369.85743944636675"
-          x="0"
+          x="40"
           y="257"
         />
         <path
-          d="M 7.84, 273.156
-      h3.6959999999999997
+          d="M 47.84, 293.156
+      h3.695999999999998
       v-4.312
-      h-3.6959999999999997
+      h-3.695999999999998
       z
-      M 12.767999999999999, 273.156
-      h3.6959999999999997
+      M 52.768, 293.156
+      h3.695999999999998
       v-4.312
-      h-3.6959999999999997
+      h-3.695999999999998
       z
-      M 17.695999999999998, 273.156
-      h3.6959999999999997
+      M 57.696, 293.156
+      h3.695999999999998
       v-4.312
-      h-3.6959999999999997
+      h-3.695999999999998
       z"
           role="presentation"
           shape-rendering="auto"
           style="type:dash;fill:#06c"
         />
         <path
-          d="M 194.0567197231834, 275.872
+          d="M 234.0567197231834, 295.872
       h9.743999999999971
       v-9.743999999999971
       h-9.743999999999971
@@ -355,14 +355,14 @@ exports[`ChartArea Component should allow tick formatting: y tick format 1`] = `
           direction="inherit"
           dx="0"
           dy="4.97"
-          x="30.8"
-          y="271"
+          x="70.8"
+          y="291"
         >
           <tspan
             dx="0"
             style="font-family:var(--pf-chart-global--FontFamily);font-size:14px;letter-spacing:var(--pf-chart-global--letter-spacing);padding:10px;stroke:transparent;fill:#252525"
             text-anchor="start"
-            x="30.8"
+            x="70.8"
           >
             Arma virumque cano
           </tspan>
@@ -371,14 +371,14 @@ exports[`ChartArea Component should allow tick formatting: y tick format 1`] = `
           direction="inherit"
           dx="0"
           dy="4.97"
-          x="215.7287197231834"
-          y="271"
+          x="255.7287197231834"
+          y="291"
         >
           <tspan
             dx="0"
             style="font-family:var(--pf-chart-global--FontFamily);font-size:14px;letter-spacing:var(--pf-chart-global--letter-spacing);padding:10px;stroke:transparent;fill:#252525"
             text-anchor="start"
-            x="215.7287197231834"
+            x="255.7287197231834"
           >
             Arma virumque cano
           </tspan>
@@ -414,9 +414,18 @@ exports[`ChartArea Component should render a basic component: basic 1`] = `
         ],
       }
     }
+    legendComponent={
+      <ChartLegend
+        borderPadding={
+          Object {
+            "top": 20,
+          }
+        }
+      />
+    }
     legendData={Array []}
     legendOrientation="horizontal"
-    legendPosition="bottom"
+    legendPosition="bottom-left"
     padding={
       Object {
         "bottom": 75,
@@ -476,6 +485,15 @@ exports[`ChartArea Component should render basic data: data 1`] = `
         voronoiPadding={5}
       />
     }
+    legendComponent={
+      <ChartLegend
+        borderPadding={
+          Object {
+            "top": 20,
+          }
+        }
+      />
+    }
     legendData={
       Array [
         Object {
@@ -484,7 +502,7 @@ exports[`ChartArea Component should render basic data: data 1`] = `
       ]
     }
     legendOrientation="horizontal"
-    legendPosition="bottom"
+    legendPosition="bottom-left"
     padding={
       Object {
         "bottom": 75,

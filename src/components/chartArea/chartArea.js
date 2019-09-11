@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Chart,
   ChartAxis,
+  ChartLegend,
   ChartLine,
   ChartVoronoiContainer,
   ChartStack,
@@ -182,7 +183,8 @@ class ChartArea extends React.Component {
     return {
       legendData,
       legendOrientation: 'horizontal',
-      legendPosition: 'bottom'
+      legendPosition: 'bottom-left',
+      legendComponent: <ChartLegend borderPadding={{ top: 20 }} />
     };
   }
 
