@@ -102,33 +102,7 @@ Object {
       "y": 0,
     },
   ],
-  "chartDataThresholds": Array [
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 0,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 1,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 2,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 3,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 4,
-      "y": 0,
-    },
-  ],
+  "chartDataThresholds": Array [],
   "chartXAxisLabelIncrement": 5,
 }
 `;
@@ -167,33 +141,7 @@ Object {
       "y": 0,
     },
   ],
-  "chartDataThresholds": Array [
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 0,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 1,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 2,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 3,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 4,
-      "y": 0,
-    },
-  ],
+  "chartDataThresholds": Array [],
   "chartXAxisLabelIncrement": 5,
 }
 `;
@@ -232,33 +180,7 @@ Object {
       "y": 0,
     },
   ],
-  "chartDataThresholds": Array [
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 0,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 1,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 2,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 3,
-      "y": 0,
-    },
-    Object {
-      "tooltip": "ipsum threshhold label: 0",
-      "x": 4,
-      "y": 0,
-    },
-  ],
+  "chartDataThresholds": Array [],
   "chartXAxisLabelIncrement": 5,
 }
 `;

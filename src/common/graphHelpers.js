@@ -136,6 +136,7 @@ const fillFormatChartData = ({ data, endDate, granularity, startDate, tooltipLab
   const chartData = [];
   const chartDataThresholds = [];
 
+  let isThreshold = false;
   let previousData = null;
   let previousYear = null;
 
@@ -165,6 +166,8 @@ const fillFormatChartData = ({ data, endDate, granularity, startDate, tooltipLab
 
     const yAxis = (data[stringDate] && data[stringDate].data) || 0;
     const yAxisThreshold = (data[stringDate] && data[stringDate].dataThreshold) || 0;
+
+    isThreshold = isThreshold || yAxisThreshold > 0;
 
     const labelData = {
       data: yAxis,
@@ -197,7 +200,7 @@ const fillFormatChartData = ({ data, endDate, granularity, startDate, tooltipLab
     }
   }
 
-  return { chartData, chartDataThresholds };
+  return { chartData, chartDataThresholds: (isThreshold && chartDataThresholds) || [] };
 };
 
 /**
