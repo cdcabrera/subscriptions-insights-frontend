@@ -15,7 +15,8 @@ const RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES = {
   CORES: 'cores',
   DATE: 'date',
   INSTANCES: 'instance_count',
-  SOCKETS: 'sockets'
+  SOCKETS: 'sockets',
+  HYPERVISOR: 'hypervisor'
 };
 const RHSM_API_RESPONSE_PRODUCTS_META = 'meta';
 const RHSM_API_RESPONSE_PRODUCTS_META_TYPES = {

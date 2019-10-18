@@ -44,72 +44,84 @@ import serviceConfig from './config';
  *           "date": "2019-07-20T00:00:00Z",
  *           "instance_count": 10,
  *           "cores": 20,
+ *           "hypervisor": 0,
  *           "sockets": 0
  *         },
  *         {
  *           "date": "2019-07-21T00:00:00Z",
  *           "instance_count": 12,
  *           "cores": 24,
+ *           "hypervisor": 0,
  *           "sockets": 0
  *         },
  *         {
  *           "date": "2019-07-22T00:00:00Z",
  *           "instance_count": 14,
  *           "cores": 28,
+ *           "hypervisor": 0,
  *           "sockets": 0
  *         },
  *         {
  *           "date": "2019-07-23T00:00:00Z",
  *           "instance_count": 16,
  *           "cores": 32,
+ *           "hypervisor": 0,
  *           "sockets": 0
  *         },
  *         {
  *           "date": "2019-07-24T00:00:00Z",
  *           "instance_count": 18,
  *           "cores": 36,
+ *           "hypervisor": 40,
  *           "sockets": 36
  *         },
  *         {
  *           "date": "2019-07-25T00:00:00Z",
  *           "instance_count": 20,
  *           "cores": 40,
+ *           "hypervisor": 50,
  *           "sockets": 40
  *         },
  *         {
  *           "date": "2019-07-26T00:00:00Z",
  *           "instance_count": 22,
  *           "cores": 44,
+ *           "hypervisor": 60,
  *           "sockets": 44
  *         },
  *         {
  *           "date": "2019-07-27T00:00:00Z",
  *           "instance_count": 24,
  *           "cores": 48,
+ *           "hypervisor": 30,
  *           "sockets": 48
  *         },
  *         {
  *           "date": "2019-07-28T00:00:00Z",
  *           "instance_count": 26,
  *           "cores": 52,
+ *           "hypervisor": 30,
  *           "sockets": 52
  *         },
  *         {
  *           "date": "2019-07-29T00:00:00Z",
  *           "instance_count": 28,
  *           "cores": 56,
+ *           "hypervisor": 30,
  *           "sockets": 56
  *         },
  *         {
  *           "date": "2019-07-30T00:00:00Z",
  *           "instance_count": 30,
  *           "cores": 60,
+ *           "hypervisor": 30,
  *           "sockets": 60
  *         },
  *         {
  *           "date": "2019-07-31T00:00:00Z",
  *           "instance_count": 32,
  *           "cores": 64,
+ *           "hypervisor": 80,
  *           "sockets": 64
  *         }
  *       ],
@@ -132,60 +144,70 @@ import serviceConfig from './config';
  *           "date": "2019-05-26T00:00:00Z",
  *           "instance_count": 16,
  *           "cores": 32,
+ *           "hypervisor": 50,
  *           "sockets": 32
  *         },
  *         {
  *           "date": "2019-06-02T00:00:00Z",
  *           "instance_count": 6,
  *           "cores": 12,
+ *           "hypervisor": 20,
  *           "sockets": 12
  *         },
  *         {
  *           "date": "2019-06-09T00:00:00Z",
  *           "instance_count": 6,
  *           "cores": 12,
+ *           "hypervisor": 20,
  *           "sockets": 12
  *         },
  *         {
  *           "date": "2019-06-16T00:00:00Z",
  *           "instance_count": 6,
  *           "cores": 12,
+ *           "hypervisor": 20,
  *           "sockets": 12
  *         },
  *         {
  *           "date": "2019-06-23T00:00:00Z",
  *           "instance_count": 6,
  *           "cores": 12,
+ *           "hypervisor": 20,
  *           "sockets": 12
  *         },
  *         {
  *           "date": "2019-06-30T00:00:00Z",
  *           "instance_count": 6,
  *           "cores": 12,
+ *           "hypervisor": 20,
  *           "sockets": 12
  *         },
  *         {
  *           "date": "2019-07-07T00:00:00Z",
  *           "instance_count": 5,
  *           "cores": 10,
+ *           "hypervisor": 0,
  *           "sockets": 10
  *         },
  *         {
  *           "date": "2019-07-14T00:00:00Z",
  *           "instance_count": 5,
  *           "cores": 10,
+ *           "hypervisor": 0,
  *           "sockets": 10
  *         },
  *         {
  *           "date": "2019-07-21T00:00:00Z",
  *           "instance_count": 5,
  *           "cores": 10,
+ *           "hypervisor": 0,
  *           "sockets": 10
  *         },
  *         {
  *           "date": "2019-07-28T00:00:00Z",
  *           "instance_count": 6,
  *           "cores": 12,
+ *           "hypervisor": 20,
  *           "sockets": 12
  *         }
  *       ],
@@ -208,36 +230,42 @@ import serviceConfig from './config';
  *           "date": "2019-01-01T00:00:00Z",
  *           "instance_count": 16,
  *           "cores": 32,
+ *           "hypervisor": 50,
  *           "sockets": 32
  *         },
  *         {
  *           "date": "2019-02-01T00:00:00Z",
  *           "instance_count": 8,
  *           "cores": 16,
+ *           "hypervisor": 20,
  *           "sockets": 16
  *         },
  *         {
  *           "date": "2019-03-01T00:00:00Z",
  *           "instance_count": 0,
  *           "cores": 0,
+ *           "hypervisor": 0,
  *           "sockets": 0
  *         },
  *         {
  *           "date": "2019-04-01T00:00:00Z",
  *           "instance_count": 8,
  *           "cores": 16,
+ *           "hypervisor": 20,
  *           "sockets": 16
  *         },
  *         {
  *           "date": "2019-05-01T00:00:00Z",
  *           "instance_count": 16,
  *           "cores": 32,
+ *           "hypervisor": 50,
  *           "sockets": 32
  *         },
  *         {
  *           "date": "2019-06-01T00:00:00Z",
  *           "instance_count": 24,
  *           "cores": 48,
+ *           "hypervisor": 50,
  *           "sockets": 48
  *         }
  *       ],
@@ -260,24 +288,28 @@ import serviceConfig from './config';
  *           "date": "2018-01-01T00:00:00Z",
  *           "instance_count": 24,
  *           "cores": 48,
+ *           "hypervisor": 50,
  *           "sockets": 48
  *         },
  *         {
  *           "date": "2018-04-01T00:00:00Z",
  *           "instance_count": 16,
  *           "cores": 32,
+ *           "hypervisor": 50,
  *           "sockets": 32
  *         },
  *         {
  *           "date": "2018-07-01T00:00:00Z",
  *           "instance_count": 8,
  *           "cores": 16,
+ *           "hypervisor": 20,
  *           "sockets": 16
  *         },
  *         {
  *           "date": "2018-10-01T00:00:00Z",
  *           "instance_count": 0,
  *           "cores": 0,
+ *           "hypervisor": 10,
  *           "sockets": 0
  *         }
  *       ],

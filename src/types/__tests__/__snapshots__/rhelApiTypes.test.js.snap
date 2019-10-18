@@ -28,6 +28,7 @@ Object {
   "RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES": Object {
     "CORES": "cores",
     "DATE": "date",
+    "HYPERVISOR": "hypervisor",
     "INSTANCES": "instance_count",
     "SOCKETS": "sockets",
   },
@@ -62,6 +63,7 @@ Object {
     "RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES": Object {
       "CORES": "cores",
       "DATE": "date",
+      "HYPERVISOR": "hypervisor",
       "INSTANCES": "instance_count",
       "SOCKETS": "sockets",
     },
@@ -97,6 +99,7 @@ Object {
     "RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES": Object {
       "CORES": "cores",
       "DATE": "date",
+      "HYPERVISOR": "hypervisor",
       "INSTANCES": "instance_count",
       "SOCKETS": "sockets",
     },
@@ -136,6 +139,7 @@ Object {
   "RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES": Object {
     "CORES": "cores",
     "DATE": "date",
+    "HYPERVISOR": "hypervisor",
     "INSTANCES": "instance_count",
     "SOCKETS": "sockets",
   },
