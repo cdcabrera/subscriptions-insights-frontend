@@ -384,23 +384,23 @@ const getGraphReportsRhel = (params = {}) =>
  *       "data": [
  *         {
  *           "date": "2019-07-20T00:00:00Z",
- *           "sockets": 0,
+ *           "sockets": 50,
  *           "physical_sockets": 32,
- *           "hypervisor_sockets": 0,
+ *           "hypervisor_sockets": 18,
  *           "has_infinite_quantity": false
  *         },
  *         {
  *           "date": "2019-07-21T00:00:00Z",
- *           "sockets": 0,
+ *           "sockets": 50,
  *           "physical_sockets": 32,
- *           "hypervisor_sockets": 0,
+ *           "hypervisor_sockets": 18,
  *           "has_infinite_quantity": false
  *         },
  *         {
  *           "date": "2019-07-22T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 50,
  *           "physical_sockets": 32,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 18,
  *           "has_infinite_quantity": false
  *         },
  *         {
@@ -412,51 +412,51 @@ const getGraphReportsRhel = (params = {}) =>
  *         },
  *         {
  *           "date": "2019-07-24T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         },
  *         {
  *           "date": "2019-07-25T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         },
  *         {
  *           "date": "2019-07-26T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         },
  *         {
  *           "date": "2019-07-27T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         },
  *         {
  *           "date": "2019-07-28T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         },
  *         {
  *           "date": "2019-07-29T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         },
  *         {
  *           "date": "2019-07-30T00:00:00Z",
- *           "sockets": 10,
+ *           "sockets": 100,
  *           "physical_sockets": 75,
- *           "hypervisor_sockets": 5,
+ *           "hypervisor_sockets": 25,
  *           "has_infinite_quantity": true
  *         }
  *       ],

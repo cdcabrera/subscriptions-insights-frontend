@@ -1,6 +1,7 @@
 const RHSM_API_RESPONSE_CAPACITY_DATA = 'data';
 const RHSM_API_RESPONSE_CAPACITY_DATA_TYPES = {
   DATE: 'date',
+  SOCKETS: 'sockets',
   PHYSICAL_SOCKETS: 'physical_sockets',
   HYPERVISOR_SOCKETS: 'hypervisor_sockets',
   INFINITE: 'has_infinite_quantity'
