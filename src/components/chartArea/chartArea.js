@@ -135,11 +135,13 @@ class ChartArea extends React.Component {
     let dataSetMaxY = 0;
 
     dataSets.forEach(dataSet => {
-      dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data.length : dataSetMaxX;
+      if (dataSet.data) {
+        dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data.length : dataSetMaxX;
 
-      dataSet.data.forEach(value => {
-        dataSetMaxY = value.y > dataSetMaxY ? value.y : dataSetMaxY;
-      });
+        dataSet.data.forEach(value => {
+          dataSetMaxY = value.y > dataSetMaxY ? value.y : dataSetMaxY;
+        });
+      }
 
       if (dataSet.threshold) {
         dataSet.threshold.forEach(value => {
@@ -231,6 +233,12 @@ class ChartArea extends React.Component {
       );
     }
 
+    /**
+     * FixMe: PFCharts, unable to return null or empty content.
+     * General practice of returning "null" shouldn't necessarily melt the
+     * graph. To avoid issues we have to return a non-element such as
+     * <React.Fragment />
+     */
     return (
       <div ref={this.containerRef}>
         <Chart animate={{ duration: 0 }} width={chartWidth} {...chartProps}>
@@ -250,10 +258,8 @@ class ChartArea extends React.Component {
                     themeColor={dataSet.thresholdColor}
                     style={dataSet.thresholdStyle || {}}
                   />
-                )) ||
-                null
-            )) ||
-            null}
+                )) || <React.Fragment key={helpers.generateId()} />
+            )) || <React.Fragment />}
           <ChartStack>
             {(dataSets &&
               dataSets.length &&
@@ -268,10 +274,8 @@ class ChartArea extends React.Component {
                       // FixMe: PFCharts inconsistent implementation around themeColor and style, see ChartThreshold themeColor and style
                       style={{ data: { fill: dataSet.dataColor }, ...dataSet.dataStyle }}
                     />
-                  )) ||
-                  null
-              )) ||
-              null}
+                  )) || <React.Fragment key={helpers.generateId()} />
+              )) || <React.Fragment />}
           </ChartStack>
         </Chart>
       </div>
