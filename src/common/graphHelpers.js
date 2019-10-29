@@ -2,6 +2,7 @@ import moment from 'moment';
 import numbro from 'numbro';
 import { rhelApiTypes } from '../types/rhelApiTypes';
 import { translate } from '../components/i18n/i18n';
+import { helpers } from './helpers';
 
 const GRANULARITY_TYPES = rhelApiTypes.RHSM_API_QUERY_GRANULARITY_TYPES;
 
@@ -104,7 +105,10 @@ const getGranularityDateType = granularity => {
  * @returns {string}
  */
 const getLabel = ({ data, previousData, formattedDate, granularity, tooltipLabel }) => {
-  const { label, previousLabel } = getGraphLabels({ granularity, tooltipLabel });
+  const { label, previousLabel } = getGraphLabels({
+    granularity,
+    tooltipLabel
+  });
   const previousCount = data - previousData;
   const updatedLabel = `${data} ${label} ${formattedDate}`;
 
@@ -265,7 +269,8 @@ const fillFormatChartData = ({
  * @param {string} granularity, see enum of rhelApiTypes.RHSM_API_QUERY_GRANULARITY_TYPES
  * @returns {Object} Object array result converted { chartData: {...} chartDomain {...} }
  */
-const convertChartData = ({
+/*
+const convertChartDataOLD = ({
   data,
   dataFacet,
   dataThreshold,
@@ -287,9 +292,9 @@ const convertChartData = ({
         .toISOString();
 
       /**
-       * FixMe: per API the list indexes should match on capacity and reporting.Once resonable
+       * FixMe: per API the list indexes should match on capacity and reporting.
        * Once reasonable testing has occurred consider removing this check.
-       */
+        /
       const checkThresholdDate = dataThresholdItem => {
         if (!dataThresholdItem) {
           return false;
@@ -323,19 +328,282 @@ const convertChartData = ({
     tooltipThresholdLabel
   });
 
+  // debugger;
+
   return {
     chartData,
     chartDataThresholds,
-    chartXAxisLabelIncrement: getChartXAxisLabelIncrement(granularity)
+    chartXAxisLabelIncrement: getChartXAxisLabelIncrement(granularity),
+    chartFacets: chartData
   };
+};
+*/
+
+/*
+const convertChartData = ({ data = [], tooltipLabel = null, tooltipLabelNoData = null, granularity = null }) =>
+  data.map((dataItem, index) => {
+
+
+    return {
+      ...dataItem
+    };
+  });
+*/
+
+const tooltipDate = ({ date, granularity }) => {
+  const granularityType = getGranularityDateType(granularity);
+  const momentDate = moment(date);
+  let formattedDateTooltip;
+
+  switch (granularityType) {
+    case 'quarters':
+      formattedDateTooltip = chartDateQuarterFormatLong;
+      break;
+    case 'months':
+      formattedDateTooltip = chartDateMonthFormatLong;
+      break;
+    default:
+      formattedDateTooltip = chartDateDayFormatLong;
+      break;
+  }
+
+  return momentDate.format(formattedDateTooltip);
+};
+
+const addTooltips = ({
+  data = [],
+  tooltip,
+  // tooltipNoData,
+  // disableTooltipOnNoData,
+  // tooltipLabel = null,
+  // tooltipLabelNoData = null,
+  granularity = null
+}) => {
+  const granularityType = getGranularityDateType(granularity);
+  // const granularityTick = getChartXAxisLabelIncrement(granularity);
+
+  let previousData = null;
+  let previousYear = null;
+
+  return data.map((dataItem, index) => {
+    const updatedData = {
+      ...dataItem
+    };
+    const momentDate = moment(dataItem.date);
+    const year = parseInt(momentDate.year(), 10);
+    const isNewYear = index !== 0 && year !== previousYear;
+
+    let formattedDate;
+    let formattedDateTooltip;
+
+    switch (granularityType) {
+      case 'quarters':
+        formattedDate = (isNewYear && chartDateQuarterFormatYearShort) || chartDateQuarterFormatShort;
+        formattedDateTooltip = (isNewYear && chartDateQuarterFormatYearLong) || chartDateQuarterFormatLong;
+        break;
+      case 'months':
+        formattedDate = (isNewYear && chartDateMonthFormatYearShort) || chartDateMonthFormatShort;
+        formattedDateTooltip = (isNewYear && chartDateMonthFormatYearLong) || chartDateMonthFormatLong;
+        break;
+      default:
+        formattedDate = (isNewYear && chartDateDayFormatYearShort) || chartDateDayFormatShort;
+        formattedDateTooltip = (isNewYear && chartDateDayFormatYearLong) || chartDateDayFormatLong;
+        break;
+    }
+
+    formattedDate = momentDate.format(formattedDate);
+    formattedDateTooltip = momentDate.format(formattedDateTooltip);
+
+    if (tooltip) {
+      const tooltipDisplay = tooltip({
+        formattedDate: formattedDateTooltip,
+        previousData,
+        data: dataItem
+      });
+
+      if (tooltipDisplay) {
+        updatedData.tooltip = tooltipDisplay;
+      }
+    }
+
+    // if (disableTooltipOnNoData && !dataItem.y) {
+    //  delete updatedData.tooltip;
+    // }
+
+    // if (tooltipNoData) {
+    // updatedData.tooltip = tooltipNoData(dataItem);
+    // }
+
+    // if (!data.y && !tooltipNoData) {
+    // delete updatedData.tooltip;
+    // }
+
+    previousData = dataItem;
+    previousYear = year;
+
+    return updatedData;
+    // return dataItem;
+
+    /*
+    const checkTick = index % granularityTick === 0;
+    const isNewYear = index !== 0 && checkTick && year !== previousYear;
+    let formattedDate;
+    let formattedDateTooltip;
+
+    if (granularityType === 'quarters') {
+      formattedDate = isNewYear
+        ? momentDate.format(chartDateQuarterFormatYearShort)
+        : momentDate.format(chartDateQuarterFormatShort);
+
+      formattedDateTooltip = isNewYear
+        ? momentDate.format(chartDateQuarterFormatYearLong)
+        : momentDate.format(chartDateQuarterFormatLong);
+    } else if (granularityType === 'months') {
+      formattedDate = isNewYear
+        ? momentDate.format(chartDateMonthFormatYearShort)
+        : momentDate.format(chartDateMonthFormatShort);
+
+      formattedDateTooltip = isNewYear
+        ? momentDate.format(chartDateMonthFormatYearLong)
+        : momentDate.format(chartDateMonthFormatLong);
+    } else {
+      formattedDate = isNewYear
+        ? momentDate.format(chartDateDayFormatYearShort)
+        : momentDate.format(chartDateDayFormatShort);
+
+      formattedDateTooltip = isNewYear
+        ? momentDate.format(chartDateDayFormatYearLong)
+        : momentDate.format(chartDateDayFormatLong);
+    }
+
+    const labelData = {
+      data: dataItem.y,
+      previousData,
+      formattedDate: formattedDateTooltip,
+      granularity,
+      tooltipLabel
+    };
+    */
+    /*
+    const chartDataThresholdsItem = {
+      x: chartData.length,
+      y: yAxisThreshold
+    };
+
+    if (yAxisThreshold) {
+      chartDataThresholdsItem.tooltip = getThresholdLabel({ yValue: yAxisThreshold, tooltipThresholdLabel });
+    }
+
+    chartDataThresholds.push(chartDataThresholdsItem);
+    */
+    /*
+    const chartDataItem = {
+      xAxisLabel:
+        granularityType === 'months' || granularityType === 'quarters'
+          ? formattedDate.replace(/\s/, '\n')
+          : formattedDate
+    };
+
+    chartDataItem.tooltip = (dataItem.y && getLabel(labelData)) || tooltipLabelNoData;
+
+    if (!dataItem.y && !tooltipLabelNoData) {
+      delete chartDataItem.tooltip;
+    }
+
+    // chartData.push(chartDataItem);
+
+    previousData = dataItem.y;
+
+    if (checkTick && year !== previousYear) {
+      previousYear = year;
+    }
+
+    return {
+      ...dataItem
+    };
+     */
+  });
+};
+
+const xAxisTickFormat = ({ date, granularity, tick }) => {
+  /*
+  const granularityType = getGranularityDateType(granularity);
+  const granularityTick = getChartXAxisLabelIncrement(granularity);
+
+  const momentDate = moment.utc(date);
+  // const stringDate = momentDate.toISOString();
+  // const year = parseInt(momentDate.year(), 10);
+
+  const checkTick = tick % granularityTick === 0;
+  const isNewYear = tick !== 0 && checkTick; // && year !== previousYear;
+
+  let formattedDate;
+
+  if (granularityType === 'quarters') {
+    formattedDate = isNewYear
+      ? momentDate.format(chartDateQuarterFormatYearShort)
+      : momentDate.format(chartDateQuarterFormatShort);
+  } else if (granularityType === 'months') {
+    formattedDate = isNewYear
+      ? momentDate.format(chartDateMonthFormatYearShort)
+      : momentDate.format(chartDateMonthFormatShort);
+  } else {
+    formattedDate = isNewYear
+      ? momentDate.format(chartDateDayFormatYearShort)
+      : momentDate.format(chartDateDayFormatShort);
+  }
+  */
+  if (!date || !granularity) {
+    return undefined;
+  }
+
+  const granularityType = getGranularityDateType(granularity);
+  const granularityTick = getChartXAxisLabelIncrement(granularity);
+  const checkTick = tick % granularityTick === 0;
+  const isNewYear = tick !== 0 && checkTick; // && year !== previousYear;
+
+  const momentDate = moment(date);
+  let formattedDate;
+
+  if (granularityType === 'quarters') {
+    formattedDate = isNewYear
+      ? momentDate.format(chartDateQuarterFormatYearShort)
+      : momentDate.format(chartDateQuarterFormatShort);
+  } else if (granularityType === 'months') {
+    formattedDate = isNewYear
+      ? momentDate.format(chartDateMonthFormatYearShort)
+      : momentDate.format(chartDateMonthFormatShort);
+  } else {
+    formattedDate = isNewYear
+      ? momentDate.format(chartDateDayFormatYearShort)
+      : momentDate.format(chartDateDayFormatShort);
+  }
+
+  /*
+  if (granularityType === 'quarters') {
+    formattedDate = momentDate.format('MM');
+  } else if (granularityType === 'months') {
+    formattedDate = momentDate.format('MM');
+  } else {
+    formattedDate = momentDate.format('MMM D');
+  }
+   */
+
+  // const test = ;
+  // console.log(`one=${test}`, `two=${date.toISOString()}`, `three=${moment(date).toISOString()}`);
+  // return moment(date).format('MMMM D');
+  return formattedDate;
 };
 
 const yAxisTickFormat = tick => numbro(tick).format({ average: true, mantissa: 1, optionalMantissa: true });
 
 const graphHelpers = {
+  tooltipDate,
+  addTooltips,
+  xAxisTickFormat,
   yAxisTickFormat,
   fillFormatChartData,
-  convertChartData,
+  // convertChartData,
   getGranularityDateType,
   getGraphLabels,
   getChartXAxisLabelIncrement,
@@ -345,9 +613,12 @@ const graphHelpers = {
 export {
   graphHelpers as default,
   graphHelpers,
+  tooltipDate,
+  addTooltips,
+  xAxisTickFormat,
   yAxisTickFormat,
   fillFormatChartData,
-  convertChartData,
+  // convertChartData,
   getGranularityDateType,
   getGraphLabels,
   getChartXAxisLabelIncrement,

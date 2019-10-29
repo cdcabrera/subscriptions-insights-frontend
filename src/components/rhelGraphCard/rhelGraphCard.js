@@ -51,8 +51,15 @@ class RhelGraphCard extends React.Component {
 
   // ToDo: evaluate show error toast on chart error
   renderChart() {
+    const { graphData, graphGranularity, t } = this.props;
+    /*
     const { graphData, graphGranularity, startDate, endDate, t } = this.props;
-    const { chartXAxisLabelIncrement, chartData, chartDataThresholds } = graphHelpers.convertChartData({
+    const {
+      chartXAxisLabelIncrement,
+      chartData,
+      chartDataThresholds,
+      chartDataHypervisor
+    } = graphHelpers.convertChartData({
       data: graphData.usage,
       dataFacet: rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.SOCKETS,
       dataThreshold: graphData.capacity,
@@ -64,27 +71,140 @@ class RhelGraphCard extends React.Component {
       endDate,
       granularity: graphGranularity
     });
+    */
+
+    /*
+    const convertChartData = (d = []) => {
+      // debugger;
+      const sockets = [];
+      const socketsThreshold = [];
+      const hypervisor = [];
+
+      d.forEach(item => {
+        // const yAxis = (data[stringDate] && data[stringDate].data) || 0;
+        sockets.push({
+          x: sockets.length,
+          y: item.sockets,
+          // date: item.date,
+          // xAxisLabel: 'x axis',
+          tooltip: 'No data'
+        });
+
+        socketsThreshold.push({
+          x: socketsThreshold.length,
+          y: item.socketsThreshold
+          // date: item.date
+        });
+
+        hypervisor.push({
+          x: hypervisor.length,
+          y: item.hypervisor
+          // date: item.date
+        });
+      });
+
+      return {
+        facets: {
+          sockets,
+          socketsThreshold,
+          hypervisor
+        }
+      };
+    };
+
+    // const { facets } = convertChartData(graphData);
+    const { facets } = convertChartData(graphData);
+    */
 
     return (
       <ChartArea
         xAxisFixLabelOverlap
-        xAxisLabelIncrement={chartXAxisLabelIncrement}
+        xAxisLabelIncrement={graphHelpers.getChartXAxisLabelIncrement(graphGranularity)}
+        xAxisTickFormat={({ tick, keys }) =>
+          graphHelpers.xAxisTickFormat({
+            tick,
+            date: keys && keys.sockets && keys.sockets.date,
+            granularity: graphGranularity
+          })
+        }
         yAxisTickFormat={({ tick }) => graphHelpers.yAxisTickFormat(tick)}
+        tooltips={({ keys }) => {
+          let hypervisor = keys.hypervisor && keys.hypervisor.y;
+          let sockets = keys.sockets && keys.sockets.y;
+          let threshold = keys.threshold && keys.threshold.y;
+
+          hypervisor = (hypervisor && `${hypervisor} ${t('curiosity-graph.rhelTooltipHypervisor')}`) || '';
+          sockets = (sockets && `${sockets} ${t('curiosity-graph.rhelTooltipSockets')}`) || '';
+          threshold = (threshold && `${t('curiosity-graph.rhelTooltipThreshold')}: ${threshold}`) || '';
+
+          const date =
+            ((sockets ||
+              hypervisor) &&
+              `on ${graphHelpers.tooltipDate({
+                date: keys.sockets.date,
+                granularity: graphGranularity
+              })}`) ||
+            '';
+
+          return `${threshold}\n${sockets} ${hypervisor}\n${date}`.trim() || t('curiosity-graph.tooltipNoData');
+        }}
+        /*
+        tooltipsOLD={({ items }) => {
+          let sockets = items.find(value => value.id === 'sockets').y;
+          sockets =
+            (sockets &&
+              `${items.find(value => value.id === 'sockets').y} ${t('curiosity-graph.rhelTooltipSockets')}`) ||
+            '';
+
+          let threshold = items.find(value => value.id === 'threshold').y;
+          threshold = (threshold && `${t('curiosity-graph.rhelTooltipThreshold')}: ${threshold}`) || '';
+
+          let hypervisor = items.find(value => value.id === 'hypervisor').y;
+          hypervisor = (hypervisor && `${hypervisor} ${t('curiosity-graph.rhelTooltipHypervisor')}`) || '';
+
+          const date =
+            (sockets &&
+              hypervisor &&
+              `on ${graphHelpers.tooltipDate({
+                date: items.find(value => value.id === 'sockets').date,
+                granularity: graphGranularity
+              })}`) ||
+            '';
+
+          return `${threshold}\n${sockets} ${hypervisor}\n${date}`.trim() || t('curiosity-graph.tooltipNoData');
+        }}
+        */
         dataSets={[
           {
-            data: chartData,
-            dataAnimate: {
+            data: graphData.sockets,
+            id: 'sockets',
+            animate: {
               duration: 250,
               onLoad: { duration: 250 }
             },
-            dataLegendLabel: t('curiosity-graph.legendSocketsLabel'),
-            threshold: chartDataThresholds,
-            thresholdAnimate: {
+            legendLabel: t('curiosity-graph.rhelLegendSocketsLabel'),
+            isStacked: true
+          },
+          {
+            data: graphData.hypervisor,
+            id: 'hypervisor',
+            animate: {
+              duration: 250,
+              onLoad: { duration: 250 }
+            },
+            legendLabel: t('curiosity-graph.rhelLegendHypervisorLabel'),
+            isStacked: true
+          },
+          {
+            data: graphData.threshold,
+            id: 'threshold',
+            animate: {
               duration: 100,
               onLoad: { duration: 100 }
             },
-            thresholdColor: ChartThemeColor.green,
-            thresholdLegendLabel: t('curiosity-graph.legendSocketsThresholdLabel')
+            color: ChartThemeColor.green,
+            legendLabel: t('curiosity-graph.rhelLegendThresholdLabel'),
+            isThreshold: true
           }
         ]}
       />
@@ -132,9 +252,47 @@ RhelGraphCard.propTypes = {
   getGraphCapacityRhel: PropTypes.func,
   getGraphReportsRhel: PropTypes.func,
   graphData: PropTypes.shape({
-    capacity: PropTypes.array,
-    usage: PropTypes.array
+    sockets: PropTypes.arrayOf(
+      PropTypes.shape({
+        date: PropTypes.instanceOf(Date),
+        x: PropTypes.number,
+        y: PropTypes.number
+      })
+    ),
+    hypervisor: PropTypes.arrayOf(
+      PropTypes.shape({
+        date: PropTypes.instanceOf(Date),
+        x: PropTypes.number,
+        y: PropTypes.number
+      })
+    ),
+    threshold: PropTypes.arrayOf(
+      PropTypes.shape({
+        date: PropTypes.instanceOf(Date),
+        x: PropTypes.number,
+        y: PropTypes.number
+      })
+    )
   }),
+  /*
+  graphDataOLD: PropTypes.shape({
+    facets: PropTypes.arrayOf(
+      PropTypes.shape({
+        x: PropTypes.number,
+        y: PropTypes.number,
+        tooltip: PropTypes.string,
+        xAxisLabel: PropTypes.string,
+        yAxisLabel: PropTypes.string
+      })
+    ),
+    thresholds: PropTypes.arrayOf(
+      PropTypes.shape({
+        x: PropTypes.number,
+        y: PropTypes.number
+      })
+    )
+  }),
+   */
   graphGranularity: PropTypes.oneOf([
     GRANULARITY_TYPES.DAILY,
     GRANULARITY_TYPES.WEEKLY,
@@ -151,8 +309,9 @@ RhelGraphCard.defaultProps = {
   getGraphCapacityRhel: helpers.noop,
   getGraphReportsRhel: helpers.noop,
   graphData: {
-    capacity: [],
-    usage: []
+    sockets: [],
+    hypervisor: [],
+    threshold: []
   },
   graphGranularity: GRANULARITY_TYPES.DAILY,
   pending: false,

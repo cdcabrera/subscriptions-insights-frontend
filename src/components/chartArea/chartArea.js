@@ -18,6 +18,8 @@ class ChartArea extends React.Component {
 
   containerRef = React.createRef();
 
+  dataSets = [];
+
   componentDidMount() {
     this.onResizeContainer();
     window.addEventListener('resize', this.onResizeContainer);
@@ -35,47 +37,123 @@ class ChartArea extends React.Component {
     }
   };
 
+  setDataSets() {
+    const { dataSets, tooltips } = this.props;
+
+    if (tooltips && dataSets && dataSets[0] && dataSets[0].data) {
+      const updatedDataSets = _cloneDeep(dataSets);
+
+      updatedDataSets[0].data = updatedDataSets[0].data.map((value, index) => {
+        const keys = {};
+        const items = [];
+
+        dataSets.forEach(data => {
+          if (data.data && data.data[value.x]) {
+            if (data.id) {
+              keys[data.id] = data.data[value.x];
+            }
+
+            items.push(data.data[value.x]);
+          }
+        });
+
+        return {
+          ...value,
+          _tooltip: tooltips({
+            x: value.x,
+            y: value.y,
+            index,
+            items,
+            keys,
+            dataSets: _cloneDeep(dataSets)
+          })
+        };
+      });
+
+      this.dataSets = updatedDataSets;
+    } else {
+      this.dataSets = dataSets;
+    }
+  }
+
   setChartTicks() {
-    const { xAxisLabelIncrement, yAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
+    const { xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
     const xAxisProps = {};
     const yAxisProps = {};
     let xAxisDataSet = (dataSets.length && dataSets[0].data) || [];
-    let yAxisDataSet = (dataSets.length && dataSets[0].data) || [];
+    // let yAxisDataSet = (dataSets.length && dataSets[0].data) || [];
 
     dataSets.forEach(dataSet => {
       if (dataSet.xAxisLabelUseDataSet) {
         xAxisDataSet = dataSet.data;
       }
 
-      if (dataSet.yAxisLabelUseDataSet) {
-        yAxisDataSet = dataSet.data;
-      }
+      // if (dataSet.yAxisLabelUseDataSet) {
+      //   yAxisDataSet = dataSet.data;
+      // }
     });
 
-    if (xAxisDataSet.find(value => value.xAxisLabel && value.xAxisLabel)) {
-      xAxisProps.xAxisTickValues = xAxisDataSet.reduce(
-        (acc, current, index) => (index % xAxisLabelIncrement === 0 ? acc.concat(current.x) : acc),
-        []
-      );
-      xAxisProps.xAxisTickFormat = tickValue =>
-        (xAxisDataSet[tickValue] && xAxisDataSet[tickValue].xAxisLabel) || tickValue;
-    }
+    xAxisProps.xAxisTickValues = xAxisDataSet.reduce(
+      (acc, current, index) => (index % xAxisLabelIncrement === 0 ? acc.concat(current.x) : acc),
+      []
+    );
+
+    xAxisProps.xAxisTickFormat = tickValue =>
+      (xAxisDataSet[tickValue] && xAxisDataSet[tickValue].xAxisLabel) || tickValue;
 
     if (typeof xAxisTickFormat === 'function') {
-      xAxisProps.xAxisTickFormat = tickValue => xAxisTickFormat({ dataSet: _cloneDeep(xAxisDataSet), tick: tickValue });
-    }
+      xAxisProps.xAxisTickFormat = tickValue => {
+        // dataSets: _cloneDeep(dataSets)
+        const keys = {};
+        const items = [];
 
-    if (yAxisDataSet.find(value => value.yAxisLabel && value.yAxisLabel)) {
-      yAxisProps.yAxisTickValues = yAxisDataSet.reduce(
-        (acc, current, index) => (index % yAxisLabelIncrement === 0 ? acc.concat(current.y) : acc),
-        []
-      );
-      yAxisProps.yAxisTickFormat = tickValue =>
-        (yAxisDataSet[tickValue] && yAxisDataSet[tickValue].yAxisLabel) || tickValue;
+        dataSets.forEach(data => {
+          if (data.data && data.data[tickValue]) {
+            const item = _cloneDeep(data.data[tickValue]);
+            if (data.id) {
+              keys[data.id] = item;
+            }
+
+            items.push(item);
+          }
+        });
+
+        return xAxisTickFormat({
+          // dataSet: _cloneDeep(xAxisDataSet),
+          dataSets: _cloneDeep(dataSets),
+          items,
+          keys: (Object.keys(keys).length && keys) || undefined,
+          // item: _cloneDeep(xAxisDataSet[tickValue]),
+          tick: tickValue
+        });
+      };
     }
 
     if (typeof yAxisTickFormat === 'function') {
-      yAxisProps.yAxisTickFormat = tickValue => yAxisTickFormat({ dataSet: _cloneDeep(yAxisDataSet), tick: tickValue });
+      yAxisProps.yAxisTickFormat = tickValue => {
+        const keys = {};
+        const items = [];
+
+        dataSets.forEach(data => {
+          if (data.data && data.data[tickValue]) {
+            const item = _cloneDeep(data.data[tickValue]);
+            if (data.id) {
+              keys[data.id] = item;
+            }
+
+            items.push(item);
+          }
+        });
+
+        return yAxisTickFormat({
+          // dataSet : _cloneDeep(yAxisDataSet),
+          dataSets: _cloneDeep(dataSets),
+          items,
+          // item: _cloneDeep(yAxisDataSet[tickValue]),
+          keys: (Object.keys(keys).length && keys) || undefined,
+          tick: tickValue
+        });
+      };
     }
 
     return {
@@ -85,16 +163,16 @@ class ChartArea extends React.Component {
   }
 
   getChartTicks() {
-    const { xAxisFixLabelOverlap, yAxisFixLabelOverlap } = this.props;
+    const { xAxisFixLabelOverlap } = this.props;
 
-    const { xAxisTickValues, xAxisTickFormat, yAxisTickValues, yAxisTickFormat } = this.setChartTicks();
+    const { xAxisTickValues, xAxisTickFormat, yAxisTickFormat } = this.setChartTicks();
     const updatedXAxisProps = {
       fixLabelOverlap: xAxisFixLabelOverlap
     };
     const updatedYAxisProps = {
       dependentAxis: true,
-      showGrid: true,
-      fixLabelOverlap: yAxisFixLabelOverlap
+      showGrid: true
+      // fixLabelOverlap: yAxisFixLabelOverlap
     };
 
     if (xAxisTickValues) {
@@ -105,24 +183,19 @@ class ChartArea extends React.Component {
       updatedXAxisProps.tickFormat = xAxisTickFormat;
     }
 
-    if (yAxisTickValues) {
-      updatedYAxisProps.tickValues = yAxisTickValues;
-    }
-
     if (yAxisTickFormat) {
       updatedYAxisProps.tickFormat = yAxisTickFormat;
     }
 
     return {
       isXAxisTicks: !!xAxisTickValues,
-      isYAxisTicks: !!yAxisTickValues,
       xAxisProps: updatedXAxisProps,
       yAxisProps: updatedYAxisProps
     };
   }
 
   // ToDo: the domain range needs to be update when additional datasets are added
-  getChartDomain({ isXAxisTicks, isYAxisTicks }) {
+  getChartDomain({ isXAxisTicks }) {
     const { domain, dataSets } = this.props;
 
     if (Object.keys(domain).length) {
@@ -134,12 +207,25 @@ class ChartArea extends React.Component {
     let dataSetMaxX = 0;
     let dataSetMaxY = 0;
 
-    dataSets.forEach(dataSet => {
+    const stackedSets = dataSets.filter(set => set.stacked === true);
+    const unstackedSets = dataSets.filter(set => set.stacked !== true);
+
+    stackedSets.forEach(dataSet => {
       if (dataSet.data) {
         dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data.length : dataSetMaxX;
 
         dataSet.data.forEach(value => {
-          dataSetMaxY = value.y > dataSetMaxY ? value.y : dataSetMaxY;
+          dataSetMaxY = value && value.y > dataSetMaxY ? value.y : dataSetMaxY;
+        });
+      }
+    });
+
+    unstackedSets.forEach(dataSet => {
+      if (dataSet.data) {
+        dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data.length : dataSetMaxX;
+
+        dataSet.data.forEach(value => {
+          dataSetMaxY = value && value.y > dataSetMaxY ? value.y : dataSetMaxY;
         });
       }
     });
@@ -148,10 +234,8 @@ class ChartArea extends React.Component {
       generatedDomain.x = [0, dataSetMaxX || 10];
     }
 
-    if (!isYAxisTicks) {
-      const floored = Math.pow(10, Math.floor(Math.log10((dataSetMaxY > 10 && dataSetMaxY) || 10)));
-      generatedDomain.y = [0, Math.ceil((dataSetMaxY + 1) / floored) * floored];
-    }
+    const floored = Math.pow(10, Math.floor(Math.log10((dataSetMaxY > 10 && dataSetMaxY) || 10)));
+    generatedDomain.y = [0, Math.ceil((dataSetMaxY + 1) / floored) * floored];
 
     if (Object.keys(generatedDomain).length) {
       updatedChartDomain.domain = generatedDomain;
@@ -191,16 +275,45 @@ class ChartArea extends React.Component {
     };
   }
 
+  getContainerComponent() {
+    const { tooltips } = this.props;
+
+    const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+    const containerComponentProps = {
+      constrainToVisibleArea: true,
+      cursorDimension: 'x',
+      voronoiDimension: 'x',
+      voronoiPadding: 50,
+      mouseFollowTooltips: true
+    };
+
+    if (tooltips) {
+      containerComponentProps.labelComponent = (
+        <VictoryPortal>
+          <ChartTooltip pointerLength={0} centerOffset={{ x: tooltip => tooltip.flyoutWidth / 2 + 5, y: 0 }} />
+        </VictoryPortal>
+      );
+
+      containerComponentProps.labels = ({ datum }) =>
+        (/^curiosity-0/.test(datum.childName) && datum._tooltip) || undefined;
+    }
+
+    return {
+      containerComponent: <VictoryVoronoiCursorContainer {...containerComponentProps} />
+    };
+  }
+
   renderChart({ stacked = false }) {
-    const { dataSets } = this.props;
+    const { dataSets } = this;
     const charts = [];
     const chartsStacked = [];
 
-    const thresholdChart = dataSet => (
+    const thresholdChart = (dataSet, index) => (
       <ChartThreshold
         animate={dataSet.animate || false}
         interpolation={dataSet.interpolation || 'step'}
         key={helpers.generateId()}
+        name={`curiosity-${index}-threshold`}
         data={dataSet.data}
         // FixMe: PFCharts inconsistent implementation around themeColor and style, see ChartArea. Appears enforced, see PFCharts. Leads to multiple annoyance checks and implementations.
         themeColor={dataSet.color}
@@ -208,20 +321,21 @@ class ChartArea extends React.Component {
       />
     );
 
-    const areaChart = dataSet => (
+    const areaChart = (dataSet, index) => (
       <PfChartArea
         animate={dataSet.animate || false}
         interpolation={dataSet.interpolation || 'catmullRom'}
         key={helpers.generateId()}
+        name={`curiosity-${index}-area`}
         data={dataSet.data}
         // FixMe: PFCharts inconsistent implementation around themeColor and style, see ChartThreshold themeColor and style
         style={{ data: { fill: dataSet.color }, ...dataSet.style }}
       />
     );
 
-    dataSets.forEach(dataSet => {
+    dataSets.forEach((dataSet, index) => {
       if (dataSet.data && dataSet.data.length) {
-        const updatedDataSet = (dataSet.isThreshold && thresholdChart(dataSet)) || areaChart(dataSet);
+        const updatedDataSet = (dataSet.isThreshold && thresholdChart(dataSet, index)) || areaChart(dataSet, index);
 
         if (dataSet.isStacked) {
           chartsStacked.push(updatedDataSet);
@@ -238,36 +352,18 @@ class ChartArea extends React.Component {
     const { chartWidth } = this.state;
     const { padding } = this.props;
 
-    const { isXAxisTicks, isYAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
-    const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks, isYAxisTicks });
+    this.setDataSets();
+
+    const { isXAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
+    const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks });
     const chartLegendProps = this.getChartLegend();
-    const chartProps = { padding, ...chartLegendProps, ...chartDomain };
-
-    if (maxY > 0) {
-      const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
-      const labelComponent = (
-        <VictoryPortal>
-          <ChartTooltip pointerLength={0} centerOffset={{ x: tooltip => tooltip.flyoutWidth / 2 + 5, y: 0 }} />
-        </VictoryPortal>
-      );
-
-      chartProps.containerComponent = (
-        <VictoryVoronoiCursorContainer
-          constrainToVisibleArea
-          cursorDimension="x"
-          voronoiDimension="x"
-          voronoiPadding={50}
-          mouseFollowTooltips
-          labels={({ datum }) => datum.tooltip}
-          labelComponent={labelComponent}
-        />
-      );
-    }
+    const containerComponent = (maxY > 0 && this.getContainerComponent()) || {};
+    const chartProps = { padding, ...chartLegendProps, ...chartDomain, ...containerComponent };
 
     /**
-     * FixMe: PFCharts or Victory???, unable to return null or empty content.
-     * General practice of returning "null" shouldn't necessarily melt the
-     * graph. To avoid issues we return an empty array
+     * FixMe: PFCharts or Victory?, unable to return null or empty content.
+     * Previous practice of returning "null" shouldn't melt the graph with
+     * a render error. To avoid issues we return an empty array now.
      */
     return (
       <div ref={this.containerRef}>
@@ -289,9 +385,10 @@ ChartArea.propTypes = {
         PropTypes.shape({
           x: PropTypes.number.isRequired,
           y: PropTypes.number.isRequired,
-          tooltip: PropTypes.string,
-          xAxisLabel: PropTypes.string,
-          yAxisLabel: PropTypes.string
+          id: PropTypes.string,
+          // xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
+          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
+          // yAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
         })
       ),
       animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
@@ -301,8 +398,8 @@ ChartArea.propTypes = {
       style: PropTypes.object,
       isStacked: PropTypes.bool,
       isThreshold: PropTypes.bool,
-      xAxisLabelUseDataSet: PropTypes.bool,
-      yAxisLabelUseDataSet: PropTypes.bool
+      xAxisLabelUseDataSet: PropTypes.bool
+      // yAxisLabelUseDataSet: PropTypes.bool
     })
   ),
   domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -313,11 +410,12 @@ ChartArea.propTypes = {
     right: PropTypes.number,
     top: PropTypes.number
   }),
+  tooltips: PropTypes.func,
   xAxisFixLabelOverlap: PropTypes.bool,
   xAxisLabelIncrement: PropTypes.number,
   xAxisTickFormat: PropTypes.func,
-  yAxisFixLabelOverlap: PropTypes.bool,
-  yAxisLabelIncrement: PropTypes.number,
+  // yAxisFixLabelOverlap: PropTypes.bool,
+  // yAxisLabelIncrement: PropTypes.number,
   yAxisTickFormat: PropTypes.func
 };
 
@@ -331,11 +429,12 @@ ChartArea.defaultProps = {
     right: 50,
     top: 50
   },
+  tooltips: null,
   xAxisFixLabelOverlap: false,
   xAxisLabelIncrement: 1,
   xAxisTickFormat: null,
-  yAxisFixLabelOverlap: false,
-  yAxisLabelIncrement: 1,
+  // yAxisFixLabelOverlap: false,
+  // yAxisLabelIncrement: 1,
   yAxisTickFormat: null
 };
 

@@ -27,7 +27,11 @@ const rhelGraphCardSelector = createSelector(
       fulfilled: false,
       pending: false,
       initialLoad,
-      graphData: [],
+      graphData: {
+        sockets: [],
+        hypervisor: [],
+        threshold: []
+      },
       ...cachedGranularity
     };
 
@@ -44,37 +48,53 @@ const rhelGraphCardSelector = createSelector(
     if (capacity.fulfilled && report.fulfilled && granularity) {
       const products = _get(report, ['data', rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA], []);
       const threshold = _get(capacity, ['data', rhelApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA], []);
-      const aggregatedData = [];
+      const aggregatedData = {
+        sockets: [],
+        hypervisor: [],
+        threshold: []
+      };
 
       products.forEach((value, index) => {
         if (value) {
-          const stringDate = moment
+          const date = moment
             .utc(value[rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.DATE])
             .startOf('day')
-            .toISOString();
+            .toDate();
 
           /**
            * FixMe: per API the list indexes should match on capacity and reporting.
            * Once reasonable testing has occurred consider removing this check.
            */
-          const checkThresholdDate = dataThresholdItem => {
-            if (!dataThresholdItem) {
+          const checkThresholdDate = item => {
+            if (!item) {
               return false;
             }
 
-            const stringThresholdDate = moment
-              .utc(dataThresholdItem[rhelApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.DATE])
+            const itemDate = moment
+              .utc(item[rhelApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.DATE])
               .startOf('day')
-              .toISOString();
+              .toDate();
 
-            return moment(stringDate).isSame(stringThresholdDate);
+            return moment(date).isSame(itemDate);
           };
 
-          aggregatedData.push({
-            date: value[rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.DATE],
-            sockets: Number.parseInt(value[rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.SOCKETS], 10),
-            hypervisor: Number.parseInt(value[rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HYPERVISOR], 10),
-            socketsThreshold: Number.parseInt(
+          aggregatedData.sockets.push({
+            date,
+            x: index,
+            y: Number.parseInt(value[rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.PHYSICAL_SOCKETS], 10)
+            // xAxisLabel: date
+          });
+
+          aggregatedData.hypervisor.push({
+            date,
+            x: index,
+            y: Number.parseInt(value[rhelApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HYPERVISOR_SOCKETS], 10)
+          });
+
+          aggregatedData.threshold.push({
+            date,
+            x: index,
+            y: Number.parseInt(
               (checkThresholdDate(threshold && threshold[index]) &&
                 threshold[index][rhelApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.SOCKETS]) ||
                 0,
@@ -84,6 +104,7 @@ const rhelGraphCardSelector = createSelector(
         }
       });
 
+      console.log('AGGREGATED', products, threshold, aggregatedData);
       updatedData.graphData = aggregatedData;
       updatedData.initialLoad = false;
       updatedData.fulfilled = true;
