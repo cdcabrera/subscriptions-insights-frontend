@@ -36,10 +36,10 @@ const getTooltipDate = ({ date, granularity }) => {
 
   switch (granularity) {
     case GRANULARITY_TYPES.QUARTERLY:
-      formattedDateTooltip = dateHelpers.timestampQuarterFormats.long;
+      formattedDateTooltip = dateHelpers.timestampQuarterFormats.yearLong;
       break;
     case GRANULARITY_TYPES.MONTHLY:
-      formattedDateTooltip = dateHelpers.timestampMonthFormats.long;
+      formattedDateTooltip = dateHelpers.timestampMonthFormats.yearLong;
       break;
     default:
       formattedDateTooltip = dateHelpers.timestampDayFormats.long;
