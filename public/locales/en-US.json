@@ -7,10 +7,10 @@
     "dropdownQuarterly": "Quarterly",
     "dropdownPlaceholder": "Select date range",
     "tooltipNoData": "No data",
-    "rhelTooltipHypervisor": "hypervisors",
-    "rhelTooltipSockets": "systems",
+    "rhelTooltipHypervisor": "Hypervisors",
+    "rhelTooltipSockets": "Physical systems",
     "rhelTooltipThreshold": "Subscription threshold",
-    "rhelLegendHypervisorLabel": "Hypervisor",
+    "rhelLegendHypervisorLabel": "Hypervisors",
     "rhelLegendSocketsLabel": "Physical systems",
     "rhelLegendThresholdLabel": "Subscription threshold"
   }
