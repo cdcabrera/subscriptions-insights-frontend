@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Card, CardHead, CardActions, CardBody } from '@patternfly/react-core';
 import { ChartThemeColor } from '@patternfly/react-charts';
 import {
+  chart_color_blue_100 as chartColorBlue100,
+  chart_color_blue_400 as chartColorBlue400,
   chart_color_cyan_100 as chartColorCyan100,
   chart_color_cyan_400 as chartColorCyan400
 } from '@patternfly/react-tokens';
@@ -88,6 +90,8 @@ class RhelGraphCard extends React.Component {
               duration: 250,
               onLoad: { duration: 250 }
             },
+            fill: chartColorBlue100.value,
+            stroke: chartColorBlue400.value,
             legendLabel: t('curiosity-graph.rhelLegendSocketsLabel'),
             isStacked: true
           },
