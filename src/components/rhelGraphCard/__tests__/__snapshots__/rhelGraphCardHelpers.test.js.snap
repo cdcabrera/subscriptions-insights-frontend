@@ -21,17 +21,21 @@ Object {
 exports[`RhelGraphCardHelpers getTooltips should return a formatted tooltip based on data and granularity: granularity data display 1`] = `
 Object {
   "daily": "t('curiosity-graph.rhelTooltipThreshold'): 100
-50 t('curiosity-graph.rhelTooltipSockets') 50 t('curiosity-graph.rhelTooltipHypervisor')
-on June 1",
+t('curiosity-graph.rhelTooltipSockets'): 50
+t('curiosity-graph.rhelTooltipHypervisor'): 50
+t('curiosity-graph.rhelTooltipDate'): June 1",
   "monthly": "t('curiosity-graph.rhelTooltipThreshold'): 100
-50 t('curiosity-graph.rhelTooltipSockets') 50 t('curiosity-graph.rhelTooltipHypervisor')
-on June",
+t('curiosity-graph.rhelTooltipSockets'): 50
+t('curiosity-graph.rhelTooltipHypervisor'): 50
+t('curiosity-graph.rhelTooltipDate'): June",
   "quarterly": "t('curiosity-graph.rhelTooltipThreshold'): 100
-50 t('curiosity-graph.rhelTooltipSockets') 50 t('curiosity-graph.rhelTooltipHypervisor')
-on June",
+t('curiosity-graph.rhelTooltipSockets'): 50
+t('curiosity-graph.rhelTooltipHypervisor'): 50
+t('curiosity-graph.rhelTooltipDate'): June",
   "weekly": "t('curiosity-graph.rhelTooltipThreshold'): 100
-50 t('curiosity-graph.rhelTooltipSockets') 50 t('curiosity-graph.rhelTooltipHypervisor')
-on June 1",
+t('curiosity-graph.rhelTooltipSockets'): 50
+t('curiosity-graph.rhelTooltipHypervisor'): 50
+t('curiosity-graph.rhelTooltipDate'): June 1",
 }
 `;
 

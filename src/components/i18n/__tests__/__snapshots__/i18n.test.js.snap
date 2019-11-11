@@ -24,6 +24,10 @@ msgstr \\"\\"
 msgid \\"curiosity-graph.rhelLegendThresholdLabel\\"
 msgstr \\"\\"
 
+#: src/components/rhelGraphCard/rhelGraphCardHelpers.js:74
+msgid \\"curiosity-graph.rhelTooltipDate\\"
+msgstr \\"\\"
+
 #: src/components/rhelGraphCard/rhelGraphCardHelpers.js:68
 msgid \\"curiosity-graph.rhelTooltipHypervisor\\"
 msgstr \\"\\"

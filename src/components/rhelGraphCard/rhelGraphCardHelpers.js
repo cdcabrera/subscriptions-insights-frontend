@@ -71,7 +71,7 @@ const getTooltips = ({ itemsByKey, granularity }) => {
 
   const date =
     ((hypervisor || sockets || threshold) &&
-      `Date: ${getTooltipDate({
+      `${translate('curiosity-graph.rhelTooltipDate')}: ${getTooltipDate({
         date: itemsByKey.sockets.date,
         granularity
       })}`) ||

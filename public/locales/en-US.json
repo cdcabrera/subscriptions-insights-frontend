@@ -7,6 +7,7 @@
     "dropdownQuarterly": "Quarterly",
     "dropdownPlaceholder": "Select date range",
     "tooltipNoData": "No data",
+    "rhelTooltipDate": "Date",
     "rhelTooltipHypervisor": "Hypervisors",
     "rhelTooltipSockets": "Physical systems",
     "rhelTooltipThreshold": "Subscription threshold",
