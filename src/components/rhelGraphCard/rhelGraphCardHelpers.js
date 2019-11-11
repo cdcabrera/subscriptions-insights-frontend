@@ -70,14 +70,17 @@ const getTooltips = ({ itemsByKey, granularity }) => {
   threshold = (threshold && `${translate('curiosity-graph.rhelTooltipThreshold')}: ${threshold}`) || '';
 
   const date =
-    ((sockets || hypervisor) &&
+    ((hypervisor || sockets || threshold) &&
       `on ${getTooltipDate({
         date: itemsByKey.sockets.date,
         granularity
       })}`) ||
     '';
 
-  return `${threshold}\n${sockets} ${hypervisor}\n${date}`.trim() || translate('curiosity-graph.tooltipNoData');
+  return (
+    `${threshold}\n${sockets} ${hypervisor}${((sockets || hypervisor) && '\n') || ''}${date}`.trim() ||
+    translate('curiosity-graph.tooltipNoData')
+  );
 };
 
 /**
