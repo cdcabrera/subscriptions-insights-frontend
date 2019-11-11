@@ -36,7 +36,7 @@ msgstr \\"\\"
 msgid \\"curiosity-graph.rhelTooltipThreshold\\"
 msgstr \\"\\"
 
-#: src/components/rhelGraphCard/rhelGraphCardHelpers.js:80
+#: src/components/rhelGraphCard/rhelGraphCardHelpers.js:82
 msgid \\"curiosity-graph.tooltipNoData\\"
 msgstr \\"\\"
 
