@@ -14,12 +14,13 @@ class Authentication extends Component {
   buildNav = helpers.noop;
 
   componentDidMount() {
-    const { appName, authorizeUser, history, insights, session } = this.props;
+    const { authorizeUser, history, insights, session } = this.props;
 
     try {
       if (helpers.PROD_MODE || helpers.REVIEW_MODE) {
         insights.chrome.init();
-        insights.chrome.identifyApp(appName);
+        // this.setAppIdentity();
+        insights.chrome.identifyApp('rhel-sw'); // CAUSES THE APP TO REDIRECT? SUBMITTING ALL THE IDS REDIRECTS TOWARDS THE SUCCESSFUL ID PATH... weeeeee
         insights.chrome.navigation(this.buildNavigation());
 
         this.appNav = insights.chrome.on('APP_NAVIGATION', event => history.push(`${event.navId}`));
@@ -31,7 +32,7 @@ class Authentication extends Component {
       }
     } catch (e) {
       if (!helpers.TEST_MODE) {
-        console.warn(`{ init, identifyApp, navigation } = insights.chrome: ${e.message}`);
+        console.warn(`{ init, navigation } = insights.chrome: ${e.message}`);
       }
     }
   }
@@ -40,6 +41,30 @@ class Authentication extends Component {
     this.appNav();
     this.buildNav();
   }
+
+  /**
+   * ToDo: relocate platform related calls into an "appServices"
+   * Relates to adding an internal log to the state layer instead of console warnings.
+   * A side effect should be boosting our test coverage.
+   */
+  setAppIdentity = () => {
+    const { appName, insights } = this.props;
+    const appNames = (typeof appName === 'string' && [appName]) || [...appName];
+
+    // FixMe: syntax towards Promise.allSettled, see q
+    const checkName = (p, name) => {
+      return Promise.resolve(p).then(
+        val => ({ status: 'fulfilled', value: val, name }),
+        err => ({ status: 'rejected', reason: err, name })
+      );
+    };
+
+    Promise.all(appNames.map(name => checkName(insights.chrome.identifyApp(name), name))).then(settled => {
+      if (/rejected/.test(JSON.stringify(settled))) {
+        console.warn('{ identifyApp } = insights.chrome:', settled);
+      }
+    });
+  };
 
   buildNavigation = () => {
     const { navigation } = this.props;
@@ -87,7 +112,7 @@ class Authentication extends Component {
 }
 
 Authentication.propTypes = {
-  appName: PropTypes.string,
+  appName: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   authorizeUser: PropTypes.func,
   children: PropTypes.node.isRequired,
   history: PropTypes.shape({
@@ -116,7 +141,7 @@ Authentication.propTypes = {
 };
 
 Authentication.defaultProps = {
-  appName: helpers.UI_NAME,
+  appName: helpers.UI_APP_ID,
   authorizeUser: helpers.noop,
   insights: window.insights,
   navigation: appNavigation,

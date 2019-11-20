@@ -6,6 +6,10 @@ Object {
   "PROD_MODE": false,
   "REVIEW_MODE": false,
   "TEST_MODE": true,
+  "UI_APP_ID": Array [
+    "subscriptions",
+    "rhel-sw",
+  ],
   "UI_DEPLOY_PATH_PREFIX": "",
   "UI_DISABLED": false,
   "UI_DISPLAY_CONFIG_NAME": "Subscription Watch",

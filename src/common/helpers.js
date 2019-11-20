@@ -15,6 +15,8 @@ const REVIEW_MODE = process.env.REACT_APP_ENV === 'review';
 
 const TEST_MODE = process.env.REACT_APP_ENV === 'test';
 
+const UI_APP_ID = (process.env.REACT_APP_UI_IDS && process.env.REACT_APP_UI_IDS.split(',')) || [];
+
 const UI_DEPLOY_PATH_PREFIX = process.env.REACT_APP_UI_DEPLOY_PATH_PREFIX;
 
 const UI_DISABLED = process.env.REACT_APP_UI_DISABLED === 'true';
@@ -42,6 +44,7 @@ const helpers = {
   PROD_MODE,
   REVIEW_MODE,
   TEST_MODE,
+  UI_APP_ID,
   UI_DEPLOY_PATH_PREFIX,
   UI_DISABLED,
   UI_DISPLAY_NAME,
