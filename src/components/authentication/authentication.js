@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components';
 import { EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateVariant } from '@patternfly/react-core';
 import { BanIcon, BinocularsIcon } from '@patternfly/react-icons';
+import { Redirect } from 'react-router-dom';
 import { connectRouter, reduxActions } from '../../redux';
 import { helpers } from '../../common/helpers';
-import { navigation as appNavigation } from '../router/router';
+import { navigation as appNavigation, routes as appRoutes } from '../router/router';
 import PageLayout from '../pageLayout/pageLayout';
 
 class Authentication extends Component {
@@ -52,9 +53,9 @@ class Authentication extends Component {
   };
 
   render() {
-    const { children, session } = this.props;
+    const { children, routes, session } = this.props;
 
-    if (session.authorized) {
+    if (session.authorized && session.apiAccess) {
       return <React.Fragment>{children}</React.Fragment>;
     }
 
@@ -69,6 +70,17 @@ class Authentication extends Component {
             <EmptyStateBody>Authenticating...</EmptyStateBody>
           </EmptyState>
         </PageLayout>
+      );
+    }
+
+    const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
+
+    if (activateOnErrorRoute) {
+      return (
+        <React.Fragment>
+          <Redirect to={activateOnErrorRoute.to} />
+          {children}
+        </React.Fragment>
       );
     }
 
@@ -107,7 +119,14 @@ Authentication.propTypes = {
       id: PropTypes.string
     })
   ),
+  routes: PropTypes.arrayOf(
+    PropTypes.shape({
+      activateOnError: PropTypes.bool,
+      to: PropTypes.string
+    })
+  ),
   session: PropTypes.shape({
+    apiAccess: PropTypes.bool,
     authorized: PropTypes.bool,
     error: PropTypes.bool,
     errorMessage: PropTypes.string,
@@ -120,7 +139,9 @@ Authentication.defaultProps = {
   authorizeUser: helpers.noop,
   insights: window.insights,
   navigation: appNavigation,
+  routes: appRoutes,
   session: {
+    apiAccess: false,
     authorized: false,
     error: false,
     errorMessage: '',

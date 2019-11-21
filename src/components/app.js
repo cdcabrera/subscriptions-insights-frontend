@@ -9,8 +9,9 @@ import PageLayout from './pageLayout/pageLayout';
 
 class App extends React.Component {
   componentDidMount() {
-    const { getLocale } = this.props;
+    const { getApiVersion, getLocale } = this.props;
 
+    getApiVersion();
     getLocale();
   }
 
@@ -30,6 +31,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+  getApiVersion: PropTypes.func,
   getLocale: PropTypes.func,
   locale: PropTypes.shape({
     value: PropTypes.string
@@ -37,11 +39,13 @@ App.propTypes = {
 };
 
 App.defaultProps = {
+  getApiVersion: helpers.noop,
   getLocale: helpers.noop,
   locale: {}
 };
 
 const mapDispatchToProps = dispatch => ({
+  getApiVersion: () => dispatch(reduxActions.user.getApiVersion()),
   getLocale: () => dispatch(reduxActions.user.getLocale())
 });
 
