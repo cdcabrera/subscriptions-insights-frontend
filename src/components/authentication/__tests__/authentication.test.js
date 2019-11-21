@@ -1,6 +1,7 @@
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import { mount, shallow } from 'enzyme';
+import { BrowserRouter } from 'react-router-dom';
 import { helpers } from '../../../common/helpers';
 import { ConnectedAuthentication, Authentication } from '../authentication';
 
@@ -9,7 +10,7 @@ describe('Authorization Component', () => {
 
   it('should render a connected component', () => {
     const store = generateEmptyStore({
-      user: { session: { authorized: false, error: false, errorMessage: '', pending: false } }
+      user: { session: { apiAccess: false, authorized: false, error: false, errorMessage: '', pending: false } }
     });
 
     const component = shallow(
@@ -29,16 +30,19 @@ describe('Authorization Component', () => {
         push: helpers.noop
       },
       session: {
+        apiAccess: false,
         authorized: false,
         error: true,
         errorMessage: 'Authentication credentials were not provided.',
         pending: false
       }
     };
-    const component = mount(
-      <Authentication {...props}>
-        <span className="test">lorem</span>
-      </Authentication>
+    const component = shallow(
+      <BrowserRouter>
+        <Authentication {...props}>
+          <span className="test">lorem</span>
+        </Authentication>
+      </BrowserRouter>
     );
 
     expect(component).toMatchSnapshot('non-connected error');
@@ -73,16 +77,19 @@ describe('Authorization Component', () => {
         push: helpers.noop
       },
       session: {
+        apiAccess: true,
         authorized: true,
         error: false,
         errorMessage: '',
         pending: false
       }
     };
-    const component = mount(
-      <Authentication {...props}>
-        <span className="test">lorem</span>
-      </Authentication>
+    const component = shallow(
+      <BrowserRouter>
+        <Authentication {...props}>
+          <span className="test">lorem</span>
+        </Authentication>
+      </BrowserRouter>
     );
 
     expect(component).toMatchSnapshot('non-connected authorized');
