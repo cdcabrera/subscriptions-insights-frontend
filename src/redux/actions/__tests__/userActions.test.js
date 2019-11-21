@@ -44,4 +44,16 @@ describe('UserActions', () => {
       done();
     });
   });
+
+  it('Should return response content for getApiVersion method', done => {
+    const store = generateStore();
+    const dispatcher = userActions.getApiVersion();
+
+    dispatcher(store.dispatch).then(() => {
+      const response = store.getState().user;
+
+      expect(response.session.apiAccess).toBe(true);
+      done();
+    });
+  });
 });

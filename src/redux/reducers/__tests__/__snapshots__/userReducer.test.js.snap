@@ -1,9 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`UserReducer should handle all defined error types: rejected types GET_API_VERSION 1`] = `
+Object {
+  "result": Object {
+    "session": Object {
+      "apiAccess": false,
+      "authorized": false,
+      "error": false,
+      "errorMessage": null,
+      "errorStatus": null,
+      "fulfilled": false,
+      "locale": null,
+      "pending": false,
+    },
+  },
+  "type": "GET_API_VERSION_REJECTED",
+}
+`;
+
 exports[`UserReducer should handle all defined error types: rejected types USER_AUTH 1`] = `
 Object {
   "result": Object {
     "session": Object {
+      "apiAccess": true,
       "authorized": false,
       "error": true,
       "errorMessage": "ERROR",
@@ -21,6 +40,7 @@ exports[`UserReducer should handle all defined fulfilled types: fulfilled types 
 Object {
   "result": Object {
     "session": Object {
+      "apiAccess": true,
       "authorized": true,
       "error": false,
       "errorMessage": null,
@@ -39,6 +59,7 @@ exports[`UserReducer should handle all defined fulfilled types: fulfilled types 
 Object {
   "result": Object {
     "session": Object {
+      "apiAccess": true,
       "authorized": false,
       "error": false,
       "errorMessage": null,
@@ -58,6 +79,7 @@ exports[`UserReducer should handle all defined pending types: pending types USER
 Object {
   "result": Object {
     "session": Object {
+      "apiAccess": true,
       "authorized": false,
       "error": false,
       "errorMessage": null,

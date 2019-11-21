@@ -8,6 +8,7 @@ const initialState = {
     errorStatus: null,
     pending: false,
     fulfilled: false,
+    apiAccess: true,
     authorized: false,
     locale: null
   }
@@ -15,6 +16,18 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case reduxHelpers.REJECTED_ACTION(userTypes.GET_API_VERSION):
+      return reduxHelpers.setStateProp(
+        'session',
+        {
+          apiAccess: false
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+
     case reduxHelpers.REJECTED_ACTION(userTypes.USER_AUTH):
       return reduxHelpers.setStateProp(
         'session',
@@ -22,6 +35,7 @@ const userReducer = (state = initialState, action) => {
           error: action.error,
           errorMessage: reduxHelpers.getMessageFromResults(action.payload),
           errorStatus: reduxHelpers.getStatusFromResults(action.payload),
+          apiAccess: state.session.apiAccess,
           locale: state.session.locale
         },
         {
@@ -34,6 +48,7 @@ const userReducer = (state = initialState, action) => {
       return reduxHelpers.setStateProp(
         'session',
         {
+          apiAccess: state.session.apiAccess,
           locale: state.session.locale,
           pending: true
         },
@@ -49,6 +64,7 @@ const userReducer = (state = initialState, action) => {
         {
           authorized: true,
           fulfilled: true,
+          apiAccess: state.session.apiAccess,
           locale: state.session.locale,
           username: action.username
         },

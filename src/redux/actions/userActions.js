@@ -7,9 +7,15 @@ const authorizeUser = () => dispatch =>
     payload: userService.authorizeUser()
   });
 
+const getApiVersion = () => dispatch =>
+  dispatch({
+    type: userTypes.GET_API_VERSION,
+    payload: userService.getApiVersion()
+  });
+
 const getLocale = () => ({
   type: userTypes.USER_LOCALE,
   payload: userService.getLocale()
 });
 
-export { authorizeUser, getLocale };
+export { authorizeUser, getApiVersion, getLocale };

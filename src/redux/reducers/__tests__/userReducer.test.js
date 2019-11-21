@@ -8,7 +8,7 @@ describe('UserReducer', () => {
   });
 
   it('should handle all defined error types', () => {
-    const specificTypes = [types.USER_AUTH];
+    const specificTypes = [types.USER_AUTH, types.GET_API_VERSION];
 
     specificTypes.forEach(value => {
       const dispatched = {
