@@ -56,6 +56,7 @@ const getApiVersion = () =>
   axios(
     serviceConfig({
       url: process.env.REACT_APP_SERVICES_RHSM_VERSION
+      // url: '/api/rhsm-subscriptions/v1/tally/products'
     })
   );
 

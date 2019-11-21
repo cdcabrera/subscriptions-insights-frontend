@@ -75,7 +75,7 @@ class Authentication extends Component {
 
     const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
 
-    if (activateOnErrorRoute) {
+    if (activateOnErrorRoute && !session.apiAccess) {
       return (
         <React.Fragment>
           <Redirect to={activateOnErrorRoute.to} />
