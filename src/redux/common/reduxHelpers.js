@@ -8,6 +8,8 @@ const PENDING_ACTION = (base = '') => `${base}_PENDING`;
 
 const REJECTED_ACTION = (base = '') => `${base}_REJECTED`;
 
+const HTTP_STATUS_RANGE = status => `${status}_STATUS_RANGE`;
+
 const getMessageFromResults = (results, filterField = null) => {
   const status = _get(results, 'response.status', results.status);
   const statusResponse = _get(results, 'response.statusText', results.statusText);
@@ -186,6 +188,7 @@ const reduxHelpers = {
   FULFILLED_ACTION,
   PENDING_ACTION,
   REJECTED_ACTION,
+  HTTP_STATUS_RANGE,
   generatedPromiseActionReducer,
   getMessageFromResults,
   getStatusFromResults,
