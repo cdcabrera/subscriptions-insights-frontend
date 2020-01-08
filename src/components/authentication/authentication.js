@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components';
 import { EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateVariant } from '@patternfly/react-core';
 import { BanIcon, BinocularsIcon } from '@patternfly/react-icons';
+import { Redirect } from 'react-router-dom';
 import { connectRouter, reduxActions } from '../../redux';
 import { helpers } from '../../common/helpers';
-import { navigation as appNavigation } from '../router/router';
+import { navigation as appNavigation, routes as appRoutes } from '../router/router';
 import PageLayout from '../pageLayout/pageLayout';
 
 class Authentication extends Component {
@@ -51,8 +52,24 @@ class Authentication extends Component {
     }));
   };
 
+  renderErrorIssue() {
+    const { session } = this.props;
+
+    return (
+      <PageLayout>
+        <PageHeader>
+          <PageHeaderTitle title={`Status ${session.errorStatus} `} />
+        </PageHeader>
+        <EmptyState variant={EmptyStateVariant.full} className="fadein">
+          <EmptyStateIcon icon={BanIcon} />
+          <EmptyStateBody>There appears to be an issue. Contact your administrator.</EmptyStateBody>
+        </EmptyState>
+      </PageLayout>
+    );
+  }
+
   render() {
-    const { children, session } = this.props;
+    const { children, routes, session } = this.props;
 
     if (session.authorized) {
       return <React.Fragment>{children}</React.Fragment>;
@@ -72,17 +89,25 @@ class Authentication extends Component {
       );
     }
 
-    return (
-      <PageLayout>
-        <PageHeader>
-          <PageHeaderTitle title="Unauthorized" />
-        </PageHeader>
-        <EmptyState variant={EmptyStateVariant.full} className="fadein">
-          <EmptyStateIcon icon={BanIcon} />
-          <EmptyStateBody>You do not have permission to access reporting. Contact your administrator.</EmptyStateBody>
-        </EmptyState>
-      </PageLayout>
-    );
+    if (session.errorStatus === 418) {
+      if (helpers.PROD_MODE || helpers.REVIEW_MODE) {
+        window.location.replace(`${helpers.UI_DEPLOY_PATH_PREFIX}/?not_entitled=subscriptions`);
+      }
+      return this.renderErrorIssue();
+    }
+
+    const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
+
+    if (activateOnErrorRoute && session.errorStatus >= 400 && session.errorStatus <= 499) {
+      return (
+        <React.Fragment>
+          <Redirect to={activateOnErrorRoute.to} />
+          {children}
+        </React.Fragment>
+      );
+    }
+
+    return this.renderErrorIssue();
   }
 }
 
@@ -107,10 +132,17 @@ Authentication.propTypes = {
       id: PropTypes.string
     })
   ),
+  routes: PropTypes.arrayOf(
+    PropTypes.shape({
+      activateOnError: PropTypes.bool,
+      to: PropTypes.string
+    })
+  ),
   session: PropTypes.shape({
     authorized: PropTypes.bool,
     error: PropTypes.bool,
     errorMessage: PropTypes.string,
+    errorStatus: PropTypes.number,
     pending: PropTypes.bool
   })
 };
@@ -120,10 +152,12 @@ Authentication.defaultProps = {
   authorizeUser: helpers.noop,
   insights: window.insights,
   navigation: appNavigation,
+  routes: appRoutes,
   session: {
     authorized: false,
     error: false,
     errorMessage: '',
+    errorStatus: null,
     pending: false
   }
 };

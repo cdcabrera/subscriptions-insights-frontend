@@ -1,4 +1,4 @@
-import { userTypes } from '../types';
+import { appTypes, userTypes } from '../types';
 import { reduxHelpers } from '../common/reduxHelpers';
 
 const initialState = {
@@ -15,6 +15,30 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    /*
+    case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_4XX):
+    case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_5XX):
+
+      // if () {
+      // return state;
+      // }
+      console.log('CHECKING ------>', );
+
+      return reduxHelpers.setStateProp(
+        'session',
+        {
+          error: true,
+          errorMessage: reduxHelpers.getMessageFromResults(action),
+          errorStatus: reduxHelpers.getStatusFromResults(action),
+          locale: state.session.locale
+        },
+        {
+          state,
+          initialState
+        }
+      );
+      */
+
     case reduxHelpers.REJECTED_ACTION(userTypes.USER_AUTH):
       return reduxHelpers.setStateProp(
         'session',

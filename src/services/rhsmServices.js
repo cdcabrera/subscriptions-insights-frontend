@@ -39,7 +39,7 @@ const getApiVersion = () =>
 
 /**
  * @apiMock {DelayResponse} 2000
- * @apiMock {ForceStatus} 200
+ * @apiMock {ForceStatus} 400
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *

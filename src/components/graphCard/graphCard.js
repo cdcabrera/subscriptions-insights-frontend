@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import { Card, CardHead, CardActions, CardBody } from '@patternfly/react-core';
 import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components';
@@ -19,6 +18,8 @@ class GraphCard extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { graphGranularity } = this.props;
+
+    console.log('CHECKING ----------->', graphGranularity !== prevProps.graphGranularity);
 
     if (graphGranularity !== prevProps.graphGranularity) {
       this.onUpdateGraphData();
@@ -112,14 +113,14 @@ class GraphCard extends React.Component {
     return <ChartArea {...chartAreaProps} dataSets={filteredGraphData(graphData)} />;
   }
 
-  // ToDo: combine "curiosity-skeleton-container" into a single class w/ --loading and BEM style
+  /**
+   * ToDo: determine whether the error handling should be redirected from the component or a global error handler
+   * The global error handler would be redux middleware exposing http status. This status could be handled by
+   * the auth component. See Cloud Meter/Frontigrade for Redux middleware.
+   */
   render() {
-    const { cardTitle, error, errorRoute, errorStatus, graphGranularity, selectOptionsType, pending, t } = this.props;
+    const { cardTitle, graphGranularity, selectOptionsType, pending, t } = this.props;
     const getGranularityOptions = graphCardTypes.getGranularityOptions(selectOptionsType);
-
-    if (error && (errorStatus === 403 || errorStatus >= 500)) {
-      return (errorRoute && errorRoute.to && <Redirect to={errorRoute.to} />) || null;
-    }
 
     return (
       <Card className="curiosity-usage-graph fadein">

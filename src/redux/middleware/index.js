@@ -18,7 +18,7 @@ const notificationsOptions = {
 
 const reduxMiddleware = [
   thunkMiddleware,
-  statusMiddleware(),
+  // statusMiddleware(),
   promiseMiddleware,
   notificationsMiddleware(notificationsOptions)
 ];
