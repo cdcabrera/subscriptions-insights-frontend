@@ -4,6 +4,10 @@
     "authorizedTitle": "Unauthorized",
     "authorizedCopy": "You do not have permission to access reporting. Contact your administrator."
   },
+  "curiosity-error": {
+    "errorTitle": "Issue",
+    "errorCopy": "There appears to be an issue. Contact your administrator."
+  },
   "curiosity-graph": {
     "coresHeading": "CPU core usage",
     "socketsHeading": "CPU socket usage",
