@@ -47,9 +47,9 @@ describe('RouterHelpers', () => {
     }).toMatchSnapshot('detail: computenode');
 
     expect({
-      nav: getNavigationDetail({ params: {}, pathname: 'default' }),
-      route: getRouteDetail({ params: {}, pathname: 'default' }),
-      navRoute: getNavRouteDetail({ params: {}, pathname: 'default' })
+      nav: getNavigationDetail({ params: {}, pathname: 'lore-ipsum-broken', returnDefault: true }),
+      route: getRouteDetail({ params: {}, pathname: 'lorem-ipsum-broken', returnDefault: true }),
+      navRoute: getNavRouteDetail({ params: {}, pathname: 'lorem-ipsum-broken', returnDefault: true })
     }).toMatchSnapshot('detail: default');
 
     expect({
