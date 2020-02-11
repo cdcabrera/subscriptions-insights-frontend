@@ -5,10 +5,10 @@ import { rhsmApiTypes } from '../../types/rhsmApiTypes';
 
 const graphCardCache = { dataId: null, data: {} };
 
-const graphComponent = (state, props) => ({ ...state.graph.component[props.viewId] });
+const graphComponent = (state, props = {}) => ({ ..._get(state, ['graph', 'component', props.viewId]) });
 
-const graphResponse = (state, props) => ({
-  ...state.graph.reportCapacity[props.productId],
+const graphResponse = (state, props = {}) => ({
+  ..._get(state, ['graph', 'reportCapacity', props.productId]),
   ...{ viewId: props.viewId }
 });
 
@@ -37,7 +37,10 @@ const graphCardSelector = createSelector(
 
     const updatedResponseData = {
       ...component,
-      ...responseData,
+      error: responseData.error,
+      errorStatus: responseData.errorStatus,
+      fulfilled: responseData.fulfilled,
+      pending: responseData.pending,
       initialLoad,
       graphData: {
         cores: [],
