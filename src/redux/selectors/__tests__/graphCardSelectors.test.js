@@ -6,10 +6,9 @@ describe('GraphCardSelectors', () => {
     expect(graphCardSelectors).toMatchSnapshot('selectors');
   });
 
-  it('should error on missing a reducer response', () => {
-    // it('should pass minimal data on missing a reducer response', () => {
+  it('should pass minimal data on missing a reducer response', () => {
     const state = {};
-    expect(graphCardSelectors.graphCard(state)).toMatchSnapshot('rhelGraphCard: missing reducer error');
+    expect(graphCardSelectors.graphCard(state)).toMatchSnapshot('graphCard: missing reducer error');
   });
 
   it('should error on a product ID without granularity provided', () => {
@@ -32,7 +31,7 @@ describe('GraphCardSelectors', () => {
       }
     };
 
-    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('rhelGraphCard: no granularity error');
+    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('graphCard: no granularity error');
   });
 
   it('should error on a product ID without a product ID provided', () => {
@@ -57,7 +56,7 @@ describe('GraphCardSelectors', () => {
       }
     };
 
-    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('rhelGraphCard: no product id error');
+    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('graphCard: no product id error');
   });
 
   it('should handle pending state on a product ID', () => {
@@ -88,7 +87,7 @@ describe('GraphCardSelectors', () => {
       }
     };
 
-    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('rhelGraphCard: pending');
+    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('graphCard: pending');
   });
 
   it('should populate data on a product ID when the api response provided mismatches index or date', () => {
@@ -132,7 +131,7 @@ describe('GraphCardSelectors', () => {
     };
 
     expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot(
-      'rhelGraphCard: data populated on mismatch fulfilled'
+      'graphCard: data populated on mismatch fulfilled'
     );
   });
 
@@ -203,9 +202,7 @@ describe('GraphCardSelectors', () => {
       }
     };
 
-    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot(
-      'rhelGraphCard: data populated, missing properties'
-    );
+    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('graphCard: data populated, missing properties');
   });
 
   it('should map a fulfilled product ID response to an aggregated output', () => {
@@ -287,7 +284,7 @@ describe('GraphCardSelectors', () => {
       }
     };
 
-    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('rhelGraphCard: fulfilled granularity');
+    expect(graphCardSelectors.graphCard(state, props)).toMatchSnapshot('graphCard: fulfilled granularity');
   });
 
   it('should populate data from the in memory cache', () => {
