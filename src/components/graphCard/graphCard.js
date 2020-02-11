@@ -119,7 +119,7 @@ class GraphCard extends React.Component {
   // ToDo: combine "curiosity-skeleton-container" into a single class w/ --loading and BEM style
   render() {
     const { cardTitle, error, graphGranularity, selectOptionsType, pending, t } = this.props;
-    const getGranularityOptions = graphCardTypes.getGranularityOptions(selectOptionsType);
+    const { options } = graphCardTypes.getGranularityOptions(selectOptionsType);
 
     return (
       <Card className="curiosity-usage-graph fadein">
@@ -129,7 +129,7 @@ class GraphCard extends React.Component {
             <Select
               aria-label={t('curiosity-graph.dropdownPlaceholder')}
               onSelect={this.onSelect}
-              options={getGranularityOptions}
+              options={options}
               selectedOptions={graphGranularity}
               placeholder={t('curiosity-graph.dropdownPlaceholder')}
             />
