@@ -8,6 +8,7 @@ import {
 import { PageLayout, PageHeader, PageSection } from '../pageLayout/pageLayout';
 import GraphCard from '../graphCard/graphCard';
 import { helpers } from '../../common';
+import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../types/rhsmApiTypes';
 
 class OpenshiftView extends React.Component {
   componentDidMount() {}
@@ -27,9 +28,10 @@ class OpenshiftView extends React.Component {
               { id: 'cores', fill: chartColorBlueLight.value, stroke: chartColorBlueDark.value },
               { id: 'threshold' }
             ]}
+            graphGranularity={GRANULARITY_TYPES.DAILY}
             productId={routeDetail.pathParameter}
+            viewId={routeDetail.pathId}
             cardTitle={t('curiosity-graph.coresHeading')}
-            errorRoute={routeDetail.errorRoute}
             productShortLabel="OpenShift"
           />
         </PageSection>
@@ -41,18 +43,15 @@ class OpenshiftView extends React.Component {
 OpenshiftView.propTypes = {
   routeDetail: PropTypes.shape({
     pathParameter: PropTypes.string.isRequired,
+    pathId: PropTypes.string.isRequired,
     routeItem: PropTypes.shape({
       title: PropTypes.string
-    }),
-    errorRoute: PropTypes.shape({
-      to: PropTypes.string
     })
-  }),
+  }).isRequired,
   t: PropTypes.func
 };
 
 OpenshiftView.defaultProps = {
-  routeDetail: {},
   t: helpers.noopTranslate
 };
 

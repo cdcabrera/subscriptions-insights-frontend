@@ -10,6 +10,7 @@ import {
 import GraphCard from '../graphCard/graphCard';
 import { PageLayout, PageHeader, PageSection } from '../pageLayout/pageLayout';
 import { helpers } from '../../common';
+import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../types/rhsmApiTypes';
 
 class RhelView extends React.Component {
   componentDidMount() {}
@@ -30,9 +31,10 @@ class RhelView extends React.Component {
               { id: 'hypervisorSockets', fill: chartColorCyanLight.value, stroke: chartColorCyanDark.value },
               { id: 'threshold' }
             ]}
+            graphGranularity={GRANULARITY_TYPES.DAILY}
             productId={routeDetail.pathParameter}
+            viewId={routeDetail.pathId}
             cardTitle={t('curiosity-graph.socketsHeading')}
-            errorRoute={routeDetail.errorRoute}
             productShortLabel="RHEL"
           />
         </PageSection>
@@ -44,18 +46,15 @@ class RhelView extends React.Component {
 RhelView.propTypes = {
   routeDetail: PropTypes.shape({
     pathParameter: PropTypes.string.isRequired,
+    pathId: PropTypes.string.isRequired,
     routeItem: PropTypes.shape({
       title: PropTypes.string
-    }),
-    errorRoute: PropTypes.shape({
-      to: PropTypes.string
     })
-  }),
+  }).isRequired,
   t: PropTypes.func
 };
 
 RhelView.defaultProps = {
-  routeDetail: {},
   t: helpers.noopTranslate
 };
 
