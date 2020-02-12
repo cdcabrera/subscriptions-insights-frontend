@@ -96,12 +96,11 @@ class GraphCard extends React.Component {
             duration: 250,
             onLoad: { duration: 250 }
           },
-          legendLabel: t(`curiosity-graph.${key}Label`, { product: productShortLabel }),
-          isStacked: key !== 'threshold',
-          isThreshold: key === 'threshold'
+          isStacked: !/^threshold/.test(key),
+          isThreshold: /^threshold/.test(key)
         };
 
-        if (key === 'threshold') {
+        if (/^threshold/.test(key)) {
           tempFiltered.animate = {
             duration: 100,
             onLoad: { duration: 100 }
@@ -110,6 +109,9 @@ class GraphCard extends React.Component {
           tempFiltered.stroke = chartColorGreenDark.value;
           tempFiltered.strokeDasharray = '4,3';
           tempFiltered.strokeWidth = 2.5;
+          tempFiltered.legendLabel = t(`curiosity-graph.thresholdLabel`);
+        } else {
+          tempFiltered.legendLabel = t(`curiosity-graph.${key}Label`, { product: productShortLabel });
         }
 
         return tempFiltered;
@@ -125,9 +127,8 @@ class GraphCard extends React.Component {
     return <ChartArea key={helpers.generateId()} {...chartAreaProps} dataSets={filteredGraphData(graphData)} />;
   }
 
-  // ToDo: combine "curiosity-skeleton-container" into a single class w/ --loading and BEM style
   render() {
-    const { cardTitle, error, graphGranularity, selectOptionsType, pending, t } = this.props;
+    const { cardTitle, children, error, graphGranularity, selectOptionsType, pending, t } = this.props;
     const { options } = graphCardTypes.getGranularityOptions(selectOptionsType);
 
     return (
@@ -135,6 +136,7 @@ class GraphCard extends React.Component {
         <CardHead>
           <h2>{cardTitle}</h2>
           <CardActions>
+            {children}
             <Select
               aria-label={t('curiosity-graph.dropdownPlaceholder')}
               onSelect={this.onSelect}
@@ -164,6 +166,7 @@ class GraphCard extends React.Component {
 
 GraphCard.propTypes = {
   cardTitle: PropTypes.string,
+  children: PropTypes.node,
   error: PropTypes.bool,
   filterGraphData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -185,6 +188,7 @@ GraphCard.propTypes = {
 
 GraphCard.defaultProps = {
   cardTitle: null,
+  children: null,
   error: false,
   filterGraphData: [],
   getGraphReportsCapacity: helpers.noop,
