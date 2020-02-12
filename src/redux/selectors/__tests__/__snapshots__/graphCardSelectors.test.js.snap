@@ -5,15 +5,7 @@ Object {
   "error": undefined,
   "errorStatus": undefined,
   "fulfilled": undefined,
-  "graphData": Object {
-    "cores": Array [],
-    "hypervisorCores": Array [],
-    "hypervisorSockets": Array [],
-    "physicalCores": Array [],
-    "physicalSockets": Array [],
-    "sockets": Array [],
-    "threshold": Array [],
-  },
+  "graphData": Object {},
   "initialLoad": true,
   "pending": undefined,
 }
@@ -24,15 +16,7 @@ Object {
   "error": undefined,
   "errorStatus": undefined,
   "fulfilled": undefined,
-  "graphData": Object {
-    "cores": Array [],
-    "hypervisorCores": Array [],
-    "hypervisorSockets": Array [],
-    "physicalCores": Array [],
-    "physicalSockets": Array [],
-    "sockets": Array [],
-    "threshold": Array [],
-  },
+  "graphData": Object {},
   "initialLoad": true,
   "pending": undefined,
 }
@@ -43,15 +27,7 @@ Object {
   "error": undefined,
   "errorStatus": undefined,
   "fulfilled": undefined,
-  "graphData": Object {
-    "cores": Array [],
-    "hypervisorCores": Array [],
-    "hypervisorSockets": Array [],
-    "physicalCores": Array [],
-    "physicalSockets": Array [],
-    "sockets": Array [],
-    "threshold": Array [],
-  },
+  "graphData": Object {},
   "graphGranularity": "daily",
   "initialLoad": true,
   "pending": true,
@@ -81,6 +57,40 @@ Object {
         "y": 4,
       },
     ],
+    "date": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": "2019-09-05T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": "2019-09-06T00:00:00.000Z",
+      },
+    ],
+    "hasData": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
     "hypervisorCores": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
@@ -166,7 +176,126 @@ Object {
         "y": 4,
       },
     ],
-    "threshold": Array [
+    "thresholdCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdDate": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": "2019-09-05T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": "2019-09-06T00:00:00.000Z",
+      },
+    ],
+    "thresholdHasInfiniteQuantity": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 50,
+      },
+    ],
+    "thresholdPhysicalCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 50,
+      },
+    ],
+    "thresholdSockets": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
@@ -195,15 +324,7 @@ Object {
   "error": undefined,
   "errorStatus": undefined,
   "fulfilled": undefined,
-  "graphData": Object {
-    "cores": Array [],
-    "hypervisorCores": Array [],
-    "hypervisorSockets": Array [],
-    "physicalCores": Array [],
-    "physicalSockets": Array [],
-    "sockets": Array [],
-    "threshold": Array [],
-  },
+  "graphData": Object {},
   "initialLoad": true,
   "pending": undefined,
 }
@@ -220,6 +341,20 @@ Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
         "y": 2,
+      },
+    ],
+    "date": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "hasData": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
       },
     ],
     "hypervisorCores": Array [
@@ -257,7 +392,56 @@ Object {
         "y": 2,
       },
     ],
-    "threshold": Array [
+    "thresholdCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdDate": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "thresholdHasInfiniteQuantity": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+    ],
+    "thresholdPhysicalCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+    ],
+    "thresholdSockets": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
@@ -283,6 +467,20 @@ Object {
         "y": 2,
       },
     ],
+    "date": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "hasData": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
     "hypervisorCores": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
@@ -318,7 +516,56 @@ Object {
         "y": 2,
       },
     ],
-    "threshold": Array [
+    "thresholdCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdDate": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "thresholdHasInfiniteQuantity": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+    ],
+    "thresholdPhysicalCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+    ],
+    "thresholdSockets": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
@@ -345,6 +592,20 @@ Object {
         "y": 2,
       },
     ],
+    "date": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "hasData": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
     "hypervisorCores": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
@@ -380,7 +641,56 @@ Object {
         "y": 2,
       },
     ],
-    "threshold": Array [
+    "thresholdCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdDate": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "thresholdHasInfiniteQuantity": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+    ],
+    "thresholdPhysicalCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+    ],
+    "thresholdSockets": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
@@ -417,6 +727,40 @@ Object {
         "y": 0,
       },
     ],
+    "date": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": "2019-09-05T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": "2019-09-06T00:00:00.000Z",
+      },
+    ],
+    "hasData": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
     "hypervisorCores": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
@@ -502,7 +846,126 @@ Object {
         "y": 4,
       },
     ],
-    "threshold": Array [
+    "thresholdCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdDate": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": "2019-09-05T00:00:00.000Z",
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": "2019-09-06T00:00:00.000Z",
+      },
+    ],
+    "thresholdHasInfiniteQuantity": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 50,
+      },
+    ],
+    "thresholdPhysicalCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 50,
+      },
+      Object {
+        "date": 2019-09-05T00:00:00.000Z,
+        "x": 1,
+        "y": 0,
+      },
+      Object {
+        "date": 2019-09-06T00:00:00.000Z,
+        "x": 2,
+        "y": 50,
+      },
+    ],
+    "thresholdSockets": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
@@ -537,6 +1000,20 @@ Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
         "y": 2,
+      },
+    ],
+    "date": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": "2019-09-04T00:00:00.000Z",
+      },
+    ],
+    "hasData": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
       },
     ],
     "hypervisorCores": Array [
@@ -574,7 +1051,56 @@ Object {
         "y": 2,
       },
     ],
-    "threshold": Array [
+    "thresholdCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdDate": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHasInfiniteQuantity": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdHypervisorSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalCores": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdPhysicalSockets": Array [
+      Object {
+        "date": 2019-09-04T00:00:00.000Z,
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    "thresholdSockets": Array [
       Object {
         "date": 2019-09-04T00:00:00.000Z,
         "x": 0,
