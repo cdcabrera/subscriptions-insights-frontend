@@ -1,10 +1,13 @@
+import crypto from 'crypto';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createContainer, VictoryPortal } from 'victory';
+import { createContainer, VictoryPortal, VictoryScatter, VictoryGroup } from 'victory';
 import {
   Chart,
   ChartAxis,
+  ChartGroup,
   ChartLegend,
+  ChartScatter,
   ChartStack,
   ChartThreshold,
   ChartTooltip,
@@ -14,14 +17,51 @@ import {
 import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
 
+// const hash = crypto.createHash('sha256');
+/*
+var test = JSON.stringify({ "data": true }).split('').map(b => b.charCodeAt())
+
+function gen(len = 40){
+  var arr = new Uint8Array(test);
+  return Array.from(arr, byteToHex).join("");
+}
+
+function byteToHex(byte){
+  return (`0${byte.toString(16).slice(-2)}`)
+}
+*/
+const generateHash = (data = {}, len = 40) => {
+  const byteToHex = byte => `0${byte.toString(16).slice(-2)}`;
+  const c = JSON.stringify(data)
+    .split('')
+    .map(b => b.charCodeAt());
+  const a = new Uint8Array(c);
+  return Array.from(a, byteToHex).join('');
+};
+
+const chartAreaCache = {
+
+};
+
 class ChartArea extends React.Component {
   state = { chartWidth: 0 };
 
   containerRef = React.createRef();
 
+  hash;
+
   componentDidMount() {
+    const { dataSets } = this.props;
+
+    this.hash = crypto
+      .createHash('sha1')
+      .update(JSON.stringify(dataSets))
+      .digest('hex');
+
     this.onResizeContainer();
     window.addEventListener('resize', this.onResizeContainer);
+
+    console.log('MOUNT ---->');
   }
 
   componentWillUnmount() {
@@ -309,6 +349,36 @@ class ChartArea extends React.Component {
         dataColorStroke.data.stroke = dataSet.stroke;
       }
 
+
+      return (
+        <VictoryGroup
+          key={helpers.generateId()}
+          // animate={dataSet.animate || false}
+          // themeColor={dataSet.themeColor}
+          // themeVariant={dataSet.themeVariant}
+          interpolation={dataSet.interpolation || 'monotoneX'}
+        >
+          <VictoryScatter data={dataSet.data} style={{ data: { fill: dataColorStroke.data.stroke || 'black' }, 'stroke-width': 2 }} />
+          <PfChartArea data={dataSet.data} name={`chartArea-${index}-area`} style={{ ...(dataSet.style || {}), ...dataColorStroke }} />
+        </VictoryGroup>
+      );
+
+      return (
+        <VictoryGroup
+          key={helpers.generateId()}
+          data={dataSet.data}
+          // animate={dataSet.animate || false}
+          // themeColor={dataSet.themeColor}
+          // themeVariant={dataSet.themeVariant}
+          // interpolation={dataSet.interpolation || 'monotoneX'}
+        >
+          <PfChartArea name={`chartArea-${index}-area`} style={{ ...(dataSet.style || {}), ...dataColorStroke }} />
+          <VictoryPortal>
+            <VictoryScatter style={{ data: { fill: dataColorStroke.data.stroke || 'black' } }} />
+          </VictoryPortal>
+        </VictoryGroup>
+      );
+
       return (
         <PfChartArea
           animate={dataSet.animate || false}
@@ -348,6 +418,9 @@ class ChartArea extends React.Component {
     const chartLegendProps = this.getChartLegend();
     const containerComponent = (maxY > 0 && ChartArea.getContainerComponent()) || {};
     const chartProps = { padding, ...chartLegendProps, ...chartDomain, ...containerComponent };
+
+    console.log('HASH --->', this.hash);
+    // console.log('HASH 2 --->', this.hash2);
 
     /**
      * FixMe: PFCharts or Victory, unable to return null or empty content.
@@ -389,7 +462,7 @@ ChartArea.propTypes = {
       strokeDasharray: PropTypes.string,
       themeColor: PropTypes.string,
       themeVariant: PropTypes.string,
-      id: PropTypes.string,
+      id: PropTypes.string.isRequired,
       interpolation: PropTypes.string,
       legendLabel: PropTypes.string,
       legendSymbolType: PropTypes.string,

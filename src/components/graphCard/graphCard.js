@@ -13,7 +13,9 @@ import ChartArea from '../chartArea/chartArea';
 
 class GraphCard extends React.Component {
   componentDidMount() {
-    this.onUpdateGraphData();
+    const { selectOptionsType } = this.props;
+    const { selected } = graphCardTypes.getGranularityOptions(selectOptionsType);
+    this.onSelect({ value: selected });
   }
 
   componentDidUpdate(prevProps) {
@@ -43,13 +45,14 @@ class GraphCard extends React.Component {
   };
 
   onSelect = event => {
-    const { graphGranularity, viewId } = this.props;
+    const { graphGranularity, productId, viewId } = this.props;
     const { value } = event;
 
     if (graphGranularity !== value) {
       store.dispatch({
         type: reduxTypes.rhsm.SET_GRAPH_GRANULARITY_RHSM,
         graphGranularity: value,
+        productId,
         viewId
       });
     }
@@ -84,7 +87,16 @@ class GraphCard extends React.Component {
       xAxisLabelIncrement: graphCardHelpers.getChartXAxisLabelIncrement(updatedGranularity),
       xAxisTickFormat,
       yAxisTickFormat: graphCardHelpers.yAxisTickFormat,
-      tooltips
+      tooltips,
+      events: [
+        {
+          element: ['legend'],
+          event: 'onClick',
+          handler: props => {
+            console.log('PROPS ---->', props);
+          }
+        }
+      ]
     };
 
     const filteredGraphData = data => {

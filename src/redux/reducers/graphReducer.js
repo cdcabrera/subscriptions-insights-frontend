@@ -15,12 +15,14 @@ const graphReducer = (state = initialState, action) => {
         'component',
         {
           [action.viewId]: {
-            graphGranularity: action.graphGranularity
+            graphGranularity: action.graphGranularity,
+            productId: action.productId,
+            viewId: action.viewId
           }
         },
         {
           state,
-          reset: false
+          initialState
         }
       );
 

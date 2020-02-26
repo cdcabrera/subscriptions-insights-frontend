@@ -10,12 +10,12 @@ const graphCardCache = { dataId: null, data: {} };
 const graphComponent = (state, props = {}) => ({ ..._get(state, ['graph', 'component', props.viewId]) });
 
 const graphResponse = (state, props = {}) => ({
-  ..._get(state, ['graph', 'reportCapacity', props.productId]),
-  ...{ viewId: props.viewId, productId: props.productId }
+  ..._get(state, ['graph', 'reportCapacity', props.productId])
 });
 
 const graphCardSelector = createSelector([graphResponse, graphComponent], (response, component) => {
-  const { viewId = null, productId = null, metaQuery = {}, ...responseData } = response || {};
+  const { graphGranularity, viewId = null, productId = null } = component;
+  const { metaQuery = {}, ...responseData } = response || {};
 
   const updatedResponseData = {
     ...component,
@@ -23,20 +23,11 @@ const graphCardSelector = createSelector([graphResponse, graphComponent], (respo
     errorStatus: responseData.errorStatus,
     fulfilled: responseData.fulfilled || false,
     pending: responseData.pending || false,
-    graphData: {},
-    syncing: false
+    graphData: {}
   };
 
   const responseGranularity = metaQuery[rhsmApiTypes.RHSM_API_QUERY_GRANULARITY] || null;
-  let granularity = null;
-
-  if (component.graphGranularity === responseGranularity || (!component.graphGranularity && responseData.fulfilled)) {
-    granularity = responseGranularity;
-  }
-
-  if (!granularity && responseData.fulfilled) {
-    updatedResponseData.syncing = true;
-  }
+  const granularity = graphGranularity;
 
   const cachedGranularity =
     (granularity && viewId && productId && graphCardCache.data[`${viewId}_${productId}_${granularity}`]) || {};
@@ -49,7 +40,7 @@ const graphCardSelector = createSelector([graphResponse, graphComponent], (respo
     graphCardCache.data = {};
   }
 
-  if (responseData.fulfilled && granularity && productId) {
+  if (responseData.fulfilled && graphGranularity === responseGranularity && productId) {
     const [report, capacity] = responseData.data;
     const reportData = _get(report, [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA], []);
     const capacityData = _get(capacity, [rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA], []);

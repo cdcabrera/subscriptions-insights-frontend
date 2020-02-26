@@ -575,11 +575,17 @@ const getGraphReports = (id, params = {}) =>
  *        ]
  *     }
  */
-const getGraphCapacity = (id, params = {}) =>
-  serviceCall({
-    url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
-    params
+const getGraphCapacity = (id, params = {}) => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(serviceCall({
+        url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
+        params
+      }));
+    }, 3000);
   });
+
+}
 
 const rhsmServices = { getApiVersion, getGraphCapacity, getGraphReports };
 
