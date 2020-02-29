@@ -7,28 +7,8 @@ describe('GraphReducer', () => {
     expect(graphReducer.initialState).toBeDefined();
   });
 
-  it('should handle specific defined types', () => {
-    const specificTypes = [types.SET_GRAPH_GRANULARITY_RHSM];
-
-    specificTypes.forEach(value => {
-      const dispatched = {
-        type: value,
-        graphGranularity: 'lorem granularity',
-        viewId: 'dolor id'
-      };
-
-      const resultState = graphReducer(undefined, dispatched);
-
-      expect({ type: value, result: resultState }).toMatchSnapshot(`defined type ${value}`);
-    });
-  });
-
   it('should handle all defined error types', () => {
-    const specificTypes = [
-      types.GET_GRAPH_REPORT_CAPACITY_RHSM,
-      types.GET_GRAPH_CAPACITY_RHSM,
-      types.GET_GRAPH_REPORT_RHSM
-    ];
+    const specificTypes = [types.GET_GRAPH_REPORT_CAPACITY_RHSM];
 
     specificTypes.forEach(value => {
       const dispatched = {
@@ -55,11 +35,7 @@ describe('GraphReducer', () => {
   });
 
   it('should handle all defined pending types', () => {
-    const specificTypes = [
-      types.GET_GRAPH_REPORT_CAPACITY_RHSM,
-      types.GET_GRAPH_CAPACITY_RHSM,
-      types.GET_GRAPH_REPORT_RHSM
-    ];
+    const specificTypes = [types.GET_GRAPH_REPORT_CAPACITY_RHSM];
 
     specificTypes.forEach(value => {
       const dispatched = {
@@ -75,11 +51,7 @@ describe('GraphReducer', () => {
   });
 
   it('should handle all defined fulfilled types', () => {
-    const specificTypes = [
-      types.GET_GRAPH_REPORT_CAPACITY_RHSM,
-      types.GET_GRAPH_CAPACITY_RHSM,
-      types.GET_GRAPH_REPORT_RHSM
-    ];
+    const specificTypes = [types.GET_GRAPH_REPORT_CAPACITY_RHSM];
 
     specificTypes.forEach(value => {
       const dispatched = {
