@@ -169,6 +169,26 @@ Object {
 }
 `;
 
+exports[`ReduxHelpers should update a nested state object: dont reset state object 1`] = `
+Object {
+  "ipsum": Object {
+    "dolor": Object {
+      "nullam": true,
+    },
+  },
+}
+`;
+
+exports[`ReduxHelpers should update a nested state object: reset state object 1`] = `
+Object {
+  "ipsum": Object {
+    "dolor": Object {
+      "nullam": true,
+    },
+  },
+}
+`;
+
 exports[`ReduxHelpers should update a state object: dont reset state object 1`] = `
 Object {
   "ipsum": false,

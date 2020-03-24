@@ -225,6 +225,53 @@ describe('ReduxHelpers', () => {
     ).toMatchSnapshot('dont reset state object');
   });
 
+  it('should update a nested state object', () => {
+    const initialState = {
+      lorem: false,
+      ipsum: {
+        dolor: {
+          nullam: false,
+          ut: false
+        }
+      }
+    };
+
+    const state = {};
+    state.ipsum = false;
+
+    expect(
+      reduxHelpers.setStateProp(
+        'ipsum',
+        {
+          dolor: {
+            nullam: true
+          }
+        },
+        {
+          state,
+          initialState
+        }
+      )
+    ).toMatchSnapshot('reset state object');
+
+    state.ipsum = false;
+
+    expect(
+      reduxHelpers.setStateProp(
+        'ipsum',
+        {
+          dolor: {
+            nullam: true
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      )
+    ).toMatchSnapshot('dont reset state object');
+  });
+
   it('should automate creating general promise action reducers', () => {
     const state = {};
     const action = {
