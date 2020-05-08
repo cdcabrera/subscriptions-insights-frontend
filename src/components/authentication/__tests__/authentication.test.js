@@ -4,6 +4,7 @@ import { mount, shallow } from 'enzyme';
 import { BrowserRouter } from 'react-router-dom';
 import { helpers } from '../../../common/helpers';
 import { ConnectedAuthentication, Authentication } from '../authentication';
+import { rhsmApiTypes } from '../../../types';
 
 describe('Authorization Component', () => {
   const generateEmptyStore = (obj = {}) => configureMockStore()(obj);
@@ -80,6 +81,7 @@ describe('Authorization Component', () => {
         authorized: false,
         error: true,
         status: 403,
+        errorCodes: [rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN],
         errorMessage: `Forbidden`,
         pending: false
       }
