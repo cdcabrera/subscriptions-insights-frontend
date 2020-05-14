@@ -4,4 +4,30 @@
       border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
     }
   }
+
+  .c3-line {
+    // fill: none;
+  }
+
+  .c3-axis-y text {
+    font-size: 1em;
+  }
+
+  .c3-axis-x text {
+    font-size: 1.3em;
+  }
+
+  table.c3-tooltip {
+    background-color: #333333;
+    color: #ffffff;
+    tr,th,td {
+      background-color: inherit;
+      color: inherit;
+    }
+  }
+
+  .curiosity-c3chart {
+    .curiosity-c3chart-container {}
+    .curiosity-c3chart-legend {}
+  }
 }

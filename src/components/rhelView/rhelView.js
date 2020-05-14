@@ -14,6 +14,7 @@ import { connectTranslate, reduxSelectors } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import Toolbar from '../toolbar/toolbar';
 import { helpers } from '../../common';
+import C3GraphCard from '../c3GraphCard/c3GraphCard';
 
 /**
  * A Red Hat Enterprise Linux encompassing view, and system architectures.
@@ -38,8 +39,7 @@ class RhelView extends React.Component {
           <Toolbar graphQuery={graphQuery} viewId={viewId} />
         </PageToolbar>
         <PageSection>
-          <GraphCard
-            key={routeDetail.pathParameter}
+          <C3GraphCard
             filterGraphData={initialFilters}
             graphQuery={graphQuery}
             productId={routeDetail.pathParameter}

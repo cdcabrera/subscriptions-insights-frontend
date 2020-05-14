@@ -123,8 +123,8 @@ const xAxisTickFormat = ({ date, granularity, tick, previousDate }) => {
       formattedDate = isNewYear
         ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
         : momentDate.format(dateHelpers.timestampQuarterFormats.short);
-
-      formattedDate = formattedDate.replace(/\s/, '\n');
+      // formattedDate = momentDate.format(dateHelpers.timestampQuarterFormats.yearShort);
+      // formattedDate = formattedDate.replace(/\s/, '\n');
       break;
     case GRANULARITY_TYPES.MONTHLY:
       formattedDate = isNewYear
