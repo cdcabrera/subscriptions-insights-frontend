@@ -90,13 +90,15 @@ class C3GraphCard extends React.Component {
     const updatedGranularity = graphGranularity || selected;
 
     const filtered = {};
+    const hiddenDataFacets = [];
     const converted = {
       x: 'x',
+      colors: {},
       columns: [],
-      names: {},
-      types: {},
       groups: [[]],
-      colors: {}
+      // hide: [],
+      names: {},
+      types: {}
       // tooltipTitle: []
     };
 
@@ -148,15 +150,25 @@ class C3GraphCard extends React.Component {
       converted.columns[0] = ['x'];
       converted.columns.push([value]);
 
+      let totalData = 0;
+
       filtered[value].forEach(filteredValue => {
         const formattedDate = moment.utc(filteredValue.date).local().format('YYYY-MM-DD');
         converted.columns[0].push(formattedDate);
         converted.columns[converted.columns.length - 1].push(filteredValue.y);
+        totalData += filteredValue.y || 0;
       });
+
+      if (totalData <= 0) {
+        // converted.columns.splice(-1);
+        converted.columns.pop();
+        hiddenDataFacets.push(value);
+        // converted.hide.push(value);
+      }
     });
 
     const onComplete = ({ chart }) => {
-      console.log('ON COMPLETE >>>', chart);
+      console.log('ON COMPLETE >>>', chart, converted);
     };
 
     return (
@@ -165,7 +177,7 @@ class C3GraphCard extends React.Component {
         onComplete={onComplete}
         config={{
           unloadBeforeLoad: true,
-          padding: { left: 30, right: 30 },
+          padding: { left: 40, right: 40, top: 10, bottom: 10 },
           legend: { show: false },
           spline: {
             interpolation: {
@@ -174,6 +186,14 @@ class C3GraphCard extends React.Component {
           },
           data: {
             ...converted
+            // empty: {
+            //  label: {
+            //    text: "No Data"
+            //  }
+            // }
+          },
+          point: {
+            show: false
           },
           grid: {
             y: {
@@ -195,8 +215,13 @@ class C3GraphCard extends React.Component {
               padding: 0
             },
             y: {
+              // show: hiddenDataFacets.length !== Object.keys(filtered).length, // acts wonky when some products have data
+              default: [0, 50],
+              padding: { bottom: 0 },
+              min: 0,
               tick: {
                 // count: 1,
+                show: false,
                 outer: false,
                 format: tick => (tick === 0 ? '' : yAxisTickFormat({ tick }))
               }
@@ -218,6 +243,9 @@ class C3GraphCard extends React.Component {
               </ul>
             );
 
+            // const isDataHidden = converted.hide.includes(productDataFacet);
+            const isDataHidden = hiddenDataFacets.includes(productDataFacet);
+
             return (
               <Tooltip
                 key={`curiosity-tooltip-${buttonLabel}`}
@@ -237,14 +265,16 @@ class C3GraphCard extends React.Component {
                   onBlur={() => chart.revert()}
                   onMouseOut={() => chart.revert()}
                   component="a"
+                  className={(isDataHidden && 'faded') || ''}
+                  isDisabled={isDataHidden}
                 >
+                  <svg viewBox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="2" x2="10" y2="2" stroke="black" />
+                  </svg>
                   <div
+                    className={(/^threshold/.test(productDataFacet) && 'threshold-legend-icon') || 'legend-icon'}
                     style={{
-                      backgroundColor: chart.color(productDataFacet),
-                      verticalAlign: 'baseline',
-                      width: '10px',
-                      height: '10px',
-                      display: 'inline-block'
+                      backgroundColor: chart.color(productDataFacet)
                     }}
                   />{' '}
                   {buttonLabel}

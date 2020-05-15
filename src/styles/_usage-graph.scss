@@ -9,12 +9,60 @@
     // fill: none;
   }
 
+  .c3-axis.c3-axis-x,
+  .c3-axis.c3-axis-y {
+    opacity: 0.5 !important;
+  }
+
+  .c3-axis.c3-axis-y {
+     g:first-of-type {
+      // opacity: 0 !important;
+    }
+  }
+
   .c3-axis-y text {
-    font-size: 1em;
+    font-size: 1.4em;
   }
 
   .c3-axis-x text {
-    font-size: 1.3em;
+    font-size: 1.4em;
+  }
+
+  .c3-ygrids {
+    line {
+
+    }
+  }
+
+  .c3-shape.c3-circle {
+    // display: none;
+  }
+
+  // .c3-chart-line.c3-target.c3-target-thresholdSockets {
+  // .c3-shape.c3-line[class^="threshold"]c3-line-thresholdSockets {
+  .c3-shape.c3-line[class*="threshold"] {
+    stroke-dasharray: 5,5;
+    stroke-width: 3;
+  }
+
+  .threshold-legend-icon,
+  .legend-icon {
+    vertical-align: baseline;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+  }
+
+  .threshold-legend-icon {
+    height: 1px;
+    border: none;
+    border-top: 10px dotted #fff;
+    vertical-align: middle;
+  }
+
+  .c3-xgrid, .c3-ygrid {
+    stroke-dasharray: none;
+    opacity: 0.5;
   }
 
   table.c3-tooltip {
@@ -23,11 +71,15 @@
     tr,th,td {
       background-color: inherit;
       color: inherit;
+      border: none;
     }
   }
 
   .curiosity-c3chart {
     .curiosity-c3chart-container {}
-    .curiosity-c3chart-legend {}
+    .curiosity-c3chart-description {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
   }
 }

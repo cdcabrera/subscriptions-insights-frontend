@@ -23,16 +23,17 @@ class C3Chart extends React.Component {
     const { config } = this.props;
 
     if (!_isEqual(prevProps.config.data, config.data)) {
-      this.generateChart();
+      this.generateChart(true);
     }
   }
 
   componentWillUnmount() {
     const { chart } = this.state;
-    this.setState({ chart: chart?.destroy() });
+    chart.destroy();
+    this.setState({ chart: null });
   }
 
-  generateChart() {
+  generateChart(isUpdating) {
     const { chart } = this.state;
     const { config, onComplete } = this.props;
 
@@ -42,20 +43,23 @@ class C3Chart extends React.Component {
     }
 
     this.setState({ chart: updatedChart }, () => {
-      if (config.unloadBeforeLoad) {
-        updatedChart.unload();
-      }
-
-      updatedChart.load({
-        ...config.data,
-        done: async () => {
-          if (config.done) {
-            await config.done({ chart: updatedChart });
-          } else {
-            await onComplete({ chart: updatedChart });
+      // if (config.unloadBeforeLoad) {
+      //  updatedChart.unload();
+      // updatedChart.destroy();
+      // }
+      if (isUpdating) {
+        updatedChart.load({
+          ...config.data,
+          unload: config.unloadBeforeLoad || false,
+          done: async () => {
+            if (config.done) {
+              await config.done({ chart: updatedChart });
+            } else {
+              await onComplete({ chart: updatedChart });
+            }
           }
-        }
-      });
+        });
+      }
     });
   }
 
