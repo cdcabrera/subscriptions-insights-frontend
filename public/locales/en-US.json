@@ -21,10 +21,15 @@
     "socketsLabel": "Sockets",
     "cloudSocketsLabel": "Public cloud",
     "hypervisorCoresLabel": "Virtualized cores",
+    "hypervisorCoresLegendTooltip": "Lorem ipsum dolor sit, hypervisorCores.",
     "hypervisorSocketsLabel": "Virtualized {{product}}",
+    "hypervisorSocketsLegendTooltip": "Lorem ipsum dolor sit, hypervisorSockets.",
     "physicalCoresLabel": "Physical cores",
+    "physicalCoresLegendTooltip": "Lorem ipsum dolor sit, physicalCores.",
     "physicalSocketsLabel": "Physical {{product}}",
-    "thresholdLabel": "Subscription threshold"
+    "physicalSocketsLegendTooltip": "Lorem ipsum dolor sit, physicalSockets.",
+    "thresholdLabel": "Subscription threshold",
+    "thresholdLegendTooltip": "Lorem ipsum dolor sit, threshold."
   },
   "curiosity-toolbar": {
     "slaCategory": "SLA",

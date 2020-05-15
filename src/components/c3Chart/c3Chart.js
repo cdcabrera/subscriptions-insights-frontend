@@ -29,7 +29,9 @@ class C3Chart extends React.Component {
 
   componentWillUnmount() {
     const { chart } = this.state;
-    chart.destroy();
+    if (chart) {
+      chart.destroy();
+    }
     this.setState({ chart: null });
   }
 
@@ -47,19 +49,19 @@ class C3Chart extends React.Component {
       //  updatedChart.unload();
       // updatedChart.destroy();
       // }
-      if (isUpdating) {
-        updatedChart.load({
-          ...config.data,
-          unload: config.unloadBeforeLoad || false,
-          done: async () => {
-            if (config.done) {
-              await config.done({ chart: updatedChart });
-            } else {
-              await onComplete({ chart: updatedChart });
-            }
+      // if (isUpdating) {
+      updatedChart.load({
+        ...config.data,
+        unload: config.unloadBeforeLoad || false,
+        done: async () => {
+          if (config.done) {
+            await config.done({ chart: updatedChart });
+          } else {
+            await onComplete({ chart: updatedChart });
           }
-        });
-      }
+        }
+      });
+      // }
     });
   }
 

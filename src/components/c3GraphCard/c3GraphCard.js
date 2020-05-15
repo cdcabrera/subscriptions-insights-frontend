@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EyeSlashIcon } from '@patternfly/react-icons';
 import { Card, CardHead, CardActions, CardBody, Button, Tooltip, TooltipPosition } from '@patternfly/react-core';
 import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
 import { Skeleton, SkeletonSize } from '@redhat-cloud-services/frontend-components/components/Skeleton';
@@ -10,9 +11,10 @@ import { Select } from '../form/select';
 import { connectTranslate, reduxActions, reduxSelectors, reduxTypes, store } from '../../redux';
 import { helpers, dateHelpers } from '../../common';
 import { rhsmApiTypes, RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../types/rhsmApiTypes';
-import { graphCardHelpers } from '../graphCard/graphCardHelpers';
+import { c3GraphCardHelpers } from './c3GraphCardHelpers';
 import { graphCardTypes } from '../graphCard/graphCardTypes';
 import { C3Chart } from '../c3Chart/c3Chart';
+import { translate } from '../i18n/i18n';
 
 /**
  * A chart/graph card.
@@ -89,7 +91,7 @@ class C3GraphCard extends React.Component {
     const { selected } = graphCardTypes.getGranularityOptions(selectOptionsType);
     const updatedGranularity = graphGranularity || selected;
 
-    const filtered = {};
+    const filtered = [];
     const hiddenDataFacets = [];
     const converted = {
       x: 'x',
@@ -102,14 +104,14 @@ class C3GraphCard extends React.Component {
       // tooltipTitle: []
     };
 
-    const xAxisLabelIncrement = graphCardHelpers.getChartXAxisLabelIncrement(updatedGranularity);
+    // const xAxisLabelIncrement = graphCardHelpers.getChartXAxisLabelIncrement(updatedGranularity);
 
     const xAxisTickFormat = ({ tick }) => {
       const formattedDate = moment.utc(tick).local().format('YYYY-MM-DD');
       const dateIndex = converted.columns[0].slice(1).indexOf(formattedDate);
       const previousDate = dateIndex > -1 && converted.columns[0][dateIndex - 1];
 
-      return graphCardHelpers.xAxisTickFormat({
+      return c3GraphCardHelpers.xAxisTickFormat({
         tick: dateIndex,
         date: formattedDate,
         previousDate,
@@ -117,53 +119,54 @@ class C3GraphCard extends React.Component {
       });
     };
 
-    const yAxisTickFormat = ({ tick }) => numbro(tick).format({ average: true, mantissa: 1, optionalMantissa: true });
-
     if (!graphData || !Object.values(graphData).length) {
       return null;
     }
 
     if (filterGraphData.length) {
       filterGraphData.forEach(value => {
-        filtered[value.id] = graphData[value.id];
+        if (graphData[value.id]) {
+          filtered.push({ id: value.id, data: [...graphData[value.id]] });
 
-        if (/^threshold/.test(value.id)) {
-          converted.colors[value.id] = chartColorGreenDark.value;
-        } else {
-          converted.colors[value.id] = value.stroke;
+          if (/^threshold/.test(value.id)) {
+            converted.colors[value.id] = chartColorGreenDark.value;
+          } else {
+            converted.colors[value.id] = value.stroke;
+          }
         }
       });
     } else {
-      Object.assign(filtered, { ...graphData });
+      Object.keys(graphData).forEach(id => {
+        filtered.push({ id, data: [...graphData[id]] });
+      });
     }
 
-    Object.keys(filtered).forEach(value => {
-      if (/^threshold/.test(value)) {
-        converted.types[value] = 'step';
-        converted.names[value] = t(`curiosity-graph.thresholdLabel`);
+    console.log('CHECK >>>', filtered);
+
+    filtered.forEach(value => {
+      if (/^threshold/.test(value.id)) {
+        converted.types[value.id] = 'step';
+        converted.names[value.id] = t(`curiosity-graph.thresholdLabel`);
       } else {
-        converted.types[value] = 'area-spline';
-        converted.groups[0].push(value);
-        converted.names[value] = t(`curiosity-graph.${value}Label`, { product: productShortLabel });
+        converted.types[value.id] = 'area-spline';
+        converted.groups[0].push(value.id);
+        converted.names[value.id] = t(`curiosity-graph.${value.id}Label`, { product: productShortLabel });
       }
 
       converted.columns[0] = ['x'];
-      converted.columns.push([value]);
+      converted.columns.push([value.id]);
 
       let totalData = 0;
 
-      filtered[value].forEach(filteredValue => {
-        const formattedDate = moment.utc(filteredValue.date).local().format('YYYY-MM-DD');
-        converted.columns[0].push(formattedDate);
+      value.data.forEach(filteredValue => {
+        converted.columns[0].push(moment.utc(filteredValue.date).local().format('YYYY-MM-DD'));
         converted.columns[converted.columns.length - 1].push(filteredValue.y);
         totalData += filteredValue.y || 0;
       });
 
       if (totalData <= 0) {
-        // converted.columns.splice(-1);
         converted.columns.pop();
-        hiddenDataFacets.push(value);
-        // converted.hide.push(value);
+        hiddenDataFacets.push(value.id);
       }
     });
 
@@ -176,6 +179,31 @@ class C3GraphCard extends React.Component {
         key={`chart-${updatedGranularity}`}
         onComplete={onComplete}
         config={{
+          tooltip: {
+            order: (t1, t2) => converted.columns.indexOf(t1.id) - converted.columns.indexOf(t2.id),
+            format: {
+              title: x =>
+                `${c3GraphCardHelpers.getTooltipDate({
+                  date: x,
+                  granularity: updatedGranularity
+                })}`,
+              value: (value, ratio, id, index) => {
+                console.log('TOOLTIP >>>', value, ratio, id, index, graphData[id][index]);
+                const dataItem = graphData[id][index];
+                let updatedValue;
+
+                if (/^threshold/.test(id)) {
+                  updatedValue =
+                    (dataItem.hasInfinite && t('curiosity-graph.infiniteThresholdLabel')) ||
+                    (dataItem.y ?? t('curiosity-graph.noDataLabel'));
+                } else {
+                  updatedValue = (dataItem.hasData === false && t('curiosity-graph.noDataLabel')) || dataItem.y || 0;
+                }
+
+                return updatedValue;
+              }
+            }
+          },
           unloadBeforeLoad: true,
           padding: { left: 40, right: 40, top: 10, bottom: 10 },
           legend: { show: false },
@@ -186,11 +214,6 @@ class C3GraphCard extends React.Component {
           },
           data: {
             ...converted
-            // empty: {
-            //  label: {
-            //    text: "No Data"
-            //  }
-            // }
           },
           point: {
             show: false
@@ -223,7 +246,7 @@ class C3GraphCard extends React.Component {
                 // count: 1,
                 show: false,
                 outer: false,
-                format: tick => (tick === 0 ? '' : yAxisTickFormat({ tick }))
+                format: tick => (tick === 0 ? '' : c3GraphCardHelpers.yAxisTickFormat({ tick }))
               }
               // padding: { bottom: 10 }
             }
@@ -231,20 +254,24 @@ class C3GraphCard extends React.Component {
         }}
       >
         {({ chart }) =>
-          Object.keys(filtered).map(productDataFacet => {
+          filtered.map(({ id }) => {
             const buttonLabel =
-              (/^threshold/.test(productDataFacet) && t(`curiosity-graph.thresholdLabel`)) ||
-              t(`curiosity-graph.${productDataFacet}Label`, { product: productShortLabel });
+              (/^threshold/.test(id) && t(`curiosity-graph.thresholdLabel`)) ||
+              t(`curiosity-graph.${id}Label`, { product: productShortLabel });
 
             const tooltip = (
-              <ul>
-                <li>hello</li>
-                <li>world</li>
-              </ul>
+              <p>
+                {(/^threshold/.test(id) && t(`curiosity-graph.thresholdLegendTooltip`)) ||
+                  t(`curiosity-graph.${id}LegendTooltip`)}
+              </p>
             );
 
             // const isDataHidden = converted.hide.includes(productDataFacet);
-            const isDataHidden = hiddenDataFacets.includes(productDataFacet);
+            const isDataHidden = hiddenDataFacets.includes(id);
+            // let isDataToggledOff = false;
+            // const { [`${id}Toggle`] } = this.state;
+            const isDataToggledOff = this.state?.[`${id}Toggle`] || false;
+            // const isDataToggledOff = [`${id}Toggle`];
 
             return (
               <Tooltip
@@ -259,24 +286,41 @@ class C3GraphCard extends React.Component {
                   tabIndex={0}
                   key={buttonLabel}
                   variant="link"
-                  onClick={() => chart.toggle(productDataFacet)}
-                  onFocus={() => chart.focus(productDataFacet)}
-                  onMouseOver={() => chart.focus(productDataFacet)}
+                  onClick={() => {
+                    chart.toggle(id);
+                    // console.log('TOGGLE', isDataToggledOff);
+                    this.setState({ [`${id}Toggle`]: !isDataToggledOff });
+                  }}
+                  onFocus={() => chart.focus(id)}
+                  onMouseOver={() => chart.focus(id)}
                   onBlur={() => chart.revert()}
                   onMouseOut={() => chart.revert()}
                   component="a"
-                  className={(isDataHidden && 'faded') || ''}
+                  // className={(isDataHidden && 'faded') || ''}
                   isDisabled={isDataHidden}
+                  icon={
+                    ((isDataHidden || isDataToggledOff) && <EyeSlashIcon />) ||
+                    (/^threshold/.test(id) && (
+                      <hr
+                        aria-hidden
+                        className="threshold-legend-icon"
+                        style={{
+                          visibility: (isDataHidden && 'hidden') || (isDataToggledOff && 'hidden') || 'visible',
+                          borderTopColor: chart.color(id)
+                        }}
+                      />
+                    )) || (
+                      <div
+                        aria-hidden
+                        className="legend-icon"
+                        style={{
+                          visibility: (isDataHidden && 'hidden') || (isDataToggledOff && 'hidden') || 'visible',
+                          backgroundColor: chart.color(id)
+                        }}
+                      />
+                    )
+                  }
                 >
-                  <svg viewBox="0 0 10 10" width="10" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="2" x2="10" y2="2" stroke="black" />
-                  </svg>
-                  <div
-                    className={(/^threshold/.test(productDataFacet) && 'threshold-legend-icon') || 'legend-icon'}
-                    style={{
-                      backgroundColor: chart.color(productDataFacet)
-                    }}
-                  />{' '}
                   {buttonLabel}
                 </Button>
               </Tooltip>
