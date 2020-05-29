@@ -120,6 +120,7 @@ const c3Config = ({ data = [], granularity, productShortLabel }) => {
     names: {},
     types: {}
   };
+  const regions = [];
 
   const convertTimeSeriesDate = value => {
     const dateStr = (helpers.TEST_MODE && moment.utc(value)) || moment.utc(value).local();
@@ -142,12 +143,36 @@ const c3Config = ({ data = [], granularity, productShortLabel }) => {
     converted.columns.push([value.id]);
 
     let totalData = 0;
+    const infiniteRegions = [];
 
-    value.data.forEach(filteredValue => {
+    value.data.forEach((filteredValue, index) => {
+      if (filteredValue.hasInfinite) {
+        infiniteRegions.push({ date: convertTimeSeriesDate(filteredValue.date), index });
+      }
+
       converted.columns[0].push(convertTimeSeriesDate(filteredValue.date));
       converted.columns[converted.columns.length - 1].push(filteredValue.y);
       totalData += filteredValue.y || 0;
     });
+
+    // FIXME: appears regions don't redraw like expected on scaling
+    const createRegionRanges = ({ src = [], config = [], className = 'curiosity-c3chart-region' }) => {
+      const ranges = src.reduce((accum, { date, index }) => {
+        const lastSubArray = accum[accum.length - 1];
+        if (!lastSubArray || lastSubArray[lastSubArray.length - 1].index !== index - 1) {
+          accum.push([]);
+        }
+
+        accum[accum.length - 1].push({ date, index });
+        return accum;
+      }, []);
+
+      ranges.forEach(arr => {
+        config.push({ start: arr[0].date, end: arr[arr.length - 1].date, class: className });
+      });
+    };
+
+    createRegionRanges({ src: infiniteRegions, config: regions });
 
     // ToDo: need to check for infinite threshold, possibly has data
     if (totalData <= 0) {
@@ -195,6 +220,7 @@ const c3Config = ({ data = [], granularity, productShortLabel }) => {
       data: {
         ...converted
       },
+      regions,
       point: {
         show: false
       },

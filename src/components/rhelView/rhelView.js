@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  chart_color_blue_100 as chartColorBlueLight,
   chart_color_blue_300 as chartColorBlueDark,
-  chart_color_cyan_100 as chartColorCyanLight,
   chart_color_cyan_300 as chartColorCyanDark,
-  chart_color_purple_100 as chartColorPurpleLight,
   chart_color_purple_300 as chartColorPurpleDark
 } from '@patternfly/react-tokens';
 import { PageLayout, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { connectTranslate, reduxSelectors } from '../../redux';
-import GraphCard from '../graphCard/graphCard';
 import C3GraphCard from '../c3GraphCard/c3GraphCard';
 import Toolbar from '../toolbar/toolbar';
 import { helpers } from '../../common';
@@ -31,7 +27,6 @@ class RhelView extends React.Component {
    */
   render() {
     const { graphQuery, initialFilters, location, routeDetail, t, viewId } = this.props;
-    const isC3 = location?.parsedSearch?.c3 === '';
 
     return (
       <PageLayout>
@@ -40,27 +35,15 @@ class RhelView extends React.Component {
           <Toolbar graphQuery={graphQuery} viewId={viewId} />
         </PageToolbar>
         <PageSection>
-          {(isC3 && (
-            <C3GraphCard
-              key={routeDetail.pathParameter}
-              filterGraphData={initialFilters}
-              graphQuery={graphQuery}
-              productId={routeDetail.pathParameter}
-              viewId={viewId}
-              cardTitle={t('curiosity-graph.socketsHeading')}
-              productShortLabel={viewId}
-            />
-          )) || (
-            <GraphCard
-              key={routeDetail.pathParameter}
-              filterGraphData={initialFilters}
-              graphQuery={graphQuery}
-              productId={routeDetail.pathParameter}
-              viewId={viewId}
-              cardTitle={t('curiosity-graph.socketsHeading')}
-              productShortLabel={viewId}
-            />
-          )}
+          <C3GraphCard
+            key={routeDetail.pathParameter}
+            filterGraphData={initialFilters}
+            graphQuery={graphQuery}
+            productId={routeDetail.pathParameter}
+            viewId={viewId}
+            cardTitle={t('curiosity-graph.socketsHeading')}
+            productShortLabel={viewId}
+          />
         </PageSection>
       </PageLayout>
     );
@@ -104,20 +87,14 @@ RhelView.defaultProps = {
   initialFilters: [
     {
       id: 'physicalSockets',
-      fill: chartColorBlueLight.value,
-      stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value
     },
     {
       id: 'hypervisorSockets',
-      fill: chartColorCyanLight.value,
-      stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value
     },
     {
       id: 'cloudSockets',
-      fill: chartColorPurpleLight.value,
-      stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value
     },
     { id: 'thresholdSockets' }
