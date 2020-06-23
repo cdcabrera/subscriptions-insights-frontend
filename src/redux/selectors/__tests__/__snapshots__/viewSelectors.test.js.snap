@@ -6,6 +6,18 @@ Object {
 }
 `;
 
+exports[`ViewSelectors should pass minimal data on missing a reducer response: missing reducer view properties error 1`] = `
+Object {
+  "graphQuery": Object {},
+}
+`;
+
+exports[`ViewSelectors should pass minimal data on missing a reducer response: missing reducer view.graphQuery ID error 1`] = `
+Object {
+  "graphQuery": Object {},
+}
+`;
+
 exports[`ViewSelectors should return specific selectors: selectors 1`] = `
 Object {
   "makeView": [Function],

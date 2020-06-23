@@ -1,5 +1,4 @@
 import { createSelectorCreator, defaultMemoize } from 'reselect';
-import _get from 'lodash/get';
 import _isEqual from 'lodash/isEqual';
 
 /**
@@ -20,9 +19,10 @@ const createDeepEqualSelector = createSelectorCreator(defaultMemoize, _isEqual);
  * @returns {object}
  */
 const viewGraphQuery = (state = {}, props, defaultProps = {}) => ({
+  session: state.user?.session ?? {},
   graphQuery: {
     ...defaultProps.graphQuery,
-    ..._get(state, ['view', 'graphQuery', defaultProps.viewId])
+    ...state.view?.graphQuery[defaultProps.viewId]
   }
 });
 
@@ -32,7 +32,7 @@ const viewGraphQuery = (state = {}, props, defaultProps = {}) => ({
  * @type {{graphQuery: object}}
  */
 const viewSelector = createDeepEqualSelector([viewGraphQuery], viewGraph => ({
-  graphQuery: { ...viewGraph.graphQuery }
+  ...viewGraph
 }));
 
 /**
