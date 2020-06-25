@@ -1,8 +1,9 @@
+import { lazy } from 'react';
 import path from 'path';
 import { helpers } from '../../common/helpers';
-import OpenshiftView from '../openshiftView/openshiftView';
-import OptinView from '../optinView/optinView';
-import RhelView from '../rhelView/rhelView';
+// import OpenshiftView from '../openshiftView/openshiftView';
+// import OptinView from '../optinView/optinView';
+// import RhelView from '../rhelView/rhelView';
 import { RHSM_API_PATH_ID_TYPES } from '../../types/rhsmApiTypes';
 
 /**
@@ -35,7 +36,7 @@ const routes = [
   {
     to: '/rhel-sw/all',
     redirect: true,
-    component: RhelView,
+    component: lazy(() => import('../rhelView/rhelView')),
     exact: true,
     render: true,
     disabled: helpers.UI_DISABLED
@@ -43,7 +44,7 @@ const routes = [
   {
     id: 'rhel-sw',
     to: '/rhel-sw/:variant',
-    component: RhelView,
+    component: lazy(() => import('../rhelView/rhelView')),
     exact: true,
     render: true,
     disabled: helpers.UI_DISABLED
@@ -51,7 +52,7 @@ const routes = [
   {
     id: 'openshift-sw',
     to: '/openshift-sw',
-    component: OpenshiftView,
+    component: lazy(() => import('../openshiftView/openshiftView')),
     exact: true,
     render: true,
     disabled: helpers.UI_DISABLED
@@ -59,7 +60,7 @@ const routes = [
   {
     id: 'optin',
     to: '/optin',
-    component: OptinView,
+    component: lazy(() => import('../optinView/optinView')),
     exact: true,
     render: true,
     activateOnError: true,

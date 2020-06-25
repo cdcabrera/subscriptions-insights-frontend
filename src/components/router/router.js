@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect as ReactRouterDomRedirect, Route, Switch } from 'react-router-dom';
 import Redirect from './redirect';
 import { routerHelpers } from './routerHelpers';
 import { routerTypes } from './routerTypes';
+import { Loading } from '../loading/loading';
 
 /**
  * Load routes.
@@ -99,10 +100,12 @@ class Router extends React.Component {
     const { renderRoutes, redirectRoot } = this.renderRoutes();
 
     return (
-      <Switch>
-        {renderRoutes}
-        {redirectRoot}
-      </Switch>
+      <Suspense fallback={<Loading />}>
+        <Switch>
+          {renderRoutes}
+          {redirectRoot}
+        </Switch>
+      </Suspense>
     );
   }
 }
