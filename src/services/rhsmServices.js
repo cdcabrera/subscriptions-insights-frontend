@@ -960,7 +960,7 @@ const getGraphCapacity = (id, params = {}) =>
  *           "cores": 4,
  *           "sockets": 6,
  *           "hardware_type": "physical",
- *           "last_seen": "2020-07-01T00:00:00Z"
+ *           "last_seen": "2020-06-20T00:00:00Z"
  *         }
  *       ],
  *       "links": {
