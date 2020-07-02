@@ -71,7 +71,10 @@ const inventoryListSelector = createSelector([inventoryResponse], response => {
     const customInventoryValue = ({ key, value }) => {
       switch (key) {
         case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.LAST_SEEN:
-          return (value && moment.utc(value).startOf('day').toDate()) || null;
+          // return (value && moment.utc(value).startOf('day').toDate()) || null;
+          const momentDate = moment.utc(value).startOf('day') || null;
+          // return momentDate.format(dateHelpers.inventoryFormats.yearShort);
+          return momentDate.fromNow();
         default:
           return value ?? null;
       }
