@@ -8,12 +8,30 @@ import {
   chart_color_purple_100 as chartColorPurpleLight,
   chart_color_purple_300 as chartColorPurpleDark
 } from '@patternfly/react-tokens';
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownPosition,
+  KebabToggle,
+  DataList,
+  DataListAction,
+  DataListCell,
+  DataListItem,
+  DataListItemCells,
+  DataListItemRow,
+  Pagination,
+  PaginationVariant
+} from '@patternfly/react-core';
+import { Table, TableHeader, TableBody, TableVariant } from '@patternfly/react-table';
+import { CodeIcon, CodeBranchIcon, CubeIcon, FilterIcon, SortAmountDownIcon } from '@patternfly/react-icons';
 import { PageLayout, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { connectTranslate, reduxSelectors } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import C3GraphCard from '../c3GraphCard/c3GraphCard';
 import Toolbar from '../toolbar/toolbar';
+import InventoryList from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 
 /**
@@ -30,8 +48,88 @@ class RhelView extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { graphQuery, initialFilters, location, routeDetail, t, viewId } = this.props;
+    const { graphQuery, initialFilters, inventoryFilters, location, routeDetail, t, viewId } = this.props;
     const isC3 = location?.parsedSearch?.c3 === '';
+
+    /*
+    const actions = [
+      {
+        title: <a href="#">Link</a>
+      },
+      {
+        title: 'Action'
+      },
+      {
+        isSeparator: true
+      },
+      {
+        title: <a href="#">Separated link</a>
+      }
+    ];
+
+    const columns = ['Repositories', 'Branches', 'Pull requests', 'Workspaces', 'Last commit', ''];
+    const rows = [
+      {
+        cells: [
+          {
+            title: (
+              <React.Fragment>
+                <div>Node 1</div>
+                <Button variant="link" isInline>siemur/test-space</Button>
+              </React.Fragment>
+            ),
+            props: { column: 'Repositories' }
+          },
+          {
+            title: (
+              <React.Fragment>
+                <CodeBranchIcon key="icon" /> 10
+              </React.Fragment>
+            ),
+            props: { column: 'Branches' }
+          },
+          {
+            title: (
+              <React.Fragment>
+                <CodeIcon key="icon" /> 25
+              </React.Fragment>
+            ),
+            props: { column: 'Pull requests' }
+          },
+          {
+            title: (
+              <React.Fragment>
+                <CubeIcon key="icon" /> 5
+              </React.Fragment>
+            ),
+            props: { column: 'Workspaces' }
+          },
+          {
+            title: '2 days ago',
+            props: { column: 'Last commit' }
+          },
+          {
+            title: <React.Fragment>Action link</React.Fragment>,
+            props: { column: '' }
+          }
+        ]
+      }
+    ];
+          <Table
+            variant={TableVariant.compact}
+            gridBreakPoint="grid-xl"
+            aria-label="This is a table with checkboxes"
+            id="page-layout-table-column-management-action-table"
+            onSelect={this.onSelect}
+            cells={columns}
+            rows={rows}
+            actions={actions}
+            canSelectAll={false}
+          >
+            <TableHeader />
+            <TableBody />
+          </Table>
+          */
 
     return (
       <PageLayout>
@@ -62,6 +160,22 @@ class RhelView extends React.Component {
             />
           )}
         </PageSection>
+        <PageSection>
+          <InventoryList
+            key={routeDetail.pathParameter}
+            // filterData={inventoryFilters}
+            query={graphQuery}
+            productId={routeDetail.pathParameter}
+            viewId={viewId}
+          />
+          <Pagination
+            id="page-layout-table-column-management-action-toolbar-bottom"
+            itemCount={1}
+            widgetId="pagination-options-menu-bottom"
+            page={1}
+            variant={PaginationVariant.bottom}
+          />
+        </PageSection>
       </PageLayout>
     );
   }
@@ -78,6 +192,7 @@ RhelView.propTypes = {
     [rhsmApiTypes.RHSM_API_QUERY_GRANULARITY]: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)])
   }),
   initialFilters: PropTypes.array,
+  inventoryFilters: PropTypes.array,
   location: PropTypes.shape({
     parsedSearch: PropTypes.objectOf(PropTypes.string)
   }).isRequired,
@@ -121,6 +236,17 @@ RhelView.defaultProps = {
       color: chartColorPurpleDark.value
     },
     { id: 'thresholdSockets' }
+  ],
+  inventoryFilters: [
+    {
+      id: ['sockets', 'cores']
+    },
+    {
+      id: 'numberOfGuests'
+    },
+    {
+      id: 'hardwareType'
+    }
   ],
   t: helpers.noopTranslate,
   viewId: 'RHEL'

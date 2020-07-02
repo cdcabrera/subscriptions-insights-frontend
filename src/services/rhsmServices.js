@@ -934,6 +934,7 @@ const getGraphCapacity = (id, params = {}) =>
   });
 
 /**
+ * @apiMock {DelayResponse} 1000
  * @api {get} /api/rhsm-subscriptions/v1/hosts/products/:product_id Get RHSM hosts/systems table/inventory data
  * @apiDescription Retrieve hosts/systems table/inventory data.
  *
@@ -1003,6 +1004,7 @@ const getHostsInventory = (id, params = {}) =>
   });
 
 /**
+ * @apiMock {DelayResponse} 500
  * @api {get} /api/rhsm-subscriptions/v1/hosts/:hypervisor_uuid/guests Get RHSM hosts/systems table/inventory guests data
  * @apiDescription Retrieve hosts/systems table/inventory guests data.
  *
