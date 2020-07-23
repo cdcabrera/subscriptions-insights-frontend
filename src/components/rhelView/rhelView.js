@@ -8,12 +8,14 @@ import {
   chart_color_purple_100 as chartColorPurpleLight,
   chart_color_purple_300 as chartColorPurpleDark
 } from '@patternfly/react-tokens';
+import { Pagination, PaginationVariant } from '@patternfly/react-core';
 import { PageLayout, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { connectTranslate, reduxSelectors } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import C3GraphCard from '../c3GraphCard/c3GraphCard';
 import Toolbar from '../toolbar/toolbar';
+import InventoryList from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 
 /**
@@ -30,7 +32,7 @@ class RhelView extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { graphQuery, initialFilters, location, routeDetail, t, viewId } = this.props;
+    const { graphQuery, initialFilters, inventoryFilters, location, routeDetail, t, viewId } = this.props;
     const isC3 = location?.parsedSearch?.c3 === '';
 
     return (
@@ -62,6 +64,22 @@ class RhelView extends React.Component {
             />
           )}
         </PageSection>
+        <PageSection>
+          <InventoryList
+            key={routeDetail.pathParameter}
+            filterData={inventoryFilters}
+            listQuery={graphQuery}
+            productId={routeDetail.pathParameter}
+            viewId={viewId}
+          />
+          <Pagination
+            id="page-layout-table-column-management-action-toolbar-bottom"
+            itemCount={1}
+            widgetId="pagination-options-menu-bottom"
+            page={1}
+            variant={PaginationVariant.bottom}
+          />
+        </PageSection>
       </PageLayout>
     );
   }
@@ -78,6 +96,7 @@ RhelView.propTypes = {
     [rhsmApiTypes.RHSM_API_QUERY_GRANULARITY]: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)])
   }),
   initialFilters: PropTypes.array,
+  inventoryFilters: PropTypes.array,
   location: PropTypes.shape({
     parsedSearch: PropTypes.objectOf(PropTypes.string)
   }).isRequired,
@@ -121,6 +140,21 @@ RhelView.defaultProps = {
       color: chartColorPurpleDark.value
     },
     { id: 'thresholdSockets' }
+  ],
+  inventoryFilters: [
+    {
+      id: 'displayName'
+    },
+    {
+      id: 'hardwareType'
+    },
+    {
+      id: ['sockets', 'cores'],
+      format: '{0}/{1}'
+    },
+    {
+      id: 'lastSeen'
+    }
   ],
   t: helpers.noopTranslate,
   viewId: 'RHEL'

@@ -4,6 +4,7 @@ import {
   chart_color_blue_100 as chartColorBlueLight,
   chart_color_blue_300 as chartColorBlueDark
 } from '@patternfly/react-tokens';
+import { Pagination, PaginationVariant } from '@patternfly/react-core';
 import { PageLayout, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { connectTranslate, reduxSelectors } from '../../redux';
@@ -11,6 +12,7 @@ import GraphCard from '../graphCard/graphCard';
 import C3GraphCard from '../c3GraphCard/c3GraphCard';
 import { Select } from '../form/select';
 import Toolbar from '../toolbar/toolbar';
+import InventoryList from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 
 /**
@@ -73,7 +75,7 @@ class OpenshiftView extends React.Component {
    */
   render() {
     const { filters } = this.state;
-    const { graphQuery, location, routeDetail, t, viewId } = this.props;
+    const { graphQuery, inventoryFilters, location, routeDetail, t, viewId } = this.props;
     const isC3 = location?.parsedSearch?.c3 === '';
 
     return (
@@ -109,6 +111,21 @@ class OpenshiftView extends React.Component {
             </GraphCard>
           )}
         </PageSection>
+        <PageSection>
+          <InventoryList
+            key={routeDetail.pathParameter}
+            filterData={inventoryFilters}
+            listQuery={graphQuery}
+            productId={routeDetail.pathParameter}
+            viewId={viewId}
+          />
+          <Pagination
+            itemCount={1}
+            widgetId="pagination-options-menu-bottom"
+            page={1}
+            variant={PaginationVariant.bottom}
+          />
+        </PageSection>
       </PageLayout>
     );
   }
@@ -126,6 +143,7 @@ OpenshiftView.propTypes = {
   }),
   initialOption: PropTypes.oneOf(['cores', 'sockets']),
   initialFilters: PropTypes.array,
+  inventoryFilters: PropTypes.array,
   location: PropTypes.shape({
     parsedSearch: PropTypes.objectOf(PropTypes.string)
   }).isRequired,
@@ -160,6 +178,21 @@ OpenshiftView.defaultProps = {
     },
     { id: 'thresholdSockets' },
     { id: 'thresholdCores' }
+  ],
+  inventoryFilters: [
+    {
+      id: 'displayName'
+    },
+    {
+      id: 'hardwareType'
+    },
+    {
+      id: ['sockets', 'cores'],
+      format: '{0}/{1}'
+    },
+    {
+      id: 'lastSeen'
+    }
   ],
   t: helpers.noopTranslate,
   viewId: 'OpenShift'
