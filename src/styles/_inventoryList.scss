@@ -1,0 +1,38 @@
+.curiosity {
+  &.pf-c-page__main-section {
+    box-shadow: var(--pf-global--BoxShadow--sm);
+
+    .pf-c-card {
+      box-shadow: none;
+    }
+  }
+
+  /**
+   * FixMe: PF CSS, appears updating resources causes an issue with an aggressive selector
+   * This is related to responsive table headers on browser widths below 800px. Remove this
+   * block once PF has a fix.
+   */
+  tr.pf-c-table__expandable-row.pf-m-expanded > td:before {
+    content: '';
+  }
+
+  tr.pf-c-table__expandable-row.pf-m-expanded > td {
+    padding: 0;
+    padding-bottom: var(--pf-c-table--m-compact-th--PaddingBottom);
+  }
+
+  /**
+   * FixMe: PF CSS, appears nested tables within expandables can't have borders disabled
+   * Remove this block once PF has a fix.
+   */
+  table.pf-m-no-border-rows,
+  table.pf-m-no-border-rows > thead > tr,
+  table.pf-m-no-border-rows > tbody > tr {
+    border-width:0
+  }
+
+  .curiosity-inventory-list,
+  .curiosity-inventory-guestlist {
+    border-top-width: 0;
+  }
+}

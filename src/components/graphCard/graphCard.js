@@ -13,6 +13,7 @@ import { graphCardTypes } from './graphCardTypes';
 import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 import { ChartArea } from '../chartArea/chartArea';
+import { Loader } from '../loader/loader';
 
 /**
  * A chart/graph card.
@@ -182,15 +183,8 @@ class GraphCard extends React.Component {
           </CardActions>
         </CardHeader>
         <CardBody>
-          <div className={`curiosity-skeleton-container ${(error && 'blur') || ''}`}>
-            {pending && (
-              <React.Fragment>
-                <Skeleton size={SkeletonSize.xs} />
-                <Skeleton size={SkeletonSize.sm} />
-                <Skeleton size={SkeletonSize.md} />
-                <Skeleton size={SkeletonSize.lg} />
-              </React.Fragment>
-            )}
+          <div className={(error && 'blur') || ''}>
+            {pending && <Loader variant="graph" />}
             {!pending && this.renderChart()}
           </div>
         </CardBody>

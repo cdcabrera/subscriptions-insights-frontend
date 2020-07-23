@@ -6,6 +6,7 @@
  *     --BackgroundUrl:url("d...
  * Workaround is to move the CSS files to ./src/index.js
  */
+// @import '~@patternfly/patternfly/sass-utilities/all';
 
 // App
 @import 'app';
@@ -14,3 +15,4 @@
 @import 'usage-graph';
 @import 'tour';
 @import 'skeleton';
+@import 'inventoryList';

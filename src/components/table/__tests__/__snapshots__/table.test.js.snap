@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table Component should render a non-connected component: non-connected 1`] = `
+<Grid
+  className="ins-inventory-list"
+  guttter="sm"
+>
+  <GridItem
+    span={12}
+  >
+    <div>
+      empty table
+    </div>
+  </GridItem>
+</Grid>
+`;
