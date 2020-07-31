@@ -53,11 +53,13 @@ class Toolbar extends React.Component {
    */
   onClearFilter = category => {
     const { filterCategory, activeFilters } = this.state;
+
     const updatedActiveFilters = new Set(activeFilters);
     const options = toolbarTypes.getOptions();
     const { value: filterValue } = options.options.find(({ title }) => title === category);
 
     updatedActiveFilters.delete(filterValue);
+
     const updatedFilterCategory = (updatedActiveFilters.size > 0 && filterCategory) || null;
 
     this.setState({ filterCategory: updatedFilterCategory, activeFilters: updatedActiveFilters }, () => {

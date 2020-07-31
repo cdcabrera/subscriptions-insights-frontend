@@ -61,8 +61,8 @@
     "usagePlaceholder": "Filter by usage",
     "usageDevelopment": "Development/Test",
     "usageDisaster": "Disaster Recovery",
-    "usageUnspecified": "Unspecified",
-    "usageProduction": "Production"
+    "usageProduction": "Production",
+    "usageUnspecified": "Unspecified"
   },
   "curiosity-optin": {
     "buttonActivate": "Activate {{appName}}",
