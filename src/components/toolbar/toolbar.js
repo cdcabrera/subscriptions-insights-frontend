@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Toolbar as PfToolbar, ToolbarContent, ToolbarFilter, ToolbarGroup } from '@patternfly/react-core';
+import {
+  Toolbar as PfToolbar,
+  ToolbarContent,
+  ToolbarFilter,
+  ToolbarGroup,
+  ToolbarItem,
+  ToolbarToggleGroup
+} from '@patternfly/react-core';
+import { FilterIcon } from '@patternfly/react-icons';
 import { Select } from '../form/select';
 import { reduxTypes, store } from '../../redux';
 import { rhsmApiTypes } from '../../types/rhsmApiTypes';
@@ -13,16 +21,63 @@ import { translate } from '../i18n/i18n';
  *
  * @augments React.Component
  * @fires onClear
+ * @fires onClearFilter
+ * @fires onCategorySelect
  * @fires onSlaSelect
+ * @fires onUsageSelect
  */
 class Toolbar extends React.Component {
+  state = { filterCategory: null, activeFilters: new Set() };
+
   /**
-   * Clear filters' state.
+   * Clear all filters' state.
    *
    * @event onClear
    */
   onClear = () => {
-    this.dispatchFilter(reduxTypes.rhsm.SET_FILTER_SLA_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_SLA]: null });
+    this.setState({ filterCategory: null, activeFilters: new Set() }, () => {
+      this.setDispatchFilter(reduxTypes.rhsm.SET_CLEAR_FILTERS, {
+        clearFilters: {
+          [rhsmApiTypes.RHSM_API_QUERY_SLA]: null,
+          [rhsmApiTypes.RHSM_API_QUERY_USAGE]: null
+        }
+      });
+    });
+  };
+
+  /**
+   * Clear individual filter state.
+   *
+   * @event onClearFilter
+   * @param {string} category
+   */
+  onClearFilter = category => {
+    const { filterCategory, activeFilters } = this.state;
+    const updatedActiveFilters = new Set(activeFilters);
+    const options = toolbarTypes.getOptions();
+    const { value: filterValue } = options.options.find(({ title }) => title === category);
+
+    updatedActiveFilters.delete(filterValue);
+    const updatedFilterCategory = (updatedActiveFilters.size > 0 && filterCategory) || null;
+
+    this.setState({ filterCategory: updatedFilterCategory, activeFilters: updatedActiveFilters }, () => {
+      this.setDispatchFilter(reduxTypes.rhsm.SET_CLEAR_FILTERS, {
+        clearFilters: {
+          [filterValue]: null
+        }
+      });
+    });
+  };
+
+  /**
+   * Set Category selection.
+   *
+   * @event onCategorySelect
+   * @param {object} event
+   */
+  onCategorySelect = event => {
+    const { value } = event;
+    this.setState({ filterCategory: value });
   };
 
   /**
@@ -32,9 +87,29 @@ class Toolbar extends React.Component {
    * @param {object} event
    */
   onSlaSelect = event => {
+    const { activeFilters } = this.state;
     const { value } = event;
+    const updatedActiveFilters = activeFilters.add(rhsmApiTypes.RHSM_API_QUERY_SLA);
 
-    this.dispatchFilter(reduxTypes.rhsm.SET_FILTER_SLA_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_SLA]: value });
+    this.setState({ activeFilters: updatedActiveFilters }, () => {
+      this.setDispatchFilter(reduxTypes.rhsm.SET_FILTER_SLA_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_SLA]: value });
+    });
+  };
+
+  /**
+   * Set Usage filter selection.
+   *
+   * @event onUsageSelect
+   * @param {object} event
+   */
+  onUsageSelect = event => {
+    const { activeFilters } = this.state;
+    const { value } = event;
+    const updatedActiveFilters = activeFilters.add(rhsmApiTypes.RHSM_API_QUERY_USAGE);
+
+    this.setState({ activeFilters: updatedActiveFilters }, () => {
+      this.setDispatchFilter(reduxTypes.rhsm.SET_FILTER_USAGE_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_USAGE]: value });
+    });
   };
 
   /**
@@ -43,7 +118,7 @@ class Toolbar extends React.Component {
    * @param {string} type
    * @param {object} data
    */
-  dispatchFilter(type, data = {}) {
+  setDispatchFilter(type, data = {}) {
     const { viewId } = this.props;
 
     if (type) {
@@ -55,24 +130,27 @@ class Toolbar extends React.Component {
     }
   }
 
-  // ToDo: API to provide SLA options from endpoint.
+  // ToDo: API, in the future, to provide select options.
   /**
-   * Available and selected SLA options.
+   * Available and selected filter options.
    *
-   * @returns {{slaOptionsSelected: Array, slaOptions: object}}
+   * @param {string} type
+   * @param {string|object} query
+   * @returns {{optionsSelected: Array, options: Array }}
    */
-  filterSla() {
-    const { query } = this.props;
+  static setFilter(type, query = '') {
+    const options = toolbarTypes.getOptions(type);
+    let filter;
 
-    const slaOptions = toolbarTypes.getOptions();
-    const filterSla =
-      typeof query[rhsmApiTypes.RHSM_API_QUERY_SLA] === 'string' &&
-      slaOptions.options.find(val => val.value === query[rhsmApiTypes.RHSM_API_QUERY_SLA]);
+    if (typeof query === 'string') {
+      filter = options.options.find(({ value }) => value === query);
+    } else {
+      filter = typeof query?.[type] === 'string' && options.options.find(({ value }) => value === query?.[type]);
+    }
 
-    const slaOptionsSelected =
-      (filterSla && filterSla.title && [filterSla.title]) || (slaOptions.selected && [slaOptions.selected]) || [];
+    const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
 
-    return { slaOptions, slaOptionsSelected };
+    return { options, optionsSelected };
   }
 
   /**
@@ -81,37 +159,77 @@ class Toolbar extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { isDisabled, t } = this.props;
+    const { filterCategory } = this.state;
+    const { query, isDisabled, t } = this.props;
 
     if (isDisabled) {
       return null;
     }
 
-    const { slaOptions, slaOptionsSelected } = this.filterSla();
+    const { options: categoryOptions, optionsSelected: categoryOptionsSelected } = Toolbar.setFilter(
+      null,
+      filterCategory
+    );
+
+    const { options: slaOptions, optionsSelected: slaOptionsSelected } = Toolbar.setFilter(
+      rhsmApiTypes.RHSM_API_QUERY_SLA,
+      query
+    );
+    const { options: usageOptions, optionsSelected: usageOptionsSelected } = Toolbar.setFilter(
+      rhsmApiTypes.RHSM_API_QUERY_USAGE,
+      query
+    );
 
     return (
       <PfToolbar
         id="curiosity-toolbar"
-        className="pf-m-toggle-group-container ins-c-primary-toolbar"
-        collapseListedFiltersBreakpoint="xl"
+        className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+        collapseListedFiltersBreakpoint="sm"
         clearAllFilters={this.onClear}
       >
         <ToolbarContent>
-          <ToolbarGroup variant="filter-group">
-            <ToolbarFilter
-              chips={slaOptionsSelected}
-              deleteChip={this.onClear}
-              categoryName={t('curiosity-toolbar.slaCategory')}
-            >
-              <Select
-                aria-label={t('curiosity-toolbar.slaCategory')}
-                onSelect={this.onSlaSelect}
-                selectedOptions={slaOptionsSelected}
-                placeholder={t('curiosity-toolbar.slaPlaceholder')}
-                options={slaOptions.options}
-              />
-            </ToolbarFilter>
-          </ToolbarGroup>
+          <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
+            <ToolbarGroup variant="filter-group">
+              <ToolbarItem>
+                <Select
+                  aria-label={t('curiosity-toolbar.category')}
+                  onSelect={this.onCategorySelect}
+                  selectedOptions={categoryOptionsSelected}
+                  placeholder={t('curiosity-toolbar.categoryPlaceholder')}
+                  options={categoryOptions.options}
+                  toggleIcon={<FilterIcon />}
+                />
+              </ToolbarItem>
+              <ToolbarFilter
+                chips={slaOptionsSelected}
+                deleteChip={this.onClearFilter}
+                categoryName={t('curiosity-toolbar.slaCategory')}
+                showToolbarItem={filterCategory === rhsmApiTypes.RHSM_API_QUERY_SLA}
+              >
+                <Select
+                  aria-label={t('curiosity-toolbar.slaCategory')}
+                  onSelect={this.onSlaSelect}
+                  selectedOptions={slaOptionsSelected}
+                  placeholder={t('curiosity-toolbar.slaPlaceholder')}
+                  options={slaOptions.options}
+                />
+              </ToolbarFilter>
+              <ToolbarFilter
+                chips={usageOptionsSelected}
+                deleteChip={this.onClearFilter}
+                categoryName={t('curiosity-toolbar.usageCategory')}
+                showToolbarItem={filterCategory === rhsmApiTypes.RHSM_API_QUERY_USAGE}
+              >
+                <Select
+                  aria-label={t('curiosity-toolbar.usageCategory')}
+                  onSelect={this.onUsageSelect}
+                  selectedOptions={usageOptionsSelected}
+                  placeholder={t('curiosity-toolbar.usagePlaceholder')}
+                  options={usageOptions.options}
+                />
+              </ToolbarFilter>
+            </ToolbarGroup>
+          </ToolbarToggleGroup>
         </ToolbarContent>
       </PfToolbar>
     );
@@ -125,7 +243,8 @@ class Toolbar extends React.Component {
  */
 Toolbar.propTypes = {
   query: PropTypes.shape({
-    [rhsmApiTypes.RHSM_API_QUERY_SLA]: PropTypes.string
+    [rhsmApiTypes.RHSM_API_QUERY_SLA]: PropTypes.string,
+    [rhsmApiTypes.RHSM_API_QUERY_USAGE]: PropTypes.string
   }),
   isDisabled: PropTypes.bool,
   t: PropTypes.func,
