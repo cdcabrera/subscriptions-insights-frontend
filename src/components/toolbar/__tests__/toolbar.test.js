@@ -5,6 +5,14 @@ import { toolbarTypes } from '../toolbarTypes';
 import { RHSM_API_QUERY_SLA, RHSM_API_QUERY_USAGE } from '../../../types/rhsmApiTypes';
 
 describe('Toolbar Component', () => {
+  let mockDispatchFilter;
+
+  beforeEach(() => {
+    mockDispatchFilter = jest
+      .spyOn(Toolbar.prototype, 'setDispatchFilter')
+      .mockImplementation((type, data) => ({ type, data }));
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -16,44 +24,6 @@ describe('Toolbar Component', () => {
     expect(component).toMatchSnapshot('non-connected');
   });
 
-  it('should handle updating state and dispatching a sla filter', () => {
-    const props = {};
-
-    const dispatchFilter = jest.spyOn(Toolbar.prototype, 'setDispatchFilter');
-    const component = mount(<Toolbar {...props} />);
-    component.setState({ filterCategory: RHSM_API_QUERY_SLA });
-
-    const componentInstance = component.instance();
-
-    const option = toolbarTypes.getOptions(RHSM_API_QUERY_SLA).options[0];
-    componentInstance.onSlaSelect({ selected: { ...option }, value: option.value });
-    expect(componentInstance.state).toMatchSnapshot(`${RHSM_API_QUERY_SLA} selected`);
-
-    componentInstance.onClear();
-    expect(componentInstance.state).toMatchSnapshot(`${RHSM_API_QUERY_SLA} clear filters`);
-
-    expect(dispatchFilter).toHaveBeenCalledTimes(2);
-  });
-
-  it('should handle updating state and dispatching a usage filter', () => {
-    const props = {};
-
-    const dispatchFilter = jest.spyOn(Toolbar.prototype, 'setDispatchFilter');
-    const component = mount(<Toolbar {...props} />);
-    component.setState({ filterCategory: RHSM_API_QUERY_USAGE });
-
-    const componentInstance = component.instance();
-
-    const option = toolbarTypes.getOptions(RHSM_API_QUERY_USAGE).options[0];
-    componentInstance.onUsageSelect({ selected: { ...option }, value: option.value });
-    expect(componentInstance.state).toMatchSnapshot(`${RHSM_API_QUERY_USAGE} selected`);
-
-    componentInstance.onClear();
-    expect(componentInstance.state).toMatchSnapshot(`${RHSM_API_QUERY_USAGE} clear filters`);
-
-    expect(dispatchFilter).toHaveBeenCalledTimes(2);
-  });
-
   it('should return an empty render when disabled', () => {
     const props = {
       isDisabled: true
@@ -61,5 +31,54 @@ describe('Toolbar Component', () => {
     const component = shallow(<Toolbar {...props} />);
 
     expect(component).toMatchSnapshot('disabled component');
+  });
+
+  it('should handle updating state and clearing all filters', () => {
+    const props = {};
+    const component = mount(<Toolbar {...props} />);
+    const componentInstance = component.instance();
+
+    const filters = [
+      { category: RHSM_API_QUERY_SLA, method: 'onSlaSelect' },
+      { category: RHSM_API_QUERY_USAGE, method: 'onUsageSelect' }
+    ];
+
+    filters.forEach(({ category, method }) => {
+      componentInstance.onCategorySelect({ value: category });
+
+      const [optionOne, optionTwo] = toolbarTypes.getOptions(category).options;
+      componentInstance[method]({ value: optionOne.value });
+      expect({ state: componentInstance.state }).toMatchSnapshot(`${category}, selected once`);
+
+      componentInstance[method]({ value: optionTwo.value });
+      expect({ state: componentInstance.state }).toMatchSnapshot(`${category}, selected twice`);
+    });
+
+    componentInstance.onClear();
+    expect(componentInstance.state).toMatchSnapshot('clear all filters');
+    expect(mockDispatchFilter).toMatchSnapshot('dispatch filter');
+  });
+
+  it('should handle updating state and clearing specific filters', () => {
+    const props = {};
+    const component = mount(<Toolbar {...props} />);
+    const componentInstance = component.instance();
+
+    const filters = [
+      { category: RHSM_API_QUERY_SLA, method: 'onSlaSelect' },
+      { category: RHSM_API_QUERY_USAGE, method: 'onUsageSelect' }
+    ];
+
+    filters.forEach(({ category, method }) => {
+      componentInstance.onCategorySelect({ value: category });
+
+      const [optionOne] = toolbarTypes.getOptions(category).options;
+      componentInstance[method]({ value: optionOne.value });
+      expect(componentInstance.state).toMatchSnapshot(`${category}, select specific`);
+
+      const { title: categoryTitle } = toolbarTypes.getOptions().options.find(({ value }) => value === category);
+      componentInstance.onClearFilter(categoryTitle);
+      expect(componentInstance.state).toMatchSnapshot(`${category}, clear specific filter`);
+    });
   });
 });

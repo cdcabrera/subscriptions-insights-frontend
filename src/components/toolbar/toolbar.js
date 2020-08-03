@@ -27,7 +27,7 @@ import { translate } from '../i18n/i18n';
  * @fires onUsageSelect
  */
 class Toolbar extends React.Component {
-  state = { filterCategory: null, activeFilters: new Set() };
+  state = { filterCategory: null, activeCategories: new Set() };
 
   /**
    * Clear all filters' state.
@@ -35,7 +35,7 @@ class Toolbar extends React.Component {
    * @event onClear
    */
   onClear = () => {
-    this.setState({ filterCategory: null, activeFilters: new Set() }, () => {
+    this.setState({ filterCategory: null, activeCategories: new Set() }, () => {
       this.setDispatchFilter(reduxTypes.rhsm.SET_CLEAR_FILTERS, {
         clearFilters: {
           [rhsmApiTypes.RHSM_API_QUERY_SLA]: null,
@@ -49,23 +49,26 @@ class Toolbar extends React.Component {
    * Clear individual filter state.
    *
    * @event onClearFilter
-   * @param {string} category
+   * @param {string} categoryTitle
    */
-  onClearFilter = category => {
-    const { filterCategory, activeFilters } = this.state;
+  onClearFilter = categoryTitle => {
+    const { filterCategory, activeCategories } = this.state;
+    const updatedActiveCategories = new Set(activeCategories);
+    const categoryOptions = toolbarTypes.getOptions();
+    const { value: categoryValue } = categoryOptions.options.find(({ title }) => title === categoryTitle) || {};
 
-    const updatedActiveFilters = new Set(activeFilters);
-    const options = toolbarTypes.getOptions();
-    const { value: filterValue } = options.options.find(({ title }) => title === category);
+    if (!categoryValue) {
+      return;
+    }
 
-    updatedActiveFilters.delete(filterValue);
+    updatedActiveCategories.delete(categoryValue);
 
-    const updatedFilterCategory = (updatedActiveFilters.size > 0 && filterCategory) || null;
+    const updatedFilterCategory = (updatedActiveCategories.size > 0 && filterCategory) || null;
 
-    this.setState({ filterCategory: updatedFilterCategory, activeFilters: updatedActiveFilters }, () => {
+    this.setState({ filterCategory: updatedFilterCategory, activeCategories: updatedActiveCategories }, () => {
       this.setDispatchFilter(reduxTypes.rhsm.SET_CLEAR_FILTERS, {
         clearFilters: {
-          [filterValue]: null
+          [categoryValue]: null
         }
       });
     });
@@ -89,11 +92,11 @@ class Toolbar extends React.Component {
    * @param {object} event
    */
   onSlaSelect = event => {
-    const { activeFilters } = this.state;
+    const { activeCategories } = this.state;
     const { value } = event;
-    const updatedActiveFilters = activeFilters.add(rhsmApiTypes.RHSM_API_QUERY_SLA);
+    const updatedActiveCategories = activeCategories.add(rhsmApiTypes.RHSM_API_QUERY_SLA);
 
-    this.setState({ activeFilters: updatedActiveFilters }, () => {
+    this.setState({ activeCategories: updatedActiveCategories }, () => {
       this.setDispatchFilter(reduxTypes.rhsm.SET_FILTER_SLA_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_SLA]: value });
     });
   };
@@ -105,11 +108,11 @@ class Toolbar extends React.Component {
    * @param {object} event
    */
   onUsageSelect = event => {
-    const { activeFilters } = this.state;
+    const { activeCategories } = this.state;
     const { value } = event;
-    const updatedActiveFilters = activeFilters.add(rhsmApiTypes.RHSM_API_QUERY_USAGE);
+    const updatedActiveCategories = activeCategories.add(rhsmApiTypes.RHSM_API_QUERY_USAGE);
 
-    this.setState({ activeFilters: updatedActiveFilters }, () => {
+    this.setState({ activeCategories: updatedActiveCategories }, () => {
       this.setDispatchFilter(reduxTypes.rhsm.SET_FILTER_USAGE_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_USAGE]: value });
     });
   };
@@ -123,13 +126,11 @@ class Toolbar extends React.Component {
   setDispatchFilter(type, data = {}) {
     const { viewId } = this.props;
 
-    if (type) {
-      store.dispatch({
-        type,
-        viewId,
-        ...data
-      });
-    }
+    store.dispatch({
+      type,
+      viewId,
+      ...data
+    });
   }
 
   // ToDo: API, in the future, to provide select options.
