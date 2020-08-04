@@ -157,35 +157,24 @@ class Toolbar extends React.Component {
   }
 
   /**
-   * Categories available, and selected options.
-   *
-   * @returns {{optionsSelected: Array, options: Array }}
-   */
-  setCategory() {
-    const { filterType } = this.props;
-    const options = toolbarTypes.getOptions();
-    const category = options.options.find(({ value }) => value === filterType);
-    const optionsSelected = (category?.title && [category.title]) || (options?.selected && [options.selected]) || [];
-
-    return { options, optionsSelected };
-  }
-
-  /**
-   * Filters available, and selected filter options.
+   * Available, and selected filter options.
    *
    * @param {string} filterType
    * @returns {{optionsSelected: Array, options: Array }}
    */
   setFilter(filterType) {
-    const { query } = this.props;
+    const { filterType: category, query } = this.props;
     const options = toolbarTypes.getOptions(filterType);
-    const filter =
-      typeof query?.[filterType] === 'string' && options.options.find(({ value }) => value === query?.[filterType]);
-    const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
+    let filter;
 
-    // if (optionsSelected.length) {
-    // this.activeCategories = this.activeCategories.add(filterType);
-    // }
+    if (filterType) {
+      filter =
+        typeof query?.[filterType] === 'string' && options.options.find(({ value }) => value === query?.[filterType]);
+    } else {
+      filter = options.options.find(({ value }) => value === category);
+    }
+
+    const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
 
     return { options, optionsSelected };
   }
@@ -202,7 +191,7 @@ class Toolbar extends React.Component {
       return null;
     }
 
-    const { options: categoryOptions, optionsSelected: categoryOptionsSelected } = this.setCategory();
+    const { options: categoryOptions, optionsSelected: categoryOptionsSelected } = this.setFilter();
 
     const { options: slaOptions, optionsSelected: slaOptionsSelected } = this.setFilter(
       rhsmApiTypes.RHSM_API_QUERY_SLA

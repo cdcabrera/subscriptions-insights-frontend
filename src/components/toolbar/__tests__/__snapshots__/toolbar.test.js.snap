@@ -1,179 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Toolbar Component should handle updating state and clearing all filters: clear all filters 1`] = `
-Object {
-  "activeCategories": Set {},
-  "filterCategory": null,
-}
-`;
-
-exports[`Toolbar Component should handle updating state and clearing all filters: dispatch filter 1`] = `
-[MockFunction] {
-  "calls": Array [
-    Array [
-      "SET_FILTER_SLA_RHSM",
-      Object {
-        "sla": "premium",
-      },
-    ],
-    Array [
-      "SET_FILTER_SLA_RHSM",
-      Object {
-        "sla": "standard",
-      },
-    ],
-    Array [
-      "SET_FILTER_USAGE_RHSM",
-      Object {
-        "usage": "Development/Test",
-      },
-    ],
-    Array [
-      "SET_FILTER_USAGE_RHSM",
-      Object {
-        "usage": "Disaster Recovery",
-      },
-    ],
-    Array [
-      "SET_CLEAR_FILTERS",
-      Object {
-        "clearFilters": Object {
-          "sla": null,
-          "usage": null,
-        },
-      },
-    ],
-  ],
-  "results": Array [
-    Object {
-      "type": "return",
-      "value": Object {
-        "data": Object {
-          "sla": "premium",
-        },
-        "type": "SET_FILTER_SLA_RHSM",
-      },
-    },
-    Object {
-      "type": "return",
-      "value": Object {
-        "data": Object {
-          "sla": "standard",
-        },
-        "type": "SET_FILTER_SLA_RHSM",
-      },
-    },
-    Object {
-      "type": "return",
-      "value": Object {
-        "data": Object {
-          "usage": "Development/Test",
-        },
-        "type": "SET_FILTER_USAGE_RHSM",
-      },
-    },
-    Object {
-      "type": "return",
-      "value": Object {
-        "data": Object {
-          "usage": "Disaster Recovery",
-        },
-        "type": "SET_FILTER_USAGE_RHSM",
-      },
-    },
-    Object {
-      "type": "return",
-      "value": Object {
-        "data": Object {
-          "clearFilters": Object {
-            "sla": null,
-            "usage": null,
-          },
-        },
-        "type": "SET_CLEAR_FILTERS",
-      },
-    },
-  ],
-}
-`;
+exports[`Toolbar Component should handle updating state and clearing all filters: dispatch filter 1`] = `undefined`;
 
 exports[`Toolbar Component should handle updating state and clearing all filters: sla, selected once 1`] = `
 Object {
-  "state": Object {
-    "activeCategories": Set {
-      "sla",
-    },
-    "filterCategory": "sla",
-  },
+  "state": null,
 }
 `;
 
 exports[`Toolbar Component should handle updating state and clearing all filters: sla, selected twice 1`] = `
 Object {
-  "state": Object {
-    "activeCategories": Set {
-      "sla",
-    },
-    "filterCategory": "sla",
-  },
+  "state": null,
 }
 `;
 
 exports[`Toolbar Component should handle updating state and clearing all filters: usage, selected once 1`] = `
 Object {
-  "state": Object {
-    "activeCategories": Set {
-      "sla",
-      "usage",
-    },
-    "filterCategory": "usage",
-  },
+  "state": null,
 }
 `;
 
 exports[`Toolbar Component should handle updating state and clearing all filters: usage, selected twice 1`] = `
 Object {
-  "state": Object {
-    "activeCategories": Set {
-      "sla",
-      "usage",
-    },
-    "filterCategory": "usage",
-  },
+  "state": null,
 }
 `;
 
-exports[`Toolbar Component should handle updating state and clearing specific filters: sla, clear specific filter 1`] = `
-Object {
-  "activeCategories": Set {},
-  "filterCategory": null,
-}
-`;
+exports[`Toolbar Component should handle updating state and clearing specific filters: sla, clear specific filter 1`] = `null`;
 
-exports[`Toolbar Component should handle updating state and clearing specific filters: sla, select specific 1`] = `
-Object {
-  "activeCategories": Set {
-    "sla",
-  },
-  "filterCategory": "sla",
-}
-`;
+exports[`Toolbar Component should handle updating state and clearing specific filters: sla, select specific 1`] = `null`;
 
-exports[`Toolbar Component should handle updating state and clearing specific filters: usage, clear specific filter 1`] = `
-Object {
-  "activeCategories": Set {},
-  "filterCategory": null,
-}
-`;
+exports[`Toolbar Component should handle updating state and clearing specific filters: usage, clear specific filter 1`] = `null`;
 
-exports[`Toolbar Component should handle updating state and clearing specific filters: usage, select specific 1`] = `
-Object {
-  "activeCategories": Set {
-    "usage",
-  },
-  "filterCategory": "usage",
-}
-`;
+exports[`Toolbar Component should handle updating state and clearing specific filters: usage, select specific 1`] = `null`;
 
 exports[`Toolbar Component should render a non-connected component: non-connected 1`] = `
 <Toolbar
