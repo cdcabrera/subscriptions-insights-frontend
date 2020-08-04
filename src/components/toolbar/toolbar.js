@@ -10,7 +10,7 @@ import {
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Select } from '../form/select';
-import { reduxTypes, store } from '../../redux';
+import { connect, reduxTypes, store } from '../../redux';
 import { rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { toolbarTypes } from './toolbarTypes';
 import { helpers } from '../../common';
@@ -27,22 +27,25 @@ import { translate } from '../i18n/i18n';
  * @fires onUsageSelect
  */
 class Toolbar extends React.Component {
-  state = { filterCategory: null, activeCategories: new Set() };
-
   /**
    * Clear all filters' state.
    *
    * @event onClear
    */
   onClear = () => {
-    this.setState({ filterCategory: null, activeCategories: new Set() }, () => {
-      this.setDispatchFilter(reduxTypes.rhsm.SET_CLEAR_FILTERS, {
-        clearFilters: {
-          [rhsmApiTypes.RHSM_API_QUERY_SLA]: null,
-          [rhsmApiTypes.RHSM_API_QUERY_USAGE]: null
+    this.setDispatch([
+      { type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { filterType: null } },
+      { type: reduxTypes.toolbar.SET_ACTIVE_FILTERS, data: { activeFilters: new Set() } },
+      {
+        type: reduxTypes.query.SET_QUERY_CLEAR,
+        data: {
+          clearFilters: {
+            [rhsmApiTypes.RHSM_API_QUERY_SLA]: null,
+            [rhsmApiTypes.RHSM_API_QUERY_USAGE]: null
+          }
         }
-      });
-    });
+      }
+    ]);
   };
 
   /**
@@ -52,8 +55,8 @@ class Toolbar extends React.Component {
    * @param {string} categoryTitle
    */
   onClearFilter = categoryTitle => {
-    const { filterCategory, activeCategories } = this.state;
-    const updatedActiveCategories = new Set(activeCategories);
+    const { activeFilters, filterType } = this.props;
+
     const categoryOptions = toolbarTypes.getOptions();
     const { value: categoryValue } = categoryOptions.options.find(({ title }) => title === categoryTitle) || {};
 
@@ -61,17 +64,23 @@ class Toolbar extends React.Component {
       return;
     }
 
-    updatedActiveCategories.delete(categoryValue);
+    const updatedActiveFilters = new Set(activeFilters);
+    updatedActiveFilters.delete(categoryValue);
 
-    const updatedFilterCategory = (updatedActiveCategories.size > 0 && filterCategory) || null;
+    const updatedFilterType = (updatedActiveFilters.size > 0 && filterType) || null;
 
-    this.setState({ filterCategory: updatedFilterCategory, activeCategories: updatedActiveCategories }, () => {
-      this.setDispatchFilter(reduxTypes.rhsm.SET_CLEAR_FILTERS, {
-        clearFilters: {
-          [categoryValue]: null
+    this.setDispatch([
+      { type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { filterType: updatedFilterType } },
+      { type: reduxTypes.toolbar.SET_ACTIVE_FILTERS, data: { activeFilters: updatedActiveFilters } },
+      {
+        type: reduxTypes.query.SET_QUERY_CLEAR,
+        data: {
+          clearFilters: {
+            [categoryValue]: null
+          }
         }
-      });
-    });
+      }
+    ]);
   };
 
   /**
@@ -82,7 +91,7 @@ class Toolbar extends React.Component {
    */
   onCategorySelect = event => {
     const { value } = event;
-    this.setState({ filterCategory: value });
+    this.setDispatch({ type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { filterType: value } });
   };
 
   /**
@@ -92,13 +101,20 @@ class Toolbar extends React.Component {
    * @param {object} event
    */
   onSlaSelect = event => {
-    const { activeCategories } = this.state;
+    const { activeFilters } = this.props;
     const { value } = event;
-    const updatedActiveCategories = activeCategories.add(rhsmApiTypes.RHSM_API_QUERY_SLA);
+    const updatedActiveFilters = activeFilters.add(rhsmApiTypes.RHSM_API_QUERY_SLA);
 
-    this.setState({ activeCategories: updatedActiveCategories }, () => {
-      this.setDispatchFilter(reduxTypes.rhsm.SET_FILTER_SLA_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_SLA]: value });
-    });
+    this.setDispatch([
+      {
+        type: reduxTypes.toolbar.SET_ACTIVE_FILTERS,
+        data: { activeFilters: updatedActiveFilters }
+      },
+      {
+        type: reduxTypes.query.SET_QUERY_SLA_RHSM,
+        data: { [rhsmApiTypes.RHSM_API_QUERY_SLA]: value }
+      }
+    ]);
   };
 
   /**
@@ -108,50 +124,68 @@ class Toolbar extends React.Component {
    * @param {object} event
    */
   onUsageSelect = event => {
-    const { activeCategories } = this.state;
+    const { activeFilters } = this.props;
     const { value } = event;
-    const updatedActiveCategories = activeCategories.add(rhsmApiTypes.RHSM_API_QUERY_USAGE);
+    const updatedActiveFilters = activeFilters.add(rhsmApiTypes.RHSM_API_QUERY_USAGE);
 
-    this.setState({ activeCategories: updatedActiveCategories }, () => {
-      this.setDispatchFilter(reduxTypes.rhsm.SET_FILTER_USAGE_RHSM, { [rhsmApiTypes.RHSM_API_QUERY_USAGE]: value });
-    });
+    this.setDispatch([
+      {
+        type: reduxTypes.toolbar.SET_ACTIVE_FILTERS,
+        data: { activeFilters: updatedActiveFilters }
+      },
+      {
+        type: reduxTypes.query.SET_QUERY_USAGE_RHSM,
+        data: { [rhsmApiTypes.RHSM_API_QUERY_USAGE]: value }
+      }
+    ]);
   };
 
   /**
    * Dispatch a Redux store type.
    *
-   * @param {string} type
-   * @param {object} data
+   * @param {Array|object} actions
    */
-  setDispatchFilter(type, data = {}) {
+  setDispatch(actions) {
     const { viewId } = this.props;
-
-    store.dispatch({
+    const updatedActions = ((Array.isArray(actions) && actions) || [actions]).map(({ type, data }) => ({
       type,
       viewId,
       ...data
-    });
+    }));
+
+    store.dispatch(updatedActions);
   }
 
-  // ToDo: API, in the future, to provide select options.
   /**
-   * Available and selected filter options.
+   * Categories available, and selected options.
    *
-   * @param {string} type
-   * @param {string|object} query
    * @returns {{optionsSelected: Array, options: Array }}
    */
-  static setFilter(type, query = '') {
-    const options = toolbarTypes.getOptions(type);
-    let filter;
+  setCategory() {
+    const { filterType } = this.props;
+    const options = toolbarTypes.getOptions();
+    const category = options.options.find(({ value }) => value === filterType);
+    const optionsSelected = (category?.title && [category.title]) || (options?.selected && [options.selected]) || [];
 
-    if (typeof query === 'string') {
-      filter = options.options.find(({ value }) => value === query);
-    } else {
-      filter = typeof query?.[type] === 'string' && options.options.find(({ value }) => value === query?.[type]);
-    }
+    return { options, optionsSelected };
+  }
 
+  /**
+   * Filters available, and selected filter options.
+   *
+   * @param {string} filterType
+   * @returns {{optionsSelected: Array, options: Array }}
+   */
+  setFilter(filterType) {
+    const { query } = this.props;
+    const options = toolbarTypes.getOptions(filterType);
+    const filter =
+      typeof query?.[filterType] === 'string' && options.options.find(({ value }) => value === query?.[filterType]);
     const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
+
+    // if (optionsSelected.length) {
+    // this.activeCategories = this.activeCategories.add(filterType);
+    // }
 
     return { options, optionsSelected };
   }
@@ -162,25 +196,19 @@ class Toolbar extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { filterCategory } = this.state;
-    const { query, isDisabled, t } = this.props;
+    const { isDisabled, filterType, t } = this.props;
 
     if (isDisabled) {
       return null;
     }
 
-    const { options: categoryOptions, optionsSelected: categoryOptionsSelected } = Toolbar.setFilter(
-      null,
-      filterCategory
-    );
+    const { options: categoryOptions, optionsSelected: categoryOptionsSelected } = this.setCategory();
 
-    const { options: slaOptions, optionsSelected: slaOptionsSelected } = Toolbar.setFilter(
-      rhsmApiTypes.RHSM_API_QUERY_SLA,
-      query
+    const { options: slaOptions, optionsSelected: slaOptionsSelected } = this.setFilter(
+      rhsmApiTypes.RHSM_API_QUERY_SLA
     );
-    const { options: usageOptions, optionsSelected: usageOptionsSelected } = Toolbar.setFilter(
-      rhsmApiTypes.RHSM_API_QUERY_USAGE,
-      query
+    const { options: usageOptions, optionsSelected: usageOptionsSelected } = this.setFilter(
+      rhsmApiTypes.RHSM_API_QUERY_USAGE
     );
 
     return (
@@ -207,7 +235,7 @@ class Toolbar extends React.Component {
                 chips={slaOptionsSelected}
                 deleteChip={this.onClearFilter}
                 categoryName={t('curiosity-toolbar.slaCategory')}
-                showToolbarItem={filterCategory === rhsmApiTypes.RHSM_API_QUERY_SLA}
+                showToolbarItem={filterType === rhsmApiTypes.RHSM_API_QUERY_SLA}
               >
                 <Select
                   aria-label={t('curiosity-toolbar.slaCategory')}
@@ -221,7 +249,7 @@ class Toolbar extends React.Component {
                 chips={usageOptionsSelected}
                 deleteChip={this.onClearFilter}
                 categoryName={t('curiosity-toolbar.usageCategory')}
-                showToolbarItem={filterCategory === rhsmApiTypes.RHSM_API_QUERY_USAGE}
+                showToolbarItem={filterType === rhsmApiTypes.RHSM_API_QUERY_USAGE}
               >
                 <Select
                   aria-label={t('curiosity-toolbar.usageCategory')}
@@ -242,14 +270,16 @@ class Toolbar extends React.Component {
 /**
  * Prop types
  *
- * @type {{viewId: string, t: Function, query: object, isDisabled: boolean }}
+ * @type {{viewId: string, t: Function, activeFilters, query, isDisabled: boolean, filterType: string}}
  */
 Toolbar.propTypes = {
   query: PropTypes.shape({
     [rhsmApiTypes.RHSM_API_QUERY_SLA]: PropTypes.string,
     [rhsmApiTypes.RHSM_API_QUERY_USAGE]: PropTypes.string
   }),
+  activeFilters: PropTypes.instanceOf(Set),
   isDisabled: PropTypes.bool,
+  filterType: PropTypes.oneOf([rhsmApiTypes.RHSM_API_QUERY_SLA, rhsmApiTypes.RHSM_API_QUERY_USAGE]),
   t: PropTypes.func,
   viewId: PropTypes.string
 };
@@ -257,13 +287,28 @@ Toolbar.propTypes = {
 /**
  * Default props.
  *
- * @type {{viewId: string, t: translate, query: {}, isDisabled: boolean}}
+ * @type {{viewId: string, t: translate, activeFilters: Set, query: {}, isDisabled: boolean, filterType: null}}
  */
 Toolbar.defaultProps = {
   query: {},
+  activeFilters: new Set(),
   isDisabled: helpers.UI_DISABLED_TOOLBAR,
+  filterType: null,
   t: translate,
   viewId: 'toolbar'
 };
 
-export { Toolbar as default, Toolbar };
+/**
+ * Apply state to props.
+ *
+ * @param {object} state
+ * @param {object} state.toolbar
+ * @param {object} props
+ * @param {string} props.viewId
+ * @returns {object}
+ */
+const mapStateToProps = ({ toolbar }, { viewId }) => ({ ...toolbar.filters?.[viewId] });
+
+const ConnectedToolbar = connect(mapStateToProps)(Toolbar);
+
+export { ConnectedToolbar as default, ConnectedToolbar, Toolbar };
