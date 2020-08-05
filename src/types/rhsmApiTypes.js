@@ -282,7 +282,7 @@ const RHSM_API_QUERY_USAGE_TYPES = {
   PRODUCTION: 'Production',
   DEVELOPMENT: 'Development/Test',
   DISASTER: 'Disaster Recovery',
-  UNSPECIFIED: ''
+  NONE: ''
 };
 
 /**

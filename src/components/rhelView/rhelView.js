@@ -14,6 +14,7 @@ import { connect, reduxSelectors } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import C3GraphCard from '../c3GraphCard/c3GraphCard';
 import Toolbar from '../toolbar/toolbar';
+import InventoryList from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
@@ -62,6 +63,14 @@ class RhelView extends React.Component {
               productShortLabel={viewId}
             />
           )}
+        </PageSection>
+        <PageSection>
+          <InventoryList
+            key={routeDetail.pathParameter}
+            listQuery={query}
+            productId={routeDetail.pathParameter}
+            viewId={viewId}
+          />
         </PageSection>
       </PageLayout>
     );

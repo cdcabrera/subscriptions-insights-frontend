@@ -46,7 +46,12 @@
     "tableSummary": "A generated table with one level of column headers.",
     "tableEmptyInventoryTitle": "No results found",
     "tableEmptyInventoryMessage": "No results match the filter criteria. Remove filters or clear all filters to show results.",
-    "tableSkeletonAriaLabel": "Loading"
+    "tableSkeletonAriaLabel": "Loading",
+    "headerName": "Name",
+    "headerInfrastructure": "Infrastructure",
+    "headerSocketsCores": "Sockets/Cores",
+    "headerLastSeen": "Last seen",
+    "headerUUID": "UUID"
   },
   "curiosity-toolbar": {
     "category": "Filter by",

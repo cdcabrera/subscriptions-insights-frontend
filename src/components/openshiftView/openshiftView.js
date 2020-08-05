@@ -11,6 +11,7 @@ import GraphCard from '../graphCard/graphCard';
 import C3GraphCard from '../c3GraphCard/c3GraphCard';
 import { Select } from '../form/select';
 import Toolbar from '../toolbar/toolbar';
+import InventoryList from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
@@ -109,6 +110,14 @@ class OpenshiftView extends React.Component {
               {this.renderSelect()}
             </GraphCard>
           )}
+        </PageSection>
+        <PageSection>
+          <InventoryList
+            key={routeDetail.pathParameter}
+            listQuery={query}
+            productId={routeDetail.pathParameter}
+            viewId={viewId}
+          />
         </PageSection>
       </PageLayout>
     );

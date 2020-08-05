@@ -23,11 +23,10 @@ const selectorCache = { dataId: null, data: {} };
  * @returns {object}
  */
 const statePropsFilter = (state, props = {}) => ({
-  ...state.inventory?.hostsGuests?.[props.productId],
+  ...state.inventory?.hostsGuests?.[props.listQueryId],
   ...{
-    viewId: props.viewId,
-    productId: props.productId,
-    query: props.listQuery
+    query: props.listQuery,
+    queryId: props.listQueryId
   }
 });
 
@@ -37,7 +36,7 @@ const statePropsFilter = (state, props = {}) => ({
  * @type {{pending: boolean, fulfilled: boolean, listData: object, error: boolean, status: (*|number)}}
  */
 const selector = createSelector([statePropsFilter], response => {
-  const { viewId = null, productId = null, query = {}, metaId, metaQuery = {}, ...responseData } = response || {};
+  const { query = {}, queryId = null, metaId, metaQuery = {}, ...responseData } = response || {};
 
   const updatedResponseData = {
     error: responseData.error || false,
@@ -49,17 +48,16 @@ const selector = createSelector([statePropsFilter], response => {
 
   const responseMetaQuery = { ...metaQuery };
 
-  const cache =
-    (viewId && productId && selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`]) || undefined;
+  // const cache = (queryId && selectorCache.data[`${queryId}_${JSON.stringify(query)}`]) || undefined;
 
-  Object.assign(updatedResponseData, { ...cache });
+  // Object.assign(updatedResponseData, { ...cache });
 
-  if (viewId && selectorCache.dataId !== viewId) {
-    selectorCache.dataId = viewId;
-    selectorCache.data = {};
-  }
+  // if (queryId && selectorCache.dataId !== queryId) {
+  //   selectorCache.dataId = queryId;
+  //   selectorCache.data = {};
+  // }
 
-  if (responseData.fulfilled && productId === metaId && _isEqual(query, responseMetaQuery)) {
+  if (responseData.fulfilled && queryId === metaId && _isEqual(query, responseMetaQuery)) {
     const inventory = responseData.data;
     const listData = inventory?.[rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA] || [];
 
@@ -103,9 +101,9 @@ const selector = createSelector([statePropsFilter], response => {
 
     // Update response and cache
     updatedResponseData.fulfilled = true;
-    selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`] = {
-      ...updatedResponseData
-    };
+    // selectorCache.data[`${queryId}_${JSON.stringify(query)}`] = {
+    //   ...updatedResponseData
+    // };
   }
 
   return updatedResponseData;

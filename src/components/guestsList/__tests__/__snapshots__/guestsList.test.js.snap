@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GuestsList Component should render a non-connected component: non-connected 1`] = `
+<Table
+  ariaLabel="Compact table."
+  borders={false}
+  className="curiosity-inventory-guestlist"
+  columnHeaders={
+    Array [
+      "t(curiosity-inventory.headerName)",
+      "t(curiosity-inventory.headerUUID)",
+      "t(curiosity-inventory.headerLastSeen)",
+    ]
+  }
+  rows={Array []}
+  summary="A generated table with one level of column headers."
+  variant="compact"
+/>
+`;
