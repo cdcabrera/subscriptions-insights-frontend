@@ -33,7 +33,16 @@ class RhelView extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { query, initialGraphFilters, initialInventoryFilters, location, routeDetail, t, viewId } = this.props;
+    const {
+      initialGraphFilters,
+      initialGuestsFilters,
+      initialInventoryFilters,
+      location,
+      query,
+      routeDetail,
+      t,
+      viewId
+    } = this.props;
     const isC3 = location?.parsedSearch?.c3 === '';
 
     return (
@@ -70,6 +79,7 @@ class RhelView extends React.Component {
         <PageSection>
           <InventoryList
             key={routeDetail.pathParameter}
+            filterGuestsData={initialGuestsFilters}
             filterInventoryData={initialInventoryFilters}
             query={query}
             productId={routeDetail.pathParameter}
@@ -86,7 +96,7 @@ class RhelView extends React.Component {
  * Prop types.
  *
  * @type {{viewId: string, t: Function, query: object, initialGraphFilters: Array, routeDetail: object,
- *     initialInventoryFilters: Array}}
+ *    initialGuestsFilters: Array, initialInventoryFilters: Array}}
  */
 RhelView.propTypes = {
   query: PropTypes.shape({
@@ -94,6 +104,7 @@ RhelView.propTypes = {
   }),
   initialGraphFilters: PropTypes.array,
   initialInventoryFilters: PropTypes.array,
+  initialGuestsFilters: PropTypes.array,
   location: PropTypes.shape({
     parsedSearch: PropTypes.objectOf(PropTypes.string)
   }).isRequired,
@@ -111,7 +122,8 @@ RhelView.propTypes = {
 /**
  * Default props.
  *
- * @type {{viewId: string, t: translate, query: object, initialGraphFilters: Array, initialInventoryFilters: Array}}
+ * @type {{viewId: string, t: translate, query: object, initialGraphFilters: Array, initialGuestsFilters: Array,
+ *     initialInventoryFilters: Array}}
  */
 RhelView.defaultProps = {
   query: {
@@ -139,6 +151,17 @@ RhelView.defaultProps = {
       color: chartColorPurpleDark.value
     },
     { id: 'thresholdSockets' }
+  ],
+  initialGuestsFilters: [
+    {
+      id: 'displayName'
+    },
+    {
+      id: 'insightsId'
+    },
+    {
+      id: 'lastSeen'
+    }
   ],
   initialInventoryFilters: [
     {

@@ -87,7 +87,7 @@ class OpenshiftView extends React.Component {
    */
   render() {
     const { graphFilters, inventoryFilters } = this.state;
-    const { query, location, routeDetail, t, viewId } = this.props;
+    const { initialGuestsFilters, location, query, routeDetail, t, viewId } = this.props;
     const isC3 = location?.parsedSearch?.c3 === '';
 
     return (
@@ -128,6 +128,7 @@ class OpenshiftView extends React.Component {
         <PageSection>
           <InventoryList
             key={routeDetail.pathParameter}
+            filterGuestsData={initialGuestsFilters}
             filterInventoryData={inventoryFilters}
             query={query}
             productId={routeDetail.pathParameter}
@@ -143,8 +144,8 @@ class OpenshiftView extends React.Component {
 /**
  * Prop types.
  *
- * @type {{initialGraphFilters: Array, initialInventoryFilters: Array, initialOption: string, viewId: string,
- *     t: Function, query: object, routeDetail: object, location: object}}
+ * @type {{initialOption: Array, viewId: string, t: Function, query, initialGraphFilters: Array, routeDetail: object,
+ *     location: object, initialGuestsFilters: Array, initialInventoryFilters: Array}}
  */
 OpenshiftView.propTypes = {
   query: PropTypes.shape({
@@ -152,6 +153,7 @@ OpenshiftView.propTypes = {
   }),
   initialOption: PropTypes.oneOf(['cores', 'sockets']),
   initialGraphFilters: PropTypes.array,
+  initialGuestsFilters: PropTypes.array,
   initialInventoryFilters: PropTypes.array,
   location: PropTypes.shape({
     parsedSearch: PropTypes.objectOf(PropTypes.string)
@@ -170,8 +172,8 @@ OpenshiftView.propTypes = {
 /**
  * Default props.
  *
- * @type {{initialGraphFilters: Array, initialInventoryFilters: Array, initialOption: string, viewId: string,
- *     t: translate, query: object}}
+ * @type {{initialOption: string, viewId: string, t: translate, query: object, initialGraphFilters: Array,
+ *     initialGuestsFilters: Array, initialInventoryFilters: Array}}
  */
 OpenshiftView.defaultProps = {
   query: {
@@ -197,6 +199,17 @@ OpenshiftView.defaultProps = {
     },
     { id: 'thresholdSockets', optional: true },
     { id: 'thresholdCores', optional: true }
+  ],
+  initialGuestsFilters: [
+    {
+      id: 'displayName'
+    },
+    {
+      id: 'insightsId'
+    },
+    {
+      id: 'lastSeen'
+    }
   ],
   initialInventoryFilters: [
     {
