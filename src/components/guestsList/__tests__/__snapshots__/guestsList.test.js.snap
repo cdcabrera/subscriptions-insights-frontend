@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GuestsList Component should handle variations in data: filtered data 1`] = `
+<div
+  className="fadein "
+>
+  <div
+    className="curiosity-table-scroll"
+    style={
+      Object {
+        "height": "200px",
+      }
+    }
+  >
+    <div
+      className="curiosity-table-scroll-list"
+      onScroll={[Function]}
+    >
+      <Table
+        ariaLabel={null}
+        borders={false}
+        className="curiosity-inventory-list"
+        columnHeaders={
+          Array [
+            "t(curiosity-inventory.header, [object Object])",
+          ]
+        }
+        isHeader={true}
+        rows={
+          Array [
+            Object {
+              "cells": Array [
+                "ipsum",
+              ],
+            },
+            Object {
+              "cells": Array [
+                "sit",
+              ],
+            },
+          ]
+        }
+        summary={null}
+        t={[Function]}
+        variant="compact"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GuestsList Component should handle variations in data: variable data 1`] = `
+<div
+  className="fadein "
+>
+  <div
+    className="curiosity-table-scroll"
+    style={
+      Object {
+        "height": "200px",
+      }
+    }
+  >
+    <div
+      className="curiosity-table-scroll-list"
+      onScroll={[Function]}
+    >
+      <Table
+        ariaLabel={null}
+        borders={false}
+        className="curiosity-inventory-list"
+        columnHeaders={
+          Array [
+            "t(curiosity-inventory.header, [object Object])",
+            "t(curiosity-inventory.header, [object Object])",
+          ]
+        }
+        isHeader={true}
+        rows={
+          Array [
+            Object {
+              "cells": Array [
+                "ipsum",
+                "sit",
+              ],
+            },
+            Object {
+              "cells": Array [
+                "sit",
+                "amet",
+              ],
+            },
+          ]
+        }
+        summary={null}
+        t={[Function]}
+        variant="compact"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`GuestsList Component should render a non-connected component: non-connected 1`] = `
+<div
+  className="fadein "
+>
+  <div
+    className="curiosity-table-scroll"
+    style={
+      Object {
+        "height": "200px",
+      }
+    }
+  >
+    <div
+      className="curiosity-table-scroll-list"
+      onScroll={[Function]}
+    />
+  </div>
+</div>
+`;

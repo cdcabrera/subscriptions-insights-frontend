@@ -85,6 +85,20 @@ exports[`OpenshiftView Component should display an alternate graph on query-stri
   <PageSection>
     <Connect(InventoryList)
       cardTitle="t(curiosity-inventory.cardHeading)"
+      filterGuestsData={
+        Array [
+          Object {
+            "cell": [Function],
+            "id": "displayName",
+          },
+          Object {
+            "id": "inventoryId",
+          },
+          Object {
+            "id": "lastSeen",
+          },
+        ]
+      }
       filterInventoryData={
         Array [
           Object {
@@ -203,6 +217,20 @@ exports[`OpenshiftView Component should have a fallback title: title 1`] = `
   <PageSection>
     <Connect(InventoryList)
       cardTitle="t(curiosity-inventory.cardHeading)"
+      filterGuestsData={
+        Array [
+          Object {
+            "cell": [Function],
+            "id": "displayName",
+          },
+          Object {
+            "id": "inventoryId",
+          },
+          Object {
+            "id": "lastSeen",
+          },
+        ]
+      }
       filterInventoryData={
         Array [
           Object {
@@ -441,6 +469,20 @@ exports[`OpenshiftView Component should render a non-connected component: non-co
   <PageSection>
     <Connect(InventoryList)
       cardTitle="t(curiosity-inventory.cardHeading)"
+      filterGuestsData={
+        Array [
+          Object {
+            "cell": [Function],
+            "id": "displayName",
+          },
+          Object {
+            "id": "inventoryId",
+          },
+          Object {
+            "id": "lastSeen",
+          },
+        ]
+      }
       filterInventoryData={
         Array [
           Object {
