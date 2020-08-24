@@ -8,6 +8,7 @@ import { helpers } from '../../common';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
+import GuestsList from '../guestsList/guestsList';
 import { inventoryListHelpers } from './inventoryListHelpers';
 import Pagination from '../pagination/pagination';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
@@ -44,7 +45,7 @@ class InventoryList extends React.Component {
    * @returns {Node}
    */
   renderTable() {
-    const { filterInventoryData, listData } = this.props;
+    const { filterGuestsData, filterInventoryData, listData, productId, query, viewId } = this.props;
     let updatedColumnHeaders = [];
 
     const updatedRows = listData.map(({ ...cellData }) => {
@@ -56,7 +57,17 @@ class InventoryList extends React.Component {
       updatedColumnHeaders = columnHeaders;
 
       return {
-        cells
+        cells,
+        expandedContent: cellData?.numberOfGuests > 0 && (
+          <GuestsList
+            filterGuestsData={filterGuestsData}
+            loaderRowCount={cellData?.numberOfGuests}
+            productId={productId}
+            query={query}
+            queryId={cellData?.subscriptionManagerId}
+            viewId={viewId}
+          />
+        )
       };
     });
 
@@ -160,6 +171,7 @@ class InventoryList extends React.Component {
 InventoryList.propTypes = {
   error: PropTypes.bool,
   cardTitle: PropTypes.string,
+  filterGuestsData: PropTypes.array,
   filterInventoryData: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -197,6 +209,7 @@ InventoryList.propTypes = {
 InventoryList.defaultProps = {
   error: false,
   cardTitle: null,
+  filterGuestsData: [],
   filterInventoryData: [],
   getHostsInventory: helpers.noop,
   isDisabled: helpers.UI_DISABLED_TABLE,
