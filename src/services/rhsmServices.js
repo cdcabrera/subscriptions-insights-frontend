@@ -952,7 +952,7 @@ const getGraphCapacity = (id, params = {}) =>
  *           "cores": 4,
  *           "sockets": 2,
  *           "hardware_type": "physical",
- *           "number_of_guests": 2,
+ *           "number_of_guests": 11,
  *           "last_seen": "2020-04-01T00:00:00Z"
  *         },
  *         {
@@ -1018,14 +1018,79 @@ const getHostsInventory = (id, params = {}) =>
  *       "data" : [
  *         {
  *           "insights_id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
+ *           "inventory_id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
  *           "display_name": "guest01.example.com",
  *           "subscription_manager_id": "adafd9d5-5b00-42fa-a6c9-75801d45cc6d",
  *           "last_seen": "2020-04-01T00:00:00Z"
  *         },
  *         {
  *           "insights_id": "9358e312-1c9f-42f4-8910-dcef6e970852",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-dcef6e970852",
  *           "display_name": "guest02.example.com",
  *           "subscription_manager_id": "b101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest03.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "498cff02-8b4b-46f8-a655-56043XXX0d2f",
+ *           "inventory_id": "498cff02-8b4b-46f8-a655-56043XXX0d2f",
+ *           "display_name": "guest04.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest05.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest06.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest07.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest08.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest09.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest10.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
+ *           "last_seen": "2020-07-01T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
+ *           "display_name": "guest11.example.com",
+ *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
  *           "last_seen": "2020-07-01T00:00:00Z"
  *         }
  *       ],
