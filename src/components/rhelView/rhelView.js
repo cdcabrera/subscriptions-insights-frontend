@@ -157,10 +157,29 @@ RhelView.defaultProps = {
   ],
   initialGuestsFilters: [
     {
-      id: 'displayName'
+      id: 'displayName',
+      cell: obj => {
+        const { displayName, inventoryId } = obj;
+
+        if (!inventoryId?.value) {
+          return displayName.value;
+        }
+
+        return (
+          <Button
+            isInline
+            component="a"
+            variant="link"
+            target="_blank"
+            href={`/insights/inventory/${inventoryId.value}/`}
+          >
+            {displayName.value || inventoryId.value}
+          </Button>
+        );
+      }
     },
     {
-      id: 'insightsId'
+      id: 'inventoryId'
     },
     {
       id: 'lastSeen'
@@ -172,7 +191,7 @@ RhelView.defaultProps = {
       cell: obj => {
         const { displayName, inventoryId } = obj;
 
-        if (!inventoryId.value) {
+        if (!inventoryId?.value) {
           return displayName.value;
         }
 
