@@ -17,6 +17,7 @@ import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
  * A system inventory component.
  *
  * @augments React.Component
+ * @fires onUpdateInventoryData
  */
 class InventoryList extends React.Component {
   componentDidMount() {
@@ -31,6 +32,11 @@ class InventoryList extends React.Component {
     }
   }
 
+  /**
+   * Call the RHSM APIs, apply filters.
+   *
+   * @event onUpdateInventoryData
+   */
   onUpdateInventoryData = () => {
     const { getHostsInventory, isDisabled, productId, query } = this.props;
 
@@ -61,7 +67,6 @@ class InventoryList extends React.Component {
         expandedContent: cellData?.numberOfGuests > 0 && (
           <GuestsList
             filterGuestsData={filterGuestsData}
-            loaderRowCount={cellData?.numberOfGuests}
             productId={productId}
             query={query}
             queryId={cellData?.subscriptionManagerId}
