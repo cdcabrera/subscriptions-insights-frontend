@@ -51,7 +51,7 @@ class InventoryList extends React.Component {
    * @returns {Node}
    */
   renderTable() {
-    const { filterGuestsData, filterInventoryData, listData, productId, query, viewId } = this.props;
+    const { filterGuestsData, filterInventoryData, listData, query } = this.props;
     let updatedColumnHeaders = [];
 
     const updatedRows = listData.map(({ ...cellData }) => {
@@ -60,17 +60,19 @@ class InventoryList extends React.Component {
         cellData
       });
 
+      const hasGuests = cellData?.numberOfGuests > 0;
+      const guestsId = cellData?.subscriptionManagerId;
       updatedColumnHeaders = columnHeaders;
 
       return {
         cells,
-        expandedContent: cellData?.numberOfGuests > 0 && (
+        expandedContent: hasGuests && guestsId && (
           <GuestsList
+            key={guestsId}
             filterGuestsData={filterGuestsData}
-            productId={productId}
+            numberOfEntries={cellData?.numberOfGuests}
+            id={guestsId}
             query={query}
-            queryId={cellData?.subscriptionManagerId}
-            viewId={viewId}
           />
         )
       };

@@ -210,7 +210,7 @@ OpenshiftView.defaultProps = {
         const { displayName, inventoryId } = obj;
 
         if (!inventoryId?.value) {
-          return displayName.value;
+          return displayName?.value;
         }
 
         return (
@@ -240,7 +240,7 @@ OpenshiftView.defaultProps = {
         const { displayName, inventoryId } = obj;
 
         if (!inventoryId?.value) {
-          return displayName.value;
+          return displayName?.value;
         }
 
         return (

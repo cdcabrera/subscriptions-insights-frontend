@@ -162,7 +162,7 @@ RhelView.defaultProps = {
         const { displayName, inventoryId } = obj;
 
         if (!inventoryId?.value) {
-          return displayName.value;
+          return displayName?.value;
         }
 
         return (
@@ -192,7 +192,7 @@ RhelView.defaultProps = {
         const { displayName, inventoryId } = obj;
 
         if (!inventoryId?.value) {
-          return displayName.value;
+          return displayName?.value;
         }
 
         return (
