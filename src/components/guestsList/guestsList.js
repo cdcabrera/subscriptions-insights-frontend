@@ -1,28 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TableVariant } from '@patternfly/react-table';
-import _isEqual from 'lodash/isEqual';
 import { helpers } from '../../common';
 import { apiQueries, connect, reduxActions, reduxSelectors } from '../../redux';
 import { Loader } from '../loader/loader';
 import { inventoryListHelpers } from '../inventoryList/inventoryListHelpers';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { Table } from '../table/table';
-import { TableScroll } from '../table/tableScroll';
-import { PaginationScroll } from '../pagination/paginationScroll';
 
-// TODO: change limit back to 100, and in rhsmServices update to 700 for guests count
 /**
  * A system inventory guests component.
  *
- * @param event
  * @augments React.Component
  * @fires onUpdateGuestsData
- * @fires onPage
+ * @fires onScroll
  */
 class GuestsList extends React.Component {
-  previousData = [];
-
   state = { currentPage: 0, limit: 10, previousData: [] };
 
   componentDidMount() {
@@ -58,6 +51,12 @@ class GuestsList extends React.Component {
     }
   };
 
+  /**
+   * Update page state.
+   *
+   * @event onScroll
+   * @param {object} event
+   */
   onScroll = event => {
     const { target } = event;
     const { currentPage, limit, previousData } = this.state;
@@ -77,52 +76,26 @@ class GuestsList extends React.Component {
     }
   };
 
-  /**
-   * Update page state.
-   *
-   * @event onPage
-   * @param {object} params
-   * @param {number} params.page
-   * @returns {Promise<boolean>}
-   */
-  onPage = async ({ page }) => {
-    const { limit } = this.state;
-    const { numberOfEntries, id } = this.props;
+  renderLoader() {
+    const { currentPage } = this.state;
+    const { pending } = this.props;
 
-    console.log('SCROLLING ', id, page, limit, numberOfEntries);
-
-    if (numberOfEntries >= page * limit) {
-      await this.setState({
-        currentPage: page - 1
-      });
-
-      return true;
+    if (currentPage > 0 && pending) {
+      return (
+        <div className="curiosity-pagination-scroll-loader__spinner">
+          <Loader />
+        </div>
+      );
     }
 
-    return false;
-  };
+    return null;
+  }
 
   /**
    * Render a guests table.
    *
    * @returns {Node}
    */
-  renderTableWORKS() {
-    const { previousData } = this.state;
-    const { listData } = this.props;
-
-    const list = [...previousData, ...(listData || [])];
-    const updatedListData = list.map((v, i) => <li key={`data${i}`}>{v.insightsId}</li>);
-
-    return (
-      <div className="curiosity-pagination-scroll" style={{ height: `200px` }}>
-        <div className="curiosity-pagination-scroll-list" onScroll={this.onScroll}>
-          <ol>{updatedListData}</ol>
-        </div>
-      </div>
-    );
-  }
-
   renderTable() {
     const { previousData } = this.state;
     const { filterGuestsData, listData } = this.props;
@@ -144,13 +117,17 @@ class GuestsList extends React.Component {
     return (
       <div className="curiosity-pagination-scroll" style={{ height: `200px` }}>
         <div className="curiosity-pagination-scroll-list" onScroll={this.onScroll}>
-          <Table
-            borders={false}
-            variant={TableVariant.compact}
-            className="curiosity-inventory-list"
-            columnHeaders={updatedColumnHeaders}
-            rows={updatedRows}
-          />
+          {this.renderLoader()}
+          {(updatedRows.length && (
+            <Table
+              borders={false}
+              variant={TableVariant.compact}
+              className="curiosity-inventory-list"
+              columnHeaders={updatedColumnHeaders}
+              rows={updatedRows}
+            />
+          )) ||
+            null}
         </div>
       </div>
     );
@@ -178,7 +155,7 @@ class GuestsList extends React.Component {
             }}
           />
         )}
-        {this.renderTable()}
+        {((!pending && currentPage === 0) || currentPage > 0) && this.renderTable()}
       </div>
     );
   }
