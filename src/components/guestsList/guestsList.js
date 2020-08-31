@@ -1,51 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _isEqual from 'lodash/isEqual';
 import { TableVariant } from '@patternfly/react-table';
+import _isEqual from 'lodash/isEqual';
 import { helpers } from '../../common';
 import { apiQueries, connect, reduxActions, reduxSelectors } from '../../redux';
-import Table from '../table/table';
 import { Loader } from '../loader/loader';
 import { inventoryListHelpers } from '../inventoryList/inventoryListHelpers';
-import PaginationScroll from '../pagination/paginationScroll';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { Table } from '../table/table';
+import { TableScroll } from '../table/tableScroll';
+import { PaginationScroll } from '../pagination/paginationScroll';
 
 // TODO: change limit back to 100, and in rhsmServices update to 700 for guests count
 /**
  * A system inventory guests component.
  *
+ * @param event
  * @augments React.Component
  * @fires onUpdateGuestsData
  * @fires onPage
  */
 class GuestsList extends React.Component {
-  state = { currentPage: 0, limit: 10 };
+  previousData = [];
+
+  state = { currentPage: 0, limit: 10, previousData: [] };
 
   componentDidMount() {
     this.onUpdateGuestsData();
   }
 
-  /*
-  componentDidUpdate(prevProps) {
-    const { query, queryId } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { currentPage } = this.state;
 
-    if (queryId !== prevProps.queryId || !_isEqual(query, prevProps.query)) {
+    if (currentPage !== prevState.currentPage) {
       this.onUpdateGuestsData();
     }
   }
-   */
 
   /**
    * Call the RHSM APIs, apply filters.
    *
    * @event onUpdateGuestsData
    */
-  onUpdateGuestsData = () => {
+  onUpdateGuestsData = async () => {
     const { currentPage, limit } = this.state;
-    const { getHostsInventoryGuests, query, queryId } = this.props;
+    const { getHostsInventoryGuests, query, id } = this.props;
 
-    // if (!isDisabled && queryId && itemCount >= currentPage * 100) {
-    if (queryId) {
+    if (id) {
       const updatedQuery = {
         ...query,
         [RHSM_API_QUERY_TYPES.LIMIT]: limit,
@@ -53,7 +54,26 @@ class GuestsList extends React.Component {
       };
 
       const { guestsQuery } = apiQueries.parseRhsmQuery(updatedQuery);
-      getHostsInventoryGuests(queryId, guestsQuery);
+      await getHostsInventoryGuests(id, guestsQuery);
+    }
+  };
+
+  onScroll = event => {
+    const { target } = event;
+    const { currentPage, limit, previousData } = this.state;
+    const { numberOfEntries, pending, listData } = this.props;
+
+    // const distanceBottom = target.scrollHeight - (target.scrollTop + target.clientHeight);
+    const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
+
+    if (numberOfEntries > (currentPage + 1) * limit && bottom && !pending) {
+      const newPage = currentPage + 1;
+      const updatedData = [...previousData, ...(listData || [])];
+
+      this.setState({
+        previousData: updatedData,
+        currentPage: newPage
+      });
     }
   };
 
@@ -67,17 +87,14 @@ class GuestsList extends React.Component {
    */
   onPage = async ({ page }) => {
     const { limit } = this.state;
-    const { itemCount } = this.props;
+    const { numberOfEntries, id } = this.props;
 
-    if (itemCount >= page * limit) {
-      await this.setState(
-        {
-          currentPage: page - 1
-        },
-        () => {
-          this.onUpdateGuestsData();
-        }
-      );
+    console.log('SCROLLING ', id, page, limit, numberOfEntries);
+
+    if (numberOfEntries >= page * limit) {
+      await this.setState({
+        currentPage: page - 1
+      });
 
       return true;
     }
@@ -90,11 +107,28 @@ class GuestsList extends React.Component {
    *
    * @returns {Node}
    */
+  renderTableWORKS() {
+    const { previousData } = this.state;
+    const { listData } = this.props;
+
+    const list = [...previousData, ...(listData || [])];
+    const updatedListData = list.map((v, i) => <li key={`data${i}`}>{v.insightsId}</li>);
+
+    return (
+      <div className="curiosity-pagination-scroll" style={{ height: `200px` }}>
+        <div className="curiosity-pagination-scroll-list" onScroll={this.onScroll}>
+          <ol>{updatedListData}</ol>
+        </div>
+      </div>
+    );
+  }
+
   renderTable() {
+    const { previousData } = this.state;
     const { filterGuestsData, listData } = this.props;
     let updatedColumnHeaders = [];
 
-    const updatedRows = listData.map(({ ...cellData }) => {
+    const updatedRows = [...previousData, ...(listData || [])].map(({ ...cellData }) => {
       const { columnHeaders, cells } = inventoryListHelpers.parseRowCellsListData({
         filters: filterGuestsData,
         cellData
@@ -107,34 +141,18 @@ class GuestsList extends React.Component {
       };
     });
 
-    const paginationScrollLoader = (
-      <Loader
-        variant="table"
-        tableProps={{
-          className: 'curiosity-inventory-guestlist__pagination-scroll',
-          borders: false,
-          colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
-          rowCount: 0,
-          variant: TableVariant.compact
-        }}
-      />
-    );
-
     return (
-      <PaginationScroll
-        distanceFromBottom={100}
-        elementHeight={275}
-        onPage={this.onPage}
-        loader={paginationScrollLoader}
-      >
-        <Table
-          borders={false}
-          variant={TableVariant.compact}
-          className="curiosity-inventory-list"
-          columnHeaders={updatedColumnHeaders}
-          rows={updatedRows}
-        />
-      </PaginationScroll>
+      <div className="curiosity-pagination-scroll" style={{ height: `200px` }}>
+        <div className="curiosity-pagination-scroll-list" onScroll={this.onScroll}>
+          <Table
+            borders={false}
+            variant={TableVariant.compact}
+            className="curiosity-inventory-list"
+            columnHeaders={updatedColumnHeaders}
+            rows={updatedRows}
+          />
+        </div>
+      </div>
     );
   }
 
@@ -144,23 +162,23 @@ class GuestsList extends React.Component {
    * @returns {Node}
    */
   render() {
+    const { currentPage } = this.state;
     const { error, filterGuestsData, listData, pending, perPageDefault } = this.props;
 
     return (
-      <div className={`curiosity-inventory-list-wrapper fadein ${(error && 'blur') || ''}`}>
-        {pending && (
+      <div className={`fadein ${(error && 'blur') || ''}`}>
+        {pending && currentPage === 0 && (
           <Loader
             variant="table"
             tableProps={{
               borders: false,
-              className: 'curiosity-inventory-guestlist',
               colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
               rowCount: perPageDefault,
               variant: TableVariant.compact
             }}
           />
         )}
-        {!pending && this.renderTable()}
+        {this.renderTable()}
       </div>
     );
   }
@@ -169,9 +187,9 @@ class GuestsList extends React.Component {
 /**
  * Prop types.
  *
- * @type {{viewId: string, productId: string, listData: Array, getHostsInventoryGuests: Function,
- *     filterGuestsData: object, pending: boolean, query: object, perPageDefault: number, error: boolean,
- *     itemCount: boolean, queryId: string}}
+ * @type {{numberOfEntries: number, listData: Array, getHostsInventoryGuests: Function,
+ *     filterGuestsData: object, pending: boolean, query: object, perPageDefault: number,
+ *     id: string, error: boolean}}
  */
 GuestsList.propTypes = {
   error: PropTypes.bool,
@@ -193,31 +211,28 @@ GuestsList.propTypes = {
     }).isRequired
   ),
   getHostsInventoryGuests: PropTypes.func,
-  itemCount: PropTypes.number,
+  numberOfEntries: PropTypes.number,
   listData: PropTypes.array,
   pending: PropTypes.bool,
-  productId: PropTypes.string.isRequired,
   perPageDefault: PropTypes.number,
   query: PropTypes.object.isRequired,
-  queryId: PropTypes.string.isRequired,
-  viewId: PropTypes.string
+  id: PropTypes.string.isRequired
 };
 
 /**
  * Default props.
  *
- * @type {{viewId: string, listData: Array, getHostsInventoryGuests: Function, filterGuestsData: Array,
- *     pending: boolean, perPageDefault: number, error: boolean, itemCount: number}}
+ * @type {{numberOfEntries: number, listData: Array, getHostsInventoryGuests: Function,
+ *     filterGuestsData: Array, pending: boolean, perPageDefault: number, error: boolean}}
  */
 GuestsList.defaultProps = {
   error: false,
   filterGuestsData: [],
   getHostsInventoryGuests: helpers.noop,
-  itemCount: 0,
+  numberOfEntries: 0,
   listData: [],
   pending: false,
-  perPageDefault: 5,
-  viewId: 'guestsList'
+  perPageDefault: 5
 };
 
 /**
