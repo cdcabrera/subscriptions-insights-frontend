@@ -952,7 +952,7 @@ const getGraphCapacity = (id, params = {}) =>
  *           "cores": 4,
  *           "sockets": 2,
  *           "hardware_type": "VIRTUAL",
- *           "number_of_guests": 700,
+ *           "number_of_guests": 70,
  *           "last_seen": "2020-04-01T00:00:00Z"
  *         },
  *         {
@@ -973,7 +973,7 @@ const getGraphCapacity = (id, params = {}) =>
  *           "cores": 4,
  *           "sockets": 2,
  *           "hardware_type": "VIRTUAL",
- *           "number_of_guests": 6,
+ *           "number_of_guests": 10,
  *           "last_seen": "2020-04-02T00:00:00Z"
  *         }
  *       ],
