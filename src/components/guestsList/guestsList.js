@@ -92,7 +92,7 @@ class GuestsList extends React.Component {
         />
       );
 
-      return <div className="curiosity-pagination-scroll-loader__custom">{scrollLoader}</div>;
+      return <div className="curiosity-table-scroll-loader__custom">{scrollLoader}</div>;
     }
 
     return null;
@@ -122,8 +122,8 @@ class GuestsList extends React.Component {
     });
 
     return (
-      <div className="curiosity-pagination-scroll" style={{ height: `200px` }}>
-        <div className="curiosity-pagination-scroll-list" onScroll={this.onScroll}>
+      <div className="curiosity-table-scroll" style={{ height: `200px` }}>
+        <div className="curiosity-table-scroll-list" onScroll={this.onScroll}>
           {this.renderLoader()}
           {(updatedRows.length && (
             <Table
