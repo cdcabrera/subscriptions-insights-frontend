@@ -62,7 +62,6 @@ class GuestsList extends React.Component {
     const { currentPage, limit, previousData } = this.state;
     const { numberOfEntries, pending, listData } = this.props;
 
-    // const distanceBottom = target.scrollHeight - (target.scrollTop + target.clientHeight);
     const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
 
     if (numberOfEntries > (currentPage + 1) * limit && bottom && !pending) {
@@ -78,14 +77,22 @@ class GuestsList extends React.Component {
 
   renderLoader() {
     const { currentPage } = this.state;
-    const { pending } = this.props;
+    const { filterGuestsData, listData, pending } = this.props;
 
     if (currentPage > 0 && pending) {
-      return (
-        <div className="curiosity-pagination-scroll-loader__spinner">
-          <Loader />
-        </div>
+      const scrollLoader = (
+        <Loader
+          variant="table"
+          tableProps={{
+            borders: false,
+            colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
+            rowCount: 0,
+            variant: TableVariant.compact
+          }}
+        />
       );
+
+      return <div className="curiosity-pagination-scroll-loader__custom">{scrollLoader}</div>;
     }
 
     return null;
