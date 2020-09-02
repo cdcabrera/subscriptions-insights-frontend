@@ -9,6 +9,13 @@ import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { Table } from '../table/table';
 
 /**
+ * ToDo: Consider removing the query prop entirely.
+ * The current API doesn't allow setting more than "offset" and "limit"
+ */
+/**
+ * ToDo: Review moving the "onScroll" layout into a standalone component.
+ */
+/**
  * A system inventory guests component.
  *
  * @augments React.Component
@@ -35,7 +42,7 @@ class GuestsList extends React.Component {
    *
    * @event onUpdateGuestsData
    */
-  onUpdateGuestsData = async () => {
+  onUpdateGuestsData = () => {
     const { currentPage, limit } = this.state;
     const { getHostsInventoryGuests, query, id } = this.props;
 
@@ -47,7 +54,7 @@ class GuestsList extends React.Component {
       };
 
       const { guestsQuery } = apiQueries.parseRhsmQuery(updatedQuery);
-      await getHostsInventoryGuests(id, guestsQuery);
+      getHostsInventoryGuests(id, guestsQuery);
     }
   };
 
@@ -60,11 +67,11 @@ class GuestsList extends React.Component {
   onScroll = event => {
     const { target } = event;
     const { currentPage, limit, previousData } = this.state;
-    const { numberOfEntries, pending, listData } = this.props;
+    const { numberOfGuests, pending, listData } = this.props;
 
     const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
 
-    if (numberOfEntries > (currentPage + 1) * limit && bottom && !pending) {
+    if (numberOfGuests > (currentPage + 1) * limit && bottom && !pending) {
       const newPage = currentPage + 1;
       const updatedData = [...previousData, ...(listData || [])];
 
@@ -99,13 +106,17 @@ class GuestsList extends React.Component {
   }
 
   /**
+   * ToDo: Consider moving the "meaning of life" into the default props on iteration.
+   * For everyone else... move the 42 into default props, possibly the 275.
+   */
+  /**
    * Render a guests table.
    *
    * @returns {Node}
    */
   renderTable() {
     const { previousData } = this.state;
-    const { filterGuestsData, listData } = this.props;
+    const { filterGuestsData, listData, numberOfGuests } = this.props;
     let updatedColumnHeaders = [];
 
     const updatedRows = [...previousData, ...(listData || [])].map(({ ...cellData }) => {
@@ -121,9 +132,16 @@ class GuestsList extends React.Component {
       };
     });
 
+    // Include the table header
+    let updatedHeight = (numberOfGuests + 1) * 42;
+    updatedHeight = (updatedHeight < 275 && updatedHeight) ?? 275;
+
     return (
-      <div className="curiosity-table-scroll" style={{ height: `200px` }}>
-        <div className="curiosity-table-scroll-list" onScroll={this.onScroll}>
+      <div className="curiosity-table-scroll" style={{ height: `${updatedHeight}px` }}>
+        <div
+          className={`curiosity-table-scroll-list${(updatedHeight < 275 && '__no-scroll') || ''}`}
+          onScroll={this.onScroll}
+        >
           {this.renderLoader()}
           {(updatedRows.length && (
             <Table
@@ -147,7 +165,7 @@ class GuestsList extends React.Component {
    */
   render() {
     const { currentPage } = this.state;
-    const { error, filterGuestsData, listData, pending, perPageDefault } = this.props;
+    const { error, filterGuestsData, listData, numberOfGuests, pending, perPageDefault } = this.props;
 
     return (
       <div className={`fadein ${(error && 'blur') || ''}`}>
@@ -157,7 +175,7 @@ class GuestsList extends React.Component {
             tableProps={{
               borders: false,
               colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
-              rowCount: perPageDefault,
+              rowCount: numberOfGuests < perPageDefault ? numberOfGuests : perPageDefault,
               variant: TableVariant.compact
             }}
           />
@@ -171,8 +189,8 @@ class GuestsList extends React.Component {
 /**
  * Prop types.
  *
- * @type {{numberOfEntries: number, listData: Array, getHostsInventoryGuests: Function,
- *     filterGuestsData: object, pending: boolean, query: object, perPageDefault: number,
+ * @type {{listData: Array, getHostsInventoryGuests: Function, filterGuestsData: object,
+ *     pending: boolean, query: object, numberOfGuests: number, perPageDefault: number,
  *     id: string, error: boolean}}
  */
 GuestsList.propTypes = {
@@ -195,7 +213,7 @@ GuestsList.propTypes = {
     }).isRequired
   ),
   getHostsInventoryGuests: PropTypes.func,
-  numberOfEntries: PropTypes.number,
+  numberOfGuests: PropTypes.number.isRequired,
   listData: PropTypes.array,
   pending: PropTypes.bool,
   perPageDefault: PropTypes.number,
@@ -206,15 +224,13 @@ GuestsList.propTypes = {
 /**
  * Default props.
  *
- * @type {{numberOfEntries: number, listData: Array, getHostsInventoryGuests: Function,
- *     filterGuestsData: Array, pending: boolean, query: object, perPageDefault: number,
- *     error: boolean}}
+ * @type {{listData: Array, getHostsInventoryGuests: Function, filterGuestsData: Array,
+ *     pending: boolean, query: object, perPageDefault: number, error: boolean}}
  */
 GuestsList.defaultProps = {
   error: false,
   filterGuestsData: [],
   getHostsInventoryGuests: helpers.noop,
-  numberOfEntries: 0,
   listData: [],
   pending: false,
   perPageDefault: 5,

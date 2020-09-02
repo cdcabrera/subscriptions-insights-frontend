@@ -5,7 +5,8 @@ import { GuestsList } from '../guestsList';
 describe('GuestsList Component', () => {
   it('should render a non-connected component', () => {
     const props = {
-      id: 'lorem'
+      id: 'lorem',
+      numberOfGuests: 0
     };
 
     const component = shallow(<GuestsList {...props} />);
@@ -15,9 +16,10 @@ describe('GuestsList Component', () => {
   it('should handle variations in data', () => {
     const props = {
       id: 'lorem',
+      numberOfGuests: 2,
       listData: [
         { lorem: 'ipsum', dolor: 'sit' },
-        { lorem: 'sit', dolor: 'amet' }
+        { lorem: 'amet', dolor: 'amet' }
       ]
     };
 
@@ -29,5 +31,53 @@ describe('GuestsList Component', () => {
     });
 
     expect(component).toMatchSnapshot('filtered data');
+  });
+
+  it('should handle multiple display states', () => {
+    const props = {
+      id: 'lorem',
+      numberOfGuests: 1,
+      pending: true
+    };
+
+    const component = shallow(<GuestsList {...props} />);
+    expect(component).toMatchSnapshot('initial pending');
+
+    component.setProps({
+      pending: false,
+      listData: [{ lorem: 'ipsum', dolor: 'sit' }]
+    });
+
+    expect(component).toMatchSnapshot('fulfilled');
+
+    component.setState({ currentPage: 1 });
+
+    component.setProps({
+      pending: true,
+      listData: []
+    });
+
+    expect(component).toMatchSnapshot('paged pending');
+  });
+
+  it('should handle updating paging state', () => {
+    const props = {
+      id: 'lorem',
+      numberOfGuests: 11,
+      listData: [{ lorem: 'ipsum', dolor: 'sit' }]
+    };
+
+    const component = shallow(<GuestsList {...props} />);
+    const componentInstance = component.instance();
+
+    const initialState = component.state();
+
+    componentInstance.onScroll({ target: { scrollHeight: 100, scrollTop: 20, clientHeight: 100 } });
+    const scrollProgress = component.state();
+
+    componentInstance.onScroll({ target: { scrollHeight: 100, scrollTop: 0, clientHeight: 100 } });
+    const scrollComplete = component.state();
+
+    expect({ initialState, scrollProgress, scrollComplete }).toMatchSnapshot('state');
   });
 });

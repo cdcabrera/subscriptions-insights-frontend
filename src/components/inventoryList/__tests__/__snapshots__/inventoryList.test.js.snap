@@ -57,7 +57,7 @@ exports[`InventoryList Component should handle expandable guests data: number of
         "expandedContent": <UNDEFINED
           filterGuestsData={Array []}
           id="loremipsum"
-          numberOfEntries={1}
+          numberOfGuests={1}
           query={
             Object {
               "limit": 10,

@@ -70,7 +70,7 @@ class InventoryList extends React.Component {
           <GuestsList
             key={guestsId}
             filterGuestsData={filterGuestsData}
-            numberOfEntries={cellData?.numberOfGuests}
+            numberOfGuests={cellData?.numberOfGuests}
             id={guestsId}
             query={query}
           />

@@ -975,6 +975,17 @@ const getGraphCapacity = (id, params = {}) =>
  *           "hardware_type": "VIRTUAL",
  *           "number_of_guests": 10,
  *           "last_seen": "2020-04-02T00:00:00Z"
+ *         },
+ *         {
+ *           "insights_id": "498cff02-8b4b-46f8-a655-nopqrstuvxyzab",
+ *           "inventory_id": "498cff02-8b4b-46f8-a655-nopqrstuvxyzab",
+ *           "display_name": "dolor.again.com",
+ *           "subscription_manager_id": "b6028fa4-cd26-449a-b122-nopqrstuvxyzab",
+ *           "cores": 4,
+ *           "sockets": 2,
+ *           "hardware_type": "VIRTUAL",
+ *           "number_of_guests": 1,
+ *           "last_seen": "2020-04-02T00:00:00Z"
  *         }
  *       ],
  *       "links": {

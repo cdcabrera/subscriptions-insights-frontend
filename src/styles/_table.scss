@@ -51,10 +51,16 @@
     width: auto;
   }
 
-  .curiosity-table-scroll-list {
+  .curiosity-table-scroll-list,
+  .curiosity-table-scroll-list__no-scroll {
     overflow-y: auto;
     min-height: calc(100% / 2);
     max-height: calc(100%);
     padding-bottom: 20px;
+  }
+
+  .curiosity-table-scroll-list__no-scroll {
+    overflow-y: hidden;
+    padding-bottom: inherit;
   }
 }
