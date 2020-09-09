@@ -1,10 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _isEqual from 'lodash/isEqual';
 import { Pagination as PfPagination } from '@patternfly/react-core';
-import { connect, reduxTypes, store } from '../../redux';
+import { apiQueries, connect, reduxSelectors, reduxTypes, store } from '../../redux';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+// import { OpenshiftView } from '../openshiftView/openshiftView';
 
 // ToDo: Apply locale/translation to the PF Pagination "titles" prop.
+/**
+ * ToDo: Review removing pagination state updates to both the productId and global viewId
+ * Applying paging to the global id of viewId is an extra, it's unnecessary and
+ * was meant to originally help facilitate a refresh across components. To review it
+ * however is confusing and can lead to the very question "why is there a product level
+ * state identifier and a global state identifier?"... answer, "not all filters are global"
+ */
 /**
  * Contained pagination.
  *
@@ -14,6 +23,32 @@ import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
  * @fires onPerPage
  */
 class Pagination extends React.Component {
+  /*
+  componentDidUpdate(prevProps) {
+    const { query, resetPaging, resetQuery } = this.props;
+    // const { pagingQuery: localQuery } = apiQueries.parseRhsmQuery(query);
+    // const { pagingQuery: globalQuery } = apiQueries.parseRhsmQuery(viewQuery);
+    // console.log('QUERY >>>', productId, viewId, viewQuery, query, prevProps.query);
+
+    // console.log('UPDATE PAGE >>>', { ...localQuery, ...globalQuery }, this.previousQuery);
+    console.log('UPDATE PAGE >>>', query, resetPaging);
+
+    // if (!_isEqual(resetQuery, prevProps.resetQuery)) {
+    // if (resetPaging === true && resetPaging !== prevProps.resetPaging) {
+
+    if (resetPaging === true && !_isEqual(query, prevProps.query)) {
+      // if (!_isEqual(query, prevProps.query) || !_isEqual(viewQuery, prevProps.viewQuery)) {
+      // if (!_isEqual({ ...localQuery, ...globalQuery }, this.previousQuery)) {
+      // this.previousQuery = { ...localQuery, ...globalQuery };
+      // this.resetPaging();
+    }
+
+    // if (!_isEqual(resetQuery, prevProps.resetQuery)) {
+    //  this.resetPaging();
+    // }
+  }
+  */
+
   /**
    * Update page state.
    *
@@ -28,26 +63,26 @@ class Pagination extends React.Component {
     const updatedActions = [
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
-        viewId,
+        viewId: productId,
         [RHSM_API_QUERY_TYPES.OFFSET]: offset
       },
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
-        viewId,
+        viewId: productId,
         [RHSM_API_QUERY_TYPES.LIMIT]: updatedPerPage
       }
     ];
 
-    if (productId && productId !== viewId) {
+    if (viewId && productId !== viewId) {
       updatedActions.push({
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
-        viewId: productId,
+        viewId,
         [RHSM_API_QUERY_TYPES.OFFSET]: offset
       });
 
       updatedActions.push({
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
-        viewId: productId,
+        viewId,
         [RHSM_API_QUERY_TYPES.LIMIT]: updatedPerPage
       });
     }
@@ -67,31 +102,60 @@ class Pagination extends React.Component {
     const updatedActions = [
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
-        viewId,
+        viewId: productId,
         [RHSM_API_QUERY_TYPES.OFFSET]: offsetDefault
       },
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
-        viewId,
+        viewId: productId,
         [RHSM_API_QUERY_TYPES.LIMIT]: perPage
       }
     ];
 
-    if (productId && productId !== viewId) {
+    if (viewId && productId !== viewId) {
       updatedActions.push({
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
-        viewId: productId,
+        viewId,
         [RHSM_API_QUERY_TYPES.OFFSET]: offsetDefault
       });
 
       updatedActions.push({
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
-        viewId: productId,
+        viewId,
         [RHSM_API_QUERY_TYPES.LIMIT]: perPage
       });
     }
+
     store.dispatch(updatedActions);
   };
+
+  /*
+  onResetPaging = () => {};
+
+  resetPaging() {
+    const { offsetDefault, productId, viewId } = this.props;
+
+    const updatedActions = [
+      {
+        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+        viewId: productId,
+        [RHSM_API_QUERY_TYPES.OFFSET]: offsetDefault
+      }
+    ];
+
+    if (viewId && productId !== viewId) {
+      updatedActions.push({
+        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+        viewId,
+        [RHSM_API_QUERY_TYPES.OFFSET]: offsetDefault
+      });
+    }
+
+    store.dispatch(updatedActions);
+
+    // console.log('checking query for reset >>>', query, viewQuery);
+  }
+  */
 
   // ToDo: Consider using the PfPagination "offset" prop
   /**
@@ -140,8 +204,11 @@ Pagination.propTypes = {
   offsetDefault: PropTypes.number,
   perPageDefault: PropTypes.number,
   productId: PropTypes.string.isRequired,
+  // resetPaging: PropTypes.bool,
+  // resetQuery: PropTypes.object,
   variant: PropTypes.string,
   viewId: PropTypes.string
+  // viewQuery: PropTypes.object
 };
 
 /**
@@ -159,8 +226,11 @@ Pagination.defaultProps = {
   itemCount: 0,
   offsetDefault: 0,
   perPageDefault: 10,
+  // resetPaging: false,
+  // resetQuery: {},
   variant: null,
   viewId: 'pagination'
+  // viewQuery: {}
 };
 
 /**
@@ -173,6 +243,15 @@ Pagination.defaultProps = {
  * @returns {object}
  */
 const mapStateToProps = ({ view }, { productId }) => ({ query: view.query?.[productId] });
+
+/*
+const mapStateToProps = ({ view }, { productId, viewId }) => ({
+  query: view.query?.[productId],
+  viewQuery: view.query?.[viewId]
+});
+ */
+
+// const makeMapStateToProps = reduxSelectors.paging.makePaging();
 
 const ConnectedPagination = connect(mapStateToProps)(Pagination);
 

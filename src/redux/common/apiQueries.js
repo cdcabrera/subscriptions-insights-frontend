@@ -11,12 +11,14 @@ const parseRhsmQuery = (query = {}) => {
   const graphQuery = reduxHelpers.setApiQuery(query, rhsmApiTypes.RHSM_API_QUERY_SET_REPORT_CAPACITY_TYPES);
   const guestsQuery = reduxHelpers.setApiQuery(query, rhsmApiTypes.RHSM_API_QUERY_SET_INVENTORY_GUESTS_TYPES);
   const inventoryQuery = reduxHelpers.setApiQuery(query, rhsmApiTypes.RHSM_API_QUERY_SET_INVENTORY_TYPES);
+  const pagingQuery = reduxHelpers.setApiQuery(query, rhsmApiTypes.RHSM_API_QUERY_SET_PAGING_TYPES);
 
   return {
     query,
     graphQuery,
     guestsQuery,
     inventoryQuery,
+    pagingQuery,
     toolbarQuery: query
   };
 };

@@ -52,6 +52,7 @@ const selector = createDeepEqualSelector([statePropsFilter], response => {
     pending: responseData.pending || responseData.cancelled || false,
     listData: [],
     itemCount: 0,
+    resetPaging: true,
     status: responseData.status
   };
 
@@ -104,6 +105,7 @@ const selector = createDeepEqualSelector([statePropsFilter], response => {
     const [meta = {}] = updatedListMeta || [];
 
     // Update response and cache
+    updatedResponseData.resetPaging = false;
     updatedResponseData.itemCount = meta[rhsmApiTypes.RHSM_API_RESPONSE_META_TYPES.COUNT] ?? 0;
     updatedResponseData.listData = updatedListData;
     updatedResponseData.fulfilled = true;

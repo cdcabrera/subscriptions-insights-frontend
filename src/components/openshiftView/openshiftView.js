@@ -19,6 +19,7 @@ import Toolbar from '../toolbar/toolbar';
 import InventoryList from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
+import {paginationHelpers} from "../pagination/paginationHelpers";
 
 /**
  * An OpenShift encompassing view.
@@ -46,7 +47,7 @@ class OpenshiftView extends React.Component {
    */
   onSelect = (event = {}) => {
     const { option } = this.state;
-    const { initialGraphFilters, initialInventoryFilters, viewId } = this.props;
+    const { initialGraphFilters, initialInventoryFilters, routeDetail, viewId } = this.props;
     const { value } = event;
 
     if (value !== option) {
@@ -67,6 +68,8 @@ class OpenshiftView extends React.Component {
           inventoryFilters
         },
         () => {
+          paginationHelpers.resetPage({ productId: routeDetail.pathParameter, viewId });
+
           store.dispatch({
             type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.UOM],
             viewId,
@@ -116,12 +119,7 @@ class OpenshiftView extends React.Component {
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: viewId })}
         </PageHeader>
         <PageToolbar>
-          <Toolbar
-            filterOptions={initialToolbarFilters}
-            productId={routeDetail.pathParameter}
-            query={toolbarQuery}
-            viewId={viewId}
-          />
+          <Toolbar filterOptions={initialToolbarFilters} query={toolbarQuery} viewId={viewId} />
         </PageToolbar>
         <PageSection>
           {(isC3 && (

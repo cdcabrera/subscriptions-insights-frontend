@@ -53,12 +53,7 @@ class RhelView extends React.Component {
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: viewId })}
         </PageHeader>
         <PageToolbar>
-          <Toolbar
-            filterOptions={initialToolbarFilters}
-            productId={routeDetail.pathParameter}
-            query={toolbarQuery}
-            viewId={viewId}
-          />
+          <Toolbar filterOptions={initialToolbarFilters} query={toolbarQuery} viewId={viewId} />
         </PageToolbar>
         <PageSection>
           {(isC3 && (

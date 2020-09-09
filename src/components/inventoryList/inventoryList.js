@@ -5,12 +5,13 @@ import { TableVariant } from '@patternfly/react-table';
 import { Card, CardActions, CardBody, CardFooter, CardHeader, CardTitle, Title } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/cjs/TableToolbar';
 import { helpers } from '../../common';
-import { connect, reduxActions, reduxSelectors } from '../../redux';
+import {connect, reduxActions, reduxSelectors, reduxTypes, store} from '../../redux';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
 import GuestsList from '../guestsList/guestsList';
 import { inventoryListHelpers } from './inventoryListHelpers';
 import Pagination from '../pagination/pagination';
+import PaginationHelpers from '../pagination/paginationHelpers';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 
 /**
@@ -43,6 +44,30 @@ class InventoryList extends React.Component {
     if (!isDisabled && productId) {
       getHostsInventory(productId, query);
     }
+  };
+
+  onResetPaging = () => {
+    /*
+    const { productId, viewId } = this.props;
+
+    const updatedActions = [
+      {
+        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+        viewId: productId,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
+      }
+    ];
+
+    if (viewId && productId !== viewId) {
+      updatedActions.push({
+        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+        viewId,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
+      });
+    }
+
+    store.dispatch(updatedActions);
+    */
   };
 
   /**
@@ -106,6 +131,7 @@ class InventoryList extends React.Component {
       perPageDefault,
       productId,
       query,
+      resetPaging,
       viewId
     } = this.props;
 
@@ -115,6 +141,8 @@ class InventoryList extends React.Component {
 
     const updatedPerPage = query?.[RHSM_API_QUERY_TYPES.LIMIT] || perPageDefault;
     const loaderPerPage = updatedPerPage / 2;
+
+
 
     return (
       <Card className="curiosity-inventory-card">
@@ -129,9 +157,9 @@ class InventoryList extends React.Component {
               isCompact
               isDisabled={pending || error}
               itemCount={itemCount}
+              itemsPerPageDefault={updatedPerPage}
               productId={productId}
               viewId={viewId}
-              itemsPerPageDefault={updatedPerPage}
             />
           </CardActions>
         </CardHeader>
@@ -154,12 +182,12 @@ class InventoryList extends React.Component {
         <CardFooter className={(error && 'blur') || ''}>
           <TableToolbar isFooter>
             <Pagination
+              dropDirection="up"
               isDisabled={pending || error}
               itemCount={itemCount}
+              perPageDefault={updatedPerPage}
               productId={productId}
               viewId={viewId}
-              perPageDefault={updatedPerPage}
-              dropDirection="up"
             />
           </TableToolbar>
         </CardFooter>
@@ -200,10 +228,12 @@ InventoryList.propTypes = {
   isDisabled: PropTypes.bool,
   itemCount: PropTypes.number,
   listData: PropTypes.array,
+  pagingQuery: PropTypes.object,
   pending: PropTypes.bool,
   productId: PropTypes.string.isRequired,
   perPageDefault: PropTypes.number,
   query: PropTypes.object.isRequired,
+  resetPaging: PropTypes.bool,
   viewId: PropTypes.string
 };
 
@@ -222,8 +252,10 @@ InventoryList.defaultProps = {
   isDisabled: helpers.UI_DISABLED_TABLE,
   itemCount: 0,
   listData: [],
+  pagingQuery: {},
   pending: false,
   perPageDefault: 10,
+  resetPaging: false,
   viewId: 'inventoryList'
 };
 
