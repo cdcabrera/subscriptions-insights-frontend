@@ -18,12 +18,14 @@ import { translate } from '../i18n/i18n';
 class Authentication extends Component {
   appName = routerTypes.appName;
 
+  isAuthorized = false;
+
   removeListeners = helpers.noop;
 
   async componentDidMount() {
-    const { authorizeUser, history, initializeChrome, onNavigation, setAppName, session } = this.props;
+    const { authorizeUser, history, initializeChrome, onNavigation, setAppName } = this.props;
 
-    if (!session.authorized) {
+    if (!this.isAuthorized) {
       await authorizeUser();
     }
 
@@ -53,6 +55,7 @@ class Authentication extends Component {
    */
   render() {
     const { children, session, t } = this.props;
+    const { operation, resource } = session.permissions[this.appName] || {};
 
     if (helpers.UI_DISABLED) {
       return (
@@ -62,7 +65,8 @@ class Authentication extends Component {
       );
     }
 
-    if (session.authorized) {
+    if (operation === '*' && resource === '*') {
+      this.isAuthorized = true;
       return <React.Fragment>{children}</React.Fragment>;
     }
 
@@ -105,11 +109,14 @@ Authentication.propTypes = {
   onNavigation: PropTypes.func,
   setAppName: PropTypes.func,
   session: PropTypes.shape({
-    authorized: PropTypes.bool,
-    error: PropTypes.bool,
     errorCodes: PropTypes.arrayOf(PropTypes.string),
-    errorMessage: PropTypes.string,
     pending: PropTypes.bool,
+    permissions: PropTypes.shape({
+      [routerTypes.appName]: PropTypes.shape({
+        resource: PropTypes.string,
+        operation: PropTypes.string
+      })
+    }),
     status: PropTypes.number
   }),
   t: PropTypes.func
@@ -119,8 +126,8 @@ Authentication.propTypes = {
  * Default props.
  *
  * @type {{authorizeUser: Function, onNavigation: Function, setAppName: Function, t: translate,
- *     initializeChrome: Function, session: {authorized: boolean, errorCodes: Array, pending: boolean,
- *     errorMessage: string, error: boolean, status: null}}}
+ *     initializeChrome: Function, session: {permissions: object, errorCodes: Array, pending: boolean,
+ *     status: number}}}
  */
 Authentication.defaultProps = {
   authorizeUser: helpers.noop,
@@ -128,11 +135,9 @@ Authentication.defaultProps = {
   onNavigation: helpers.noop,
   setAppName: helpers.noop,
   session: {
-    authorized: false,
-    error: false,
     errorCodes: [],
-    errorMessage: '',
     pending: false,
+    permissions: {},
     status: null
   },
   t: translate

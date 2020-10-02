@@ -19,10 +19,14 @@ exports[`Authentication Component should render a non-connected component author
   onNavigation={[Function]}
   session={
     Object {
-      "authorized": true,
       "error": false,
-      "errorMessage": "",
       "pending": false,
+      "permissions": Object {
+        "subscriptions": Object {
+          "operation": "*",
+          "resource": "*",
+        },
+      },
     }
   }
   setAppName={[Function]}
@@ -49,10 +53,9 @@ exports[`Authentication Component should render a non-connected component error:
   onNavigation={[Function]}
   session={
     Object {
-      "authorized": false,
       "error": true,
-      "errorMessage": "Authentication credentials were not provided.",
       "pending": false,
+      "permissions": Object {},
     }
   }
   setAppName={[Function]}

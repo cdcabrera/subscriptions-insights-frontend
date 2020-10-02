@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import _get from 'lodash/get';
 import { platformApiTypes } from '../../types/platformApiTypes';
 import { helpers } from '../../common/helpers';
 
@@ -17,58 +16,43 @@ const statePropsFilter = state => ({
 /**
  * Create selector, transform combined state, props into a consumable graph/charting object.
  *
- * @type {{session: {entitled: boolean, permissions: Array, authorized: boolean, admin: boolean, error: boolean}}}
+ * @type {{session: {entitled: boolean, permissions: object, admin: boolean, error: boolean}}}
  */
 const selector = createSelector([statePropsFilter], response => {
   const { error = false, fulfilled = false, data = {}, ...rest } = response || {};
   const updatedSession = {
     ...rest,
     admin: false,
-    authorized: false,
     entitled: false,
     error,
-    permissions: []
+    permissions: {}
   };
 
   if (!error && fulfilled) {
-    const { user = {}, permissions = [] } = data;
+    const { user = {}, permissions: responsePermissions = [] } = data;
 
-    const admin = _get(
-      user,
-      [
-        platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY,
-        platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_TYPES.USER,
-        platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_USER_TYPES.ORG_ADMIN
-      ],
-      false
-    );
+    const admin =
+      user?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY]?.[
+        platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_TYPES.USER
+      ]?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_USER_TYPES.ORG_ADMIN] || false;
 
-    const entitled = _get(
-      user,
-      [
-        platformApiTypes.PLATFORM_API_RESPONSE_USER_ENTITLEMENTS,
-        helpers.UI_NAME,
+    const entitled =
+      user?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_ENTITLEMENTS]?.[helpers.UI_NAME]?.[
         platformApiTypes.PLATFORM_API_RESPONSE_USER_ENTITLEMENTS_APP_TYPES.ENTITLED
-      ],
-      false
-    );
+      ] || false;
 
-    const subscriptionPermissions = permissions.map(value => {
-      const src = value[platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION];
-      const [app, resource, operation] = src.split(':');
-      return {
-        permission: { app, resource, operation, src },
-        definitions: value[platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.RESOURCE_DEFS]
-      };
-    });
+    responsePermissions.forEach(
+      ({
+        [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: permission,
+        [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.RESOURCE_DEFS]: definitions = []
+      }) => {
+        const [app = '', resource, operation] = permission?.split(':') || [];
+        updatedSession.permissions[app] = { definitions, operation, resource };
+      }
+    );
 
     updatedSession.admin = admin;
     updatedSession.entitled = entitled;
-    updatedSession.permissions = subscriptionPermissions;
-
-    if (subscriptionPermissions.find(({ permission }) => permission.resource === '*' && permission.operation === '*')) {
-      updatedSession.authorized = true;
-    }
   }
 
   return { session: updatedSession };
