@@ -55,7 +55,7 @@ class Authentication extends Component {
    */
   render() {
     const { children, session, t } = this.props;
-    const { operation, resource } = session.permissions[this.appName] || {};
+    const { authorized } = session.permissions[this.appName] || {};
 
     if (helpers.UI_DISABLED) {
       return (
@@ -65,7 +65,7 @@ class Authentication extends Component {
       );
     }
 
-    if (operation === '*' && resource === '*') {
+    if (authorized) {
       this.isAuthorized = true;
       return <React.Fragment>{children}</React.Fragment>;
     }

@@ -92,10 +92,16 @@ describe('UserSelectors', () => {
                 [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: `${helpers.UI_NAME}:*:*`
               },
               {
+                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: `${helpers.UI_NAME}:*:read`
+              },
+              {
+                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: `${helpers.UI_NAME}:*:write`
+              },
+              {
                 [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: 'lorem:*:read'
               },
               {
-                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: 'ipsum:*:write'
+                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: 'ipsum:*:read'
               }
             ]
           }
@@ -133,10 +139,16 @@ describe('UserSelectors', () => {
                 [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: `${helpers.UI_NAME}:*:*`
               },
               {
+                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: `${helpers.UI_NAME}:*:read`
+              },
+              {
+                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: `${helpers.UI_NAME}:*:write`
+              },
+              {
                 [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: 'lorem:*:read'
               },
               {
-                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: 'ipsum:*:write'
+                [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: 'ipsum:*:read'
               }
             ]
           }

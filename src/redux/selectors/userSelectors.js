@@ -47,7 +47,19 @@ const selector = createSelector([statePropsFilter], response => {
         [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.RESOURCE_DEFS]: definitions = []
       }) => {
         const [app = '', resource, operation] = permission?.split(':') || [];
-        updatedSession.permissions[app] = { definitions, operation, resource };
+
+        if (!updatedSession.permissions[app]) {
+          updatedSession.permissions[app] = {
+            authorized: false,
+            permissions: []
+          };
+        }
+
+        if (resource === '*' && operation === '*') {
+          updatedSession.permissions[app].authorized = true;
+        }
+
+        updatedSession.permissions[app].permissions.push({ definitions, operation, resource });
       }
     );
 
