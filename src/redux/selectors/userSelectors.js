@@ -50,16 +50,20 @@ const selector = createSelector([statePropsFilter], response => {
 
         if (!updatedSession.permissions[app]) {
           updatedSession.permissions[app] = {
-            authorized: false,
-            permissions: []
+            all: false,
+            resources: {}
           };
         }
 
         if (resource === '*' && operation === '*') {
-          updatedSession.permissions[app].authorized = true;
+          updatedSession.permissions[app].all = true;
         }
 
-        updatedSession.permissions[app].permissions.push({ definitions, operation, resource });
+        if (!updatedSession.permissions[app].resources[resource]) {
+          updatedSession.permissions[app].resources[resource] = {};
+        }
+
+        updatedSession.permissions[app].resources[resource][operation] = definitions;
       }
     );
 

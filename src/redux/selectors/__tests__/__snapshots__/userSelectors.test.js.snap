@@ -46,44 +46,30 @@ Object {
     "error": false,
     "permissions": Object {
       "ipsum": Object {
-        "authorized": false,
-        "permissions": Array [
-          Object {
-            "definitions": Array [],
-            "operation": "read",
-            "resource": "*",
+        "all": false,
+        "resources": Object {
+          "*": Object {
+            "read": Array [],
           },
-        ],
+        },
       },
       "lorem": Object {
-        "authorized": false,
-        "permissions": Array [
-          Object {
-            "definitions": Array [],
-            "operation": "read",
-            "resource": "*",
+        "all": false,
+        "resources": Object {
+          "*": Object {
+            "read": Array [],
           },
-        ],
+        },
       },
       "subscriptions": Object {
-        "authorized": true,
-        "permissions": Array [
-          Object {
-            "definitions": Array [],
-            "operation": "*",
-            "resource": "*",
+        "all": true,
+        "resources": Object {
+          "*": Object {
+            "*": Array [],
+            "read": Array [],
+            "write": Array [],
           },
-          Object {
-            "definitions": Array [],
-            "operation": "read",
-            "resource": "*",
-          },
-          Object {
-            "definitions": Array [],
-            "operation": "write",
-            "resource": "*",
-          },
-        ],
+        },
       },
     },
   },

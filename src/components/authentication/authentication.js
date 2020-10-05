@@ -18,14 +18,13 @@ import { translate } from '../i18n/i18n';
 class Authentication extends Component {
   appName = routerTypes.appName;
 
-  isAuthorized = false;
-
   removeListeners = helpers.noop;
 
   async componentDidMount() {
-    const { authorizeUser, history, initializeChrome, onNavigation, setAppName } = this.props;
+    const { authorizeUser, history, initializeChrome, onNavigation, session, setAppName } = this.props;
+    const { all: authorized } = session.permissions[this.appName] || {};
 
-    if (!this.isAuthorized) {
+    if (!authorized) {
       await authorizeUser();
     }
 
@@ -55,7 +54,7 @@ class Authentication extends Component {
    */
   render() {
     const { children, session, t } = this.props;
-    const { authorized } = session.permissions[this.appName] || {};
+    const { all: authorized } = session.permissions[this.appName] || {};
 
     if (helpers.UI_DISABLED) {
       return (
@@ -66,7 +65,6 @@ class Authentication extends Component {
     }
 
     if (authorized) {
-      this.isAuthorized = true;
       return <React.Fragment>{children}</React.Fragment>;
     }
 

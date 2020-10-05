@@ -151,8 +151,12 @@ describe('Authentication Component', () => {
       session: {
         permissions: {
           [helpers.UI_NAME]: {
-            operation: '*',
-            resource: '*'
+            all: true,
+            resources: {
+              '*': {
+                '*': []
+              }
+            }
           }
         },
         error: false,
