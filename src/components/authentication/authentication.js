@@ -111,8 +111,7 @@ Authentication.propTypes = {
     pending: PropTypes.bool,
     permissions: PropTypes.shape({
       [routerTypes.appName]: PropTypes.shape({
-        resource: PropTypes.string,
-        operation: PropTypes.string
+        all: PropTypes.bool.isRequired
       })
     }),
     status: PropTypes.number
