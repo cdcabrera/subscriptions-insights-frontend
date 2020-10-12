@@ -1638,10 +1638,10 @@
     commander ">=2.20.0"
     react-content-loader ">=3.4.1"
 
-"@redhat-cloud-services/frontend-components@2.4.5":
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components/-/frontend-components-2.4.5.tgz#ab011138c3358af7783bffa97cca9dced1c1695f"
-  integrity sha512-1d4cKj9LGgVt8+R885MZec25qMNQW11LnW32tmLbLTqLFUOLp1zsAqXlh8QU27TapAuun9ot0SshyhrC5cnHJg==
+"@redhat-cloud-services/frontend-components@2.4.10":
+  version "2.4.10"
+  resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components/-/frontend-components-2.4.10.tgz#0dab9bb807eb08ec2e8ee826451cc7024d78edc3"
+  integrity sha512-zvGRR9WyecmcXm/hNOjPOjOZ2jpB6YN75XuStRRv4/gD61vcHdFxMt7OQlLm/czKQqYoFmCSeqC/Fz7DQT7V9g==
   dependencies:
     "@redhat-cloud-services/frontend-components-utilities" "*"
     sanitize-html "^1.25.0"

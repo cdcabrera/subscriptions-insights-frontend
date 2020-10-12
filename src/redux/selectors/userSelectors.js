@@ -1,5 +1,10 @@
 import { createSelector } from 'reselect';
-import { platformApiTypes } from '../../types/platformApiTypes';
+import {
+  platformApiTypes,
+  PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES as APP_TYPES,
+  PLATFORM_API_RESPONSE_USER_PERMISSION_RESOURCE_TYPES as RESOURCE_TYPES,
+  PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES as OPERATION_TYPES
+} from '../../types/platformApiTypes';
 import { helpers } from '../../common/helpers';
 
 /**
@@ -25,22 +30,27 @@ const selector = createSelector([statePropsFilter], response => {
     admin: false,
     entitled: false,
     error,
+    authorized: {
+      [helpers.UI_NAME]: false,
+      inventory: false
+    },
     permissions: {}
   };
 
   if (!error && fulfilled) {
     const { user = {}, permissions: responsePermissions = [] } = data;
 
-    const admin =
+    updatedSession.admin =
       user?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY]?.[
         platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_TYPES.USER
       ]?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_USER_TYPES.ORG_ADMIN] || false;
 
-    const entitled =
-      user?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_ENTITLEMENTS]?.[helpers.UI_NAME]?.[
+    updatedSession.entitled =
+      user?.[platformApiTypes.PLATFORM_API_RESPONSE_USER_ENTITLEMENTS]?.[APP_TYPES.SUBSCRIPTIONS]?.[
         platformApiTypes.PLATFORM_API_RESPONSE_USER_ENTITLEMENTS_APP_TYPES.ENTITLED
       ] || false;
 
+    // All permissions breakdown
     responsePermissions.forEach(
       ({
         [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES.PERMISSION]: permission,
@@ -55,7 +65,7 @@ const selector = createSelector([statePropsFilter], response => {
           };
         }
 
-        if (resource === '*' && operation === '*') {
+        if (resource === RESOURCE_TYPES.ALL && operation === OPERATION_TYPES.ALL) {
           updatedSession.permissions[app].all = true;
         }
 
@@ -67,8 +77,13 @@ const selector = createSelector([statePropsFilter], response => {
       }
     );
 
-    updatedSession.admin = admin;
-    updatedSession.entitled = entitled;
+    // Alias specific app permissions checks
+    updatedSession.authorized[helpers.UI_NAME] = updatedSession.permissions[APP_TYPES.SUBSCRIPTIONS]?.all || false;
+
+    updatedSession.authorized.inventory =
+      updatedSession.permissions[APP_TYPES.INVENTORY]?.all ||
+      updatedSession.permissions[APP_TYPES.INVENTORY]?.resources?.[RESOURCE_TYPES.ALL]?.[OPERATION_TYPES.READ] ||
+      false;
   }
 
   return { session: updatedSession };

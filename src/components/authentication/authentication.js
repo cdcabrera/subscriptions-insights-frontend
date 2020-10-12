@@ -22,7 +22,7 @@ class Authentication extends Component {
 
   async componentDidMount() {
     const { authorizeUser, history, initializeChrome, onNavigation, session, setAppName } = this.props;
-    const { all: authorized } = session.permissions[this.appName] || {};
+    const { subscriptions: authorized } = session.authorized || {};
 
     if (!authorized) {
       await authorizeUser();
@@ -54,7 +54,7 @@ class Authentication extends Component {
    */
   render() {
     const { children, session, t } = this.props;
-    const { all: authorized } = session.permissions[this.appName] || {};
+    const { subscriptions: authorized } = session.authorized || {};
 
     if (helpers.UI_DISABLED) {
       return (
@@ -107,13 +107,11 @@ Authentication.propTypes = {
   onNavigation: PropTypes.func,
   setAppName: PropTypes.func,
   session: PropTypes.shape({
+    authorized: PropTypes.shape({
+      [routerTypes.appName]: PropTypes.bool.isRequired
+    }),
     errorCodes: PropTypes.arrayOf(PropTypes.string),
     pending: PropTypes.bool,
-    permissions: PropTypes.shape({
-      [routerTypes.appName]: PropTypes.shape({
-        all: PropTypes.bool.isRequired
-      })
-    }),
     status: PropTypes.number
   }),
   t: PropTypes.func

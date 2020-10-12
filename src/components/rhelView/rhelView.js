@@ -209,24 +209,30 @@ RhelView.defaultProps = {
   initialInventoryFilters: [
     {
       id: 'displayName',
-      cell: obj => {
+      cell: (obj, session) => {
+        console.log('displayName', session);
         const { displayName, inventoryId } = obj;
+        const { inventory: authorized } = session.authorized || {};
 
         if (!inventoryId?.value) {
           return displayName?.value;
         }
 
-        return (
-          <Button
-            isInline
-            component="a"
-            variant="link"
-            target="_blank"
-            href={`/insights/inventory/${inventoryId.value}/`}
-          >
-            {displayName.value || inventoryId.value}
-          </Button>
-        );
+        if (authorized) {
+          return (
+            <Button
+              isInline
+              component="a"
+              variant="link"
+              target="_blank"
+              href={`/insights/inventory/${inventoryId.value}/`}
+            >
+              {displayName.value || inventoryId.value}
+            </Button>
+          );
+        }
+
+        return displayName.value || inventoryId.value;
       },
       isSortable: true
     },

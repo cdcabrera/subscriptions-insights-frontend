@@ -310,7 +310,8 @@ OpenshiftView.defaultProps = {
     },
     {
       id: 'hardwareType',
-      cell: obj => {
+      cell: (obj, session) => {
+        console.log('hardwareType', session);
         const { hardwareType, numberOfGuests } = obj;
         return (
           <React.Fragment>

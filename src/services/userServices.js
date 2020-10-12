@@ -23,6 +23,7 @@ const authorizeUser = async () => {
   }
 
   if (_isPlainObject(userData) && Object.keys(userData).length) {
+    console.log('TEST USER SERVICES >>>');
     return Promise.resolve({ data: { user: userData, permissions: userPermissions || [] }, message, status: 200 });
   }
 

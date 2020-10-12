@@ -1,6 +1,10 @@
 import _set from 'lodash/set';
 import { helpers } from '../common';
-import { platformApiTypes } from '../types';
+import {
+  platformApiTypes,
+  PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as PERMISSION_TYPES,
+  PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES as APP_TYPES
+} from '../types/platformApiTypes';
 
 /**
  * Basic user authentication.
@@ -42,11 +46,14 @@ const getUserPermissions = () => {
   const { insights } = window;
   try {
     return (
-      (helpers.DEV_MODE &&
-        [helpers.UI_NAME, 'inventory'].map(value => ({
-          [platformApiTypes.PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES
-            .PERMISSION]: `${value}:${process.env.REACT_APP_DEBUG_PERMISSION_RESOURCE}:${process.env.REACT_APP_DEBUG_PERMISSION_OPERATION}`
-        }))) ||
+      (helpers.DEV_MODE && [
+        {
+          [PERMISSION_TYPES.PERMISSION]: `${APP_TYPES.SUBSCRIPTIONS}:${process.env.REACT_APP_DEBUG_SUBSCRIPTIONS_PERMISSION_RESOURCE}:${process.env.REACT_APP_DEBUG_SUBSCRIPTIONS_PERMISSION_OPERATION}`
+        },
+        {
+          [PERMISSION_TYPES.PERMISSION]: `${APP_TYPES.INVENTORY}:${process.env.REACT_APP_DEBUG_INVENTORY_PERMISSION_RESOURCE}:${process.env.REACT_APP_DEBUG_INVENTORY_PERMISSION_OPERATION}`
+        }
+      ]) ||
       insights.chrome.getUserPermissions()
     );
   } catch (e) {

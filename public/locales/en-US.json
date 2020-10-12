@@ -42,6 +42,8 @@
   },
   "curiosity-inventory": {
     "cardHeading": "Current systems",
+    "noAccessTitle": "Inventory",
+    "noAccessMessage": "Your organization administrator must grant you inventory access to view your systems.",
     "tableAriaLabel": "{{appName}} systems inventory table.",
     "tableSummary": "A generated table with one level of column headers.",
     "tableEmptyInventoryTitle": "No results found",
