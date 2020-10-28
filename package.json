@@ -121,8 +121,8 @@
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-i18next": "^11.7.3",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
@@ -162,5 +162,9 @@
     "standard-version": "^9.0.0",
     "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"
+  },
+  "resolutions": {
+    "**/react": "16.14.0",
+    "**/react-dom": "16.14.0"
   }
 }
