@@ -358,12 +358,14 @@ OpenshiftView.defaultProps = {
       id: 'sockets',
       isOptional: true,
       isSortable: true,
+      isWrappable: true,
       cellWidth: 15
     },
     {
       id: 'cores',
       isOptional: true,
       isSortable: true,
+      isWrappable: true,
       cellWidth: 15
     },
     {

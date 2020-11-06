@@ -279,6 +279,7 @@ RhelView.defaultProps = {
     {
       id: 'sockets',
       isSortable: true,
+      isWrappable: true,
       cellWidth: 15
     },
     {
