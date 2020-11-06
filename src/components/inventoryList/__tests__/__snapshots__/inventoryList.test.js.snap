@@ -177,17 +177,13 @@ exports[`InventoryList Component should handle variations in data: filtered data
             Array [
               Object {
                 "cells": Array [
-                  Object {
-                    "title": "ipsum",
-                  },
+                  "ipsum",
                 ],
                 "expandedContent": false,
               },
               Object {
                 "cells": Array [
-                  Object {
-                    "title": "sit",
-                  },
+                  "sit",
                 ],
                 "expandedContent": false,
               },

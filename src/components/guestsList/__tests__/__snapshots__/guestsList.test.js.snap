@@ -169,16 +169,12 @@ exports[`GuestsList Component should handle variations in data: filtered data 1`
           Array [
             Object {
               "cells": Array [
-                Object {
-                  "title": "ipsum",
-                },
+                "ipsum",
               ],
             },
             Object {
               "cells": Array [
-                Object {
-                  "title": "amet",
-                },
+                "amet",
               ],
             },
           ]

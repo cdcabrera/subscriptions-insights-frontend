@@ -307,17 +307,11 @@ exports[`OpenshiftView Component should have a fallback title: title 1`] = `
 exports[`OpenshiftView Component should have default props that set product configuration: filteredGuestsData results 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": "lorem",
-    },
-    Object {
-      "title": "lorem inventory id",
-    },
-    Object {
-      "title": <DateFormat
-        date="lorem date obj"
-      />,
-    },
+    "lorem",
+    "lorem inventory id",
+    <DateFormat
+      date="lorem date obj"
+    />,
   ],
   "columnHeaders": Array [
     Object {
@@ -365,25 +359,19 @@ Object {
 exports[`OpenshiftView Component should have default props that set product configuration: filteredGuestsData results, authorized 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": <Button
-        component="a"
-        href="/insights/inventory/lorem inventory id/"
-        isInline={true}
-        target="_blank"
-        variant="link"
-      >
-        lorem
-      </Button>,
-    },
-    Object {
-      "title": "lorem inventory id",
-    },
-    Object {
-      "title": <DateFormat
-        date="lorem date obj"
-      />,
-    },
+    <Button
+      component="a"
+      href="/insights/inventory/lorem inventory id/"
+      isInline={true}
+      target="_blank"
+      variant="link"
+    >
+      lorem
+    </Button>,
+    "lorem inventory id",
+    <DateFormat
+      date="lorem date obj"
+    />,
   ],
   "columnHeaders": Array [
     Object {
@@ -431,31 +419,21 @@ Object {
 exports[`OpenshiftView Component should have default props that set product configuration: filteredInventoryData results 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": <React.Fragment>
-        lorem
-         
-        t(curiosity-inventory.label, {"context":"numberOfGuests","count":3}, [object Object])
-      </React.Fragment>,
-    },
-    Object {
-      "title": <React.Fragment>
-        t(curiosity-inventory.measurementType, {"context":null})
-         
-        
-      </React.Fragment>,
-    },
-    Object {
-      "title": 10,
-    },
-    Object {
-      "title": 12,
-    },
-    Object {
-      "title": <DateFormat
-        date="lorem date obj"
-      />,
-    },
+    <React.Fragment>
+      lorem
+       
+      t(curiosity-inventory.label, {"context":"numberOfGuests","count":3}, [object Object])
+    </React.Fragment>,
+    <React.Fragment>
+      t(curiosity-inventory.measurementType, {"context":null})
+       
+      
+    </React.Fragment>,
+    10,
+    12,
+    <DateFormat
+      date="lorem date obj"
+    />,
   ],
   "columnHeaders": Array [
     Object {
@@ -531,37 +509,27 @@ Object {
 exports[`OpenshiftView Component should have default props that set product configuration: filteredInventoryData results, authorized 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": <Button
-        component="a"
-        href="/insights/inventory/lorem inventory id/"
-        isInline={true}
-        target="_blank"
-        variant="link"
-      >
-        lorem
-         
-        t(curiosity-inventory.label, {"context":"numberOfGuests","count":3}, [object Object])
-      </Button>,
-    },
-    Object {
-      "title": <React.Fragment>
-        t(curiosity-inventory.measurementType, {"context":null})
-         
-        
-      </React.Fragment>,
-    },
-    Object {
-      "title": 10,
-    },
-    Object {
-      "title": 12,
-    },
-    Object {
-      "title": <DateFormat
-        date="lorem date obj"
-      />,
-    },
+    <Button
+      component="a"
+      href="/insights/inventory/lorem inventory id/"
+      isInline={true}
+      target="_blank"
+      variant="link"
+    >
+      lorem
+       
+      t(curiosity-inventory.label, {"context":"numberOfGuests","count":3}, [object Object])
+    </Button>,
+    <React.Fragment>
+      t(curiosity-inventory.measurementType, {"context":null})
+       
+      
+    </React.Fragment>,
+    10,
+    12,
+    <DateFormat
+      date="lorem date obj"
+    />,
   ],
   "columnHeaders": Array [
     Object {

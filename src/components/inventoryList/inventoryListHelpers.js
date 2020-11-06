@@ -164,12 +164,6 @@ const parseRowCellsListData = ({ filters = [], cellData = {}, session = {} }) =>
         cellUpdated = (typeof cell === 'function' && cell({ ...allCells }, { ...session })) || cell;
       }
 
-      if (typeof cellUpdated === 'string' || typeof cellUpdated === 'number' || React.isValidElement(cellUpdated)) {
-        cellUpdated = {
-          title: cellUpdated
-        };
-      }
-
       updatedColumnHeaders.push(headerUpdated);
       updatedCells.push(cellUpdated);
     });

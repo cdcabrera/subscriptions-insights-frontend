@@ -87,9 +87,7 @@ Object {
 exports[`InventoryListHelpers parseRowCellsListData should parse and return formatted/filtered table cells.: custom callback data 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": "ipsum/sit",
-    },
+    "ipsum/sit",
   ],
   "columnHeaders": Array [
     Object {
@@ -142,9 +140,7 @@ Object {
 exports[`InventoryListHelpers parseRowCellsListData should parse and return formatted/filtered table cells.: custom header data 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": "ipsum",
-    },
+    "ipsum",
   ],
   "columnHeaders": Array [
     Object {
@@ -171,9 +167,7 @@ Object {
 exports[`InventoryListHelpers parseRowCellsListData should parse and return formatted/filtered table cells.: filtered data 1`] = `
 Object {
   "cells": Array [
-    Object {
-      "title": "ipsum",
-    },
+    "ipsum",
   ],
   "columnHeaders": Array [
     Object {
