@@ -159,7 +159,8 @@ class InventoryList extends React.Component {
       perPageDefault,
       productId,
       query,
-      viewId
+      viewId,
+      fulfilled
     } = this.props;
 
     if (isDisabled) {
@@ -167,6 +168,15 @@ class InventoryList extends React.Component {
     }
 
     const updatedPerPage = query?.[RHSM_API_QUERY_TYPES.LIMIT] || perPageDefault;
+    // const isRefreshKey = (itemCount < updatedPerPage && 'test') || '';
+    // the trick may be to calculate the last page of results and set the paging accordingly
+    // the first page can still be force refreshed... if the results are less than perpage
+    const contentKey =
+      // (!pending && itemCount < updatedPerPage && `bodyMinHeight-${updatedPerPage}-resize`) ||
+      (fulfilled === true && itemCount < updatedPerPage && `bodyMinHeight-${updatedPerPage}-resize`) ||
+      `bodyMinHeight-${updatedPerPage}`;
+
+    console.log('>>>', contentKey, itemCount, updatedPerPage);
 
     return (
       <Card className="curiosity-inventory-card">
@@ -189,7 +199,7 @@ class InventoryList extends React.Component {
             </CardActions>
           </CardHeader>
         </MinHeight>
-        <MinHeight key={`bodyMinHeight-${updatedPerPage}`}>
+        <MinHeight key={contentKey}>
           <CardBody>
             <div className={(error && 'blur') || 'fadein'}>
               {pending && (
@@ -258,6 +268,7 @@ InventoryList.propTypes = {
       ])
     }).isRequired
   ),
+  fulfilled: PropTypes.bool,
   getHostsInventory: PropTypes.func,
   isDisabled: PropTypes.bool,
   itemCount: PropTypes.number,
@@ -282,6 +293,7 @@ InventoryList.defaultProps = {
   cardTitle: null,
   filterGuestsData: [],
   filterInventoryData: [],
+  fulfilled: false,
   getHostsInventory: helpers.noop,
   isDisabled: helpers.UI_DISABLED_TABLE,
   itemCount: 0,

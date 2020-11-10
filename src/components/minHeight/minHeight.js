@@ -20,15 +20,20 @@ class MinHeight extends React.Component {
   resizeObserver = helpers.noop;
 
   componentDidMount() {
+    const { autoUpdate } = this.props;
     this.setMinHeight();
-    this.setResizeObserver();
+
+    if (autoUpdate) {
+      this.setResizeObserver();
+    }
   }
 
   componentDidUpdate() {
     const { autoUpdate } = this.props;
 
     if (autoUpdate) {
-      this.setMinHeight();
+      // console.log('>>>', 'autoUpdate');
+      // this.setMinHeight();
     }
   }
 
