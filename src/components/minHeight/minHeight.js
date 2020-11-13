@@ -20,20 +20,19 @@ class MinHeight extends React.Component {
   resizeObserver = helpers.noop;
 
   componentDidMount() {
-    const { autoUpdate } = this.props;
+    const { updateOnResize } = this.props;
     this.setMinHeight();
 
-    if (autoUpdate) {
+    if (updateOnResize) {
       this.setResizeObserver();
     }
   }
 
   componentDidUpdate() {
-    const { autoUpdate } = this.props;
+    const { updateOnContent } = this.props;
 
-    if (autoUpdate) {
-      // console.log('>>>', 'autoUpdate');
-      // this.setMinHeight();
+    if (updateOnContent) {
+      this.setMinHeight();
     }
   }
 
@@ -59,26 +58,27 @@ class MinHeight extends React.Component {
   /**
    * Set minHeight on mount or update.
    *
-   * @param {boolean} resetMinHeight
+   * @param {boolean} reset
    */
-  setMinHeight(resetMinHeight) {
-    const { updatedMinHeight } = this;
+  setMinHeight(reset = false) {
     const { minHeight: overrideMinHeight } = this.props;
     const { current: domElement = {} } = this.containerRef;
     const { current: innerDomElement = {} } = this.innerContainerRef;
 
-    if (resetMinHeight && domElement.style) {
-      domElement.style.minHeight = innerDomElement?.clientHeight || 0;
-    }
+    if (domElement.style) {
+      let clientHeight;
 
-    const clientHeight = domElement?.clientHeight || 0;
+      if (reset) {
+        clientHeight = innerDomElement?.clientHeight || 0;
+      } else {
+        clientHeight = domElement?.clientHeight || 0;
+      }
 
-    if (clientHeight !== updatedMinHeight) {
-      this.updatedMinHeight = clientHeight;
-    }
+      if (overrideMinHeight > clientHeight) {
+        clientHeight = overrideMinHeight;
+      }
 
-    if (overrideMinHeight > this.updatedMinHeight) {
-      this.updatedMinHeight = overrideMinHeight;
+      domElement.style.minHeight = `${clientHeight}px`;
     }
   }
 
@@ -86,17 +86,8 @@ class MinHeight extends React.Component {
    * Set ResizeObserver for scenarios when min-height needs to be updated.
    */
   setResizeObserver() {
-    const containerElement = this.containerRef.current;
-    const { ResizeObserver } = window;
-
-    if (containerElement && ResizeObserver) {
-      const resizeObserver = new ResizeObserver(this.onResizeContainer);
-      resizeObserver.observe(containerElement);
-      this.resizeObserver = () => resizeObserver.unobserve(containerElement);
-    } else {
-      window.addEventListener('resize', this.onResizeContainer);
-      this.resizeObserver = () => window.removeEventListener('resize', this.onResizeContainer);
-    }
+    window.addEventListener('resize', this.onResizeContainer);
+    this.resizeObserver = () => window.removeEventListener('resize', this.onResizeContainer);
   }
 
   /**
@@ -105,11 +96,10 @@ class MinHeight extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { updatedMinHeight } = this;
     const { children } = this.props;
 
     return (
-      <div ref={this.containerRef} style={{ minHeight: updatedMinHeight }}>
+      <div className="curiosity-minheight" ref={this.containerRef}>
         <div ref={this.innerContainerRef}>{children}</div>
       </div>
     );
@@ -119,10 +109,11 @@ class MinHeight extends React.Component {
 /**
  * Prop types.
  *
- * @type {{minHeight: number, autoUpdate: boolean, children: Node}}
+ * @type {{minHeight: number, children: Node, updateOnContent: boolean, updateOnResize: boolean}}
  */
 MinHeight.propTypes = {
-  autoUpdate: PropTypes.bool,
+  updateOnContent: PropTypes.bool,
+  updateOnResize: PropTypes.bool,
   children: PropTypes.node.isRequired,
   minHeight: PropTypes.number
 };
@@ -130,10 +121,11 @@ MinHeight.propTypes = {
 /**
  * Default props.
  *
- * @type {{minHeight: number, autoUpdate: boolean}}
+ * @type {{minHeight: number, updateOnContent: boolean, updateOnResize: boolean}}
  */
 MinHeight.defaultProps = {
-  autoUpdate: false,
+  updateOnContent: false,
+  updateOnResize: true,
   minHeight: 0
 };
 
