@@ -21,7 +21,9 @@ class MinHeight extends React.Component {
 
   componentDidMount() {
     const { updateOnResize } = this.props;
-    this.setMinHeight();
+    window.setTimeout(() => {
+      this.setMinHeight();
+    });
 
     if (updateOnResize) {
       this.setResizeObserver();
@@ -32,7 +34,9 @@ class MinHeight extends React.Component {
     const { updateOnContent } = this.props;
 
     if (updateOnContent) {
-      this.setMinHeight();
+      window.setTimeout(() => {
+        this.setMinHeight();
+      });
     }
   }
 
