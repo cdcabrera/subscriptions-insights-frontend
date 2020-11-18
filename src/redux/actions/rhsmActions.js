@@ -6,11 +6,12 @@ import { rhsmServices } from '../../services/rhsmServices';
  *
  * @param {string} id
  * @param {object} query
+ * @param {string} type
  * @returns {Function}
  */
-const getReportsCapacity = (id = null, query = {}) => dispatch =>
+const getReportsCapacity = (id = null, query = {}, type = rhsmTypes.GET_REPORT_CAPACITY_RHSM) => dispatch =>
   dispatch({
-    type: rhsmTypes.GET_REPORT_CAPACITY_RHSM,
+    type,
     payload: Promise.all([rhsmServices.getGraphReports(id, query), rhsmServices.getGraphCapacity(id, query)]),
     meta: {
       id,
@@ -26,16 +27,8 @@ const getReportsCapacity = (id = null, query = {}) => dispatch =>
  * @param {object} query
  * @returns {Function}
  */
-const getGraphReportsCapacity = (id = null, query = {}) => dispatch =>
-  dispatch({
-    type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM,
-    payload: Promise.all([rhsmServices.getGraphReports(id, query), rhsmServices.getGraphCapacity(id, query)]),
-    meta: {
-      id,
-      query,
-      notifications: {}
-    }
-  });
+const getGraphReportsCapacity = (id = null, query = {}) =>
+  getReportsCapacity(id, query, rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM);
 
 /**
  * Get a hosts response listing from RHSM subscriptions.

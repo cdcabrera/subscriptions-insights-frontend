@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector as reselectCreateSelector } from 'reselect';
 import moment from 'moment';
 import _isEqual from 'lodash/isEqual';
 import _camelCase from 'lodash/camelCase';
@@ -48,11 +48,13 @@ const queryFilter = (state, props = {}) => {
 };
 
 /**
- * Create selector, transform combined state, props into a consumable graph/charting object.
+ * Selector callback, parse data.
  *
- * @type {{pending: boolean, fulfilled: boolean, graphData: object, error: boolean, status: (*|number)}}
+ * @param {object} response
+ * @param {object} query
+ * @returns {{pending: (*|boolean), query: object, fulfilled: boolean, graphData: object, error: (*|boolean), status: *}}
  */
-const selector = createSelector([statePropsFilter, queryFilter], (response, query = {}) => {
+const selector = (response, query = {}) => {
   const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
 
   const updatedResponseData = {
@@ -172,7 +174,14 @@ const selector = createSelector([statePropsFilter, queryFilter], (response, quer
   }
 
   return updatedResponseData;
-});
+};
+
+/**
+ * Create selector, transform combined state, props into a consumable graph/charting object.
+ *
+ * @type {{pending: boolean, fulfilled: boolean, graphData: object, error: boolean, status: (*|number)}}
+ */
+const createSelector = reselectCreateSelector([statePropsFilter, queryFilter], selector);
 
 /**
  * Expose selector instance. For scenarios where a selector is reused across component instances.
@@ -181,12 +190,15 @@ const selector = createSelector([statePropsFilter, queryFilter], (response, quer
  * @returns {{pending: boolean, fulfilled: boolean, graphData: object, error: boolean, status: (*|number)}}
  */
 const makeSelector = defaultProps => (state, props) => ({
-  ...selector(state, props, defaultProps)
+  ...createSelector(state, props, defaultProps)
 });
 
 const graphCardSelectors = {
-  graphCard: selector,
+  statePropsFilter,
+  queryFilter,
+  selector,
+  graphCard: createSelector,
   makeGraphCard: makeSelector
 };
 
-export { graphCardSelectors as default, graphCardSelectors, selector, makeSelector };
+export { graphCardSelectors as default, graphCardSelectors, statePropsFilter, queryFilter, selector, makeSelector };
