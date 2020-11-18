@@ -10,7 +10,7 @@ import { queryFilter as graphCardQueryFilter, selector as graphCardSelector } fr
  * @returns {object}
  */
 const statePropsFilter = (state, props = {}) => ({
-  ...state.dailGraph?.reportCapacity?.[props.productId],
+  ...state.dailyGraph?.reportCapacity?.[props.productId],
   ...{
     viewId: props.viewId,
     productId: props.productId
