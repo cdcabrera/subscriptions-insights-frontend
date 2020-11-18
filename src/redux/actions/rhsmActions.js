@@ -2,7 +2,25 @@ import { rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsmServices';
 
 /**
- * Get a combined RHSM response from reporting and capacity.
+ * Get a combined RHSM response from reporting and capacity using a general type
+ *
+ * @param {string} id
+ * @param {object} query
+ * @returns {Function}
+ */
+const getReportsCapacity = (id = null, query = {}) => dispatch =>
+  dispatch({
+    type: rhsmTypes.GET_REPORT_CAPACITY_RHSM,
+    payload: Promise.all([rhsmServices.getGraphReports(id, query), rhsmServices.getGraphCapacity(id, query)]),
+    meta: {
+      id,
+      query,
+      notifications: {}
+    }
+  });
+
+/**
+ * Get a combined RHSM response from reporting and capacity using a graph specific type
  *
  * @param {string} id
  * @param {object} query
@@ -55,6 +73,13 @@ const getHostsInventoryGuests = (id = null, query = {}) => dispatch =>
     }
   });
 
-const rhsmActions = { getGraphReportsCapacity, getHostsInventory, getHostsInventoryGuests };
+const rhsmActions = { getGraphReportsCapacity, getHostsInventory, getHostsInventoryGuests, getReportsCapacity };
 
-export { rhsmActions as default, rhsmActions, getGraphReportsCapacity, getHostsInventory, getHostsInventoryGuests };
+export {
+  rhsmActions as default,
+  rhsmActions,
+  getGraphReportsCapacity,
+  getHostsInventory,
+  getHostsInventoryGuests,
+  getReportsCapacity
+};

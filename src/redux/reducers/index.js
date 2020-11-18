@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { notifications } from '@redhat-cloud-services/frontend-components-notifications/cjs';
+import dailyGraphReducer from './dailyGraphReducer';
 import graphReducer from './graphReducer';
 import inventoryReducer from './inventoryReducer';
 import toolbarReducer from './toolbarReducer';
@@ -8,6 +9,7 @@ import viewReducer from './viewReducer';
 
 const reducers = {
   notifications,
+  dailyGraph: dailyGraphReducer,
   graph: graphReducer,
   inventory: inventoryReducer,
   toolbar: toolbarReducer,
@@ -20,6 +22,7 @@ const reduxReducers = combineReducers(reducers);
 export {
   reduxReducers as default,
   reduxReducers,
+  dailyGraphReducer,
   graphReducer,
   inventoryReducer,
   toolbarReducer,

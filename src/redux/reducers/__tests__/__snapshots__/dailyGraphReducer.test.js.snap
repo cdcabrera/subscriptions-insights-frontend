@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DailyGraphReducer should handle all defined error types: rejected types GET_REPORT_CAPACITY_RHSM 1`] = `
+Object {
+  "result": Object {
+    "reportCapacity": Object {
+      "error": true,
+      "errorMessage": "MESSAGE",
+      "fulfilled": false,
+      "meta": Object {},
+      "metaData": undefined,
+      "metaId": undefined,
+      "metaQuery": undefined,
+      "pending": false,
+      "status": 0,
+    },
+  },
+  "type": "GET_REPORT_CAPACITY_RHSM_REJECTED",
+}
+`;
+
+exports[`DailyGraphReducer should handle all defined fulfilled types: fulfilled types GET_REPORT_CAPACITY_RHSM 1`] = `
+Object {
+  "result": Object {
+    "reportCapacity": Object {
+      "data": Object {
+        "test": "success",
+      },
+      "date": null,
+      "error": false,
+      "errorMessage": "",
+      "fulfilled": true,
+      "meta": Object {},
+      "metaData": undefined,
+      "metaId": undefined,
+      "metaQuery": undefined,
+      "pending": false,
+      "status": 0,
+    },
+  },
+  "type": "GET_REPORT_CAPACITY_RHSM_FULFILLED",
+}
+`;
+
+exports[`DailyGraphReducer should handle all defined pending types: pending types GET_REPORT_CAPACITY_RHSM 1`] = `
+Object {
+  "result": Object {
+    "reportCapacity": Object {
+      "error": false,
+      "errorMessage": "",
+      "fulfilled": false,
+      "meta": Object {},
+      "metaData": undefined,
+      "metaId": undefined,
+      "metaQuery": undefined,
+      "pending": true,
+    },
+  },
+  "type": "GET_REPORT_CAPACITY_RHSM_PENDING",
+}
+`;

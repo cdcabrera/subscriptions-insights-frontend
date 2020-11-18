@@ -1,7 +1,7 @@
 import promiseMiddleware from 'redux-promise-middleware';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import moxios from 'moxios';
-import { graphReducer, inventoryReducer, viewReducer } from '../../reducers';
+import { dailyGraphReducer, graphReducer, inventoryReducer, viewReducer } from '../../reducers';
 import { rhsmApiTypes } from '../../../types/rhsmApiTypes';
 import { rhsmActions } from '../rhsmActions';
 
@@ -10,6 +10,7 @@ describe('RhsmActions', () => {
   const generateStore = () =>
     createStore(
       combineReducers({
+        dailyGraph: dailyGraphReducer,
         graph: graphReducer,
         inventory: inventoryReducer,
         view: viewReducer
@@ -33,6 +34,17 @@ describe('RhsmActions', () => {
 
   afterEach(() => {
     moxios.uninstall();
+  });
+
+  it('Should return response content for getReportsCapacity method', done => {
+    const store = generateStore();
+    const dispatcher = rhsmActions.getReportsCapacity();
+
+    dispatcher(store.dispatch).then(() => {
+      const response = store.getState().dailyGraph;
+      expect(response.reportCapacity.fulfilled).toBe(true);
+      done();
+    });
   });
 
   it('Should return response content for getGraphReportsCapacity method', done => {
