@@ -6,19 +6,29 @@ import { rhsmServices } from '../../services/rhsmServices';
  *
  * @param {string} id
  * @param {object} query
- * @param {string} type
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {object} options.meta
+ * @param {string} options.type
  * @returns {Function}
  */
-const getReportsCapacity = (id = null, query = {}, type = rhsmTypes.GET_REPORT_CAPACITY_RHSM) => dispatch =>
-  dispatch({
+const getReportsCapacity = (id = null, query = {}, options = {}) => dispatch => {
+  const { cancel = true, meta: updatedMeta = {}, type = rhsmTypes.GET_REPORT_CAPACITY_RHSM } = options;
+
+  return dispatch({
     type,
-    payload: Promise.all([rhsmServices.getGraphReports(id, query), rhsmServices.getGraphCapacity(id, query)]),
+    payload: Promise.all([
+      rhsmServices.getGraphReports(id, query, cancel),
+      rhsmServices.getGraphCapacity(id, query, cancel)
+    ]),
     meta: {
       id,
       query,
-      notifications: {}
+      notifications: {},
+      ...updatedMeta
     }
   });
+};
 
 /**
  * Get a combined RHSM response from reporting and capacity using a graph specific type
@@ -28,7 +38,7 @@ const getReportsCapacity = (id = null, query = {}, type = rhsmTypes.GET_REPORT_C
  * @returns {Function}
  */
 const getGraphReportsCapacity = (id = null, query = {}) =>
-  getReportsCapacity(id, query, rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM);
+  getReportsCapacity(id, query, { type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM });
 
 /**
  * Get a hosts response listing from RHSM subscriptions.
