@@ -37,14 +37,19 @@ import { helpers } from '../common';
 /**
  * Get RHSM API version information.
  *
- * @param {boolean} cancel
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getApiVersion = (cancel = true) =>
-  serviceCall({
+const getApiVersion = (options = {}) => {
+  const { cancel = true, cancelId } = options;
+  return serviceCall({
     url: process.env.REACT_APP_SERVICES_RHSM_VERSION,
-    cancel
+    cancel,
+    cancelId
   });
+};
 
 /**
  * @apiMock {DelayResponse} 2000
@@ -625,15 +630,20 @@ const getApiVersion = (cancel = true) =>
  *
  * @param {string} id Product ID
  * @param {object} params Query/search params
- * @param {boolean} cancel
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getGraphReports = (id, params = {}, cancel = true) =>
-  serviceCall({
+const getGraphReports = (id, params = {}, options = {}) => {
+  const { cancel = true, cancelId } = options;
+  return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_REPORT}${id}`,
     params,
-    cancel
+    cancel,
+    cancelId
   });
+};
 
 /**
  * @api {get} /api/rhsm-subscriptions/v1/capacity/products/:product_id Get RHSM graph capacity data, i.e. thresholds
@@ -928,15 +938,20 @@ const getGraphReports = (id, params = {}, cancel = true) =>
  *
  * @param {string} id Product ID
  * @param {object} params Query/search params
- * @param {boolean} cancel
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getGraphCapacity = (id, params = {}, cancel = true) =>
-  serviceCall({
+const getGraphCapacity = (id, params = {}, options = {}) => {
+  const { cancel = true, cancelId } = options;
+  return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
     params,
-    cancel
+    cancel,
+    cancelId
   });
+};
 
 /**
  * @apiMock {DelayResponse} 1000
@@ -1119,15 +1134,20 @@ const getGraphCapacity = (id, params = {}, cancel = true) =>
  *
  * @param {string} id Product ID
  * @param {object} params Query/search params
- * @param {boolean} cancel
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getHostsInventory = (id, params = {}, cancel = true) =>
-  serviceCall({
+const getHostsInventory = (id, params = {}, options = {}) => {
+  const { cancel = true, cancelId } = options;
+  return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_INVENTORY}${id}`,
     params,
-    cancel
+    cancel,
+    cancelId
   });
+};
 
 /**
  * @apiMock {DelayResponse} 2000
@@ -1241,15 +1261,20 @@ const getHostsInventory = (id, params = {}, cancel = true) =>
  *
  * @param {string} id Subscription Manager ID
  * @param {object} params Query/search params
- * @param {boolean} cancel
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getHostsInventoryGuests = (id, params = {}, cancel = false) =>
-  serviceCall({
+const getHostsInventoryGuests = (id, params = {}, options = {}) => {
+  const { cancel = false, cancelId } = options;
+  return serviceCall({
     url: process.env.REACT_APP_SERVICES_RHSM_INVENTORY_GUESTS.replace('{0}', id),
     params,
-    cancel
+    cancel,
+    cancelId
   });
+};
 
 const rhsmServices = { getApiVersion, getGraphCapacity, getGraphReports, getHostsInventory, getHostsInventoryGuests };
 

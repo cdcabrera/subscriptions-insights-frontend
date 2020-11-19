@@ -1,4 +1,4 @@
-import { createSelector as reselectCreateSelector } from 'reselect';
+import { createSelector } from 'reselect';
 import { rhsmApiTypes } from '../../types';
 /**
  * Selector cache.
@@ -17,19 +17,18 @@ const selectorCache = { data: {} };
  * @returns {object}
  */
 const statePropsFilter = (state, props = {}) => ({
-  reportCapacity: state.dailyGraph?.reportCapacity?.[props.productId],
+  report: state.messages?.report?.[props.productId],
   viewId: props.viewId,
   productId: props.productId
 });
 
 /**
- * Selector callback, parse data.
+ * Create selector, transform combined state, props into a consumable object.
  *
- * @param {object} data
- * @returns {{appMessages: {cloudigradeMismatch: boolean}}}
+ * @type {{appMessages: {cloudigradeMismatch: boolean}}}
  */
-const selector = data => {
-  const { viewId = null, productId = null, reportCapacity = {} } = data || {};
+const selector = createSelector([statePropsFilter], data => {
+  const { viewId = null, productId = null, report = {} } = data || {};
   const appMessages = {
     cloudigradeMismatch: false
   };
@@ -39,8 +38,8 @@ const selector = data => {
   Object.assign(appMessages, { ...cache });
 
   // Scan Tally response for Cloud Meter flags
-  if (reportCapacity.fulfilled && appMessages.cloudigradeMismatch !== true) {
-    const [{ [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA]: reportData = [] }] = reportCapacity.data || {};
+  if (report.fulfilled && appMessages.cloudigradeMismatch !== true) {
+    const { [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA]: reportData = [] } = report.data || {};
 
     const cloudigradeMismatch = reportData
       .reverse()
@@ -57,14 +56,7 @@ const selector = data => {
   }
 
   return { appMessages };
-};
-
-/**
- * Create selector, transform combined state, props into a consumable object.
- *
- * @type {{appMessages: {cloudigradeMismatch: boolean}}}
- */
-const createSelector = reselectCreateSelector([statePropsFilter], selector);
+});
 
 /**
  * Expose selector instance. For scenarios where a selector is reused across component instances.
@@ -73,13 +65,12 @@ const createSelector = reselectCreateSelector([statePropsFilter], selector);
  * @returns {{appMessages: {cloudigradeMismatch: boolean}}}
  */
 const makeSelector = defaultProps => (state, props) => ({
-  ...createSelector(state, props, defaultProps)
+  ...selector(state, props, defaultProps)
 });
 
 const appMessagesSelectors = {
-  statePropsFilter,
-  appMessages: createSelector,
+  appMessages: selector,
   makeAppMessages: makeSelector
 };
 
-export { appMessagesSelectors as default, appMessagesSelectors, statePropsFilter, selector, makeSelector };
+export { appMessagesSelectors as default, appMessagesSelectors, selector, makeSelector };

@@ -33,7 +33,7 @@ class BannerMessages extends React.Component {
    * @event onUpdateGraphData
    */
   onUpdateData = () => {
-    const { getReportsCapacity, productId } = this.props;
+    const { getMessageReports, productId } = this.props;
 
     if (productId) {
       const { startDate, endDate } = dateHelpers.getRangedDateTime('CURRENT');
@@ -43,7 +43,7 @@ class BannerMessages extends React.Component {
         [RHSM_API_QUERY_TYPES.END_DATE]: endDate.toISOString()
       };
 
-      getReportsCapacity(productId, query, { cancel: false });
+      getMessageReports(productId, query, { cancel: false });
     }
   };
 
@@ -102,11 +102,11 @@ class BannerMessages extends React.Component {
 /**
  * Prop types.
  *
- * @type {{appMessages: object, productId: string, messages: Array, getReportsCapacity: Function}}
+ * @type {{appMessages: object, productId: string, messages: Array, getMessageReports: Function}}
  */
 BannerMessages.propTypes = {
   appMessages: PropTypes.object.isRequired,
-  getReportsCapacity: PropTypes.func,
+  getMessageReports: PropTypes.func,
   messages: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -121,10 +121,10 @@ BannerMessages.propTypes = {
 /**
  * Default props.
  *
- * @type {{messages: Array, getReportsCapacity: Function}}
+ * @type {{messages: Array, getMessageReports: Function}}
  */
 BannerMessages.defaultProps = {
-  getReportsCapacity: helpers.noop,
+  getMessageReports: helpers.noop,
   messages: [
     {
       id: 'cloudigradeMismatch',
@@ -158,7 +158,7 @@ BannerMessages.defaultProps = {
  * @returns {object}
  */
 const mapDispatchToProps = dispatch => ({
-  getReportsCapacity: (id, query, options) => dispatch(reduxActions.rhsm.getReportsCapacity(id, query, options))
+  getMessageReports: (id, query) => dispatch(reduxActions.rhsm.getMessageReports(id, query))
 });
 
 /**

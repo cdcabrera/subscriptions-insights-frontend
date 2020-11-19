@@ -1,7 +1,7 @@
 import promiseMiddleware from 'redux-promise-middleware';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import moxios from 'moxios';
-import { dailyGraphReducer, graphReducer, inventoryReducer, viewReducer } from '../../reducers';
+import { graphReducer, inventoryReducer, messagesReducer, viewReducer } from '../../reducers';
 import { rhsmApiTypes } from '../../../types/rhsmApiTypes';
 import { rhsmActions } from '../rhsmActions';
 
@@ -10,9 +10,9 @@ describe('RhsmActions', () => {
   const generateStore = () =>
     createStore(
       combineReducers({
-        dailyGraph: dailyGraphReducer,
         graph: graphReducer,
         inventory: inventoryReducer,
+        messages: messagesReducer,
         view: viewReducer
       }),
       applyMiddleware(...middleware)
@@ -34,17 +34,6 @@ describe('RhsmActions', () => {
 
   afterEach(() => {
     moxios.uninstall();
-  });
-
-  it('Should return response content for getReportsCapacity method', done => {
-    const store = generateStore();
-    const dispatcher = rhsmActions.getReportsCapacity();
-
-    dispatcher(store.dispatch).then(() => {
-      const response = store.getState().dailyGraph;
-      expect(response.reportCapacity.fulfilled).toBe(true);
-      done();
-    });
   });
 
   it('Should return response content for getGraphReportsCapacity method', done => {
@@ -76,6 +65,17 @@ describe('RhsmActions', () => {
     dispatcher(store.dispatch).then(() => {
       const response = store.getState().inventory;
       expect(response.hostsGuests.fulfilled).toBe(true);
+      done();
+    });
+  });
+
+  it('Should return response content for getMessageReports method', done => {
+    const store = generateStore();
+    const dispatcher = rhsmActions.getMessageReports();
+
+    dispatcher(store.dispatch).then(() => {
+      const response = store.getState().dailyGraph;
+      expect(response.report.fulfilled).toBe(true);
       done();
     });
   });

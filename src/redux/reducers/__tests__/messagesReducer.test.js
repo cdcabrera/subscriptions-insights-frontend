@@ -1,14 +1,15 @@
-import dailyGraphReducer from '../dailyGraphReducer';
+import messagesReducer from '../messagesReducer';
 import { rhsmTypes as types } from '../../types';
 import { reduxHelpers } from '../../common/reduxHelpers';
+import {GET_MESSAGE_REPORTS_RHSM} from "../../types/rhsmTypes";
 
-describe('DailyGraphReducer', () => {
+describe('MessagesReducer', () => {
   it('should return the initial state', () => {
-    expect(dailyGraphReducer.initialState).toBeDefined();
+    expect(messagesReducer.initialState).toBeDefined();
   });
 
   it('should handle all defined error types', () => {
-    const specificTypes = [types.GET_REPORT_CAPACITY_RHSM];
+    const specificTypes = [types.GET_MESSAGE_REPORTS_RHSM];
 
     specificTypes.forEach(value => {
       const dispatched = {
@@ -26,7 +27,7 @@ describe('DailyGraphReducer', () => {
         }
       };
 
-      const resultState = dailyGraphReducer(undefined, dispatched);
+      const resultState = messagesReducer(undefined, dispatched);
 
       expect({ type: reduxHelpers.REJECTED_ACTION(value), result: resultState }).toMatchSnapshot(
         `rejected types ${value}`
@@ -35,14 +36,14 @@ describe('DailyGraphReducer', () => {
   });
 
   it('should handle all defined pending types', () => {
-    const specificTypes = [types.GET_REPORT_CAPACITY_RHSM];
+    const specificTypes = [types.GET_MESSAGE_REPORTS_RHSM];
 
     specificTypes.forEach(value => {
       const dispatched = {
         type: reduxHelpers.PENDING_ACTION(value)
       };
 
-      const resultState = dailyGraphReducer(undefined, dispatched);
+      const resultState = messagesReducer(undefined, dispatched);
 
       expect({ type: reduxHelpers.PENDING_ACTION(value), result: resultState }).toMatchSnapshot(
         `pending types ${value}`
@@ -51,7 +52,7 @@ describe('DailyGraphReducer', () => {
   });
 
   it('should handle all defined fulfilled types', () => {
-    const specificTypes = [types.GET_REPORT_CAPACITY_RHSM];
+    const specificTypes = [types.GET_MESSAGE_REPORTS_RHSM];
 
     specificTypes.forEach(value => {
       const dispatched = {
@@ -63,7 +64,7 @@ describe('DailyGraphReducer', () => {
         }
       };
 
-      const resultState = dailyGraphReducer(undefined, dispatched);
+      const resultState = messagesReducer(undefined, dispatched);
 
       expect({ type: reduxHelpers.FULFILLED_ACTION(value), result: resultState }).toMatchSnapshot(
         `fulfilled types ${value}`

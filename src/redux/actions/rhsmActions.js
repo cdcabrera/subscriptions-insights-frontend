@@ -2,43 +2,30 @@ import { rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsmServices';
 
 /**
- * Get a combined RHSM response from reporting and capacity using a general type
+ * Get a combined RHSM response from reporting and capacity.
  *
  * @param {string} id
  * @param {object} query
  * @param {object} options
- * @param {boolean} options.cancel
- * @param {object} options.meta
- * @param {string} options.type
+ * @param {string} options.cancelId
  * @returns {Function}
  */
-const getReportsCapacity = (id = null, query = {}, options = {}) => dispatch => {
-  const { cancel = true, meta: updatedMeta = {}, type = rhsmTypes.GET_REPORT_CAPACITY_RHSM } = options;
+const getGraphReportsCapacity = (id = null, query = {}, options = {}) => dispatch => {
+  const { cancelId = 'graphReportsCapacity' } = options;
 
   return dispatch({
-    type,
+    type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM,
     payload: Promise.all([
-      rhsmServices.getGraphReports(id, query, cancel),
-      rhsmServices.getGraphCapacity(id, query, cancel)
+      rhsmServices.getGraphReports(id, query, { cancelId }),
+      rhsmServices.getGraphCapacity(id, query, { cancelId })
     ]),
     meta: {
       id,
       query,
-      notifications: {},
-      ...updatedMeta
+      notifications: {}
     }
   });
 };
-
-/**
- * Get a combined RHSM response from reporting and capacity using a graph specific type
- *
- * @param {string} id
- * @param {object} query
- * @returns {Function}
- */
-const getGraphReportsCapacity = (id = null, query = {}) =>
-  getReportsCapacity(id, query, { type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM });
 
 /**
  * Get a hosts response listing from RHSM subscriptions.
@@ -76,7 +63,25 @@ const getHostsInventoryGuests = (id = null, query = {}) => dispatch =>
     }
   });
 
-const rhsmActions = { getGraphReportsCapacity, getHostsInventory, getHostsInventoryGuests, getReportsCapacity };
+/**
+ * Get a RHSM response from message reporting.
+ *
+ * @param {string} id
+ * @param {object} query
+ * @returns {Function}
+ */
+const getMessageReports = (id = null, query = {}) => dispatch =>
+  dispatch({
+    type: rhsmTypes.GET_MESSAGE_REPORTS_RHSM,
+    payload: rhsmServices.getGraphReports(id, query, { cancelId: 'messageReport' }),
+    meta: {
+      id,
+      query,
+      notifications: {}
+    }
+  });
+
+const rhsmActions = { getGraphReportsCapacity, getHostsInventory, getHostsInventoryGuests, getMessageReports };
 
 export {
   rhsmActions as default,
@@ -84,5 +89,5 @@ export {
   getGraphReportsCapacity,
   getHostsInventory,
   getHostsInventoryGuests,
-  getReportsCapacity
+  getMessageReports
 };
