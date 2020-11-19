@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector as reselectCreateSelector } from 'reselect';
 import { rhsmApiTypes } from '../../types';
 /**
  * Selector cache.
@@ -17,17 +17,18 @@ const selectorCache = { data: {} };
  * @returns {object}
  */
 const statePropsFilter = (state, props = {}) => ({
-  reportCapacity: state.graph?.reportCapacity?.[props.productId],
+  reportCapacity: state.dailyGraph?.reportCapacity?.[props.productId],
   viewId: props.viewId,
   productId: props.productId
 });
 
 /**
- * Create selector, transform combined state, props into a consumable object.
+ * Selector callback, parse data.
  *
- * @type {{appMessages: {cloudigradeMismatch: boolean}}}
+ * @param {object} data
+ * @returns {{appMessages: {cloudigradeMismatch: boolean}}}
  */
-const selector = createSelector([statePropsFilter], data => {
+const selector = data => {
   const { viewId = null, productId = null, reportCapacity = {} } = data || {};
   const appMessages = {
     cloudigradeMismatch: false
@@ -41,9 +42,12 @@ const selector = createSelector([statePropsFilter], data => {
   if (reportCapacity.fulfilled && appMessages.cloudigradeMismatch !== true) {
     const [{ [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA]: reportData = [] }] = reportCapacity.data || {};
 
-    const cloudigradeMismatch = reportData.find(
-      ({ [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_MISMATCH]: mismatch }) => mismatch === true
-    );
+    const cloudigradeMismatch = reportData
+      .reverse()
+      .find(
+        ({ [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_MISMATCH]: mismatch }) =>
+          mismatch === true
+      );
 
     appMessages.cloudigradeMismatch = cloudigradeMismatch !== undefined;
 
@@ -53,7 +57,14 @@ const selector = createSelector([statePropsFilter], data => {
   }
 
   return { appMessages };
-});
+};
+
+/**
+ * Create selector, transform combined state, props into a consumable object.
+ *
+ * @type {{appMessages: {cloudigradeMismatch: boolean}}}
+ */
+const createSelector = reselectCreateSelector([statePropsFilter], selector);
 
 /**
  * Expose selector instance. For scenarios where a selector is reused across component instances.
@@ -62,12 +73,13 @@ const selector = createSelector([statePropsFilter], data => {
  * @returns {{appMessages: {cloudigradeMismatch: boolean}}}
  */
 const makeSelector = defaultProps => (state, props) => ({
-  ...selector(state, props, defaultProps)
+  ...createSelector(state, props, defaultProps)
 });
 
 const appMessagesSelectors = {
-  appMessages: selector,
+  statePropsFilter,
+  appMessages: createSelector,
   makeAppMessages: makeSelector
 };
 
-export { appMessagesSelectors as default, appMessagesSelectors, selector, makeSelector };
+export { appMessagesSelectors as default, appMessagesSelectors, statePropsFilter, selector, makeSelector };
