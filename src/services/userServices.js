@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import LocaleCode from 'locale-code';
 import _isPlainObject from 'lodash/isPlainObject';
 import { getUser, getUserPermissions } from './platformServices';
+import { getGraphReports, getGraphCapacity } from './rhsmServices';
 import { serviceCall } from './config';
 import { helpers } from '../common';
 
@@ -198,12 +199,13 @@ const deleteAccountOptIn = () =>
 /**
  * Get a RHSM account opt-in config.
  *
+ * @param {boolean} cancel
  * @returns {Promise<*>}
  */
-const getAccountOptIn = () =>
+const getAccountOptIn = (cancel = true) =>
   serviceCall({
     url: process.env.REACT_APP_SERVICES_RHSM_OPTIN,
-    cancel: true
+    cancel
   });
 
 /**

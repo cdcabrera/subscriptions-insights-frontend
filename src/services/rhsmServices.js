@@ -37,12 +37,13 @@ import { helpers } from '../common';
 /**
  * Get RHSM API version information.
  *
+ * @param {boolean} cancel
  * @returns {Promise<*>}
  */
-const getApiVersion = () =>
+const getApiVersion = (cancel = true) =>
   serviceCall({
     url: process.env.REACT_APP_SERVICES_RHSM_VERSION,
-    cancel: true
+    cancel
   });
 
 /**
@@ -90,8 +91,6 @@ const getApiVersion = () =>
  *           "physical_sockets": 50,
  *           "hypervisor_sockets": 0,
  *           "has_data": true,
- *           "has_cloudigrade_data": true,
- *           "has_cloudigrade_mismatch": true,
  *           "cloud_sockets": 80
  *         },
  *         {
@@ -332,7 +331,9 @@ const getApiVersion = () =>
  *           "physical_sockets": 64,
  *           "hypervisor_sockets": 80,
  *           "has_data": true,
- *           "cloud_sockets": 40
+ *           "cloud_sockets": 40,
+ *           "has_cloudigrade_data": true,
+ *           "has_cloudigrade_mismatch": true
  *         }
  *       ],
  *       "links": {
@@ -624,13 +625,14 @@ const getApiVersion = () =>
  *
  * @param {string} id Product ID
  * @param {object} params Query/search params
+ * @param {boolean} cancel
  * @returns {Promise<*>}
  */
-const getGraphReports = (id, params = {}) =>
+const getGraphReports = (id, params = {}, cancel = true) =>
   serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_REPORT}${id}`,
     params,
-    cancel: true
+    cancel
   });
 
 /**
@@ -926,13 +928,14 @@ const getGraphReports = (id, params = {}) =>
  *
  * @param {string} id Product ID
  * @param {object} params Query/search params
+ * @param {boolean} cancel
  * @returns {Promise<*>}
  */
-const getGraphCapacity = (id, params = {}) =>
+const getGraphCapacity = (id, params = {}, cancel = true) =>
   serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
     params,
-    cancel: true
+    cancel
   });
 
 /**
@@ -1116,13 +1119,14 @@ const getGraphCapacity = (id, params = {}) =>
  *
  * @param {string} id Product ID
  * @param {object} params Query/search params
+ * @param {boolean} cancel
  * @returns {Promise<*>}
  */
-const getHostsInventory = (id, params = {}) =>
+const getHostsInventory = (id, params = {}, cancel = true) =>
   serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_INVENTORY}${id}`,
     params,
-    cancel: true
+    cancel
   });
 
 /**
@@ -1237,12 +1241,14 @@ const getHostsInventory = (id, params = {}) =>
  *
  * @param {string} id Subscription Manager ID
  * @param {object} params Query/search params
+ * @param {boolean} cancel
  * @returns {Promise<*>}
  */
-const getHostsInventoryGuests = (id, params = {}) =>
+const getHostsInventoryGuests = (id, params = {}, cancel = false) =>
   serviceCall({
     url: process.env.REACT_APP_SERVICES_RHSM_INVENTORY_GUESTS.replace('{0}', id),
-    params
+    params,
+    cancel
   });
 
 const rhsmServices = { getApiVersion, getGraphCapacity, getGraphReports, getHostsInventory, getHostsInventoryGuests };
