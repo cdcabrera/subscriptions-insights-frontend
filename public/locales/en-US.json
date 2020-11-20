@@ -47,6 +47,8 @@
   },
   "curiosity-inventory": {
     "cardHeading": "Current systems",
+    "tab_systems": "Current systems",
+    "tab_subscriptions": "Current subscriptions",
     "tableAriaLabel": "{{appName}} systems inventory table.",
     "tableSummary": "A generated table with one level of column headers.",
     "tableEmptyInventoryTitle": "No results found",
@@ -74,6 +76,9 @@
     "header_inventoryId": "UUID",
     "header_sockets": "Subscribed sockets",
     "header_lastSeen": "Last seen",
+    "header_productName": "Product",
+    "header_serviceLevel": "Service level",
+    "header_upcomingEventDate": "Next event",
     "measurementType": "{{context}}",
     "measurementType_cloud": "Public cloud",
     "measurementType_alibaba": "Public cloud",
