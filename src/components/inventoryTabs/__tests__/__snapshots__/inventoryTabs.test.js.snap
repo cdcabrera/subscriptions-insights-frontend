@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InventoryList Component should handle updating tabs for redux state: dispatch filter 1`] = `
+Array [
+  Array [
+    Object {
+      "tabs": Object {
+        "lorem": 1,
+      },
+      "type": "SET_INVENTORY_TAB",
+    },
+  ],
+]
+`;
+
+exports[`InventoryList Component should render a non-connected component: non-connected 1`] = `
+<Tabs
+  activeTab={0}
+  className=""
+  defaultActiveTab={0}
+  hasOverflowScroll={false}
+  onTab={[Function]}
+  tabs={
+    Array [
+      Object {
+        "content": "ipsum",
+        "title": "lorem",
+      },
+      Object {
+        "content": "amet",
+        "title": "sit",
+      },
+    ]
+  }
+/>
+`;
+
+exports[`InventoryList Component should return an empty render when disabled: disabled component 1`] = `""`;
