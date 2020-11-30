@@ -213,6 +213,8 @@ class InventoryList extends React.Component {
                 productId={productId}
                 viewId={viewId}
                 perPageDefault={updatedPerPage}
+                offsetType={reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET]}
+                limitType={reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT]}
               />
             </CardActions>
           </CardHeader>
@@ -247,6 +249,8 @@ class InventoryList extends React.Component {
                 viewId={viewId}
                 perPageDefault={updatedPerPage}
                 dropDirection="up"
+                offsetType={reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET]}
+                limitType={reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT]}
               />
             </TableToolbar>
           </CardFooter>

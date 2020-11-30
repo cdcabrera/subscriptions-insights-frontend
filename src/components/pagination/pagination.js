@@ -50,11 +50,11 @@ class Pagination extends React.Component {
    * @param {number} offset
    */
   setOffset(offset) {
-    const { offsetDefault, productId } = this.props;
+    const { offsetDefault, offsetType, productId } = this.props;
     const updatedActions = [];
 
     updatedActions.push({
-      type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+      type: offsetType,
       viewId: productId,
       [RHSM_API_QUERY_TYPES.OFFSET]: offset ?? offsetDefault
     });
@@ -68,11 +68,11 @@ class Pagination extends React.Component {
    * @param {number} limit
    */
   setLimit(limit) {
-    const { perPageDefault, productId } = this.props;
+    const { limitType, perPageDefault, productId } = this.props;
     const updatedActions = [];
 
     updatedActions.push({
-      type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
+      type: limitType,
       viewId: productId,
       [RHSM_API_QUERY_TYPES.LIMIT]: limit ?? perPageDefault
     });
@@ -124,7 +124,17 @@ Pagination.propTypes = {
   isCompact: PropTypes.bool,
   isDisabled: PropTypes.bool,
   itemCount: PropTypes.number,
+  limitType: PropTypes.oneOf([
+    reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
+    reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
+    reduxTypes.query.SET_QUERY_RHSM_SUBSCRIPTIONS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT]
+  ]),
   offsetDefault: PropTypes.number,
+  offsetType: PropTypes.oneOf([
+    reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+    reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
+    reduxTypes.query.SET_QUERY_RHSM_SUBSCRIPTIONS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET]
+  ]),
   perPageDefault: PropTypes.number,
   productId: PropTypes.string.isRequired,
   variant: PropTypes.string
@@ -142,7 +152,9 @@ Pagination.defaultProps = {
   isCompact: false,
   isDisabled: false,
   itemCount: 0,
+  limitType: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT],
   offsetDefault: 0,
+  offsetType: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET],
   perPageDefault: 10,
   variant: null
 };

@@ -75,34 +75,6 @@ const viewReducer = (state = initialState, action) => {
           reset: false
         }
       );
-    case reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.LIMIT]:
-      return reduxHelpers.setStateProp(
-        'query',
-        {
-          [action.viewId]: {
-            ...state.query[action.viewId],
-            [RHSM_API_QUERY_TYPES.LIMIT]: action[RHSM_API_QUERY_TYPES.LIMIT]
-          }
-        },
-        {
-          state,
-          reset: false
-        }
-      );
-    case reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.OFFSET]:
-      return reduxHelpers.setStateProp(
-        'query',
-        {
-          [action.viewId]: {
-            ...state.query[action.viewId],
-            [RHSM_API_QUERY_TYPES.OFFSET]: action[RHSM_API_QUERY_TYPES.OFFSET]
-          }
-        },
-        {
-          state,
-          reset: false
-        }
-      );
     case reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.SLA]:
       return reduxHelpers.setStateProp(
         'query',
@@ -145,6 +117,34 @@ const viewReducer = (state = initialState, action) => {
           reset: false
         }
       );
+    case reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT]:
+      return reduxHelpers.setStateProp(
+        'hostsQuery',
+        {
+          [action.viewId]: {
+            ...state.hostsQuery[action.viewId],
+            [RHSM_API_QUERY_TYPES.LIMIT]: action[RHSM_API_QUERY_TYPES.LIMIT]
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    case reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET]:
+      return reduxHelpers.setStateProp(
+        'hostsQuery',
+        {
+          [action.viewId]: {
+            ...state.hostsQuery[action.viewId],
+            [RHSM_API_QUERY_TYPES.OFFSET]: action[RHSM_API_QUERY_TYPES.OFFSET]
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
     case reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.DIRECTION]:
       return reduxHelpers.setStateProp(
         'hostsQuery',
@@ -166,6 +166,34 @@ const viewReducer = (state = initialState, action) => {
           [action.viewId]: {
             ...state.hostsQuery[action.viewId],
             [RHSM_API_QUERY_TYPES.SORT]: action[RHSM_API_QUERY_TYPES.SORT]
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    case reduxTypes.query.SET_QUERY_RHSM_SUBSCRIPTIONS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT]:
+      return reduxHelpers.setStateProp(
+        'subscriptionsQuery',
+        {
+          [action.viewId]: {
+            ...state.subscriptionsQuery[action.viewId],
+            [RHSM_API_QUERY_TYPES.LIMIT]: action[RHSM_API_QUERY_TYPES.LIMIT]
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    case reduxTypes.query.SET_QUERY_RHSM_SUBSCRIPTIONS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET]:
+      return reduxHelpers.setStateProp(
+        'subscriptionsQuery',
+        {
+          [action.viewId]: {
+            ...state.subscriptionsQuery[action.viewId],
+            [RHSM_API_QUERY_TYPES.OFFSET]: action[RHSM_API_QUERY_TYPES.OFFSET]
           }
         },
         {
