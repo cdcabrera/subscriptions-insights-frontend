@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Title } from '@patternfly/react-core';
 import { connect, reduxTypes, store } from '../../redux';
 import { Tabs } from '../tabs/tabs';
 import { helpers } from '../../common';
+import { translate } from '../i18n/i18n';
 
 /**
  * ToDo: Revisit using tabs attribute vs children
@@ -42,13 +44,20 @@ class InventoryTabs extends React.Component {
    * @returns {Node}
    */
   render() {
-    const { activeTab, isDisabled, tabs } = this.props;
+    const { activeTab, isDisabled, tabs, t } = this.props;
 
     if (isDisabled) {
       return null;
     }
 
-    return <Tabs activeTab={activeTab} onTab={this.onTab} tabs={tabs} />;
+    return (
+      <React.Fragment>
+        <Title headingLevel="h2" className="sr-only">
+          {t('curiosity-inventory.tabHeading')}
+        </Title>
+        <Tabs activeTab={activeTab} onTab={this.onTab} tabs={tabs} />
+      </React.Fragment>
+    );
   }
 }
 
@@ -61,7 +70,8 @@ InventoryTabs.propTypes = {
   activeTab: PropTypes.number,
   isDisabled: PropTypes.bool,
   productId: PropTypes.string.isRequired,
-  tabs: Tabs.propTypes.tabs.isRequired
+  tabs: Tabs.propTypes.tabs.isRequired,
+  t: PropTypes.func
 };
 
 /**
@@ -71,7 +81,8 @@ InventoryTabs.propTypes = {
  */
 InventoryTabs.defaultProps = {
   activeTab: 0,
-  isDisabled: helpers.UI_DISABLED_TABLE
+  isDisabled: helpers.UI_DISABLED_TABLE,
+  t: translate
 };
 
 /**

@@ -46,7 +46,7 @@
     "tooltipSummary": "Your subscription data facets. With one level of column and row headers."
   },
   "curiosity-inventory": {
-    "cardHeading": "Current systems",
+    "tabHeading": "Inventory listings",
     "tab_systems": "Current systems",
     "tab_subscriptions": "Current subscriptions",
     "tableAriaLabel": "{{appName}} systems inventory table.",
