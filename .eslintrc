@@ -12,7 +12,8 @@
     "jsdoc",
     "json",
     "prettier",
-    "react"
+    "react",
+    "spellcheck"
   ],
   "settings": {
     "jsdoc": {
@@ -115,6 +116,15 @@
     "react/no-unused-prop-types": 1,
     "react/state-in-constructor": [ 1, "never" ],
     "space-before-function-paren": 0,
+    "spellcheck/spell-checker": [ 1, {
+      "comments": true,
+      "identifiers": true,
+      "lang": "en_US",
+      "ignoreRequire": "",
+      "skipWords": [
+
+      ]
+    }],
     "jsx-a11y/anchor-is-valid": 1,
     "jsx-a11y/label-has-associated-control": [ 2, {
       "labelComponents": ["CustomInputLabel"],

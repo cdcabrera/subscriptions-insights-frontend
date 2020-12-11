@@ -95,7 +95,7 @@
     "test:dev": "run-s test:lint test:local",
     "test:integration": "jest --roots=./tests",
     "test:integration-dev": "jest ./tests/* --watchAll",
-    "test:lint": "eslint --ext=json --ext=js --ext=jsx src",
+    "test:lint": "eslint --ext=json public/locales/en-US.json",
     "test:local": "react-scripts test --env=jsdom --roots=./src"
   },
   "dependencies": {
@@ -149,6 +149,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-spellcheck": "^0.0.17",
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "moxios": "^0.4.0",
