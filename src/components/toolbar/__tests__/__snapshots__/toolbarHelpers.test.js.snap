@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ToolbarHelpers should have specific types: toolbarTypes 1`] = `
+exports[`ToolbarHelpers should have specific helpers: toolbarHelpers 1`] = `
 Object {
   "getOptions": [Function],
 }
