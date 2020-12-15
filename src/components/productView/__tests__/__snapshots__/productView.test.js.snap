@@ -4,10 +4,10 @@ exports[`ProductView Component should render a non-connected component: non-conn
 <PageLayout>
   <PageHeader
     includeTour={true}
-    productLabel="lorem ipsum"
+    productLabel={null}
     t={[Function]}
   >
-    t(curiosity-view.title, {"appName":"Subscription Watch","context":"lorem ipsum"})
+    t(curiosity-view.title, {"appName":"Subscription Watch"})
   </PageHeader>
   <PageMessages
     className=""
@@ -33,7 +33,6 @@ exports[`ProductView Component should render a non-connected component: non-conn
       cardTitle="t(curiosity-graph.socketsHeading)"
       key="lorem ipsum"
       productId="lorem ipsum"
-      productLabel="lorem ipsum"
       query={Object {}}
       viewId="dolor sit"
     />

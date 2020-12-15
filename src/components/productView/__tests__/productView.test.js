@@ -8,7 +8,7 @@ describe('ProductView Component', () => {
       productConfig: {},
       routeDetail: {
         pathParameter: 'lorem ipsum',
-        productParameter: 'dolor sit'
+        viewParameter: 'dolor sit'
       }
     };
 
@@ -21,7 +21,7 @@ describe('ProductView Component', () => {
       productConfig: {},
       routeDetail: {
         pathParameter: null,
-        productParameter: null
+        viewParameter: null
       }
     };
 
