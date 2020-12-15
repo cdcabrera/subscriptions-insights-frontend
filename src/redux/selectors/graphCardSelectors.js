@@ -7,14 +7,6 @@ import { reduxHelpers } from '../common/reduxHelpers';
 import { apiQueries } from '../common';
 
 /**
- * Selector cache.
- *
- * @private
- * @type {{dataId: {string}, data: {object}}}
- */
-const selectorCache = { dataId: null, data: {} };
-
-/**
  * Return a combined state, props object.
  *
  * @private
@@ -25,7 +17,6 @@ const selectorCache = { dataId: null, data: {} };
 const statePropsFilter = (state, props = {}) => ({
   ...state.graph?.reportCapacity?.[props.productId],
   ...{
-    viewId: props.viewId,
     productId: props.productId
   }
 });
@@ -58,7 +49,7 @@ const queryFilter = (state, props = {}) => {
  * @type {{pending: boolean, fulfilled: boolean, graphData: object, error: boolean, status: (*|number)}}
  */
 const selector = createSelector([statePropsFilter, queryFilter], (response, query = {}) => {
-  const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
+  const { productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
 
   const updatedResponseData = {
     error: responseData.error || false,
@@ -72,16 +63,6 @@ const selector = createSelector([statePropsFilter, queryFilter], (response, quer
   const responseMetaQuery = { ...metaQuery };
   delete responseMetaQuery[RHSM_API_QUERY_TYPES.START_DATE];
   delete responseMetaQuery[RHSM_API_QUERY_TYPES.END_DATE];
-
-  const cachedGranularity =
-    (viewId && productId && selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`]) || undefined;
-
-  Object.assign(updatedResponseData, { ...cachedGranularity });
-
-  if (viewId && selectorCache.dataId !== viewId) {
-    selectorCache.dataId = viewId;
-    selectorCache.data = {};
-  }
 
   if (responseData.fulfilled && productId === metaId && _isEqual(query, responseMetaQuery)) {
     const [report, capacity] = responseData.data;
@@ -169,11 +150,7 @@ const selector = createSelector([statePropsFilter, queryFilter], (response, quer
       });
     });
 
-    // Update response and cache
     updatedResponseData.fulfilled = true;
-    selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`] = {
-      ...updatedResponseData
-    };
   }
 
   return updatedResponseData;

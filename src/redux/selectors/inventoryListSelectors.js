@@ -14,14 +14,6 @@ import { selector as userSession } from './userSelectors';
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, _isEqual);
 
 /**
- * Selector cache.
- *
- * @private
- * @type {{dataId: {string}, data: {object}}}
- */
-const selectorCache = { dataId: null, data: {} };
-
-/**
  * Return a combined state, props object.
  *
  * @private
@@ -32,7 +24,6 @@ const selectorCache = { dataId: null, data: {} };
 const statePropsFilter = (state, props = {}) => ({
   ...state.inventory?.hostsInventory?.[props.productId],
   ...{
-    viewId: props.viewId,
     productId: props.productId
   }
 });
@@ -72,7 +63,7 @@ const queryFilter = (state, props = {}) => {
  * @type {{pending: boolean, fulfilled: boolean, listData: object, error: boolean, status: (*|number)}}
  */
 const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (response, query = {}) => {
-  const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
+  const { productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
 
   const updatedResponseData = {
     error: responseData.error || false,
@@ -83,17 +74,6 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
     query,
     status: responseData.status
   };
-
-  const cache =
-    (viewId && productId && selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`]) || undefined;
-
-  Object.assign(updatedResponseData, { ...cache });
-
-  // Reset cache on viewId update
-  if (viewId && selectorCache.dataId !== viewId) {
-    selectorCache.dataId = viewId;
-    selectorCache.data = {};
-  }
 
   if (responseData.fulfilled && productId === metaId && _isEqual(query, metaQuery)) {
     const {
@@ -136,9 +116,6 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
     updatedResponseData.itemCount = meta[rhsmApiTypes.RHSM_API_RESPONSE_META_TYPES.COUNT] ?? 0;
     updatedResponseData.listData = updatedListData;
     updatedResponseData.fulfilled = true;
-    selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`] = {
-      ...updatedResponseData
-    };
   }
 
   return updatedResponseData;
