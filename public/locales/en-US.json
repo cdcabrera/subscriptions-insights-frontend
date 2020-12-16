@@ -93,6 +93,7 @@
     "category_sla": "SLA",
     "category_usage": "Usage",
     "placeholder": "Filter by",
+    "placeholder_displayName": "Filter by name",
     "placeholder_granularity": "Select date range",
     "placeholder_sla": "Filter by SLA",
     "placeholder_usage": "Filter by usage",
