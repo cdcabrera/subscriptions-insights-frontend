@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ToolbarFieldGranularity Component should render a non-connected component: non-connected 1`] = `
+<Select
+  aria-label="t(curiosity-toolbar.placeholder, {\\"context\\":\\"granularity\\"})"
+  ariaLabel="Select option"
+  className=""
+  id="generatedid-"
+  isDisabled={false}
+  isToggleText={true}
+  name={null}
+  onSelect={[Function]}
+  options={
+    Array [
+      Object {
+        "selected": true,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"daily\\"})",
+        "value": "daily",
+      },
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"weekly\\"})",
+        "value": "weekly",
+      },
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"monthly\\"})",
+        "value": "monthly",
+      },
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"quarterly\\"})",
+        "value": "quarterly",
+      },
+    ]
+  }
+  placeholder="t(curiosity-toolbar.placeholder, {\\"context\\":\\"granularity\\"})"
+  selectedOptions="daily"
+  toggleIcon={null}
+  variant="single"
+/>
+`;
