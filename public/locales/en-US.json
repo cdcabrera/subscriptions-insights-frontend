@@ -106,10 +106,10 @@
     "slaSelfSupport": "Self-Support",
     "slaStandard": "Standard",
 
-    "sla_None": "No SLA",
-    "sla_Premium": "Premium",
-    "sla_Self-Support": "Self-Support",
-    "sla_Standard": "Standard",
+    "sla_none": "No SLA",
+    "sla_premium": "Premium",
+    "sla_self-Support": "Self-Support",
+    "sla_standard": "Standard",
 
     "uom_cores": "Cores",
     "uom_sockets": "Sockets",
