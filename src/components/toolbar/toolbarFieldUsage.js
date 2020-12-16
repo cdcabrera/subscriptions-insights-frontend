@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, reduxTypes, store } from '../../redux';
 import { Select } from '../form/select';
-import { RHSM_API_QUERY_USAGE_TYPES as USAGE_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { RHSM_API_QUERY_USAGE_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -16,7 +16,7 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldUsage = ({ value, t, viewId }) => {
-  const options = Object.values(USAGE_TYPES).map(type => ({
+  const options = Object.values(FIELD_TYPES).map(type => ({
     title: translate('curiosity-toolbar.usage', { context: (type === '' && 'Unspecified') || type }),
     value: type,
     selected: type === value
@@ -54,7 +54,7 @@ const ToolbarFieldUsage = ({ value, t, viewId }) => {
  */
 ToolbarFieldUsage.propTypes = {
   t: PropTypes.func,
-  value: PropTypes.oneOf([...Object.values(USAGE_TYPES)]),
+  value: PropTypes.oneOf([...Object.values(FIELD_TYPES)]),
   viewId: PropTypes.string
 };
 

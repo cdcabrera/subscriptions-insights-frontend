@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, reduxTypes, store } from '../../redux';
 import { Select } from '../form/select';
-import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -16,7 +16,7 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldGranularity = ({ value, t, viewId }) => {
-  const options = Object.values(GRANULARITY_TYPES).map(type => ({
+  const options = Object.values(FIELD_TYPES).map(type => ({
     title: translate('curiosity-toolbar.granularity', { context: type }),
     value: type,
     selected: type === value
@@ -54,7 +54,7 @@ const ToolbarFieldGranularity = ({ value, t, viewId }) => {
  */
 ToolbarFieldGranularity.propTypes = {
   t: PropTypes.func,
-  value: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)]),
+  value: PropTypes.oneOf([...Object.values(FIELD_TYPES)]),
   viewId: PropTypes.string
 };
 
@@ -65,7 +65,7 @@ ToolbarFieldGranularity.propTypes = {
  */
 ToolbarFieldGranularity.defaultProps = {
   t: translate,
-  value: GRANULARITY_TYPES.DAILY,
+  value: FIELD_TYPES.DAILY,
   viewId: 'toolbarFieldGranularity'
 };
 
