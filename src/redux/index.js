@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, useSelector as UseSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { store } from './store';
 import { reduxActions } from './actions';
@@ -6,9 +6,13 @@ import { reduxHelpers, apiQueries } from './common';
 import { reduxReducers } from './reducers';
 import { reduxSelectors } from './selectors';
 import { reduxTypes } from './types';
+import { helpers } from '../common';
 
 const connectRouter = (mapStateToProps, mapDispatchToProps) => component =>
   withRouter(connect(mapStateToProps, mapDispatchToProps)(component));
+
+const useSelector = (selector, { equality, value = null }) =>
+  (helpers.TEST_MODE && value) || UseSelector(selector, equality) || value;
 
 export {
   apiQueries,
@@ -19,5 +23,6 @@ export {
   reduxReducers,
   reduxSelectors,
   reduxTypes,
-  store
+  store,
+  useSelector
 };

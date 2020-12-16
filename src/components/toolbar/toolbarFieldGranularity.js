@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect, reduxTypes, store } from '../../redux';
+import { reduxTypes, store, useSelector } from '../../redux';
 import { Select } from '../form/select';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
@@ -16,10 +16,14 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldGranularity = ({ value, t, viewId }) => {
+  const updatedValue = useSelector(({ view }) => view.graphTallyQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY]?.[viewId], {
+    value
+  });
+
   const options = Object.values(FIELD_TYPES).map(type => ({
     title: translate('curiosity-toolbar.granularity', { context: type }),
     value: type,
-    selected: type === value
+    selected: type === updatedValue
   }));
 
   /**
@@ -41,7 +45,7 @@ const ToolbarFieldGranularity = ({ value, t, viewId }) => {
       aria-label={t('curiosity-toolbar.placeholder', { context: 'granularity' })}
       onSelect={onSelect}
       options={options}
-      selectedOptions={value}
+      selectedOptions={updatedValue}
       placeholder={t('curiosity-toolbar.placeholder', { context: 'granularity' })}
     />
   );
@@ -69,19 +73,4 @@ ToolbarFieldGranularity.defaultProps = {
   viewId: 'toolbarFieldGranularity'
 };
 
-/**
- * Apply state to props.
- *
- * @param {object} state
- * @param {object} state.view
- * @param {object} props
- * @param {string} props.viewId
- * @returns {object}
- */
-const mapStateToProps = ({ view }, { viewId }) => ({
-  value: view.graphTallyQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY]?.[viewId]
-});
-
-const ConnectedToolbarFieldGranularity = connect(mapStateToProps)(ToolbarFieldGranularity);
-
-export { ConnectedToolbarFieldGranularity as default, ConnectedToolbarFieldGranularity, ToolbarFieldGranularity };
+export { ToolbarFieldGranularity as default, ToolbarFieldGranularity };
