@@ -8,7 +8,7 @@ import { translate } from '../i18n/i18n';
 /**
  * Display a granularity field with options.
  *
- * @fires onGranularitySelect
+ * @fires onSelect
  * @param {object} props
  * @param {string} props.value
  * @param {Function} props.t
@@ -16,16 +16,16 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldGranularity = ({ value, t, viewId }) => {
-  const options = Object.values(GRANULARITY_TYPES).map(granularity => ({
-    title: translate('curiosity-toolbar.granularity', { context: granularity }),
-    value: granularity,
-    selected: granularity === value
+  const options = Object.values(GRANULARITY_TYPES).map(type => ({
+    title: translate('curiosity-toolbar.granularity', { context: type }),
+    value: type,
+    selected: type === value
   }));
 
   /**
-   * On granularity select, dispatch granularity type.
+   * On select, dispatch type.
    *
-   * @event onGranularitySelect
+   * @event onSelect
    * @param {object} event
    * @returns {void}
    */
