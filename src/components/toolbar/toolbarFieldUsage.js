@@ -30,11 +30,16 @@ const ToolbarFieldUsage = ({ value, t, viewId }) => {
    * @returns {void}
    */
   const onSelect = (event = {}) =>
-    store.dispatch({
-      type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.USAGE],
-      viewId,
-      [RHSM_API_QUERY_TYPES.USAGE]: event.value
-    });
+    store.dispatch([
+      {
+        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
+      },
+      {
+        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.USAGE],
+        viewId,
+        [RHSM_API_QUERY_TYPES.USAGE]: event.value
+      }
+    ]);
 
   return (
     <Select
@@ -66,7 +71,7 @@ ToolbarFieldUsage.propTypes = {
 ToolbarFieldUsage.defaultProps = {
   t: translate,
   value: null,
-  viewId: 'toolbarFieldGranularity'
+  viewId: 'toolbarFieldUsage'
 };
 
 /**

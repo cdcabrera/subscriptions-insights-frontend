@@ -30,11 +30,16 @@ const ToolbarFieldSla = ({ value, t, viewId }) => {
    * @returns {void}
    */
   const onSelect = (event = {}) =>
-    store.dispatch({
-      type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.SLA],
-      viewId,
-      [RHSM_API_QUERY_TYPES.SLA]: event.value
-    });
+    store.dispatch([
+      {
+        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
+      },
+      {
+        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.SLA],
+        viewId,
+        [RHSM_API_QUERY_TYPES.SLA]: event.value
+      }
+    ]);
 
   return (
     <Select
