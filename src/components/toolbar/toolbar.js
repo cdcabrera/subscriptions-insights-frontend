@@ -9,48 +9,47 @@ import {
   ToolbarToggleGroup
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
-import { Select } from '../form/select';
-import { connect, reduxTypes, store } from '../../redux';
+import _isEqual from 'lodash/isEqual';
+import { connect, reduxTypes, store, useSelector } from '../../redux';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-import { toolbarHelpers } from './toolbarHelpers';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
+import { ToolbarFieldSla, toolbarFieldOptions as slaOptions } from './toolbarFieldSla';
+import { ToolbarFieldUsage, toolbarFieldOptions as usageOptions } from './toolbarFieldUsage';
+import { ToolbarFieldCategory, toolbarFieldOptions as categoryOptions } from './toolbarFieldCategory';
 
 /**
  * Application filter toolbar.
  *
  * @augments React.Component
- * @fires onClear
+ * @fires onClearAllFilters
  * @fires onClearFilter
- * @fires onCategorySelect
- * @fires onSelect
  */
+/*
 class Toolbar extends React.Component {
+  componentDidUpdate(prevProps) {
+    const { query } = this.props;
+    console.log('onupdate >>>', _isEqual(query, prevProps.query));
+    // if (!_isEqual(query, prevProps.query)) {
+    // }
+  }
+
   /**
    * Clear all filters' state.
    *
-   * @event onClear
-   */
-  onClear = () => {
-    const { hardFilterReset } = this.props;
-    const dispatchActions = [
-      { type: reduxTypes.toolbar.SET_ACTIVE_FILTERS, data: { activeFilters: new Set() } },
-      {
-        type: reduxTypes.query.SET_QUERY_CLEAR,
-        data: {
-          clearFilters: {
-            [RHSM_API_QUERY_TYPES.SLA]: null,
-            [RHSM_API_QUERY_TYPES.USAGE]: null
-          }
-        }
+   * @event onClearAllFilters
+   * /
+  onClearAllFilters = () => {
+    const { viewId } = this.props;
+
+    store.dispatch({
+      type: reduxTypes.query.SET_QUERY_CLEAR,
+      viewId,
+      clearFilters: {
+        [RHSM_API_QUERY_TYPES.SLA]: null,
+        [RHSM_API_QUERY_TYPES.USAGE]: null
       }
-    ];
-
-    if (hardFilterReset) {
-      dispatchActions.push({ type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { currentFilter: null } });
-    }
-
-    this.setDispatch(dispatchActions, true);
+    });
   };
 
   /**
@@ -58,130 +57,30 @@ class Toolbar extends React.Component {
    *
    * @event onClearFilter
    * @param {string} categoryTitle
-   */
+   * /
   onClearFilter = categoryTitle => {
-    const { activeFilters, currentFilter, hardFilterReset } = this.props;
-
-    const categoryOptions = toolbarHelpers.getOptions();
-    const { value: categoryValue } = categoryOptions.options.find(({ title }) => title === categoryTitle) || {};
+    const { viewId } = this.props;
+    const { value: categoryValue } = categoryOptions.find(({ title }) => title === categoryTitle) || {};
 
     if (!categoryValue) {
       return;
     }
 
-    const updatedActiveFilters = new Set(activeFilters);
-    updatedActiveFilters.delete(categoryValue);
-
-    const dispatchActions = [
-      { type: reduxTypes.toolbar.SET_ACTIVE_FILTERS, data: { activeFilters: updatedActiveFilters } },
-      {
-        type: reduxTypes.query.SET_QUERY_CLEAR,
-        data: {
-          clearFilters: {
-            [categoryValue]: null
-          }
-        }
-      }
-    ];
-
-    if (hardFilterReset) {
-      const updatedCurrentFilter = (updatedActiveFilters.size > 0 && currentFilter) || null;
-      dispatchActions.push({ type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { currentFilter: updatedCurrentFilter } });
-    }
-
-    this.setDispatch(dispatchActions, true);
-  };
-
-  /**
-   * Set Category selection.
-   *
-   * @event onCategorySelect
-   * @param {object} event
-   */
-  onCategorySelect = event => {
-    const { value } = event;
-    this.setDispatch({ type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { currentFilter: value } });
-  };
-
-  /**
-   * Set select filter selection for dispatch.
-   *
-   * @param {object} params
-   * @param {object} params.event
-   * @param {string} params.field
-   */
-  onSelect = ({ event, field }) => {
-    const { activeFilters } = this.props;
-    const { value } = event;
-    const updatedActiveFilters = new Set(activeFilters).add(field);
-
-    this.setDispatch(
-      [
-        {
-          type: reduxTypes.toolbar.SET_ACTIVE_FILTERS,
-          data: { activeFilters: updatedActiveFilters }
-        },
-        {
-          type: reduxTypes.query.SET_QUERY_RHSM_TYPES[field],
-          data: { [field]: value }
-        }
-      ],
-      true
-    );
-  };
-
-  /**
-   * Dispatch a Redux store type.
-   *
-   * @param {Array|object} actions
-   * @param {boolean} resetPage
-   */
-  setDispatch(actions, resetPage = false) {
-    const { viewId } = this.props;
-    const updatedActions = ((Array.isArray(actions) && actions) || [actions]).map(({ type, data }) => ({
-      type,
+    store.dispatch({
+      type: reduxTypes.query.SET_QUERY_CLEAR,
       viewId,
-      ...data
-    }));
-
-    if (resetPage) {
-      updatedActions.push({
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
-      });
-    }
-
-    store.dispatch(updatedActions);
-  }
+      clearFilters: {
+        [categoryValue]: null
+      }
+    });
+  };
 
   /**
-   * Available, and selected select filter options.
-   *
-   * @param {string} field
-   * @returns {{optionsSelected: Array, options: Array }}
-   */
-  setSelectFilter(field) {
-    const { query } = this.props;
-    const options = toolbarHelpers.getOptions(field);
-    const currentFilter = this.getCurrentFilter();
-    let filter;
-
-    if (field) {
-      filter = typeof query?.[field] === 'string' && options.options.find(({ value }) => value === query?.[field]);
-    } else {
-      filter = options.options.find(({ value }) => value === currentFilter);
-    }
-
-    const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
-
-    return { options, optionsSelected };
-  }
-
-  /**
-   * Return the currentFilter, fallback to selected
+   * Return the current category filter, fallback to props selected.
    *
    * @returns {string|undefined}
-   */
-  getCurrentFilter() {
+   * /
+  getCurrentCategoryFilter() {
     const { currentFilter, filterOptions } = this.props;
 
     return (
@@ -192,73 +91,150 @@ class Toolbar extends React.Component {
   }
 
   /**
-   * A select filter node.
+   * Available, and selected select filter options for chip display.
    *
-   * @param {object} params
-   * @param {string} params.id
-   * @returns {object}
-   */
-  renderSelectFilter({ id: field }) {
-    const { t } = this.props;
-    const { options, optionsSelected } = this.setSelectFilter(field);
-    const currentFilter = this.getCurrentFilter();
+   * @param {string} field
+   * @param {Array} options
+   * @returns {Array}
+   * /
+  getSelectedFilterForChips(field, options) {
+    const { query } = this.props;
+    const filter = typeof query?.[field] === 'string' && options.find(({ value }) => value === query?.[field]);
+
+    return (filter?.title && [filter.title]) || [];
+  }
+
+  /**
+   * Render a filter node.
+   *
+   * @param {string} field
+   * @returns {Node}
+   * /
+  renderFiltersWORKSISH(field) {
+    const { t, viewId } = this.props;
+    const currentCategoryFilter = this.getCurrentCategoryFilter();
+    let selectedFilterForChips;
+    let filter;
+
+    switch (field) {
+      case RHSM_API_QUERY_TYPES.USAGE:
+        selectedFilterForChips = this.getSelectedFilterForChips(field, usageOptions);
+        filter = <ToolbarFieldUsage viewId={viewId} />;
+        break;
+      case RHSM_API_QUERY_TYPES.SLA:
+      default:
+        selectedFilterForChips = this.getSelectedFilterForChips(field, slaOptions);
+        filter = <ToolbarFieldSla viewId={viewId} />;
+        break;
+    }
 
     return (
       <ToolbarFilter
         key={field}
-        chips={optionsSelected}
+        chips={selectedFilterForChips}
         deleteChip={this.onClearFilter}
         categoryName={t('curiosity-toolbar.category', { context: field })}
-        showToolbarItem={currentFilter === field}
+        showToolbarItem={currentCategoryFilter === field}
       >
-        <Select
-          aria-label={t('curiosity-toolbar.category', { context: field })}
-          onSelect={event => this.onSelect({ event, field })}
-          selectedOptions={optionsSelected}
-          placeholder={t('curiosity-toolbar.placeholder', { context: field })}
-          options={options.options}
-        />
+        {filter}
       </ToolbarFilter>
     );
+  }
+
+  renderFilters() {
+    const { t, viewId } = this.props;
+    const currentCategoryFilter = this.getCurrentCategoryFilter();
+
+    return (
+      <React.Fragment>
+        <ToolbarFilter
+          key={RHSM_API_QUERY_TYPES.SLA}
+          chips={this.getSelectedFilterForChips(RHSM_API_QUERY_TYPES.SLA, slaOptions)}
+          deleteChip={this.onClearFilter}
+          categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA })}
+          // showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.SLA}
+        >
+          <ToolbarFieldSla viewId={viewId} />
+        </ToolbarFilter>
+        <ToolbarFilter
+          key={RHSM_API_QUERY_TYPES.USAGE}
+          chips={this.getSelectedFilterForChips(RHSM_API_QUERY_TYPES.USAGE, usageOptions)}
+          deleteChip={this.onClearFilter}
+          categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE })}
+          // showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.USAGE}
+        >
+          <ToolbarFieldUsage viewId={viewId} />
+        </ToolbarFilter>
+      </React.Fragment>
+    );
+  }
+
+  /**
+   * Render toolbar category select.
+   *
+   * @returns {Node}
+   * /
+  renderCategories() {
+    const { filterOptions, viewId } = this.props;
+    const currentCategoryFilter = this.getCurrentCategoryFilter();
+    const options = categoryOptions.filter(({ value }) => filterOptions.find(({ id }) => id === value));
+
+    if (options.length > 1) {
+      return (
+        <ToolbarItem>
+          <ToolbarFieldCategory
+            viewId={viewId}
+            options={options}
+            value={currentCategoryFilter}
+            toggleIcon={<FilterIcon />}
+          />
+        </ToolbarItem>
+      );
+    }
+
+    return null;
   }
 
   /**
    * Render a filter toolbar.
    *
    * @returns {Node}
-   */
+   * /
   render() {
-    const { filterOptions, isDisabled, t } = this.props;
+    const { chipGroupSequence, filterOptions, isDisabled } = this.props;
 
     if (isDisabled) {
       return null;
     }
 
-    const { options: categoryOptions, optionsSelected: categoryOptionsSelected } = this.setSelectFilter();
+    // let updatedFilterOptions = filterOptions;
+
+    /*
+    if (chipGroupSequence.size) {
+      updatedFilterOptions = [];
+      Array.from(chipGroupSequence).forEach(field => {
+        const filter = filterOptions.find(obj => obj.id === field);
+        updatedFilterOptions.push(filter);
+      });
+    }
+    * /
 
     return (
       <PfToolbar
         id="curiosity-toolbar"
         className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
         collapseListedFiltersBreakpoint="sm"
-        clearAllFilters={this.onClear}
+        clearAllFilters={this.onClearAllFilters}
       >
         <ToolbarContent>
           <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
             <ToolbarGroup variant="filter-group">
-              {filterOptions.length !== 1 && (
-                <ToolbarItem>
-                  <Select
-                    aria-label={t('curiosity-toolbar.category')}
-                    onSelect={this.onCategorySelect}
-                    selectedOptions={categoryOptionsSelected}
-                    placeholder={t('curiosity-toolbar.placeholder')}
-                    options={categoryOptions.options}
-                    toggleIcon={<FilterIcon />}
-                  />
-                </ToolbarItem>
-              )}
-              {filterOptions.map(({ id, selected }) => this.renderSelectFilter({ id, selected }))}
+              {this.renderCategories()}
+              {
+                this.renderFilters()
+                // updatedFilterOptions.map(({ id }) => this.renderFilters(id))
+                // .sort(({ id: a }, { id: b }) => a && a.localeCompare(b))}
+              }
             </ToolbarGroup>
           </ToolbarToggleGroup>
         </ToolbarContent>
@@ -266,6 +242,95 @@ class Toolbar extends React.Component {
     );
   }
 }
+*/
+
+const Toolbar = ({ filterOptions, isDisabled, query, t, viewId }) => {
+  const currentFilter = useSelector(({ toolbar }) => toolbar.filters?.[viewId]?.currentFilter, null);
+  const updatedQuery = useSelector(({ view }) => view.query?.[viewId], query);
+
+  if (isDisabled) {
+    return null;
+  }
+
+  const updatedFilterOptions = categoryOptions.filter(({ value }) => filterOptions.find(({ id }) => id === value));
+  const currentCategoryFilter =
+    currentFilter ||
+    filterOptions.find(({ selected }) => selected === true)?.id ||
+    (filterOptions.length === 1 && filterOptions[0]?.id);
+
+  const getSelectedFilterForChips = (field, options) => {
+    const filter =
+      typeof updatedQuery?.[field] === 'string' && options.find(({ value }) => value === updatedQuery?.[field]);
+    return (filter?.title && [filter.title]) || [];
+  };
+
+  const onClearAllFilters = () =>
+    store.dispatch({
+      type: reduxTypes.query.SET_QUERY_CLEAR,
+      viewId,
+      clearFilters: {
+        [RHSM_API_QUERY_TYPES.SLA]: null,
+        [RHSM_API_QUERY_TYPES.USAGE]: null
+      }
+    });
+
+  const onClearFilter = categoryTitle => {
+    const { value: categoryValue } = categoryOptions.find(({ title }) => title === categoryTitle) || {};
+    if (categoryValue) {
+      store.dispatch({
+        type: reduxTypes.query.SET_QUERY_CLEAR,
+        viewId,
+        clearFilters: {
+          [categoryValue]: null
+        }
+      });
+    }
+  };
+
+  return (
+    <PfToolbar
+      id="curiosity-toolbar"
+      className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+      collapseListedFiltersBreakpoint="sm"
+      clearAllFilters={onClearAllFilters}
+    >
+      <ToolbarContent>
+        <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
+          <ToolbarGroup variant="filter-group">
+            {updatedFilterOptions.length > 1 && (
+              <ToolbarItem>
+                <ToolbarFieldCategory
+                  viewId={viewId}
+                  options={updatedFilterOptions}
+                  value={currentCategoryFilter}
+                  toggleIcon={<FilterIcon />}
+                />
+              </ToolbarItem>
+            )}
+            <ToolbarFilter
+              key={RHSM_API_QUERY_TYPES.SLA}
+              chips={getSelectedFilterForChips(RHSM_API_QUERY_TYPES.SLA, slaOptions)}
+              deleteChip={onClearFilter}
+              categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA })}
+              showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.SLA}
+            >
+              <ToolbarFieldSla viewId={viewId} />
+            </ToolbarFilter>
+            <ToolbarFilter
+              key={RHSM_API_QUERY_TYPES.USAGE}
+              chips={getSelectedFilterForChips(RHSM_API_QUERY_TYPES.USAGE, usageOptions)}
+              deleteChip={onClearFilter}
+              categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE })}
+              showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.USAGE}
+            >
+              <ToolbarFieldUsage viewId={viewId} />
+            </ToolbarFilter>
+          </ToolbarGroup>
+        </ToolbarToggleGroup>
+      </ToolbarContent>
+    </PfToolbar>
+  );
+};
 
 /**
  * Prop types
@@ -278,16 +343,16 @@ Toolbar.propTypes = {
     [RHSM_API_QUERY_TYPES.SLA]: PropTypes.string,
     [RHSM_API_QUERY_TYPES.USAGE]: PropTypes.string
   }),
-  activeFilters: PropTypes.instanceOf(Set),
-  currentFilter: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
+  // chipGroupSequence: PropTypes.instanceOf(Set),
+  // activeFilters: PropTypes.instanceOf(Set),
+  // currentFilter: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
   filterOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      filterType: PropTypes.oneOf(['select']),
       id: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
       selected: PropTypes.bool
     })
   ),
-  hardFilterReset: PropTypes.bool,
+  // hardFilterReset: PropTypes.bool,
   isDisabled: PropTypes.bool,
   t: PropTypes.func,
   viewId: PropTypes.string
@@ -301,20 +366,19 @@ Toolbar.propTypes = {
  */
 Toolbar.defaultProps = {
   query: {},
-  activeFilters: new Set(),
-  currentFilter: null,
+  // activeFilters: new Set(),
+  // chipGroupSequence: new Set(),
+  // currentFilter: null,
   filterOptions: [
     {
-      id: RHSM_API_QUERY_TYPES.SLA,
-      filterType: 'select'
+      id: RHSM_API_QUERY_TYPES.SLA
     },
     {
       id: RHSM_API_QUERY_TYPES.USAGE,
-      filterType: 'select',
       selected: true
     }
   ],
-  hardFilterReset: false,
+  // hardFilterReset: false,
   isDisabled: helpers.UI_DISABLED_TOOLBAR,
   t: translate,
   viewId: 'toolbar'
@@ -325,12 +389,19 @@ Toolbar.defaultProps = {
  *
  * @param {object} state
  * @param {object} state.toolbar
+ * @param {object} state.view
  * @param {object} props
  * @param {string} props.viewId
  * @returns {object}
  */
-const mapStateToProps = ({ toolbar }, { viewId }) => ({ ...toolbar.filters?.[viewId] });
+/*
+const mapStateToProps = ({ toolbar, view }, { viewId }) => ({
+  query: view?.query?.[viewId],
+  ...toolbar.filters?.[viewId]
+});
 
 const ConnectedToolbar = connect(mapStateToProps)(Toolbar);
 
 export { ConnectedToolbar as default, ConnectedToolbar, Toolbar };
+ */
+export { Toolbar as default, Toolbar };
