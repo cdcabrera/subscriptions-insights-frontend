@@ -8,7 +8,7 @@ import { helpers, dateHelpers } from '../../common';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { c3GraphCardHelpers } from './c3GraphCardHelpers';
 import { C3GraphCardLegendItem } from './c3GraphCardLegendItem';
-import { graphCardTypes } from '../graphCard/graphCardTypes';
+import { graphCardTypes } from './graphCardTypes';
 import { C3Chart } from '../c3Chart/c3Chart';
 import { Loader } from '../loader/loader';
 import { translate } from '../i18n/i18n';
