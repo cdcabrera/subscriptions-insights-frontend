@@ -26,7 +26,7 @@ class TextInput extends React.Component {
 
   render() {
     const { name, value } = this.state;
-    const { className, ...props } = this.props;
+    const { className, type, ...props } = this.props;
     const nameId = name || helpers.generateId();
 
     return (
@@ -35,7 +35,7 @@ class TextInput extends React.Component {
         name={nameId}
         className={`curiosity-text-input ${className}`}
         value={value}
-        type="text"
+        type={type}
         onChange={this.onChange}
         {...props}
       />
@@ -49,7 +49,8 @@ class TextInput extends React.Component {
 TextInput.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  type: PropTypes.string
 };
 
 /**
@@ -58,7 +59,8 @@ TextInput.propTypes = {
 TextInput.defaultProps = {
   className: '',
   name: null,
-  onChange: helpers.noop
+  onChange: helpers.noop,
+  type: 'text'
 };
 
 export { TextInput as default, TextInput };

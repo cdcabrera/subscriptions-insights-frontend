@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect, reduxTypes, store } from '../../redux';
+import { Button, ButtonVariant, InputGroup } from '@patternfly/react-core';
+import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
+import { reduxTypes, store, useSelector } from '../../redux';
 import { TextInput } from '../form/textInput';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
@@ -8,7 +10,7 @@ import { translate } from '../i18n/i18n';
 /**
  * Display a display name input field for search.
  *
- * @fires onChange
+ * @fires onSubmit
  * @param {object} props
  * @param {string} props.value
  * @param {Function} props.t
@@ -16,14 +18,19 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldDisplayName = ({ value, t, viewId }) => {
+  let updatedValue = useSelector(
+    ({ view }) => view.inventoryHostsQuery?.[RHSM_API_QUERY_TYPES.DISPLAY_NAME]?.[viewId],
+    value
+  );
+
+  // ToDo: need to reset this for paging... but really only "offset"
   /**
-   * On change, dispatch type.
+   * On submit, dispatch type.
    *
-   * @event onChange
-   * @param {object} event
+   * @event onSubmit
    * @returns {void}
    */
-  const onChange = (event = {}) =>
+  const onSubmit = () =>
     store.dispatch([
       {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
@@ -31,17 +38,31 @@ const ToolbarFieldDisplayName = ({ value, t, viewId }) => {
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.DISPLAY_NAME],
         viewId,
-        [RHSM_API_QUERY_TYPES.DISPLAY_NAME]: event.value
+        [RHSM_API_QUERY_TYPES.DISPLAY_NAME]: updatedValue
       }
     ]);
 
+  const onChange = (event = {}) => {
+    updatedValue = event.value;
+  };
+
   return (
-    <TextInput
-      aria-label={t('curiosity-toolbar.placeholder', { context: 'displayName' })}
-      onChange={onChange}
-      value={value}
-      placeholder={t('curiosity-toolbar.placeholder', { context: 'displayName' })}
-    />
+    <InputGroup>
+      <TextInput
+        aria-label={t('curiosity-toolbar.placeholder', { context: 'displayName' })}
+        onChange={onChange}
+        value={updatedValue}
+        placeholder={t('curiosity-toolbar.placeholder', { context: 'displayName' })}
+        type="search"
+      />
+      <Button
+        onClick={onSubmit}
+        variant={ButtonVariant.control}
+        aria-label={t('curiosity-toolbar.button', { context: 'displayName' })}
+      >
+        <SearchIcon />
+      </Button>
+    </InputGroup>
   );
 };
 
@@ -67,19 +88,4 @@ ToolbarFieldDisplayName.defaultProps = {
   viewId: 'toolbarFieldDisplayName'
 };
 
-/**
- * Apply state to props.
- *
- * @param {object} state
- * @param {object} state.view
- * @param {object} props
- * @param {string} props.viewId
- * @returns {object}
- */
-const mapStateToProps = ({ view }, { viewId }) => ({
-  value: view.inventoryHostsQuery?.[RHSM_API_QUERY_TYPES.DISPLAY_NAME]?.[viewId]
-});
-
-const ConnectedToolbarFieldDisplayName = connect(mapStateToProps)(ToolbarFieldDisplayName);
-
-export { ConnectedToolbarFieldDisplayName as default, ConnectedToolbarFieldDisplayName, ToolbarFieldDisplayName };
+export { ToolbarFieldDisplayName as default, ToolbarFieldDisplayName };
