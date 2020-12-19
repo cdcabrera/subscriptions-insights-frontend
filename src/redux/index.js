@@ -11,8 +11,8 @@ import { helpers } from '../common';
 const connectRouter = (mapStateToProps, mapDispatchToProps) => component =>
   withRouter(connect(mapStateToProps, mapDispatchToProps)(component));
 
-const useSelector = (selector, { equality, value = null }) =>
-  (helpers.TEST_MODE && value) || UseSelector(selector, equality) || value;
+const useSelector = (selector, value = null, options = {}) =>
+  (helpers.TEST_MODE && value) || UseSelector(selector, options.equality) || value;
 
 export {
   apiQueries,
