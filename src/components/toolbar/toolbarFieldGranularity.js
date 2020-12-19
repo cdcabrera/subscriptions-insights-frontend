@@ -16,9 +16,10 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldGranularity = ({ value, t, viewId }) => {
-  const updatedValue = useSelector(({ view }) => view.graphTallyQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY]?.[viewId], {
+  const updatedValue = useSelector(
+    ({ view }) => view.graphTallyQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY]?.[viewId],
     value
-  });
+  );
 
   const options = Object.values(FIELD_TYPES).map(type => ({
     title: translate('curiosity-toolbar.granularity', { context: type }),
