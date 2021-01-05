@@ -325,11 +325,15 @@ Toolbar.defaultProps = {
  *
  * @param {object} state
  * @param {object} state.toolbar
+ * @param {object} state.view
  * @param {object} props
  * @param {string} props.viewId
  * @returns {object}
  */
-const mapStateToProps = ({ toolbar }, { viewId }) => ({ ...toolbar.filters?.[viewId] });
+const mapStateToProps = ({ toolbar, view }, { viewId }) => ({
+  query: view?.query?.[viewId],
+  ...toolbar.filters?.[viewId]
+});
 
 const ConnectedToolbar = connect(mapStateToProps)(Toolbar);
 
