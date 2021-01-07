@@ -110,7 +110,7 @@
 
     "sla_none": "No SLA",
     "sla_premium": "Premium",
-    "sla_self-Support": "Self-Support",
+    "sla_self-support": "Self-Support",
     "sla_standard": "Standard",
 
     "uom_cores": "Cores",

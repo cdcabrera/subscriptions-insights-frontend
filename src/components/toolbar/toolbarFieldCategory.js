@@ -34,8 +34,9 @@ const toolbarFieldOptions = [
  * @param {string} props.viewId
  * @returns {Node}
  */
-const ToolbarFieldCategory = ({ options, t, value, viewId }) => {
+const ToolbarFieldCategory = ({ options, t, value, viewId, ...props }) => {
   const updatedValue = useSelector(({ toolbar }) => toolbar.filters?.[viewId]?.currentFilter, value);
+  // const updatedValueChips = useSelector(({ toolbar }) => toolbar.filters?.[viewId]?.currentFilter);
   const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
 
   /**
@@ -59,6 +60,7 @@ const ToolbarFieldCategory = ({ options, t, value, viewId }) => {
       options={updatedOptions}
       selectedOptions={updatedValue}
       placeholder={t('curiosity-toolbar.placeholder')}
+      {...props}
     />
   );
 };

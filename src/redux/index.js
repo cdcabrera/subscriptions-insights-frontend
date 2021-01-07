@@ -8,11 +8,31 @@ import { reduxSelectors } from './selectors';
 import { reduxTypes } from './types';
 import { helpers } from '../common';
 
+/**
+ * Wrapper for applying Router Dom withRouter and Redux connect.
+ *
+ * @param {Function} mapStateToProps
+ * @param {Function} mapDispatchToProps
+ * @returns {Function}
+ */
 const connectRouter = (mapStateToProps, mapDispatchToProps) => component =>
   withRouter(connect(mapStateToProps, mapDispatchToProps)(component));
 
-const useSelector = (selector, value = null, options = {}) =>
-  (helpers.TEST_MODE && value) || UseSelector(selector, options.equality) || value;
+/**
+ * Wrapper for Redux hook, useSelector. Applies test mode and a fallback value.
+ *
+ * @param {Function} selector
+ * @param {*} value
+ * @param {object} options
+ * @returns {*}
+ */
+const useSelector = (selector, value = null, options = {}) => {
+  if (helpers.TEST_MODE) {
+    return value;
+  }
+
+  return UseSelector(selector, options.equality) ?? value;
+};
 
 export {
   apiQueries,

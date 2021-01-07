@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect, reduxTypes, store } from '../../redux';
+import { reduxTypes, store, useSelector } from '../../redux';
 import { Select } from '../form/select';
 import { RHSM_API_QUERY_SLA_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
+import { toolbarFieldOptions as categoryOptions } from './toolbarFieldCategory';
 
+/**
+ * Select field options.
+ *
+ * @type {{title: (string|Node), value: string, selected: boolean}[]}
+ */
 const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
   title: translate('curiosity-toolbar.sla', { context: (type === '' && 'none') || type }),
   value: type,
@@ -16,21 +22,15 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  *
  * @fires onSelect
  * @param {object} props
- * @param {string} props.value
+ * @param {object} props.options
  * @param {Function} props.t
+ * @param {string} props.value
  * @param {string} props.viewId
  * @returns {Node}
  */
-const ToolbarFieldSla = ({ value, t, viewId }) => {
-  const options = toolbarFieldOptions.map(option => ({ ...option, selected: option.value === value }));
-  /*
-  const options = Object.values(FIELD_TYPES).map(type => ({
-    title: translate('curiosity-toolbar.sla', { context: (type === '' && 'none') || type }),
-    value: type,
-    selected: type === value
-  }));
-
-   */
+const ToolbarFieldSla = ({ options, t, value, viewId, ...props }) => {
+  const updatedValue = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.SLA], value);
+  const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
 
   /**
    * On select, dispatch type.
@@ -45,6 +45,12 @@ const ToolbarFieldSla = ({ value, t, viewId }) => {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
       },
       {
+        type: reduxTypes.toolbar.SET_ACTIVE_FILTERS,
+        viewId,
+        // currentFilter: categoryOptions.find(obj => obj.value === RHSM_API_QUERY_TYPES.SLA)?.title
+        currentFilter: categoryOptions.find(obj => obj.value === RHSM_API_QUERY_TYPES.SLA)?.value
+      },
+      {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.SLA],
         viewId,
         [RHSM_API_QUERY_TYPES.SLA]: event.value
@@ -55,9 +61,10 @@ const ToolbarFieldSla = ({ value, t, viewId }) => {
     <Select
       aria-label={t('curiosity-toolbar.placeholder', { context: 'sla' })}
       onSelect={onSelect}
-      options={options}
-      selectedOptions={value}
+      options={updatedOptions}
+      selectedOptions={updatedValue}
       placeholder={t('curiosity-toolbar.placeholder', { context: 'sla' })}
+      {...props}
     />
   );
 };
@@ -65,9 +72,16 @@ const ToolbarFieldSla = ({ value, t, viewId }) => {
 /**
  * Prop types.
  *
- * @type {{viewId: string, t: Function, value: string}}
+ * @type {{viewId: string, t: Function, options: Array, value: string}}
  */
 ToolbarFieldSla.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.node,
+      value: PropTypes.any,
+      selected: PropTypes.bool
+    })
+  ),
   t: PropTypes.func,
   value: PropTypes.oneOf([...Object.values(FIELD_TYPES)]),
   viewId: PropTypes.string
@@ -76,27 +90,13 @@ ToolbarFieldSla.propTypes = {
 /**
  * Default props.
  *
- * @type {{viewId: string, t: translate, value: string}}
+ * @type {{viewId: string, t: translate, options: Array, value: string}}
  */
 ToolbarFieldSla.defaultProps = {
+  options: toolbarFieldOptions,
   t: translate,
   value: null,
   viewId: 'toolbarFieldSla'
 };
 
-/**
- * Apply state to props.
- *
- * @param {object} state
- * @param {object} state.view
- * @param {object} props
- * @param {string} props.viewId
- * @returns {object}
- */
-const mapStateToProps = ({ view }, { viewId }) => ({
-  value: view.query?.[RHSM_API_QUERY_TYPES.SLA]?.[viewId]
-});
-
-const ConnectedToolbarFieldSla = connect(mapStateToProps)(ToolbarFieldSla);
-
-export { ConnectedToolbarFieldSla as default, ConnectedToolbarFieldSla, ToolbarFieldSla, toolbarFieldOptions };
+export { ToolbarFieldSla as default, ToolbarFieldSla, toolbarFieldOptions };
