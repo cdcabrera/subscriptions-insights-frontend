@@ -9,12 +9,18 @@ import {
   ToolbarToggleGroup
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
-import { Select } from '../form/select';
+// import { Select } from '../form/select';
 import { connect, reduxTypes, store } from '../../redux';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-import { toolbarHelpers } from './toolbarHelpers';
+// import { toolbarHelpers } from './toolbarHelpers';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
+import { ConnectedToolbarFieldSla as ToolbarFieldSla, toolbarFieldOptions as slaOptions } from './toolbarFieldSla';
+import {
+  ConnectedToolbarFieldUsage as ToolbarFieldUsage,
+  toolbarFieldOptions as usageOptions
+} from './toolbarFieldUsage';
+import { ToolbarFieldCategory, toolbarFieldOptions as categoryOptions } from './toolbarFieldCategory';
 
 /**
  * Application filter toolbar.
@@ -25,12 +31,13 @@ import { translate } from '../i18n/i18n';
  * @fires onCategorySelect
  * @fires onSelect
  */
-class Toolbar extends React.Component {
+/*
+class ToolbarOLD extends React.Component {
   /**
    * Clear all filters' state.
    *
    * @event onClear
-   */
+   * /
   onClear = () => {
     const { hardFilterReset } = this.props;
     const dispatchActions = [
@@ -58,7 +65,7 @@ class Toolbar extends React.Component {
    *
    * @event onClearFilter
    * @param {string} categoryTitle
-   */
+   * /
   onClearFilter = categoryTitle => {
     const { activeFilters, currentFilter, hardFilterReset } = this.props;
 
@@ -97,7 +104,7 @@ class Toolbar extends React.Component {
    *
    * @event onCategorySelect
    * @param {object} event
-   */
+   * /
   onCategorySelect = event => {
     const { value } = event;
     this.setDispatch({ type: reduxTypes.toolbar.SET_FILTER_TYPE, data: { currentFilter: value } });
@@ -109,7 +116,7 @@ class Toolbar extends React.Component {
    * @param {object} params
    * @param {object} params.event
    * @param {string} params.field
-   */
+   * /
   onSelect = ({ event, field }) => {
     const { activeFilters } = this.props;
     const { value } = event;
@@ -135,7 +142,7 @@ class Toolbar extends React.Component {
    *
    * @param {Array|object} actions
    * @param {boolean} resetPage
-   */
+   * /
   setDispatch(actions, resetPage = false) {
     const { viewId } = this.props;
     const updatedActions = ((Array.isArray(actions) && actions) || [actions]).map(({ type, data }) => ({
@@ -158,7 +165,7 @@ class Toolbar extends React.Component {
    *
    * @param {string} field
    * @returns {{optionsSelected: Array, options: Array }}
-   */
+   * /
   setSelectFilter(field) {
     const { query } = this.props;
     const options = toolbarHelpers.getOptions(field);
@@ -180,7 +187,7 @@ class Toolbar extends React.Component {
    * Return the currentFilter, fallback to selected
    *
    * @returns {string|undefined}
-   */
+   * /
   getCurrentFilter() {
     const { currentFilter, filterOptions } = this.props;
 
@@ -197,7 +204,7 @@ class Toolbar extends React.Component {
    * @param {object} params
    * @param {string} params.id
    * @returns {object}
-   */
+   * /
   renderSelectFilter({ id: field }) {
     const { t } = this.props;
     const { options, optionsSelected } = this.setSelectFilter(field);
@@ -226,7 +233,7 @@ class Toolbar extends React.Component {
    * Render a filter toolbar.
    *
    * @returns {Node}
-   */
+   * /
   render() {
     const { filterOptions, isDisabled, t } = this.props;
 
@@ -266,6 +273,162 @@ class Toolbar extends React.Component {
     );
   }
 }
+*/
+
+class Toolbar extends React.Component {
+  onClear = () => {};
+
+  onClearFilter = () => {};
+
+  /*
+  onCategorySelect = event => {
+    const { value } = event;
+    const { viewId } = this.props;
+
+    store.dispatch({
+      type: reduxTypes.toolbar.SET_FILTER_TYPE,
+      viewId,
+      currentFilter: value
+    });
+  };
+  */
+
+  // getSelectedFilter(field) {
+  getSelectedFilter(field, options) {
+    const { query } = this.props;
+    // const filter = (typeof query?.[field] === 'string' && query?.[field]) || null;
+    const filter = typeof query?.[field] === 'string' && options.find(({ value }) => value === query?.[field]);
+    return (filter?.title && [filter.title]) || [];
+
+    // const optionsSelected = (filter?.title && [filter.title]) || [];
+    // filter = typeof query?.[field] === 'string' && options.options.find(({ value }) => value === query?.[field]);
+    // const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
+  }
+
+  /**
+   * Return the currentFilter, fallback to selected
+   *
+   * @returns {string|undefined}
+   */
+  getCurrentFilter() {
+    const { currentFilter, filterOptions } = this.props;
+
+    return (
+      currentFilter ||
+      filterOptions.find(({ selected }) => selected === true)?.id ||
+      (filterOptions.length === 1 && filterOptions[0]?.id)
+    );
+  }
+
+  renderFilters(field) {
+    const { t, viewId } = this.props;
+    // const selectedFilter = this.getSelectedFilter(field);
+    const currentFilter = this.getCurrentFilter();
+    let selectedFilter;
+    let filter;
+
+    switch (field) {
+      case RHSM_API_QUERY_TYPES.USAGE:
+        selectedFilter = this.getSelectedFilter(field, usageOptions);
+        filter = <ToolbarFieldUsage viewId={viewId} />;
+        break;
+      case RHSM_API_QUERY_TYPES.SLA:
+      default:
+        selectedFilter = this.getSelectedFilter(field, slaOptions);
+        filter = <ToolbarFieldSla viewId={viewId} />;
+        break;
+    }
+
+    return (
+      <ToolbarFilter
+        key={field}
+        chips={selectedFilter}
+        deleteChip={this.onClearFilter}
+        categoryName={t('curiosity-toolbar.category', { context: field })}
+        showToolbarItem={currentFilter === field}
+      >
+        {filter}
+      </ToolbarFilter>
+    );
+  }
+
+  /*
+  renderCategories() {
+    const { filterOptions, t } = this.props;
+    const categoryOptions = [
+      {
+        title: t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA }),
+        value: RHSM_API_QUERY_TYPES.SLA
+      },
+      {
+        title: t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE }),
+        value: RHSM_API_QUERY_TYPES.USAGE
+      }
+    ].filter(({ value }) => filterOptions.find(({ id }) => id === value));
+
+    if (categoryOptions.length > 1) {
+      return (
+        <ToolbarItem>
+          <Select
+            aria-label={t('curiosity-toolbar.category')}
+            onSelect={this.onCategorySelect}
+            selectedOptions={null}
+            placeholder={t('curiosity-toolbar.placeholder')}
+            options={categoryOptions}
+            toggleIcon={<FilterIcon />}
+          />
+        </ToolbarItem>
+      );
+    }
+
+    return null;
+  }
+  */
+  renderCategories() {
+    const { filterOptions, viewId } = this.props;
+    const currentFilter = this.getCurrentFilter();
+    const options = categoryOptions.filter(({ value }) => filterOptions.find(({ id }) => id === value));
+    // const optionSelected = ;
+    // filter = options.options.find(({ value }) => value === currentFilter);
+    // const optionsSelected = (filter?.title && [filter.title]) || (options?.selected && [options.selected]) || [];
+
+    if (options.length > 1) {
+      return (
+        <ToolbarItem>
+          <ToolbarFieldCategory viewId={viewId} options={options} value={currentFilter} />
+        </ToolbarItem>
+      );
+    }
+
+    return null;
+  }
+
+  render() {
+    const { filterOptions, isDisabled } = this.props;
+
+    if (isDisabled) {
+      return null;
+    }
+
+    return (
+      <PfToolbar
+        id="curiosity-toolbar"
+        className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+        collapseListedFiltersBreakpoint="sm"
+        clearAllFilters={this.onClear}
+      >
+        <ToolbarContent>
+          <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
+            <ToolbarGroup variant="filter-group">
+              {this.renderCategories()}
+              {filterOptions.map(({ id }) => this.renderFilters(id))}
+            </ToolbarGroup>
+          </ToolbarToggleGroup>
+        </ToolbarContent>
+      </PfToolbar>
+    );
+  }
+}
 
 /**
  * Prop types
@@ -282,7 +445,6 @@ Toolbar.propTypes = {
   currentFilter: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
   filterOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      filterType: PropTypes.oneOf(['select']),
       id: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
       selected: PropTypes.bool
     })
@@ -305,12 +467,10 @@ Toolbar.defaultProps = {
   currentFilter: null,
   filterOptions: [
     {
-      id: RHSM_API_QUERY_TYPES.SLA,
-      filterType: 'select'
+      id: RHSM_API_QUERY_TYPES.SLA
     },
     {
       id: RHSM_API_QUERY_TYPES.USAGE,
-      filterType: 'select',
       selected: true
     }
   ],

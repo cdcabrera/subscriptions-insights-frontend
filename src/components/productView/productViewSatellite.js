@@ -230,8 +230,8 @@ ProductViewSatellite.defaultProps = {
         id: RHSM_API_QUERY_TYPES.SLA
       },
       {
-        id: RHSM_API_QUERY_TYPES.USAGE,
-        selected: true
+        id: RHSM_API_QUERY_TYPES.USAGE
+        // selected: true
       }
     ]
   }

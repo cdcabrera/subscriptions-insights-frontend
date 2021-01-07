@@ -5,6 +5,12 @@ import { Select } from '../form/select';
 import { RHSM_API_QUERY_USAGE_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
 
+const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
+  title: translate('curiosity-toolbar.usage', { context: (type === '' && 'Unspecified') || type }),
+  value: type,
+  selected: false
+}));
+
 /**
  * Display a usage field with options.
  *
@@ -16,11 +22,14 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldUsage = ({ value, t, viewId }) => {
+  const options = toolbarFieldOptions.map(option => ({ ...option, selected: option.value === value }));
+  /*
   const options = Object.values(FIELD_TYPES).map(type => ({
     title: translate('curiosity-toolbar.usage', { context: (type === '' && 'Unspecified') || type }),
     value: type,
     selected: type === value
   }));
+   */
 
   /**
    * On select, dispatch type.
@@ -89,4 +98,4 @@ const mapStateToProps = ({ view }, { viewId }) => ({
 
 const ConnectedToolbarFieldUsage = connect(mapStateToProps)(ToolbarFieldUsage);
 
-export { ConnectedToolbarFieldUsage as default, ConnectedToolbarFieldUsage, ToolbarFieldUsage };
+export { ConnectedToolbarFieldUsage as default, ConnectedToolbarFieldUsage, ToolbarFieldUsage, toolbarFieldOptions };

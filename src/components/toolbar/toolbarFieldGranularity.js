@@ -6,6 +6,17 @@ import { RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES }
 import { translate } from '../i18n/i18n';
 
 /**
+ * Select field options.
+ *
+ * @type {{title: (string|Node), value: string, selected: boolean}[]}
+ */
+const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
+  title: translate('curiosity-toolbar.granularity', { context: type }),
+  value: type,
+  selected: false
+}));
+
+/**
  * Display a granularity field with options.
  *
  * @fires onSelect
@@ -21,11 +32,7 @@ const ToolbarFieldGranularity = ({ value, t, viewId }) => {
     value
   );
 
-  const options = Object.values(FIELD_TYPES).map(type => ({
-    title: translate('curiosity-toolbar.granularity', { context: type }),
-    value: type,
-    selected: type === updatedValue
-  }));
+  const options = toolbarFieldOptions.map(option => ({ ...option, selected: option.value === updatedValue }));
 
   /**
    * On select, dispatch type.
@@ -74,4 +81,4 @@ ToolbarFieldGranularity.defaultProps = {
   viewId: 'toolbarFieldGranularity'
 };
 
-export { ToolbarFieldGranularity as default, ToolbarFieldGranularity };
+export { ToolbarFieldGranularity as default, ToolbarFieldGranularity, toolbarFieldOptions };
