@@ -31,19 +31,11 @@ const platformModalRedirect = path.join(helpers.UI_DEPLOY_PATH_PREFIX, '/?not_en
  */
 const routes = [
   {
-    to: '/rhel-sw/all',
-    redirect: true,
-    component: React.lazy(() => import('../rhelView/rhelView')),
-    exact: true,
-    render: true,
-    disabled: helpers.UI_DISABLED
-  },
-  {
     id: 'rhel-sw',
     to: '/rhel-sw/:variant',
+    redirect: '/rhel-sw/all',
     component: React.lazy(() => import('../rhelView/rhelView')),
     exact: true,
-    render: true,
     disabled: helpers.UI_DISABLED
   },
   {
@@ -51,7 +43,6 @@ const routes = [
     to: '/openshift-sw',
     component: React.lazy(() => import('../openshiftView/openshiftView')),
     exact: true,
-    render: true,
     disabled: helpers.UI_DISABLED
   },
   {
@@ -59,7 +50,6 @@ const routes = [
     to: '/satellite-sw/all',
     component: React.lazy(() => import('../productView/productViewSatellite')),
     exact: true,
-    render: true,
     disabled: helpers.UI_DISABLED
   },
   {
@@ -67,7 +57,6 @@ const routes = [
     to: '/satellite-sw/:variant',
     component: React.lazy(() => import('../productView/productViewSatellite')),
     exact: true,
-    render: true,
     disabled: helpers.UI_DISABLED
   },
   {
@@ -75,7 +64,6 @@ const routes = [
     to: '/optin',
     component: React.lazy(() => import('../optinView/optinView')),
     exact: true,
-    render: true,
     activateOnError: true,
     disabled: helpers.UI_DISABLED
   }
