@@ -9,7 +9,8 @@ import {
   ToolbarToggleGroup
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
-import { connect, reduxTypes, store } from '../../redux';
+import _isEqual from 'lodash/isEqual';
+import { connect, reduxTypes, store, useSelector } from '../../redux';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
@@ -24,12 +25,20 @@ import { ToolbarFieldCategory, toolbarFieldOptions as categoryOptions } from './
  * @fires onClearAllFilters
  * @fires onClearFilter
  */
+/*
 class Toolbar extends React.Component {
+  componentDidUpdate(prevProps) {
+    const { query } = this.props;
+    console.log('onupdate >>>', _isEqual(query, prevProps.query));
+    // if (!_isEqual(query, prevProps.query)) {
+    // }
+  }
+
   /**
    * Clear all filters' state.
    *
    * @event onClearAllFilters
-   */
+   * /
   onClearAllFilters = () => {
     const { viewId } = this.props;
 
@@ -48,7 +57,7 @@ class Toolbar extends React.Component {
    *
    * @event onClearFilter
    * @param {string} categoryTitle
-   */
+   * /
   onClearFilter = categoryTitle => {
     const { viewId } = this.props;
     const { value: categoryValue } = categoryOptions.find(({ title }) => title === categoryTitle) || {};
@@ -70,7 +79,7 @@ class Toolbar extends React.Component {
    * Return the current category filter, fallback to props selected.
    *
    * @returns {string|undefined}
-   */
+   * /
   getCurrentCategoryFilter() {
     const { currentFilter, filterOptions } = this.props;
 
@@ -87,7 +96,7 @@ class Toolbar extends React.Component {
    * @param {string} field
    * @param {Array} options
    * @returns {Array}
-   */
+   * /
   getSelectedFilterForChips(field, options) {
     const { query } = this.props;
     const filter = typeof query?.[field] === 'string' && options.find(({ value }) => value === query?.[field]);
@@ -100,7 +109,7 @@ class Toolbar extends React.Component {
    *
    * @param {string} field
    * @returns {Node}
-   */
+   * /
   renderFiltersWORKSISH(field) {
     const { t, viewId } = this.props;
     const currentCategoryFilter = this.getCurrentCategoryFilter();
@@ -139,22 +148,22 @@ class Toolbar extends React.Component {
     return (
       <React.Fragment>
         <ToolbarFilter
-          key={RHSM_API_QUERY_TYPES.USAGE}
-          chips={this.getSelectedFilterForChips(RHSM_API_QUERY_TYPES.USAGE, usageOptions)}
-          deleteChip={this.onClearFilter}
-          categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE })}
-          showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.USAGE}
-        >
-          <ToolbarFieldUsage viewId={viewId} />
-        </ToolbarFilter>
-        <ToolbarFilter
           key={RHSM_API_QUERY_TYPES.SLA}
           chips={this.getSelectedFilterForChips(RHSM_API_QUERY_TYPES.SLA, slaOptions)}
           deleteChip={this.onClearFilter}
           categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA })}
-          showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.SLA}
+          // showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.SLA}
         >
           <ToolbarFieldSla viewId={viewId} />
+        </ToolbarFilter>
+        <ToolbarFilter
+          key={RHSM_API_QUERY_TYPES.USAGE}
+          chips={this.getSelectedFilterForChips(RHSM_API_QUERY_TYPES.USAGE, usageOptions)}
+          deleteChip={this.onClearFilter}
+          categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE })}
+          // showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.USAGE}
+        >
+          <ToolbarFieldUsage viewId={viewId} />
         </ToolbarFilter>
       </React.Fragment>
     );
@@ -164,7 +173,7 @@ class Toolbar extends React.Component {
    * Render toolbar category select.
    *
    * @returns {Node}
-   */
+   * /
   renderCategories() {
     const { filterOptions, viewId } = this.props;
     const currentCategoryFilter = this.getCurrentCategoryFilter();
@@ -190,7 +199,7 @@ class Toolbar extends React.Component {
    * Render a filter toolbar.
    *
    * @returns {Node}
-   */
+   * /
   render() {
     const { chipGroupSequence, filterOptions, isDisabled } = this.props;
 
@@ -198,8 +207,9 @@ class Toolbar extends React.Component {
       return null;
     }
 
-    let updatedFilterOptions = filterOptions;
+    // let updatedFilterOptions = filterOptions;
 
+    /*
     if (chipGroupSequence.size) {
       updatedFilterOptions = [];
       Array.from(chipGroupSequence).forEach(field => {
@@ -207,6 +217,7 @@ class Toolbar extends React.Component {
         updatedFilterOptions.push(filter);
       });
     }
+    * /
 
     return (
       <PfToolbar
@@ -231,6 +242,95 @@ class Toolbar extends React.Component {
     );
   }
 }
+*/
+
+const Toolbar = ({ filterOptions, isDisabled, query, t, viewId }) => {
+  const currentFilter = useSelector(({ toolbar }) => toolbar.filters?.[viewId]?.currentFilter, null);
+  const updatedQuery = useSelector(({ view }) => view.query?.[viewId], query);
+
+  if (isDisabled) {
+    return null;
+  }
+
+  const updatedFilterOptions = categoryOptions.filter(({ value }) => filterOptions.find(({ id }) => id === value));
+  const currentCategoryFilter =
+    currentFilter ||
+    filterOptions.find(({ selected }) => selected === true)?.id ||
+    (filterOptions.length === 1 && filterOptions[0]?.id);
+
+  const getSelectedFilterForChips = (field, options) => {
+    const filter =
+      typeof updatedQuery?.[field] === 'string' && options.find(({ value }) => value === updatedQuery?.[field]);
+    return (filter?.title && [filter.title]) || [];
+  };
+
+  const onClearAllFilters = () =>
+    store.dispatch({
+      type: reduxTypes.query.SET_QUERY_CLEAR,
+      viewId,
+      clearFilters: {
+        [RHSM_API_QUERY_TYPES.SLA]: null,
+        [RHSM_API_QUERY_TYPES.USAGE]: null
+      }
+    });
+
+  const onClearFilter = categoryTitle => {
+    const { value: categoryValue } = categoryOptions.find(({ title }) => title === categoryTitle) || {};
+    if (categoryValue) {
+      store.dispatch({
+        type: reduxTypes.query.SET_QUERY_CLEAR,
+        viewId,
+        clearFilters: {
+          [categoryValue]: null
+        }
+      });
+    }
+  };
+
+  return (
+    <PfToolbar
+      id="curiosity-toolbar"
+      className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+      collapseListedFiltersBreakpoint="sm"
+      clearAllFilters={onClearAllFilters}
+    >
+      <ToolbarContent>
+        <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
+          <ToolbarGroup variant="filter-group">
+            {updatedFilterOptions.length > 1 && (
+              <ToolbarItem>
+                <ToolbarFieldCategory
+                  viewId={viewId}
+                  options={updatedFilterOptions}
+                  value={currentCategoryFilter}
+                  toggleIcon={<FilterIcon />}
+                />
+              </ToolbarItem>
+            )}
+            <ToolbarFilter
+              key={RHSM_API_QUERY_TYPES.SLA}
+              chips={getSelectedFilterForChips(RHSM_API_QUERY_TYPES.SLA, slaOptions)}
+              deleteChip={onClearFilter}
+              categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA })}
+              showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.SLA}
+            >
+              <ToolbarFieldSla viewId={viewId} />
+            </ToolbarFilter>
+            <ToolbarFilter
+              key={RHSM_API_QUERY_TYPES.USAGE}
+              chips={getSelectedFilterForChips(RHSM_API_QUERY_TYPES.USAGE, usageOptions)}
+              deleteChip={onClearFilter}
+              categoryName={t('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE })}
+              showToolbarItem={currentCategoryFilter === RHSM_API_QUERY_TYPES.USAGE}
+            >
+              <ToolbarFieldUsage viewId={viewId} />
+            </ToolbarFilter>
+          </ToolbarGroup>
+        </ToolbarToggleGroup>
+      </ToolbarContent>
+    </PfToolbar>
+  );
+};
 
 /**
  * Prop types
@@ -243,9 +343,9 @@ Toolbar.propTypes = {
     [RHSM_API_QUERY_TYPES.SLA]: PropTypes.string,
     [RHSM_API_QUERY_TYPES.USAGE]: PropTypes.string
   }),
-  chipGroupSequence: PropTypes.instanceOf(Set),
+  // chipGroupSequence: PropTypes.instanceOf(Set),
   // activeFilters: PropTypes.instanceOf(Set),
-  currentFilter: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
+  // currentFilter: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
   filterOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOf([RHSM_API_QUERY_TYPES.SLA, RHSM_API_QUERY_TYPES.USAGE]),
@@ -267,8 +367,8 @@ Toolbar.propTypes = {
 Toolbar.defaultProps = {
   query: {},
   // activeFilters: new Set(),
-  chipGroupSequence: new Set(),
-  currentFilter: null,
+  // chipGroupSequence: new Set(),
+  // currentFilter: null,
   filterOptions: [
     {
       id: RHSM_API_QUERY_TYPES.SLA
@@ -294,6 +394,7 @@ Toolbar.defaultProps = {
  * @param {string} props.viewId
  * @returns {object}
  */
+/*
 const mapStateToProps = ({ toolbar, view }, { viewId }) => ({
   query: view?.query?.[viewId],
   ...toolbar.filters?.[viewId]
@@ -302,3 +403,5 @@ const mapStateToProps = ({ toolbar, view }, { viewId }) => ({
 const ConnectedToolbar = connect(mapStateToProps)(Toolbar);
 
 export { ConnectedToolbar as default, ConnectedToolbar, Toolbar };
+ */
+export { Toolbar as default, Toolbar };

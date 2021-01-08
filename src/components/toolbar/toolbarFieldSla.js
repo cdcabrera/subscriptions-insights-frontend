@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxTypes, store, useSelector } from '../../redux';
+import { useSelector } from 'react-redux';
+import { reduxTypes, store } from '../../redux';
 import { Select } from '../form/select';
 import { RHSM_API_QUERY_SLA_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
-import { toolbarFieldOptions as categoryOptions } from './toolbarFieldCategory';
 
 /**
  * Select field options.
@@ -29,7 +29,7 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  * @returns {Node}
  */
 const ToolbarFieldSla = ({ options, t, value, viewId, ...props }) => {
-  const updatedValue = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.SLA], value);
+  const updatedValue = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.SLA]) ?? value;
   const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
 
   /**
@@ -45,12 +45,6 @@ const ToolbarFieldSla = ({ options, t, value, viewId, ...props }) => {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
       },
       {
-        type: reduxTypes.toolbar.SET_ACTIVE_FILTERS,
-        viewId,
-        // currentFilter: categoryOptions.find(obj => obj.value === RHSM_API_QUERY_TYPES.SLA)?.title
-        currentFilter: categoryOptions.find(obj => obj.value === RHSM_API_QUERY_TYPES.SLA)?.value
-      },
-      {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.SLA],
         viewId,
         [RHSM_API_QUERY_TYPES.SLA]: event.value
@@ -62,7 +56,7 @@ const ToolbarFieldSla = ({ options, t, value, viewId, ...props }) => {
       aria-label={t('curiosity-toolbar.placeholder', { context: 'sla' })}
       onSelect={onSelect}
       options={updatedOptions}
-      selectedOptions={updatedValue}
+      // selectedOptions={updatedValue}
       placeholder={t('curiosity-toolbar.placeholder', { context: 'sla' })}
       {...props}
     />

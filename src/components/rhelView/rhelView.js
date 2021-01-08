@@ -65,8 +65,8 @@ class RhelView extends React.Component {
     const {
       graphTallyQuery: initialGraphTallyQuery,
       inventoryHostsQuery: initialInventoryHostsQuery,
-      inventorySubscriptionsQuery: initialInventorySubscriptionsQuery,
-      toolbarQuery
+      inventorySubscriptionsQuery: initialInventorySubscriptionsQuery
+      // toolbarQuery
     } = apiQueries.parseRhsmQuery(query, { graphTallyQuery, inventoryHostsQuery, inventorySubscriptionsQuery });
 
     return (
@@ -78,12 +78,7 @@ class RhelView extends React.Component {
           <BannerMessages productId={routeDetail.pathParameter} viewId={viewId} query={query} />
         </PageMessages>
         <PageToolbar>
-          <Toolbar
-            filterOptions={initialToolbarFilters}
-            productId={routeDetail.pathParameter}
-            query={toolbarQuery}
-            viewId={viewId}
-          />
+          <Toolbar key="lockit" filterOptions={initialToolbarFilters} productId={routeDetail.pathParameter} viewId={viewId} />
         </PageToolbar>
         <PageSection>
           {(isC3 && (

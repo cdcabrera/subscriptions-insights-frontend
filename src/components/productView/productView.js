@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages } from '../pageLayout/pageLayout';
-import {apiQueries, connect, reduxSelectors, useSelector} from '../../redux';
+import { apiQueries, connect, reduxSelectors, useSelector } from '../../redux';
 import { ConnectedGraphCard, GraphCard } from '../graphCard/graphCard';
-import { ConnectedToolbar, Toolbar } from '../toolbar/toolbar';
+// import { ConnectedToolbar, Toolbar } from '../toolbar/toolbar';
+import { Toolbar } from '../toolbar/toolbar';
 import { ConnectedInventoryList, InventoryList } from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 import BannerMessages from '../bannerMessages/bannerMessages';
@@ -82,12 +83,7 @@ const ProductView = ({ productConfig, routeDetail, t }) => {
         <BannerMessages productId={productId} viewId={viewId} query={query} />
       </PageMessages>
       <PageToolbar>
-        <ConnectedToolbar
-          filterOptions={initialToolbarFilters}
-          productId={productId}
-          // query={toolbarQuery}
-          viewId={viewId}
-        />
+        <Toolbar filterOptions={initialToolbarFilters} productId={productId} viewId={viewId} />
       </PageToolbar>
       <PageSection>
         <ConnectedGraphCard

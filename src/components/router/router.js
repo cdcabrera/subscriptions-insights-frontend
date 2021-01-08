@@ -29,62 +29,62 @@ class Router extends React.Component {
           return null;
         }
 
-        if (item.redirect === true) {
-          redirectRoot = <ReactRouterDomRedirect to={item.to} />;
-        }
+        const renderCallback = ({ location, ...routeProps }) => {
+          const navDetail = routerHelpers.getNavigationDetail({
+            pathname: location && location.pathname,
+            returnDefault: true
+          });
 
-        if (item.render === true) {
+          const { URLSearchParams, decodeURIComponent } = window;
+          const parsedSearch = {};
+
+          [
+            ...new Set(
+              [...new URLSearchParams(decodeURIComponent(location.search))].map(([param, value]) => `${param}~${value}`)
+            )
+          ].forEach(v => {
+            const [param, value] = v.split('~');
+            parsedSearch[param] = value;
+          });
+
+          const updatedLocation = {
+            ...location,
+            parsedSearch
+          };
+
           return (
-            <Route
-              exact={item.hasParameters || item.exact}
-              key={item.to}
-              path={item.to}
-              strict={item.strict}
-              render={({ location, ...routeProps }) => {
-                const navDetail = routerHelpers.getNavigationDetail({
-                  pathname: location && location.pathname,
-                  returnDefault: false
-                });
-
-                const { URLSearchParams, decodeURIComponent } = window;
-                const parsedSearch = {};
-
-                [
-                  ...new Set(
-                    [...new URLSearchParams(decodeURIComponent(location.search))].map(
-                      ([param, value]) => `${param}~${value}`
-                    )
-                  )
-                ].forEach(v => {
-                  const [param, value] = v.split('~');
-                  parsedSearch[param] = value;
-                });
-
-                const updatedLocation = {
-                  ...location,
-                  parsedSearch
-                };
-
-                return (
-                  <item.component
-                    routeDetail={{
-                      baseName: routerHelpers.baseName,
-                      errorRoute: activateOnErrorRoute,
-                      routes,
-                      routeItem: { ...item },
-                      ...navDetail
-                    }}
-                    location={updatedLocation}
-                    {...routeProps}
-                  />
-                );
+            <item.component
+              routeDetail={{
+                baseName: routerHelpers.baseName,
+                errorRoute: activateOnErrorRoute,
+                routes,
+                routeItem: { ...item },
+                ...navDetail
               }}
+              location={updatedLocation}
+              {...routeProps}
             />
+          );
+        };
+
+        if (item.redirect) {
+          // redirectRoot = <Route key={`${item.to}-redirect`} path="*" render={renderCallback} />;
+          // redirectRoot = <Route key={`${item.to}-redirect`} path="/" render={renderCallback} />;
+          redirectRoot = (
+            <Route key={`${item.to}-redirect`} path="*">
+              <ReactRouterDomRedirect to={item.redirect} />
+            </Route>
           );
         }
 
         return (
-          <Route exact={item.hasParameters || item.exact} key={item.to} path={item.to} component={item.component} />
+          <Route
+            exact={item.hasParameters || item.exact}
+            key={item.to}
+            path={item.to}
+            strict={item.strict}
+            render={renderCallback}
+          />
         );
       }),
       redirectRoot
