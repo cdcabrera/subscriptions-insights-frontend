@@ -49,7 +49,7 @@ const Pagination = ({
     onSetPage={(event, page, limit) =>
       onPage({ event, page, perPage: limit, offset: paginationHelpers.calculateOffsetFromPage(page, limit) })
     }
-    onPerPageSelect={(event, limit) => onPerPage({ event, perPage: limit })}
+    onPerPageSelect={(event, limit) => onPerPage({ event, page: 1, perPage: limit, offset: 0 })}
     page={paginationHelpers.calculatePageFromOffset(offset, perPage)}
     perPage={perPage}
     variant={variant}
