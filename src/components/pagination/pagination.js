@@ -47,10 +47,10 @@ const Pagination = ({
     isDisabled={isDisabled || !itemCount}
     itemCount={itemCount}
     onSetPage={(event, page, limit) =>
-      onPage({ event, page, perPage: limit, offset: paginationHelpers.calculateOffsetFromPage(page, limit) })
+      onPage({ event, perPage: limit, offset: paginationHelpers.calculateOffsetFromPage(page, limit) })
     }
-    onPerPageSelect={(event, limit) => onPerPage({ event, page: 1, perPage: limit, offset: 0 })}
-    page={paginationHelpers.calculatePageFromOffset(offset, perPage)}
+    onPerPageSelect={(event, limit) => onPerPage({ event, perPage: limit, offset: Pagination.defaultProps.offset })}
+    page={paginationHelpers.calculatePageFromOffset(offset || Pagination.defaultProps.offset, perPage)}
     perPage={perPage}
     variant={variant}
   />

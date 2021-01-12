@@ -187,8 +187,8 @@ class InventorySubscriptions extends React.Component {
       );
     }
 
-    const updatedPerPage = query?.[RHSM_API_QUERY_TYPES.LIMIT] || perPageDefault;
-    const updatedOffset = query[RHSM_API_QUERY_TYPES.OFFSET] || 0;
+    const updatedPerPage = query[RHSM_API_QUERY_TYPES.LIMIT] || perPageDefault;
+    const updatedOffset = query[RHSM_API_QUERY_TYPES.OFFSET];
     const isLastPage =
       paginationHelpers.calculatePageFromOffset(
         query[RHSM_API_QUERY_TYPES.OFFSET],
