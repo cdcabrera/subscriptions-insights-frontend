@@ -26,9 +26,20 @@ import { paginationHelpers } from './paginationHelpers';
  * @param {Function} props.onPage
  * @param {Function} props.onPerPage
  * @param {number} props.perPage
+ * @param {string} props.variant
  * @returns {Node}
  */
-const Pagination = ({ dropDirection, isDisabled, isCompact, itemCount, offset, onPage, onPerPage, perPage }) => (
+const Pagination = ({
+  dropDirection,
+  isDisabled,
+  isCompact,
+  itemCount,
+  offset,
+  onPage,
+  onPerPage,
+  perPage,
+  variant
+}) => (
   <PfPagination
     className={(!itemCount && 'hidden') || ''}
     dropDirection={dropDirection}
@@ -41,6 +52,7 @@ const Pagination = ({ dropDirection, isDisabled, isCompact, itemCount, offset, o
     onPerPageSelect={(event, limit) => onPerPage({ event, perPage: limit })}
     page={paginationHelpers.calculatePageFromOffset(offset, perPage)}
     perPage={perPage}
+    variant={variant}
   />
 );
 
@@ -48,7 +60,8 @@ const Pagination = ({ dropDirection, isDisabled, isCompact, itemCount, offset, o
  * Prop types
  *
  * @type {{isCompact: boolean, onPage: Function, perPage: number, offset: number,
- *     dropDirection: string, onPerPage: Function, isDisabled: boolean, itemCount: number}}
+ *     dropDirection: string, onPerPage: Function, variant: null, isDisabled: boolean,
+ *     itemCount: number}}
  */
 Pagination.propTypes = {
   dropDirection: PropTypes.oneOf(['up', 'down']),
@@ -58,14 +71,16 @@ Pagination.propTypes = {
   offset: PropTypes.number,
   onPage: PropTypes.func,
   onPerPage: PropTypes.func,
-  perPage: PropTypes.number
+  perPage: PropTypes.number,
+  variant: PropTypes.string
 };
 
 /**
  * Default props.
  *
  * @type {{isCompact: boolean, onPage: Function, perPage: number, offset: number,
- *     dropDirection: string, onPerPage: Function, isDisabled: boolean, itemCount: number}}
+ *     dropDirection: string, onPerPage: Function, variant: null, isDisabled: boolean,
+ *     itemCount: number}}
  */
 Pagination.defaultProps = {
   dropDirection: 'down',
@@ -75,7 +90,8 @@ Pagination.defaultProps = {
   offset: 0,
   onPage: helpers.noop,
   onPerPage: helpers.noop,
-  perPage: 10
+  perPage: 10,
+  variant: null
 };
 
 export { Pagination as default, Pagination };

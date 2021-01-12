@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaginationHelpers should have specific functions: paginationHelpers 1`] = `
+Object {
+  "calculateOffsetFromPage": [Function],
+  "calculatePageFromOffset": [Function],
+}
+`;
+
+exports[`PaginationHelpers should return a page from offset and perPage/limit: page variations 1`] = `
+Array [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+]
+`;
+
+exports[`PaginationHelpers should return an offset from page and perPage/limit: page variations 1`] = `
+Array [
+  0,
+  10,
+  20,
+  30,
+  40,
+  50,
+  0,
+  20,
+  40,
+  60,
+  80,
+  100,
+]
+`;
