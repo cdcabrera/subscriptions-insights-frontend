@@ -1,5 +1,6 @@
 import { reduxTypes } from '../types';
 import { reduxHelpers } from '../common/reduxHelpers';
+import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 
 /**
  * Initial state.
@@ -20,13 +21,52 @@ const initialState = {
  */
 const toolbarReducer = (state = initialState, action) => {
   switch (action.type) {
+    /*
+    case reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.USAGE]:
+      const updatedActiveFiltersUsage = new Set(state.filters?.[action.viewId]?.activeFilters).add(
+        action[RHSM_API_QUERY_TYPES.USAGE]
+      );
+
+      return reduxHelpers.setStateProp(
+        'filters',
+        {
+          [action.viewId]: {
+            ...state.filters[action.viewId],
+            activeFilters: updatedActiveFiltersUsage
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    case reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.SLA]:
+      const updatedActiveFiltersSla = new Set(state.filters?.[action.viewId]?.activeFilters).add(
+        action[RHSM_API_QUERY_TYPES.SLA]
+      );
+
+      return reduxHelpers.setStateProp(
+        'filters',
+        {
+          [action.viewId]: {
+            ...state.filters[action.viewId],
+            activeFilters: updatedActiveFiltersSla
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    */
     case reduxTypes.toolbar.SET_ACTIVE_FILTERS:
       return reduxHelpers.setStateProp(
         'filters',
         {
           [action.viewId]: {
             ...state.filters[action.viewId],
-            activeFilters: action.activeFilters
+            // activeFilters: action.activeFilters
+            c: new Set(state.filters?.[action.viewId]?.chipGroupSequence).add(action.currentFilter)
           }
         },
         {
@@ -41,6 +81,7 @@ const toolbarReducer = (state = initialState, action) => {
           [action.viewId]: {
             ...state.filters[action.viewId],
             currentFilter: action.currentFilter
+            // chipGroupSequence: new Set(state.filters?.[action.viewId]?.chipGroupSequence).add(action.currentFilter)
           }
         },
         {
