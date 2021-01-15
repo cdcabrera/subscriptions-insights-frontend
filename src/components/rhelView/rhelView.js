@@ -28,6 +28,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import BannerMessages from '../bannerMessages/bannerMessages';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
+import { ToolbarFieldDisplayName } from '../toolbar/toolbarFieldDisplayName';
 
 /**
  * A Red Hat Enterprise Linux encompassing view, and system architectures.
@@ -91,7 +92,9 @@ class RhelView extends React.Component {
             viewId={viewId}
             cardTitle={t('curiosity-graph.socketsHeading')}
             productLabel={productLabel}
-          />
+          >
+            <ToolbarFieldDisplayName viewId={viewId} />
+          </GraphCard>
         </PageSection>
         <PageSection>
           <InventoryTabs productId={routeDetail.pathParameter}>

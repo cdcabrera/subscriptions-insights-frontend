@@ -13,7 +13,8 @@ describe('ViewReducer', () => {
       ...Object.values(types.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES),
       ...Object.values(types.SET_QUERY_RHSM_SUBSCRIPTIONS_INVENTORY_TYPES),
       types.SET_QUERY_CLEAR,
-      types.SET_QUERY_CLEAR_INVENTORY_LIST
+      types.SET_QUERY_CLEAR_INVENTORY_LIST,
+      types.SET_QUERY_RESET_INVENTORY_LIST
     ];
 
     specificTypes.forEach(value => {

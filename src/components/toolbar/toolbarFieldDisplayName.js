@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonVariant, InputGroup } from '@patternfly/react-core';
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
+import CloseIcon from '@patternfly/react-icons/dist/js/icons/close-icon';
 import { reduxTypes, store, useSelector } from '../../redux';
 import { TextInput } from '../form/textInput';
+import { formHelpers } from '../form/formHelpers';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
 
@@ -11,6 +13,8 @@ import { translate } from '../i18n/i18n';
  * Display a display name input field for search.
  *
  * @fires onSubmit
+ * @fires onClear
+ * @fires onChange
  * @param {object} props
  * @param {string} props.value
  * @param {Function} props.t
@@ -18,39 +22,86 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ToolbarFieldDisplayName = ({ value, t, viewId }) => {
-  let updatedValue = useSelector(
-    ({ view }) => view.inventoryHostsQuery?.[RHSM_API_QUERY_TYPES.DISPLAY_NAME]?.[viewId],
+  const currentValue = useSelector(
+    ({ view }) => view.inventoryHostsQuery?.[viewId]?.[RHSM_API_QUERY_TYPES.DISPLAY_NAME],
     value
   );
 
-  // ToDo: need to reset this for paging... but really only "offset"
+  let updatedValue = currentValue;
+
   /**
    * On submit, dispatch type.
    *
    * @event onSubmit
    * @returns {void}
    */
-  const onSubmit = () =>
+  const onSubmit = () => {
+    if (formHelpers.doesntHaveMinimumCharacters(updatedValue)) {
+      return;
+    }
+
     store.dispatch([
       {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
       },
       {
-        type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.DISPLAY_NAME],
+        type: reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.DISPLAY_NAME],
         viewId,
         [RHSM_API_QUERY_TYPES.DISPLAY_NAME]: updatedValue
       }
     ]);
+  };
 
-  const onChange = (event = {}) => {
+  /**
+   * On clear, dispatch type.
+   *
+   * @event onClear
+   * @returns {void}
+   */
+  const onClear = () => {
+    if (currentValue === '' || !currentValue) {
+      return;
+    }
+    console.log(currentValue, updatedValue);
+
+    store.dispatch([
+      {
+        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST
+      },
+      {
+        type: reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.DISPLAY_NAME],
+        viewId,
+        [RHSM_API_QUERY_TYPES.DISPLAY_NAME]: ''
+      }
+    ]);
+  };
+
+  /**
+   * On change, update value.
+   *
+   * @event onChange
+   * @param {object} event
+   */
+  const onChange = event => {
     updatedValue = event.value;
   };
+
+  /*
+  <Button
+        onClick={onClear}
+        variant={ButtonVariant.control}
+        aria-label={t('curiosity-toolbar.button', { context: 'displayName' })}
+      >
+        <CloseIcon />
+      </Button>
+   */
 
   return (
     <InputGroup>
       <TextInput
         aria-label={t('curiosity-toolbar.placeholder', { context: 'displayName' })}
         onChange={onChange}
+        onClear={onClear}
         value={updatedValue}
         placeholder={t('curiosity-toolbar.placeholder', { context: 'displayName' })}
         type="search"
