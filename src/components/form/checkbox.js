@@ -4,13 +4,20 @@ import { Checkbox as PfCheckbox } from '@patternfly/react-core/dist/js/component
 import { helpers } from '../../common';
 
 /**
- * Render a checkbox form element.
+ * ToDo: evaluate the disabled against isDisabled prop
+ * This is an attempt to revert/normalize the prop against the standard html prop name. For now
+ * the subtle difference between readonly has caused more confusion than solutions, we can
+ * revisit at some point how we normalize that behavior against readonly.
+ */
+/**
+ * Render a checkbox form element. Provides restructured event data.
  *
+ * @fires onCheckboxChange
  * @param {object} props
  * @param {string} props.ariaLabel
  * @param {*} props.checked
  * @param {Node} props.children
- * @param {boolean} props.isDisabled
+ * @param {boolean} props.disabled
  * @param {Node} props.label
  * @param {string} props.name
  * @param {Function} props.onChange
@@ -18,9 +25,16 @@ import { helpers } from '../../common';
  * @param {*} props.value
  * @returns {Node}
  */
-const Checkbox = ({ ariaLabel, checked, children, isDisabled, label, name, onChange, readOnly, value, ...props }) => {
+const Checkbox = ({ ariaLabel, checked, children, disabled, label, name, onChange, readOnly, value, ...props }) => {
   const nameId = name || helpers.generateId();
 
+  /**
+   * onChange event, provide restructured event.
+   *
+   * @event onCheckboxChange
+   * @param {boolean} isChecked
+   * @param {object} event
+   */
   const onCheckboxChange = (isChecked, event) => {
     const { currentTarget, target } = event;
     const mockEvent = {
@@ -41,7 +55,7 @@ const Checkbox = ({ ariaLabel, checked, children, isDisabled, label, name, onCha
       checked={checked}
       id={nameId}
       isChecked={checked}
-      isDisabled={isDisabled || readOnly || false}
+      isDisabled={disabled || readOnly || false}
       label={children || label}
       name={nameId}
       onChange={onCheckboxChange}
@@ -55,14 +69,14 @@ const Checkbox = ({ ariaLabel, checked, children, isDisabled, label, name, onCha
 /**
  * Prop types.
  *
- * @type {{onChange: Function, children: Node, name: string, checked: boolean, readOnly: boolean,
- *     label: string, value: *, ariaLabel: string}}
+ * @type {{onChange: Function, children: Node, name: string, checked: *, disabled: boolean,
+ *     readOnly: boolean, label: string, value: *, ariaLabel: string}}
  */
 Checkbox.propTypes = {
   ariaLabel: PropTypes.string,
   checked: PropTypes.any,
   children: PropTypes.node,
-  isDisabled: PropTypes.bool,
+  disabled: PropTypes.bool,
   label: PropTypes.node,
   name: PropTypes.string,
   onChange: PropTypes.func,
@@ -73,14 +87,14 @@ Checkbox.propTypes = {
 /**
  * Default props.
  *
- * @type {{onChange: Function, children: null, name: null, checked: undefined, readOnly: undefined,
- *     label: string, value: undefined, ariaLabel: null}}
+ * @type {{onChange: Function, children: Node, name: string, checked: *, disabled: boolean,
+ *     readOnly: boolean, label: string, value: *, ariaLabel: string}}
  */
 Checkbox.defaultProps = {
   ariaLabel: null,
   checked: undefined,
   children: null,
-  isDisabled: false,
+  disabled: false,
   label: '',
   name: null,
   onChange: helpers.noop,

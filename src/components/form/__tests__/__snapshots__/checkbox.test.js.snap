@@ -22,7 +22,7 @@ exports[`Checkbox Component should handle children as a label: children label ch
 </div>
 `;
 
-exports[`Checkbox Component should handle readOnly as isDisabled: active checkbox 1`] = `
+exports[`Checkbox Component should handle readOnly as disabled: active checkbox 1`] = `
 <div
   class="pf-c-check"
 >
@@ -38,7 +38,7 @@ exports[`Checkbox Component should handle readOnly as isDisabled: active checkbo
 </div>
 `;
 
-exports[`Checkbox Component should handle readOnly as isDisabled: isDisabled checkbox 1`] = `
+exports[`Checkbox Component should handle readOnly as disabled: disabled checkbox 1`] = `
 <div
   class="pf-c-check"
 >
@@ -55,7 +55,7 @@ exports[`Checkbox Component should handle readOnly as isDisabled: isDisabled che
 </div>
 `;
 
-exports[`Checkbox Component should handle readOnly as isDisabled: readOnly checkbox 1`] = `
+exports[`Checkbox Component should handle readOnly as disabled: readOnly checkbox 1`] = `
 <div
   class="pf-c-check"
 >

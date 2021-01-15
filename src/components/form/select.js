@@ -18,11 +18,11 @@ import { helpers } from '../../common/helpers';
  * "required" anywhere it's used in an effort to squash it.
  */
 /**
- * A wrapper for Patternfly Select. Provides additional event data for onSelect callback.
+ * A wrapper for Patternfly Select. Provides restructured event data for onSelect callback.
  *
  * @augments React.Component
  * @fires onSelect
- * @param expanded
+ * @fires onToggle
  */
 class Select extends React.Component {
   state = { isExpanded: false, options: null, selected: null };
@@ -116,6 +116,7 @@ class Select extends React.Component {
   /**
    * Patternfly Select's open/closed state.
    *
+   * @event onToggle
    * @param {boolean} expanded
    */
   onToggle = expanded => {

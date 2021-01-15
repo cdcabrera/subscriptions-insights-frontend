@@ -10,7 +10,7 @@ describe('Checkbox Component', () => {
     expect(component.render()).toMatchSnapshot('basic checkbox');
   });
 
-  it('should handle readOnly as isDisabled', () => {
+  it('should handle readOnly as disabled', () => {
     const props = {
       readOnly: true
     };
@@ -20,14 +20,14 @@ describe('Checkbox Component', () => {
 
     component.setProps({
       readOnly: false,
-      isDisabled: true
+      disabled: true
     });
 
-    expect(component.render()).toMatchSnapshot('isDisabled checkbox');
+    expect(component.render()).toMatchSnapshot('disabled checkbox');
 
     component.setProps({
       readOnly: false,
-      isDisabled: false
+      disabled: false
     });
 
     expect(component.render()).toMatchSnapshot('active checkbox');
