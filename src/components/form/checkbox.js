@@ -4,12 +4,6 @@ import { Checkbox as PfCheckbox } from '@patternfly/react-core/dist/js/component
 import { helpers } from '../../common';
 
 /**
- * ToDo: evaluate the disabled against isDisabled prop
- * This is an attempt to revert/normalize the prop against the standard html prop name. For now
- * the subtle difference between readonly has caused more confusion than solutions, we can
- * revisit at some point how we normalize that behavior against readonly.
- */
-/**
  * Render a checkbox form element. Provides restructured event data.
  *
  * @fires onCheckboxChange
@@ -55,7 +49,7 @@ const Checkbox = ({ ariaLabel, checked, children, disabled, label, name, onChang
       checked={checked}
       id={nameId}
       isChecked={checked}
-      isDisabled={disabled || readOnly || false}
+      isDisabled={disabled || false}
       label={children || label}
       name={nameId}
       onChange={onCheckboxChange}

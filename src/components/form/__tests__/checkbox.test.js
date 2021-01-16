@@ -7,30 +7,38 @@ describe('Checkbox Component', () => {
     const props = {};
 
     const component = mount(<Checkbox {...props} />);
-    expect(component.render()).toMatchSnapshot('basic checkbox');
+    expect(component.render()).toMatchSnapshot('basic component');
   });
 
-  it('should handle readOnly as disabled', () => {
+  it('should handle readOnly, disabled, checked', () => {
     const props = {
       readOnly: true
     };
 
     const component = mount(<Checkbox {...props} />);
-    expect(component.render()).toMatchSnapshot('readOnly checkbox');
+    expect(component.render()).toMatchSnapshot('readOnly');
 
     component.setProps({
       readOnly: false,
       disabled: true
     });
 
-    expect(component.render()).toMatchSnapshot('disabled checkbox');
+    expect(component.render()).toMatchSnapshot('disabled');
 
     component.setProps({
       readOnly: false,
       disabled: false
     });
 
-    expect(component.render()).toMatchSnapshot('active checkbox');
+    expect(component.render()).toMatchSnapshot('active');
+
+    component.setProps({
+      readOnly: false,
+      disabled: false,
+      checked: true
+    });
+
+    expect(component.render()).toMatchSnapshot('checked');
   });
 
   it('should handle children as a label', () => {
@@ -39,7 +47,7 @@ describe('Checkbox Component', () => {
     expect(component.render()).toMatchSnapshot('children label checkbox');
   });
 
-  it('should return an emulated onchange event', done => {
+  it('should return an emulated onChange event', done => {
     const props = {};
 
     props.onChange = event => {

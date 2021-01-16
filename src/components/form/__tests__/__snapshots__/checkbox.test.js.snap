@@ -22,7 +22,7 @@ exports[`Checkbox Component should handle children as a label: children label ch
 </div>
 `;
 
-exports[`Checkbox Component should handle readOnly as disabled: active checkbox 1`] = `
+exports[`Checkbox Component should handle readOnly, disabled, checked: active 1`] = `
 <div
   class="pf-c-check"
 >
@@ -38,7 +38,23 @@ exports[`Checkbox Component should handle readOnly as disabled: active checkbox 
 </div>
 `;
 
-exports[`Checkbox Component should handle readOnly as disabled: disabled checkbox 1`] = `
+exports[`Checkbox Component should handle readOnly, disabled, checked: checked 1`] = `
+<div
+  class="pf-c-check"
+>
+  <input
+    aria-invalid="false"
+    aria-label=""
+    class="pf-c-check__input"
+    id="generatedid-"
+    name="generatedid-"
+    type="checkbox"
+    value=""
+  />
+</div>
+`;
+
+exports[`Checkbox Component should handle readOnly, disabled, checked: disabled 1`] = `
 <div
   class="pf-c-check"
 >
@@ -55,7 +71,7 @@ exports[`Checkbox Component should handle readOnly as disabled: disabled checkbo
 </div>
 `;
 
-exports[`Checkbox Component should handle readOnly as disabled: readOnly checkbox 1`] = `
+exports[`Checkbox Component should handle readOnly, disabled, checked: readOnly 1`] = `
 <div
   class="pf-c-check"
 >
@@ -63,7 +79,6 @@ exports[`Checkbox Component should handle readOnly as disabled: readOnly checkbo
     aria-invalid="false"
     aria-label=""
     class="pf-c-check__input"
-    disabled=""
     id="generatedid-"
     name="generatedid-"
     readonly=""
@@ -73,7 +88,7 @@ exports[`Checkbox Component should handle readOnly as disabled: readOnly checkbo
 </div>
 `;
 
-exports[`Checkbox Component should render a basic component: basic checkbox 1`] = `
+exports[`Checkbox Component should render a basic component: basic component 1`] = `
 <div
   class="pf-c-check"
 >
@@ -89,7 +104,7 @@ exports[`Checkbox Component should render a basic component: basic checkbox 1`] 
 </div>
 `;
 
-exports[`Checkbox Component should return an emulated onchange event: emulated event 1`] = `
+exports[`Checkbox Component should return an emulated onChange event: emulated event 1`] = `
 Object {
   "checked": false,
   "currentTarget": <input
