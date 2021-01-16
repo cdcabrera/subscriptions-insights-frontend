@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonVariant, InputGroup } from '@patternfly/react-core';
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon';
-import CloseIcon from '@patternfly/react-icons/dist/js/icons/close-icon';
 import { reduxTypes, store, useSelector } from '../../redux';
 import { TextInput } from '../form/textInput';
 import { formHelpers } from '../form/formHelpers';
@@ -36,7 +35,7 @@ const ToolbarFieldDisplayName = ({ value, t, viewId }) => {
    * @returns {void}
    */
   const onSubmit = () => {
-    if (formHelpers.doesntHaveMinimumCharacters(updatedValue)) {
+    if (formHelpers.doesNotHaveMinimumCharacters(updatedValue)) {
       return;
     }
 
@@ -85,16 +84,6 @@ const ToolbarFieldDisplayName = ({ value, t, viewId }) => {
   const onChange = event => {
     updatedValue = event.value;
   };
-
-  /*
-  <Button
-        onClick={onClear}
-        variant={ButtonVariant.control}
-        aria-label={t('curiosity-toolbar.button', { context: 'displayName' })}
-      >
-        <CloseIcon />
-      </Button>
-   */
 
   return (
     <InputGroup>

@@ -1,53 +1,82 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import Checkbox from '../textInput';
+import TextInput from '../textInput';
+import { helpers } from '../../../common';
 
 describe('TextInput Component', () => {
   it('should render a basic component', () => {
     const props = {};
 
-    const component = shallow(<Checkbox {...props} />);
-    expect(component.render()).toMatchSnapshot('basic checkbox');
+    const component = shallow(<TextInput {...props} />);
+    expect(component.render()).toMatchSnapshot('basic component');
   });
 
-  it('should handle readOnly as isDisabled', () => {
+  it('should handle readOnly, disabled', () => {
     const props = {
       readOnly: true
     };
 
-    const component = mount(<Checkbox {...props} />);
-    expect(component.render()).toMatchSnapshot('readOnly checkbox');
+    const component = mount(<TextInput {...props} />);
+    expect(component.render()).toMatchSnapshot('readOnly');
 
     component.setProps({
       readOnly: false,
-      isDisabled: true
+      disabled: true
     });
 
-    expect(component.render()).toMatchSnapshot('isDisabled checkbox');
+    expect(component.render()).toMatchSnapshot('disabled');
 
     component.setProps({
       readOnly: false,
-      isDisabled: false
+      disabled: false
     });
 
-    expect(component.render()).toMatchSnapshot('active checkbox');
+    expect(component.render()).toMatchSnapshot('active');
   });
 
-  it('should handle children as a label', () => {
-    const props = {};
-    const component = mount(<Checkbox {...props}>lorem ipsum</Checkbox>);
-    expect(component.render()).toMatchSnapshot('children label checkbox');
-  });
-
-  it('should return an emulated onchange event', done => {
-    const props = {};
+  it('should return an emulated onChange event', done => {
+    const props = {
+      value: 'lorem ipsum'
+    };
 
     props.onChange = event => {
       expect(event).toMatchSnapshot('emulated event');
       done();
     };
 
-    const component = mount(<Checkbox {...props}>lorem ipsum</Checkbox>);
+    const component = mount(<TextInput {...props} />);
     component.find('input').simulate('change');
+  });
+
+  it('should return an emulated onClear event on escape', done => {
+    const props = {
+      value: 'lorem ipsum',
+      type: 'search'
+    };
+
+    props.onClear = event => {
+      expect(event).toMatchSnapshot('emulated event');
+      done();
+    };
+
+    const component = shallow(<TextInput {...props} />);
+    component.instance().onKeyUp({ keyCode: 27, currentTarget: { value: '' }, persist: helpers.noop });
+  });
+
+  it('should return an emulated onClear event on search clear', done => {
+    const props = {
+      value: 'lorem ipsum',
+      type: 'search'
+    };
+
+    props.onClear = event => {
+      expect(event).toMatchSnapshot('emulated event');
+      done();
+    };
+
+    const component = shallow(<TextInput {...props} />);
+    const mockEvent = { currentTarget: { value: 'lorem ipsum' }, persist: helpers.noop };
+    component.instance().onMouseUp(mockEvent);
+    mockEvent.currentTarget.value = '';
   });
 });

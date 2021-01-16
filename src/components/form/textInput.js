@@ -118,7 +118,7 @@ class TextInput extends React.Component {
         id={nameId}
         name={nameId}
         className={`curiosity-text-input ${className}`}
-        isDisabled={disabled || readOnly || false}
+        isDisabled={disabled || false}
         onChange={this.onChange}
         onKeyUp={this.onKeyUp}
         onMouseUp={this.onMouseUp}

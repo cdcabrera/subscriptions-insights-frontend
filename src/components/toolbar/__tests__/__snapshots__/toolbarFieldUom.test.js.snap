@@ -20,7 +20,7 @@ Array [
   Array [
     Array [
       Object {
-        "type": "SET_QUERY_CLEAR_INVENTORY_LIST",
+        "type": "SET_QUERY_RESET_INVENTORY_LIST",
       },
       Object {
         "type": "SET_QUERY_RHSM_uom",
@@ -37,8 +37,8 @@ exports[`ToolbarFieldUom Component should render a non-connected component: non-
   aria-label="t(curiosity-toolbar.placeholder, {\\"context\\":\\"uom\\"})"
   ariaLabel="Select option"
   className=""
+  disabled={false}
   id="generatedid-"
-  isDisabled={false}
   isToggleText={true}
   name={null}
   onSelect={[Function]}
