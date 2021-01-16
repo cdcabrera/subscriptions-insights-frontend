@@ -540,8 +540,8 @@ exports[`Toolbar Component should render a non-connected component: non-connecte
             aria-label="t(curiosity-toolbar.category)"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}
@@ -584,8 +584,8 @@ exports[`Toolbar Component should render a non-connected component: non-connecte
             aria-label="t(curiosity-toolbar.category, {\\"context\\":\\"sla\\"})"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}
@@ -626,8 +626,8 @@ exports[`Toolbar Component should render a non-connected component: non-connecte
             aria-label="t(curiosity-toolbar.category, {\\"context\\":\\"usage\\"})"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}
@@ -692,8 +692,8 @@ exports[`Toolbar Component should render filters when props are populated: props
             aria-label="t(curiosity-toolbar.category)"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}
@@ -740,8 +740,8 @@ exports[`Toolbar Component should render filters when props are populated: props
             aria-label="t(curiosity-toolbar.category, {\\"context\\":\\"sla\\"})"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}
@@ -786,8 +786,8 @@ exports[`Toolbar Component should render filters when props are populated: props
             aria-label="t(curiosity-toolbar.category, {\\"context\\":\\"usage\\"})"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}
@@ -858,8 +858,8 @@ exports[`Toolbar Component should render specific filters when the filterOptions
             aria-label="t(curiosity-toolbar.category, {\\"context\\":\\"sla\\"})"
             ariaLabel="Select option"
             className=""
-            disabled={false}
             id="generatedid-"
+            isDisabled={false}
             isToggleText={true}
             name={null}
             onSelect={[Function]}

@@ -110,7 +110,18 @@ class TextInput extends React.Component {
    */
   render() {
     const { name, updatedValue } = this.state;
-    const { className, disabled, onChange, onClear, onKeyUp, onMouseUp, readOnly, type, value, ...props } = this.props;
+    const {
+      className,
+      isDisabled,
+      onChange,
+      onClear,
+      onKeyUp,
+      onMouseUp,
+      isReadOnly,
+      type,
+      value,
+      ...props
+    } = this.props;
     const nameId = name || helpers.generateId();
 
     return (
@@ -118,11 +129,11 @@ class TextInput extends React.Component {
         id={nameId}
         name={nameId}
         className={`curiosity-text-input ${className}`}
-        isDisabled={disabled || false}
+        isDisabled={isDisabled || false}
         onChange={this.onChange}
         onKeyUp={this.onKeyUp}
         onMouseUp={this.onMouseUp}
-        isReadOnly={readOnly || false}
+        isReadOnly={isReadOnly || false}
         type={type}
         value={updatedValue ?? value ?? ''}
         {...props}
@@ -134,18 +145,19 @@ class TextInput extends React.Component {
 /**
  * Prop types.
  *
- * @type {{onKeyUp: Function, onChange: Function, onClear: Function, name: null,
- *     className: string, onMouseUp: Function, type: string, value: string}}
+ * @type {{onKeyUp: Function, isReadOnly: boolean, onChange: Function, onClear: Function,
+ *     name: string, className: string, isDisabled: boolean, onMouseUp: Function, type: string,
+ *     value: string}}
  */
 TextInput.propTypes = {
   className: PropTypes.string,
-  disabled: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+  isReadOnly: PropTypes.bool,
   name: PropTypes.string,
   onChange: PropTypes.func,
   onClear: PropTypes.func,
   onKeyUp: PropTypes.func,
   onMouseUp: PropTypes.func,
-  readOnly: PropTypes.bool,
   type: PropTypes.string,
   value: PropTypes.string
 };
@@ -153,18 +165,19 @@ TextInput.propTypes = {
 /**
  * Default props.
  *
- * @type {{onKeyUp: Function, onChange: Function, onClear: Function, name: null,
- *     className: string, onMouseUp: Function, type: string, value: string}}
+ * @type {{onKeyUp: Function, isReadOnly: boolean, onChange: Function, onClear: Function,
+ *     name: string, className: string, isDisabled: boolean, onMouseUp: Function, type: string,
+ *     value: string}}
  */
 TextInput.defaultProps = {
   className: '',
-  disabled: false,
+  isDisabled: false,
+  isReadOnly: false,
   name: null,
   onChange: helpers.noop,
   onClear: helpers.noop,
   onKeyUp: helpers.noop,
   onMouseUp: helpers.noop,
-  readOnly: false,
   type: 'text',
   value: ''
 };

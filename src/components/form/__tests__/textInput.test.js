@@ -13,22 +13,22 @@ describe('TextInput Component', () => {
 
   it('should handle readOnly, disabled', () => {
     const props = {
-      readOnly: true
+      isReadOnly: true
     };
 
     const component = mount(<TextInput {...props} />);
     expect(component.render()).toMatchSnapshot('readOnly');
 
     component.setProps({
-      readOnly: false,
-      disabled: true
+      isReadOnly: false,
+      isDisabled: true
     });
 
     expect(component.render()).toMatchSnapshot('disabled');
 
     component.setProps({
-      readOnly: false,
-      disabled: false
+      isReadOnly: false,
+      isDisabled: false
     });
 
     expect(component.render()).toMatchSnapshot('active');

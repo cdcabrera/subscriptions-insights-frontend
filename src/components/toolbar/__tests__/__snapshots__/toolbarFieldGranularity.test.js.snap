@@ -42,8 +42,8 @@ exports[`ToolbarFieldGranularity Component should render a non-connected compone
   aria-label="t(curiosity-toolbar.placeholder, {\\"context\\":\\"granularity\\"})"
   ariaLabel="Select option"
   className=""
-  disabled={false}
   id="generatedid-"
+  isDisabled={false}
   isToggleText={true}
   name={null}
   onSelect={[Function]}

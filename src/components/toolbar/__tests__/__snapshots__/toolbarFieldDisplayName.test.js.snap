@@ -5,14 +5,14 @@ exports[`ToolbarFieldDisplayName Component should render a non-connected compone
   <TextInput
     aria-label="t(curiosity-toolbar.placeholder, {\\"context\\":\\"displayName\\"})"
     className=""
-    disabled={false}
+    isDisabled={false}
+    isReadOnly={false}
     name={null}
     onChange={[Function]}
     onClear={[Function]}
     onKeyUp={[Function]}
     onMouseUp={[Function]}
     placeholder="t(curiosity-toolbar.placeholder, {\\"context\\":\\"displayName\\"})"
-    readOnly={false}
     type="search"
     value={null}
   />
