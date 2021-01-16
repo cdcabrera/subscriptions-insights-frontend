@@ -182,12 +182,12 @@ class Select extends React.Component {
    */
   render() {
     const { options, selected, isExpanded } = this.state;
-    const { ariaLabel, className, disabled, isToggleText, placeholder, toggleIcon, variant } = this.props;
+    const { ariaLabel, className, isDisabled, isToggleText, placeholder, toggleIcon, variant } = this.props;
 
     const pfSelectOptions = {};
 
     // FixMe: investigate "isDisabled", PFReact quirks?
-    if (!options || !options.length || disabled) {
+    if (!options || !options.length || isDisabled) {
       pfSelectOptions.isDisabled = true;
     }
 
@@ -231,13 +231,13 @@ class Select extends React.Component {
  *
  * @type {{isToggleText: boolean, toggleIcon: Node|Function, name: string, options: object,
  *     selectedOptions: (number|string|Array), variant: (object|string), className: string,
- *     id: string, disabled: boolean, placeholder: string, ariaLabel: string,
+ *     id: string, isDisabled: boolean, placeholder: string, ariaLabel: string,
  *     onSelect: Function}}
  */
 Select.propTypes = {
   ariaLabel: PropTypes.string,
   className: PropTypes.string,
-  disabled: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   id: PropTypes.string,
   isToggleText: PropTypes.bool,
   name: PropTypes.string,
@@ -268,13 +268,13 @@ Select.propTypes = {
  * Default props.
  *
  * @type {{isToggleText: boolean, toggleIcon: null, name: null, options: Array, selectedOptions: null,
- *     variant: SelectVariant.single, className: string, id: string, disabled: boolean,
+ *     variant: SelectVariant.single, className: string, id: string, isDisabled: boolean,
  *     placeholder: string, ariaLabel: string, onSelect: Function}}
  */
 Select.defaultProps = {
   ariaLabel: 'Select option',
   className: '',
-  disabled: false,
+  isDisabled: false,
   id: helpers.generateId(),
   isToggleText: true,
   name: null,

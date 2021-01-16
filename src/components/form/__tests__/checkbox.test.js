@@ -12,30 +12,30 @@ describe('Checkbox Component', () => {
 
   it('should handle readOnly, disabled, checked', () => {
     const props = {
-      readOnly: true
+      isReadOnly: true
     };
 
     const component = mount(<Checkbox {...props} />);
     expect(component.render()).toMatchSnapshot('readOnly');
 
     component.setProps({
-      readOnly: false,
-      disabled: true
+      isReadOnly: false,
+      isDisabled: true
     });
 
     expect(component.render()).toMatchSnapshot('disabled');
 
     component.setProps({
-      readOnly: false,
-      disabled: false
+      isReadOnly: false,
+      isDisabled: false
     });
 
     expect(component.render()).toMatchSnapshot('active');
 
     component.setProps({
-      readOnly: false,
-      disabled: false,
-      checked: true
+      isReadOnly: false,
+      isDisabled: false,
+      isChecked: true
     });
 
     expect(component.render()).toMatchSnapshot('checked');

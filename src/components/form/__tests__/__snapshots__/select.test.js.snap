@@ -537,8 +537,8 @@ exports[`Select Component should render a expanded select: expanded 1`] = `
 <Select
   ariaLabel="Select option"
   className=""
-  disabled={false}
   id="test"
+  isDisabled={false}
   isToggleText={true}
   name={null}
   onSelect={[Function]}

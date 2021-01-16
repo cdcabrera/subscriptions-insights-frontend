@@ -122,14 +122,14 @@ describe('Select Component', () => {
 
     component.setProps({
       options: [],
-      disabled: false
+      isDisabled: false
     });
 
     expect(component).toMatchSnapshot('options, but no content');
 
     component.setProps({
       options: ['lorem', 'ipsum', 'hello', 'world'],
-      disabled: true
+      isDisabled: true
     });
 
     expect(component).toMatchSnapshot('options, but disabled');
