@@ -102,13 +102,13 @@
     "test:local": "react-scripts test --env=jsdom --roots=./src"
   },
   "dependencies": {
-    "@patternfly/patternfly": "4.65.6",
+    "@patternfly/patternfly": "4.80.3",
     "@patternfly/react-charts": "6.12.2",
     "@patternfly/react-core": "4.79.2",
-    "@patternfly/react-icons": "4.7.18",
+    "@patternfly/react-icons": "4.8.4",
     "@patternfly/react-styles": "4.7.16",
     "@patternfly/react-table": "4.19.24",
-    "@patternfly/react-tokens": "4.9.18",
+    "@patternfly/react-tokens": "4.9.26",
     "@redhat-cloud-services/frontend-components": "2.5.0",
     "@redhat-cloud-services/frontend-components-notifications": "2.2.3",
     "@redhat-cloud-services/frontend-components-utilities": "2.2.7",
