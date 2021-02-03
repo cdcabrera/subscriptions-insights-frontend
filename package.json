@@ -104,9 +104,9 @@
   "dependencies": {
     "@patternfly/patternfly": "4.80.3",
     "@patternfly/react-charts": "6.12.2",
-    "@patternfly/react-core": "4.79.2",
+    "@patternfly/react-core": "4.90.2",
     "@patternfly/react-icons": "4.8.4",
-    "@patternfly/react-styles": "4.7.16",
+    "@patternfly/react-styles": "4.7.29",
     "@patternfly/react-table": "4.20.15",
     "@patternfly/react-tokens": "4.9.26",
     "@redhat-cloud-services/frontend-components": "2.5.0",
