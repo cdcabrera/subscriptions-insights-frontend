@@ -1,7 +1,8 @@
 // Framework
-@import '~@redhat-cloud-services/frontend-components-utilities/files/Utilities/_all';
+@import '~@redhat-cloud-services/frontend-components-utilities/index';
+@import '~@redhat-cloud-services/frontend-components-notifications/index';
 /**
- * FixMe: Variables break Sass compiler
+ * FixMe: Variables break Sass compiler, Invalid CSS in "-utilities"
  * Sass compiler throws an error when coming across the following syntax in
  *     --BackgroundUrl:url("d...
  * Workaround is to move the CSS files to ./src/index.js
