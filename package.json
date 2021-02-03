@@ -107,7 +107,7 @@
     "@patternfly/react-core": "4.79.2",
     "@patternfly/react-icons": "4.8.4",
     "@patternfly/react-styles": "4.7.16",
-    "@patternfly/react-table": "4.19.24",
+    "@patternfly/react-table": "4.20.15",
     "@patternfly/react-tokens": "4.9.26",
     "@redhat-cloud-services/frontend-components": "2.5.0",
     "@redhat-cloud-services/frontend-components-notifications": "2.2.3",
