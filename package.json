@@ -102,6 +102,7 @@
     "test:local": "react-scripts test --env=jsdom --roots=./src"
   },
   "dependencies": {
+    "@joi/date": "^2.0.1",
     "@patternfly/patternfly": "4.80.3",
     "@patternfly/react-charts": "6.13.8",
     "@patternfly/react-core": "4.90.2",
@@ -114,6 +115,7 @@
     "@redhat-cloud-services/frontend-components-utilities": "3.0.3",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
+    "joi": "^17.4.0",
     "i18next": "^19.8.7",
     "i18next-xhr-backend": "^3.2.2",
     "js-cookie": "^2.2.1",
