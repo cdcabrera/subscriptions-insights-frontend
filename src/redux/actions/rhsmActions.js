@@ -1,5 +1,5 @@
 import { rhsmTypes } from '../types';
-import { rhsmServices } from '../../services/rhsmServices';
+import { rhsmServices } from '../../services/rhsm/rhsmServices';
 
 /**
  * Get a combined RHSM response from reporting and capacity.

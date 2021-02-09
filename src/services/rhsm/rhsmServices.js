@@ -1,5 +1,5 @@
-import { serviceCall } from './config';
-import { helpers } from '../common';
+import { serviceCall } from '../config';
+import { helpers } from '../../common';
 
 /**
  * @api {get} /api/rhsm-subscriptions/v1/version

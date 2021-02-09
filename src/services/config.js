@@ -1,6 +1,6 @@
 import axios, { CancelToken } from 'axios';
 import LruCache from 'lru-cache';
-import { platformServices } from './platformServices';
+import { platformServices } from './platform/platformServices';
 
 /**
  * Apply consistent service configuration.
