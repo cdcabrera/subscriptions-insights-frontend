@@ -33,6 +33,19 @@ const responseCache = new LruCache({
   updateAgeOnGet: true
 });
 
+const responseNormalize = (data, schema) => {
+  let error;
+  let updatedData;
+
+  try {
+    updatedData = schema(data);
+  } catch (e) {
+    error = e;
+  }
+
+  return { data: updatedData || data, error };
+};
+
 /**
  * Call platform "getUser" auth method, and apply service config. Service configuration
  * includes the ability to cancel all and specific calls, and cache specific calls with
@@ -47,6 +60,7 @@ const serviceCall = async config => {
 
   const updatedConfig = { ...config };
   const axiosInstance = axios.create();
+  let cacheId;
 
   if (updatedConfig.cancel === true) {
     const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.url}`;
@@ -63,7 +77,8 @@ const serviceCall = async config => {
 
   if (updatedConfig.cache === true) {
     const sortedParams = Object.entries(updatedConfig.params).sort(([a], [b]) => a.localeCompare(b));
-    const cacheId = `${updatedConfig.url}-${JSON.stringify(sortedParams)}`;
+
+    cacheId = `${updatedConfig.url}-${JSON.stringify(sortedParams)}`;
     const cachedResponse = responseCache.get(cacheId);
 
     if (cachedResponse) {
@@ -75,14 +90,33 @@ const serviceCall = async config => {
           config: adapterConfig
         });
     }
-
-    axiosInstance.interceptors.response.use(response => {
-      responseCache.set(cacheId, response);
-      return response;
-    });
-
-    delete updatedConfig.cache;
   }
+
+  axiosInstance.interceptors.response.use(response => {
+    const updatedResponse = { ...response };
+
+    console.log('updatedConfig', updatedConfig);
+
+    if (updatedConfig.schema) {
+      const { data, error } = responseNormalize(updatedResponse.data, updatedConfig.schema);
+
+      console.log('schema set', data, error);
+
+      if (!error) {
+        updatedResponse.data = data;
+        console.log('>>>>>>>>>>>>', data);
+      }
+    }
+
+    if (updatedConfig.cache === true) {
+      responseCache.set(cacheId, updatedResponse);
+    }
+
+    return updatedResponse;
+  });
+
+  // delete updatedConfig.cache;
+  // delete updatedConfig.schema;
 
   return axiosInstance(serviceConfig(updatedConfig));
 };
