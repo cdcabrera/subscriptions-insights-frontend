@@ -1,11 +1,13 @@
 import _camelCase from 'lodash/camelCase';
 
-const schemaResponse = (response, schema, id = null) => {
-  const { value, error = { details: [] } } = schema.validate(response);
+const schemaResponse = ({ convert = true, id = null, response, schema }) => {
+  const { value, error = { details: [] } } = schema.validate(response, { convert });
 
   if (error.details.length) {
     throw new Error(
-      `Schema validation for ${id}: ${error.details.map(({ message, type }) => `${message}:${type}`).join(', ')}`
+      `Schema validation for ${id || '...'}: ${error.details
+        .map(({ message, type }) => `${message}:${type}`)
+        .join(', ')}`
     );
   }
 

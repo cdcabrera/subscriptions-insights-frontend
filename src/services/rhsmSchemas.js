@@ -1,6 +1,7 @@
 import JoiBase from 'joi';
 import JoiDate from '@joi/date';
 import { schemaResponse } from './helpers';
+import { rhsmConstants } from './rhsmConstants';
 
 const Joi = JoiBase.extend(JoiDate);
 
@@ -58,6 +59,34 @@ const hostReportSchema = Joi.object({
   meta: metaSchema
 });
 
+const subscriptionsReportItems = Joi.object({
+  physical_capacity: Joi.number().integer().default(null),
+  product_name: Joi.string().default(null),
+  service_level: Joi.string()
+    .valid(...Object.values(rhsmConstants.RHSM_API_RESPONSE_SLA_TYPES))
+    .lowercase()
+    .default(null),
+  sku: Joi.string().default(null),
+  subscription_numbers: Joi.array().default([]),
+  total_capacity: Joi.number().integer().default(null),
+  uom: Joi.string()
+    .valid(...Object.values(rhsmConstants.RHSM_API_RESPONSE_UOM_TYPES))
+    .lowercase()
+    .default(null),
+  upcoming_event_date: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').default(null),
+  upcoming_event_type: Joi.string().default(null),
+  usage: Joi.string()
+    .valid(...Object.values(rhsmConstants.RHSM_API_RESPONSE_USAGE_TYPES))
+    .lowercase()
+    .default(null),
+  virtual_capacity: Joi.number().integer().default(null)
+});
+
+const subscriptionsReportSchema = Joi.object({
+  data: Joi.array().items(subscriptionsReportItems).default([]),
+  meta: metaSchema
+});
+
 const tallyItems = Joi.object().keys({
   cloud_cores: Joi.number().integer().default(0),
   cloud_instance_count: Joi.number().integer().default(0),
@@ -80,11 +109,13 @@ const tallySchema = Joi.object({
 });
 
 const rhsmSchemas = {
-  capacity: response => schemaResponse(response, capacitySchema, 'RHSM capacity'),
+  capacity: response => schemaResponse({ response, schema: capacitySchema, id: 'RHSM capacity' }),
   hypervisorGuestReport: response =>
-    schemaResponse(response, hypervisorGuestReportSchema, 'RHSM hypervisorGuestReport'),
-  hostReport: response => schemaResponse(response, hostReportSchema, 'RHSM hostReport'),
-  tally: response => schemaResponse(response, tallySchema, 'RHSM tally')
+    schemaResponse({ response, schema: hypervisorGuestReportSchema, id: 'RHSM hypervisorGuestReport' }),
+  hostReport: response => schemaResponse({ response, schema: hostReportSchema, id: 'RHSM hostReport' }),
+  subscriptions: response =>
+    schemaResponse({ response, schema: subscriptionsReportSchema, id: 'RHSM subscriptionsReport' }),
+  tally: response => schemaResponse({ response, schema: tallySchema, id: 'RHSM tally' })
 };
 
 export { rhsmSchemas as default, rhsmSchemas };

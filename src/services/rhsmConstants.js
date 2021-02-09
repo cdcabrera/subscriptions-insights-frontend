@@ -1,0 +1,164 @@
+/**
+ * ToDo: rename to RHSM_API_PRODUCT_ID_TYPES
+ */
+const RHSM_API_PATH_ID_TYPES = {
+  RHEL: 'RHEL',
+  RHEL_COMPUTE_NODE: 'RHEL Compute Node',
+  RHEL_DESKTOP: 'RHEL Desktop',
+  RHEL_SERVER: 'RHEL Server',
+  RHEL_WORKSTATION: 'RHEL Workstation',
+  RHEL_ARM: 'RHEL for ARM',
+  RHEL_IBM_POWER: 'RHEL for IBM Power',
+  RHEL_IBM_Z: 'RHEL for IBM z',
+  RHEL_X86: 'RHEL for x86',
+  OPENSHIFT: 'OpenShift Container Platform',
+  SATELLITE: 'Satellite',
+  SATELLITE_CAPSULE: 'Satellite Capsule',
+  SATELLITE_SERVER: 'Satellite Server'
+};
+
+/**
+ * RHSM response Error DATA CODE types.
+ *
+ * @type {{GENERIC: string, OPTIN: string}}
+ */
+const RHSM_API_RESPONSE_ERROR_CODE_TYPES = {
+  GENERIC: 'SUBSCRIPTIONS1003',
+  OPTIN: 'SUBSCRIPTIONS1004'
+};
+
+// const SUBSCRIPTIONS_REPORT_SERVICE_LEVEL = {
+const RHSM_API_RESPONSE_SLA_TYPES = {
+  PREMIUM: 'premium',
+  STANDARD: 'standard',
+  SELF: 'self-support',
+  NONE: ''
+};
+
+// const SUBSCRIPTIONS_REPORT_UOM = {
+const RHSM_API_RESPONSE_UOM_TYPES = {
+  CORES: 'cores',
+  SOCKETS: 'sockets'
+};
+
+// const SUBSCRIPTIONS_REPORT_USAGE = {
+const RHSM_API_RESPONSE_USAGE_TYPES = {
+  PRODUCTION: 'production',
+  DEVELOPMENT: 'development/test',
+  DISASTER: 'disaster recovery',
+  UNSPECIFIED: ''
+};
+
+const RHSM_API_QUERY_GRANULARITY_TYPES = {
+  DAILY: 'daily',
+  WEEKLY: 'weekly',
+  MONTHLY: 'monthly',
+  QUARTERLY: 'quarterly'
+};
+
+const RHSM_API_QUERY_SORT_TYPES = {
+  CORES: 'cores',
+  HARDWARE: 'hardware_type',
+  LAST_SEEN: 'last_seen',
+  MEASUREMENT: 'measurement_type',
+  NAME: 'display_name',
+  SOCKETS: 'sockets'
+};
+
+const RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES = {
+  SKU: 'sku',
+  PRODUCT_NAME: 'product_name',
+  SERVICE_LEVEL: 'service_level',
+  USAGE: 'usage',
+  UPCOMING_EVENT_DATE: 'upcoming_event_date',
+  PHYSICAL_CAPACITY: 'physical_capacity',
+  VIRTUAL_CAPACITY: 'virtual_capacity',
+  TOTAL_CAPACITY: 'total_capacity',
+  UOM: 'uom'
+};
+
+const RHSM_API_QUERY_SORT_DIRECTION_TYPES = {
+  ASCENDING: 'asc',
+  DESCENDING: 'desc'
+};
+
+const RHSM_API_QUERY_SLA_TYPES = RHSM_API_RESPONSE_SLA_TYPES;
+
+const RHSM_API_QUERY_UOM_TYPES = RHSM_API_RESPONSE_UOM_TYPES;
+
+const RHSM_API_QUERY_USAGE_TYPES = RHSM_API_RESPONSE_USAGE_TYPES;
+
+const RHSM_API_QUERY_SET_OPTIN_TYPES = {
+  CONDUIT_SYNC: 'enable_conduit_sync',
+  TALLY_REPORT: 'enable_tally_reporting',
+  TALLY_SYNC: 'enable_tally_sync'
+};
+
+// ToDo: rename to ...TALLY_CAPACITY_TYPES
+const RHSM_API_QUERY_SET_REPORT_CAPACITY_TYPES = {
+  END_DATE: 'ending',
+  GRANULARITY: 'granularity',
+  SLA: 'sla',
+  START_DATE: 'beginning',
+  USAGE: 'usage'
+};
+
+// ToDo: rename to ...SET_HOST_REPORT_TYPES
+const RHSM_API_QUERY_SET_INVENTORY_TYPES = {
+  DIRECTION: 'dir',
+  DISPLAY_NAME: 'display_name_contains',
+  LIMIT: 'limit',
+  OFFSET: 'offset',
+  SLA: 'sla',
+  SORT: 'sort',
+  UOM: 'uom',
+  USAGE: 'usage'
+};
+
+// ToDo: rename to ...SET_HYPERVISOR_GUEST_REPORT_TYPES
+const RHSM_API_QUERY_SET_INVENTORY_GUESTS_TYPES = {
+  LIMIT: 'limit',
+  OFFSET: 'offset'
+};
+
+// ToDo: rename to ...SET_SUBSCRIPTIONS_REPORT_TYPES
+const RHSM_API_QUERY_SET_INVENTORY_SUBSCRIPTIONS_TYPES = {
+  ...RHSM_API_QUERY_SET_INVENTORY_TYPES
+};
+
+const RHSM_API_QUERY_TYPES = {
+  ...RHSM_API_QUERY_SET_OPTIN_TYPES,
+  ...RHSM_API_QUERY_SET_REPORT_CAPACITY_TYPES,
+  ...RHSM_API_QUERY_SET_INVENTORY_TYPES,
+  ...RHSM_API_QUERY_SET_INVENTORY_GUESTS_TYPES,
+  ...RHSM_API_QUERY_SET_INVENTORY_SUBSCRIPTIONS_TYPES
+};
+
+const rhsmConstants = {
+  RHSM_API_PATH_ID_TYPES,
+  RHSM_API_QUERY_GRANULARITY_TYPES,
+  RHSM_API_QUERY_SORT_TYPES,
+  RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES,
+  RHSM_API_QUERY_SORT_DIRECTION_TYPES,
+  RHSM_API_QUERY_SLA_TYPES,
+  RHSM_API_QUERY_UOM_TYPES,
+  RHSM_API_QUERY_USAGE_TYPES,
+  RHSM_API_QUERY_SET_OPTIN_TYPES,
+  RHSM_API_QUERY_SET_REPORT_CAPACITY_TYPES,
+  RHSM_API_QUERY_SET_INVENTORY_TYPES,
+  RHSM_API_QUERY_SET_INVENTORY_GUESTS_TYPES,
+  RHSM_API_QUERY_SET_INVENTORY_SUBSCRIPTIONS_TYPES,
+  RHSM_API_QUERY_TYPES,
+  RHSM_API_RESPONSE_ERROR_CODE_TYPES,
+  RHSM_API_RESPONSE_SLA_TYPES,
+  RHSM_API_RESPONSE_UOM_TYPES,
+  RHSM_API_RESPONSE_USAGE_TYPES
+  // RHSM_API_SLA_TYPES,
+  // RHSM_API_UOM_TYPES,
+  // RHSM_API_USAGE_TYPES,
+  // SUBSCRIPTIONS_REPORT_SERVICE_LEVEL,
+  // SUBSCRIPTIONS_REPORT_UOM,
+  // SUBSCRIPTIONS_REPORT_USAGE
+};
+
+export { rhsmConstants as default, rhsmConstants };
