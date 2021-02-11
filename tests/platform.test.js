@@ -42,7 +42,7 @@ describe('Platform Configuration, Build', () => {
         .toString()
         .trim()
         .split(/[\n\r]/g)
-        .filter(str => !/\/(cjs|esm)\//.test(str))
+        .filter(str => /\/(import\s{[\d\D]+})\//.test(str))
     ).toMatchSnapshot('direct import exceptions, components');
 
     const notificationsOutput = execSync(

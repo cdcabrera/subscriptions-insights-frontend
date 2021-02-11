@@ -1732,7 +1732,7 @@
     commander ">=2.20.0"
     react-content-loader ">=3.4.1"
 
-"@redhat-cloud-services/frontend-components-utilities@3.0.3":
+"@redhat-cloud-services/frontend-components-utilities@3.0.3", "@redhat-cloud-services/frontend-components-utilities@>=3.0.0":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components-utilities/-/frontend-components-utilities-3.0.3.tgz#160ceccc3eb70215505307dafeb5b4333e4090ce"
   integrity sha512-5tV0iFuM15f5Q+TJJp97r0mCaSwffFwlh5Ey7v9MhKjv1AXU1/GCEeRmoN2B1wT1Yh1i1zPKqj423i+y5RzoPA==
@@ -1743,12 +1743,12 @@
     commander ">=2.20.0"
     react-content-loader ">=3.4.1"
 
-"@redhat-cloud-services/frontend-components@2.5.10":
-  version "2.5.10"
-  resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components/-/frontend-components-2.5.10.tgz#644b459066c9ab30730f7251133e464579ec9879"
-  integrity sha512-/1BW2jwdEyD9p2jF53RPmZhtucdaoB6//sCxBy9PvZnfVMYlT1sf+EAOdj+q7Nd4agfItKnM8Tg3IFkIfpeOUw==
+"@redhat-cloud-services/frontend-components@3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@redhat-cloud-services/frontend-components/-/frontend-components-3.0.6.tgz#036cd9656a18616d8ed4cff6a56ce5e9c4030984"
+  integrity sha512-SBl4fskO4BwqiJvsXJBZyxqWECIpgwFOgSD0rpma4lD+d+Fq28gjH+UMgukpGD5tgNJrbmsG/9ZTwqSbt1+1BA==
   dependencies:
-    "@redhat-cloud-services/frontend-components-utilities" "*"
+    "@redhat-cloud-services/frontend-components-utilities" ">=3.0.0"
     "@scalprum/core" "0.0.10"
     "@scalprum/react-core" "0.0.13"
     sanitize-html "^1.25.0"
