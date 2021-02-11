@@ -62,13 +62,13 @@ global.window.insights = {
  * jest-prop-type-error, https://www.npmjs.com/package/jest-prop-type-error
  */
 beforeAll(() => {
-  const { error } = console;
+  const { warn } = console;
 
   console.error = (message, ...args) => {
     if (/(Invalid prop|Failed prop type)/gi.test(message)) {
       throw new Error(message);
     }
 
-    error.apply(console, [message, ...args]);
+    warn.apply(console, [message, ...args]);
   };
 });
