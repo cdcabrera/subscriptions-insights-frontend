@@ -54,7 +54,7 @@ describe('Platform Configuration, Build', () => {
         .toString()
         .trim()
         .split(/[\n\r]/g)
-        .filter(str => !/\/(cjs|esm)/.test(str))
+        .filter(str => /\/(import\s{[\d\D]+})\//.test(str))
     ).toMatchSnapshot('import exceptions, notifications');
 
     const utilitiesOutput = execSync(
@@ -66,7 +66,7 @@ describe('Platform Configuration, Build', () => {
         .toString()
         .trim()
         .split(/[\n\r]/g)
-        .filter(str => !/\/(cjs|esm)/.test(str))
+        .filter(str => /\/(import\s{[\d\D]+})\//.test(str))
     ).toMatchSnapshot('import exceptions, utilities');
   });
 });
