@@ -21,6 +21,7 @@ import {
 import { ConnectedProductView, ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { helpers } from '../../common';
+import { ProductContext } from './productContext';
 
 /**
  * A Red Hat Satellite configured view, and related system architectures.
@@ -31,7 +32,9 @@ import { helpers } from '../../common';
  * @returns {Node}
  */
 const ProductViewSatellite = ({ productConfig, routeDetail }) => (
-  <ConnectedProductView routeDetail={routeDetail} productConfig={productConfig} />
+  <ProductContext.Provider value={routeDetail}>
+    <ConnectedProductView productConfig={productConfig} />
+  </ProductContext.Provider>
 );
 
 /**

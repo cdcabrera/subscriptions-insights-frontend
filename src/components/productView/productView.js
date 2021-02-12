@@ -21,6 +21,7 @@ import {
 } from '../../types/rhsmApiTypes';
 import { GuestsList } from '../guestsList/guestsList';
 import { translate } from '../i18n/i18n';
+import { ProductContext } from './productContext';
 
 /**
  * ToDo: base for default product layouts, add additional props for various toolbars
@@ -38,11 +39,10 @@ import { translate } from '../i18n/i18n';
  *
  * @param {object} props
  * @param {object} props.productConfig
- * @param {object} props.routeDetail
  * @param {Function} props.t
  * @returns {Node}
  */
-const ProductView = ({ productConfig, routeDetail, t }) => {
+const ProductView = ({ productConfig, t }) => {
   const {
     graphTallyQuery,
     inventoryHostsQuery,
@@ -64,6 +64,7 @@ const ProductView = ({ productConfig, routeDetail, t }) => {
     toolbarQuery: initialToolbarQuery
   } = apiQueries.parseRhsmQuery(query, { graphTallyQuery, inventoryHostsQuery, inventorySubscriptionsQuery });
 
+  const routeDetail = React.useContext(ProductContext);
   const { pathParameter: productId, productParameter: productLabel, viewParameter: viewId } = routeDetail;
 
   if (!productId || !viewId) {
@@ -130,7 +131,7 @@ const ProductView = ({ productConfig, routeDetail, t }) => {
 /**
  * Prop types.
  *
- * @type {{t: Function, routeDetail: object, productConfig: object}}
+ * @type {{t: Function, object, productConfig: object}}
  */
 ProductView.propTypes = {
   productConfig: PropTypes.shape({
@@ -156,11 +157,6 @@ ProductView.propTypes = {
     initialInventoryFilters: InventoryList.propTypes.filterInventoryData,
     initialInventorySettings: InventoryList.propTypes.settings,
     initialSubscriptionsInventoryFilters: InventorySubscriptions.propTypes.filterInventoryData
-  }).isRequired,
-  routeDetail: PropTypes.shape({
-    pathParameter: PropTypes.string,
-    productParameter: PropTypes.string,
-    viewParameter: PropTypes.string
   }).isRequired,
   t: PropTypes.func
 };
