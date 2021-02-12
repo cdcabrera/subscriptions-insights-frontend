@@ -151,16 +151,22 @@ const parseRowCellsListData = ({ filters = [], cellData = {}, session = {} }) =>
         headerUpdated = {
           title: headerUpdated
         };
+      } else {
+        headerUpdated = {
+          title: 'undefined'
+        };
       }
 
-      headerUpdated.transforms = [];
+      if (headerUpdated) {
+        headerUpdated.transforms = [];
 
-      if (Array.isArray(transforms)) {
-        headerUpdated.transforms = headerUpdated.transforms.concat([...transforms]);
-      }
+        if (Array.isArray(transforms)) {
+          headerUpdated.transforms = headerUpdated.transforms.concat([...transforms]);
+        }
 
-      if (typeof cellWidth === 'number') {
-        headerUpdated.transforms.push(PfCellWidth(cellWidth));
+        if (typeof cellWidth === 'number') {
+          headerUpdated.transforms.push(PfCellWidth(cellWidth));
+        }
       }
 
       if (typeof onSort === 'function') {
@@ -180,6 +186,10 @@ const parseRowCellsListData = ({ filters = [], cellData = {}, session = {} }) =>
       if (typeof cellUpdated === 'string' || typeof cellUpdated === 'number' || React.isValidElement(cellUpdated)) {
         cellUpdated = {
           title: cellUpdated
+        };
+      } else {
+        cellUpdated = {
+          title: 'undefined'
         };
       }
 

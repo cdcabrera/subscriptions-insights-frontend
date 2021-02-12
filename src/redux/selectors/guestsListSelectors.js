@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { rhsmApiTypes } from '../../types/rhsmApiTypes';
-import { reduxHelpers } from '../common/reduxHelpers';
 import { selector as userSession } from './userSelectors';
 
 /**
@@ -34,26 +33,9 @@ const selector = createSelector([statePropsFilter], response => {
   if (responseData.fulfilled) {
     const { [rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA]: listData = [] } = responseData.data || {};
 
-    // Apply "display logic" then return a custom value for entries
-    const customInventoryValue = ({ key, value }) => {
-      switch (key) {
-        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.LAST_SEEN:
-          return (value && new Date(value)) || null;
-        default:
-          return value ?? null;
-      }
-    };
-
-    // Generate normalized properties
-    const [updatedListData] = reduxHelpers.setNormalizedResponse({
-      schema: rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_GUESTS_DATA_TYPES,
-      data: listData,
-      customResponseValue: customInventoryValue
-    });
-
     // Update response and cache
     updatedResponseData.fulfilled = true;
-    updatedResponseData.listData = updatedListData;
+    updatedResponseData.listData.push(...listData);
   }
 
   return updatedResponseData;

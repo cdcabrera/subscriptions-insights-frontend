@@ -1,7 +1,5 @@
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import _isEqual from 'lodash/isEqual';
-import { rhsmApiTypes } from '../../types/rhsmApiTypes';
-import { reduxHelpers } from '../common/reduxHelpers';
 import { apiQueries } from '../common';
 import { selector as userSession } from './userSelectors';
 
@@ -63,19 +61,12 @@ const queryFilter = (state, props = {}) => {
 };
 
 /**
- * Note: We use an in-memory cache to provide the user a pleasant UX experience. To
- * aid in that UX we need "pending" to fire in scenarios that are not loaded in-memory. Because
- * we load the cache first there are scenarios where the previous XHR call is still in state
- * when a subsequent fulfilled XHR call comes through. Without the _isEqual(query, metaQuery) check
- * the overlap of the prior fulfilled call interferes with the pending of the subsequent call.
- */
-/**
  * Create selector, transform combined state, props into a consumable object.
  *
  * @type {{pending: boolean, fulfilled: boolean, listData: object, error: boolean, status: (*|number)}}
  */
 const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (response, query = {}) => {
-  const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
+  const { viewId = null, productId = null, metaId, ...responseData } = response || {};
 
   const updatedResponseData = {
     error: responseData.error || false,
@@ -98,47 +89,14 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
     selectorCache.data = {};
   }
 
-  if (responseData.fulfilled && productId === metaId && _isEqual(query, metaQuery)) {
-    const {
-      [rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA]: listData = [],
-      [rhsmApiTypes.RHSM_API_RESPONSE_META]: listMeta = {}
-    } = responseData.data || {};
+  if (responseData.fulfilled) {
+    const { data = [], meta = {} } = responseData.data || {};
 
     updatedResponseData.listData.length = 0;
-
-    // Apply "display logic" then return a custom value for entries
-    const customInventoryValue = ({ key, value }) => {
-      switch (key) {
-        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.CLOUD_PROVIDER:
-        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.HARDWARE:
-        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.MEASUREMENT:
-          return value?.toLowerCase() || null;
-        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.LAST_SEEN:
-          return (value && new Date(value)) || null;
-        default:
-          return value ?? null;
-      }
-    };
-
-    // Generate normalized properties
-    const [updatedListData, updatedListMeta] = reduxHelpers.setNormalizedResponse(
-      {
-        schema: rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES,
-        data: listData,
-        customResponseValue: customInventoryValue
-      },
-      {
-        schema: rhsmApiTypes.RHSM_API_RESPONSE_META_TYPES,
-        data: listMeta
-      }
-    );
-
-    const [meta = {}] = updatedListMeta || [];
-
-    // Update response and cache
-    updatedResponseData.itemCount = meta[rhsmApiTypes.RHSM_API_RESPONSE_META_TYPES.COUNT] ?? 0;
-    updatedResponseData.listData = updatedListData;
+    updatedResponseData.itemCount = meta.count;
+    updatedResponseData.listData.push(...data);
     updatedResponseData.fulfilled = true;
+
     selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`] = {
       ...updatedResponseData
     };

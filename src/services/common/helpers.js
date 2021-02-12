@@ -1,4 +1,23 @@
 import _camelCase from 'lodash/camelCase';
+import _isPlainObject from 'lodash/isPlainObject';
+
+const camelCase = obj => {
+  if (Array.isArray(obj)) {
+    return obj.map(camelCase);
+  }
+
+  if (_isPlainObject(obj)) {
+    const updatedObj = {};
+
+    Object.entries(obj).forEach(([key, val]) => {
+      updatedObj[_camelCase(key)] = camelCase(val);
+    });
+
+    return updatedObj;
+  }
+
+  return obj;
+};
 
 const schemaResponse = ({ convert = true, id = null, response, schema }) => {
   const { value, error = { details: [] } } = schema.validate(response, { convert });
@@ -11,16 +30,12 @@ const schemaResponse = ({ convert = true, id = null, response, schema }) => {
     );
   }
 
-  const updatedValue = {};
-  Object.keys(value).forEach(key => {
-    updatedValue[_camelCase(key).trim()] = value[key];
-  });
-
-  return updatedValue;
+  return camelCase(value);
 };
 
 const serviceHelpers = {
+  camelCase,
   schemaResponse
 };
 
-export { serviceHelpers as default, schemaResponse };
+export { serviceHelpers as default, camelCase, schemaResponse };

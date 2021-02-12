@@ -33,6 +33,13 @@ const responseCache = new LruCache({
   updateAgeOnGet: true
 });
 
+/**
+ * Apply response schema to data.
+ *
+ * @param {object} data
+ * @param {Function} schema
+ * @returns {{data: *, error}}
+ */
 const responseNormalize = (data, schema) => {
   let error;
   let updatedData;
@@ -48,9 +55,10 @@ const responseNormalize = (data, schema) => {
 
 /**
  * Call platform "getUser" auth method, and apply service config. Service configuration
- * includes the ability to cancel all and specific calls, and cache specific calls with
- * their success response only. The cache will refresh its timeout on continuous calls.
- * To reset it a user will either need to refresh the page or wait the "maxAge".
+ * includes the ability to cancel all and specific calls, cache and normalize a response
+ * based on a provided schema, and being a successful API response. The cache will refresh
+ * its timeout on continuous calls. To reset it a user will either need to refresh the
+ * page or wait the "maxAge".
  *
  * @param {object} config
  * @returns {Promise<*>}
@@ -95,16 +103,10 @@ const serviceCall = async config => {
   axiosInstance.interceptors.response.use(response => {
     const updatedResponse = { ...response };
 
-    console.log('updatedConfig', updatedConfig);
-
     if (updatedConfig.schema) {
       const { data, error } = responseNormalize(updatedResponse.data, updatedConfig.schema);
-
-      console.log('schema set', data, error);
-
       if (!error) {
         updatedResponse.data = data;
-        console.log('>>>>>>>>>>>>', data);
       }
     }
 
@@ -114,9 +116,6 @@ const serviceCall = async config => {
 
     return updatedResponse;
   });
-
-  // delete updatedConfig.cache;
-  // delete updatedConfig.schema;
 
   return axiosInstance(serviceConfig(updatedConfig));
 };

@@ -9,22 +9,22 @@ const linksSchema = Joi.object();
 
 const metaSchema = Joi.object()
   .keys({
-    count: Joi.number().integer()
+    count: Joi.number().integer().default(0)
   })
   .unknown(true);
 
 const capacityItems = Joi.object().keys({
-  cloud_cores: Joi.number().integer().allow(null).default(0),
-  cloud_instance_count: Joi.number().integer().allow(null).default(0),
-  cloud_sockets: Joi.number().integer().allow(null).default(0),
-  cores: Joi.number().integer().allow(null).default(0),
+  cloud_cores: Joi.number().integer().optional().allow(null),
+  cloud_instance_count: Joi.number().integer().optional().allow(null),
+  cloud_sockets: Joi.number().integer().optional().allow(null),
+  cores: Joi.number().integer().optional().allow(null),
   date: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').required(),
-  hypervisor_cores: Joi.number().integer().allow(null).default(0),
-  hypervisor_sockets: Joi.number().integer().allow(null).default(0),
-  physical_cores: Joi.number().integer().allow(null).default(0),
-  physical_sockets: Joi.number().integer().allow(null).default(0),
-  sockets: Joi.number().integer().allow(null).default(0),
-  has_infinite_quantity: Joi.boolean()
+  hypervisor_cores: Joi.number().integer().optional().allow(null),
+  hypervisor_sockets: Joi.number().integer().optional().allow(null),
+  physical_cores: Joi.number().integer().optional().allow(null),
+  physical_sockets: Joi.number().integer().optional().allow(null),
+  sockets: Joi.number().integer().optional().allow(null),
+  has_infinite_quantity: Joi.boolean().optional().allow(null)
 });
 
 const capacitySchema = Joi.object({
@@ -46,7 +46,7 @@ const hypervisorGuestReportSchema = Joi.object({
   meta: metaSchema
 });
 
-const hostReportItems = Joi.object({
+const hostReportItems = {
   cloud_provider: Joi.string().lowercase().default(null),
   cores: Joi.number().integer().allow(null).default(null),
   number_of_guests: Joi.number().integer().allow(null).default(null),
@@ -58,10 +58,10 @@ const hostReportItems = Joi.object({
   display_name: Joi.string().default(null),
   sockets: Joi.number().integer().allow(null).default(null),
   subscription_manager_id: Joi.string().default(null)
-});
+};
 
 const hostReportSchema = Joi.object({
-  data: Joi.array().items(hostReportItems).default([]),
+  data: Joi.array().items(Joi.object(hostReportItems)).default([]),
   links: linksSchema,
   meta: metaSchema
 });
@@ -96,19 +96,19 @@ const subscriptionsReportSchema = Joi.object({
 });
 
 const tallyItems = Joi.object().keys({
-  cloud_cores: Joi.number().integer().allow(null).default(0),
-  cloud_instance_count: Joi.number().integer().allow(null).default(0),
-  cloud_sockets: Joi.number().integer().allow(null).default(0),
-  cores: Joi.number().integer().allow(null).default(0),
+  cloud_cores: Joi.number().integer().optional().allow(null),
+  cloud_instance_count: Joi.number().integer().optional().allow(null),
+  cloud_sockets: Joi.number().integer().optional().allow(null),
+  cores: Joi.number().integer().optional().allow(null),
   date: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').required(),
-  hypervisor_cores: Joi.number().integer().allow(null).default(0),
-  hypervisor_sockets: Joi.number().integer().allow(null).default(0),
-  physical_cores: Joi.number().integer().allow(null).default(0),
-  physical_sockets: Joi.number().integer().allow(null).default(0),
-  sockets: Joi.number().integer().allow(null).default(0),
-  has_cloudigrade_data: Joi.boolean(),
-  has_cloudigrade_mismatch: Joi.boolean(),
-  has_data: Joi.boolean()
+  hypervisor_cores: Joi.number().integer().optional().allow(null),
+  hypervisor_sockets: Joi.number().integer().optional().allow(null),
+  physical_cores: Joi.number().integer().optional().allow(null),
+  physical_sockets: Joi.number().integer().optional().allow(null),
+  sockets: Joi.number().integer().optional().allow(null),
+  has_cloudigrade_data: Joi.boolean().optional().allow(null),
+  has_cloudigrade_mismatch: Joi.boolean().optional().allow(null),
+  has_data: Joi.boolean().optional().allow(null)
 });
 
 const tallySchema = Joi.object({

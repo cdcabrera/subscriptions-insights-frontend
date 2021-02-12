@@ -638,14 +638,13 @@ const getApiVersion = (options = {}) => {
  * @returns {Promise<*>}
  */
 const getGraphReports = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = true, cancelId, schema = rhsmSchemas.tally } = options;
+  const { cache = true, cancel = true, cancelId } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_REPORT}${id}`,
     params,
     cache,
     cancel,
-    cancelId,
-    schema
+    cancelId
   });
 };
 
@@ -948,14 +947,13 @@ const getGraphReports = (id, params = {}, options = {}) => {
  * @returns {Promise<*>}
  */
 const getGraphCapacity = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = true, cancelId, schema = rhsmSchemas.capacity } = options;
+  const { cache = true, cancel = true, cancelId } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
     params,
     cache,
     cancel,
-    cancelId,
-    schema
+    cancelId
   });
 };
 

@@ -1,15 +1,7 @@
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import _isEqual from 'lodash/isEqual';
-import { rhsmApiTypes } from '../../types/rhsmApiTypes';
-import { reduxHelpers } from '../common/reduxHelpers';
 import { apiQueries } from '../common';
 import { selector as userSession } from './userSelectors';
-
-/**
- * ToDo: Consider consolidating inventory selectors, and/or create API specific selectors, i.e. RHSM, etc
- * Breaking out the inventory selectors is a temporary solution until the API is finalized. Aspects
- * of the caching and applying the API schemas is now consistent enough to allow for grouping/refinement.
- */
 
 /**
  * Create a custom "are objects equal" selector.
@@ -74,7 +66,7 @@ const queryFilter = (state, props = {}) => {
  * @type {{pending: boolean, fulfilled: boolean, listData: object, error: boolean, status: (*|number)}}
  */
 const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (response, query = {}) => {
-  const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
+  const { viewId = null, productId = null, metaId, ...responseData } = response || {};
 
   const updatedResponseData = {
     error: responseData.error || false,
@@ -97,43 +89,14 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
     selectorCache.data = {};
   }
 
-  if (responseData.fulfilled && productId === metaId && _isEqual(query, metaQuery)) {
-    const {
-      [rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA]: listData = [],
-      [rhsmApiTypes.RHSM_API_RESPONSE_META]: listMeta = {}
-    } = responseData.data || {};
+  if (responseData.fulfilled) {
+    const { data = [], meta = {} } = responseData.data || {};
 
     updatedResponseData.listData.length = 0;
-
-    // Apply "display logic" then return a custom value for entries
-    const customInventoryValue = ({ key, value }) => {
-      switch (key) {
-        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_SUBSCRIPTIONS_DATA_TYPES.UPCOMING_EVENT_DATE:
-          return (value && new Date(value)) || null;
-        default:
-          return value ?? null;
-      }
-    };
-
-    // Generate normalized properties
-    const [updatedListData, updatedListMeta] = reduxHelpers.setNormalizedResponse(
-      {
-        schema: rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_SUBSCRIPTIONS_DATA_TYPES,
-        data: listData,
-        customResponseValue: customInventoryValue
-      },
-      {
-        schema: rhsmApiTypes.RHSM_API_RESPONSE_META_TYPES,
-        data: listMeta
-      }
-    );
-
-    const [meta = {}] = updatedListMeta || [];
-
-    // Update response and cache
-    updatedResponseData.itemCount = meta[rhsmApiTypes.RHSM_API_RESPONSE_META_TYPES.COUNT] ?? 0;
-    updatedResponseData.listData = updatedListData;
+    updatedResponseData.itemCount = meta.count;
+    updatedResponseData.listData.push(...data);
     updatedResponseData.fulfilled = true;
+
     selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`] = {
       ...updatedResponseData
     };
