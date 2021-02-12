@@ -1,5 +1,6 @@
 import axios, { CancelToken } from 'axios';
 import LruCache from 'lru-cache';
+import { helpers } from '../common';
 import { platformServices } from './platform/platformServices';
 
 /**
@@ -47,6 +48,9 @@ const responseNormalize = (data, schema) => {
   try {
     updatedData = schema(data);
   } catch (e) {
+    if (helpers.DEV_MODE) {
+      throw new Error(e);
+    }
     error = e;
   }
 

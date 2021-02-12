@@ -13,7 +13,7 @@ const metaSchema = Joi.object()
   })
   .unknown(true);
 
-const capacityItems = Joi.object().keys({
+const capacityItems = Joi.object({
   cloud_cores: Joi.number().integer().optional().allow(null),
   cloud_instance_count: Joi.number().integer().optional().allow(null),
   cloud_sockets: Joi.number().integer().optional().allow(null),
@@ -25,9 +25,9 @@ const capacityItems = Joi.object().keys({
   physical_sockets: Joi.number().integer().optional().allow(null),
   sockets: Joi.number().integer().optional().allow(null),
   has_infinite_quantity: Joi.boolean().optional().allow(null)
-});
+}).unknown(true);
 
-const capacitySchema = Joi.object({
+const capacitySchema = Joi.object().keys({
   data: Joi.array().items(capacityItems).default([]),
   links: linksSchema,
   meta: metaSchema
@@ -38,15 +38,15 @@ const hypervisorGuestReportItems = Joi.object({
   display_name: Joi.string().default(null),
   subscription_manager_id: Joi.string().default(null),
   last_seen: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').default(null)
-});
+}).unknown(true);
 
-const hypervisorGuestReportSchema = Joi.object({
+const hypervisorGuestReportSchema = Joi.object().keys({
   data: Joi.array().items(hypervisorGuestReportItems).default([]),
   links: linksSchema,
   meta: metaSchema
 });
 
-const hostReportItems = {
+const hostReportItems = Joi.object({
   cloud_provider: Joi.string().lowercase().default(null),
   cores: Joi.number().integer().allow(null).default(null),
   number_of_guests: Joi.number().integer().allow(null).default(null),
@@ -58,10 +58,10 @@ const hostReportItems = {
   display_name: Joi.string().default(null),
   sockets: Joi.number().integer().allow(null).default(null),
   subscription_manager_id: Joi.string().default(null)
-};
+}).unknown(true);
 
-const hostReportSchema = Joi.object({
-  data: Joi.array().items(Joi.object(hostReportItems)).default([]),
+const hostReportSchema = Joi.object().keys({
+  data: Joi.array().items(hostReportItems).default([]),
   links: linksSchema,
   meta: metaSchema
 });
@@ -87,15 +87,15 @@ const subscriptionsReportItems = Joi.object({
     .lowercase()
     .default(null),
   virtual_capacity: Joi.number().integer().allow(null).default(null)
-});
+}).unknown(true);
 
-const subscriptionsReportSchema = Joi.object({
+const subscriptionsReportSchema = Joi.object().keys({
   data: Joi.array().items(subscriptionsReportItems).default([]),
   links: linksSchema,
   meta: metaSchema
 });
 
-const tallyItems = Joi.object().keys({
+const tallyItems = Joi.object({
   cloud_cores: Joi.number().integer().optional().allow(null),
   cloud_instance_count: Joi.number().integer().optional().allow(null),
   cloud_sockets: Joi.number().integer().optional().allow(null),
@@ -109,9 +109,9 @@ const tallyItems = Joi.object().keys({
   has_cloudigrade_data: Joi.boolean().optional().allow(null),
   has_cloudigrade_mismatch: Joi.boolean().optional().allow(null),
   has_data: Joi.boolean().optional().allow(null)
-});
+}).unknown(true);
 
-const tallySchema = Joi.object({
+const tallySchema = Joi.object().keys({
   data: Joi.array().items(tallyItems).default([]),
   links: linksSchema,
   meta: metaSchema

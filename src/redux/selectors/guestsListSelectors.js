@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { selector as userSession } from './userSelectors';
 
 /**
@@ -31,11 +30,10 @@ const selector = createSelector([statePropsFilter], response => {
   };
 
   if (responseData.fulfilled) {
-    const { [rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA]: listData = [] } = responseData.data || {};
+    const { data = [] } = responseData.data || {};
 
-    // Update response and cache
     updatedResponseData.fulfilled = true;
-    updatedResponseData.listData.push(...listData);
+    updatedResponseData.listData.push(...data);
   }
 
   return updatedResponseData;
