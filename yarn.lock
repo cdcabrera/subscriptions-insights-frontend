@@ -2777,21 +2777,21 @@ apidoc-core@^0.12.0:
     lodash "^4.17.20"
     semver "~7.3.2"
 
-apidoc-mock@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/apidoc-mock/-/apidoc-mock-3.0.3.tgz#fcdadab20ae0cd154cbade339d84d04e7cc57764"
-  integrity sha512-3AOd/WbYhiv0moiSvYaxEs4WgdRn8UViK36IeIFfZP/DVVMmD2NpPE4wFQkOfAOWVYjEmQuKPA3a3NjQpuWfZg==
+apidoc-mock@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/apidoc-mock/-/apidoc-mock-3.0.4.tgz#5981d6762bae3f16edfade92aabd27847c2a18b0"
+  integrity sha512-iopmRbYV4gME4wiMYkp+/Yi9sL7KOiIk7plLG4CTm6Ptag0yhEj8Z24pNih5nbXXP0txkXG0v2nSvACcjeDeVQ==
   dependencies:
-    apidoc "^0.25.0"
+    apidoc "^0.26.0"
     express "^4.17.1"
-    node-watch "^0.6.4"
+    node-watch "^0.7.1"
     winston "^3.3.3"
-    yargs "^16.0.3"
+    yargs "^16.2.0"
 
-apidoc@^0.25.0:
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/apidoc/-/apidoc-0.25.0.tgz#d59ad8724e091f4a1e349ff50cf4fb4dd3de6142"
-  integrity sha512-5g9fp8OffXZOdBTzm4BBvV5Vw54s+NmKnGZIUKuH+gRTqqJuRJpcGN6sz6WnjJ+NcvXhB7rIRp6FhtJahazx2Q==
+apidoc@^0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/apidoc/-/apidoc-0.26.0.tgz#7073ed5c92f06a22a611569985f578231c26e3a9"
+  integrity sha512-IEw/Z7HMMbjeVjK2sZvZSwAln8AqalLzf3qLDtkcedXVhdxGm6W7UgIW6fshegqNTMLzm8CFEMi4Lxbeu0xKTw==
   dependencies:
     apidoc-core "^0.12.0"
     commander "^2.20.0"
@@ -9654,10 +9654,10 @@ node-sass@^4.14.1:
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
 
-node-watch@^0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/node-watch/-/node-watch-0.6.4.tgz#50e564046eb7be15151c25f9c5aac4b5f495c291"
-  integrity sha512-cI6CHzivIFESe8djiK3Wh90CtWQBxLwMem8x8S+2GSvCvFgoMuOKVlfJtQ/2v3Afg3wOnHl/+tXotEs8z5vOrg==
+node-watch@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/node-watch/-/node-watch-0.7.1.tgz#0caaa6a6833b0d533487f953c52a6c787769ba7c"
+  integrity sha512-UWblPYuZYrkCQCW5PxAwYSxaELNBLUckrTBBk8xr1/bUgyOkYYTsUcV4e3ytcazFEOyiRyiUrsG37pu6I0I05g==
 
 nodemon@^2.0.4:
   version "2.0.7"
@@ -14860,7 +14860,7 @@ yargs@^15.3.1, yargs@^15.4.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yargs@^16.0.3:
+yargs@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==

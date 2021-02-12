@@ -75,7 +75,7 @@
     ]
   },
   "scripts": {
-    "api:dev": "mock -p 5000 -w ./src/services",
+    "api:dev": "mock -p 5000 -w ./src/services -w ./src/services/rhsm -w ./src/services/user -w ./src/services/platform",
     "api:docs": "node ./scripts/openapi.docs.js",
     "api:proxy-hosts": "bash ./scripts/proxy.api.sh -s",
     "api:proxy": "bash ./scripts/proxy.api.sh -d \"https://ci.foo.redhat.com/beta/subscriptions/\" -p 443 -c \"$(pwd)/config/spandx.config.js\"",
@@ -140,7 +140,7 @@
     "victory-create-container": "^35.4.8"
   },
   "devDependencies": {
-    "apidoc-mock": "^3.0.3",
+    "apidoc-mock": "^3.0.4",
     "cspell": "^5.2.4",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
