@@ -84,7 +84,7 @@ class RhelView extends React.Component {
         </PageToolbar>
         <PageSection>
           <GraphCard
-            key={routeDetail.pathParameter}
+            key={`graph-card-${routeDetail.pathParameter}`}
             filterGraphData={initialGraphFilters}
             query={initialGraphTallyQuery}
             productId={routeDetail.pathParameter}
@@ -97,7 +97,7 @@ class RhelView extends React.Component {
           <InventoryTabs productId={routeDetail.pathParameter}>
             <InventoryTab key="hostsTab" title={t('curiosity-inventory.tab', { context: 'hosts' })}>
               <InventoryList
-                key={routeDetail.pathParameter}
+                key={`inv-list-${routeDetail.pathParameter}`}
                 filterGuestsData={initialGuestsFilters}
                 filterInventoryData={initialInventoryFilters}
                 productId={routeDetail.pathParameter}
@@ -109,7 +109,7 @@ class RhelView extends React.Component {
             {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && (
               <InventoryTab key="subscriptionsTab" title={t('curiosity-inventory.tab', { context: 'subscriptions' })}>
                 <InventorySubscriptions
-                  key={routeDetail.pathParameter}
+                  key={`inv-subs-${routeDetail.pathParameter}`}
                   filterInventoryData={initialSubscriptionsInventoryFilters}
                   productId={routeDetail.pathParameter}
                   query={initialInventorySubscriptionsQuery}

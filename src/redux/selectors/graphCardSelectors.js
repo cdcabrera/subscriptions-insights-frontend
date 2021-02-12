@@ -1,10 +1,18 @@
-import { createSelector } from 'reselect';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
 import moment from 'moment';
 import _isEqual from 'lodash/isEqual';
 import _camelCase from 'lodash/camelCase';
 import { rhsmApiTypes, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { reduxHelpers } from '../common/reduxHelpers';
 import { apiQueries } from '../common';
+
+/**
+ * Create a custom "are objects equal" selector.
+ *
+ * @private
+ * @type {Function}}
+ */
+const createDeepEqualSelector = createSelectorCreator(defaultMemoize, _isEqual);
 
 /**
  * Selector cache.
@@ -57,7 +65,7 @@ const queryFilter = (state, props = {}) => {
  *
  * @type {{pending: boolean, fulfilled: boolean, graphData: object, error: boolean, status: (*|number)}}
  */
-const selector = createSelector([statePropsFilter, queryFilter], (response, query = {}) => {
+const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (response, query = {}) => {
   const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
 
   const updatedResponseData = {

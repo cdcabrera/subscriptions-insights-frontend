@@ -31,6 +31,18 @@ const parseRhsmQuery = (query = {}, queries = {}) => {
     inventorySubscriptionsQuery: { ...updatedInventorySubscriptionsQuery, ...inventorySubscriptionsQuery },
     toolbarQuery: query
   };
+
+  // const sortParams = params => Object.entries(params).sort(([a], [b]) => a.localeCompare(b));
+  // const sortedQuery = sortParams(query);
+
+  // return {
+  //  query: sortedQuery,
+  //  graphTallyQuery: sortParams({ ...updatedGraphTallyQuery, ...graphTallyQuery }),
+  //  inventoryGuestsQuery: sortParams({ ...updatedInventoryGuestsQuery, ...inventoryGuestsQuery }),
+  //  inventoryHostsQuery: sortParams({ ...updatedInventoryHostsQuery, ...inventoryHostsQuery }),
+  //  inventorySubscriptionsQuery: sortParams({ ...updatedInventorySubscriptionsQuery, ...inventorySubscriptionsQuery }),
+  //  toolbarQuery: sortedQuery
+  // };
 };
 
 const apiQueries = {
