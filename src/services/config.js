@@ -101,6 +101,8 @@ const serviceCall = async config => {
           statusText: 'Not Modified',
           config: adapterConfig
         });
+
+      return axiosInstance(serviceConfig(updatedConfig));
     }
   }
 
