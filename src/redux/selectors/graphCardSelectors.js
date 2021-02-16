@@ -2,8 +2,6 @@ import { createSelectorCreator, defaultMemoize } from 'reselect';
 import moment from 'moment';
 import _isEqual from 'lodash/isEqual';
 import _camelCase from 'lodash/camelCase';
-import { rhsmApiTypes, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-import { reduxHelpers } from '../common/reduxHelpers';
 import { apiQueries } from '../common';
 
 /**
@@ -15,14 +13,6 @@ import { apiQueries } from '../common';
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, _isEqual);
 
 /**
- * Selector cache.
- *
- * @private
- * @type {{dataId: {string}, data: {object}}}
- */
-const selectorCache = { dataId: null, data: {} };
-
-/**
  * Return a combined state, props object.
  *
  * @private
@@ -31,11 +21,7 @@ const selectorCache = { dataId: null, data: {} };
  * @returns {object}
  */
 const statePropsFilter = (state, props = {}) => ({
-  ...state.graph?.reportCapacity?.[props.productId],
-  ...{
-    viewId: props.viewId,
-    productId: props.productId
-  }
+  ...state.graph?.reportCapacity?.[props.productId]
 });
 
 /**
@@ -66,7 +52,7 @@ const queryFilter = (state, props = {}) => {
  * @type {{pending: boolean, fulfilled: boolean, graphData: object, error: boolean, status: (*|number)}}
  */
 const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (response, query = {}) => {
-  const { viewId = null, productId = null, metaId, metaQuery = {}, ...responseData } = response || {};
+  const { metaId, ...responseData } = response || {};
 
   const updatedResponseData = {
     error: responseData.error || false,
@@ -77,24 +63,10 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
     status: responseData.status
   };
 
-  const responseMetaQuery = { ...metaQuery };
-  delete responseMetaQuery[RHSM_API_QUERY_TYPES.START_DATE];
-  delete responseMetaQuery[RHSM_API_QUERY_TYPES.END_DATE];
-
-  const cachedGranularity =
-    (viewId && productId && selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`]) || undefined;
-
-  Object.assign(updatedResponseData, { ...cachedGranularity });
-
-  if (viewId && selectorCache.dataId !== viewId) {
-    selectorCache.dataId = viewId;
-    selectorCache.data = {};
-  }
-
-  if (responseData.fulfilled && productId === metaId && _isEqual(query, responseMetaQuery)) {
+  if (responseData.fulfilled) {
     const [report, capacity] = responseData.data;
-    const reportData = report?.[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA] || [];
-    const capacityData = capacity?.[rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA] || [];
+    const reportData = report?.data || [];
+    const capacityData = capacity?.data || [];
 
     /**
      * ToDo: Reevaluate this reset on graphData when working with Reselect's memoize.
@@ -105,31 +77,23 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
       updatedResponseData.graphData[graphDataKey] = [];
     });
 
-    // Populate expected API response values with undefined
-    const [tallySchema = {}, capacitySchema = {}] = reduxHelpers.setResponseSchemas([
-      rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES,
-      rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES
-    ]);
-
     // Apply "display logic" then return a custom value for Reporting graph entries
     const customReportValue = (data, key, presetData) => ({
-      ...presetData,
-      hasData: data[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_DATA],
-      hasCloudigradeData: data[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_DATA],
-      hasCloudigradeMismatch: data[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_MISMATCH]
+      ...data,
+      ...presetData
     });
 
     // Apply "display logic" then return a custom value for Capacity graph entries
     const customCapacityValue = (data, key, { date, x, y }) => ({
+      ...data,
       date,
       x,
-      y: data[rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.HAS_INFINITE] === true ? null : y,
-      hasInfinite: data[rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.HAS_INFINITE]
+      y: data.hasInfiniteQuantity === true ? null : y
     });
 
     // Generate reflected graph data for number, undefined, and null
     reportData.forEach((value, index) => {
-      const date = moment.utc(value[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.DATE]).startOf('day').toDate();
+      const date = moment.utc(value.date).startOf('day').toDate();
 
       const generateGraphData = ({ graphDataObj, keyPrefix = '', customValue = null }) => {
         Object.keys(graphDataObj).forEach(graphDataObjKey => {
@@ -144,14 +108,10 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
               updatedResponseData.graphData[casedGraphDataObjKey] = [];
             }
 
-            let generatedY;
+            let generatedY = graphDataObj[graphDataObjKey];
 
-            if (typeof graphDataObj[graphDataObjKey] === 'number') {
-              generatedY = Number.parseInt(graphDataObj[graphDataObjKey], 10);
-            } else if (graphDataObj[graphDataObjKey] === undefined) {
+            if (graphDataObj[graphDataObjKey] === undefined) {
               generatedY = 0;
-            } else if (graphDataObj[graphDataObjKey] === null) {
-              generatedY = graphDataObj[graphDataObjKey];
             }
 
             const updatedItem =
@@ -169,19 +129,15 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
         });
       };
 
-      generateGraphData({ graphDataObj: { ...tallySchema, ...value }, customValue: customReportValue });
+      generateGraphData({ graphDataObj: { ...value }, customValue: customReportValue });
       generateGraphData({
-        graphDataObj: { ...capacitySchema, ...capacityData[index] },
+        graphDataObj: { ...capacityData[index] },
         keyPrefix: 'threshold',
         customValue: customCapacityValue
       });
     });
 
-    // Update response and cache
     updatedResponseData.fulfilled = true;
-    selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`] = {
-      ...updatedResponseData
-    };
   }
 
   return updatedResponseData;
