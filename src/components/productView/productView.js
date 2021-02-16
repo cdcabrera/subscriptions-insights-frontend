@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages } from '../pageLayout/pageLayout';
+import { useRouteDetail } from '../router/router';
 import { apiQueries, connect, reduxSelectors } from '../../redux';
 import { ConnectedGraphCard, GraphCard } from '../graphCard/graphCard';
 import { ConnectedToolbar, Toolbar } from '../toolbar/toolbar';
@@ -39,10 +40,11 @@ import { ProductContext } from './productContext';
  *
  * @param {object} props
  * @param {object} props.productConfig
+ * @param {object} props.routeDetail
  * @param {Function} props.t
  * @returns {Node}
  */
-const ProductView = ({ productConfig, t }) => {
+const ProductView = ({ productConfig, routeDetail, t }) => {
   const {
     graphTallyQuery,
     inventoryHostsQuery,
@@ -64,74 +66,77 @@ const ProductView = ({ productConfig, t }) => {
     toolbarQuery: initialToolbarQuery
   } = apiQueries.parseRhsmQuery(query, { graphTallyQuery, inventoryHostsQuery, inventorySubscriptionsQuery });
 
-  const routeDetail = React.useContext(ProductContext);
-  const { pathParameter: productId, productParameter: productLabel, viewParameter: viewId } = routeDetail;
+  const { pathParameter: productId, productParameter: productLabel, viewParameter: viewId } = useRouteDetail(
+    routeDetail
+  );
 
   if (!productId || !viewId) {
     return null;
   }
 
   return (
-    <PageLayout>
-      <PageHeader productLabel={productLabel} includeTour>
-        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
-      </PageHeader>
-      <PageMessages>
-        <BannerMessages productId={productId} viewId={viewId} query={initialQuery} />
-      </PageMessages>
-      <PageToolbar>
-        <ConnectedToolbar
-          filterOptions={initialToolbarFilters}
-          productId={productId}
-          query={initialToolbarQuery}
-          viewId={viewId}
-        />
-      </PageToolbar>
-      <PageSection>
-        <ConnectedGraphCard
-          key={productId}
-          filterGraphData={initialGraphFilters}
-          query={initialGraphTallyQuery}
-          productId={productId}
-          viewId={viewId}
-          cardTitle={t('curiosity-graph.socketsHeading')}
-          productLabel={productLabel}
-        />
-      </PageSection>
-      <PageSection>
-        <InventoryTabs productId={productId}>
-          <InventoryTab key="hostsTab" title={t('curiosity-inventory.tab', { context: 'hosts' })}>
-            <ConnectedInventoryList
-              key={productId}
-              filterGuestsData={initialGuestsFilters}
-              filterInventoryData={initialInventoryFilters}
-              productId={productId}
-              settings={initialInventorySettings}
-              query={initialInventoryHostsQuery}
-              viewId={viewId}
-            />
-          </InventoryTab>
-          {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && (
-            <InventoryTab key="subscriptionsTab" title={t('curiosity-inventory.tab', { context: 'subscriptions' })}>
-              <ConnectedInventorySubscriptions
-                key={productId}
-                filterInventoryData={initialSubscriptionsInventoryFilters}
+    <ProductContext.Provider value={productConfig}>
+      <PageLayout>
+        <PageHeader productLabel={productLabel} includeTour>
+          {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
+        </PageHeader>
+        <PageMessages>
+          <BannerMessages productId={productId} viewId={viewId} query={initialQuery} />
+        </PageMessages>
+        <PageToolbar>
+          <ConnectedToolbar
+            filterOptions={initialToolbarFilters}
+            productId={productId}
+            query={initialToolbarQuery}
+            viewId={viewId}
+          />
+        </PageToolbar>
+        <PageSection>
+          <ConnectedGraphCard
+            key={`graph-card-${productId}`}
+            filterGraphData={initialGraphFilters}
+            query={initialGraphTallyQuery}
+            productId={productId}
+            viewId={viewId}
+            cardTitle={t('curiosity-graph.socketsHeading')}
+            productLabel={productLabel}
+          />
+        </PageSection>
+        <PageSection>
+          <InventoryTabs productId={productId}>
+            <InventoryTab key="hostsTab" title={t('curiosity-inventory.tab', { context: 'hosts' })}>
+              <ConnectedInventoryList
+                key={`inv-list-${productId}`}
+                filterGuestsData={initialGuestsFilters}
+                filterInventoryData={initialInventoryFilters}
                 productId={productId}
-                query={initialInventorySubscriptionsQuery}
+                settings={initialInventorySettings}
+                query={initialInventoryHostsQuery}
                 viewId={viewId}
               />
             </InventoryTab>
-          )}
-        </InventoryTabs>
-      </PageSection>
-    </PageLayout>
+            {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && (
+              <InventoryTab key="subscriptionsTab" title={t('curiosity-inventory.tab', { context: 'subscriptions' })}>
+                <ConnectedInventorySubscriptions
+                  key={`inv-subs-${productId}`}
+                  filterInventoryData={initialSubscriptionsInventoryFilters}
+                  productId={productId}
+                  query={initialInventorySubscriptionsQuery}
+                  viewId={viewId}
+                />
+              </InventoryTab>
+            )}
+          </InventoryTabs>
+        </PageSection>
+      </PageLayout>
+    </ProductContext.Provider>
   );
 };
 
 /**
  * Prop types.
  *
- * @type {{t: Function, object, productConfig: object}}
+ * @type {{t: Function, routeDetail: object, productConfig: object}}
  */
 ProductView.propTypes = {
   productConfig: PropTypes.shape({
@@ -158,6 +163,11 @@ ProductView.propTypes = {
     initialInventorySettings: InventoryList.propTypes.settings,
     initialSubscriptionsInventoryFilters: InventorySubscriptions.propTypes.filterInventoryData
   }).isRequired,
+  routeDetail: PropTypes.shape({
+    pathParameter: PropTypes.string,
+    productParameter: PropTypes.string,
+    viewParameter: PropTypes.string
+  }),
   t: PropTypes.func
 };
 
@@ -167,6 +177,7 @@ ProductView.propTypes = {
  * @type {{t: translate}}
  */
 ProductView.defaultProps = {
+  routeDetail: {},
   t: translate
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   chart_color_blue_100 as chartColorBlueLight,
   chart_color_blue_300 as chartColorBlueDark,
@@ -21,34 +20,23 @@ import {
 import { ConnectedProductView, ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { helpers } from '../../common';
-import { ProductContext } from './productContext';
 
 /**
  * A Red Hat Satellite configured view, and related system architectures.
  *
  * @param {object} props
  * @param {object} props.productConfig
- * @param {object} props.routeDetail
  * @returns {Node}
  */
-const ProductViewSatellite = ({ productConfig, routeDetail }) => (
-  <ProductContext.Provider value={routeDetail}>
-    <ConnectedProductView productConfig={productConfig} />
-  </ProductContext.Provider>
-);
+const ProductViewSatellite = ({ productConfig }) => <ConnectedProductView productConfig={productConfig} />;
 
 /**
  * Prop types.
  *
- * @type {{routeDetail: object, productConfig:object}}
+ * @type {{productConfig:object}}
  */
 ProductViewSatellite.propTypes = {
-  productConfig: ProductView.propTypes.productConfig,
-  routeDetail: PropTypes.shape({
-    pathParameter: PropTypes.string,
-    productParameter: PropTypes.string,
-    viewParameter: PropTypes.string
-  }).isRequired
+  productConfig: ProductView.propTypes.productConfig
 };
 
 /**
