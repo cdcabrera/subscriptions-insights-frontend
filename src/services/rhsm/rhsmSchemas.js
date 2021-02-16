@@ -29,7 +29,7 @@ const capacityItems = Joi.object({
   cloud_instance_count: Joi.number().integer().optional().allow(null),
   cloud_sockets: Joi.number().integer().optional().allow(null),
   cores: Joi.number().integer().optional().allow(null),
-  date: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').required(),
+  date: Joi.date().optional().allow(null),
   hypervisor_cores: Joi.number().integer().optional().allow(null),
   hypervisor_sockets: Joi.number().integer().optional().allow(null),
   physical_cores: Joi.number().integer().optional().allow(null),
@@ -48,7 +48,7 @@ const hypervisorGuestReportItems = Joi.object({
   insights_id: Joi.string().default(null),
   display_name: Joi.string().default(null),
   subscription_manager_id: Joi.string().default(null),
-  last_seen: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').default(null)
+  last_seen: Joi.date().default(null)
 }).unknown(true);
 
 const hypervisorGuestReportSchema = Joi.object().keys({
@@ -64,7 +64,7 @@ const hostReportItems = Joi.object({
   hardware_type: Joi.string().lowercase().default(null),
   insights_id: Joi.string().default(null),
   inventory_id: Joi.string().default(null),
-  last_seen: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').default(null),
+  last_seen: Joi.date().default(null),
   measurement_type: Joi.string().lowercase().default(null),
   display_name: Joi.string().default(null),
   sockets: Joi.number().integer().allow(null).default(null),
@@ -91,7 +91,7 @@ const subscriptionsReportItems = Joi.object({
     .valid(...Object.values(rhsmConstants.RHSM_API_RESPONSE_UOM_TYPES))
     .lowercase()
     .default(null),
-  upcoming_event_date: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').default(null),
+  upcoming_event_date: Joi.date().default(null),
   upcoming_event_type: Joi.string().default(null),
   usage: Joi.string()
     .valid(...Object.values(rhsmConstants.RHSM_API_RESPONSE_USAGE_TYPES))
@@ -111,7 +111,7 @@ const tallyItems = Joi.object({
   cloud_instance_count: Joi.number().integer().optional().allow(null),
   cloud_sockets: Joi.number().integer().optional().allow(null),
   cores: Joi.number().integer().optional().allow(null),
-  date: Joi.date().format('YYYY-MM-DDTHH:mm:SSZ').required(),
+  date: Joi.date().optional().allow(null),
   hypervisor_cores: Joi.number().integer().optional().allow(null),
   hypervisor_sockets: Joi.number().integer().optional().allow(null),
   physical_cores: Joi.number().integer().optional().allow(null),
