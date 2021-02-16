@@ -10,8 +10,6 @@ import {
   ChartArea as PfChartArea
 } from '@patternfly/react-charts';
 import _cloneDeep from 'lodash/cloneDeep';
-// import _isEqual from 'lodash/isEqual';
-import _isEqualWith from 'lodash/isEqualWith';
 import { helpers } from '../../common';
 
 /**
@@ -42,68 +40,6 @@ class ChartArea extends React.Component {
 
   componentDidMount() {
     this.setResizeObserve();
-  }
-
-  componentDidUpdate(prevProps) {
-    // const { dataSets } = this.props;
-
-    const customizer = (valueA, valueB) => {
-      if (typeof valueA === 'function' && typeof valueB === 'function') {
-        return valueA.toString() === valueB.toString();
-      }
-
-      return undefined;
-    };
-
-    if (!_isEqualWith(prevProps, this.props, customizer)) {
-      // this.setRowData();
-      console.log('PROPS arent equal', this.props);
-    }
-
-    // console.log('WTF >>>', _isEqual(prevProps.dataSets, dataSets));
-    /**
-     * chartLegend: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-     chartTooltip: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-     dataSets: PropTypes.arrayOf(
-     PropTypes.shape({
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.number.isRequired,
-          y: PropTypes.number,
-          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
-        })
-      ),
-      animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-      fill: PropTypes.string,
-      stroke: PropTypes.string,
-      strokeWidth: PropTypes.number,
-      strokeDasharray: PropTypes.string,
-      themeColor: PropTypes.string,
-      themeVariant: PropTypes.string,
-      id: PropTypes.string.isRequired,
-      interpolation: PropTypes.string,
-      legendLabel: PropTypes.string,
-      legendSymbolType: PropTypes.string,
-      style: PropTypes.object,
-      isStacked: PropTypes.bool,
-      isThreshold: PropTypes.bool,
-      xAxisLabelUseDataSet: PropTypes.bool
-    })
-     ),
-     domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-     height: PropTypes.number,
-     padding: PropTypes.shape({
-    bottom: PropTypes.number,
-    left: PropTypes.number,
-    right: PropTypes.number,
-    top: PropTypes.number
-  }),
-     themeColor: PropTypes.oneOf(Object.values(ChartThemeColor)),
-     xAxisFixLabelOverlap: PropTypes.bool,
-     xAxisLabelIncrement: PropTypes.number,
-     xAxisTickFormat: PropTypes.func,
-     yAxisTickFormat: PropTypes.func
-     */
   }
 
   componentWillUnmount() {
