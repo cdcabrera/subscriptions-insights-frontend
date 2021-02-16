@@ -635,16 +635,26 @@ const getApiVersion = (options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
+ * @param {string} options.errorSchema
+ * @param {string} options.responseSchema
  * @returns {Promise<*>}
  */
 const getGraphReports = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = true, cancelId } = options;
+  const {
+    cache = true,
+    cancel = true,
+    cancelId,
+    errorSchema = rhsmSchemas.errors,
+    responseSchema = rhsmSchemas.capacity
+  } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_REPORT}${id}`,
     params,
     cache,
     cancel,
-    cancelId
+    cancelId,
+    errorSchema,
+    responseSchema
   });
 };
 
@@ -944,16 +954,26 @@ const getGraphReports = (id, params = {}, options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
+ * @param {string} options.errorSchema
+ * @param {string} options.responseSchema
  * @returns {Promise<*>}
  */
 const getGraphCapacity = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = true, cancelId } = options;
+  const {
+    cache = true,
+    cancel = true,
+    cancelId,
+    errorSchema = rhsmSchemas.errors,
+    responseSchema = rhsmSchemas.capacity
+  } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
     params,
     cache,
     cancel,
-    cancelId
+    cancelId,
+    errorSchema,
+    responseSchema
   });
 };
 

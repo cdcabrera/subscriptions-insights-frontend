@@ -48,7 +48,7 @@ const responseNormalize = (data, schema) => {
   try {
     updatedData = schema(data);
   } catch (e) {
-    if (helpers.DEV_MODE) {
+    if (helpers.DEV_MODE || helpers.REVIEW_MODE) {
       throw new Error(e);
     }
     error = e;
