@@ -5,6 +5,17 @@ import { rhsmConstants } from './rhsmConstants';
 
 const Joi = JoiBase.extend(JoiDate);
 
+const errorItems = Joi.object({
+  code: Joi.string().default(null),
+  detail: Joi.string().default(null)
+}).unknown(true);
+
+const errorSchema = Joi.object()
+  .keys({
+    errors: Joi.array().items(errorItems).default([])
+  })
+  .unknown(true);
+
 const linksSchema = Joi.object();
 
 const metaSchema = Joi.object()
@@ -119,6 +130,7 @@ const tallySchema = Joi.object().keys({
 
 const rhsmSchemas = {
   capacity: response => schemaResponse({ response, schema: capacitySchema, id: 'RHSM capacity' }),
+  errors: response => schemaResponse({ response, schema: errorSchema, id: 'RHSM errors' }),
   hypervisorGuestReport: response =>
     schemaResponse({ response, schema: hypervisorGuestReportSchema, id: 'RHSM hypervisorGuestReport' }),
   hostReport: response => schemaResponse({ response, schema: hostReportSchema, id: 'RHSM hostReport' }),

@@ -106,22 +106,37 @@ const serviceCall = async config => {
     }
   }
 
-  axiosInstance.interceptors.response.use(response => {
-    const updatedResponse = { ...response };
+  axiosInstance.interceptors.response.use(
+    response => {
+      const updatedResponse = { ...response };
 
-    if (updatedConfig.schema) {
-      const { data, error } = responseNormalize(updatedResponse.data, updatedConfig.schema);
-      if (!error) {
-        updatedResponse.data = data;
+      if (updatedConfig.responseSchema) {
+        const { data, error } = responseNormalize(updatedResponse.data, updatedConfig.responseSchema);
+        if (!error) {
+          updatedResponse.data = data;
+        }
       }
-    }
 
-    if (updatedConfig.cache === true) {
-      responseCache.set(cacheId, updatedResponse);
-    }
+      if (updatedConfig.cache === true) {
+        responseCache.set(cacheId, updatedResponse);
+      }
 
-    return updatedResponse;
-  });
+      return updatedResponse;
+    },
+    error => {
+      const updatedError = { ...error };
+
+      if (updatedConfig.errorSchema) {
+        const errorData = updatedError?.response?.data;
+        const { data, error: normalizeError } = responseNormalize(errorData, updatedConfig.errorSchema);
+        if (!normalizeError) {
+          updatedError.response = { ...updatedError.response, data };
+        }
+      }
+
+      return updatedError;
+    }
+  );
 
   return axiosInstance(serviceConfig(updatedConfig));
 };

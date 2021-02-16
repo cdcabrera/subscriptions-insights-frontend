@@ -1121,6 +1121,20 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
  *
  * @apiError {Array} errors
  * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 403 Forbidden
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1004",
+ *            "detail": "Opt-in required.",
+ *            "status": "403",
+ *            "title": "Access Denied"
+ *          }
+ *        ]
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Internal Server Error
  *     {
  *        "errors": [
@@ -1141,17 +1155,26 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
+ * @param {string} options.errorSchema
+ * @param {string} options.responseSchema
  * @returns {Promise<*>}
  */
 const getHostsInventory = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = true, cancelId, schema = rhsmSchemas.hostReport } = options;
+  const {
+    cache = true,
+    cancel = true,
+    cancelId,
+    errorSchema = rhsmSchemas.errors,
+    responseSchema = rhsmSchemas.hostReport
+  } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_INVENTORY}${id}`,
     params,
     cache,
     cancel,
     cancelId,
-    schema
+    errorSchema,
+    responseSchema
   });
 };
 
@@ -1270,17 +1293,26 @@ const getHostsInventory = (id, params = {}, options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
+ * @param {string} options.errorSchema
+ * @param {string} options.responseSchema
  * @returns {Promise<*>}
  */
 const getHostsInventoryGuests = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = false, cancelId, schema = rhsmSchemas.hypervisorGuestReport } = options;
+  const {
+    cache = true,
+    cancel = false,
+    cancelId,
+    errorSchema = rhsmSchemas.errors,
+    responseSchema = rhsmSchemas.hypervisorGuestReport
+  } = options;
   return serviceCall({
     url: process.env.REACT_APP_SERVICES_RHSM_INVENTORY_GUESTS.replace('{0}', id),
     params,
     cache,
     cancel,
     cancelId,
-    schema
+    errorSchema,
+    responseSchema
   });
 };
 
@@ -1363,17 +1395,26 @@ const getHostsInventoryGuests = (id, params = {}, options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
+ * @param {string} options.errorSchema
+ * @param {string} options.responseSchema
  * @returns {Promise<*>}
  */
 const getSubscriptionsInventory = (id, params = {}, options = {}) => {
-  const { cache = true, cancel = true, cancelId, schema = rhsmSchemas.subscriptions } = options;
+  const {
+    cache = true,
+    cancel = true,
+    cancelId,
+    errorSchema = rhsmSchemas.errors,
+    responseSchema = rhsmSchemas.subscriptions
+  } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_INVENTORY_SUBSCRIPTIONS}${id}`,
     params,
     cache,
     cancel,
     cancelId,
-    schema
+    errorSchema,
+    responseSchema
   });
 };
 
