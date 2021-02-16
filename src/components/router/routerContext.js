@@ -14,7 +14,7 @@ const useRouteContext = () => React.useContext(RouterContext);
  * @param {*} value
  * @returns {{}|null}
  */
-const useRouteDetail = (value = null) => {
+const useRouteDetail = (value = {}) => {
   const { routeDetail = {} } = useRouteContext();
 
   if (helpers.TEST_MODE) {
