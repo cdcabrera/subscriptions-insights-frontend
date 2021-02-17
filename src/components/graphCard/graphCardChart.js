@@ -12,7 +12,7 @@ import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 import { ChartArea } from '../chartArea/chartArea';
 import { useRouteDetail } from '../router/routerContext';
-import { useProductContextGraphFilters } from '../productView/productContext';
+import { useProductContext } from '../productView/productContext';
 
 /**
  * A chart/graph.
@@ -23,13 +23,14 @@ import { useProductContextGraphFilters } from '../productView/productContext';
  * @returns {Node}
  */
 const GraphCardChart = ({ graphData, granularity }) => {
+  const { initialGraphFilters: filterGraphData = [] } = useProductContext();
   const { productParameter: productLabel, viewParameter: viewId } = useRouteDetail();
   const updatedGranularity = useSelector(
     ({ view }) => view.graphTallyQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY]?.[viewId],
     granularity
   );
-  const filterOption = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.UOM]);
-  const filterGraphData = useProductContextGraphFilters(filterOption);
+  // const filterOption = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.UOM]);
+  // const filterGraphData = useProductContextGraphFilters(filterOption);
 
   const xAxisTickFormat = ({ item, previousItem, tick }) =>
     graphCardHelpers.xAxisTickFormat({

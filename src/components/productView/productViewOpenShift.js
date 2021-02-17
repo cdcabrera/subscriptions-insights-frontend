@@ -35,11 +35,57 @@ const ProductViewOpenShift = ({ productConfig, routeDetail }) => {
     ({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.UOM],
     RHSM_API_QUERY_UOM_TYPES.CORES
   );
+  /*
+  const [updatedProductConfig, setUpdatedProductConfig] = React.useState(productConfig);
+
+  // React.useEffect(() => {
+  const filterFilters = ({ id, isOptional }) => {
+    if (!isOptional) {
+      return true;
+    }
+    return new RegExp(filterOption, 'i').test(id);
+  };
+
+  const initialGraphFilters = productConfig?.initialGraphFilters.filter(filterFilters);
+  const initialInventoryFilters = productConfig?.initialInventoryFilters.filter(filterFilters);
+  const initialSubscriptionsInventoryFilters = productConfig?.initialSubscriptionsInventoryFilters.filter(
+    filterFilters
+  );
+
+  setUpdatedProductConfig({
+    ...productConfig,
+    ...initialGraphFilters,
+    ...initialInventoryFilters,
+    ...initialSubscriptionsInventoryFilters
+  });
+  */
+  // }, [filterOption, productConfig, setUpdatedProductConfig]);
+  const updatedProductConfig = () => {
+    const filterFilters = ({ id, isOptional }) => {
+      if (!isOptional) {
+        return true;
+      }
+      return new RegExp(filterOption, 'i').test(id);
+    };
+
+    const initialGraphFilters = productConfig.initialGraphFilters.filter(filterFilters);
+    const initialInventoryFilters = productConfig.initialInventoryFilters.filter(filterFilters);
+    const initialSubscriptionsInventoryFilters = productConfig.initialSubscriptionsInventoryFilters.filter(
+      filterFilters
+    );
+
+    return {
+      ...productConfig,
+      initialGraphFilters,
+      initialInventoryFilters,
+      initialSubscriptionsInventoryFilters
+    };
+  };
 
   return (
     <ConnectedProductView
       graphCardToolbar={<ToolbarFieldUom value={filterOption} viewId={viewId} />}
-      productConfig={productConfig}
+      productConfig={updatedProductConfig()}
     />
   );
 };

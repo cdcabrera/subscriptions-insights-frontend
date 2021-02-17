@@ -29,9 +29,10 @@ const useProductContextFiltered = (filter, value) => {
   return (filter && filter(productConfig)) || productConfig;
 };
  */
-const useProductContextFiltered = (filter, value) => {
+const useProductContextFiltered = (filter, value = {}) => {
   const { productConfig = value } = useProductContext();
-  return (filter && filter(productConfig)) || productConfig;
+  const applyFilter = () => (filter && filter(productConfig)) || productConfig;
+  return applyFilter();
 };
 
 const useProductContextGraphFilters = (filter, value = []) => {
