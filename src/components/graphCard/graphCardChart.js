@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
 import { useSelector } from '../../redux';
-import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import {
+  RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
+  RHSM_API_QUERY_TYPES
+  // RHSM_API_QUERY_UOM_TYPES
+} from '../../types/rhsmApiTypes';
 import { graphCardHelpers } from './graphCardHelpers';
 import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 import { ChartArea } from '../chartArea/chartArea';
 import { useRouteDetail } from '../router/routerContext';
-import { useProductContext } from '../productView/productContext';
+import { useProductContextGraphFilters } from '../productView/productContext';
 
 /**
  * A chart/graph.
@@ -19,12 +23,13 @@ import { useProductContext } from '../productView/productContext';
  * @returns {Node}
  */
 const GraphCardChart = ({ graphData, granularity }) => {
-  const { initialGraphFilters: filterGraphData = [] } = useProductContext();
   const { productParameter: productLabel, viewParameter: viewId } = useRouteDetail();
   const updatedGranularity = useSelector(
     ({ view }) => view.graphTallyQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY]?.[viewId],
     granularity
   );
+  const filterOption = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.UOM]);
+  const filterGraphData = useProductContextGraphFilters(filterOption);
 
   const xAxisTickFormat = ({ item, previousItem, tick }) =>
     graphCardHelpers.xAxisTickFormat({
@@ -68,7 +73,7 @@ const GraphCardChart = ({ graphData, granularity }) => {
       return tempFiltered;
     };
 
-    if (filterGraphData.length) {
+    if (filterGraphData?.length) {
       return filterGraphData.map(value => Object.assign(filtered(value.id), value));
     }
 

@@ -40,12 +40,13 @@ import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
  * Display a product.
  *
  * @param {object} props
+ * @param {Node} props.graphCardToolbar
  * @param {object} props.productConfig
  * @param {object} props.routeDetail
  * @param {Function} props.t
  * @returns {Node}
  */
-const ProductView = ({ productConfig, routeDetail, t }) => {
+const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
   const {
     graphTallyQuery,
     inventoryHostsQuery,
@@ -102,6 +103,7 @@ const ProductView = ({ productConfig, routeDetail, t }) => {
             cardTitle={t('curiosity-graph.socketsHeading')}
             productLabel={productLabel}
           >
+            {graphCardToolbar}
             <ToolbarFieldGranularity viewId={viewId} value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} />
           </ConnectedGraphCard>
         </PageSection>
@@ -142,6 +144,7 @@ const ProductView = ({ productConfig, routeDetail, t }) => {
  * @type {{t: Function, routeDetail: object, productConfig: object}}
  */
 ProductView.propTypes = {
+  graphCardToolbar: PropTypes.node,
   productConfig: PropTypes.shape({
     graphTallyQuery: PropTypes.shape({
       [RHSM_API_QUERY_TYPES.GRANULARITY]: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)])
@@ -177,9 +180,10 @@ ProductView.propTypes = {
 /**
  * Default props.
  *
- * @type {{t: Function, routeDetail: object}}
+ * @type {{graphCardToolbar: Node, t: Function, routeDetail: object}}
  */
 ProductView.defaultProps = {
+  graphCardToolbar: null,
   routeDetail: {},
   t: translate
 };
