@@ -53,7 +53,6 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
     inventorySubscriptionsQuery,
     query,
     initialToolbarFilters,
-    initialGraphFilters,
     initialGuestsFilters,
     initialInventoryFilters,
     initialInventorySettings,
@@ -76,6 +75,14 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
     return null;
   }
 
+  /**
+   * ToDo: clean up all props, specifically props for viewId, productId, and query once api normalizing is active
+   * The api normalizing should allow removing conditions and some transformations from the selectors. However,
+   * the existing selectors make use of passed props to perform checks, which is why we're temporarily leaving
+   * them in place even though they're not directly consumed in the component. The current components use hooks
+   * and will need to be updated:
+   * - graphCard
+   */
   return (
     <ProductContext.Provider value={productConfig}>
       <PageLayout>
@@ -96,12 +103,10 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
         <PageSection>
           <ConnectedGraphCard
             key={`graph-card-${productId}`}
-            filterGraphData={initialGraphFilters}
             query={initialGraphTallyQuery}
             productId={productId}
             viewId={viewId}
             cardTitle={t('curiosity-graph.socketsHeading')}
-            productLabel={productLabel}
           >
             {graphCardToolbar}
             <ToolbarFieldGranularity viewId={viewId} value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} />
