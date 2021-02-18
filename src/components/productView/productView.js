@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages } from '../pageLayout/pageLayout';
 import { useRouteDetail } from '../router/router';
 import { apiQueries, connect, reduxSelectors } from '../../redux';
-import { ConnectedGraphCard, GraphCard } from '../graphCard/graphCard';
+import { ConnectedGraphCard } from '../graphCard/graphCard';
 import { ConnectedToolbar, Toolbar } from '../toolbar/toolbar';
-import { ConnectedInventoryList, InventoryList } from '../inventoryList/inventoryList';
+import { ConnectedInventoryList } from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
 import BannerMessages from '../bannerMessages/bannerMessages';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
@@ -37,6 +37,15 @@ import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
  * relocating them to this directory if they've been customized beyond a basic layout.
  */
 /**
+ * ToDo: clean up all props, specifically props for viewId, productId, and query once api normalizing is active
+ * The api normalizing should allow removing conditions and some transformations from the selectors. However,
+ * the existing selectors make use of passed props to perform checks, which is why we're temporarily leaving
+ * them in place even though they're not directly consumed in the component. The current components use hooks
+ * and will need to be updated:
+ * - graphCard
+ * - inventoryList/inventoryCard
+ */
+/**
  * Display a product.
  *
  * @param {object} props
@@ -47,15 +56,13 @@ import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
  * @returns {Node}
  */
 const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
+  const [updatedProductConfig] = React.useState(productConfig);
   const {
     graphTallyQuery,
     inventoryHostsQuery,
     inventorySubscriptionsQuery,
     query,
     initialToolbarFilters,
-    initialGuestsFilters,
-    initialInventoryFilters,
-    initialInventorySettings,
     initialSubscriptionsInventoryFilters
   } = productConfig;
 
@@ -75,16 +82,8 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
     return null;
   }
 
-  /**
-   * ToDo: clean up all props, specifically props for viewId, productId, and query once api normalizing is active
-   * The api normalizing should allow removing conditions and some transformations from the selectors. However,
-   * the existing selectors make use of passed props to perform checks, which is why we're temporarily leaving
-   * them in place even though they're not directly consumed in the component. The current components use hooks
-   * and will need to be updated:
-   * - graphCard
-   */
   return (
-    <ProductContext.Provider value={productConfig}>
+    <ProductContext.Provider value={updatedProductConfig}>
       <PageLayout>
         <PageHeader productLabel={productLabel} includeTour>
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
@@ -117,11 +116,8 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
             <InventoryTab key="hostsTab" title={t('curiosity-inventory.tab', { context: 'hosts' })}>
               <ConnectedInventoryList
                 key={`inv-list-${productId}`}
-                filterGuestsData={initialGuestsFilters}
-                filterInventoryData={initialInventoryFilters}
-                productId={productId}
-                settings={initialInventorySettings}
                 query={initialInventoryHostsQuery}
+                productId={productId}
                 viewId={viewId}
               />
             </InventoryTab>
@@ -168,10 +164,36 @@ ProductView.propTypes = {
     }),
     query: PropTypes.object,
     initialToolbarFilters: Toolbar.propTypes.filterOptions,
-    initialGraphFilters: GraphCard.propTypes.filterGraphData,
+    initialGraphFilters: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        fill: PropTypes.string,
+        stroke: PropTypes.string
+      })
+    ),
     initialGuestsFilters: GuestsList.propTypes.filterGuestsData,
-    initialInventoryFilters: InventoryList.propTypes.filterInventoryData,
-    initialInventorySettings: InventoryList.propTypes.settings,
+    initialInventoryFilters: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        header: PropTypes.oneOfType([
+          PropTypes.shape({
+            title: PropTypes.node.isRequired
+          }),
+          PropTypes.func,
+          PropTypes.node
+        ]),
+        cell: PropTypes.oneOfType([
+          PropTypes.shape({
+            title: PropTypes.node.isRequired
+          }),
+          PropTypes.func,
+          PropTypes.node
+        ])
+      }).isRequired
+    ),
+    initialInventorySettings: PropTypes.shape({
+      hasGuests: PropTypes.func
+    }),
     initialSubscriptionsInventoryFilters: InventorySubscriptions.propTypes.filterInventoryData
   }).isRequired,
   routeDetail: PropTypes.shape({
