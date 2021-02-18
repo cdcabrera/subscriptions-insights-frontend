@@ -1,15 +1,14 @@
 import React from 'react';
-// import { helpers } from '../../common';
+import { useSelector } from '../../redux';
+import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { useRouteDetail } from '../router/routerContext';
 
 /**
  * Product context.
  *
  * @type {React.Context<{}>}
  */
-const ProductContext = React.createContext({
-  // productConfig: {},
-  // setProductConfig: helpers.noop
-});
+const ProductContext = React.createContext({});
 
 /**
  * Expose product context.
@@ -17,83 +16,103 @@ const ProductContext = React.createContext({
  * @returns {*}
  */
 const useProductContext = () => React.useContext(ProductContext);
-/*
-const useProductContext = value => {
-  const { productConfig = value } = React.useContext(ProductContext);
-  return productConfig;
-  //return (filter && filter(productConfig)) || productConfig;
-};
 
-const useProductContextFiltered = (filter, value) => {
-  const { productConfig = value } = useProductContext();
-  return (filter && filter(productConfig)) || productConfig;
-};
+/**
+ * Expose a UOM filtered product context.
+ *
+ * @returns {object}
  */
-const useProductContextFiltered = (filter, value = {}) => {
-  const { productConfig = value } = useProductContext();
-  const applyFilter = () => (filter && filter(productConfig)) || productConfig;
-  return applyFilter();
-};
-
-const useProductContextGraphFilters = (filter, value = []) => {
+const useProductContextUom = () => {
   const productConfig = useProductContext();
-  const { initialGraphFilters = value } = productConfig;
+  const {
+    initialGraphFilters = [],
+    initialInventoryFilters = [],
+    initialSubscriptionsInventoryFilters = [],
+    productContextFilterUom
+  } = productConfig || {};
 
-  const applyFilter = () => {
-    const filterFilters = ({ id, isOptional }) => {
-      if (!isOptional) {
-        return true;
-      }
-      return new RegExp(filter, 'i').test(id);
+  const { viewParameter: viewId } = useRouteDetail();
+  const filter = useSelector(({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.UOM], productContextFilterUom);
+
+  if (productContextFilterUom) {
+    const applyFilter = () => {
+      const filterFilters = ({ id, isOptional }) => {
+        if (!isOptional) {
+          return true;
+        }
+        return new RegExp(filter, 'i').test(id);
+      };
+
+      return {
+        ...productConfig,
+        initialGraphFilters: initialGraphFilters.filter(filterFilters),
+        initialInventoryFilters: initialInventoryFilters.filter(filterFilters),
+        initialSubscriptionsInventoryFilters: initialSubscriptionsInventoryFilters.filter(filterFilters)
+      };
     };
 
-    return (filter && initialGraphFilters.filter(filterFilters)) || initialGraphFilters;
-  };
+    return applyFilter();
+  }
 
-  return applyFilter();
-  // const { initialGraphFilters = [] } = productConfig;
-  /*
-  const [initialGraphFilters, setInitialGraphFilters] = React.useState(productConfig.initialGraphFilters);
-
-  React.useEffect(() => {
-    const filterFilters = ({ id, isOptional }) => {
-      if (!isOptional) {
-        return true;
-      }
-      return new RegExp(filter, 'i').test(id);
-    };
-
-    if (filter) {
-      setInitialGraphFilters(initialGraphFilters?.filter(filterFilters));
-    } else {
-      setInitialGraphFilters(initialGraphFilters);
-    }
-  }, [filter, initialGraphFilters]);
-
-  return initialGraphFilters;
-  */
-  /*
-  (initialGraphFilters = []) => {
-    const filterFilters = ({ id, isOptional }) => {
-      if (!isOptional) {
-        return true;
-      }
-      return new RegExp(filterOption, 'i').test(id);
-    };
-
-    return {
-      initialGraphFilters: initialGraphFilters.filter(filterFilters)
-    };
-    */
-
-  // const { initialGraphFilters } = productConfig;
-  // return (filter && filter(initialGraphFilters)) || initialGraphFilters;
+  return productConfig;
 };
+
+/**
+ * Generate queries.
+ *
+ * @param {string} queryType
+ * @returns {object}
+ */
+const useQueryFactory = queryType => {
+  const { [queryType]: initialQuery } = useProductContext() || {};
+
+  const { pathParameter: productId, viewParameter: viewId } = useRouteDetail();
+  const queryProduct = useSelector(({ view }) => view?.[queryType]?.[productId]);
+  const queryView = useSelector(({ view }) => view?.[queryType]?.[viewId]);
+
+  return {
+    ...initialQuery,
+    ...queryProduct,
+    ...queryView
+  };
+};
+
+/**
+ * Expose query.
+ *
+ * @returns {object}
+ */
+const useQuery = () => useQueryFactory('query');
+
+/**
+ * Expose query used for tally/capacity graph.
+ *
+ * @returns {object}
+ */
+const useGraphTallyQuery = () => ({ ...useQuery(), ...useQueryFactory('graphTallyQuery') });
+
+/**
+ * Expose query used for hosts inventory.
+ *
+ * @returns {object}
+ */
+const useInventoryHostsQuery = () => ({ ...useQuery(), ...useQueryFactory('inventoryHostsQuery') });
+
+/**
+ * Expose query used for subscriptions inventory.
+ *
+ * @returns {object}
+ */
+const useInventorySubscriptionsQuery = () => ({ ...useQuery(), ...useQueryFactory('inventorySubscriptionsQuery') });
 
 export {
   ProductContext as default,
   ProductContext,
   useProductContext,
-  useProductContextFiltered,
-  useProductContextGraphFilters
+  useProductContextUom,
+  useQueryFactory,
+  useQuery,
+  useGraphTallyQuery,
+  useInventoryHostsQuery,
+  useInventorySubscriptionsQuery
 };
