@@ -26,6 +26,8 @@ import { useInventoryHostsQuery, useProductUomContext } from '../productView/pro
 /**
  * A hosts system inventory component.
  *
+ * @fires onColumnSort
+ * @fires onPage
  * @param {object} props
  * @param {Function} props.getHostsInventory
  * @param {boolean} props.isDisabled
@@ -78,6 +80,14 @@ const InventoryList = ({
     );
   }
 
+  /**
+   * On paging and on perPage events.
+   *
+   * @event onPage
+   * @param {object} params
+   * @param {number} params.offset
+   * @param {number} params.perPage
+   */
   const onPage = ({ offset, perPage }) => {
     store.dispatch([
       {
@@ -93,6 +103,15 @@ const InventoryList = ({
     ]);
   };
 
+  /**
+   * On column sort update state.
+   *
+   * @event onColumnSort
+   * @param {object} data pass-through inventory data.
+   * @param {object} sortParams
+   * @param {string} sortParams.direction
+   * @param {string} sortParams.id column identifier
+   */
   const onColumnSort = (data, { direction, id }) => {
     const updatedSortColumn = Object.values(SORT_TYPES).find(value => _camelCase(value) === id);
     let updatedDirection;
@@ -124,6 +143,11 @@ const InventoryList = ({
     ]);
   };
 
+  /**
+   * Render an inventory table.
+   *
+   * @returns {Node}
+   */
   const renderTable = () => {
     let updatedColumnHeaders = [];
 
@@ -253,10 +277,9 @@ const InventoryList = ({
 /**
  * Prop types.
  *
- * @type {{settings:object, productId: string, listData: Array, session: object, pending: boolean,
- *     query: object, fulfilled: boolean, getHostsInventory: Function, error: boolean,
- *     itemCount: number, viewId: string, t: Function, filterInventoryData: Array, filterGuestsData: Array,
- *     perPageDefault: number, isDisabled: boolean}}
+ * @type {{t: Function, listData: Array, session: object, pending: boolean, fulfilled: boolean,
+ *     getHostsInventory: Function, perPageDefault: number, isDisabled: boolean, error: boolean,
+ *     itemCount: number}}
  */
 InventoryList.propTypes = {
   error: PropTypes.bool,
@@ -274,9 +297,9 @@ InventoryList.propTypes = {
 /**
  * Default props.
  *
- * @type {{settings: object, listData: Array, session: object, pending: boolean, fulfilled: boolean,
- *     getHostsInventory: Function, error: boolean, itemCount: number, viewId: string, t: translate,
- *     filterInventoryData: Array, filterGuestsData: Array, perPageDefault: number, isDisabled: boolean}}
+ * @type {{t: Function, listData: Array, session: object, pending: boolean, fulfilled: boolean,
+ *     getHostsInventory: Function, perPageDefault: number, isDisabled: boolean, error: boolean,
+ *     itemCount: number}}
  */
 InventoryList.defaultProps = {
   error: false,
