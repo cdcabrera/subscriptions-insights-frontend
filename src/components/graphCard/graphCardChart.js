@@ -7,7 +7,7 @@ import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 import { ChartArea } from '../chartArea/chartArea';
 import { useRouteDetail } from '../router/routerContext';
-import { useGraphTallyQuery, useProductContextUom } from '../productView/productContext';
+import { useGraphTallyQuery, useProductUomContext } from '../productView/productContext';
 
 /**
  * A chart/graph.
@@ -17,8 +17,8 @@ import { useGraphTallyQuery, useProductContextUom } from '../productView/product
  * @param {string} props.granularity
  * @returns {Node}
  */
-const GraphCardChart = ({ graphData, granularity }) => {
-  const { initialGraphFilters: filterGraphData = [] } = useProductContextUom();
+const GraphCardChart = ({ graphData, granularity } = {}) => {
+  const { initialGraphFilters: filterGraphData = [] } = useProductUomContext();
   const { productParameter: productLabel, viewParameter: viewId } = useRouteDetail();
   const { [RHSM_API_QUERY_TYPES.GRANULARITY]: updatedGranularity } = useGraphTallyQuery(granularity);
 
