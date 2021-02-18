@@ -26,7 +26,7 @@ import { useGraphTallyQuery } from '../productView/productContext';
 const GraphCard = ({ cardTitle, children, error, getGraphReportsCapacity, graphData, isDisabled, pending } = {}) => {
   const { pathParameter: productId } = useRouteDetail();
   const updatedQuery = useGraphTallyQuery();
-  const granularity = updatedQuery?.[RHSM_API_QUERY_TYPES.GRANULARITY];
+  const { [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity } = updatedQuery;
 
   /**
    * Call the API, apply query.
