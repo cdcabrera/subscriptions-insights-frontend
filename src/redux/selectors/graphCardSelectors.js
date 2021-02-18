@@ -72,6 +72,7 @@ const selector = createSelector([statePropsFilter, queryFilter], (response, quer
   const responseMetaQuery = { ...metaQuery };
   delete responseMetaQuery[RHSM_API_QUERY_TYPES.START_DATE];
   delete responseMetaQuery[RHSM_API_QUERY_TYPES.END_DATE];
+  delete responseMetaQuery[RHSM_API_QUERY_TYPES.UOM];
 
   const cachedGranularity =
     (viewId && productId && selectorCache.data[`${viewId}_${productId}_${JSON.stringify(query)}`]) || undefined;
