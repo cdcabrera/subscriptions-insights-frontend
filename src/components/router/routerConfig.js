@@ -48,6 +48,13 @@ const routes = [
     disabled: helpers.UI_DISABLED
   },
   {
+    to: '/openshift-sw',
+    component: React.lazy(() => import('../productView/productViewOpenShift')),
+    exact: true,
+    render: true,
+    disabled: helpers.UI_DISABLED
+  },
+  {
     id: 'satellite-sw',
     to: '/satellite-sw/:variant(all|satellite-capsule|satellite-server)',
     component: React.lazy(() => import('../productView/productViewSatellite')),
