@@ -17,7 +17,6 @@ import {
 import { ConnectedProductView, ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { helpers } from '../../common';
-import { useSelector } from '../../redux';
 import { useRouteDetail } from '../router/routerContext';
 import { ToolbarFieldUom } from '../toolbar/toolbarFieldUom';
 
@@ -31,61 +30,12 @@ import { ToolbarFieldUom } from '../toolbar/toolbarFieldUom';
  */
 const ProductViewOpenShift = ({ productConfig, routeDetail }) => {
   const { viewParameter: viewId } = useRouteDetail(routeDetail);
-  const filterOption = useSelector(
-    ({ view }) => view.query?.[viewId]?.[RHSM_API_QUERY_TYPES.UOM],
-    RHSM_API_QUERY_UOM_TYPES.CORES
-  );
-  /*
-  const [updatedProductConfig, setUpdatedProductConfig] = React.useState(productConfig);
-
-  // React.useEffect(() => {
-  const filterFilters = ({ id, isOptional }) => {
-    if (!isOptional) {
-      return true;
-    }
-    return new RegExp(filterOption, 'i').test(id);
-  };
-
-  const initialGraphFilters = productConfig?.initialGraphFilters.filter(filterFilters);
-  const initialInventoryFilters = productConfig?.initialInventoryFilters.filter(filterFilters);
-  const initialSubscriptionsInventoryFilters = productConfig?.initialSubscriptionsInventoryFilters.filter(
-    filterFilters
-  );
-
-  setUpdatedProductConfig({
-    ...productConfig,
-    ...initialGraphFilters,
-    ...initialInventoryFilters,
-    ...initialSubscriptionsInventoryFilters
-  });
-  */
-  // }, [filterOption, productConfig, setUpdatedProductConfig]);
-  const updatedProductConfig = () => {
-    const filterFilters = ({ id, isOptional }) => {
-      if (!isOptional) {
-        return true;
-      }
-      return new RegExp(filterOption, 'i').test(id);
-    };
-
-    const initialGraphFilters = productConfig.initialGraphFilters.filter(filterFilters);
-    const initialInventoryFilters = productConfig.initialInventoryFilters.filter(filterFilters);
-    const initialSubscriptionsInventoryFilters = productConfig.initialSubscriptionsInventoryFilters.filter(
-      filterFilters
-    );
-
-    return {
-      ...productConfig,
-      initialGraphFilters,
-      initialInventoryFilters,
-      initialSubscriptionsInventoryFilters
-    };
-  };
+  const filterOption = RHSM_API_QUERY_UOM_TYPES.CORES;
 
   return (
     <ConnectedProductView
       graphCardToolbar={<ToolbarFieldUom value={filterOption} viewId={viewId} />}
-      productConfig={updatedProductConfig()}
+      productConfig={{ ...productConfig, productContextFilterUom: filterOption }}
     />
   );
 };
