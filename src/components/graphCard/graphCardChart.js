@@ -17,7 +17,7 @@ import { useGraphTallyQuery, useProductUomContext } from '../productView/product
  * @param {string} props.granularity
  * @returns {Node}
  */
-const GraphCardChart = ({ graphData, granularity } = {}) => {
+const GraphCardChart = ({ graphData, granularity }) => {
   const { initialGraphFilters: filterGraphData = [] } = useProductUomContext();
   const { productParameter: productLabel, viewParameter: viewId } = useRouteDetail();
   const { [RHSM_API_QUERY_TYPES.GRANULARITY]: updatedGranularity } = useGraphTallyQuery(granularity);

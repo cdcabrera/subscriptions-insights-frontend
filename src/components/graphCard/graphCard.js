@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
+import { useShallowCompareEffect } from 'react-use';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
-import { helpers, dateHelpers, contextHelpers } from '../../common';
+import { helpers, dateHelpers } from '../../common';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
@@ -23,7 +24,7 @@ import { useGraphTallyQuery } from '../productView/productContext';
  * @param {boolean} props.pending
  * @returns {Node}
  */
-const GraphCard = ({ cardTitle, children, error, getGraphReportsCapacity, graphData, isDisabled, pending } = {}) => {
+const GraphCard = ({ cardTitle, children, error, getGraphReportsCapacity, graphData, isDisabled, pending }) => {
   const { pathParameter: productId } = useRouteDetail();
   const updatedQuery = useGraphTallyQuery();
   const { [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity } = updatedQuery;
@@ -31,7 +32,7 @@ const GraphCard = ({ cardTitle, children, error, getGraphReportsCapacity, graphD
   /**
    * Call the API, apply query.
    */
-  contextHelpers.useDeepCompareEffect(() => {
+  useShallowCompareEffect(() => {
     if (!isDisabled && granularity && productId) {
       const { startDate, endDate } = dateHelpers.getRangedDateTime(granularity);
       const graphQuery = {
