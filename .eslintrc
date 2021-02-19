@@ -117,6 +117,8 @@
     "react/state-in-constructor": [ 1, "never" ],
     "space-before-function-paren": 0,
     "jsx-a11y/anchor-is-valid": 1,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
     "jsx-a11y/label-has-associated-control": [ 2, {
       "labelComponents": ["CustomInputLabel"],
       "labelAttributes": ["label"],

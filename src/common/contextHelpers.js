@@ -43,13 +43,31 @@ const useDeepCompare = value => {
  * @param {Array} dependencies
  * @returns {*}
  */
-const useDeepCompareEffect = (callback, dependencies) =>
+const useDeepCompareEffectTest = (callback, dependencies) =>
   React.useEffect.call(null, callback, dependencies.map(useDeepCompare));
+
+const useDeepCompareEffect = (callback, dependencies) => {
+  /**
+   * Instance of useEffect.
+   *
+   * @returns {*}
+   */
+  const testEffect = () => React.useEffect.call(null, callback, dependencies.map(useDeepCompare));
+
+  return testEffect();
+};
+
+const altDeepCompareEffect = (callback, dependencies, effect) => effect(callback, dependencies.map(useDeepCompare));
+
+const mapDependencies = dependencies => dependencies.map(useDeepCompare);
 
 const contextHelpers = {
   deepCompareEquals,
   useDeepCompare,
-  useDeepCompareEffect
+  useDeepCompareEffect,
+  useDeepCompareEffectTest,
+  altDeepCompareEffect,
+  mapDependencies
 };
 
 export { contextHelpers as default, contextHelpers, deepCompareEquals, useDeepCompare, useDeepCompareEffect };

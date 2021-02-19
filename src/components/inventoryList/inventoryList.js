@@ -4,7 +4,9 @@ import { SortByDirection, TableVariant } from '@patternfly/react-table';
 import { Bullseye, Card, CardActions, CardBody, CardFooter, CardHeader, CardHeaderMain } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/components/TableToolbar';
 import _camelCase from 'lodash/camelCase';
-import { contextHelpers, helpers } from '../../common';
+import { useShallowCompareEffect } from 'react-use';
+import { helpers } from '../../common';
+// import { contextHelpers, helpers } from '../../common';
 import { connect, reduxActions, reduxSelectors, reduxTypes, store } from '../../redux';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
@@ -22,7 +24,8 @@ import {
 import { translate } from '../i18n/i18n';
 import { useRouteDetail } from '../router/routerContext';
 import { useInventoryHostsQuery, useProductUomContext } from '../productView/productContext';
-
+// import context from "react-router/modules/RouterContext";
+window.storeit = [];
 /**
  * A hosts system inventory component.
  *
@@ -52,23 +55,28 @@ const InventoryList = ({
   perPageDefault,
   t,
   session
-} = {}) => {
+}) => {
   const {
     initialInventoryFilters: filterInventoryData = [],
     initialGuestsFilters: filterGuestsData = [],
     initialInventorySettings: settings
   } = useProductUomContext();
-  const { pathParameter: productId, viewParameter: viewId } = useRouteDetail();
+  const { pathParameter, viewParameter: viewId } = useRouteDetail();
   const updatedQuery = useInventoryHostsQuery();
+  const productId = pathParameter;
 
   /**
    * Call the API, apply query.
    */
-  contextHelpers.useDeepCompareEffect(() => {
-    if (!isDisabled && productId) {
-      getHostsInventory(productId, updatedQuery);
+  useShallowCompareEffect(() => {
+    if (!isDisabled && pathParameter) {
+      getHostsInventory(pathParameter, updatedQuery);
+      window.storeit.push(pathParameter);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>> inventory 002', pathParameter, JSON.parse(JSON.stringify(updatedQuery)));
     }
-  }, [getHostsInventory, isDisabled, productId, updatedQuery]);
+  }, [isDisabled, pathParameter, updatedQuery]);
+
+  console.log('>>>>>>>>>>>>>>>>>>>>>>> inventory 001', pathParameter, JSON.parse(JSON.stringify(updatedQuery)));
 
   if (isDisabled) {
     return (

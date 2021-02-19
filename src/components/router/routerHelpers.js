@@ -37,6 +37,29 @@ const baseName =
 const getErrorRoute = routes.find(route => route.activateOnError === true) || {};
 
 /**
+ * Return a search object.
+ *
+ * @param {object} location
+ * @param {string} location.search
+ * @returns {object}
+ */
+const getParsedQuery = (location = window.location) => {
+  const { URLSearchParams, decodeURIComponent } = window;
+  const parsedSearch = {};
+
+  [
+    ...new Set(
+      [...new URLSearchParams(decodeURIComponent(location.search))].map(([param, value]) => `${param}~${value}`)
+    )
+  ].forEach(v => {
+    const [param, value] = v.split('~');
+    parsedSearch[param] = value;
+  });
+
+  return parsedSearch;
+};
+
+/**
  * Return an object matching a specific navigation object.
  *
  * @param {object} params
@@ -116,6 +139,7 @@ const routerHelpers = {
   baseName,
   dynamicBaseName,
   getErrorRoute,
+  getParsedQuery,
   getNavigationDetail,
   getRouteDetail,
   getNavRouteDetail
@@ -127,6 +151,7 @@ export {
   baseName,
   dynamicBaseName,
   getErrorRoute,
+  getParsedQuery,
   getNavigationDetail,
   getRouteDetail,
   getNavRouteDetail

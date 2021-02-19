@@ -62,7 +62,7 @@ class Authentication extends Component {
    * @returns {Node}
    */
   render() {
-    const { children, session, t } = this.props;
+    const { children, session, t, history } = this.props;
     const { subscriptions: authorized } = session.authorized || {};
 
     if (helpers.UI_DISABLED) {
@@ -72,9 +72,53 @@ class Authentication extends Component {
         </MessageView>
       );
     }
-
+    //
     if (authorized) {
-      return <React.Fragment>{children}</React.Fragment>;
+      return (
+        <React.Fragment>
+          <ul>
+            <li>
+              <a
+                tabIndex={0}
+                role="link"
+                onClick={() => {
+                  history.push('/rhel-sw/all');
+                }}
+              >
+                All
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  history.push('/rhel-sw/arm');
+                }}
+              >
+                arm
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  history.push('/rhel-sw/x86');
+                }}
+              >
+                x86
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  history.push('/openshift-sw/');
+                }}
+              >
+                openshift
+              </a>
+            </li>
+          </ul>
+          {children}
+        </React.Fragment>
+      );
     }
 
     if (session.pending) {

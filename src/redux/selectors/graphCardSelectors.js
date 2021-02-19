@@ -84,6 +84,10 @@ const selector = createSelector([statePropsFilter, queryFilter], (response, quer
     selectorCache.data = {};
   }
 
+  console.log('>>>>>>>>>>>>>>>>>>>>>', _isEqual(query, responseMetaQuery));
+  console.log('>>>>>>>>>>>>>>>>>>>>>', query);
+  console.log('>>>>>>>>>>>>>>>>>>>>>', responseMetaQuery);
+
   if (responseData.fulfilled && productId === metaId && _isEqual(query, responseMetaQuery)) {
     const [report, capacity] = responseData.data;
     const reportData = report?.[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA] || [];
