@@ -6,6 +6,7 @@ import { routerHelpers } from './routerHelpers';
 import { routerConfig } from './routerConfig';
 import { Loader } from '../loader/loader';
 import { RouterContext, useHistory, useLocation, useParams, useRouteDetail, useRouteMatch } from './routerContext';
+import { RouterContextProvider } from './routerContextProvider';
 
 /**
  * Load routes.
@@ -33,70 +34,66 @@ class Router extends React.Component {
           redirectRoot = <ReactRouterDomRedirect to={item.redirect} />;
         }
 
-        if (item.render === true) {
-          return (
-            <Route
-              exact={item.exact}
-              key={item.to}
-              path={item.to}
-              strict={item.strict}
-              render={({ location, ...routeProps }) => {
-                const navDetail = routerHelpers.getNavigationDetail({
-                  pathname: location && location.pathname,
-                  returnDefault: false
-                });
+        return (
+          <Route
+            exact={item.exact}
+            key={item.to}
+            path={item.to}
+            strict={item.strict}
+            render={({ location, ...routeProps }) => {
+              const navDetail = routerHelpers.getNavigationDetail({
+                pathname: location && location.pathname,
+                returnDefault: false
+              });
 
-                const { URLSearchParams, decodeURIComponent } = window;
-                const parsedSearch = {};
+              const { URLSearchParams, decodeURIComponent } = window;
+              const parsedSearch = {};
 
-                [
-                  ...new Set(
-                    [...new URLSearchParams(decodeURIComponent(location.search))].map(
-                      ([param, value]) => `${param}~${value}`
-                    )
+              [
+                ...new Set(
+                  [...new URLSearchParams(decodeURIComponent(location.search))].map(
+                    ([param, value]) => `${param}~${value}`
                   )
-                ].forEach(v => {
-                  const [param, value] = v.split('~');
-                  parsedSearch[param] = value;
-                });
+                )
+              ].forEach(v => {
+                const [param, value] = v.split('~');
+                parsedSearch[param] = value;
+              });
 
-                const updatedLocation = {
-                  ...location,
-                  parsedSearch
-                };
+              const updatedLocation = {
+                ...location,
+                parsedSearch
+              };
 
-                return (
-                  <RouterContext.Provider
-                    value={{
-                      routeDetail: {
-                        baseName: routerHelpers.baseName,
-                        errorRoute: activateOnErrorRoute,
-                        routes,
-                        routeItem: { ...item },
-                        ...navDetail
-                      },
-                      location: updatedLocation
+              return (
+                <RouterContextProvider
+                  value={{
+                    routeDetail: {
+                      baseName: routerHelpers.baseName,
+                      errorRoute: activateOnErrorRoute,
+                      routes,
+                      routeItem: { ...item },
+                      ...navDetail
+                    },
+                    location: updatedLocation
+                  }}
+                >
+                  <item.component
+                    routeDetail={{
+                      baseName: routerHelpers.baseName,
+                      errorRoute: activateOnErrorRoute,
+                      routes,
+                      routeItem: { ...item },
+                      ...navDetail
                     }}
-                  >
-                    <item.component
-                      routeDetail={{
-                        baseName: routerHelpers.baseName,
-                        errorRoute: activateOnErrorRoute,
-                        routes,
-                        routeItem: { ...item },
-                        ...navDetail
-                      }}
-                      location={updatedLocation}
-                      {...routeProps}
-                    />
-                  </RouterContext.Provider>
-                );
-              }}
-            />
-          );
-        }
-
-        return <Route exact={item.exact} key={item.to} path={item.to} component={item.component} />;
+                    location={updatedLocation}
+                    {...routeProps}
+                  />
+                </RouterContextProvider>
+              );
+            }}
+          />
+        );
       }),
       redirectRoot
     };
@@ -157,6 +154,7 @@ export {
   routerHelpers,
   routerConfig,
   RouterContext,
+  RouterContextProvider,
   useHistory,
   useLocation,
   useParams,

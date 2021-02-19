@@ -18,11 +18,10 @@ const useRouteContext = () => React.useContext(RouterContext);
 /**
  * Expose custom router detail object.
  *
- * @param {*} value
  * @returns {{}|null}
  */
-const useRouteDetail = (value = {}) => {
-  const { routeDetail = value } = useRouteContext();
+const useRouteDetail = () => {
+  const { routeDetail } = useRouteContext();
   return routeDetail;
 };
 
