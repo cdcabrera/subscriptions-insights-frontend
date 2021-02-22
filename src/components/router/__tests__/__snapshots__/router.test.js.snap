@@ -107,6 +107,18 @@ exports[`Router Component should render a basic component: basic 1`] = `
         "exact": true,
         "id": "openshift-sw",
         "render": true,
+        "to": "/openshift-sw/:variant(|openshift-metric|openshift-dedicated-metric)",
+      },
+      Object {
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_ctor": [Function],
+          "_result": null,
+          "_status": -1,
+        },
+        "disabled": false,
+        "exact": true,
+        "render": true,
         "to": "/openshift-sw",
       },
       Object {
@@ -144,6 +156,12 @@ exports[`Router Component should render a basic component: basic 1`] = `
       exact={true}
       key="/rhel-sw/:variant(all|arm|ibmpower|ibmz|x86)"
       path="/rhel-sw/:variant(all|arm|ibmpower|ibmz|x86)"
+      render={[Function]}
+    />
+    <Route
+      exact={true}
+      key="/openshift-sw/:variant(|openshift-metric|openshift-dedicated-metric)"
+      path="/openshift-sw/:variant(|openshift-metric|openshift-dedicated-metric)"
       render={[Function]}
     />
     <Route

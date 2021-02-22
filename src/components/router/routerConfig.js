@@ -41,6 +41,13 @@ const routes = [
   },
   {
     id: 'openshift-sw',
+    to: '/openshift-sw/:variant(|openshift-metric|openshift-dedicated-metric)',
+    component: React.lazy(() => import('../openshiftView/openshiftView')),
+    exact: true,
+    render: true,
+    disabled: helpers.UI_DISABLED
+  },
+  {
     to: '/openshift-sw',
     component: React.lazy(() => import('../openshiftView/openshiftView')),
     exact: true,
@@ -118,6 +125,22 @@ const navigation = [
     path: '/openshift-sw',
     pathId: 'openshift-sw',
     pathParameter: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
+    productParameter: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
+    viewParameter: `view${RHSM_API_PATH_ID_TYPES.OPENSHIFT}`
+  },
+  {
+    id: 'openshift-sw',
+    path: '/openshift-sw/openshift-metric',
+    pathId: 'openshift-sw',
+    pathParameter: RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRIC,
+    productParameter: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
+    viewParameter: `view${RHSM_API_PATH_ID_TYPES.OPENSHIFT}`
+  },
+  {
+    id: 'openshift-sw',
+    path: '/openshift-sw/openshift-dedicated-metric',
+    pathId: 'openshift-sw',
+    pathParameter: RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRIC,
     productParameter: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
     viewParameter: `view${RHSM_API_PATH_ID_TYPES.OPENSHIFT}`
   },

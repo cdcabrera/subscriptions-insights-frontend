@@ -36,6 +36,8 @@ Object {
     "rhsmApi": Object {
       "RHSM_API_PATH_ID_TYPES": Object {
         "OPENSHIFT": "OpenShift Container Platform",
+        "OPENSHIFT_DEDICATED_METRIC": "OpenShift Dedicated-metric",
+        "OPENSHIFT_METRIC": "OpenShift Container Platform-metric",
         "RHEL": "RHEL",
         "RHEL_ARM": "RHEL for ARM",
         "RHEL_COMPUTE_NODE": "RHEL Compute Node",
@@ -265,6 +267,8 @@ Object {
     "rhsmApi": Object {
       "RHSM_API_PATH_ID_TYPES": Object {
         "OPENSHIFT": "OpenShift Container Platform",
+        "OPENSHIFT_DEDICATED_METRIC": "OpenShift Dedicated-metric",
+        "OPENSHIFT_METRIC": "OpenShift Container Platform-metric",
         "RHEL": "RHEL",
         "RHEL_ARM": "RHEL for ARM",
         "RHEL_COMPUTE_NODE": "RHEL Compute Node",
@@ -493,6 +497,8 @@ Object {
   "rhsmApiTypes": Object {
     "RHSM_API_PATH_ID_TYPES": Object {
       "OPENSHIFT": "OpenShift Container Platform",
+      "OPENSHIFT_DEDICATED_METRIC": "OpenShift Dedicated-metric",
+      "OPENSHIFT_METRIC": "OpenShift Container Platform-metric",
       "RHEL": "RHEL",
       "RHEL_ARM": "RHEL for ARM",
       "RHEL_COMPUTE_NODE": "RHEL Compute Node",
@@ -725,6 +731,8 @@ Object {
   "rhsmApi": Object {
     "RHSM_API_PATH_ID_TYPES": Object {
       "OPENSHIFT": "OpenShift Container Platform",
+      "OPENSHIFT_DEDICATED_METRIC": "OpenShift Dedicated-metric",
+      "OPENSHIFT_METRIC": "OpenShift Container Platform-metric",
       "RHEL": "RHEL",
       "RHEL_ARM": "RHEL for ARM",
       "RHEL_COMPUTE_NODE": "RHEL Compute Node",
