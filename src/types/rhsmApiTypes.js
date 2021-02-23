@@ -109,6 +109,7 @@ const RHSM_API_RESPONSE_INVENTORY_DATA = 'data';
 const RHSM_API_RESPONSE_INVENTORY_DATA_TYPES = {
   CLOUD_PROVIDER: 'cloud_provider',
   CORES: 'cores',
+  CORE_HOURS: 'core_hours',
   GUESTS: 'number_of_guests',
   HARDWARE: 'hardware_type',
   ID: 'insights_id',

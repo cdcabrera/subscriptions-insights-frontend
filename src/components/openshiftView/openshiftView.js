@@ -27,6 +27,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { helpers, dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
 import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
+import { ToolbarFieldRangeGranularity } from '../toolbar/toolbarFieldRangeGranularity';
 
 /**
  * An OpenShift encompassing view.
@@ -95,11 +96,16 @@ class OpenshiftView extends React.Component {
             query={initialGraphTallyQuery}
             productId={productId}
             viewId={viewId}
-            cardTitle={t('curiosity-graph.cardHeading')}
+            cardTitle={t('curiosity-graph.cardHeading', { context: productId })}
             productLabel={productLabel}
           >
-            {uomFilter && <ToolbarFieldUom value={uomFilter} viewId={viewId} />}
-            <ToolbarFieldGranularity value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} viewId={viewId} />
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && uomFilter && (
+              <ToolbarFieldUom value={uomFilter} viewId={viewId} />
+            )}
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && (
+              <ToolbarFieldGranularity value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} viewId={viewId} />
+            )}
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRIC && <ToolbarFieldRangeGranularity viewId={viewId} />}
           </GraphCard>
         </PageSection>
         <PageSection>
@@ -401,7 +407,7 @@ OpenshiftView.defaultProps = {
       },
       initialGraphFilters: [
         {
-          id: 'sockets',
+          id: 'coreHours',
           fill: chartColorBlueLight.value,
           stroke: chartColorBlueDark.value,
           color: chartColorBlueDark.value
@@ -452,7 +458,7 @@ OpenshiftView.defaultProps = {
       viewId: 'viewOpenShiftMetric'
     }
   ],
-  productLabel: 'OpenShift',
+  productLabel: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
   t: translate
 };
 

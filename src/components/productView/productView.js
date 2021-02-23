@@ -38,13 +38,14 @@ import { translate } from '../i18n/i18n';
  * Display a product.
  *
  * @param {object} props
- * @param {Node} props.graphCardToolbar
  * @param {object} props.productConfig
  * @param {object} props.routeDetail
  * @param {Function} props.t
+ * @param {Node} props.toolbarGraph
+ * @param {Node} props.toolbarProduct
  * @returns {Node}
  */
-const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
+const ProductView = ({ productConfig, routeDetail, t, toolbarGraph, toolbarProduct }) => {
   const {
     graphTallyQuery,
     inventoryHostsQuery,
@@ -81,30 +82,35 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
         <BannerMessages productId={productId} viewId={viewId} query={initialQuery} />
       </PageMessages>
       <PageToolbar>
-        <ConnectedToolbar
-          filterOptions={initialToolbarFilters}
-          productId={productId}
-          query={initialToolbarQuery}
-          viewId={viewId}
-        />
+        {(React.isValidElement(toolbarProduct) && toolbarProduct) ||
+          (toolbarProduct !== false && (
+            <ConnectedToolbar
+              filterOptions={initialToolbarFilters}
+              productId={productId}
+              query={initialToolbarQuery}
+              viewId={viewId}
+            />
+          ))}
       </PageToolbar>
       <PageSection>
         <ConnectedGraphCard
-          key={productId}
+          key={`graph_${productId}`}
           filterGraphData={initialGraphFilters}
           query={initialGraphTallyQuery}
           productId={productId}
           viewId={viewId}
-          cardTitle={t('curiosity-graph.socketsHeading')}
+          cardTitle={t('curiosity-graph.cardHeading', { context: productId })}
           productLabel={productLabel}
         >
-          {graphCardToolbar}
-          <ToolbarFieldGranularity viewId={viewId} value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} />
+          {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
+            (toolbarGraph !== false && (
+              <ToolbarFieldGranularity viewId={viewId} value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} />
+            ))}
         </ConnectedGraphCard>
       </PageSection>
       <PageSection>
-        <InventoryTabs productId={productId}>
-          <InventoryTab key="hostsTab" title={t('curiosity-inventory.tab', { context: 'hosts' })}>
+        <InventoryTabs productId={`inventory_${productId}`}>
+          <InventoryTab key={`inventory_hosts_${productId}`} title={t('curiosity-inventory.tab', { context: 'hosts' })}>
             <ConnectedInventoryList
               key={productId}
               filterGuestsData={initialGuestsFilters}
@@ -116,7 +122,10 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
             />
           </InventoryTab>
           {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && (
-            <InventoryTab key="subscriptionsTab" title={t('curiosity-inventory.tab', { context: 'subscriptions' })}>
+            <InventoryTab
+              key={`inventory_subs_${productId}`}
+              title={t('curiosity-inventory.tab', { context: 'subscriptions' })}
+            >
               <ConnectedInventorySubscriptions
                 key={productId}
                 filterInventoryData={initialSubscriptionsInventoryFilters}
@@ -138,7 +147,6 @@ const ProductView = ({ graphCardToolbar, productConfig, routeDetail, t }) => {
  * @type {{t: Function, routeDetail: object, productConfig: object}}
  */
 ProductView.propTypes = {
-  graphCardToolbar: PropTypes.node,
   productConfig: PropTypes.shape({
     graphTallyQuery: PropTypes.shape({
       [RHSM_API_QUERY_TYPES.GRANULARITY]: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)]),
@@ -170,7 +178,9 @@ ProductView.propTypes = {
     productParameter: PropTypes.string,
     viewParameter: PropTypes.string
   }).isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
+  toolbarGraph: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
+  toolbarProduct: PropTypes.oneOfType([PropTypes.node, PropTypes.bool])
 };
 
 /**
@@ -179,8 +189,9 @@ ProductView.propTypes = {
  * @type {{t: translate}}
  */
 ProductView.defaultProps = {
-  graphCardToolbar: null,
-  t: translate
+  t: translate,
+  toolbarGraph: null,
+  toolbarProduct: null
 };
 
 /**

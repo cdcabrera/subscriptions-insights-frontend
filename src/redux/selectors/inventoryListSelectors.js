@@ -109,6 +109,8 @@ const selector = createDeepEqualSelector([statePropsFilter, queryFilter], (respo
     // Apply "display logic" then return a custom value for entries
     const customInventoryValue = ({ key, value }) => {
       switch (key) {
+        case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.CORE_HOURS:
+          return (typeof value === 'number' && Number.parseFloat(value).toFixed(2)) || `0.00`;
         case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.CLOUD_PROVIDER:
         case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.HARDWARE:
         case rhsmApiTypes.RHSM_API_RESPONSE_INVENTORY_DATA_TYPES.MEASUREMENT:
