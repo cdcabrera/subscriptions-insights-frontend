@@ -11,7 +11,7 @@ import { translate } from '../i18n/i18n';
  *
  * @type {{title: (string|Node), value: string, selected: boolean}[]}
  */
-const toolbarFieldOptions = dateHelpers.getMonthlyRangedDateTime().listDateTimeRanges.map(dateTime => ({
+const toolbarFieldOptions = dateHelpers.getRangedYearDateTime().listDateTimeRanges.map(dateTime => ({
   ...dateTime,
   selected: false
 }));
@@ -27,7 +27,7 @@ const toolbarFieldOptions = dateHelpers.getMonthlyRangedDateTime().listDateTimeR
  * @param {string} props.viewId
  * @returns {Node}
  */
-const ToolbarFieldRangeGranularity = ({ options, t, value, viewId }) => {
+const ToolbarFieldRangedYear = ({ options, t, value, viewId }) => {
   const updatedValue = value;
 
   const updatedOptions = options.map(option => ({ ...option, selected: option.title === updatedValue }));
@@ -78,7 +78,7 @@ const ToolbarFieldRangeGranularity = ({ options, t, value, viewId }) => {
  *
  * @type {{viewId: string, t: Function, options: Array, value: string}}
  */
-ToolbarFieldRangeGranularity.propTypes = {
+ToolbarFieldRangedYear.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.node,
@@ -96,11 +96,11 @@ ToolbarFieldRangeGranularity.propTypes = {
  *
  * @type {{viewId: string, t: translate, options: Array, value: string}}
  */
-ToolbarFieldRangeGranularity.defaultProps = {
+ToolbarFieldRangedYear.defaultProps = {
   options: toolbarFieldOptions,
   t: translate,
   value: translate('curiosity-toolbar.granularityRange', { context: 'current' }),
   viewId: 'toolbarFieldRangeGranularity'
 };
 
-export { ToolbarFieldRangeGranularity as default, ToolbarFieldRangeGranularity, toolbarFieldOptions };
+export { ToolbarFieldRangedYear as default, ToolbarFieldRangedYear, toolbarFieldOptions };

@@ -31,7 +31,7 @@ const defaultDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 30
 const weeklyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 12, measurement: 'weeks' });
 const monthlyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 12, measurement: 'months' });
 const quarterlyDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 36, measurement: 'months' });
-const rangedDateTime = setRangedDateTime({
+const rangedYearDateTime = setRangedDateTime({
   date: getCurrentDate(),
   subtract: 11,
   measurement: 'months',
@@ -60,8 +60,15 @@ const getRangedDateTime = granularity => {
   }
 };
 
-const getMonthlyRangedDateTime = month => {
-  const { startDate, endDate } = { ...rangedDateTime };
+/**
+ * Generate a list of months for use in a select list.
+ *
+ * @param {string} month
+ * @returns {{keyDateTimeRanges: {}, listDateTimeRanges: *[]}|*}
+ */
+const getRangedYearDateTime = month => {
+  const currentYear = Number.parseInt(moment.utc(getCurrentDate()).year(), 10);
+  const { startDate, endDate } = { ...rangedYearDateTime };
   const keyDateTimeRanges = {};
   let listDateTimeRanges = [];
 
@@ -75,53 +82,24 @@ const getMonthlyRangedDateTime = month => {
       }
     };
 
-    const startDateYear = Number.parseInt(startDateUpdated.year(), 10);
-    let priorYear = listDateTimeRanges?.[listDateTimeRanges.length - 1]?.value.startDate;
-
-    priorYear =
-      priorYear &&
-      Number.parseInt(moment.utc(listDateTimeRanges?.[listDateTimeRanges.length - 1]?.value.startDate).year(), 10);
-
-    const isNewYear = (priorYear && startDateYear !== priorYear) || false;
     const titleYear = startDateUpdated.format('MMMM YYYY');
     const title = startDateUpdated.format('MMMM');
+    const titleIndex = startDateUpdated.format('M');
+    const isNextYear = currentYear !== Number.parseInt(startDateUpdated.year(), 10);
 
     startDateUpdated.add(1, 'month');
 
-    dateTime.title = (isNewYear && titleYear) || title;
+    dateTime.title = (isNextYear && titleYear) || title;
     dateTime.value.endDate = startDateUpdated.startOf('month').toDate();
 
     dateTime.title = translate('curiosity-toolbar.granularityRange', { context: dateTime.title });
-    keyDateTimeRanges[startDateUpdated.format('MMMM')] = dateTime;
+    keyDateTimeRanges[title.toLowerCase()] = { ...dateTime };
+    keyDateTimeRanges[titleIndex] = { ...dateTime };
     listDateTimeRanges.push(dateTime);
   }
-  /*
-  while (endDateUpdated > startDateUpdated || startDateUpdated.format('M') === endDateUpdated.format('M')) {
-    const dateTime = {
-      value: {
-        startDate: startDateUpdated.format()
-      }
-    };
 
-    const titleYear = startDateUpdated.format('MMMM YYYY');
-    const title = startDateUpdated.format('MMMM');
-    const startDateYear = Number.parseInt(startDateUpdated.year(), 10);
-
-    startDateUpdated.add(1, 'month');
-    const nextDateYear = Number.parseInt(startDateUpdated.year(), 10);
-    const isNewYear = startDateYear !== nextDateYear;
-
-    dateTime.title = (isNewYear && titleYear) || title;
-    dateTime.value.endDate = startDateUpdated.startOf('month').format();
-
-    // dateTime.title = translate('curiosity-toolbar.granularityRange', { context: dateTime.title });
-    keyDateTimeRanges[startDateUpdated.format('MMMM')] = dateTime;
-    listDateTimeRanges.push(dateTime);
-  }
-   */
-
-  if (keyDateTimeRanges?.month) {
-    return keyDateTimeRanges[month];
+  if (month) {
+    return keyDateTimeRanges?.[month] || undefined;
   }
 
   listDateTimeRanges = listDateTimeRanges.reverse();
@@ -168,7 +146,7 @@ const timestampQuarterFormats = {
 
 const dateHelpers = {
   getCurrentDate,
-  getMonthlyRangedDateTime,
+  getRangedYearDateTime,
   getRangedDateTime,
   setRangedDateTime,
   currentDateTime,
@@ -176,6 +154,7 @@ const dateHelpers = {
   monthlyDateTime,
   quarterlyDateTime,
   weeklyDateTime,
+  rangedYearDateTime,
   timestampDayFormats,
   timestampMonthFormats,
   timestampQuarterFormats
@@ -184,7 +163,7 @@ const dateHelpers = {
 export {
   dateHelpers as default,
   getCurrentDate,
-  getMonthlyRangedDateTime,
+  getRangedYearDateTime,
   getRangedDateTime,
   setRangedDateTime,
   currentDateTime,
