@@ -102,13 +102,14 @@ const RHSM_API_RESPONSE_INVENTORY_DATA = 'data';
  * RHSM response inventory DATA types.
  * Schema/map of expected inventory DATA response properties.
  *
- * @type {{CORES: string, HARDWARE: string, SOCKETS: string, SUBSCRIPTION_ID: string, INVENTORY_ID: string,
- *     MEASUREMENT: string, ID: string, GUESTS: string, CLOUD_PROVIDER: string, LAST_SEEN: string,
- *     NAME: string}}
+ * @type {{CORES: string, CORE_HOURS: string, HARDWARE: string, SOCKETS: string, SUBSCRIPTION_ID: string,
+ *     INVENTORY_ID: string, MEASUREMENT: string, ID: string, GUESTS: string, CLOUD_PROVIDER: string,
+ *     LAST_SEEN: string, NAME: string}}
  */
 const RHSM_API_RESPONSE_INVENTORY_DATA_TYPES = {
   CLOUD_PROVIDER: 'cloud_provider',
   CORES: 'cores',
+  CORE_HOURS: 'core_hours',
   GUESTS: 'number_of_guests',
   HARDWARE: 'hardware_type',
   ID: 'insights_id',
@@ -227,10 +228,12 @@ const RHSM_API_QUERY_GRANULARITY_TYPES = {
 /**
  * RHSM API query/search parameter SORT type values for HOSTS.
  *
- * @type {{CORES: string, HARDWARE: string, SOCKETS: string, MEASUREMENT: string, LAST_SEEN: string, NAME: string}}
+ * @type {{CORES: string, CORE_HOURS: string, HARDWARE: string, SOCKETS: string, MEASUREMENT: string,
+ *     LAST_SEEN: string, NAME: string}}
  */
 const RHSM_API_QUERY_SORT_TYPES = {
   CORES: 'cores',
+  CORE_HOURS: 'core_hours',
   HARDWARE: 'hardware_type',
   LAST_SEEN: 'last_seen',
   MEASUREMENT: 'measurement_type',
