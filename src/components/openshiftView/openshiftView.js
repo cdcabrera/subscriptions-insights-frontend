@@ -27,7 +27,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { helpers, dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
 import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
-import { ToolbarFieldRangeGranularity } from '../toolbar/toolbarFieldRangeGranularity';
+import { ToolbarFieldRangedYear } from '../toolbar/toolbarFieldRangedYear';
 
 /**
  * An OpenShift encompassing view.
@@ -105,7 +105,7 @@ class OpenshiftView extends React.Component {
             {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && (
               <ToolbarFieldGranularity value={graphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} viewId={viewId} />
             )}
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRIC && <ToolbarFieldRangeGranularity viewId={viewId} />}
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRIC && <ToolbarFieldRangedYear viewId={viewId} />}
           </GraphCard>
         </PageSection>
         <PageSection>

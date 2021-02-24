@@ -15,7 +15,7 @@ import {
 import { ConnectedProductView, ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { dateHelpers } from '../../common';
-import { ToolbarFieldRangeGranularity } from '../toolbar/toolbarFieldRangeGranularity';
+import { ToolbarFieldRangedYear } from '../toolbar/toolbarFieldRangedYear';
 
 /**
  * A Red Hat Enterprise Linux configured view, and related system architectures.
@@ -33,7 +33,7 @@ const ProductViewOpenShiftDedicated = ({ productConfig, routeDetail }) => {
       routeDetail={routeDetail}
       productConfig={productConfig}
       toolbarProduct={false}
-      toolbarGraph={<ToolbarFieldRangeGranularity viewId={viewId} />}
+      toolbarGraph={<ToolbarFieldRangedYear viewId={viewId} />}
     />
   );
 };
