@@ -87,10 +87,10 @@ const getRangedMonthDateTime = month => {
     const titleIndex = startDateUpdated.format('M');
     const isNextYear = currentYear !== Number.parseInt(startDateUpdated.year(), 10);
 
-    startDateUpdated.add(1, 'month');
-
     dateTime.title = (isNextYear && titleYear) || title;
-    dateTime.value.endDate = startDateUpdated.startOf('month').toDate();
+    dateTime.value.endDate = moment.utc(startDateUpdated).endOf('month').toDate();
+
+    startDateUpdated.add(1, 'month');
 
     dateTime.title = translate('curiosity-toolbar.granularityRange', { context: dateTime.title });
     keyDateTimeRanges[title.toLowerCase()] = { ...dateTime };
