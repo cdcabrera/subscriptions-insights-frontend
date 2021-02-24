@@ -42,8 +42,8 @@ class BannerMessages extends React.Component {
       const updatedGraphQuery = {
         ...graphTallyQuery,
         [RHSM_API_QUERY_TYPES.GRANULARITY]: GRANULARITY_TYPES.DAILY,
-        [RHSM_API_QUERY_TYPES.START_DATE]: startDate.toISOString(),
-        [RHSM_API_QUERY_TYPES.END_DATE]: endDate.toISOString()
+        [RHSM_API_QUERY_TYPES.START_DATE]: startDate,
+        [RHSM_API_QUERY_TYPES.END_DATE]: endDate
       };
 
       getMessageReports(productId, updatedGraphQuery);

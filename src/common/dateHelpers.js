@@ -45,18 +45,23 @@ const rangedYearDateTime = setRangedDateTime({
  * @returns {{endDate: Date, startDate: Date}}
  */
 const getRangedDateTime = granularity => {
+  const generateRange = ({ startDate, endDate }) => ({
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString()
+  });
+
   switch (granularity) {
     case 'CURRENT':
-      return { ...currentDateTime };
+      return generateRange(currentDateTime);
     case GRANULARITY_TYPES.WEEKLY:
-      return { ...weeklyDateTime };
+      return generateRange(weeklyDateTime);
     case GRANULARITY_TYPES.MONTHLY:
-      return { ...monthlyDateTime };
+      return generateRange(monthlyDateTime);
     case GRANULARITY_TYPES.QUARTERLY:
-      return { ...quarterlyDateTime };
+      return generateRange(quarterlyDateTime);
     case GRANULARITY_TYPES.DAILY:
     default:
-      return { ...defaultDateTime };
+      return generateRange(defaultDateTime);
   }
 };
 
@@ -78,7 +83,7 @@ const getRangedMonthDateTime = month => {
   while (endDateUpdated > startDateUpdated || startDateUpdated.format('M') === endDateUpdated.format('M')) {
     const dateTime = {
       value: {
-        startDate: startDateUpdated.toDate()
+        startDate: startDateUpdated.toDate().toISOString()
       }
     };
 
@@ -89,7 +94,7 @@ const getRangedMonthDateTime = month => {
 
     dateTime.title = (isNextYear && titleYear) || title;
     dateTime._title = title.toLowerCase();
-    dateTime.value.endDate = moment.utc(startDateUpdated).endOf('month').toDate();
+    dateTime.value.endDate = moment.utc(startDateUpdated).endOf('month').toDate().toISOString();
 
     startDateUpdated.add(1, 'month');
 
