@@ -3,20 +3,10 @@ import PropTypes from 'prop-types';
 import { Select as PfSelect, SelectOption as PfSelectOption, SelectVariant } from '@patternfly/react-core';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
+import _findIndex from 'lodash/findIndex';
 import _isPlainObject from 'lodash/isPlainObject';
 import { helpers } from '../../common/helpers';
 
-/**
- * FixMe: Patternfly React select generates a random ID for select options.
- * On the surface this seems like a legitimate update until you remember unit tests.
- * Quite a few apps use test snapshots causing certain rendered select snapshots to
- * fail consistently. Appears this may have been part of the "favorites" update.
- * The solution centers around updating the  "GenerateId helper" and detecting a
- * test, dev, or prod environment instead of generating a random string every time.
- *
- * This issue also has the side-effect of making the attribute inadvertently
- * "required" anywhere it's used in an effort to squash it.
- */
 /**
  * A wrapper for Patternfly Select. Provides restructured event data for onSelect callback.
  *
@@ -156,8 +146,26 @@ class Select extends React.Component {
       convertedOption.label = convertedOption.label || convertedOption.title;
 
       if (activateOptions) {
-        updatedOptions[index].selected =
-          activateOptions.includes(convertedOption.value) || activateOptions.includes(convertedOption.title);
+        let isSelected;
+
+        if (_isPlainObject(convertedOption.value)) {
+          isSelected = _findIndex(activateOptions, convertedOption.value) > -1;
+
+          if (!isSelected) {
+            const tempSearch = activateOptions.find(activeOption =>
+              Object.values(convertedOption.value).includes(activeOption)
+            );
+            isSelected = !!tempSearch;
+          }
+        } else {
+          isSelected = activateOptions.includes(convertedOption.value);
+        }
+
+        if (!isSelected) {
+          isSelected = activateOptions.includes(convertedOption.title);
+        }
+
+        updatedOptions[index].selected = isSelected;
       }
     });
 
@@ -218,7 +226,7 @@ class Select extends React.Component {
               key={window.btoa(`${option.title}-${option.value}`)}
               id={window.btoa(`${option.title}-${option.value}`)}
               value={option.title}
-              data-value={option.value}
+              data-value={(_isPlainObject(option.value) && JSON.stringify([option.value])) || option.value}
               data-title={option.title}
             />
           ))) ||
