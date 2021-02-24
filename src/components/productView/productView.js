@@ -177,9 +177,9 @@ ProductView.propTypes = {
     initialSubscriptionsInventoryFilters: InventorySubscriptions.propTypes.filterInventoryData
   }).isRequired,
   routeDetail: PropTypes.shape({
-    pathParameter: PropTypes.string,
-    productParameter: PropTypes.string,
-    viewParameter: PropTypes.string
+    pathParameter: PropTypes.string.isRequired,
+    productParameter: PropTypes.string.isRequired,
+    viewParameter: PropTypes.string.isRequired
   }).isRequired,
   t: PropTypes.func,
   toolbarGraph: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
