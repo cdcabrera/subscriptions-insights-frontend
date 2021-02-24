@@ -60,6 +60,7 @@ class OpenshiftView extends React.Component {
       t,
       viewId
     } = this.props;
+    const productId = routeDetail.pathParameter;
     const {
       graphTallyQuery: initialGraphTallyQuery,
       inventoryHostsQuery: initialInventoryHostsQuery,
@@ -84,22 +85,22 @@ class OpenshiftView extends React.Component {
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
         </PageHeader>
         <PageMessages>
-          <BannerMessages productId={routeDetail.pathParameter} viewId={viewId} query={query} />
+          <BannerMessages productId={productId} viewId={viewId} query={query} />
         </PageMessages>
         <PageToolbar>
           <Toolbar
             filterOptions={initialToolbarFilters}
-            productId={routeDetail.pathParameter}
+            productId={productId}
             query={toolbarQuery}
             viewId={viewId}
           />
         </PageToolbar>
         <PageSection>
           <GraphCard
-            key={routeDetail.pathParameter}
+            key={`graph_${productId}`}
             filterGraphData={graphFilters}
             query={initialGraphTallyQuery}
-            productId={routeDetail.pathParameter}
+            productId={productId}
             viewId={viewId}
             cardTitle={t('curiosity-graph.cardHeading')}
             productLabel={productLabel}
@@ -109,24 +110,24 @@ class OpenshiftView extends React.Component {
           </GraphCard>
         </PageSection>
         <PageSection>
-          <InventoryTabs productId={routeDetail.pathParameter}>
-            <InventoryTab key="hostsTab" title={t('curiosity-inventory.tab', { context: 'hosts' })}>
+          <InventoryTabs key={`inventory_${productId}`} productId={productId}>
+            <InventoryTab key={`inventory_hosts_${productId}`} title={t('curiosity-inventory.tab', { context: 'hosts' })}>
               <InventoryList
-                key={routeDetail.pathParameter}
+                key={productId}
                 filterGuestsData={initialGuestsFilters}
                 filterInventoryData={inventoryFilters}
-                productId={routeDetail.pathParameter}
+                productId={productId}
                 settings={initialInventorySettings}
                 query={initialInventoryHostsQuery}
                 viewId={viewId}
               />
             </InventoryTab>
             {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && (
-              <InventoryTab key="subscriptionsTab" title={t('curiosity-inventory.tab', { context: 'subscriptions' })}>
+              <InventoryTab key={`inventory_subs_${productId}`} title={t('curiosity-inventory.tab', { context: 'subscriptions' })}>
                 <InventorySubscriptions
-                  key={routeDetail.pathParameter}
+                  key={productId}
                   filterInventoryData={subscriptionsInventoryFilters}
-                  productId={routeDetail.pathParameter}
+                  productId={productId}
                   query={initialInventorySubscriptionsQuery}
                   viewId={viewId}
                 />
