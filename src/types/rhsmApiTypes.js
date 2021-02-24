@@ -188,9 +188,10 @@ const RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES = {
 /**
  * RHSM product id type values.
  *
- * @type {{RHEL_ARM: string, SATELLITE: string, RHEL_WORKSTATION: string, RHEL_DESKTOP: string, RHEL: string,
- *     SATELLITE_CAPSULE: string, RHEL_SERVER: string, RHEL_IBM_Z: string, RHEL_COMPUTE_NODE: string,
- *     RHEL_IBM_POWER: string, RHEL_X86: string, OPENSHIFT: string}}
+ * @type {{RHEL_ARM: string, OPENSHIFT_METRICS: string, SATELLITE: string, RHEL_WORKSTATION: string,
+ *     RHEL_COMPUTE_NODE: string, RHEL_X86: string, OPENSHIFT: string, SATELLITE_SERVER: string,
+ *     OPENSHIFT_DEDICATED_METRICS: string, RHEL_DESKTOP: string, RHEL: string, SATELLITE_CAPSULE: string,
+ *     RHEL_SERVER: string, RHEL_IBM_Z: string, RHEL_IBM_POWER: string}}
  */
 const RHSM_API_PATH_ID_TYPES = {
   RHEL: 'RHEL',
@@ -203,6 +204,8 @@ const RHSM_API_PATH_ID_TYPES = {
   RHEL_IBM_Z: 'RHEL for IBM z',
   RHEL_X86: 'RHEL for x86',
   OPENSHIFT: 'OpenShift Container Platform',
+  OPENSHIFT_METRICS: 'OpenShift-metrics',
+  OPENSHIFT_DEDICATED_METRICS: 'OpenShift-dedicated-metrics',
   SATELLITE: 'Satellite',
   SATELLITE_CAPSULE: 'Satellite Capsule',
   SATELLITE_SERVER: 'Satellite Server'
