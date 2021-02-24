@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Select as PfSelect, SelectOption as PfSelectOption, SelectVariant } from '@patternfly/react-core';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
+import _findIndex from 'lodash/findIndex';
 import _isPlainObject from 'lodash/isPlainObject';
 import { helpers } from '../../common/helpers';
 
@@ -156,8 +157,26 @@ class Select extends React.Component {
       convertedOption.label = convertedOption.label || convertedOption.title;
 
       if (activateOptions) {
-        updatedOptions[index].selected =
-          activateOptions.includes(convertedOption.value) || activateOptions.includes(convertedOption.title);
+        let isSelected;
+
+        if (_isPlainObject(convertedOption.value)) {
+          isSelected = _findIndex(activateOptions, convertedOption.value) > -1;
+
+          if (!isSelected) {
+            const tempSearch = activateOptions.find(activeOption =>
+              Object.values(convertedOption.value).includes(activeOption)
+            );
+            isSelected = !!tempSearch;
+          }
+        } else {
+          isSelected = activateOptions.includes(convertedOption.value);
+        }
+
+        if (!isSelected) {
+          isSelected = activateOptions.includes(convertedOption.title);
+        }
+
+        updatedOptions[index].selected = isSelected;
       }
     });
 
@@ -218,7 +237,7 @@ class Select extends React.Component {
               key={window.btoa(`${option.title}-${option.value}`)}
               id={window.btoa(`${option.title}-${option.value}`)}
               value={option.title}
-              data-value={option.value}
+              data-value={JSON.stringify([option.value])}
               data-title={option.title}
             />
           ))) ||
