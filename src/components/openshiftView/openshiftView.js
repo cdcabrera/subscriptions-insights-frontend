@@ -19,6 +19,7 @@ import {
 import { apiQueries, connect, reduxSelectors } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import { ToolbarFieldUom } from '../toolbar/toolbarFieldUom';
+import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
 import Toolbar from '../toolbar/toolbar';
 import InventoryList from '../inventoryList/inventoryList';
 import InventorySubscriptions from '../inventorySubscriptions/inventorySubscriptions';
@@ -104,6 +105,7 @@ class OpenshiftView extends React.Component {
             productLabel={productLabel}
           >
             <ToolbarFieldUom value={initialOption} viewId={viewId} />
+            <ToolbarFieldGranularity value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]} viewId={viewId} />
           </GraphCard>
         </PageSection>
         <PageSection>
