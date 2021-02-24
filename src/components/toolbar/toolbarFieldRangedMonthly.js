@@ -35,7 +35,7 @@ const ToolbarFieldRangedMonthly = ({ options, t, value, viewId }) => {
 
   const updatedOptions = options.map(option => ({
     ...option,
-    selected: option.title === updatedValue || option.value.startDate.toISOString() === updatedValue
+    selected: option.title === updatedValue || option.value.startDate === updatedValue
   }));
 
   /**
@@ -56,12 +56,12 @@ const ToolbarFieldRangedMonthly = ({ options, t, value, viewId }) => {
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.START_DATE],
         viewId,
-        [RHSM_API_QUERY_TYPES.START_DATE]: startDate.toISOString()
+        [RHSM_API_QUERY_TYPES.START_DATE]: startDate
       },
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.END_DATE],
         viewId,
-        [RHSM_API_QUERY_TYPES.END_DATE]: endDate.toISOString()
+        [RHSM_API_QUERY_TYPES.END_DATE]: endDate
       }
     ]);
   };
