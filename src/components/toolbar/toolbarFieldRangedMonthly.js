@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxTypes, store } from '../../redux';
+import moment from 'moment';
+import { reduxTypes, store, useSelector } from '../../redux';
 import { Select } from '../form/select';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
+
+const toolbarFieldOptionsSearch = dateHelpers.getRangedMonthDateTime().keyDateTimeRanges;
 
 /**
  * Select field options.
  *
  * @type {{title: (string|Node), value: string, selected: boolean}[]}
  */
-const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRanges.map(dateTime => ({
-  ...dateTime,
+const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRanges.map(({ title, _title }) => ({
+  title,
+  value: _title,
   selected: false
 }));
 
@@ -28,11 +32,14 @@ const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRan
  * @returns {Node}
  */
 const ToolbarFieldRangedMonthly = ({ options, t, value, viewId }) => {
-  const updatedValue = value;
+  const updatedValue = useSelector(
+    ({ view }) => view.graphTallyQuery?.[viewId]?.[RHSM_API_QUERY_TYPES.START_DATE],
+    value
+  );
 
   const updatedOptions = options.map(option => ({
     ...option,
-    selected: option.title === updatedValue
+    selected: option.title === updatedValue || option.value === moment.utc(updatedValue).format('MMMM').toLowerCase()
   }));
 
   /**
@@ -43,7 +50,7 @@ const ToolbarFieldRangedMonthly = ({ options, t, value, viewId }) => {
    * @returns {void}
    */
   const onSelect = event => {
-    const { startDate, endDate } = event.value;
+    const { startDate, endDate } = toolbarFieldOptionsSearch?.[event.value]?.value || {};
     store.dispatch([
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.GRANULARITY],
@@ -53,12 +60,12 @@ const ToolbarFieldRangedMonthly = ({ options, t, value, viewId }) => {
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.START_DATE],
         viewId,
-        [RHSM_API_QUERY_TYPES.START_DATE]: startDate.toISOString()
+        [RHSM_API_QUERY_TYPES.START_DATE]: startDate
       },
       {
         type: reduxTypes.query.SET_QUERY_RHSM_TYPES[RHSM_API_QUERY_TYPES.END_DATE],
         viewId,
-        [RHSM_API_QUERY_TYPES.END_DATE]: endDate.toISOString()
+        [RHSM_API_QUERY_TYPES.END_DATE]: endDate
       }
     ]);
   };

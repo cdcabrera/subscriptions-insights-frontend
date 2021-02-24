@@ -78,7 +78,7 @@ const getRangedMonthDateTime = month => {
   while (endDateUpdated > startDateUpdated || startDateUpdated.format('M') === endDateUpdated.format('M')) {
     const dateTime = {
       value: {
-        startDate: startDateUpdated.toDate()
+        startDate: startDateUpdated.toDate().toISOString()
       }
     };
 
@@ -88,7 +88,8 @@ const getRangedMonthDateTime = month => {
     const isNextYear = currentYear !== Number.parseInt(startDateUpdated.year(), 10);
 
     dateTime.title = (isNextYear && titleYear) || title;
-    dateTime.value.endDate = moment.utc(startDateUpdated).endOf('month').toDate();
+    dateTime._title = title.toLowerCase();
+    dateTime.value.endDate = moment.utc(startDateUpdated).endOf('month').toDate().toISOString();
 
     startDateUpdated.add(1, 'month');
 
