@@ -172,6 +172,13 @@ Object {
         "startDate": 2018-08-01T00:00:00.000Z,
       },
     },
+    "current": Object {
+      "title": "t(curiosity-toolbar.granularityRange, {\\"context\\":\\"current\\"})",
+      "value": Object {
+        "endDate": 2019-07-31T23:59:59.999Z,
+        "startDate": 2019-07-01T00:00:00.000Z,
+      },
+    },
     "december": Object {
       "title": "t(curiosity-toolbar.granularityRange, {\\"context\\":\\"December 2018\\"})",
       "value": Object {

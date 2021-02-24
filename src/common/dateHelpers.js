@@ -98,15 +98,17 @@ const getRangedMonthDateTime = month => {
     listDateTimeRanges.push(dateTime);
   }
 
-  if (month) {
-    return keyDateTimeRanges?.[month] || undefined;
-  }
-
   listDateTimeRanges = listDateTimeRanges.reverse();
   listDateTimeRanges[0] = {
     ...listDateTimeRanges[0],
     title: translate('curiosity-toolbar.granularityRange', { context: 'current' })
   };
+
+  keyDateTimeRanges.current = { ...listDateTimeRanges[0] };
+
+  if (month) {
+    return keyDateTimeRanges?.[month] || undefined;
+  }
 
   return { keyDateTimeRanges, listDateTimeRanges };
 };
