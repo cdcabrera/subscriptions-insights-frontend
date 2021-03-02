@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
-import { useShallowCompareEffect } from 'react-use';
+import { useDeepCompareEffect, useShallowCompareEffect } from 'react-use';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { helpers } from '../../common';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
@@ -18,6 +18,7 @@ import { GraphCardChart } from './graphCardChart';
  * @param {Node} props.children
  * @param {boolean} props.error
  * @param {Array} props.filterGraphData
+ * @param {boolean} props.fulfilled
  * @param {Function} props.getGraphReportsCapacity
  * @param {object} props.graphData
  * @param {boolean} props.isDisabled
@@ -42,6 +43,8 @@ const GraphCard = ({
   query,
   viewId
 }) => {
+  // const { pending, fulfilled, error } = useSelector(({ graph }) => graph?.reportCapacity?.[productId], {});
+  const [updatedGraphData, setUpdatedGraphData] = React.useState(graphData);
   const {
     [RHSM_API_QUERY_TYPES.START_DATE]: startDate,
     [RHSM_API_QUERY_TYPES.END_DATE]: endDate,
@@ -52,7 +55,11 @@ const GraphCard = ({
     if (!isDisabled && startDate && endDate && granularity && productId) {
       getGraphReportsCapacity(productId, query);
     }
-  }, [isDisabled, startDate, endDate, granularity, productId, getGraphReportsCapacity, productId, query]);
+  }, [isDisabled, startDate, endDate, granularity, productId, getGraphReportsCapacity, query]);
+
+  useDeepCompareEffect(() => {
+    setUpdatedGraphData(graphData);
+  }, [graphData]);
 
   if (isDisabled) {
     return null;
@@ -78,7 +85,7 @@ const GraphCard = ({
               <GraphCardChart
                 filterGraphData={filterGraphData}
                 granularity={granularity}
-                graphData={graphData}
+                graphData={updatedGraphData}
                 productLabel={productLabel}
                 viewId={viewId}
               />
@@ -108,6 +115,7 @@ GraphCard.propTypes = {
       stroke: PropTypes.string
     })
   ),
+  // fulfilled: PropTypes.bool,
   getGraphReportsCapacity: PropTypes.func,
   graphData: PropTypes.object,
   query: PropTypes.shape({
@@ -135,6 +143,7 @@ GraphCard.defaultProps = {
   children: null,
   error: false,
   filterGraphData: [],
+  // fulfilled: false,
   getGraphReportsCapacity: helpers.noop,
   graphData: {},
   isDisabled: helpers.UI_DISABLED_GRAPH,
@@ -164,3 +173,61 @@ const makeMapStateToProps = reduxSelectors.graphCard.makeGraphCard();
 const ConnectedGraphCard = connect(makeMapStateToProps, mapDispatchToProps)(GraphCard);
 
 export { ConnectedGraphCard as default, ConnectedGraphCard, GraphCard };
+
+/**
+ * Create a selector from applied state, props.
+ *
+ * @type {Function}
+ */
+// const makeMapStateToProps = reduxSelectors.graphCard.makeGraphCard();
+/*
+const mapStateToProps = (state, props) => {
+  const { graphTallyQuery: query } = apiQueries.parseRhsmQuery(
+    {
+      ...props.query,
+      ...state.view?.query?.[props.productId],
+      ...state.view?.query?.[props.viewId]
+    },
+    {
+      graphTallyQuery: { ...state.view?.graphTallyQuery?.[props.viewId] }
+    }
+  );
+
+  return { ...state.graph?.reportCapacity?.[props.productId], query };
+};
+*/
+/*
+const makeMapStateToProps = () => (state, props) => {
+  const { graphTallyQuery: query } = apiQueries.parseRhsmQuery(
+    {
+      ...props.query,
+      ...state.view?.query?.[props.productId],
+      ...state.view?.query?.[props.viewId]
+    },
+    {
+      graphTallyQuery: { ...state.view?.graphTallyQuery?.[props.viewId] }
+    }
+  );
+  const { pending, fulfilled, error } = state.graph?.reportCapacity?.[props.productId] || {};
+
+  return { pending, fulfilled, error, query };
+};
+*/
+
+/*
+const mapStateToProps = (state, props) => {
+  const { graphTallyQuery: query } = apiQueries.parseRhsmQuery(
+    {
+      ...props.query,
+      ...state.view?.query?.[props.productId],
+      ...state.view?.query?.[props.viewId]
+    },
+    {
+      graphTallyQuery: { ...state.view?.graphTallyQuery?.[props.viewId] }
+    }
+  );
+  const { pending, fulfilled, error } = state.graph?.reportCapacity?.[props.productId];
+
+  return { pending, fulfilled, error, query };
+};
+*/

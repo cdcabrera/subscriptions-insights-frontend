@@ -91,6 +91,8 @@ const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
       subscriptionsInventoryFilters = initialSubscriptionsInventoryFilters.filter(filter);
     }
 
+    console.log('VIEW >>>');
+
     return (
       <React.Fragment key={`product_${productId}_${uomFilter}`}>
         {initialToolbarFilters && (

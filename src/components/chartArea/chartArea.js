@@ -1,13 +1,17 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createContainer } from 'victory-create-container';
+// import { createContainer } from 'victory-create-container';
+import { VictoryPortal } from 'victory-core';
 import {
   Chart,
   ChartAxis,
   ChartStack,
   ChartThreshold,
   ChartThemeColor,
-  ChartArea as PfChartArea
+  ChartArea as PfChartArea,
+  createContainer,
+  ChartLegendTooltip
 } from '@patternfly/react-charts';
 import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
@@ -329,7 +333,7 @@ class ChartArea extends React.Component {
    *
    * @returns {Node}
    */
-  renderTooltip() {
+  renderTooltipOLD() {
     const { dataSetsToggle } = this;
     const { chartTooltip, dataSets } = this.props;
 
@@ -393,6 +397,22 @@ class ChartArea extends React.Component {
         labels={obj => obj}
         labelComponent={<FlyoutComponent />}
         voronoiPadding={60}
+      />
+    );
+  }
+
+  renderTooltip() {
+    const { dataSets } = this.props;
+    console.log('SERIOUSLY >>>', dataSets);
+    const CursorVoronoiContainer = createContainer('voronoi', 'cursor');
+
+    return (
+      <CursorVoronoiContainer
+        cursorDimension="x"
+        // labels={obj => obj}
+        // mouseFollowTooltips
+        // voronoiDimension="x"
+        // voronoiPadding={50}
       />
     );
   }
@@ -526,8 +546,9 @@ class ChartArea extends React.Component {
     const { chartLegend, padding, themeColor } = this.props;
 
     const { isXAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
-    const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks });
-    const tooltipComponent = { containerComponent: (maxY >= 0 && this.renderTooltip()) || undefined };
+    const { chartDomain } = this.getChartDomain({ isXAxisTicks });
+
+    const tooltipComponent = { containerComponent: this.renderTooltip() };
     const chartProps = { padding, ...chartDomain, ...tooltipComponent };
 
     return (
@@ -536,12 +557,14 @@ class ChartArea extends React.Component {
         className="uxui-curiosity__modal uxui-curiosity__modal--loading"
         ref={this.containerRef}
       >
-        <Chart animate={{ duration: 0 }} width={chartWidth} themeColor={themeColor} {...chartProps}>
-          <ChartAxis {...xAxisProps} animate={false} />
-          <ChartAxis {...yAxisProps} animate={false} />
-          {this.renderChart({})}
-          <ChartStack>{this.renderChart({ stacked: true })}</ChartStack>
-        </Chart>
+        <VictoryPortal>
+          <Chart animate={{ duration: 0 }} width={chartWidth} themeColor={themeColor} {...chartProps}>
+            <ChartAxis {...xAxisProps} animate={false} />
+            <ChartAxis {...yAxisProps} animate={false} />
+            {this.renderChart({})}
+            <ChartStack>{this.renderChart({ stacked: true })}</ChartStack>
+          </Chart>
+        </VictoryPortal>
         {chartLegend && <div className="curiosity-chartarea-description victory-legend">{this.renderLegend()}</div>}
       </div>
     );

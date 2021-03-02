@@ -1,6 +1,8 @@
 import moment from 'moment';
-import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../types/rhsmApiTypes';
+import _camelCase from 'lodash/camelCase';
+import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, rhsmApiTypes } from '../../types/rhsmApiTypes';
 import { dateHelpers, helpers } from '../../common';
+import { reduxHelpers } from '../../redux/common/reduxHelpers';
 
 /**
  * Returns x axis ticks/intervals array for the xAxisTickInterval
@@ -160,12 +162,95 @@ const yAxisTickFormat = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
   return updatedTick;
 };
 
+const transformData = (responseData = []) => {
+  const updatedResponseData = { graphData: {} };
+
+  const [report, capacity] = responseData;
+  const reportData = report?.[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA] || [];
+  const capacityData = capacity?.[rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA] || [];
+
+  // Populate expected API response values with undefined
+  const [tallySchema = {}, capacitySchema = {}] = reduxHelpers.setResponseSchemas([
+    rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES,
+    rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES
+  ]);
+
+  // Apply "display logic" then return a custom value for Reporting graph entries
+  const customReportValue = (data, key, presetData) => ({
+    ...presetData,
+    hasData: data[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_DATA],
+    hasCloudigradeData: data[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_DATA],
+    hasCloudigradeMismatch: data[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_MISMATCH]
+  });
+
+  // Apply "display logic" then return a custom value for Capacity graph entries
+  const customCapacityValue = (data, key, { date, x, y }) => ({
+    date,
+    x,
+    y: data[rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.HAS_INFINITE] === true ? null : y,
+    hasInfinite: data[rhsmApiTypes.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES.HAS_INFINITE]
+  });
+
+  // Generate reflected graph data for number, undefined, and null
+  reportData.forEach((value, index) => {
+    const date = moment.utc(value[rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.DATE]).startOf('day').toDate();
+
+    const generateGraphData = ({ graphDataObj, keyPrefix = '', customValue = null }) => {
+      Object.keys(graphDataObj).forEach(graphDataObjKey => {
+        if (
+          typeof graphDataObj[graphDataObjKey] === 'number' ||
+          graphDataObj[graphDataObjKey] === undefined ||
+          graphDataObj[graphDataObjKey] === null
+        ) {
+          const casedGraphDataObjKey = _camelCase(`${keyPrefix} ${graphDataObjKey}`).trim();
+
+          if (!updatedResponseData.graphData[casedGraphDataObjKey]) {
+            updatedResponseData.graphData[casedGraphDataObjKey] = [];
+          }
+
+          let generatedY;
+
+          if (typeof graphDataObj[graphDataObjKey] === 'number') {
+            generatedY = Number.parseInt(graphDataObj[graphDataObjKey], 10);
+          } else if (graphDataObj[graphDataObjKey] === undefined) {
+            generatedY = 0;
+          } else if (graphDataObj[graphDataObjKey] === null) {
+            generatedY = graphDataObj[graphDataObjKey];
+          }
+
+          const updatedItem =
+            (typeof customValue === 'function' &&
+              customValue(graphDataObj, graphDataObjKey, { date, x: index, y: generatedY })) ||
+            {};
+
+          updatedResponseData.graphData[casedGraphDataObjKey][index] = {
+            date,
+            x: index,
+            y: generatedY,
+            ...updatedItem
+          };
+        }
+      });
+    };
+
+    generateGraphData({ graphDataObj: { ...tallySchema, ...value }, customValue: customReportValue });
+    generateGraphData({
+      graphDataObj: { ...capacitySchema, ...capacityData[index] },
+      keyPrefix: 'threshold',
+      customValue: customCapacityValue
+    });
+  });
+
+  return updatedResponseData.graphData;
+};
+
 const graphCardHelpers = {
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
   yAxisTickFormat,
-  yAxisTickFormatFallback
+  yAxisTickFormatFallback,
+  transformData
 };
 
 export {
@@ -175,5 +260,6 @@ export {
   getTooltipDate,
   xAxisTickFormat,
   yAxisTickFormat,
-  yAxisTickFormatFallback
+  yAxisTickFormatFallback,
+  transformData
 };

@@ -1,6 +1,8 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
+import { useDeepCompareEffect } from 'react-use';
 import { graphCardHelpers } from './graphCardHelpers';
 import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
@@ -19,6 +21,12 @@ import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../typ
  * @returns {Node}
  */
 const GraphCardChart = ({ filterGraphData, granularity, graphData, productLabel, viewId }) => {
+  const [updatedGraphData, setUpdatedGraphData] = React.useState(graphData);
+
+  useDeepCompareEffect(() => {
+    setUpdatedGraphData(graphData);
+  }, [graphData]);
+
   const xAxisTickFormat = ({ item, previousItem, tick }) =>
     graphCardHelpers.xAxisTickFormat({
       tick,
@@ -72,13 +80,11 @@ const GraphCardChart = ({ filterGraphData, granularity, graphData, productLabel,
     <ChartArea
       key={`chart_${productLabel}`}
       {...chartAreaProps}
-      dataSets={filteredGraphData(graphData)}
+      dataSets={filteredGraphData(updatedGraphData)}
       chartLegend={({ chart, datum }) => (
         <GraphCardChartLegend chart={chart} datum={datum} productLabel={productLabel} viewId={viewId} />
       )}
-      chartTooltip={({ datum }) => (
-        <GraphCardChartTooltip datum={datum} granularity={granularity} productLabel={productLabel} />
-      )}
+      chartTooltip={() => <div className="victory-tooltip">hello</div>}
     />
   );
 };
