@@ -325,7 +325,8 @@ const RHSM_API_QUERY_SET_REPORT_CAPACITY_TYPES = {
   GRANULARITY: 'granularity',
   SLA: 'sla',
   START_DATE: 'beginning',
-  USAGE: 'usage'
+  USAGE: 'usage',
+  UOM: 'uom'
 };
 
 /**
