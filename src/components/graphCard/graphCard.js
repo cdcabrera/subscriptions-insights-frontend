@@ -1,177 +1,94 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
-import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
-import _isEqual from 'lodash/isEqual';
+import { useShallowCompareEffect } from 'react-use';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { helpers } from '../../common';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-import { graphCardHelpers } from './graphCardHelpers';
-import GraphCardChartTooltip from './graphCardChartTooltip';
-import GraphCardChartLegend from './graphCardChartLegend';
-import { ChartArea } from '../chartArea/chartArea';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { translate } from '../i18n/i18n';
+import { GraphCardChart } from './graphCardChart';
 
 /**
  * A chart/graph card.
  *
- * @augments React.Component
- * @fires onUpdateGraphData
+ * @param {object} props
+ * @param {string} props.cardTitle
+ * @param {Node} props.children
+ * @param {boolean} props.error
+ * @param {Array} props.filterGraphData
+ * @param {Function} props.getGraphReportsCapacity
+ * @param {object} props.graphData
+ * @param {boolean} props.isDisabled
+ * @param {boolean} props.pending
+ * @param {string} props.productId
+ * @param {string} props.productLabel
+ * @param {object} props.query
+ * @param {string} props.viewId
+ * @returns {Node}
  */
-class GraphCard extends React.Component {
-  componentDidMount() {
-    this.onUpdateGraphData();
-  }
+const GraphCard = ({
+  cardTitle,
+  children,
+  error,
+  filterGraphData,
+  getGraphReportsCapacity,
+  graphData,
+  isDisabled,
+  pending,
+  productId,
+  productLabel,
+  query,
+  viewId
+}) => {
+  const {
+    [RHSM_API_QUERY_TYPES.START_DATE]: startDate,
+    [RHSM_API_QUERY_TYPES.END_DATE]: endDate,
+    [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity
+  } = query;
 
-  componentDidUpdate(prevProps) {
-    const { productId, query } = this.props;
-
-    if (productId !== prevProps.productId || !_isEqual(query, prevProps.query)) {
-      this.onUpdateGraphData();
-    }
-  }
-
-  /**
-   * Call the RHSM APIs, apply filters.
-   *
-   * @event onUpdateGraphData
-   */
-  onUpdateGraphData = () => {
-    const { getGraphReportsCapacity, isDisabled, productId, query } = this.props;
-    const graphGranularity = this.getQueryGranularity();
-    const { [RHSM_API_QUERY_TYPES.START_DATE]: startDate, [RHSM_API_QUERY_TYPES.END_DATE]: endDate } = query;
-
-    if (!isDisabled && graphGranularity && startDate && endDate && productId) {
+  useShallowCompareEffect(() => {
+    if (!isDisabled && startDate && endDate && granularity && productId) {
       getGraphReportsCapacity(productId, query);
     }
-  };
+  }, [isDisabled, startDate, endDate, granularity, productId, getGraphReportsCapacity, productId, query]);
 
-  getQueryGranularity() {
-    const { query } = this.props;
-    return query?.[RHSM_API_QUERY_TYPES.GRANULARITY];
+  if (isDisabled) {
+    return null;
   }
 
-  /**
-   * FixMe: custom use of dash over threshold vs updating PF Charts legend threshold symbol
-   *
-   * patternfly/react-tokens chart_threshold_stroke_dash_array and chart_threshold_stroke_Width
-   */
-  /**
-   * Apply props to chart/graph.
-   *
-   * @returns {Node}
-   */
-  renderChart() {
-    const { filterGraphData, graphData, productLabel, query, viewId } = this.props;
-    const graphGranularity = this.getQueryGranularity();
-
-    const xAxisTickFormat = ({ item, previousItem, tick }) =>
-      graphCardHelpers.xAxisTickFormat({
-        tick,
-        date: item.date,
-        previousDate: previousItem.date,
-        granularity: graphGranularity
-      });
-
-    const chartAreaProps = {
-      xAxisFixLabelOverlap: true,
-      xAxisLabelIncrement: graphCardHelpers.getChartXAxisLabelIncrement(graphGranularity),
-      xAxisTickFormat,
-      yAxisTickFormat: graphCardHelpers.yAxisTickFormat
-    };
-
-    const filteredGraphData = data => {
-      const filtered = key => {
-        const tempFiltered = {
-          data: data[key],
-          id: key,
-          animate: {
-            duration: 250,
-            onLoad: { duration: 250 }
-          },
-          strokeWidth: 2,
-          isStacked: !/^threshold/.test(key),
-          isThreshold: /^threshold/.test(key)
-        };
-
-        if (/^threshold/.test(key)) {
-          tempFiltered.animate = {
-            duration: 100,
-            onLoad: { duration: 100 }
-          };
-          tempFiltered.stroke = chartColorGreenDark.value;
-          tempFiltered.strokeDasharray = '4,3';
-          tempFiltered.strokeWidth = 3;
-        }
-
-        return tempFiltered;
-      };
-
-      if (filterGraphData.length) {
-        return filterGraphData.map(value => Object.assign(filtered(value.id), value));
-      }
-
-      return Object.keys(data).map(key => filtered(key));
-    };
-
-    return (
-      <ChartArea
-        key={`chart_${JSON.stringify(query)}`}
-        {...chartAreaProps}
-        dataSets={filteredGraphData(graphData)}
-        chartLegend={({ chart, datum }) => (
-          <GraphCardChartLegend chart={chart} datum={datum} productLabel={productLabel} viewId={viewId} />
-        )}
-        chartTooltip={({ datum }) => (
-          <GraphCardChartTooltip datum={datum} granularity={graphGranularity} productLabel={productLabel} />
-        )}
-      />
-    );
-  }
-
-  /**
-   * ToDo: Evaluate applying a minHeight attr to the MinHeight component graphCard setup
-   * Appears there may be a minor page shift when compared to the prior hard-set min-height
-   * of 410px
-   */
-  /**
-   * Render a chart/graph card with chart/graph.
-   *
-   * @returns {Node}
-   */
-  render() {
-    const { cardTitle, children, error, isDisabled, pending } = this.props;
-
-    if (isDisabled) {
-      return null;
-    }
-
-    return (
-      <Card className="curiosity-usage-graph">
-        <MinHeight key="headerMinHeight">
-          <CardHeader>
-            <CardTitle>
-              <Title headingLevel="h2" size="lg">
-                {cardTitle}
-              </Title>
-            </CardTitle>
-            <CardActions className={(error && 'blur') || ''}>{children}</CardActions>
-          </CardHeader>
-        </MinHeight>
-        <MinHeight key="bodyMinHeight">
-          <CardBody>
-            <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-              {pending && <Loader variant="graph" />}
-              {!pending && this.renderChart()}
-            </div>
-          </CardBody>
-        </MinHeight>
-      </Card>
-    );
-  }
-}
+  return (
+    <Card className="curiosity-usage-graph">
+      <MinHeight key="headerMinHeight">
+        <CardHeader>
+          <CardTitle>
+            <Title headingLevel="h2" size="lg">
+              {cardTitle}
+            </Title>
+          </CardTitle>
+          <CardActions className={(error && 'blur') || ''}>{children}</CardActions>
+        </CardHeader>
+      </MinHeight>
+      <MinHeight key="bodyMinHeight">
+        <CardBody>
+          <div className={(error && 'blur') || (pending && 'fadein') || ''}>
+            {pending && <Loader variant="graph" />}
+            {!pending && (
+              <GraphCardChart
+                filterGraphData={filterGraphData}
+                granularity={granularity}
+                graphData={graphData}
+                productLabel={productLabel}
+                viewId={viewId}
+              />
+            )}
+          </div>
+        </CardBody>
+      </MinHeight>
+    </Card>
+  );
+};
 
 /**
  * Prop types.
