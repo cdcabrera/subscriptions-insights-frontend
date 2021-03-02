@@ -1,13 +1,19 @@
 import { createSelector } from 'reselect';
+import LruCache from 'lru-cache';
 import { rhsmApiTypes } from '../../types';
 
 /**
  * Selector cache.
  *
  * @private
- * @type {{data: {object}}}
+ * @type {object}
  */
-const selectorCache = { data: {} };
+const selectorCache = new LruCache({
+  maxAge: Number.parseInt(process.env.REACT_APP_SELECTOR_CACHE, 10),
+  max: 10,
+  stale: true,
+  updateAgeOnGet: true
+});
 
 /**
  * Return a combined state, props object.
@@ -47,7 +53,7 @@ const selector = createSelector([statePropsFilter, queryFilter], (data, query = 
     cloudigradeMismatch: false
   };
 
-  const cache = (viewId && productId && selectorCache.data[`${viewId}_${productId}`]) || undefined;
+  const cache = (viewId && productId && selectorCache.get(`${viewId}_${productId}}`)) || undefined;
 
   Object.assign(appMessages, { ...cache });
 
@@ -64,9 +70,7 @@ const selector = createSelector([statePropsFilter, queryFilter], (data, query = 
 
     appMessages.cloudigradeMismatch = cloudigradeMismatch !== undefined;
 
-    selectorCache.data[`${viewId}_${productId}`] = {
-      ...appMessages
-    };
+    selectorCache.set(`${viewId}_${productId}`, { ...appMessages });
   }
 
   return { appMessages, query };
