@@ -42,6 +42,10 @@ class ChartArea extends React.Component {
     this.setResizeObserve();
   }
 
+  componentDidUpdate() {
+    console.log('UPDATED GRAPH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+  }
+
   componentWillUnmount() {
     this.resizeObserver();
   }
@@ -113,14 +117,16 @@ class ChartArea extends React.Component {
     const containerElement = this.containerRef.current;
     const { ResizeObserver } = window;
 
+    this.onResizeContainer();
+
     if (containerElement && ResizeObserver) {
-      const resizeObserver = new ResizeObserver(this.onResizeContainer);
-      resizeObserver.observe(containerElement);
-      this.resizeObserver = () => resizeObserver.unobserve(containerElement);
+      // const resizeObserver = new ResizeObserver(this.onResizeContainer);
+      // resizeObserver.observe(containerElement);
+      // this.resizeObserver = () => resizeObserver.unobserve(containerElement);
     } else {
-      this.onResizeContainer();
-      window.addEventListener('resize', this.onResizeContainer);
-      this.resizeObserver = () => window.removeEventListener('resize', this.onResizeContainer);
+      // this.onResizeContainer();
+      // window.addEventListener('resize', this.onResizeContainer);
+      // this.resizeObserver = () => window.removeEventListener('resize', this.onResizeContainer);
     }
   }
 
@@ -531,11 +537,7 @@ class ChartArea extends React.Component {
     const chartProps = { padding, ...chartDomain, ...tooltipComponent };
 
     return (
-      <div
-        id="curiosity-chartarea"
-        className="uxui-curiosity__modal uxui-curiosity__modal--loading"
-        ref={this.containerRef}
-      >
+      <div className="uxui-curiosity__modal uxui-curiosity__modal--loading" ref={this.containerRef}>
         <Chart animate={{ duration: 0 }} width={chartWidth} themeColor={themeColor} {...chartProps}>
           <ChartAxis {...xAxisProps} animate={false} />
           <ChartAxis {...yAxisProps} animate={false} />

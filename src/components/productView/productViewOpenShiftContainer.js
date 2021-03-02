@@ -28,6 +28,7 @@ import InventorySubscriptions from '../inventorySubscriptions/inventorySubscript
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { helpers, dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
+import ProductContext from './productContext';
 
 /**
  * An OpenShift Container Platform encompassing view.
@@ -41,6 +42,7 @@ import { translate } from '../i18n/i18n';
 const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
   const uomValue = useSelector(({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM], null);
   const { productParameter: viewProductLabel } = routeDetail;
+  const updatedContext = {};
 
   const renderProduct = (config, updatedUomValue) => {
     const {
@@ -90,6 +92,13 @@ const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
       inventoryFilters = initialInventoryFilters.filter(filter);
       subscriptionsInventoryFilters = initialSubscriptionsInventoryFilters.filter(filter);
     }
+
+    updatedContext[productId] = {
+      ...config,
+      initialGraphFilters: graphFilters,
+      initialInventoryFilters: inventoryFilters,
+      initialSubscriptionsInventoryFilters: subscriptionsInventoryFilters
+    };
 
     return (
       <React.Fragment key={`product_${productId}_${uomFilter}`}>
@@ -153,13 +162,17 @@ const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
     );
   };
 
+  const products = productConfig.map(config => renderProduct(config, uomValue));
+
   return (
-    <PageLayout>
-      <PageHeader productLabel={viewProductLabel} includeTour>
-        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: viewProductLabel })}
-      </PageHeader>
-      <PageColumns>{productConfig.map(config => renderProduct(config, uomValue))}</PageColumns>
-    </PageLayout>
+    <ProductContext.Provider value={updatedContext}>
+      <PageLayout>
+        <PageHeader productLabel={viewProductLabel} includeTour>
+          {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: viewProductLabel })}
+        </PageHeader>
+        <PageColumns>{products}</PageColumns>
+      </PageLayout>
+    </ProductContext.Provider>
   );
 };
 
