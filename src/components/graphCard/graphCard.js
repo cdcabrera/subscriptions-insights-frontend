@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
@@ -9,7 +8,7 @@ import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { translate } from '../i18n/i18n';
-import { useGraphTallyQuery } from '../productView/productContext';
+import { useGraphTallyQuery, useProductContext } from '../productView/productContext';
 import { GraphCardChart } from './graphCardChart';
 
 /**
@@ -23,20 +22,11 @@ import { GraphCardChart } from './graphCardChart';
  * @param {object} props.graphData
  * @param {boolean} props.isDisabled
  * @param {boolean} props.pending
- * @param {string} props.productId
  * @returns {Node}
  */
-const GraphCard = ({
-  cardTitle,
-  children,
-  error,
-  getGraphReportsCapacity,
-  graphData,
-  isDisabled,
-  pending,
-  productId
-}) => {
-  const updatedQuery = useGraphTallyQuery(productId);
+const GraphCard = ({ cardTitle, children, error, getGraphReportsCapacity, graphData, isDisabled, pending }) => {
+  const { productId } = useProductContext();
+  const updatedQuery = useGraphTallyQuery();
   const {
     [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity,
     [RHSM_API_QUERY_TYPES.START_DATE]: startDate,
@@ -69,7 +59,7 @@ const GraphCard = ({
         <CardBody>
           <div className={(error && 'blur') || (pending && 'fadein') || ''}>
             {pending && <Loader variant="graph" />}
-            {!pending && <GraphCardChart granularity={granularity} graphData={graphData} productId={productId} />}
+            {!pending && <GraphCardChart graphData={graphData} />}
           </div>
         </CardBody>
       </MinHeight>
@@ -91,8 +81,7 @@ GraphCard.propTypes = {
   getGraphReportsCapacity: PropTypes.func,
   graphData: PropTypes.object,
   isDisabled: PropTypes.bool,
-  pending: PropTypes.bool,
-  productId: PropTypes.string.isRequired
+  pending: PropTypes.bool
 };
 
 /**

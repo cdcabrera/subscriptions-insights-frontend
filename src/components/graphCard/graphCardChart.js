@@ -6,20 +6,18 @@ import { graphCardHelpers } from './graphCardHelpers';
 import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 import { ChartArea } from '../chartArea/chartArea';
-import { useGraphTallyQuery, useGraphFilters, useRouteContext } from '../productView/productContext';
+import { useGraphTallyQuery, useProductContext } from '../productView/productContext';
 
 /**
  * A chart/graph.
  *
  * @param {object} props
  * @param {object} props.graphData
- * @param {string} props.productId
  * @returns {Node}
  */
-const GraphCardChart = ({ graphData, productId }) => {
-  const { productLabel, viewId } = useRouteContext(productId);
-  const { filters: filterGraphData } = useGraphFilters(productId);
-  const { [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity } = useGraphTallyQuery(productId);
+const GraphCardChart = ({ graphData }) => {
+  const { productId, productLabel, viewId, initialGraphFilters: filterGraphData } = useProductContext();
+  const { [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity } = useGraphTallyQuery();
 
   const xAxisTickFormat = ({ item, previousItem, tick }) =>
     graphCardHelpers.xAxisTickFormat({
@@ -88,17 +86,16 @@ const GraphCardChart = ({ graphData, productId }) => {
 /**
  * Prop types.
  *
- * @type {{graphData: object, productId: string}}
+ * @type {{graphData: object}}
  */
 GraphCardChart.propTypes = {
-  graphData: PropTypes.object,
-  productId: PropTypes.string.isRequired
+  graphData: PropTypes.object
 };
 
 /**
  * Default props.
  *
- * @type {{graphData: object }}
+ * @type {{graphData: object}}
  */
 GraphCardChart.defaultProps = {
   graphData: {}
