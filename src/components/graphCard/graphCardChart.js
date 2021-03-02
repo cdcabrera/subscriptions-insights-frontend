@@ -6,7 +6,7 @@ import { graphCardHelpers } from './graphCardHelpers';
 import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 import { ChartArea } from '../chartArea/chartArea';
-import { useGraphTallyQuery, useProductContext } from '../productView/productContext';
+import { useGraphTallyQuery, useProduct, useProductGraphFilters } from '../productView/productContext';
 
 /**
  * A chart/graph.
@@ -16,7 +16,8 @@ import { useGraphTallyQuery, useProductContext } from '../productView/productCon
  * @returns {Node}
  */
 const GraphCardChart = ({ graphData }) => {
-  const { productId, productLabel, viewId, initialGraphFilters: filterGraphData } = useProductContext();
+  const { productId, productLabel, viewId } = useProduct();
+  const filterGraphData = useProductGraphFilters();
   const { [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity } = useGraphTallyQuery();
 
   const xAxisTickFormat = ({ item, previousItem, tick }) =>

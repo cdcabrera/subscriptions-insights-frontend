@@ -8,7 +8,7 @@ import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { translate } from '../i18n/i18n';
-import { useGraphTallyQuery, useProductContext } from '../productView/productContext';
+import { useGraphTallyQuery, useProduct } from '../productView/productContext';
 import { GraphCardChart } from './graphCardChart';
 
 /**
@@ -25,7 +25,7 @@ import { GraphCardChart } from './graphCardChart';
  * @returns {Node}
  */
 const GraphCard = ({ cardTitle, children, error, getGraphReportsCapacity, graphData, isDisabled, pending }) => {
-  const { productId } = useProductContext();
+  const { productId } = useProduct();
   const updatedQuery = useGraphTallyQuery();
   const {
     [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity,
