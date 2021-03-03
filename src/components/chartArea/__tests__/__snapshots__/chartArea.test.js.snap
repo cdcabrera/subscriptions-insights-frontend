@@ -868,11 +868,12 @@ exports[`ChartArea Component should handle custom chart tooltips: custom tooltip
         }
         labelComponent={<FlyoutComponent />}
         labels={[Function]}
+        mouseFollowTooltips={true}
         portalComponent={<Portal />}
         portalZIndex={99}
         responsive={true}
         role="img"
-        voronoiPadding={60}
+        voronoiPadding={50}
       />
     }
     domain={
@@ -1096,11 +1097,12 @@ exports[`ChartArea Component should handle custom chart tooltips: renderTooltip:
   }
   labelComponent={<FlyoutComponent />}
   labels={[Function]}
+  mouseFollowTooltips={true}
   portalComponent={<Portal />}
   portalZIndex={99}
   responsive={true}
   role="img"
-  voronoiPadding={60}
+  voronoiPadding={50}
 />
 `;
 

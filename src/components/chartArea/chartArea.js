@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'victory-create-container';
+import { VictoryPortal } from 'victory-core';
 import {
   Chart,
   ChartAxis,
@@ -374,13 +375,15 @@ class ChartArea extends React.Component {
 
       if (htmlContent) {
         return (
-          <g>
-            <foreignObject x={xCoordinate} y={obj.y / 2.2} width="100%" height="100%">
-              <div ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                {htmlContent}
-              </div>
-            </foreignObject>
-          </g>
+          <VictoryPortal>
+            <g>
+              <foreignObject x={xCoordinate} y={obj.y / 2.2} width="100%" height="100%">
+                <div ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
+                  {htmlContent}
+                </div>
+              </foreignObject>
+            </g>
+          </VictoryPortal>
         );
       }
 
@@ -392,7 +395,8 @@ class ChartArea extends React.Component {
         cursorDimension="x"
         labels={obj => obj}
         labelComponent={<FlyoutComponent />}
-        voronoiPadding={60}
+        voronoiPadding={50}
+        mouseFollowTooltips
       />
     );
   }
