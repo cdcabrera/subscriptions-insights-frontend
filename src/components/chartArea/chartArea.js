@@ -8,7 +8,9 @@ import {
   ChartStack,
   ChartThreshold,
   ChartThemeColor,
-  ChartArea as PfChartArea
+  ChartArea as PfChartArea,
+  ChartCursorFlyout,
+  ChartCursorTooltip
 } from '@patternfly/react-charts';
 import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
@@ -321,11 +323,6 @@ class ChartArea extends React.Component {
    * - https://github.com/FormidableLabs/victory/pull/1581
    */
   /**
-   * FixMe: Victory charts voronoi containers throw inaccurate coordinates on large graph widths
-   * Issue is "patched" by removing the "x" dimension attribute for voronoi.
-   * - https://github.com/RedHatInsights/curiosity-frontend/issues/318
-   */
-  /**
    * Return a chart/graph tooltip Victory container component to allow custom HTML tooltips.
    *
    * @returns {Node}
@@ -340,44 +337,49 @@ class ChartArea extends React.Component {
 
     const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
     const parsedTooltipData = this.getTooltipData();
-    let globalContainerBounds = {};
-    let globalTooltipBounds = {};
 
     const applyParsedTooltipData = ({ datum }) => {
       const t = parsedTooltipData.find(v => v.x === datum.x) || {};
       return t?.tooltip || '';
     };
 
+    const getXCoordinate = (x, width, tooltipWidth) => {
+      let xCoordinate = x + 10;
+
+      if (x > width / 2) {
+        xCoordinate = x - 10 - tooltipWidth / 2;
+      }
+
+      return xCoordinate;
+    };
+
+    const getYCoordinate = (y, height, tooltipHeight) => {
+      let yCoordinate = y + 10;
+
+      if (y > height / 2) {
+        yCoordinate = y - 10 - tooltipHeight;
+      }
+
+      return yCoordinate;
+    };
+
     const FlyoutComponent = obj => {
       const containerRef = this.containerRef.current;
       const tooltipRef = this.tooltipRef.current;
-      const containerBounds = (containerRef && containerRef.getBoundingClientRect()) || {};
-      const tooltipBounds = (tooltipRef && tooltipRef.getBoundingClientRect()) || {};
-
-      if (containerBounds.right) {
-        globalContainerBounds = containerBounds;
-      }
-
-      if (tooltipBounds.right) {
-        globalTooltipBounds = tooltipBounds;
-      }
-
-      let xCoordinate = obj.x + 10;
-
-      if (
-        globalContainerBounds.right < globalTooltipBounds.right ||
-        obj.x + globalTooltipBounds.width > globalContainerBounds.right / 2
-      ) {
-        xCoordinate = obj.x - 10 - globalTooltipBounds.width;
-      }
-
+      const containerBounds = (containerRef && containerRef.getBoundingClientRect()) || { width: 0, height: 0 };
+      const tooltipBounds = (tooltipRef && tooltipRef.getBoundingClientRect()) || { width: 0, height: 0 };
       const htmlContent = applyParsedTooltipData({ ...obj });
 
       if (htmlContent) {
         return (
           <VictoryPortal>
             <g>
-              <foreignObject x={xCoordinate} y={obj.y / 2.2} width="100%" height="100%">
+              <foreignObject
+                x={getXCoordinate(obj.x, containerBounds.width, tooltipBounds.width)}
+                y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height)}
+                width="100%"
+                height="100%"
+              >
                 <div ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
                   {htmlContent}
                 </div>
@@ -390,11 +392,19 @@ class ChartArea extends React.Component {
       return <g />;
     };
 
+    const labelComponent = (
+      <ChartCursorTooltip
+        flyout={<ChartCursorFlyout />}
+        flyoutStyle={{ fill: 'transparent' }}
+        labelComponent={<FlyoutComponent />}
+      />
+    );
+
     return (
       <VictoryVoronoiCursorContainer
         cursorDimension="x"
         labels={obj => obj}
-        labelComponent={<FlyoutComponent />}
+        labelComponent={labelComponent}
         voronoiPadding={50}
         mouseFollowTooltips
       />

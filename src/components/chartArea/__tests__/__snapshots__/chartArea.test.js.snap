@@ -866,7 +866,23 @@ exports[`ChartArea Component should handle custom chart tooltips: custom tooltip
             "y": -10,
           }
         }
-        labelComponent={<FlyoutComponent />}
+        labelComponent={
+          <ChartCursorTooltip
+            flyout={
+              <ChartCursorFlyout
+                pathComponent={<Path />}
+                role="presentation"
+                shapeRendering="auto"
+              />
+            }
+            flyoutStyle={
+              Object {
+                "fill": "transparent",
+              }
+            }
+            labelComponent={<FlyoutComponent />}
+          />
+        }
         labels={[Function]}
         mouseFollowTooltips={true}
         portalComponent={<Portal />}
@@ -1095,7 +1111,23 @@ exports[`ChartArea Component should handle custom chart tooltips: renderTooltip:
       "y": -10,
     }
   }
-  labelComponent={<FlyoutComponent />}
+  labelComponent={
+    <ChartCursorTooltip
+      flyout={
+        <ChartCursorFlyout
+          pathComponent={<Path />}
+          role="presentation"
+          shapeRendering="auto"
+        />
+      }
+      flyoutStyle={
+        Object {
+          "fill": "transparent",
+        }
+      }
+      labelComponent={<FlyoutComponent />}
+    />
+  }
   labels={[Function]}
   mouseFollowTooltips={true}
   portalComponent={<Portal />}
