@@ -69,27 +69,26 @@
     "api:proxy": "bash ./scripts/proxy.api.sh -d \"https://ci.foo.redhat.com/beta/subscriptions/\" -p 443 -c \"$(pwd)/config/spandx.config.js\"",
     "api:proxyClean": "bash ./scripts/proxy.api.sh -u",
     "build": "run-s -l build:pre build:js build:post test:integration",
-    "build:js": "react-scripts build",
+    "build:js": "NODE_ENV=production webpack --config config/webpack.config.js",
     "build:post": "bash ./scripts/post.sh",
     "build:pre": "bash ./scripts/pre.sh",
     "dev:chrome": "bash ./scripts/dev.chrome.sh -b master",
     "release": "standard-version",
     "start": "run-s dev:chrome; run-p -l api:dev start:js",
     "start:js": "react-scripts start",
-    "start:js-alt": "webpack serve --config config/dev.webpack.config.js",
-    "start:proxy": "sh -ac '. ./.env.proxy; run-s api:proxy-hosts; run-p -l start:js api:proxy'",
+    "start:js-proxy": "NODE_ENV=development webpack serve --config config/webpack.config.js",
+    "start:proxy": "sh -ac '. ./.env.proxy; run-s api:proxy-hosts; run-p -l start:js-proxy api:proxy'",
     "start:standalone": "rm ./.env.development.local; run-p -l api:dev start:js",
     "test": "run-s test:spell* test:lint test:ci",
-    "test:ci": "export CI=true; react-scripts test --env=jsdom --roots=./src --coverage",
+    "test:ci": "export CI=true; jest --env=jsdom --roots=./src --coverage",
     "test:clearCache": "react-scripts test --clearCache",
     "test:dev": "run-s test:spell test:lint test:local",
-    "test:dev-alt": "run-s test:spell test:lint; jest --watchAll",
     "test:integration": "jest --roots=./tests",
     "test:integration-dev": "jest ./tests/* --watchAll",
     "test:lint": "eslint --ext=json --ext=js --ext=jsx src",
     "test:spell-support": "cspell ./README.md ./config/README.md ./CONTRIBUTING.md --config ./config/cspell.config.json",
     "test:spell": "cspell './public/locales/**/en*json' './src/**/*.js' --config ./config/cspell.config.json",
-    "test:local": "react-scripts test --env=jsdom --roots=./src"
+    "test:local": "jest --watch"
   },
   "dependencies": {
     "@patternfly/patternfly": "4.80.3",
@@ -136,18 +135,14 @@
     "babel-loader": "8.2.2",
     "babel-plugin-named-asset-import": "0.3.7",
     "babel-preset-react-app": "10.0.0",
-
+    "copy-webpack-plugin": "^8.0.0",
     "cspell": "^5.2.4",
-
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "dotenv-webpack": "7.0.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.1",
-
-
-
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
@@ -167,7 +162,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
     "redux-mock-store": "^1.5.4",
-
+    "sass-loader": "11.0.1",
     "standard-version": "^9.1.0",
     "swagger-ui-express": "^4.1.6",
     "webpack": "5.24.4",
