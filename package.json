@@ -76,7 +76,7 @@
     "release": "standard-version",
     "start": "run-s dev:chrome; run-p -l api:dev start:js",
     "start:js": "react-scripts start",
-    "start:js-proxy": "NODE_ENV=development webpack serve --config config/webpack.config.js",
+    "start:js-proxy": "NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "start:proxy": "sh -ac '. ./.env.proxy; run-s api:proxy-hosts; run-p -l start:js-proxy api:proxy'",
     "start:standalone": "rm ./.env.development.local; run-p -l api:dev start:js",
     "test": "run-s test:spell* test:lint test:ci",
