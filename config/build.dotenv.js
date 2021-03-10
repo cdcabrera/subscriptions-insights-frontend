@@ -75,12 +75,13 @@ const setupDotenvFilesForEnv = ({ env } = {}) => {
   const STATIC_DIR = process.env.OSEED_STATIC_DIR || 'public';
   const PUBLIC_PATH = process.env.OSEED_PUBLIC_PATH || '/';
   const SRC_DIR = path.resolve(RELATIVE_DIRNAME, process.env.OSEED_SRC_DIR || 'src');
-  const DIST_DIR = path.resolve(RELATIVE_DIRNAME, process.env.OSEED_DIST_DIR || 'build');
+  const DIST_DIR = path.resolve(RELATIVE_DIRNAME, process.env.OSEED_DIST_DIR || 'dist');
   const HOST = process.env.OSEED_HOST || 'localhost';
   const PORT = process.env.OSEED_PORT || '3000';
   const DEV_MODE = process.env.OSEED_DEV_MODE || undefined;
   const OUTPUT_ONLY = process.env._OSEED_OUTPUT_ONLY === 'true';
 
+  process.env._OSEED_ENV = process.env.REACT_APP_ENV;
   process.env._OSEED_STATIC_DIR = STATIC_DIR;
   process.env._OSEED_RELATIVE_DIRNAME = RELATIVE_DIRNAME;
   process.env._OSEED_PUBLIC_PATH = PUBLIC_PATH;

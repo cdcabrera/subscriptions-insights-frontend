@@ -14,7 +14,8 @@ module.exports = {
     '!src/redux/reducers/index.js',
     '!src/redux/selectors/index.js'
   ],
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  setupFiles: ['react-app-polyfill/jsdom'],
+  setupFilesAfterEnv: ['<rootDir>/config/setupTests.js'],
   testMatch: ['<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}', '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
   testEnvironment: 'jsdom',
   transform: {

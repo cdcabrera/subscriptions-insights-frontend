@@ -43,12 +43,14 @@ const updatedPlugins = {
   ]
 };
 
+/*
 let { config: webpackConfig, plugins } = config({
   ...updatedConfig,
   ...updatedPlugins,
   rootFolder: RELATIVE_DIRNAME,
   debug: ENV !== 'production'
 });
+*/
 
 /*
 plugins.push(
@@ -75,6 +77,6 @@ webpackConfig = {
   }
 };
 
-console.log(JSON.stringify({ ...webpackConfig, plugins }, null, 2));
+// console.log(JSON.stringify({ ...webpackConfig, plugins }, null, 2));
 
 module.exports = { ...webpackConfig, plugins };

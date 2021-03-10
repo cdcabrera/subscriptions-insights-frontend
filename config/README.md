@@ -1,4 +1,9 @@
 # Configuration
+## Build and test
+- `build.dotenv.js` - loads dotenv params for both testing and webpack
+- `jest*js` - jest transforms/mocks
+- `webpack*js` - local run, build output configuration
+
 ## cspell config
 The cspell config file(s) contain spelling configuration and include project specific terms.
 

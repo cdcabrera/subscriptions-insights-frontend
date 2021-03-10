@@ -1,0 +1,338 @@
+~~~Using variables~~~
+Root folder: /Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend
+Current branch: build-webpack5
+Beta branches: master,qa-beta,ci-beta,prod-beta,main,devel
+Using deployments: apps
+Public path: /apps/subscriptions/
+App entry: /Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/src/entry-dev.js
+~~~~~~~~~~~~~~~~~~~~~
+{
+  "mode": "development",
+  "devtool": "eval-cheap-module-source-map",
+  "optimization": {
+    "minimize": false,
+    "splitChunks": {
+      "chunks": "all",
+      "maxInitialRequests": null,
+      "minSize": 0,
+      "cacheGroups": {
+        "reactVendor": {
+          "test": {},
+          "name": "reactvendor"
+        },
+        "pfVendor": {
+          "test": {},
+          "name": "pfVendor"
+        },
+        "rhcsVendor": {
+          "test": {},
+          "name": "rhcsVendor"
+        },
+        "vendor": {
+          "test": {},
+          "name": "vendor"
+        }
+      }
+    }
+  },
+  "entry": {
+    "App": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/src/entry-dev.js"
+  },
+  "output": {
+    "filename": "js/[name].[chunkhash].js",
+    "path": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/dist",
+    "publicPath": "/apps/subscriptions/",
+    "chunkFilename": "js/[name].[chunkhash].js"
+  },
+  "module": {
+    "rules": [
+      {
+        "test": {},
+        "loader": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/@redhat-cloud-services/frontend-components-config/src/chrome-render-loader.js",
+        "options": {
+          "appName": "subscriptions",
+          "skipChrome2": false
+        }
+      },
+      {
+        "test": {},
+        "exclude": {},
+        "use": [
+          {
+            "loader": "source-map-loader"
+          },
+          {
+            "loader": "babel-loader"
+          }
+        ]
+      },
+      {
+        "test": {},
+        "loader": "ts-loader",
+        "exclude": {}
+      },
+      {
+        "test": {},
+        "use": [
+          "style-loader",
+          {
+            "loader": "css-loader"
+          },
+          {
+            "loader": "sass-loader",
+            "options": {}
+          },
+          {
+            "loader": "sass-loader"
+          }
+        ]
+      },
+      {
+        "test": {},
+        "use": [
+          {
+            "loader": "file-loader",
+            "options": {
+              "name": "[name].[ext]",
+              "outputPath": "fonts/"
+            }
+          }
+        ]
+      },
+      {
+        "test": {},
+        "include": {},
+        "type": "javascript/auto"
+      }
+    ]
+  },
+  "resolve": {
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".mjs",
+      ".js",
+      ".scss"
+    ],
+    "alias": {
+      "customReact": "react",
+      "PFReactCore": "@patternfly/react-core",
+      "PFReactTable": "@patternfly/react-table",
+      "buffer": "buffer"
+    },
+    "fallback": {
+      "path": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/path-browserify/index.js",
+      "stream": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/stream-browserify/index.js",
+      "zlib": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/browserify-zlib/lib/index.js",
+      "assert": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/assert/build/assert.js",
+      "buffer": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/buffer/index.js",
+      "util": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/node_modules/util/util.js",
+      "process": "process/browser.js"
+    }
+  },
+  "devServer": {
+    "contentBase": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/dist",
+    "hot": true,
+    "port": "3000",
+    "https": false,
+    "inline": true,
+    "disableHostCheck": true,
+    "historyApiFallback": true,
+    "writeToDisk": true
+  },
+  "plugins": [
+    {
+      "sourceMapFilename": "sourcemaps/[name][hash].js.map",
+      "sourceMappingURLComment": "\n//# sourceMappingURL=[url]",
+      "moduleFilenameTemplate": "webpack://[namespace]/[resourcePath]",
+      "fallbackModuleFilenameTemplate": "webpack://[namespace]/[resourcePath]?[hash]",
+      "namespace": "",
+      "options": {
+        "test": {},
+        "exclude": {},
+        "filename": "sourcemaps/[name][hash].js.map"
+      }
+    },
+    {
+      "_sortedModulesCache": {},
+      "options": {
+        "filename": "css/[name].[contenthash].css",
+        "ignoreOrder": false,
+        "chunkFilename": "css/[name].[contenthash].css"
+      },
+      "runtimeOptions": {
+        "linkType": "text/css"
+      }
+    },
+    {
+      "dangerouslyAllowCleanPatternsOutsideProject": false,
+      "dry": false,
+      "verbose": false,
+      "cleanStaleWebpackAssets": false,
+      "protectWebpackAssets": true,
+      "cleanAfterEveryBuildPatterns": [],
+      "cleanOnceBeforeBuildPatterns": [
+        "**/*"
+      ],
+      "currentAssets": [],
+      "initialClean": false,
+      "outputPath": ""
+    },
+    {
+      "userOptions": {
+        "title": "Subscription Watch",
+        "filename": "index.html",
+        "template": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/public/index.html",
+        "inject": true
+      },
+      "version": 5
+    },
+    {},
+    {
+      "options": {}
+    },
+    {
+      "definitions": {
+        "process": "process/browser.js",
+        "Buffer": [
+          "buffer",
+          "Buffer"
+        ]
+      }
+    },
+    {
+      "config": {},
+      "options": {
+        "modules": [
+          "subscriptions"
+        ]
+      }
+    },
+    {
+      "config": {
+        "path": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/.env.development.local",
+        "systemvars": true,
+        "silent": true
+      }
+    },
+    {
+      "config": {
+        "path": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/.env.development",
+        "systemvars": true,
+        "silent": true
+      }
+    },
+    {
+      "config": {
+        "path": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/.env.local",
+        "systemvars": true,
+        "silent": true
+      }
+    },
+    {
+      "config": {
+        "path": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/.env",
+        "systemvars": true,
+        "silent": true
+      }
+    },
+    {
+      "_options": {
+        "name": "subscriptions",
+        "filename": "subscriptions.[chunkhash].js",
+        "library": {
+          "type": "var",
+          "name": "subscriptions"
+        },
+        "exposes": {
+          "./RootApp": "/Users/cdcabrera/Documents/Projects/Forked/curiosity-frontend/src/AppEntry"
+        },
+        "shared": [
+          {
+            "lodash": {
+              "singleton": true,
+              "requiredVersion": "^4.17.20"
+            }
+          },
+          {
+            "axios": {
+              "singleton": true,
+              "requiredVersion": "^0.21.1"
+            }
+          },
+          {
+            "redux": {
+              "requiredVersion": "^4.0.5"
+            }
+          },
+          {
+            "react": {
+              "singleton": true,
+              "requiredVersion": "^16.13.1"
+            }
+          },
+          {
+            "react-dom": {
+              "singleton": true,
+              "requiredVersion": "^16.13.1"
+            }
+          },
+          {
+            "react-router-dom": {
+              "requiredVersion": "^5.2.0"
+            }
+          },
+          {
+            "@patternfly/react-table": {
+              "singleton": true,
+              "requiredVersion": "4.20.15"
+            }
+          },
+          {
+            "@patternfly/react-core": {
+              "singleton": true,
+              "requiredVersion": "4.90.2"
+            }
+          },
+          {
+            "@patternfly/react-icons": {
+              "singleton": true,
+              "requiredVersion": "4.8.4"
+            }
+          },
+          {
+            "@patternfly/react-tokens": {
+              "singleton": true,
+              "requiredVersion": "4.9.26"
+            }
+          },
+          {
+            "@redhat-cloud-services/frontend-components": {
+              "requiredVersion": "^3.1.1"
+            }
+          },
+          {
+            "@redhat-cloud-services/frontend-components-utilities": {
+              "requiredVersion": "3.0.3"
+            }
+          },
+          {
+            "@redhat-cloud-services/frontend-components-notifications": {
+              "requiredVersion": "3.0.3"
+            }
+          },
+          {
+            "react-redux": {
+              "requiredVersion": "^7.2.2"
+            }
+          },
+          {
+            "redux-promise-middleware": {
+              "requiredVersion": "^6.1.2"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
