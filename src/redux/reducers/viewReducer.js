@@ -27,19 +27,15 @@ const initialState = {
 const viewReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxTypes.query.SET_QUERY_RESET_INVENTORY_LIST:
-      const updateResetQueries = query => {
-        const tempQuery = {};
+      const updateResetQueries = (query = {}) => {
+        const tempQuery = { ...query };
 
-        Object.entries(query).forEach(([key, value]) => {
-          tempQuery[key] = { ...value };
+        if (typeof tempQuery[RHSM_API_QUERY_TYPES.OFFSET] === 'number') {
+          tempQuery[RHSM_API_QUERY_TYPES.OFFSET] = 0;
+        }
 
-          if (typeof value[RHSM_API_QUERY_TYPES.OFFSET] === 'number') {
-            tempQuery[key][RHSM_API_QUERY_TYPES.OFFSET] = 0;
-          }
-
-          delete tempQuery[key][RHSM_API_QUERY_TYPES.DIRECTION];
-          delete tempQuery[key][RHSM_API_QUERY_TYPES.SORT];
-        });
+        delete tempQuery[RHSM_API_QUERY_TYPES.DIRECTION];
+        delete tempQuery[RHSM_API_QUERY_TYPES.SORT];
 
         return tempQuery;
       };
@@ -48,8 +44,14 @@ const viewReducer = (state = initialState, action) => {
         null,
         {
           ...state,
-          inventoryHostsQuery: updateResetQueries(state.inventoryHostsQuery),
-          inventorySubscriptionsQuery: updateResetQueries(state.inventorySubscriptionsQuery)
+          inventoryHostsQuery: {
+            ...state.inventoryHostsQuery,
+            [action.viewId]: updateResetQueries(state.inventoryHostsQuery[action.viewId])
+          },
+          inventorySubscriptionsQuery: {
+            ...state.inventorySubscriptionsQuery,
+            [action.viewId]: updateResetQueries(state.inventorySubscriptionsQuery[action.viewId])
+          }
         },
         {
           state,
@@ -57,16 +59,12 @@ const viewReducer = (state = initialState, action) => {
         }
       );
     case reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST:
-      const updateClearQueries = query => {
-        const tempQuery = {};
+      const updateClearQueries = (query = {}) => {
+        const tempQuery = { ...query };
 
-        Object.entries(query).forEach(([key, value]) => {
-          tempQuery[key] = { ...value };
-
-          if (typeof value[RHSM_API_QUERY_TYPES.OFFSET] === 'number') {
-            tempQuery[key][RHSM_API_QUERY_TYPES.OFFSET] = 0;
-          }
-        });
+        if (typeof tempQuery[RHSM_API_QUERY_TYPES.OFFSET] === 'number') {
+          tempQuery[RHSM_API_QUERY_TYPES.OFFSET] = 0;
+        }
 
         return tempQuery;
       };
@@ -75,8 +73,14 @@ const viewReducer = (state = initialState, action) => {
         null,
         {
           ...state,
-          inventoryHostsQuery: updateClearQueries(state.inventoryHostsQuery),
-          inventorySubscriptionsQuery: updateClearQueries(state.inventorySubscriptionsQuery)
+          inventoryHostsQuery: {
+            ...state.inventoryHostsQuery,
+            [action.viewId]: updateClearQueries(state.inventoryHostsQuery[action.viewId])
+          },
+          inventorySubscriptionsQuery: {
+            ...state.inventorySubscriptionsQuery,
+            [action.viewId]: updateClearQueries(state.inventorySubscriptionsQuery[action.viewId])
+          }
         },
         {
           state,
