@@ -1,0 +1,66 @@
+{
+  "name": "curiosity-charts",
+  "version": "0.1.0",
+  "description": "A subscription reporting set of charts.",
+  "main": "dist/lib/index.js",
+  "module": "dist/es/index.js",
+  "files": [
+    "css",
+    "es",
+    "lib",
+    "umd"
+  ],
+  "author": "",
+  "homepage": "",
+  "license": "Apache-2.0",
+  "repository": "",
+  "keywords": [
+    "react-component"
+  ],
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/**/.*/**"
+    ]
+  },
+  "scripts": {
+    "build": "nwb build-react-component --no-demo",
+    "clean": "nwb clean-module && nwb clean-demo",
+    "prepublishOnly": "yarn build",
+    "start": "nwb serve-react-demo",
+    "test": "nwb test-react",
+    "test:coverage": "nwb test-react --coverage",
+    "test:watch": "nwb test-react --server",
+
+    "test:ci": "export CI=true; jest --collectCoverage",
+    "test:clearCache": "jest --clearCache",
+    "test:dev": "run-s test:lint test:local",
+    "test:fix": "eslint --ext .json,.js,.ts,.jsx,.tsx ./src --fix",
+    "test:lint": "eslint --ext .json,.js,.ts,.jsx,.tsx ./src",
+    "test:local": "jest --watchAll"
+  },
+  "dependencies": {
+    "@patternfly/react-core": "4.90.2",
+    "prop-types": "^15.7.2",
+    "axios": "^0.21.1",
+    "moment": "^2.29.1"
+  },
+  "peerDependencies": {
+    "react": "16.x"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "npm-run-all": "^4.1.5",
+    "nwb": "0.25.x",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}

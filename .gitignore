@@ -31,3 +31,4 @@ public/locales/*.json
 .proxy
 .docs
 .openapi
+.archive
