@@ -3,6 +3,7 @@
 exports[`GraphCardChartTooltip Component should render a basic component: basic 1`] = `
 <div
   className="victory-tooltip"
+  key="graphCardChartTooltip-null"
 >
   <table
     summary="t(curiosity-graph.tooltipSummary)"
@@ -14,6 +15,7 @@ exports[`GraphCardChartTooltip Component should render a basic component: basic 
 exports[`GraphCardChartTooltip Component should render basic data: data 1`] = `
 <div
   className="victory-tooltip"
+  key="graphCardChartTooltip-June 1"
 >
   <table
     summary="t(curiosity-graph.tooltipSummary)"

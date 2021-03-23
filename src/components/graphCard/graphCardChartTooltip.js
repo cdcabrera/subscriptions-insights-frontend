@@ -49,7 +49,7 @@ const GraphCardChartTooltip = ({ datum, granularity, productLabel, t }) => {
   });
 
   return (
-    <div className="victory-tooltip">
+    <div key={`graphCardChartTooltip-${header}`} className="victory-tooltip">
       <table summary={t('curiosity-graph.tooltipSummary')}>
         {(data.length && header && (
           <thead>
