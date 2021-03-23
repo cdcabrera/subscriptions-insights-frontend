@@ -85,7 +85,9 @@
       }
     ]
   },
-  "main": "modules/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": ["dist", "README.md"],
   "scripts": {
     "api:dev": "mock -p 5000 -w ./src/services",
     "api:docs": "node ./scripts/openapi.docs.js",
@@ -95,6 +97,8 @@
     "build": "run-s -l build:pre build:js build:post test:integration",
     "build:js": "react-scripts build",
     "build:new-component": "cd ./packages && nwb new react-component --no-git --es-modules --no-umd",
+    "build:modules": "rm -rf dist && NODE_ENV=production babel ./src/modules/ --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "build:test": "cd ./",
     "build:post": "bash ./scripts/post.sh",
     "build:pre": "bash ./scripts/pre.sh",
     "dev:chrome": "bash ./scripts/dev.chrome.sh -b master",
@@ -151,7 +155,12 @@
     "victory-create-container": "^35.4.11"
   },
   "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.12.13",
     "apidoc-mock": "^3.0.4",
+    "babel-preset-react-app": "^10.0.0",
     "cspell": "^5.3.7",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
@@ -177,7 +186,16 @@
     "swagger-ui-express": "^4.1.6",
     "yamljs": "^0.3.0"
   },
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
   "resolutions": {
     "**/eslint": "7.19.0"
+  },
+  "babel": {
+    "presets": [
+      ["react-app", { "absoluteRuntime": false }]
+    ]
   }
 }
