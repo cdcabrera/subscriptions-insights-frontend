@@ -1,8 +1,8 @@
 import React from 'react';
-// import { rhsmServices } from '../../../src/services/rhsmServices';
+import { rhsmServices } from './services/rhsmServices';
 
 const CuriosityCharts = () => {
-  // const count = Object.entries(rhsmServices).length;
+  const count = Object.entries(rhsmServices).length;
 
   return (
     <div>

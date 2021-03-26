@@ -85,8 +85,9 @@
       }
     ]
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "source": "src/index.js",
   "files": ["dist", "README.md"],
   "scripts": {
     "api:dev": "mock -p 5000 -w ./src/services",
