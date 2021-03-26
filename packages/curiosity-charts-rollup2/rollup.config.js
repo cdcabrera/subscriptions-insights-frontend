@@ -1,6 +1,7 @@
 import babel from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import external from 'rollup-plugin-peer-deps-external';
+import commonjs from '@rollup/plugin-commonjs';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import del from 'rollup-plugin-delete';
 import replace from '@rollup/plugin-replace';
 const path = require('path');
@@ -29,7 +30,12 @@ export default {
     { file: pkg.module, format: 'esm' }
   ],
   plugins: [
-    external(),
+    peerDepsExternal({
+      includeDependencies: true
+    }),
+    commonjs({
+      include: /node_modules/
+    }),
     nodeResolve({
       extensions: ['.js']
     }),
@@ -41,8 +47,8 @@ export default {
       presets: ['react-app'],
       // presets: ['@babel/preset-react'],
       // plugins: ['@babel/plugin-syntax-class-properties'],
-      babelHelpers: 'runtime',
-      exclude: 'node_modules/**'
+      babelHelpers: 'runtime'
+      // exclude: 'node_modules/**'
     }),
     del({ targets: ['dist/*'] })
   ],

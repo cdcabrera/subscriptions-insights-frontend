@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { helpers } from '../../common/helpers';
+import { rhsmServices } from '../../services/rhsmServices';
 
 const TextInput = ({ type, label, value, onChange }) => (
   <div className="simple-form-group">
     <label className="simple-text-label">
       {label}
+      {Object(rhsmServices).keys.length || 0}
       <input
         type={type}
         className="simple-text-input"
