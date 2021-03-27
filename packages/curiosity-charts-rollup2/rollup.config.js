@@ -3,6 +3,8 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import del from 'rollup-plugin-delete';
+import { terser } from 'rollup-plugin-terser';
+import pluginJson from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 const path = require('path');
 const pkg = require('./package');
@@ -26,20 +28,35 @@ updatedDotenvVars[`process.env.PUBLIC_URL`] = JSON.stringify(process.env.PUBLIC_
 export default {
   input: pkg.source,
   output: [
-    { file: pkg.main, format: 'cjs' },
-    { file: pkg.module, format: 'esm' }
+    {
+      exports: 'named',
+      file: pkg.main,
+      format: 'cjs',
+      plugins: [terser()],
+      sourcemap: true
+    },
+    {
+      exports: 'named',
+      file: pkg.module,
+      format: 'esm',
+      plugins: [terser()],
+      sourcemap: true
+    }
   ],
   plugins: [
     peerDepsExternal({
-      includeDependencies: true
+      // includeDependencies: true
     }),
     commonjs({
       include: /node_modules/
     }),
     nodeResolve({
+      preferBuiltins: true,
       extensions: ['.js']
     }),
+    pluginJson(),
     replace({
+      preventAssignment: true,
       'process.env.NODE_ENV': JSON.stringify('production'),
       ...updatedDotenvVars
     }),
@@ -47,6 +64,7 @@ export default {
       presets: ['react-app'],
       // presets: ['@babel/preset-react'],
       // plugins: ['@babel/plugin-syntax-class-properties'],
+      // babelHelpers: 'bundled'
       babelHelpers: 'runtime'
       // exclude: 'node_modules/**'
     }),
