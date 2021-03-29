@@ -2,9 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { helpers } from '../../common/helpers';
 import { rhsmServices } from '../../services/rhsmServices';
+import graphPng2x from '../../images/graph2x.png';
+import graphPng4x from '../../images/graph4x.png';
+import '../../styles/index.scss';
 
 const TextInput = ({ type, label, value, onChange }) => (
   <div className="simple-form-group">
+    <img
+      srcSet={`${graphPng4x} 1064w, ${graphPng2x} 600w`}
+      src={graphPng4x}
+      alt="test"
+      aria-hidden
+      className="curiosity-optin-image"
+    />
     <label className="simple-text-label">
       {label}
       {Object(rhsmServices).keys.length || 0}

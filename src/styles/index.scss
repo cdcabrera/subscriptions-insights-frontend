@@ -1,5 +1,6 @@
 // Framework
-@import '~@redhat-cloud-services/frontend-components-utilities/index';
+// FixMe: there's an issue with the way this is exported? confuses the rollup SCSS import
+// @import '~@redhat-cloud-services/frontend-components-utilities/index';
 /**
  * FixMe: Variables break Sass compiler
  * Sass compiler throws an error when coming across the following syntax in

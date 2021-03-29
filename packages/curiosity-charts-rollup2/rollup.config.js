@@ -6,6 +6,8 @@ import del from 'rollup-plugin-delete';
 import { terser } from 'rollup-plugin-terser';
 import pluginJson from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
+import image from '@rollup/plugin-image';
+import postcss from 'rollup-plugin-postcss';
 const path = require('path');
 const pkg = require('./package');
 const { setupDotenvFilesForEnv } = require('./dotenv');
@@ -60,6 +62,14 @@ export default {
       'process.env.NODE_ENV': JSON.stringify('production'),
       ...updatedDotenvVars
     }),
+    postcss({
+      // extract: true, separate css files
+      extract: false,
+      modules: true,
+      use: ['sass']
+    }),
+    // base64 images in output, use sparingly
+    image(),
     babel({
       presets: ['react-app'],
       // presets: ['@babel/preset-react'],
