@@ -2,6 +2,40 @@ const localhost = (process.env.PLATFORM === 'linux' && 'localhost') || 'host.doc
 
 module.exports = {
   routes: {
+    /*s
+    '/beta/insights/starter': {
+      host: `https://${localhost}:8002`
+    },
+    '/insights/starter': {
+      host: `https://${localhost}:8002`
+    },
+    '/beta/apps/starter': {
+      host: `https://${localhost}:8002`
+    },
+    '/apps/starter': {
+      host: `https://${localhost}:8002`
+    },
+    */
+    // needed if you want to local run the new stuff
+    '/insights/subscriptions': {
+      host: `https://${localhost}:8002`
+    },
+    '/beta/insights/subscriptions': {
+      host: `https://${localhost}:8002`
+    },
+    '/apps/subscriptions': {
+      host: `https://${localhost}:8002`
+    },
+    '/beta/apps/subscriptions': {
+      host: `https://${localhost}:8002`
+    },
+    '/subscriptions': {
+      host: `https://${localhost}:8002`
+    },
+    '/beta/subscriptions': {
+      host: `https://${localhost}:8002`
+    },
+    /*
     '/locales': {
       host: `https://${localhost}:5001`
     },
@@ -29,5 +63,7 @@ module.exports = {
     '/api/rhsm-subscriptions': {
       host: 'https://ci.cloud.redhat.com'
     }
+
+     */
   }
 };

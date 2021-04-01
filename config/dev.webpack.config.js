@@ -43,15 +43,15 @@ const updatedPlugins = {
   ]
 };
 
-/*
-let { config: webpackConfig, plugins } = config({
+const compiledConfig = config({
   ...updatedConfig,
   ...updatedPlugins,
   rootFolder: RELATIVE_DIRNAME,
   debug: ENV !== 'production'
 });
-*/
 
+let webpackConfig = compiledConfig.config;
+const plugins = compiledConfig.plugins; // eslint-disable-line
 /*
 plugins.push(
   fedModules({
