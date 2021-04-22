@@ -450,10 +450,12 @@ ProductViewOpenShiftContainer.defaultProps = {
               total += y ?? 0;
             });
 
-            displayContent = translate('curiosity-graph.card-action-total', {
-              context: 'coreHours',
-              total: numbro(total).format({ average: true, mantissa: 2, trimMantissa: true }).toUpperCase()
-            });
+            if (total > 0) {
+              displayContent = translate('curiosity-graph.card-action-total', {
+                context: 'coreHours',
+                total: numbro(total).format({ average: true, mantissa: 2, trimMantissa: true }).toUpperCase()
+              });
+            }
           }
 
           return <div className="curiosity-usage-graph__total">{displayContent || null}</div>;
