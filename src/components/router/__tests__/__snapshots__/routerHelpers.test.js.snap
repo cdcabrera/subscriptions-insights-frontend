@@ -68,6 +68,172 @@ Object {
 }
 `;
 
+exports[`RouterHelpers should return default navigation and route details: detail: defaults 1`] = `
+Object {
+  "navRoute": Object {
+    "byId": Object {},
+    "configs": Array [],
+    "firstMatch": undefined,
+    "searchable": Array [
+      Object {
+        "activateOnError": false,
+        "aliases": Array [
+          "insights",
+        ],
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_init": [Function],
+          "_payload": Object {
+            "_result": [Function],
+            "_status": -1,
+          },
+        },
+        "default": false,
+        "disabled": false,
+        "id": "rhel",
+        "isSearchable": true,
+        "path": "/rhel",
+        "pathParameter": Array [
+          "RHEL",
+        ],
+        "productParameter": Array [
+          "RHEL",
+        ],
+        "redirect": null,
+      },
+      Object {
+        "activateOnError": false,
+        "aliases": Array [],
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_init": [Function],
+          "_payload": Object {
+            "_result": [Function],
+            "_status": -1,
+          },
+        },
+        "default": false,
+        "disabled": false,
+        "id": "openshift-container",
+        "isSearchable": true,
+        "path": "/openshift-container",
+        "pathParameter": Array [
+          "OpenShift Container Platform",
+          "OpenShift-metrics",
+        ],
+        "productParameter": Array [
+          "OpenShift Container Platform",
+          "OpenShift-metrics",
+        ],
+        "redirect": null,
+      },
+      Object {
+        "activateOnError": false,
+        "aliases": Array [],
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_init": [Function],
+          "_payload": Object {
+            "_result": [Function],
+            "_status": -1,
+          },
+        },
+        "default": false,
+        "disabled": false,
+        "id": "openshift-dedicated",
+        "isSearchable": true,
+        "path": "/openshift-dedicated",
+        "pathParameter": Array [
+          "OpenShift-dedicated-metrics",
+        ],
+        "productParameter": Array [
+          "OpenShift-dedicated-metrics",
+        ],
+        "redirect": null,
+      },
+    ],
+    "searchableById": Object {
+      "openshift-container": Object {
+        "activateOnError": false,
+        "aliases": Array [],
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_init": [Function],
+          "_payload": Object {
+            "_result": [Function],
+            "_status": -1,
+          },
+        },
+        "default": false,
+        "disabled": false,
+        "id": "openshift-container",
+        "isSearchable": true,
+        "path": "/openshift-container",
+        "pathParameter": Array [
+          "OpenShift Container Platform",
+          "OpenShift-metrics",
+        ],
+        "productParameter": Array [
+          "OpenShift Container Platform",
+          "OpenShift-metrics",
+        ],
+        "redirect": null,
+      },
+      "openshift-dedicated": Object {
+        "activateOnError": false,
+        "aliases": Array [],
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_init": [Function],
+          "_payload": Object {
+            "_result": [Function],
+            "_status": -1,
+          },
+        },
+        "default": false,
+        "disabled": false,
+        "id": "openshift-dedicated",
+        "isSearchable": true,
+        "path": "/openshift-dedicated",
+        "pathParameter": Array [
+          "OpenShift-dedicated-metrics",
+        ],
+        "productParameter": Array [
+          "OpenShift-dedicated-metrics",
+        ],
+        "redirect": null,
+      },
+      "rhel": Object {
+        "activateOnError": false,
+        "aliases": Array [
+          "insights",
+        ],
+        "component": Object {
+          "$$typeof": Symbol(react.lazy),
+          "_init": [Function],
+          "_payload": Object {
+            "_result": [Function],
+            "_status": -1,
+          },
+        },
+        "default": false,
+        "disabled": false,
+        "id": "rhel",
+        "isSearchable": true,
+        "path": "/rhel",
+        "pathParameter": Array [
+          "RHEL",
+        ],
+        "productParameter": Array [
+          "RHEL",
+        ],
+        "redirect": null,
+      },
+    },
+  },
+}
+`;
+
 exports[`RouterHelpers should return navigation and route details from a path: detail: match specific path 1`] = `
 Object {
   "navRoute": Object {

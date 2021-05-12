@@ -141,6 +141,7 @@ const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesCon
   const configs = [];
   const searchable = [];
   const byId = {};
+  const searchableById = {};
 
   basePathDirs.forEach(dir => {
     if (dir) {
@@ -163,11 +164,14 @@ const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesCon
             new RegExp(decodedDir, 'i').test(pathParameter?.toString()) ||
             new RegExp(decodedDir, 'i').test(aliases?.toString())
           ) {
-            byId[id] = { ...updatedConfigItem };
-            configs.push({ ...updatedConfigItem });
+            if (!byId[id]) {
+              byId[id] = { ...updatedConfigItem };
+              configs.push({ ...updatedConfigItem });
+            }
           }
 
-          if (isSearchable) {
+          if (isSearchable && !searchableById[id]) {
+            searchableById[id] = { ...updatedConfigItem };
             searchable.push({ ...updatedConfigItem });
           }
         }
@@ -175,7 +179,7 @@ const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesCon
     }
   });
 
-  return { configs, byId, firstMatch: configs?.[0], searchable };
+  return { configs, byId, firstMatch: configs?.[0], searchable, searchableById };
 };
 
 /**

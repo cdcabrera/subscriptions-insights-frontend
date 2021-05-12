@@ -155,6 +155,17 @@ describe('RouterHelpers', () => {
     }).toMatchSnapshot('detail: missing parameters');
   });
 
+  it('should return default navigation and route details', () => {
+    mockWindowLocation({
+      url: 'https://ci.foo.redhat.com/loremIpsum/dolorSit/',
+      callback: () => {
+        expect({
+          navRoute: getRouteConfigByPath()
+        }).toMatchSnapshot('detail: defaults');
+      }
+    });
+  });
+
   it('should return navigation and route details from a path', () => {
     expect({
       navRoute: getRouteConfigByPath({ pathName: '/rhel' }).firstMatch
