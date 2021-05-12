@@ -71,8 +71,8 @@ Object {
 exports[`RouterHelpers should return default navigation and route details: detail: defaults 1`] = `
 Object {
   "navRoute": Object {
-    "byId": Object {},
     "configs": Array [],
+    "configsById": Object {},
     "firstMatch": undefined,
     "searchable": Array [
       Object {
