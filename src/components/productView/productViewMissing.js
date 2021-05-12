@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
-import { useHistory } from 'react-router-dom';
+import { useHistory as ReactRouterDomUseHistory } from 'react-router-dom';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
 import { routerHelpers } from '../router/router';
 import { helpers } from '../../common';
@@ -14,9 +14,10 @@ import { translate } from '../i18n/i18n';
  * @fires onClick
  * @param {object} props
  * @param {Function} props.t
+ * @param {Function} props.useHistory
  * @returns {Node}
  */
-const ProductViewMissing = ({ t }) => {
+const ProductViewMissing = ({ t, useHistory }) => {
   const history = useHistory();
 
   /**
@@ -49,7 +50,7 @@ const ProductViewMissing = ({ t }) => {
       <PageSection isFilled>
         <Gallery hasGutter>
           {filterAvailableProducts().map(product => (
-            <Card key={product.id} isHoverable onClick={() => onClick(product.id)}>
+            <Card key={`missingViewCard-${product.id}`} isHoverable onClick={() => onClick(product.id)}>
               <CardTitle>
                 <Title headingLevel="h2" size="lg">
                   {t('curiosity-view.title', {
@@ -92,7 +93,8 @@ const ProductViewMissing = ({ t }) => {
  * @type {{t: Function}}
  */
 ProductViewMissing.propTypes = {
-  t: PropTypes.func
+  t: PropTypes.func,
+  useHistory: PropTypes.func
 };
 
 /**
@@ -101,7 +103,8 @@ ProductViewMissing.propTypes = {
  * @type {{t: translate}}
  */
 ProductViewMissing.defaultProps = {
-  t: translate
+  t: translate,
+  useHistory: ReactRouterDomUseHistory
 };
 
 export { ProductViewMissing as default, ProductViewMissing };
