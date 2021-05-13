@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   chart_color_blue_100 as chartColorBlueLight,
-  chart_color_blue_300 as chartColorBlueDark
+  chart_color_blue_300 as chartColorBlueDark,
+  chart_color_cyan_100 as chartColorCyanLight,
+  chart_color_cyan_300 as chartColorCyanDark
 } from '@patternfly/react-tokens';
 import { Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
@@ -17,6 +19,7 @@ import { ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { dateHelpers } from '../../common';
 import { ToolbarFieldRangedMonthly } from '../toolbar/toolbarFieldRangedMonthly';
+import isStacked from "../chartArea/chartArea";
 
 /**
  * An OpenShift Dedicated configured view.
@@ -80,7 +83,15 @@ ProductViewOpenShiftDedicated.defaultProps = {
         id: 'coreHours',
         fill: chartColorBlueLight.value,
         stroke: chartColorBlueDark.value,
-        color: chartColorBlueDark.value
+        color: chartColorBlueDark.value,
+        isStacked: false
+      },
+      {
+        id: 'instanceHours',
+        fill: chartColorCyanLight.value,
+        stroke: chartColorCyanDark.value,
+        color: chartColorCyanDark.value,
+        isStacked: false
       }
     ],
     initialGraphSettings: {
