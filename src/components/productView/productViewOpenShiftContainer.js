@@ -143,7 +143,7 @@ const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
           <InventoryTabs key={`inventory_${productId}`} productId={productId}>
             <InventoryTab
               key={`inventory_hosts_${productId}`}
-              title={t('curiosity-inventory.tab', { context: 'hosts' })}
+              title={t('curiosity-inventory.tabHosts', { context: productId })}
             >
               <InventoryList
                 key={`inv_${productId}`}
@@ -158,7 +158,7 @@ const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
             {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && initialSubscriptionsInventoryFilters && (
               <InventoryTab
                 key={`inventory_subs_${productId}`}
-                title={t('curiosity-inventory.tab', { context: 'subscriptions' })}
+                title={t('curiosity-inventory.tabSubscriptions', { context: productId })}
               >
                 <InventorySubscriptions
                   key={`subs_${productId}`}
@@ -282,8 +282,8 @@ ProductViewOpenShiftContainer.defaultProps = {
           stroke: chartColorBlueDark.value,
           color: chartColorBlueDark.value
         },
-        { id: 'thresholdSockets', isOptional: true },
-        { id: 'thresholdCores', isOptional: true }
+        { id: 'thresholdSockets', chartType: 'threshold', isOptional: true },
+        { id: 'thresholdCores', chartType: 'threshold', isOptional: true }
       ],
       initialGraphSettings: {},
       initialGuestsFilters: [
