@@ -19,7 +19,6 @@ import { ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { dateHelpers } from '../../common';
 import { ToolbarFieldRangedMonthly } from '../toolbar/toolbarFieldRangedMonthly';
-import isStacked from "../chartArea/chartArea";
 
 /**
  * An OpenShift Dedicated configured view.
@@ -84,14 +83,18 @@ ProductViewOpenShiftDedicated.defaultProps = {
         fill: chartColorBlueLight.value,
         stroke: chartColorBlueDark.value,
         color: chartColorBlueDark.value,
-        isStacked: false
+        isLine: true,
+        isStacked: false,
+        isYAxis: true
       },
       {
         id: 'instanceHours',
         fill: chartColorCyanLight.value,
         stroke: chartColorCyanDark.value,
         color: chartColorCyanDark.value,
-        isStacked: false
+        isLine: true,
+        isStacked: false,
+        isYAxis: true
       }
     ],
     initialGraphSettings: {
