@@ -4,6 +4,7 @@ import { createContainer } from 'victory-create-container';
 import {
   Chart,
   ChartAxis,
+  ChartLine,
   ChartStack,
   ChartThreshold,
   ChartThemeColor,
@@ -13,6 +14,7 @@ import {
 } from '@patternfly/react-charts';
 import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
+import { chartHelpers } from './chartHelpers';
 
 /**
  * FixMe: chart redraw flash related to custom tooltips use
@@ -126,61 +128,12 @@ class ChartArea extends React.Component {
   }
 
   /**
-   * Apply props, set x and y axis chart increments/ticks formatting.
-   *
-   * @returns {object}
-   */
-  setChartTicks() {
-    const { xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
-    const xAxisProps = {};
-    const yAxisProps = {};
-    let xAxisDataSet = (dataSets.length && dataSets[0].data) || [];
-
-    dataSets.forEach(dataSet => {
-      if (dataSet.xAxisLabelUseDataSet) {
-        xAxisDataSet = dataSet.data;
-      }
-    });
-
-    xAxisProps.xAxisTickValues = xAxisDataSet.reduce(
-      (acc, current, index) => (index % xAxisLabelIncrement === 0 ? acc.concat(current.x) : acc),
-      []
-    );
-
-    xAxisProps.xAxisTickFormat = tickValue =>
-      (xAxisDataSet[tickValue] && xAxisDataSet[tickValue].xAxisLabel) || tickValue;
-
-    if (typeof xAxisTickFormat === 'function') {
-      xAxisProps.xAxisTickFormat = tick => {
-        const tickValues = xAxisProps.xAxisTickValues;
-        const tickIndex = tickValues.indexOf(tick);
-        const previousItem = { ...(xAxisDataSet[tickValues[tickIndex - 1]] || {}) };
-        const nextItem = { ...(xAxisDataSet[tickValues[tickIndex + 1]] || {}) };
-        const item = { ...(xAxisDataSet[tick] || {}) };
-
-        return xAxisTickFormat({ tick, previousItem, item, nextItem });
-      };
-    }
-
-    if (typeof yAxisTickFormat === 'function') {
-      yAxisProps.yAxisTickFormat = tick => yAxisTickFormat({ tick });
-    }
-
-    return {
-      ...xAxisProps,
-      ...yAxisProps
-    };
-  }
-
-  /**
    * Return x and y axis increments/ticks.
    *
    * @returns {object}
    */
   getChartTicks() {
-    const { xAxisFixLabelOverlap } = this.props;
-
-    const { xAxisTickValues, xAxisTickFormat, yAxisTickFormat } = this.setChartTicks();
+    const { xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
     const updatedXAxisProps = {
       fixLabelOverlap: xAxisFixLabelOverlap
     };
@@ -189,20 +142,27 @@ class ChartArea extends React.Component {
       showGrid: true
     };
 
-    if (xAxisTickValues) {
-      updatedXAxisProps.tickValues = xAxisTickValues;
+    const updatedChartTicks = chartHelpers.generateChartTicks({
+      xAxisLabelIncrement,
+      xAxisTickFormat,
+      yAxisTickFormat,
+      dataSets
+    });
+
+    if (updatedChartTicks.xAxisTickValues) {
+      updatedXAxisProps.tickValues = updatedChartTicks.xAxisTickValues;
     }
 
-    if (xAxisTickFormat) {
-      updatedXAxisProps.tickFormat = xAxisTickFormat;
+    if (updatedChartTicks.xAxisTickFormat) {
+      updatedXAxisProps.tickFormat = updatedChartTicks.xAxisTickFormat;
     }
 
-    if (yAxisTickFormat) {
-      updatedYAxisProps.tickFormat = yAxisTickFormat;
+    if (updatedChartTicks.yAxisTickFormat) {
+      updatedYAxisProps.tickFormat = updatedChartTicks.yAxisTickFormat;
     }
 
     return {
-      isXAxisTicks: !!xAxisTickValues,
+      isXAxisTicks: !!updatedChartTicks.xAxisTickValues,
       xAxisProps: updatedXAxisProps,
       yAxisProps: updatedYAxisProps
     };
@@ -265,6 +225,7 @@ class ChartArea extends React.Component {
     }
 
     return {
+      maxX: dataSetMaxX,
       maxY: dataSetMaxY,
       chartDomain: { ...updatedChartDomain }
     };
@@ -280,7 +241,7 @@ class ChartArea extends React.Component {
     const { dataSets, chartTooltip } = this.props;
     let tooltipDataSet = [];
 
-    if (chartTooltip && dataSets && dataSets[0] && dataSets[0].data) {
+    if (chartTooltip && dataSets?.[0]?.data) {
       tooltipDataSet = dataSets[0].data.map((dataSet, index) => {
         const itemsByKey = {};
 
@@ -438,11 +399,33 @@ class ChartArea extends React.Component {
     const { dataSets } = this.props;
     const charts = [];
     const chartsStacked = [];
+    const chartDefaults = {
+      area: {
+        component: PfChartArea,
+        animate: false,
+        interpolation: 'monotoneX'
+      },
+      line: {
+        component: ChartLine,
+        animate: false,
+        interpolation: 'monotoneX'
+      },
+      threshold: {
+        component: ChartThreshold,
+        animate: false,
+        interpolation: 'step'
+      }
+    };
 
-    const thresholdChart = (dataSet, index) => {
-      const dataColorStroke = { data: {} };
+    const setChart = (dataSet, index) => {
+      const chartType = dataSet.chartType || 'area';
+      const updatedChartDefaults = chartDefaults[chartType];
+      const ChartComponent = updatedChartDefaults.component;
+      const dataColorStroke = {
+        data: {}
+      };
 
-      if (dataSet.fill) {
+      if (dataSet.fill && chartType === 'area') {
         dataColorStroke.data.fill = dataSet.fill;
       }
 
@@ -459,44 +442,13 @@ class ChartArea extends React.Component {
       }
 
       return (
-        <ChartThreshold
-          animate={dataSet.animate || false}
-          interpolation={dataSet.interpolation || 'step'}
+        <ChartComponent
+          animate={dataSet.animate || updatedChartDefaults.animate}
+          interpolation={dataSet.interpolation || updatedChartDefaults.interpolation}
           key={helpers.generateId()}
-          name={`chartArea-${index}-threshold`}
+          name={`chart-${index}-${chartType}`}
           data={dataSet.data}
           style={{ ...(dataSet.style || {}), ...dataColorStroke }}
-          // FixMe: PFCharts inconsistent implementation around themeColor and style, see ChartArea. Appears enforced, see PFCharts. Leads to multiple checks and implementations.
-          themeColor={dataSet.themeColor}
-          themeVariant={dataSet.themeVariant}
-        />
-      );
-    };
-
-    const areaChart = (dataSet, index) => {
-      const dataColorStroke = { data: {} };
-
-      if (dataSet.fill) {
-        dataColorStroke.data.fill = dataSet.fill;
-      }
-
-      if (dataSet.stroke) {
-        dataColorStroke.data.stroke = dataSet.stroke;
-      }
-
-      if (dataSet.strokeWidth) {
-        dataColorStroke.data.strokeWidth = dataSet.strokeWidth;
-      }
-
-      return (
-        <PfChartArea
-          animate={dataSet.animate || false}
-          interpolation={dataSet.interpolation || 'monotoneX'}
-          key={helpers.generateId()}
-          name={`chartArea-${index}-area`}
-          data={dataSet.data}
-          style={{ ...(dataSet.style || {}), ...dataColorStroke }}
-          // FixMe: PFCharts inconsistent implementation around themeColor and style, see ChartThreshold themeColor and style
           themeColor={dataSet.themeColor}
           themeVariant={dataSet.themeVariant}
         />
@@ -505,7 +457,7 @@ class ChartArea extends React.Component {
 
     dataSets.forEach((dataSet, index) => {
       if (!dataSetsToggle[dataSet.id] && dataSet.data && dataSet.data.length) {
-        const updatedDataSet = (dataSet.isThreshold && thresholdChart(dataSet, index)) || areaChart(dataSet, index);
+        const updatedDataSet = setChart(dataSet, index);
 
         if (dataSet.isStacked) {
           chartsStacked.push(updatedDataSet);
@@ -532,6 +484,7 @@ class ChartArea extends React.Component {
     const tooltipComponent = { containerComponent: (maxY >= 0 && this.renderTooltip()) || undefined };
     const chartProps = { padding, ...chartDomain, ...tooltipComponent };
 
+    //// <ChartAxis {...yAxisProps} animate={false} orientation="right" />
     return (
       <div
         id="curiosity-chartarea"
@@ -570,7 +523,9 @@ ChartArea.propTypes = {
         })
       ),
       animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+      chartType: PropTypes.oneOf(['area', 'line', 'threshold']),
       fill: PropTypes.string,
+      // isAxisDependent: PropTypes.bool,
       stroke: PropTypes.string,
       strokeWidth: PropTypes.number,
       strokeDasharray: PropTypes.string,
