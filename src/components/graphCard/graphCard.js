@@ -79,7 +79,7 @@ class GraphCard extends React.Component {
       xAxisFixLabelOverlap: true,
       xAxisLabelIncrement: graphCardHelpers.getChartXAxisLabelIncrement(graphGranularity),
       xAxisTickFormat,
-      yAxisTickFormat: graphCardHelpers.yAxisTickFormat
+      yAxisTickFormat: [graphCardHelpers.yAxisTickFormatLeft, graphCardHelpers.yAxisTickFormatRight]
     };
 
     const filteredGraphData = data => {
