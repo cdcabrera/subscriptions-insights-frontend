@@ -7,6 +7,20 @@ import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
 /**
+ * ToDo: re-evaluate how lazy imports work under webpack 5
+ * Under CRA and webpack 4 NOT specifying the ".js" extension leads to the build making an assumption
+ * about what files should be included... i.e. snapshot, test files are built
+ * https://github.com/facebook/create-react-app/issues/7602
+ */
+/**
+ * Import a route component.
+ *
+ * @param {Node} component
+ * @returns {Node}
+ */
+const importView = component => React.lazy(() => import(`../${component}.js`));
+
+/**
  * Load routes.
  *
  * @param {object} props
@@ -29,7 +43,7 @@ const Router = ({ routes } = {}) => {
           return null;
         }
 
-        const View = await item.component;
+        const View = await importView(item.component);
 
         return (
           <Route
@@ -100,7 +114,7 @@ Router.propTypes = {
   routes: PropTypes.arrayOf(
     PropTypes.shape({
       activateOnError: PropTypes.boolean,
-      component: PropTypes.any.isRequired,
+      component: PropTypes.string.isRequired,
       disabled: PropTypes.boolean,
       exact: PropTypes.boolean,
       id: PropTypes.string,
