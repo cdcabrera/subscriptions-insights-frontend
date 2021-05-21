@@ -7,10 +7,7 @@ import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
 /**
- * ToDo: re-evaluate how lazy imports work under webpack 5
- * Under CRA and webpack 4 NOT specifying the ".js" extension leads to the build making an assumption
- * about what files should be included... i.e. snapshot, test files are built
- * https://github.com/facebook/create-react-app/issues/7602
+ * ToDo: re-evaluate how exclude comments work under wp5, and regex
  */
 /**
  * Import a route component.
@@ -18,7 +15,7 @@ import { Loader } from '../loader/loader';
  * @param {Node} component
  * @returns {Node}
  */
-const importView = component => React.lazy(() => import(`../${component}.js`));
+const importView = component => React.lazy(() => import(/* webpackExclude: /\.test\.js$/ */ `../${component}.js`));
 
 /**
  * Load routes.
