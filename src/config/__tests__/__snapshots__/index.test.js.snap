@@ -50,7 +50,7 @@ Object {
       "aliases": Array [
         "insights",
       ],
-      "component": "productView/productViewRhel",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "rhel",
@@ -59,6 +59,123 @@ Object {
       "pathParameter": Array [
         "RHEL",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "RHEL",
       ],
@@ -67,7 +184,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewRhel",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "rhel-arm",
@@ -76,6 +193,123 @@ Object {
       "pathParameter": Array [
         "RHEL for ARM",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "RHEL",
       ],
@@ -84,7 +318,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewRhel",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "rhel-ibmpower",
@@ -93,6 +327,123 @@ Object {
       "pathParameter": Array [
         "RHEL for IBM Power",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "RHEL",
       ],
@@ -101,7 +452,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewRhel",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "rhel-ibmz",
@@ -110,6 +461,123 @@ Object {
       "pathParameter": Array [
         "RHEL for IBM z",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "RHEL",
       ],
@@ -118,7 +586,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewRhel",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "rhel-x86",
@@ -126,6 +594,123 @@ Object {
       "path": "/rhel-x86",
       "pathParameter": Array [
         "RHEL for x86",
+      ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
       ],
       "productParameter": Array [
         "RHEL",
@@ -145,6 +730,182 @@ Object {
         "OpenShift Container Platform",
         "OpenShift-metrics",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "cores",
+              "isOptional": true,
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "sockets",
+              "isOptional": true,
+              "stroke": "#06c",
+            },
+            Object {
+              "id": "thresholdSockets",
+              "isOptional": true,
+            },
+            Object {
+              "id": "thresholdCores",
+              "isOptional": true,
+            },
+          ],
+          "initialGraphSettings": Object {},
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"sockets_OpenShift Container Platform\\"})",
+              "id": "sockets",
+              "isOptional": true,
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"cores_OpenShift Container Platform\\"})",
+              "id": "cores",
+              "isOptional": true,
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 25,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialOption": "cores",
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "productContextFilterUom": true,
+          "productId": "OpenShift Container Platform",
+          "productLabel": "OpenShift",
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+            "uom": "cores",
+          },
+          "viewId": "viewOpenShift",
+        },
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "coreHours",
+              "stroke": "#06c",
+            },
+          ],
+          "initialGraphSettings": Object {
+            "actionDisplay": [Function],
+          },
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "coreHours",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 25,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": undefined,
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "productId": "OpenShift-metrics",
+          "productLabel": "OpenShift Metric",
+          "query": Object {
+            "beginning": "2019-07-01T00:00:00.000Z",
+            "ending": "2019-07-31T23:59:59.999Z",
+          },
+          "viewId": "viewOpenShiftMetric",
+        },
+      ],
       "productParameter": Array [
         "OpenShift Container Platform",
         "OpenShift-metrics",
@@ -163,6 +924,57 @@ Object {
       "pathParameter": Array [
         "OpenShift-dedicated-metrics",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "coreHours",
+              "stroke": "#06c",
+            },
+          ],
+          "initialGraphSettings": Object {
+            "actionDisplay": [Function],
+          },
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "coreHours",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen_OpenShift-dedicated-metrics\\"})",
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": undefined,
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "query": Object {
+            "beginning": "2019-07-01T00:00:00.000Z",
+            "ending": "2019-07-31T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "OpenShift-dedicated-metrics",
       ],
@@ -171,7 +983,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewSatellite",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "satellite",
@@ -180,6 +992,123 @@ Object {
       "pathParameter": Array [
         "Satellite",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "Satellite",
       ],
@@ -188,7 +1117,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewSatellite",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "satellite-capsule",
@@ -197,6 +1126,123 @@ Object {
       "pathParameter": Array [
         "Satellite Capsule",
       ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
+      ],
       "productParameter": Array [
         "Satellite",
       ],
@@ -205,7 +1251,7 @@ Object {
     Object {
       "activateOnError": false,
       "aliases": Array [],
-      "component": "productView/productViewSatellite",
+      "component": "productView/productViewDefault",
       "default": false,
       "disabled": false,
       "id": "satellite-server",
@@ -213,6 +1259,123 @@ Object {
       "path": "/satellite-server",
       "pathParameter": Array [
         "Satellite Server",
+      ],
+      "productConfig": Array [
+        Object {
+          "graphTallyQuery": Object {
+            "granularity": "daily",
+          },
+          "initialGraphFilters": Array [
+            Object {
+              "color": "#06c",
+              "fill": "#8bc1f7",
+              "id": "physicalSockets",
+              "stroke": "#06c",
+            },
+            Object {
+              "color": "#009596",
+              "fill": "#a2d9d9",
+              "id": "hypervisorSockets",
+              "stroke": "#009596",
+            },
+            Object {
+              "color": "#5752d1",
+              "fill": "#b2b0ea",
+              "id": "cloudSockets",
+              "stroke": "#5752d1",
+            },
+            Object {
+              "id": "thresholdSockets",
+            },
+          ],
+          "initialGuestsFilters": Array [
+            Object {
+              "cell": [Function],
+              "header": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+              "id": "displayName",
+            },
+            Object {
+              "cellWidth": 40,
+              "id": "inventoryId",
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+            },
+          ],
+          "initialInventoryFilters": Array [
+            Object {
+              "cell": [Function],
+              "id": "displayName",
+              "isSortable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 20,
+              "id": "measurementType",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "sockets",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "lastSeen",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialInventorySettings": Object {},
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "serviceLevel",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "upcomingEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
+          "initialToolbarFilters": Array [
+            Object {
+              "id": "sla",
+            },
+            Object {
+              "id": "usage",
+              "selected": true,
+            },
+          ],
+          "inventoryHostsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "upcoming_event_date",
+          },
+          "query": Object {
+            "beginning": "2019-06-20T00:00:00.000Z",
+            "ending": "2019-07-20T23:59:59.999Z",
+          },
+        },
       ],
       "productParameter": Array [
         "Satellite",
@@ -229,6 +1392,7 @@ Object {
       "isSearchable": false,
       "path": "/optin",
       "pathParameter": null,
+      "productConfig": null,
       "productParameter": null,
       "redirect": null,
     },
@@ -242,6 +1406,7 @@ Object {
       "isSearchable": false,
       "path": "/",
       "pathParameter": null,
+      "productConfig": null,
       "productParameter": null,
       "redirect": "/",
     },
