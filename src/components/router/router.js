@@ -5,6 +5,7 @@ import { useMount } from 'react-use';
 import Redirect from './redirect';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
+import { ProductContext } from '../../hooks/useProduct';
 
 /**
  * ToDo: re-evaluate how exclude comments work under wp5, and regex
@@ -70,17 +71,19 @@ const Router = ({ routes } = {}) => {
               };
 
               return (
-                <View
-                  routeDetail={{
-                    baseName: routerHelpers.baseName,
-                    errorRoute: activateOnErrorRoute,
-                    routes,
-                    routeItem: { ...item },
-                    ...routeConfig
-                  }}
-                  location={updatedLocation}
-                  {...routeProps}
-                />
+                <ProductContext.Provider value={{ ...routeConfig }}>
+                  <View
+                    routeDetail={{
+                      baseName: routerHelpers.baseName,
+                      errorRoute: activateOnErrorRoute,
+                      routes,
+                      routeItem: { ...item },
+                      ...routeConfig
+                    }}
+                    location={updatedLocation}
+                    {...routeProps}
+                  />
+                </ProductContext.Provider>
               );
             }}
           />

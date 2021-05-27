@@ -1,6 +1,7 @@
 import path from 'path';
 import { helpers } from '../../common/helpers';
-import { routesConfig } from '../../config';
+import { routesConfig } from '../../config'; // eslint-disable-line
+// import productConfig from "../../config/routes";
 
 /**
  * Platform name/id.
@@ -143,21 +144,21 @@ const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesCon
   const allConfigsById = {};
 
   const findConfig = dir => {
-    config.forEach(({ id, path: configPath, pathParameter, productParameter, aliases, ...configItem }) => {
+    config.forEach(({ id, path: configPath, productIds, productParentIds, aliases, ...configItem }) => {
       const updatedConfigItem = {
         aliases,
         id,
         path: configPath,
-        pathParameter,
-        productParameter,
+        productIds,
+        productParentIds,
         ...configItem
       };
 
       if (
         dir &&
         (new RegExp(dir, 'i').test(configPath) ||
-          new RegExp(dir, 'i').test(productParameter?.toString()) ||
-          new RegExp(dir, 'i').test(pathParameter?.toString()) ||
+          new RegExp(dir, 'i').test(productParentIds?.toString()) ||
+          new RegExp(dir, 'i').test(productIds?.toString()) ||
           new RegExp(dir, 'i').test(aliases?.toString()))
       ) {
         if (!configsById[id]) {
@@ -215,13 +216,12 @@ const getRouteConfig = ({ id = null, pathName, returnDefault = false, config = r
   if (navRouteItem) {
     const { search = '', hash = '' } = window.location;
     navRouteItem.routeHref = `${navRouteItem.path}${search}${hash}`;
-
-    const { pathParameter, productParameter } = navRouteItem;
-    navRouteItem.pathParameter = (Array.isArray(pathParameter) && pathParameter[0]) || pathParameter;
-    navRouteItem.productParameter = (Array.isArray(productParameter) && productParameter[0]) || productParameter;
-    navRouteItem.viewParameter =
-      (productParameter && `view${(Array.isArray(productParameter) && productParameter[0]) || productParameter}`) ||
-      productParameter;
+    // const { productParentId } = navRouteItem;
+    // navRouteItem.pathParameter = (Array.isArray(pathParameter) && pathParameter.join('-')) || pathParameter;
+    // navRouteItem.productParentId = (Array.isArray(productParentId) && productParentId.join('-')) || productParentId;
+    // navRouteItem.viewId =
+    //  (productParentId && `view${(Array.isArray(productParentId) && productParentId.join('_')) || productParentId}`) ||
+    //  productParentId;
   }
 
   return { ...(navRouteItem || {}) };

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ProductView } from './productView';
+import { useProduct } from '../../hooks/useProduct';
 
 /**
  * A default product view.
@@ -9,7 +10,12 @@ import { ProductView } from './productView';
  * @param {object} props.routeDetail
  * @returns {Node}
  */
-const ProductViewDefault = ({ routeDetail }) => <ProductView routeDetail={routeDetail} />;
+const ProductViewDefault = ({ routeDetail }) => {
+  const testing = useProduct();
+  console.log('PLEASE WORK >>>', testing);
+  const View = routeDetail?.productConfig?.view || ProductView;
+  return <View routeDetail={routeDetail} />;
+};
 
 /**
  * Prop types.

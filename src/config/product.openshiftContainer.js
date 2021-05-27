@@ -17,6 +17,7 @@ import {
 } from '../types/rhsmApiTypes';
 import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
+// import { config as openshiftMetricsConfig } from './product.openshiftMetrics';
 
 const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
 
@@ -189,9 +190,14 @@ const config = {
       id: RHSM_API_QUERY_TYPES.SLA
     }
   ],
-  productLabel: 'OpenShift',
+  productLabel: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
   productId: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
-  viewId: 'viewOpenShift'
+  viewId: `view${RHSM_API_PATH_ID_TYPES.OPENSHIFT}`
 };
+
+// pathParameter: productId,
+//     productConfig,
+//     productParameter: productLabel,
+//     viewParameter: viewId
 
 export { config as default, config, productGroup };

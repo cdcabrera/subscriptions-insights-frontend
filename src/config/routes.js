@@ -1,7 +1,7 @@
 import { config as rhelConfig } from './product.rhel';
 import { config as openshiftContainerConfig } from './product.openshiftContainer';
 import { config as openshiftMetricsConfig } from './product.openshiftMetrics';
-import { config as openshiftDedicatedConfig } from './product.openshiftDedicated';
+import { config as openshiftDedicatedConfig } from './product.openshiftDedicated'; // eslint-disable-line
 import { config as satelliteProductConfig } from './product.satellite';
 import { RHSM_API_PATH_ID_TYPES } from '../types/rhsmApiTypes';
 import { helpers } from '../common';
@@ -10,8 +10,8 @@ const routes = [
   {
     id: 'rhel',
     path: '/rhel',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.RHEL],
-    productParameter: [RHSM_API_PATH_ID_TYPES.RHEL],
+    productIds: [RHSM_API_PATH_ID_TYPES.RHEL],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.RHEL],
     productConfig: [rhelConfig],
     redirect: null,
     isSearchable: true,
@@ -24,8 +24,8 @@ const routes = [
   {
     id: 'rhel-arm',
     path: '/rhel-arm',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.RHEL_ARM],
-    productParameter: [RHSM_API_PATH_ID_TYPES.RHEL],
+    productIds: [RHSM_API_PATH_ID_TYPES.RHEL_ARM],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.RHEL],
     productConfig: [rhelConfig],
     redirect: null,
     isSearchable: false,
@@ -38,8 +38,8 @@ const routes = [
   {
     id: 'rhel-ibmpower',
     path: '/rhel-ibmpower',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.RHEL_IBM_POWER],
-    productParameter: [RHSM_API_PATH_ID_TYPES.RHEL],
+    productIds: [RHSM_API_PATH_ID_TYPES.RHEL_IBM_POWER],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.RHEL],
     productConfig: [rhelConfig],
     redirect: null,
     isSearchable: false,
@@ -52,8 +52,8 @@ const routes = [
   {
     id: 'rhel-ibmz',
     path: '/rhel-ibmz',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.RHEL_IBM_Z],
-    productParameter: [RHSM_API_PATH_ID_TYPES.RHEL],
+    productIds: [RHSM_API_PATH_ID_TYPES.RHEL_IBM_Z],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.RHEL],
     productConfig: [rhelConfig],
     redirect: null,
     isSearchable: false,
@@ -66,8 +66,8 @@ const routes = [
   {
     id: 'rhel-x86',
     path: '/rhel-x86',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.RHEL_X86],
-    productParameter: [RHSM_API_PATH_ID_TYPES.RHEL],
+    productIds: [RHSM_API_PATH_ID_TYPES.RHEL_X86],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.RHEL],
     productConfig: [rhelConfig],
     redirect: null,
     isSearchable: false,
@@ -80,8 +80,8 @@ const routes = [
   {
     id: 'openshift-container',
     path: '/openshift-container',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT, RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS],
-    productParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT, RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS],
+    productIds: [RHSM_API_PATH_ID_TYPES.OPENSHIFT, RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.OPENSHIFT, RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS],
     productConfig: [openshiftContainerConfig, openshiftMetricsConfig],
     redirect: null,
     isSearchable: true,
@@ -94,8 +94,8 @@ const routes = [
   {
     id: 'openshift-dedicated',
     path: '/openshift-dedicated',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS],
-    productParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS],
+    productIds: [RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS],
     productConfig: [openshiftDedicatedConfig],
     redirect: null,
     isSearchable: true,
@@ -108,8 +108,8 @@ const routes = [
   {
     id: 'satellite',
     path: '/satellite',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.SATELLITE],
-    productParameter: [RHSM_API_PATH_ID_TYPES.SATELLITE],
+    productIds: [RHSM_API_PATH_ID_TYPES.SATELLITE],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.SATELLITE],
     productConfig: [satelliteProductConfig],
     redirect: null,
     isSearchable: false,
@@ -122,8 +122,8 @@ const routes = [
   {
     id: 'satellite-capsule',
     path: '/satellite-capsule',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.SATELLITE_CAPSULE],
-    productParameter: [RHSM_API_PATH_ID_TYPES.SATELLITE],
+    productIds: [RHSM_API_PATH_ID_TYPES.SATELLITE_CAPSULE],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.SATELLITE],
     productConfig: [satelliteProductConfig],
     redirect: null,
     isSearchable: false,
@@ -136,8 +136,8 @@ const routes = [
   {
     id: 'satellite-server',
     path: '/satellite-server',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.SATELLITE_SERVER],
-    productParameter: [RHSM_API_PATH_ID_TYPES.SATELLITE],
+    productIds: [RHSM_API_PATH_ID_TYPES.SATELLITE_SERVER],
+    productParentIds: [RHSM_API_PATH_ID_TYPES.SATELLITE],
     productConfig: [satelliteProductConfig],
     redirect: null,
     isSearchable: false,
@@ -150,8 +150,8 @@ const routes = [
   {
     id: 'optin',
     path: '/optin',
-    pathParameter: null,
-    productParameter: null,
+    productIds: null,
+    productParentIds: null,
     productConfig: null,
     redirect: null,
     isSearchable: false,
@@ -164,8 +164,8 @@ const routes = [
   {
     id: 'missing',
     path: '/',
-    pathParameter: null,
-    productParameter: null,
+    productIds: null,
+    productParentIds: null,
     productConfig: null,
     redirect: '/',
     isSearchable: false,

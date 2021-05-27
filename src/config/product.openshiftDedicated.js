@@ -15,6 +15,7 @@ import {
 } from '../types/rhsmApiTypes';
 import { dateHelpers } from '../common';
 import { translate } from '../components/i18n/i18n';
+import { ToolbarFieldRangedMonthly } from '../components/toolbar/toolbarFieldRangedMonthly'; // eslint-disable-line
 
 const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
@@ -60,7 +61,16 @@ const config = {
         });
       }
 
-      return <div className="curiosity-usage-graph__total">{displayContent || null}</div>;
+      return (
+        <React.Fragment>
+          <div className="curiosity-usage-graph__total">{displayContent || null}</div>
+          <ToolbarFieldRangedMonthly
+            t={translate}
+            value={undefined}
+            viewId={RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS}
+          />
+        </React.Fragment>
+      );
     }
   },
   initialInventoryFilters: [

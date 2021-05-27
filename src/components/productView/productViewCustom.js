@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+// import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { ProductView } from './productView';
 // import { ToolbarFieldRangedMonthly } from '../toolbar/toolbarFieldRangedMonthly';
 
@@ -12,20 +12,12 @@ import { ProductView } from './productView';
  * @returns {Node}
  */
 const ProductViewOpenShiftDedicated = ({ routeDetail }) => {
-  // const { productConfig, viewParameter: viewId } = routeDetail;
   const { productConfig } = routeDetail;
-  const { [RHSM_API_QUERY_TYPES.START_DATE]: startDate } = productConfig?.[0].graphTallyQuery;
+  // const { [RHSM_API_QUERY_TYPES.START_DATE]: startDate } = productConfig?.[0].graphTallyQuery;
 
-  console.log('>>>>>>', startDate);
+  const View = productConfig?.view || ProductView;
 
-  return (
-    <ProductView
-      routeDetail={routeDetail}
-      toolbarProduct={false}
-      // toolbarGraph={<ToolbarFieldRangedMonthly value={startDate} viewId={viewId} />}
-      toolbarGraphDescription
-    />
-  );
+  return <View routeDetail={routeDetail} />;
 };
 
 /**

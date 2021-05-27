@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxTypes, store, useSelector } from '../../redux';
+import { reduxTypes, store, useSelector } from '../../redux'; // eslint-disable-line
 import { Select, SelectPosition } from '../form/select';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { dateHelpers } from '../../common';

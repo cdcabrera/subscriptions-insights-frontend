@@ -1,9 +1,10 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, TooltipPosition } from '@patternfly/react-core';
 import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
-import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages } from '../pageLayout/pageLayout';
-import { apiQueries } from '../../redux';
+import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
+import { apiQueries, useSelector } from '../../redux';
 import { ConnectedGraphCard, GraphCard } from '../graphCard/graphCard';
 import { ConnectedToolbar, Toolbar } from '../toolbar/toolbar';
 import { ConnectedInventoryList, InventoryList } from '../inventoryList/inventoryList';
@@ -24,18 +25,8 @@ import {
 } from '../../types/rhsmApiTypes';
 import { GuestsList } from '../guestsList/guestsList';
 import { translate } from '../i18n/i18n';
+import { ProductContext } from './productContext';
 
-/**
- * ToDo: base for default product layouts, add additional props for various toolbars
- * Next steps include...
- * Consider being able to pass customized toolbars for GraphCard and the
- * various Inventory displays. Have to evaluate how to handle the global toolbar, one
- * consideration is creating optional widgets with self-contained state update ability
- * based off of context/props/etc.
- *
- * Moving existing products to this layout, or maintaining them "as is", then renaming and
- * relocating them to this directory if they've been customized beyond a basic layout.
- */
 /**
  * Display a product.
  *
@@ -49,26 +40,53 @@ import { translate } from '../i18n/i18n';
  */
 const ProductView = ({ routeDetail, t, toolbarGraph, toolbarGraphDescription, toolbarProduct }) => {
   const {
-    pathParameter: productId,
-    productConfig,
-    productParameter: productLabel,
-    viewParameter: viewId
+    productIds,
+    productParentIds,
+    // pathParameter: productId,
+    productConfig
+    // productParameter: productLabel,
+    // viewParameter: viewId
   } = routeDetail;
+  const uomValue = useSelector(({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM], null);
 
-  const {
-    graphTallyQuery,
-    inventoryHostsQuery,
-    inventorySubscriptionsQuery,
-    query,
-    initialToolbarFilters,
-    initialGraphFilters,
-    initialGraphSettings,
-    initialGuestsFilters,
-    initialInventoryFilters,
-    initialInventorySettings,
-    initialSubscriptionsInventoryFilters
-  } = productConfig?.[0] || {};
+  const renderProduct = (config, index, uomValue) => {
+    const {
+      productContextFilterUom,
+      graphTallyQuery,
+      inventoryHostsQuery,
+      inventorySubscriptionsQuery,
+      query,
+      initialToolbarFilters,
+      initialGraphFilters,
+      initialGraphSettings,
+      initialGuestsFilters,
+      initialInventoryFilters,
+      initialInventorySettings,
+      initialSubscriptionsInventoryFilters,
+      // productLabel,
+      // productId,
+      // viewId
+    } = config;
 
+    return (
+      <React.Fragment key={`product_${productIds[index]}`}>
+        <ProductContext.Provider value={{ ...config }}>hello world: {productIds[index]}{productParentIds[index]}</ProductContext.Provider>
+      </React.Fragment>
+    );
+  };
+
+  const viewProductLabel = productParentIds.join('_');
+
+  return (
+    <PageLayout>
+      <PageHeader productLabel={viewProductLabel} includeTour>
+        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: viewProductLabel })}
+      </PageHeader>
+      <PageColumns>{productConfig.map((config, index) => renderProduct(config, index, uomValue))}</PageColumns>
+    </PageLayout>
+  );
+
+  /*
   const {
     query: initialQuery,
     graphTallyQuery: initialGraphTallyQuery,
@@ -177,6 +195,7 @@ const ProductView = ({ routeDetail, t, toolbarGraph, toolbarGraphDescription, to
       </PageSection>
     </PageLayout>
   );
+  */
 };
 
 /**
@@ -187,7 +206,6 @@ const ProductView = ({ routeDetail, t, toolbarGraph, toolbarGraphDescription, to
  */
 ProductView.propTypes = {
   routeDetail: PropTypes.shape({
-    pathParameter: PropTypes.string,
     productConfig: PropTypes.arrayOf(
       PropTypes.shape({
         graphTallyQuery: PropTypes.shape({
@@ -218,8 +236,8 @@ ProductView.propTypes = {
         initialSubscriptionsInventoryFilters: InventorySubscriptions.propTypes.filterInventoryData
       })
     ),
-    productParameter: PropTypes.string,
-    viewParameter: PropTypes.string
+    productIds: PropTypes.string,
+    productParentIds: PropTypes.string
   }).isRequired,
   t: PropTypes.func,
   toolbarGraph: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),

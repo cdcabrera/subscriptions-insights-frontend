@@ -105,9 +105,9 @@ const config = {
     }
   ],
   initialToolbarFilters: undefined,
-  productLabel: 'OpenShift Metric',
+  productLabel: RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS,
   productId: RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS,
-  viewId: 'viewOpenShiftMetric'
+  viewId: `view${RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS}`
 };
 
 export { config as default, config, productGroup };
