@@ -287,9 +287,13 @@ exports[`Authentication Component should return a message on 401 error: 401 erro
 `;
 
 exports[`Authentication Component should return a redirect on 418 error: 418 error 1`] = `
-<withRouter(Redirect)
+<Redirect
+  baseName="/"
+  isForced={false}
   isRedirect={true}
+  isReplace={false}
   route="/optin"
+  url={null}
 />
 `;
 
@@ -313,8 +317,12 @@ exports[`Authentication Component should return a redirect on a specific 403 err
 `;
 
 exports[`Authentication Component should return a redirect on a specific 403 error and error code: 403 redirect error 1`] = `
-<withRouter(Redirect)
+<Redirect
+  baseName="/"
+  isForced={false}
   isRedirect={true}
+  isReplace={false}
   route="/optin"
+  url={null}
 />
 `;

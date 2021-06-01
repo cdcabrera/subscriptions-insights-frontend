@@ -8,32 +8,10 @@ exports[`Redirect Component should handle a redirect with a url: redirect url 1`
 `;
 
 exports[`Redirect Component should handle existing routes with and without withRouter: existing route: outside of withRouter 1`] = `
-<Suspense
-  baseName="/"
-  fallback={
-    <Loader
-      skeletonProps={
-        Object {
-          "size": "sm",
-        }
-      }
-      tableProps={Object {}}
-      variant="title"
-    />
-  }
-  history={Object {}}
-  isRedirect={true}
-  isReplace={false}
-  route="/openshift-container"
-  t={[Function]}
-  url={null}
->
-  <Route
-    path="*"
-  >
-    <lazy />
-  </Route>
-</Suspense>
+<Fragment>
+  Redirected towards 
+  /openshift-container
+</Fragment>
 `;
 
 exports[`Redirect Component should handle existing routes with and without withRouter: existing route: routed redirect route 1`] = `
@@ -59,41 +37,22 @@ exports[`Redirect Component should handle existing routes with and without withR
     }
   }
 >
-  <withRouter(Redirect)
-    history={Object {}}
+  <Redirect
+    baseName="/"
+    isForced={false}
     isRedirect={true}
+    isReplace={false}
     route="/openshift-container"
+    url={null}
   />
 </Router>
 `;
 
 exports[`Redirect Component should handle missing routes with and without withRouter: missing route: outside of withRouter 1`] = `
-<Suspense
-  baseName="/"
-  fallback={
-    <Loader
-      skeletonProps={
-        Object {
-          "size": "sm",
-        }
-      }
-      tableProps={Object {}}
-      variant="title"
-    />
-  }
-  history={Object {}}
-  isRedirect={true}
-  isReplace={false}
-  route="/lorem-ipsum"
-  t={[Function]}
-  url={null}
->
-  <Route
-    path="*"
-  >
-    <Component />
-  </Route>
-</Suspense>
+<Fragment>
+  Redirected towards 
+  /lorem-ipsum
+</Fragment>
 `;
 
 exports[`Redirect Component should handle missing routes with and without withRouter: missing route: routed redirect route 1`] = `
@@ -119,10 +78,13 @@ exports[`Redirect Component should handle missing routes with and without withRo
     }
   }
 >
-  <withRouter(Redirect)
-    history={Object {}}
+  <Redirect
+    baseName="/"
+    isForced={false}
     isRedirect={true}
+    isReplace={false}
     route="/lorem-ipsum"
+    url={null}
   />
 </Router>
 `;

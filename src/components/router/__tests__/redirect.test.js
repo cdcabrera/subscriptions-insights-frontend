@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { BrowserRouter } from 'react-router-dom';
-import { Redirect, RoutedRedirect } from '../redirect';
+import { Redirect } from '../redirect';
 
 describe('Redirect Component', () => {
   it('should render a basic component', () => {
@@ -16,17 +16,12 @@ describe('Redirect Component', () => {
     const props = {
       isRedirect: false
     };
-    const component = shallow(
-      <BrowserRouter>
-        <RoutedRedirect {...props} />
-      </BrowserRouter>
-    );
+    const component = shallow(<Redirect {...props} />);
     expect(component.render()).toMatchSnapshot('routed');
   });
 
   it('should handle a redirect with a url', () => {
     const props = {
-      isRedirect: true,
       url: '//lorem/ipsum?dolor=sit'
     };
     const component = shallow(<Redirect {...props} />);
@@ -35,9 +30,7 @@ describe('Redirect Component', () => {
 
   it('should handle missing routes with and without withRouter', () => {
     const props = {
-      isRedirect: true,
-      route: '/lorem-ipsum',
-      history: {}
+      route: '/lorem-ipsum'
     };
     const component = shallow(<Redirect {...props} />);
 
@@ -45,7 +38,7 @@ describe('Redirect Component', () => {
 
     const componentWithRouter = shallow(
       <BrowserRouter>
-        <RoutedRedirect {...props} />
+        <Redirect {...props} />
       </BrowserRouter>
     );
 
@@ -54,9 +47,7 @@ describe('Redirect Component', () => {
 
   it('should handle existing routes with and without withRouter', () => {
     const props = {
-      isRedirect: true,
-      route: '/openshift-container',
-      history: {}
+      route: '/openshift-container'
     };
     const component = shallow(<Redirect {...props} />);
 
@@ -64,7 +55,7 @@ describe('Redirect Component', () => {
 
     const componentWithRouter = shallow(
       <BrowserRouter>
-        <RoutedRedirect {...props} />
+        <Redirect {...props} />
       </BrowserRouter>
     );
 

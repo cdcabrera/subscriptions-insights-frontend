@@ -85,7 +85,7 @@ class Authentication extends Component {
       (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
       session.status === 418
     ) {
-      return <Redirect isRedirect route={routerHelpers.getErrorRoute.path} />;
+      return <Redirect route={routerHelpers.getErrorRoute.path} />;
     }
 
     return (
