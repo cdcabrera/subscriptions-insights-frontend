@@ -139,6 +139,8 @@ class OptinView extends React.Component {
   render() {
     const { t } = this.props;
 
+    console.log('ROUTE DETAIL >>>', this.props.routeDetail); // eslint-disable-line
+
     return (
       <PageLayout>
         <Card>
