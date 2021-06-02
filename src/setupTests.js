@@ -54,6 +54,7 @@ addDisplayName(pfReactChartComponents);
  */
 global.window.insights = {
   chrome: {
+    appNavClick: Function.prototype,
     auth: {
       getUser: () =>
         new Promise(resolve =>
@@ -70,7 +71,6 @@ global.window.insights = {
     identifyApp: Function.prototype,
     init: Function.prototype,
     isBeta: Function.prototype,
-    navigation: Function.prototype,
     on: Function.prototype
   }
 };
