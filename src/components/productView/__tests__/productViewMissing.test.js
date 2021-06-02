@@ -1,9 +1,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import * as reactRedux from 'react-redux';
 import { ProductViewMissing } from '../productViewMissing';
 
 describe('ProductViewMissing Component', () => {
+  const useDispatchMock = jest.spyOn(reactRedux, 'useDispatch');
+
+  afterEach(() => {
+    useDispatchMock.mockClear();
+  });
+
   it('should render a non-connected component', () => {
+    useDispatchMock.mockReturnValue(jest.fn());
+
     const props = {
       availableProductsRedirect: 1
     };
@@ -28,11 +37,15 @@ describe('ProductViewMissing Component', () => {
   });
 
   it('should redirect when there are limited product cards', () => {
+    const mockDispatch = jest.fn();
+    useDispatchMock.mockReturnValue(action => action(mockDispatch));
+
     const props = {};
 
     mockWindowLocation(
       () => {
         const component = shallow(<ProductViewMissing {...props} />);
+        expect(mockDispatch.mock.calls).toMatchSnapshot('redirect action');
         expect(component).toMatchSnapshot('redirect');
       },
       {

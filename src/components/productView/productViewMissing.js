@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
-import { useHistory } from 'react-router-dom';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
-import { Redirect, routerHelpers } from '../router/router';
+import { routerHelpers } from '../router/router';
+import { reduxActions, useDispatch } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
@@ -18,7 +18,7 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ProductViewMissing = ({ availableProductsRedirect, t }) => {
-  const history = useHistory();
+  const dispatch = useDispatch();
 
   /**
    * Return a list of available products.
@@ -38,14 +38,19 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
    * @returns {void}
    */
   const onNavigate = id => {
-    const { routeHref } = routerHelpers.getRouteConfig({ id });
-    history.push(routeHref);
+    if (helpers.DEV_MODE) {
+      const { routeHref } = routerHelpers.getRouteConfig({ id });
+      window.location.href = routeHref;
+    } else {
+      dispatch(reduxActions.platform.setAppNav(id));
+    }
   };
 
   const availableProducts = filterAvailableProducts();
 
-  if (availableProducts.length <= availableProductsRedirect) {
-    return <Redirect isForced route={availableProducts[0].path} />;
+  if (!helpers.DEV_MODE && availableProducts.length <= availableProductsRedirect) {
+    dispatch(reduxActions.platform.setAppNav(availableProducts[0].id));
+    return null;
   }
 
   return (
