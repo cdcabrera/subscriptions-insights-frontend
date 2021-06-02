@@ -1,11 +1,17 @@
+/* eslint-disable no-unused-vars */
 import path from 'path';
+// import React, { useEffect } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { useMount } from 'react-use';
+import { Redirect as RedirectRRD } from 'react-router-dom';
+// import { useHistory, useLocation } from 'react-router-dom';
+// import { useMount } from 'react-use';
+// import { reduxActions, useDispatch } from '../../redux';
+// import { useDispatch } from '../../redux';
+// import { useMount } from 'react-use';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common';
-
+//
 /**
  * A routing redirect.
  *
@@ -19,7 +25,9 @@ import { helpers } from '../../common';
  * @returns {Node}
  */
 const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, url }) => {
-  const history = useHistory();
+  // const history = useHistory();
+  // const location = useLocation();
+  // const dispatch = useDispatch();
 
   /**
    * Bypass router, force the location.
@@ -40,18 +48,23 @@ const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, url }) => 
   /**
    * Use history, or force navigation.
    */
+  /*
   useMount(() => {
     if (isRedirect === true) {
       if (!isForced && route && history) {
-        const { routeHref } = routerHelpers.getRouteConfig({ pathName: route });
-        history.push(routeHref);
+        const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
+        // history.push(routeHref);
+        location.pathname = doit;
       } else {
         forceNavigation();
       }
     }
   });
+  */
+  const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
 
-  return (helpers.TEST_MODE && <React.Fragment>Redirected towards {url || route}</React.Fragment>) || null;
+  return <RedirectRRD to={doit} push />;
+  // return (helpers.TEST_MODE && <React.Fragment>Redirected towards {url || route}</React.Fragment>) || 'WTF';
 };
 
 /**
