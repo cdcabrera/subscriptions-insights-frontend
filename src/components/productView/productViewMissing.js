@@ -96,7 +96,7 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
 /**
  * Prop types.
  *
- * @type {{numberProductsRedirect: number, t: Function}}
+ * @type {{availableProductsRedirect: number, t: Function}}
  */
 ProductViewMissing.propTypes = {
   availableProductsRedirect: PropTypes.number,
