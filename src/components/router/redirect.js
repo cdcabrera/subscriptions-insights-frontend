@@ -50,27 +50,35 @@ const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, t, url }) 
     }
   };
 
-  const redirectRoute = () => {
+  const replaceRoute = () => {
     const routeDetail = routerHelpers.getRouteConfigByPath({ pathName: route }).firstMatch;
     return <Router routes={[{ ...routeDetail, path: '*' }]} />;
   };
 
+  // const redirectRoute = () => <Router />;
+
   /**
    * Use history, or force navigation.
    */
-  /*
   useMount(() => {
     if (isRedirect === true) {
+      if (!isForced && route && history) {
+        if (isReplace === false) {
+          const { routeHref } = routerHelpers.getRouteConfig({ pathName: route });
+          history.push(routeHref);
+        }
+      }
+      /*
       if (!isForced && route && history) {
         // const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
         // history.push(routeHref);
         // location.pathname = doit;
       } else {
-        forceNavigation();
+        // forceNavigation();
       }
+      */
     }
   });
-   */
 
   /*
   const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
@@ -81,7 +89,11 @@ const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, t, url }) 
 
   if (isRedirect === true) {
     if (!isForced && route && history) {
-      return redirectRoute();
+      if (isReplace) {
+        return replaceRoute();
+      }
+
+      return <Router />;
     }
 
     forceNavigation();
@@ -116,7 +128,7 @@ Redirect.defaultProps = {
   baseName: routerHelpers.baseName,
   isForced: false,
   isRedirect: true,
-  isReplace: false,
+  isReplace: true,
   route: null,
   url: null,
   t: translate
