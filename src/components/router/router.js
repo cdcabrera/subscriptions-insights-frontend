@@ -5,119 +5,7 @@ import { Redirect as ReactRouterDomRedirect, Route as ReactRouterDomRoute, Switc
 import { useMount } from 'react-use';
 import { routerHelpers } from './routerHelpers';
 import { Route } from './route';
-import {Loader} from "../loader/loader";
-// import { Loader } from '../loader/loader';
-/*
-const GeneratedRouteOLD = ({ item, activateOnErrorRoute, routes }) => {
-  const View = routerHelpers.importView(item.component);
-
-  console.log('>>> GEN ROUTE', View);
-
-  return (
-    <Route
-      exact={item.exact}
-      key={item.path}
-      path={item.path}
-      strict={item.strict}
-      render={({ location, ...routeProps }) => {
-        const routeConfig = item.id && routerHelpers.getRouteConfig({ id: item.id });
-        const { URLSearchParams, decodeURIComponent } = window;
-        const parsedSearch = {};
-
-        [
-          ...new Set(
-            [...new URLSearchParams(decodeURIComponent(location.search))].map(([param, value]) => `${param}~${value}`)
-          )
-        ].forEach(v => {
-          const [param, value] = v.split('~');
-          parsedSearch[param] = value;
-        });
-
-        const updatedLocation = {
-          ...location,
-          parsedSearch
-        };
-
-        return (
-          <View
-            routeDetail={{
-              baseName: routerHelpers.baseName,
-              errorRoute: activateOnErrorRoute,
-              routes,
-              routeItem: { ...item },
-              ...routeConfig
-            }}
-            location={updatedLocation}
-            {...routeProps}
-          />
-        );
-      }}
-    />
-  );
-};
-*/
-/*
-const GeneratedRoute = ({ item, activateOnErrorRoute, routes }) => {
-  const [genRoute, setGenRoute] = useState();
-
-  useMount(async () => {
-    const setup = async () => {
-      const View = await routerHelpers.importView(item.component);
-      const doroute = (
-        <Route
-          exact={item.exact}
-          key={item.path}
-          path={item.path}
-          strict={item.strict}
-          render={({ location, ...routeProps }) => {
-            const routeConfig = item.id && routerHelpers.getRouteConfig({ id: item.id });
-            const { URLSearchParams, decodeURIComponent } = window;
-            const parsedSearch = {};
-
-            [
-              ...new Set(
-                [...new URLSearchParams(decodeURIComponent(location.search))].map(
-                  ([param, value]) => `${param}~${value}`
-                )
-              )
-            ].forEach(v => {
-              const [param, value] = v.split('~');
-              parsedSearch[param] = value;
-            });
-
-            const updatedLocation = {
-              ...location,
-              parsedSearch
-            };
-
-            return (
-              <View
-                routeDetail={{
-                  baseName: routerHelpers.baseName,
-                  errorRoute: activateOnErrorRoute,
-                  routes,
-                  routeItem: { ...item },
-                  ...routeConfig
-                }}
-                location={updatedLocation}
-                {...routeProps}
-              />
-            );
-          }}
-        />
-      );
-
-      setGenRoute(doroute);
-    };
-
-    await setup();
-  });
-
-  console.log('>>> GEN ROUTE', genRoute);
-
-  return <React.Fragment>{genRoute}</React.Fragment>;
-};
-*/
+import { Loader } from '../loader/loader';
 
 /**
  * Load routes.
@@ -126,29 +14,37 @@ const GeneratedRoute = ({ item, activateOnErrorRoute, routes }) => {
  * @param {Array} props.routes
  * @returns {Node}
  */
-const Router = ({ activateOnErrorRoute, routes, redirectRoot } = {}) => {
-  const [views, setViews] = useState([]);
+const Router = ({ routes } = {}) => {
+  // const [views, setViews] = useState([]);
   // const [redirectRoot, setRedirectRoot] = useState(null);
 
   /**
    * Initialize routes.
    */
-  useMount(async () => {
+  // useMount(async () => {
     // const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
 
+    /*
     const results = await Promise.all(
-      routes.map(item => {
-        if (item.disabled) {
-          return null;
-        }
-
-        return <Route key={item.path} item={item} activateOnErrorRoute={activateOnErrorRoute} routes={routes} />;
-      })
+      routes.map(item => <Route key={item.path} item={item} activateOnErrorRoute={activateOnErrorRoute} routes={routes} />)
     );
+    /*
 
-    setViews(results);
     // setRedirectRoot(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
-  });
+    const redirectRoot = routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null;
+    if (redirectRoot) {
+      results.push(<ReactRouterDomRedirect key={`redirect-${redirectRoot.path}`} to={redirectRoot.redirect} />);
+    }
+     */
+
+    // setViews(results);
+  // });
+
+  // {}
+  // {redirectRoot && <ReactRouterDomRedirect to={redirectRoot.redirect} />}
+  const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
+  const views = routes.map(item => <Route key={item.path} item={item} activateOnErrorRoute={activateOnErrorRoute} routes={routes} />)
+  const redirectRoot = routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null;
 
   return (
     <Switch>
@@ -189,7 +85,7 @@ Router.propTypes = {
  * @type {{routes: Array}}
  */
 Router.defaultProps = {
-  activateOnErrorRoute: routes.find(route => route.activateOnError === true),
+  activateOnErrorRoute: routerHelpers.routes.find(route => route.activateOnError === true),
   routes: routerHelpers.routes,
   redirectRoot: routerHelpers.routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null
 };
