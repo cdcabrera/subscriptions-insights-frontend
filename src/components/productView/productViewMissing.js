@@ -1,13 +1,23 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
+import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
-import { Redirect, routerHelpers } from '../router/router';
+import { routerHelpers } from '../router/router';
 import { reduxActions, useDispatch } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
+
+/**
+ * Return a list of available products.
+ *
+ * @returns {Array}
+ */
+const filterAvailableProducts = () => {
+  const { configs, allConfigs } = routerHelpers.getRouteConfigByPath();
+  return (configs.length && configs) || allConfigs.filter(({ isSearchable }) => isSearchable === true);
+};
 
 /**
  * Render a missing product view.
@@ -20,16 +30,13 @@ import { translate } from '../i18n/i18n';
  */
 const ProductViewMissing = ({ availableProductsRedirect, t }) => {
   const dispatch = useDispatch();
+  const availableProducts = filterAvailableProducts();
 
-  /**
-   * Return a list of available products.
-   *
-   * @returns {Array}
-   */
-  const filterAvailableProducts = () => {
-    const { configs, allConfigs } = routerHelpers.getRouteConfigByPath();
-    return (configs.length && configs) || allConfigs.filter(({ isSearchable }) => isSearchable === true);
-  };
+  useMount(() => {
+    if (availableProducts.length <= availableProductsRedirect) {
+      dispatch(reduxActions.platform.setAppNav(availableProducts[0].id));
+    }
+  });
 
   /**
    * On click, update history.
@@ -47,18 +54,9 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
     }
   };
 
-  const availableProducts = filterAvailableProducts();
-
   if (!helpers.DEV_MODE && availableProducts.length <= availableProductsRedirect) {
-    dispatch(reduxActions.platform.setAppNav(availableProducts[0].id));
     return null;
   }
-
-  /*
-  if (availableProducts.length <= availableProductsRedirect) {
-    return <Redirect isForced route={availableProducts[0].path} />;
-  }
-   */
 
   return (
     <PageLayout className="curiosity-missing-view">
@@ -108,7 +106,7 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
 /**
  * Prop types.
  *
- * @type {{numberProductsRedirect: number, t: Function}}
+ * @type {{availableProductsRedirect: number, t: Function}}
  */
 ProductViewMissing.propTypes = {
   availableProductsRedirect: PropTypes.number,

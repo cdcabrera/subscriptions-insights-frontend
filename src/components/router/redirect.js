@@ -3,14 +3,17 @@ import path from 'path';
 // import React, { useEffect } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect as RedirectRRD } from 'react-router-dom';
+import { useHistory, Route, Redirect as RedirectRRD } from 'react-router-dom';
 // import { useHistory, useLocation } from 'react-router-dom';
-// import { useMount } from 'react-use';
+import { useMount } from 'react-use';
 // import { reduxActions, useDispatch } from '../../redux';
 // import { useDispatch } from '../../redux';
 // import { useMount } from 'react-use';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common';
+import { Loader } from '../loader/loader';
+import MessageView from '../messageView/messageView';
+import { translate } from '../i18n/i18n';
 //
 /**
  * A routing redirect.
@@ -21,11 +24,12 @@ import { helpers } from '../../common';
  * @param {boolean} props.isRedirect
  * @param {boolean} props.isReplace
  * @param {string} props.route
+ * @param {Function} props.t
  * @param {string} props.url
  * @returns {Node}
  */
-const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, url }) => {
-  // const history = useHistory();
+const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, t, url }) => {
+  const history = useHistory();
   // const location = useLocation();
   // const dispatch = useDispatch();
 
@@ -45,6 +49,21 @@ const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, url }) => 
     }
   };
 
+  const redirectRoute = () => {
+    const routeDetail = routerHelpers.getRouteConfigByPath({ pathName: route }).firstMatch;
+    const View =
+      (routeDetail && routerHelpers.importView(routeDetail.component)) ||
+      (() => <MessageView message={`${t('curiosity-view.redirectError')}, ${route}`} />);
+
+    return (
+      <React.Suspense fallback={<Loader variant="title" />}>
+        <Route path="*">
+          <View />
+        </Route>
+      </React.Suspense>
+    );
+  };
+
   /**
    * Use history, or force navigation.
    */
@@ -52,19 +71,32 @@ const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, url }) => 
   useMount(() => {
     if (isRedirect === true) {
       if (!isForced && route && history) {
-        const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
+        // const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
         // history.push(routeHref);
-        location.pathname = doit;
+        // location.pathname = doit;
       } else {
         forceNavigation();
       }
     }
   });
-  */
+   */
+
+  /*
   const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
 
-  return <RedirectRRD to={doit} push />;
+  return <RedirectRRD to={{ pathname: doit }} />;
+   */
   // return (helpers.TEST_MODE && <React.Fragment>Redirected towards {url || route}</React.Fragment>) || 'WTF';
+
+  if (isRedirect === true) {
+    if (!isForced && route && history) {
+      return redirectRoute();
+    }
+
+    forceNavigation();
+  }
+
+  return (helpers.TEST_MODE && <React.Fragment>Redirected towards {url || route}</React.Fragment>) || 'WTF';
 };
 
 /**
@@ -79,7 +111,8 @@ Redirect.propTypes = {
   isRedirect: PropTypes.bool,
   isReplace: PropTypes.bool,
   route: PropTypes.string,
-  url: PropTypes.string
+  url: PropTypes.string,
+  t: PropTypes.func
 };
 
 /**
@@ -94,7 +127,8 @@ Redirect.defaultProps = {
   isRedirect: true,
   isReplace: false,
   route: null,
-  url: null
+  url: null,
+  t: translate
 };
 
 export { Redirect as default, Redirect };
