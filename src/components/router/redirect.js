@@ -4,8 +4,9 @@ import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, Route, Redirect as RedirectRRD } from 'react-router-dom';
-// import { useHistory, useLocation } from 'react-router-dom';
 import { useMount } from 'react-use';
+import { Router } from './router';
+// import { useHistory, useLocation } from 'react-router-dom';
 // import { reduxActions, useDispatch } from '../../redux';
 // import { useDispatch } from '../../redux';
 // import { useMount } from 'react-use';
@@ -51,17 +52,7 @@ const Redirect = ({ baseName, isForced, isRedirect, isReplace, route, t, url }) 
 
   const redirectRoute = () => {
     const routeDetail = routerHelpers.getRouteConfigByPath({ pathName: route }).firstMatch;
-    const View =
-      (routeDetail && routerHelpers.importView(routeDetail.component)) ||
-      (() => <MessageView message={`${t('curiosity-view.redirectError')}, ${route}`} />);
-
-    return (
-      <React.Suspense fallback={<Loader variant="title" />}>
-        <Route path="*">
-          <View />
-        </Route>
-      </React.Suspense>
-    );
+    return <Router routes={[{ ...routeDetail, path: '*' }]} />;
   };
 
   /**
