@@ -1,13 +1,15 @@
+/* eslint-disable no-unused-vars */
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Route } from 'react-router-dom';
+import { withRouter, Route, Redirect as RedirectRRD } from 'react-router-dom';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common';
 import { Loader } from '../loader/loader';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
-
+import { Route as GeneratedRoute } from './router';
+//
 /**
  * A routing redirect.
  *
@@ -34,6 +36,19 @@ const Redirect = ({ baseName, history, isRedirect, isReplace, route, t, url }) =
 
   if (isRedirect === true) {
     if (route && history) {
+      // const { path: doit } = routerHelpers.getRouteConfig({ pathName: route });
+      // return <RedirectRRD to={doit} />;
+      const routeDetail = routerHelpers.getRouteConfig({ pathName: route });
+
+      console.log('>>> REDIRECT', routeDetail);
+
+      return (
+        <React.Suspense fallback={<Loader variant="title" />}>
+          <GeneratedRoute item={{ ...routeDetail, path: '*' }} />
+        </React.Suspense>
+      );
+
+      /*
       const routeDetail = routerHelpers.getRouteConfigByPath({ pathName: route }).firstMatch;
       const View =
         (routeDetail && routerHelpers.importView(routeDetail.component)) ||
@@ -46,10 +61,11 @@ const Redirect = ({ baseName, history, isRedirect, isReplace, route, t, url }) =
           </Route>
         </React.Suspense>
       );
+      */
     }
 
     const forcePath = url || (route && path.join(baseName, route));
-    forceNavigation(forcePath);
+    // forceNavigation(forcePath);
 
     return (
       ((helpers.DEV_MODE || helpers.TEST_MODE) && <React.Fragment>Redirected towards {forcePath}</React.Fragment>) ||
