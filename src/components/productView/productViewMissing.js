@@ -5,7 +5,7 @@ import { ArrowRightIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
 import { routerHelpers } from '../router/router';
-import { reduxActions, useDispatch } from '../../redux';
+import { useHistory } from '../../hooks/useRouter';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
@@ -29,12 +29,12 @@ const filterAvailableProducts = () => {
  * @returns {Node}
  */
 const ProductViewMissing = ({ availableProductsRedirect, t }) => {
-  const dispatch = useDispatch();
+  const history = useHistory();
   const availableProducts = filterAvailableProducts();
 
   useMount(() => {
     if (availableProducts.length <= availableProductsRedirect) {
-      dispatch(reduxActions.platform.setAppNav(availableProducts[0].id));
+      history.push(availableProducts[0].path);
     }
   });
 
@@ -42,19 +42,12 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
    * On click, update history.
    *
    * @event onNavigate
-   * @param {string} id
+   * @param {string} path
    * @returns {void}
    */
-  const onNavigate = id => {
-    if (helpers.DEV_MODE) {
-      const { routeHref } = routerHelpers.getRouteConfig({ id });
-      window.location.href = routeHref;
-    } else {
-      dispatch(reduxActions.platform.setAppNav(id));
-    }
-  };
+  const onNavigate = path => history.push(path);
 
-  if (!helpers.DEV_MODE && availableProducts.length <= availableProductsRedirect) {
+  if (availableProducts.length <= availableProductsRedirect) {
     return null;
   }
 
@@ -66,7 +59,7 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
       <PageSection isFilled>
         <Gallery hasGutter>
           {availableProducts.map(product => (
-            <Card key={`missingViewCard-${product.id}`} isHoverable onClick={() => onNavigate(product.id)}>
+            <Card key={`missingViewCard-${product.id}`} isHoverable onClick={() => onNavigate(product.path)}>
               <CardTitle>
                 <Title headingLevel="h2" size="lg">
                   {t('curiosity-view.title', {
@@ -88,7 +81,7 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
                 <Button
                   variant="link"
                   isInline
-                  onClick={() => onNavigate(product.id)}
+                  onClick={() => onNavigate(product.path)}
                   icon={<ArrowRightIcon />}
                   iconPosition="right"
                 >
@@ -119,7 +112,7 @@ ProductViewMissing.propTypes = {
  * @type {{availableProductsRedirect: number, t: translate}}
  */
 ProductViewMissing.defaultProps = {
-  availableProductsRedirect: 3,
+  availableProductsRedirect: (helpers.DEV_MODE && 0) ?? 3,
   t: translate
 };
 
