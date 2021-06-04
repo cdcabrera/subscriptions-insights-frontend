@@ -8,6 +8,7 @@ import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router/router';
+import { Redirect } from '../router/redirect';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
 import { useHistory } from '../../hooks/useRouter';
@@ -52,21 +53,11 @@ const Authentication = ({
     setAppName(appName);
     hideGlobalFilter();
 
-    const appNav = onNavigation(event => {
-      const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
-      history.push(routeHref);
-    });
+    const appNav = onNavigation(event => history.push(event.navId));
 
     removeListeners = () => {
       appNav();
     };
-
-    if (
-      (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
-      session.status === 418
-    ) {
-      history.push(routerHelpers.getErrorRoute.path);
-    }
   });
 
   useUnmount(() => {
@@ -87,6 +78,13 @@ const Authentication = ({
 
   if (session.pending) {
     return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
+  }
+
+  if (
+    (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
+    session.status === 418
+  ) {
+    return <Redirect route={routerHelpers.getErrorRoute.path} />;
   }
 
   return (

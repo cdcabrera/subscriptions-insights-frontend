@@ -16,7 +16,7 @@ const useHistory = () => {
     ...history,
     push: (pathLocation, historyState) => {
       const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
-      const { productParameter, id, routeHref } = routerHelpers.getRouteConfig({ pathName });
+      const { productParameter, id, routeHref } = routerHelpers.getRouteConfig({ pathName, id: pathName });
       const { hash, search } = window.location;
 
       if (!helpers.DEV_MODE && productParameter) {

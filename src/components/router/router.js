@@ -14,7 +14,7 @@ import { Loader } from '../loader/loader';
  */
 const Router = ({ routes } = {}) => {
   const [updatedRoutes, setUpdatedRoutes] = useState([]);
-  const [redirectRoot, setRedirectRoot] = useState(null);
+  const [redirectDefault, setRedirectDefault] = useState(null);
 
   /**
    * Initialize routes.
@@ -78,14 +78,14 @@ const Router = ({ routes } = {}) => {
     );
 
     setUpdatedRoutes(results);
-    setRedirectRoot(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
+    setRedirectDefault(routes.find(({ disabled, redirect: redirectPath }) => !disabled && redirectPath) ?? null);
   });
 
   return (
     <React.Suspense fallback={<Loader variant="title" />}>
       <Switch>
         {updatedRoutes}
-        {redirectRoot && <ReactRouterDomRedirect to={redirectRoot.redirect} />}
+        {redirectDefault && <ReactRouterDomRedirect to={redirectDefault.redirect} />}
       </Switch>
     </React.Suspense>
   );
