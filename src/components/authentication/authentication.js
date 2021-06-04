@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
@@ -9,118 +8,31 @@ import { reduxActions, reduxSelectors, useSelector, useDispatch } from '../../re
 import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router/router';
-import { Redirect } from '../router/redirect';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
 import { useHistory } from '../../hooks/useRouter';
 
+/**
+ * Create a selector to apply state, props.
+ *
+ * @type {Function}
+ */
 const makeMapStateToProps = reduxSelectors.user.makeUserSession();
 
 /**
  * An authentication pass-through component.
  *
- * @augments React.Component
+ * @param {object} props
+ * @param {string} props.appName
+ * @param {Node} props.children
+ * @param {Function} props.t
+ * @returns {Node}
  */
-/*
-class AuthenticationOLD extends Component {
-  appName = routerHelpers.appName;
-
-  removeListeners = helpers.noop;
-
-  async componentDidMount() {
-    const {
-      authorizeUser,
-      hideGlobalFilter,
-      history,
-      initializeChrome,
-      onNavigation,
-      session,
-      setAppName
-    } = this.props;
-    const { subscriptions: authorized } = session.authorized || {};
-
-    if (!authorized) {
-      await authorizeUser();
-    }
-
-    if (!helpers.DEV_MODE) {
-      initializeChrome();
-      setAppName(this.appName);
-      hideGlobalFilter();
-
-      const appNav = onNavigation(event => {
-        const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
-        history.push(routeHref);
-      });
-
-      this.removeListeners = () => {
-        appNav();
-      };
-    }
-  }
-
-  componentWillUnmount() {
-    this.removeListeners();
-  }
-
-  /**
-   * Render authenticated children or messaging.
-   *
-   * @returns {Node}
-   * /
-  render() {
-    const { children, session, t } = this.props;
-    const { subscriptions: authorized } = session.authorized || {};
-
-    if (helpers.UI_DISABLED) {
-      return (
-        <MessageView>
-          <Maintenance description={t('curiosity-auth.maintenanceCopy', '...')} />
-        </MessageView>
-      );
-    }
-
-    if (authorized) {
-      return <React.Fragment>{children}</React.Fragment>;
-    }
-
-    if (session.pending) {
-      return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
-    }
-
-    if (
-      (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
-      session.status === 418
-    ) {
-      return <Redirect route={routerHelpers.getErrorRoute.path} />;
-    }
-
-    return (
-      <MessageView>
-        <NotAuthorized serviceName={helpers.UI_DISPLAY_NAME} />
-      </MessageView>
-    );
-  }
-}
-*/
-
-const Authentication = ({
-  appName,
-  // authorizeUser,
-  // hideGlobalFilter,
-  // initializeChrome,
-  // onNavigation,
-  // session,
-  // setAppName,
-  children,
-  t
-}) => {
+const Authentication = ({ appName, children, t }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { session } = useSelector(makeMapStateToProps);
   const { subscriptions: authorized } = session.authorized || {};
-
-  console.log('HEY >>>>', authorized, session);
 
   let removeListeners = helpers.noop;
 
@@ -129,22 +41,20 @@ const Authentication = ({
       await dispatch(reduxActions.user.authorizeUser());
     }
 
-    if (!helpers.DEV_MODE) {
-      dispatch(reduxActions.platform.initializeChrome());
-      dispatch(reduxActions.platform.setAppName(appName));
-      dispatch(reduxActions.platform.hideGlobalFilter());
+    dispatch(reduxActions.platform.initializeChrome());
+    dispatch(reduxActions.platform.setAppName(appName));
+    dispatch(reduxActions.platform.hideGlobalFilter());
 
-      const appNav = dispatch(
-        reduxActions.platform.onNavigation(event => {
-          const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
-          history.push(routeHref);
-        })
-      );
+    const appNav = dispatch(
+      reduxActions.platform.onNavigation(event => {
+        const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
+        history.push(routeHref);
+      })
+    );
 
-      removeListeners = () => {
-        appNav();
-      };
-    }
+    removeListeners = () => {
+      appNav();
+    };
 
     if (
       (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
@@ -174,15 +84,6 @@ const Authentication = ({
     return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
   }
 
-  /*
-  if (
-    (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
-    session.status === 418
-  ) {
-    return <Redirect route={routerHelpers.getErrorRoute.path} />;
-  }
-  */
-
   return (
     <MessageView>
       <NotAuthorized serviceName={helpers.UI_DISPLAY_NAME} />
@@ -193,86 +94,22 @@ const Authentication = ({
 /**
  * Prop types.
  *
- * @type {{authorizeUser: Function, onNavigation: Function, setAppName: Function, t: Function,
- *     children: Node, initializeChrome: Function, session: object, history: object,
- *     hideGlobalFilter: Function}}
+ * @type {{t: Function, children: Node, appName: string}}
  */
 Authentication.propTypes = {
   appName: PropTypes.string,
-  authorizeUser: PropTypes.func,
   children: PropTypes.node.isRequired,
-  hideGlobalFilter: PropTypes.func,
-  /*
-  history: PropTypes.shape({
-    listen: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired
-  }).isRequired,
-  */
-  initializeChrome: PropTypes.func,
-  onNavigation: PropTypes.func,
-  setAppName: PropTypes.func,
-  /*
-  session: PropTypes.shape({
-    authorized: PropTypes.shape({
-      [routerHelpers.appName]: PropTypes.bool
-    }),
-    errorCodes: PropTypes.arrayOf(PropTypes.string),
-    pending: PropTypes.bool,
-    status: PropTypes.number
-  }),
-  */
   t: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{authorizeUser: Function, onNavigation: Function, setAppName: Function, t: translate,
- *     initializeChrome: Function, session: {authorized: object, errorCodes: Array, pending: boolean,
- *     status: number}, hideGlobalFilter: Function}}
+ * @type {{t: translate, appName: string}}
  */
 Authentication.defaultProps = {
   appName: routerHelpers.appName,
-  authorizeUser: helpers.noop,
-  hideGlobalFilter: helpers.noop,
-  initializeChrome: helpers.noop,
-  onNavigation: helpers.noop,
-  setAppName: helpers.noop,
-  /*
-  session: {
-    authorized: {},
-    errorCodes: [],
-    pending: false,
-    status: null
-  },
-   */
   t: translate
 };
 
-/**
- * Apply actions to props.
- *
- * @param {Function} dispatch
- * @returns {object}
- */
-/*
-const mapDispatchToProps = dispatch => ({
-  authorizeUser: () => dispatch(reduxActions.user.authorizeUser()),
-  hideGlobalFilter: isHidden => dispatch(reduxActions.platform.hideGlobalFilter(isHidden)),
-  initializeChrome: () => dispatch(reduxActions.platform.initializeChrome()),
-  onNavigation: callback => dispatch(reduxActions.platform.onNavigation(callback)),
-  setAppName: name => dispatch(reduxActions.platform.setAppName(name))
-});
-*/
-
-/**
- * Create a selector from applied state, props.
- *
- * @type {Function}
- */
-// const makeMapStateToProps = reduxSelectors.user.makeUserSession();
-
-// const ConnectedAuthentication = connect(makeMapStateToProps, mapDispatchToProps)(Authentication);
-
-// export { ConnectedAuthentication as default, ConnectedAuthentication, Authentication };
 export { Authentication as default, Authentication };
