@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
@@ -5,6 +6,7 @@ import { ArrowRightIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
 import { routerHelpers } from '../router/router';
+import { reduxActions, useDispatch } from '../../redux';
 import { useHistory } from '../../hooks/useRouter';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
@@ -31,10 +33,11 @@ const filterAvailableProducts = () => {
 const ProductViewMissing = ({ availableProductsRedirect, t }) => {
   const history = useHistory();
   const availableProducts = filterAvailableProducts();
+  const dispatch = useDispatch();
 
   useMount(() => {
     if (availableProducts.length <= availableProductsRedirect) {
-      history.push(availableProducts[0].path);
+      // history.push(availableProducts[0].path);
     }
   });
 
@@ -45,7 +48,12 @@ const ProductViewMissing = ({ availableProductsRedirect, t }) => {
    * @param {string} path
    * @returns {void}
    */
-  const onNavigate = path => history.push(path);
+  const onNavigate = path => {
+    // history.push(path);
+    const { id } = routerHelpers.getRouteConfig({ pathName: path });
+    // dispatch(reduxActions.platform.setAppNav(id));
+    window.insights.chrome.appNavClick({ id, secondaryNav: true, parentId: helpers.UI_NAME });
+  };
 
   if (availableProducts.length <= availableProductsRedirect) {
     return null;
@@ -112,7 +120,7 @@ ProductViewMissing.propTypes = {
  * @type {{availableProductsRedirect: number, t: translate}}
  */
 ProductViewMissing.defaultProps = {
-  availableProductsRedirect: (helpers.DEV_MODE && 0) ?? 3,
+  availableProductsRedirect: 0,
   t: translate
 };
 

@@ -131,8 +131,10 @@ const setAppName = async (name = null) => {
  * @param {boolean} options.secondaryNav
  * @returns {Promise<object>}
  */
-const setAppNav = async (id, { appName = helpers.UI_NAME, secondaryNav = true } = {}) => {
+const setAppNav = async (id, options = {}) => {
+  const { appName = helpers.UI_NAME, secondaryNav = true } = options;
   const { insights } = window;
+  console.log('>>>', appName, secondaryNav);
   try {
     return (
       (helpers.DEV_MODE && { [platformApiTypes.PLATFORM_API_RESPONSE_NAV_TYPES.ACTIVE_APP]: id }) ||

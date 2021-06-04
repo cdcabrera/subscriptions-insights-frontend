@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+import { useState } from 'react';
 import { useHistory as useHistoryRRD, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { routerHelpers } from '../components/router/routerHelpers';
 import { reduxActions, useDispatch } from '../redux';
 import { helpers } from '../common/helpers';
+import platformServices from '../services/platformServices';
 
 /**
  * Pass useHistory methods. Proxy useHistory push with Platform specific navigation update.
@@ -10,7 +13,8 @@ import { helpers } from '../common/helpers';
  */
 const useHistory = () => {
   const history = useHistoryRRD();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  // const [updatedDispatch] = useState(dispatch);
 
   return {
     ...history,
@@ -20,7 +24,8 @@ const useHistory = () => {
       const { hash, search } = window.location;
 
       if (!helpers.DEV_MODE && productParameter) {
-        return dispatch(reduxActions.platform.setAppNav(id));
+        // return updatedDispatch(reduxActions.platform.setAppNav(id));
+        return platformServices.setAppNav(id);
       }
 
       return history.push(routeHref || (pathName && `${pathName}${search}${hash}`) || pathLocation, historyState);
