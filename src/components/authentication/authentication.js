@@ -6,7 +6,7 @@ import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAut
 import { connectRouter, reduxActions, reduxSelectors } from '../../redux';
 import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
-import { Redirect, routerHelpers } from '../router/router';
+import { routerHelpers, Redirect } from '../router';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
 
