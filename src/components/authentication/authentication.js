@@ -1,22 +1,28 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
-import { connectRouter, reduxActions, reduxSelectors } from '../../redux';
+import { useMount, useUnmount } from 'react-use';
+import { reduxActions, reduxSelectors, useSelector, useDispatch } from '../../redux';
 import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router/router';
 import { Redirect } from '../router/redirect';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
+import { useHistory } from '../../hooks/useRouter';
+
+const makeMapStateToProps = reduxSelectors.user.makeUserSession();
 
 /**
  * An authentication pass-through component.
  *
  * @augments React.Component
  */
-class Authentication extends Component {
+/*
+class AuthenticationOLD extends Component {
   appName = routerHelpers.appName;
 
   removeListeners = helpers.noop;
@@ -61,7 +67,7 @@ class Authentication extends Component {
    * Render authenticated children or messaging.
    *
    * @returns {Node}
-   */
+   * /
   render() {
     const { children, session, t } = this.props;
     const { subscriptions: authorized } = session.authorized || {};
@@ -96,6 +102,93 @@ class Authentication extends Component {
     );
   }
 }
+*/
+
+const Authentication = ({
+  appName,
+  // authorizeUser,
+  // hideGlobalFilter,
+  // initializeChrome,
+  // onNavigation,
+  // session,
+  // setAppName,
+  children,
+  t
+}) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { session } = useSelector(makeMapStateToProps);
+  const { subscriptions: authorized } = session.authorized || {};
+
+  console.log('HEY >>>>', authorized, session);
+
+  let removeListeners = helpers.noop;
+
+  useMount(async () => {
+    if (!authorized) {
+      await dispatch(reduxActions.user.authorizeUser());
+    }
+
+    if (!helpers.DEV_MODE) {
+      dispatch(reduxActions.platform.initializeChrome());
+      dispatch(reduxActions.platform.setAppName(appName));
+      dispatch(reduxActions.platform.hideGlobalFilter());
+
+      const appNav = dispatch(
+        reduxActions.platform.onNavigation(event => {
+          const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
+          history.push(routeHref);
+        })
+      );
+
+      removeListeners = () => {
+        appNav();
+      };
+    }
+
+    if (
+      (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
+      session.status === 418
+    ) {
+      history.push(routerHelpers.getErrorRoute.path);
+    }
+  });
+
+  useUnmount(() => {
+    removeListeners();
+  });
+
+  if (helpers.UI_DISABLED) {
+    return (
+      <MessageView>
+        <Maintenance description={t('curiosity-auth.maintenanceCopy', '...')} />
+      </MessageView>
+    );
+  }
+
+  if (authorized) {
+    return <React.Fragment>{children}</React.Fragment>;
+  }
+
+  if (session.pending) {
+    return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
+  }
+
+  /*
+  if (
+    (session.errorCodes && session.errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
+    session.status === 418
+  ) {
+    return <Redirect route={routerHelpers.getErrorRoute.path} />;
+  }
+  */
+
+  return (
+    <MessageView>
+      <NotAuthorized serviceName={helpers.UI_DISPLAY_NAME} />
+    </MessageView>
+  );
+};
 
 /**
  * Prop types.
@@ -105,16 +198,20 @@ class Authentication extends Component {
  *     hideGlobalFilter: Function}}
  */
 Authentication.propTypes = {
+  appName: PropTypes.string,
   authorizeUser: PropTypes.func,
   children: PropTypes.node.isRequired,
   hideGlobalFilter: PropTypes.func,
+  /*
   history: PropTypes.shape({
     listen: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired,
+  */
   initializeChrome: PropTypes.func,
   onNavigation: PropTypes.func,
   setAppName: PropTypes.func,
+  /*
   session: PropTypes.shape({
     authorized: PropTypes.shape({
       [routerHelpers.appName]: PropTypes.bool
@@ -123,6 +220,7 @@ Authentication.propTypes = {
     pending: PropTypes.bool,
     status: PropTypes.number
   }),
+  */
   t: PropTypes.func
 };
 
@@ -134,17 +232,20 @@ Authentication.propTypes = {
  *     status: number}, hideGlobalFilter: Function}}
  */
 Authentication.defaultProps = {
+  appName: routerHelpers.appName,
   authorizeUser: helpers.noop,
   hideGlobalFilter: helpers.noop,
   initializeChrome: helpers.noop,
   onNavigation: helpers.noop,
   setAppName: helpers.noop,
+  /*
   session: {
     authorized: {},
     errorCodes: [],
     pending: false,
     status: null
   },
+   */
   t: translate
 };
 
@@ -154,6 +255,7 @@ Authentication.defaultProps = {
  * @param {Function} dispatch
  * @returns {object}
  */
+/*
 const mapDispatchToProps = dispatch => ({
   authorizeUser: () => dispatch(reduxActions.user.authorizeUser()),
   hideGlobalFilter: isHidden => dispatch(reduxActions.platform.hideGlobalFilter(isHidden)),
@@ -161,14 +263,16 @@ const mapDispatchToProps = dispatch => ({
   onNavigation: callback => dispatch(reduxActions.platform.onNavigation(callback)),
   setAppName: name => dispatch(reduxActions.platform.setAppName(name))
 });
+*/
 
 /**
  * Create a selector from applied state, props.
  *
  * @type {Function}
  */
-const makeMapStateToProps = reduxSelectors.user.makeUserSession();
+// const makeMapStateToProps = reduxSelectors.user.makeUserSession();
 
-const ConnectedAuthentication = connectRouter(makeMapStateToProps, mapDispatchToProps)(Authentication);
+// const ConnectedAuthentication = connect(makeMapStateToProps, mapDispatchToProps)(Authentication);
 
-export { ConnectedAuthentication as default, ConnectedAuthentication, Authentication };
+// export { ConnectedAuthentication as default, ConnectedAuthentication, Authentication };
+export { Authentication as default, Authentication };
