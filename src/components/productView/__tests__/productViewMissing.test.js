@@ -36,16 +36,13 @@ describe('ProductViewMissing Component', () => {
     );
   });
 
-  it('should redirect when there are limited product cards', () => {
+  it('should redirect when there are limited product cards', async () => {
     const mockDispatch = jest.fn();
     useDispatchMock.mockReturnValue(action => action(mockDispatch));
 
     const props = {};
 
-    mockWindowLocation(() => {
-      const component = shallow(<ProductViewMissing {...props} />);
-      expect(mockDispatch.mock.calls).toMatchSnapshot('redirect action');
-      expect(component).toMatchSnapshot('redirect');
-    });
+    await mountHookComponent(<ProductViewMissing {...props} />);
+    expect(mockDispatch.mock.calls).toMatchSnapshot('redirect action');
   });
 });
