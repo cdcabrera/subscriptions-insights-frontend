@@ -4,7 +4,7 @@ import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { useMount, useUnmount } from 'react-use';
-import { reduxActions, reduxSelectors, useSelector, useDispatch } from '../../redux';
+import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router/router';
@@ -13,44 +13,49 @@ import { translate } from '../i18n/i18n';
 import { useHistory } from '../../hooks/useRouter';
 
 /**
- * Create a selector to apply state, props.
- *
- * @type {Function}
- */
-const makeMapStateToProps = reduxSelectors.user.makeUserSession();
-
-/**
  * An authentication pass-through component.
  *
  * @param {object} props
+ * @param {Function} props.authorizeUser
  * @param {string} props.appName
  * @param {Node} props.children
+ * @param {Function} props.hideGlobalFilter
+ * @param {Function} props.initializeChrome
+ * @param {Function} props.onNavigation
+ * @param {object} props.session
+ * @param {Function} props.setAppName
  * @param {Function} props.t
  * @returns {Node}
  */
-const Authentication = ({ appName, children, t }) => {
+const Authentication = ({
+  appName,
+  authorizeUser,
+  children,
+  initializeChrome,
+  hideGlobalFilter,
+  onNavigation,
+  session,
+  setAppName,
+  t
+}) => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const { session } = useSelector(makeMapStateToProps);
   const { subscriptions: authorized } = session.authorized || {};
 
   let removeListeners = helpers.noop;
 
   useMount(async () => {
     if (!authorized) {
-      await dispatch(reduxActions.user.authorizeUser());
+      await authorizeUser();
     }
 
-    dispatch(reduxActions.platform.initializeChrome());
-    dispatch(reduxActions.platform.setAppName(appName));
-    dispatch(reduxActions.platform.hideGlobalFilter());
+    initializeChrome();
+    setAppName(appName);
+    hideGlobalFilter();
 
-    const appNav = dispatch(
-      reduxActions.platform.onNavigation(event => {
-        const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
-        history.push(routeHref);
-      })
-    );
+    const appNav = onNavigation(event => {
+      const { routeHref } = routerHelpers.getRouteConfig({ id: event.navId });
+      history.push(routeHref);
+    });
 
     removeListeners = () => {
       appNav();
@@ -94,22 +99,71 @@ const Authentication = ({ appName, children, t }) => {
 /**
  * Prop types.
  *
- * @type {{t: Function, children: Node, appName: string}}
+ * @type {{authorizeUser: Function, onNavigation: Function, setAppName: Function, t: Function, children: Node,
+ *     appName: string, initializeChrome: Function, session: object, hideGlobalFilter: Function}}
  */
 Authentication.propTypes = {
   appName: PropTypes.string,
+  authorizeUser: PropTypes.func,
   children: PropTypes.node.isRequired,
+  hideGlobalFilter: PropTypes.func,
+  initializeChrome: PropTypes.func,
+  onNavigation: PropTypes.func,
+  setAppName: PropTypes.func,
+  session: PropTypes.shape({
+    authorized: PropTypes.shape({
+      [routerHelpers.appName]: PropTypes.bool
+    }),
+    errorCodes: PropTypes.arrayOf(PropTypes.string),
+    pending: PropTypes.bool,
+    status: PropTypes.number
+  }),
   t: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{t: translate, appName: string}}
+ * @type {{authorizeUser: Function, onNavigation: Function, setAppName: Function, t: translate, appName: string,
+ *     initializeChrome: Function, session: object, hideGlobalFilter: Function}}
  */
 Authentication.defaultProps = {
   appName: routerHelpers.appName,
+  authorizeUser: helpers.noop,
+  hideGlobalFilter: helpers.noop,
+  initializeChrome: helpers.noop,
+  onNavigation: helpers.noop,
+  setAppName: helpers.noop,
+  session: {
+    authorized: {},
+    errorCodes: [],
+    pending: false,
+    status: null
+  },
   t: translate
 };
 
-export { Authentication as default, Authentication };
+/**
+ * Apply actions to props.
+ *
+ * @param {Function} dispatch
+ * @returns {object}
+ */
+const mapDispatchToProps = dispatch => ({
+  authorizeUser: () => dispatch(reduxActions.user.authorizeUser()),
+  hideGlobalFilter: isHidden => dispatch(reduxActions.platform.hideGlobalFilter(isHidden)),
+  initializeChrome: () => dispatch(reduxActions.platform.initializeChrome()),
+  onNavigation: callback => dispatch(reduxActions.platform.onNavigation(callback)),
+  setAppName: name => dispatch(reduxActions.platform.setAppName(name))
+});
+
+/**
+ * Create a selector from applied state, props.
+ *
+ * @type {Function}
+ */
+const makeMapStateToProps = reduxSelectors.user.makeUserSession();
+
+const ConnectedAuthentication = connect(makeMapStateToProps, mapDispatchToProps)(Authentication);
+
+export { ConnectedAuthentication as default, ConnectedAuthentication, Authentication };
