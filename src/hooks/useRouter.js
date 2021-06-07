@@ -11,9 +11,12 @@ import { helpers } from '../common/helpers';
  * @param {Function} hooks.useDispatch
  * @returns {object<history>}
  */
-const useHistory = ({ useHistory: useHist = useHistoryRRD, useDispatch: useDis = useDispatch } = {}) => {
-  const history = useHist();
-  const dispatch = useDis();
+const useHistory = ({
+  useHistory: useAliasHistory = useHistoryRRD,
+  useDispatch: useAliasDispatch = useDispatch
+} = {}) => {
+  const history = useAliasHistory();
+  const dispatch = useAliasDispatch();
 
   return {
     ...history,
