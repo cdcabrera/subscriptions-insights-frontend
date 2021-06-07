@@ -76,9 +76,7 @@ describe('useRouter', () => {
     // console.log('>>>>>', mockDispatch.mock.calls);
     // expect(hook).toMatchSnapshot('useHistory');
 
-    const mockUseHistory = mockHook(routerHooks.useHistory, {
-      args: [{ useHistory: () => ({ push: mockHistoryPush }) }]
-    });
+    const mockUseHistory = mockHook(() => routerHooks.useHistory({ useHistory: () => ({ push: mockHistoryPush }) }));
     mockUseHistory.push('rhel');
 
     expect(mockDispatch.mock.calls).toMatchSnapshot('push, config route');

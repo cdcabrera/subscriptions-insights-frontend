@@ -125,14 +125,12 @@ global.mountHookComponent = async (component, options = {}) => {
  * Fire a hook, return the result.
  *
  * @param {Function} useHook
- * @param {object} options
- * @param {Array} options.args
  * @returns {*}
  */
-global.mockHook = (useHook, { args = [] } = {}) => {
+global.mockHook = (useHook = Function.prototype) => {
   let result;
   const Hook = () => {
-    result = useHook(...args);
+    result = useHook();
     return null;
   };
   shallow(<Hook />);
