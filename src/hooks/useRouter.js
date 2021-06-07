@@ -6,11 +6,14 @@ import { helpers } from '../common/helpers';
 /**
  * Pass useHistory methods. Proxy useHistory push with Platform specific navigation update.
  *
+ * @param {object} hooks
+ * @param {Function} hooks.useHistory
+ * @param {Function} hooks.useDispatch
  * @returns {object<history>}
  */
-const useHistory = () => {
-  const history = useHistoryRRD();
-  const dispatch = useDispatch();
+const useHistory = ({ useHistory: useHist = useHistoryRRD, useDispatch: useDis = useDispatch } = {}) => {
+  const history = useHist();
+  const dispatch = useDis();
 
   return {
     ...history,

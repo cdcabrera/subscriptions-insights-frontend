@@ -1,4 +1,5 @@
-import { configure, mount } from 'enzyme';
+import React from 'react';
+import { configure, mount, shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
@@ -22,6 +23,34 @@ jest.mock('i18next', () => {
  * Emulate for component checks
  */
 jest.mock('lodash/debounce', () => jest.fn);
+
+// jest.mock('react-router-dom', () => ({ useHistory: jest.fn() }));
+// global.mockReactRouterDom = jest.mock('react-router-dom');
+/*
+global.mockUseHistory = () => ({ push: jest.fn() }); // .mockReturnValue(() => ({ push: jest.fn() }));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: global.mockUseHistory
+  // useHistory: () => ({
+  //  push: jest.fn()
+  // })
+  // useLocation: jest.fn(),
+  // useParams: jest.fn(),
+  // useRouteMatch: jest.fn()
+}));
+//
+*/
+
+/*
+global.doit = jest.mock;
+
+global.mockResource = (resource, response = {}) =>
+  global.doit(resource, () => ({
+    ...jest.requireActual(resource),
+    ...response
+  }));
+*/
 
 /**
  * FixMe: Use of arrow functions removes the usefulness of the "displayName" when shallow rendering
@@ -91,6 +120,41 @@ global.mountHookComponent = async (component, options = {}) => {
   mountedComponent?.update();
   return mountedComponent;
 };
+
+/**
+ * Fire a hook, return the result.
+ *
+ * @param {Function} useHook
+ * @param {object} options
+ * @param {Array} options.args
+ * @returns {*}
+ */
+global.mockHook = (useHook, { args = [] } = {}) => {
+  let result;
+  const Hook = () => {
+    result = useHook(...args);
+    return null;
+  };
+  shallow(<Hook />);
+  return result;
+};
+
+/*
+global.mockHook = (useHook, { args = [], context = {} } = {}) => {
+  let result;
+  const setContext = (arg = {}) => jest.spyOn(React, 'useContext').mockImplementation(() => arg);
+  const Hook = () => {
+    result = useHook(...args);
+    return null;
+  };
+
+  const spy = setContext(context);
+  shallow(<Hook />);
+  spy.mockClear();
+
+  return result;
+};
+ */
 
 /**
  * Generate a mock window location object, allow async.

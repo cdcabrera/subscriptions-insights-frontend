@@ -39,6 +39,8 @@
     "plugin:jsdoc/recommended"
   ],
   "globals": {
+    "mockReactRouterDom": "readonly",
+    "mockHook": "readonly",
     "mountHookComponent": "readonly",
     "mockWindowLocation": "readonly"
   },
