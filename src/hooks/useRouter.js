@@ -4,6 +4,11 @@ import { reduxActions, useDispatch } from '../redux';
 import { helpers } from '../common/helpers';
 
 /**
+ * ToDo: reevaluate this alternative pattern of passing library hooks as options
+ * We did this as a test to see if its more convenient for unit testing instead of
+ * having to spy or mock entire resources.
+ */
+/**
  * Pass useHistory methods. Proxy useHistory push with Platform specific navigation update.
  *
  * @param {object} hooks
