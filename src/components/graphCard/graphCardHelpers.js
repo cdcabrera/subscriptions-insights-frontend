@@ -146,7 +146,7 @@ const yAxisTickFormatFallback = ({ tick }) => {
  * @param {string} params.locale
  * @returns {string}
  */
-const yAxisTickFormat = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
+const yAxisTickFormatLeft = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
   let updatedTick = `${new Intl.NumberFormat(locale, {
     maximumFractionDigits: 1,
     notation: 'compact',
@@ -160,11 +160,14 @@ const yAxisTickFormat = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
   return updatedTick;
 };
 
+const yAxisTickFormatRight = ({ tick }) => tick;
+
 const graphCardHelpers = {
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
-  yAxisTickFormat,
+  yAxisTickFormatLeft,
+  yAxisTickFormatRight,
   yAxisTickFormatFallback
 };
 
@@ -174,6 +177,7 @@ export {
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
-  yAxisTickFormat,
+  yAxisTickFormatLeft,
+  yAxisTickFormatRight,
   yAxisTickFormatFallback
 };

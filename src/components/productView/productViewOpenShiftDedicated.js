@@ -83,7 +83,7 @@ ProductViewOpenShiftDedicated.defaultProps = {
         fill: chartColorBlueLight.value,
         stroke: chartColorBlueDark.value,
         color: chartColorBlueDark.value,
-        isLine: true,
+        chartType: 'line',
         isStacked: false,
         isYAxis: true
       },
@@ -92,9 +92,9 @@ ProductViewOpenShiftDedicated.defaultProps = {
         fill: chartColorCyanLight.value,
         stroke: chartColorCyanDark.value,
         color: chartColorCyanDark.value,
-        isLine: true,
+        chartType: 'line',
         isStacked: false,
-        isYAxis: true
+        isYAxis: false
       }
     ],
     initialGraphSettings: {
