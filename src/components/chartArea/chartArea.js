@@ -127,20 +127,45 @@ class ChartArea extends React.Component {
     }
   }
 
+  // const { xAxisProps, yAxisProps, chartDomain, hasData } = this.getChartAxisPropsDomain();
+
+  getChartAxisPropsDomain() {
+    const { dataSetsToggle } = this;
+    const { xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
+
+    const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
+
+    const { maxX, maxY, individualMaxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets }); // need to use toggled datasets
+    // const chartDomain = (Object.keys(domain).length && { domain }) || chartHelpers.generateDomains({ dataSets, maxY });
+    const chartDomain = chartHelpers.generateDomains({ dataSets, maxY });
+    const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
+      dataSets,
+      individualMaxY,
+      maxX,
+      maxY,
+      xAxisFixLabelOverlap,
+      xAxisLabelIncrement,
+      xAxisTickFormat,
+      yAxisTickFormat
+    });
+
+    const hasData = false;
+
+    console.log('>>> xAxisProps', xAxisProps);
+    console.log('>>> yAxisProps', yAxisProps);
+    console.log('>>> chartDomain', chartDomain);
+
+    return { xAxisProps, yAxisProps, chartDomain, hasData, maxX, maxY };
+  }
+
   /**
    * Return x and y axis increments/ticks.
    *
    * @returns {object}
    */
-  getChartTicks() {
+  /*
+  getChartTicksOLD() {
     const { xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
-    // const updatedXAxisProps = {
-    //  fixLabelOverlap: xAxisFixLabelOverlap
-    // };
-    // const updatedYAxisProps = {
-    //   dependentAxis: true,
-    //  showGrid: true
-    // };
 
     const { xAxisProps, yAxisProps } = chartHelpers.generateChartTicks({
       xAxisFixLabelOverlap,
@@ -152,11 +177,11 @@ class ChartArea extends React.Component {
 
     return {
       isXAxisTicks: !!xAxisProps.tickValues,
-      // xAxisProps: { ...updatedXAxisProps, ...xAxisProps },
       xAxisProps,
       yAxisProps
     };
   }
+  */
 
   /**
    * Calculate and return the x and y domain range.
@@ -164,14 +189,31 @@ class ChartArea extends React.Component {
    * @param {boolean} isXAxisTicks
    * @returns {object}
    */
-  getChartDomain({ isXAxisTicks }) {
+  // getChartDomainOLD({ isXAxisTicks }) {
+  /*
     const { dataSetsToggle } = this;
-    const { domain, dataSets, yAxisTickFormat } = this.props;
+    const { domain, dataSets } = this.props;
 
     if (Object.keys(domain).length) {
       return domain;
     }
 
+    const updatedDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
+    const { maxX, maxY, individualMaxY, chartDomain } = chartHelpers.generateChartDomains({
+      dataSets: updatedDataSets,
+      isXAxisTicks
+    });
+
+    console.log('>>> >>>>>>>>>>>>>', chartDomain);
+    console.log('>>> >>>>>>>>>>>>>', individualMaxY);
+
+    return {
+      maxX,
+      maxY,
+      chartDomain
+    };
+
+    /*
     const generatedDomain = {};
     const updatedChartDomain = {};
     let dataSetMaxX = 0;
@@ -223,7 +265,9 @@ class ChartArea extends React.Component {
       maxY: dataSetMaxY,
       chartDomain: { ...updatedChartDomain }
     };
-  }
+     * /
+    */
+  // }
 
   /**
    * Apply data set to custom tooltips.
@@ -385,10 +429,13 @@ class ChartArea extends React.Component {
   /**
    * Return a list/array of both stacked and non-stacked charts/graphs.
    *
-   * @param {boolean} stacked
+   * @param {object} params
+   * @param {object} params.maxX
+   * @param {object} params.maxY
+   * @param {boolean} params.stacked
    * @returns {Array}
    */
-  renderChart({ stacked = false }) {
+  renderChart({ maxX = {}, maxY = {}, stacked = false }) {
     const { dataSetsToggle } = this;
     const { dataSets } = this.props;
     const charts = [];
@@ -445,6 +492,8 @@ class ChartArea extends React.Component {
           style={{ ...(dataSet.style || {}), ...dataColorStroke }}
           themeColor={dataSet.themeColor}
           themeVariant={dataSet.themeVariant}
+          x={(dataSet.xValueFormat && (datum => dataSet.xValueFormat({ datum, maxX: maxX[dataSet.id] }))) || undefined}
+          y={(dataSet.yValueFormat && (datum => dataSet.yValueFormat({ datum, maxY: maxY[dataSet.id] }))) || undefined}
         />
       );
     };
@@ -473,10 +522,11 @@ class ChartArea extends React.Component {
     const { chartWidth } = this.state;
     const { chartLegend, padding, themeColor, yAxisDisabled } = this.props;
 
-    const { isXAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
-    const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks });
-    const tooltipComponent = { containerComponent: (maxY >= 0 && this.renderTooltip()) || undefined };
-    const chartProps = { padding, ...chartDomain, ...tooltipComponent };
+    // const { isXAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
+    // const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks });
+    const { xAxisProps, yAxisProps, chartDomain, hasData, maxX, maxY } = this.getChartAxisPropsDomain();
+    // const tooltipComponent = { containerComponent: (maxY >= 0 && this.renderTooltip()) || undefined };
+    const tooltipComponent = { containerComponent: (hasData && this.renderTooltip()) || undefined };
 
     return (
       <div
@@ -484,14 +534,19 @@ class ChartArea extends React.Component {
         className="uxui-curiosity__modal uxui-curiosity__modal--loading"
         ref={this.containerRef}
       >
-        <Chart animate={{ duration: 0 }} width={chartWidth} themeColor={themeColor} {...chartProps}>
+        <Chart
+          animate={{ duration: 0 }}
+          width={chartWidth}
+          themeColor={themeColor}
+          {...{ padding, ...chartDomain, ...tooltipComponent }}
+        >
           <ChartAxis {...xAxisProps} animate={false} />
           {!yAxisDisabled &&
             yAxisProps.map(axisProps => (
               <ChartAxis key={`yaxis-${axisProps.orientation}`} {...axisProps} animate={false} />
             ))}
-          {this.renderChart({})}
-          <ChartStack>{this.renderChart({ stacked: true })}</ChartStack>
+          {this.renderChart({ maxX, maxY })}
+          <ChartStack>{this.renderChart({ maxX, maxY, stacked: true })}</ChartStack>
         </Chart>
         {chartLegend && <div className="curiosity-chartarea-description victory-legend">{this.renderLegend()}</div>}
       </div>
@@ -515,7 +570,8 @@ ChartArea.propTypes = {
         PropTypes.shape({
           x: PropTypes.number.isRequired,
           y: PropTypes.number,
-          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
+          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)]), // this doesn't appear to be used, remove it
+          yAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)]) // re-eval this
         })
       ),
       animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
@@ -533,12 +589,16 @@ ChartArea.propTypes = {
       style: PropTypes.object,
       isStacked: PropTypes.bool,
       isThreshold: PropTypes.bool,
+      // isDisplayXAxis: PropTypes.bool, // todo: convert xAxisLabelUseDataSet?
+      // isDisplayYAxis: PropTypes.bool, // we can skip handling independent y axis format callbacks, stick with single
       xAxisLabelUseDataSet: PropTypes.bool,
       // yAxisTickFormat: PropTypes.func,
+      xAxisUseDataSet: PropTypes.bool,
       yAxisUseDataSet: PropTypes.bool
     })
   ),
-  domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  // domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  // domain: PropTypes.shape({ x: PropTypes.array, y: PropTypes.array }),
   height: PropTypes.number,
   padding: PropTypes.shape({
     bottom: PropTypes.number,
@@ -550,8 +610,11 @@ ChartArea.propTypes = {
   xAxisFixLabelOverlap: PropTypes.bool,
   xAxisLabelIncrement: PropTypes.number,
   xAxisTickFormat: PropTypes.func,
-  yAxisTickFormat: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.func)]),
-  yAxisDisabled: PropTypes.bool
+  // yAxisTickFormat: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.func)]),
+  yAxisTickFormat: PropTypes.func,
+  yAxisDisabled: PropTypes.bool, // REMOVE THIS
+  xValueFormat: PropTypes.func,
+  yValueFormat: PropTypes.func
 };
 
 /**
@@ -564,7 +627,7 @@ ChartArea.propTypes = {
 ChartArea.defaultProps = {
   chartLegend: null,
   chartTooltip: null,
-  domain: {},
+  // domain: {},
   dataSets: [],
   height: 275,
   padding: {
@@ -578,7 +641,9 @@ ChartArea.defaultProps = {
   xAxisLabelIncrement: 1,
   xAxisTickFormat: null,
   yAxisTickFormat: null,
-  yAxisDisabled: false
+  yAxisDisabled: false,
+  xValueFormat: null,
+  yValueFormat: null
 };
 
 export { ChartArea as default, ChartArea };

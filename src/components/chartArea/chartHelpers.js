@@ -1,180 +1,60 @@
-/* eslint-disable */
 /**
- * Generate Victory charts x,y axis chart ticks.
+ * Generate max X and Y values from datasets.
  *
  * @param {object} params
- * @param {boolean} params.xAxisFixLabelOverlap
- * @param {number} params.xAxisLabelIncrement
- * @param {Function} params.xAxisTickFormat
- * @param {Function} params.yAxisTickFormat
  * @param {Array} params.dataSets
- * @returns {object}
+ * @returns {{individualMaxY: Array, maxY: number, maxX: number}}
  */
-const generateChartTicks = ({
-  xAxisFixLabelOverlap = true,
-  xAxisLabelIncrement = 1,
-  xAxisTickFormat,
-  yAxisTickFormat,
-  dataSets = []
-} = {}) => {
-  const xAxisPropDefaults = {
-    fixLabelOverlap: xAxisFixLabelOverlap
-  };
-  const yAxisPropDefaults = {
-    dependentAxis: true,
-    showGrid: true
-  };
+const generateMaxXY = ({ dataSets = [] } = {}) => {
+  const individualDataSetsMaxY = [];
+  let combinedDataSetMaxX = 0;
+  let combinedDataSetsMaxY = 0;
 
-  const xAxisProps = { ...xAxisPropDefaults };
-  const yAxisProps = [];
-
-  let xAxisDataSet = dataSets?.[0]?.data || [];
-  // let yAxisDataSet = [];
-
-  dataSets.forEach(dataSet => {
-    if (dataSet.xAxisLabelUseDataSet) {
-      xAxisDataSet = dataSet.data;
-    }
-    // if (dataSet.yAxisLabelUseDataSet) {
-    //  xAxisDataSet = dataSet.data;
-    // }
-  });
-
-  xAxisProps.tickValues = xAxisDataSet.reduce(
-    (acc, current, index) => (index % xAxisLabelIncrement === 0 ? acc.concat(current.x) : acc),
-    []
-  );
-
-  xAxisProps.tickFormat = tickValue => (xAxisDataSet[tickValue] && xAxisDataSet[tickValue].xAxisLabel) || tickValue;
-
-  if (typeof xAxisTickFormat === 'function') {
-    xAxisProps.tickFormat = tick => {
-      const { tickValues } = xAxisProps;
-      const tickIndex = tickValues.indexOf(tick);
-      const previousItem = { ...(xAxisDataSet[tickValues[tickIndex - 1]] || {}) };
-      const nextItem = { ...(xAxisDataSet[tickValues[tickIndex + 1]] || {}) };
-      const item = { ...(xAxisDataSet[tick] || {}) };
-
-      return xAxisTickFormat({ tick, previousItem, item, nextItem });
-    };
-  }
-
-  const tempYAxisFormat = (Array.isArray(yAxisTickFormat) && yAxisTickFormat) || [yAxisTickFormat] || [];
-
-  tempYAxisFormat.slice(0, 2).forEach((axisTickFormat, index) => {
-    yAxisProps.push({
-      ...yAxisPropDefaults,
-      tickFormat: tick => axisTickFormat({ tick }),
-      orientation: (index === 0 && 'left') || 'right'
+  dataSets
+    .filter(({ isStacked }) => isStacked === true)
+    .forEach(({ data }) => {
+      if (Array.isArray(data)) {
+        combinedDataSetsMaxY += Math.max(...data.map(value => value?.y ?? 0));
+      }
     });
+
+  dataSets.forEach(({ data }) => {
+    if (Array.isArray(data)) {
+      combinedDataSetMaxX = data.length > combinedDataSetMaxX ? data.length : combinedDataSetMaxX;
+
+      const dataSetMaxY = Math.max(...data.map(value => value?.y ?? 0));
+      combinedDataSetsMaxY = dataSetMaxY > combinedDataSetsMaxY ? dataSetMaxY : combinedDataSetsMaxY;
+
+      individualDataSetsMaxY.push(dataSetMaxY); // note: may still need to include stacked y axis in here
+    }
   });
 
   return {
-    xAxisProps,
-    yAxisProps
+    maxX: combinedDataSetMaxX,
+    maxY: combinedDataSetsMaxY,
+    individualMaxY: individualDataSetsMaxY
   };
 };
 
 /**
- * Calculate and return the x and y domain range.
+ * Generate Y axis domain ranges from dataSets, ignore X axis.
  *
  * @param {object} params
- * @param {object} params.dataSetsToggle
- * @param {object|Array} params.domain
- * @param {object} params.dataSets
- * @returns {object}
+ * @param {Array} params.dataSets
+ * @param {number} params.maxY
+ * @returns {{ domain: { y: Array } }}
  */
-const generateChartDomains = ({ dataSetsToggle, domain, dataSets } = {}) => {
-  const generatedDomain = {};
+const generateDomains = ({ dataSets = [], maxY = 10 } = {}) => {
   const updatedChartDomain = {};
-
-  let dataSetMaxX = 0;
-  let individualDataSetsMaxY = [];
-  let combinedDataSetsMaxY = 0;
-
-  const stackedSets = dataSets.filter(set => set.isStacked === true);
-  const xDomainSet = dataSets.find(set => set.isXDomain === true);
-  const yDomainSets = dataSets.filter(set => set.isYDomain === true).slice(0, 2);
-
-  stackedSets.forEach(({ data }) => {
-    // if (!dataSetsToggle[dataSet.id] && dataSet.data) {
-    if (data) {
-      let dataSetMaxYStacked = 0;
-
-      data.forEach((value, index) => {
-        dataSetMaxYStacked = value && value.y > dataSetMaxYStacked ? value.y : dataSetMaxYStacked;
-
-        if (index === data.length - 1) {
-          combinedDataSetsMaxY += dataSetMaxYStacked;
-        }
-      });
-    }
-  });
-
-  dataSets.forEach(({ data }) => {
-    if (data) {
-      let dataSetMaxY = 0;
-      dataSetMaxX = data.length > dataSetMaxX ? data.length : dataSetMaxX;
-
-      data.forEach(value => {
-        combinedDataSetsMaxY = value && value.y > combinedDataSetsMaxY ? value.y : combinedDataSetsMaxY;
-      });
-    }
-  });
-
-  return {
-    chartDomain: domain
-  };
-
-
-  /*
-  const { dataSetsToggle } = this;
-  const { domain, dataSets, yAxisTickFormat } = this.props;
-
-  if (Object.keys(domain).length) {
-    return domain;
-  }
-
   const generatedDomain = {};
-  const updatedChartDomain = {};
-  let dataSetMaxX = 0;
-  let dataSetMaxY = 0;
 
-  const stackedSets = dataSets.filter(set => set.isStacked === true);
+  const multipleYAxes = dataSets.filter(({ yAxisUseDataSet }) => yAxisUseDataSet === true);
 
-  stackedSets.forEach(dataSet => {
-    if (!dataSetsToggle[dataSet.id] && dataSet.data) {
-      let dataSetMaxYStacked = 0;
-
-      dataSet.data.forEach((value, index) => {
-        dataSetMaxYStacked = value && value.y > dataSetMaxYStacked ? value.y : dataSetMaxYStacked;
-
-        if (index === dataSet.data.length - 1) {
-          dataSetMaxY += dataSetMaxYStacked;
-        }
-      });
-    }
-  });
-
-  dataSets.forEach(dataSet => {
-    if (!dataSetsToggle[dataSet.id] && dataSet.data) {
-      dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data.length : dataSetMaxX;
-
-      dataSet.data.forEach(value => {
-        dataSetMaxY = value && value.y > dataSetMaxY ? value.y : dataSetMaxY;
-      });
-    }
-  });
-
-  if (!isXAxisTicks) {
-    generatedDomain.x = [0, dataSetMaxX || 10];
-  }
-
-  if (Array.isArray(yAxisTickFormat) && yAxisTickFormat.length >= 2) {
-    // generatedDomain.y = [0, 1];
+  if (multipleYAxes.length > 1) {
+    generatedDomain.y = [0, 1];
   } else {
-    const floored = Math.pow(10, Math.floor(Math.log10((dataSetMaxY > 10 && dataSetMaxY) || 10)));
-    generatedDomain.y = [0, Math.ceil((dataSetMaxY + 1) / floored) * floored];
+    const floored = Math.pow(10, Math.floor(Math.log10(maxY)));
+    generatedDomain.y = [0, Math.ceil((maxY + 1) / floored) * floored];
   }
 
   if (Object.keys(generatedDomain).length) {
@@ -182,16 +62,180 @@ const generateChartDomains = ({ dataSetsToggle, domain, dataSets } = {}) => {
   }
 
   return {
-    maxX: dataSetMaxX,
-    maxY: dataSetMaxY,
-    chartDomain: { ...updatedChartDomain }
+    ...updatedChartDomain
   };
-  */
+};
+
+/**
+ * Generate X axis props, ticks, tick formatting.
+ *
+ * @param {object} params
+ * @param {Array} params.dataSet
+ * @param {number} params.maxX
+ * @param {number} params.xAxisLabelIncrement
+ * @param {object} params.xAxisPropDefaults
+ * @param {Function} params.xAxisTickFormat
+ * @returns {{tickFormat: (function(*)), tickValues: *}}
+ */
+const generateXAxisProps = ({
+  dataSet = [],
+  maxX,
+  xAxisLabelIncrement,
+  xAxisPropDefaults = {},
+  xAxisTickFormat
+} = {}) => {
+  const axisProps = {
+    ...xAxisPropDefaults,
+    tickValues: dataSet.reduce(
+      (acc, current, index) => (index % xAxisLabelIncrement === 0 ? acc.concat(current.x) : acc),
+      []
+    ),
+    tickFormat: tick => dataSet[tick]?.xAxisLabel || tick
+  };
+
+  if (typeof xAxisTickFormat === 'function') {
+    axisProps.tickFormat = tick => {
+      const tickIndex = axisProps.tickValues.indexOf(tick);
+      const previousItem = { ...dataSet[axisProps.tickValues[tickIndex - 1]] };
+      const nextItem = { ...dataSet[axisProps.tickValues[tickIndex + 1]] };
+      const item = { ...dataSet[tick] };
+
+      return xAxisTickFormat({ tick, previousItem, item, nextItem, maxX });
+    };
+  }
+
+  return axisProps;
+};
+
+/**
+ * Generate Y axis props, ticks, tick formatting.
+ *
+ * @param {object} params
+ * @param {Array} params.dataSets
+ * @param {Array} params.maxY
+ * @param {object} params.yAxisPropDefaults
+ * @param {Function} params.yAxisTickFormat
+ * @returns {Array}
+ */
+const generateYAxisProps = ({ dataSets = [], maxY = [], yAxisPropDefaults = {}, yAxisTickFormat } = {}) => {
+  const axisProps = [];
+
+  dataSets.forEach((dataSet = [], index) => {
+    const updatedAxisProps = {
+      tickFormat: tick => dataSet[tick]?.yAxisLabel || tick
+    };
+
+    if (typeof yAxisTickFormat === 'function') {
+      updatedAxisProps.tickFormat = tick => {
+        const tickIndex = dataSet.indexOf(tick);
+        const previousItem = { ...dataSet[tickIndex - 1] };
+        const nextItem = { ...dataSet[tickIndex + 1] };
+        const item = { ...dataSet[tick] };
+
+        return yAxisTickFormat({
+          tick,
+          previousItem,
+          item,
+          nextItem,
+          isMultiAxis: dataSets.length > 1,
+          maxY: maxY[index]
+        });
+      };
+    }
+
+    axisProps.push({
+      ...yAxisPropDefaults,
+      ...updatedAxisProps,
+      orientation: (index === 0 && 'left') || 'right'
+    });
+  });
+
+  return axisProps;
+};
+
+/**
+ * Generate x,y props.
+ *
+ * @param {object} params
+ * @param {Array} params.dataSets
+ * @param {Array} params.individualMaxY
+ * @param {number} params.maxX
+ * @param {number} params.maxY
+ * @param {boolean} params.xAxisFixLabelOverlap
+ * @param {number} params.xAxisLabelIncrement
+ * @param {Function} params.xAxisTickFormat
+ * @param {Function} params.yAxisTickFormat
+ * @returns {{xAxisProps: object, yAxisProps: Array}}
+ */
+const generateAxisProps = ({
+  dataSets = [],
+  individualMaxY,
+  maxX,
+  maxY,
+  xAxisFixLabelOverlap = true,
+  xAxisLabelIncrement = 1,
+  xAxisTickFormat,
+  yAxisTickFormat
+} = {}) => {
+  const xAxisPropDefaults = {
+    fixLabelOverlap: xAxisFixLabelOverlap
+  };
+
+  const yAxisPropDefaults = {
+    dependentAxis: true,
+    showGrid: true
+  };
+
+  let yAxisDataSets = [];
+  let xAxisDataSet;
+
+  dataSets.forEach(dataSet => {
+    if (dataSet.yAxisUseDataSet) {
+      yAxisDataSets.push(dataSet.data);
+    }
+    if (dataSet.xAxisUseDataSet) {
+      xAxisDataSet = dataSet.data;
+    }
+  });
+
+  if (!yAxisDataSets.length) {
+    yAxisDataSets.push(dataSets?.[0]?.data);
+  } else {
+    yAxisDataSets = yAxisDataSets.slice(0, 2);
+  }
+
+  if (!xAxisDataSet) {
+    xAxisDataSet = dataSets?.[0]?.data || [];
+  }
+
+  const updatedMaxY = (yAxisDataSets.length > 1 && individualMaxY) || [maxY];
+
+  return {
+    xAxisProps: generateXAxisProps({
+      dataSet: xAxisDataSet,
+      maxX,
+      xAxisLabelIncrement,
+      xAxisPropDefaults,
+      xAxisTickFormat
+    }),
+    yAxisProps: generateYAxisProps({ dataSets: yAxisDataSets, maxY: updatedMaxY, yAxisPropDefaults, yAxisTickFormat })
+  };
 };
 
 const chartHelpers = {
-  generateChartDomains,
-  generateChartTicks
+  generateAxisProps,
+  generateDomains,
+  generateMaxXY,
+  generateXAxisProps,
+  generateYAxisProps
 };
 
-export { chartHelpers as default, chartHelpers, generateChartDomains, generateChartTicks };
+export {
+  chartHelpers as default,
+  chartHelpers,
+  generateAxisProps,
+  generateDomains,
+  generateMaxXY,
+  generateXAxisProps,
+  generateYAxisProps
+};
