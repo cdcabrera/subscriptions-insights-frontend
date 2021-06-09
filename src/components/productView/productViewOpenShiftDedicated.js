@@ -85,7 +85,7 @@ ProductViewOpenShiftDedicated.defaultProps = {
         color: chartColorBlueDark.value,
         chartType: 'line',
         isStacked: false,
-        isYAxis: true
+        yAxisUseDataSet: true
       },
       {
         id: 'instanceHours',
@@ -94,7 +94,7 @@ ProductViewOpenShiftDedicated.defaultProps = {
         color: chartColorCyanDark.value,
         chartType: 'line',
         isStacked: false,
-        isYAxis: false
+        yAxisUseDataSet: true
       }
     ],
     initialGraphSettings: {

@@ -143,19 +143,24 @@ const yAxisTickFormatFallback = ({ tick }) => {
  *
  * @param {object} params
  * @param {number|string} params.tick
+ * @param {boolean} params.isMultiAxis
+ * @param {number} params.maxY
  * @param {string} params.locale
  * @returns {string}
  */
-const yAxisTickFormatLeft = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
+const yAxisTickFormatLeft = ({ tick, isMultiAxis, maxY, locale = helpers.UI_LOCALE_DEFAULT }) => { // eslint-disable-line
+  const normalizedTick = (isMultiAxis && tick * maxY) || tick;
   let updatedTick = `${new Intl.NumberFormat(locale, {
     maximumFractionDigits: 1,
     notation: 'compact',
     compactDisplay: 'short'
-  }).format(tick)}`;
+  }).format(normalizedTick)}`;
 
-  if (updatedTick.length > 3 && updatedTick.length >= `${tick}`.length) {
-    updatedTick = yAxisTickFormatFallback({ tick });
+  if (updatedTick.length > 3 && updatedTick.length >= `${normalizedTick}`.length) {
+    updatedTick = yAxisTickFormatFallback({ tick: normalizedTick });
   }
+
+  console.log('TICK FORMAT >>>', tick, isMultiAxis, maxY, normalizedTick);
 
   return updatedTick;
 };

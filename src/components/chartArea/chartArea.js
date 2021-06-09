@@ -135,7 +135,8 @@ class ChartArea extends React.Component {
 
     const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
 
-    const { maxX, maxY, individualMaxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets }); // need to use toggled datasets
+    const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets }); // need to use toggled datasets
+    const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets }); // need to use toggled datasets
     // const chartDomain = (Object.keys(domain).length && { domain }) || chartHelpers.generateDomains({ dataSets, maxY });
     const chartDomain = chartHelpers.generateDomains({ dataSets, maxY });
     const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
@@ -150,12 +151,22 @@ class ChartArea extends React.Component {
     });
 
     const hasData = false;
+    const isMultiYAxis = yAxisProps.length > 1;
 
     console.log('>>> xAxisProps', xAxisProps);
     console.log('>>> yAxisProps', yAxisProps);
     console.log('>>> chartDomain', chartDomain);
+    console.log('>>> individualMaxY', individualMaxY);
 
-    return { xAxisProps, yAxisProps, chartDomain, hasData, maxX, maxY };
+    return {
+      xAxisProps,
+      yAxisProps,
+      chartDomain,
+      hasData,
+      isMultiYAxis,
+      maxX,
+      maxY: (isMultiYAxis && individualMaxY) || maxY
+    };
   }
 
   /**
@@ -430,14 +441,15 @@ class ChartArea extends React.Component {
    * Return a list/array of both stacked and non-stacked charts/graphs.
    *
    * @param {object} params
-   * @param {object} params.maxX
-   * @param {object} params.maxY
+   * @param {boolean} params.isMultiYAxis
+   * @param {number} params.maxX
+   * @param {number|object} params.maxY
    * @param {boolean} params.stacked
    * @returns {Array}
    */
-  renderChart({ maxX = {}, maxY = {}, stacked = false }) {
+  renderChart({ isMultiYAxis = false, maxX, maxY = {}, stacked = false }) {
     const { dataSetsToggle } = this;
-    const { dataSets } = this.props;
+    const { dataSets, xValueFormat, yValueFormat } = this.props;
     const charts = [];
     const chartsStacked = [];
     const chartDefaults = {
@@ -482,6 +494,9 @@ class ChartArea extends React.Component {
         dataColorStroke.data.strokeDasharray = dataSet.strokeDasharray;
       }
 
+      console.log('REN COMPONENT >>> maxY', maxY);
+      console.log('REN COMPONENT >>> isMultiYAxis', isMultiYAxis);
+
       return (
         <ChartComponent
           animate={dataSet.animate || updatedChartDefaults.animate}
@@ -492,14 +507,31 @@ class ChartArea extends React.Component {
           style={{ ...(dataSet.style || {}), ...dataColorStroke }}
           themeColor={dataSet.themeColor}
           themeVariant={dataSet.themeVariant}
-          x={(dataSet.xValueFormat && (datum => dataSet.xValueFormat({ datum, maxX: maxX[dataSet.id] }))) || undefined}
-          y={(dataSet.yValueFormat && (datum => dataSet.yValueFormat({ datum, maxY: maxY[dataSet.id] }))) || undefined}
+          x={(xValueFormat && (datum => xValueFormat({ datum, maxX }))) || undefined}
+          crappy={datum => {
+            console.log('FORMAT Y COMPONENT WORKED >>>', maxY?.[dataSet.id]);
+            return yValueFormat({
+              datum,
+              isMultiAxis: isMultiYAxis,
+              maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
+            });
+          }}
+          y={
+            (yValueFormat &&
+              (datum =>
+                yValueFormat({
+                  datum,
+                  isMultiAxis: isMultiYAxis,
+                  maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
+                }))) ||
+            undefined
+          }
         />
       );
     };
 
     dataSets.forEach((dataSet, index) => {
-      if (!dataSetsToggle[dataSet.id] && dataSet.data && dataSet.data.length) {
+      if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
         const updatedDataSet = setChart(dataSet, index);
 
         if (dataSet.isStacked) {
@@ -524,7 +556,7 @@ class ChartArea extends React.Component {
 
     // const { isXAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
     // const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks });
-    const { xAxisProps, yAxisProps, chartDomain, hasData, maxX, maxY } = this.getChartAxisPropsDomain();
+    const { xAxisProps, yAxisProps, chartDomain, hasData, isMultiYAxis, maxX, maxY } = this.getChartAxisPropsDomain();
     // const tooltipComponent = { containerComponent: (maxY >= 0 && this.renderTooltip()) || undefined };
     const tooltipComponent = { containerComponent: (hasData && this.renderTooltip()) || undefined };
 
@@ -545,8 +577,8 @@ class ChartArea extends React.Component {
             yAxisProps.map(axisProps => (
               <ChartAxis key={`yaxis-${axisProps.orientation}`} {...axisProps} animate={false} />
             ))}
-          {this.renderChart({ maxX, maxY })}
-          <ChartStack>{this.renderChart({ maxX, maxY, stacked: true })}</ChartStack>
+          {this.renderChart({ isMultiYAxis, maxX, maxY })}
+          <ChartStack>{this.renderChart({ isMultiYAxis, maxX, maxY, stacked: true })}</ChartStack>
         </Chart>
         {chartLegend && <div className="curiosity-chartarea-description victory-legend">{this.renderLegend()}</div>}
       </div>

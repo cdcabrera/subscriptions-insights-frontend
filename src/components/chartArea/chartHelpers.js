@@ -3,10 +3,10 @@
  *
  * @param {object} params
  * @param {Array} params.dataSets
- * @returns {{individualMaxY: Array, maxY: number, maxX: number}}
+ * @returns {{individualMaxY: object, maxY: number, maxX: number}}
  */
 const generateMaxXY = ({ dataSets = [] } = {}) => {
-  const individualDataSetsMaxY = [];
+  const individualDataSetsMaxY = {};
   let combinedDataSetMaxX = 0;
   let combinedDataSetsMaxY = 0;
 
@@ -18,14 +18,18 @@ const generateMaxXY = ({ dataSets = [] } = {}) => {
       }
     });
 
-  dataSets.forEach(({ data }) => {
+  dataSets.forEach(({ id, data }) => {
     if (Array.isArray(data)) {
       combinedDataSetMaxX = data.length > combinedDataSetMaxX ? data.length : combinedDataSetMaxX;
 
       const dataSetMaxY = Math.max(...data.map(value => value?.y ?? 0));
       combinedDataSetsMaxY = dataSetMaxY > combinedDataSetsMaxY ? dataSetMaxY : combinedDataSetsMaxY;
 
-      individualDataSetsMaxY.push(dataSetMaxY); // note: may still need to include stacked y axis in here
+      if (id) {
+        // individualDataSetsMaxY.push(dataSetMaxY); // note: may still need to include stacked y axis in here
+        individualDataSetsMaxY[id] = dataSetMaxY;
+        // individualDataSetsMaxY[id] = combinedDataSetsMaxY;
+      }
     }
   });
 
@@ -44,16 +48,20 @@ const generateMaxXY = ({ dataSets = [] } = {}) => {
  * @param {number} params.maxY
  * @returns {{ domain: { y: Array } }}
  */
-const generateDomains = ({ dataSets = [], maxY = 10 } = {}) => {
+const generateDomains = ({ dataSets = [], maxY } = {}) => {
   const updatedChartDomain = {};
   const generatedDomain = {};
+
+  // if (!isXAxisTicks) {
+  //  generatedDomain.x = [0, maxX || 10];
+  // }
 
   const multipleYAxes = dataSets.filter(({ yAxisUseDataSet }) => yAxisUseDataSet === true);
 
   if (multipleYAxes.length > 1) {
     generatedDomain.y = [0, 1];
   } else {
-    const floored = Math.pow(10, Math.floor(Math.log10(maxY)));
+    const floored = Math.pow(10, Math.floor(Math.log10((maxY > 10 && maxY) || 10)));
     generatedDomain.y = [0, Math.ceil((maxY + 1) / floored) * floored];
   }
 
@@ -70,7 +78,7 @@ const generateDomains = ({ dataSets = [], maxY = 10 } = {}) => {
  * Generate X axis props, ticks, tick formatting.
  *
  * @param {object} params
- * @param {Array} params.dataSet
+ * @param {object} params.dataSet
  * @param {number} params.maxX
  * @param {number} params.xAxisLabelIncrement
  * @param {object} params.xAxisPropDefaults
@@ -78,27 +86,28 @@ const generateDomains = ({ dataSets = [], maxY = 10 } = {}) => {
  * @returns {{tickFormat: (function(*)), tickValues: *}}
  */
 const generateXAxisProps = ({
-  dataSet = [],
+  dataSet = {},
   maxX,
   xAxisLabelIncrement,
   xAxisPropDefaults = {},
   xAxisTickFormat
 } = {}) => {
+  const { data = [] } = dataSet;
   const axisProps = {
     ...xAxisPropDefaults,
-    tickValues: dataSet.reduce(
+    tickValues: data.reduce(
       (acc, current, index) => (index % xAxisLabelIncrement === 0 ? acc.concat(current.x) : acc),
       []
     ),
-    tickFormat: tick => dataSet[tick]?.xAxisLabel || tick
+    tickFormat: tick => data[tick]?.xAxisLabel || tick
   };
 
   if (typeof xAxisTickFormat === 'function') {
     axisProps.tickFormat = tick => {
       const tickIndex = axisProps.tickValues.indexOf(tick);
-      const previousItem = { ...dataSet[axisProps.tickValues[tickIndex - 1]] };
-      const nextItem = { ...dataSet[axisProps.tickValues[tickIndex + 1]] };
-      const item = { ...dataSet[tick] };
+      const previousItem = { ...data[axisProps.tickValues[tickIndex - 1]] };
+      const nextItem = { ...data[axisProps.tickValues[tickIndex + 1]] };
+      const item = { ...data[tick] };
 
       return xAxisTickFormat({ tick, previousItem, item, nextItem, maxX });
     };
@@ -112,25 +121,25 @@ const generateXAxisProps = ({
  *
  * @param {object} params
  * @param {Array} params.dataSets
- * @param {Array} params.maxY
+ * @param {number|object} params.maxY
  * @param {object} params.yAxisPropDefaults
  * @param {Function} params.yAxisTickFormat
  * @returns {Array}
  */
-const generateYAxisProps = ({ dataSets = [], maxY = [], yAxisPropDefaults = {}, yAxisTickFormat } = {}) => {
+const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxisTickFormat } = {}) => {
   const axisProps = [];
 
-  dataSets.forEach((dataSet = [], index) => {
+  dataSets.forEach(({ data = [], id }, index) => {
     const updatedAxisProps = {
-      tickFormat: tick => dataSet[tick]?.yAxisLabel || tick
+      tickFormat: tick => data[tick]?.yAxisLabel || tick
     };
 
     if (typeof yAxisTickFormat === 'function') {
       updatedAxisProps.tickFormat = tick => {
-        const tickIndex = dataSet.indexOf(tick);
-        const previousItem = { ...dataSet[tickIndex - 1] };
-        const nextItem = { ...dataSet[tickIndex + 1] };
-        const item = { ...dataSet[tick] };
+        const tickIndex = data.indexOf(tick);
+        const previousItem = { ...data[tickIndex - 1] };
+        const nextItem = { ...data[tickIndex + 1] };
+        const item = { ...data[tick] };
 
         return yAxisTickFormat({
           tick,
@@ -138,7 +147,7 @@ const generateYAxisProps = ({ dataSets = [], maxY = [], yAxisPropDefaults = {}, 
           item,
           nextItem,
           isMultiAxis: dataSets.length > 1,
-          maxY: maxY[index]
+          maxY: (typeof maxY === 'number' && maxY) || maxY?.[id]
         });
       };
     }
@@ -158,7 +167,7 @@ const generateYAxisProps = ({ dataSets = [], maxY = [], yAxisPropDefaults = {}, 
  *
  * @param {object} params
  * @param {Array} params.dataSets
- * @param {Array} params.individualMaxY
+ * @param {object} params.individualMaxY
  * @param {number} params.maxX
  * @param {number} params.maxY
  * @param {boolean} params.xAxisFixLabelOverlap
@@ -169,7 +178,7 @@ const generateYAxisProps = ({ dataSets = [], maxY = [], yAxisPropDefaults = {}, 
  */
 const generateAxisProps = ({
   dataSets = [],
-  individualMaxY,
+  individualMaxY = {},
   maxX,
   maxY,
   xAxisFixLabelOverlap = true,
@@ -191,24 +200,26 @@ const generateAxisProps = ({
 
   dataSets.forEach(dataSet => {
     if (dataSet.yAxisUseDataSet) {
-      yAxisDataSets.push(dataSet.data);
+      yAxisDataSets.push(dataSet);
     }
     if (dataSet.xAxisUseDataSet) {
-      xAxisDataSet = dataSet.data;
+      xAxisDataSet = dataSet;
     }
   });
 
   if (!yAxisDataSets.length) {
-    yAxisDataSets.push(dataSets?.[0]?.data);
+    yAxisDataSets.push(dataSets?.[0]);
   } else {
     yAxisDataSets = yAxisDataSets.slice(0, 2);
   }
 
   if (!xAxisDataSet) {
-    xAxisDataSet = dataSets?.[0]?.data || [];
+    xAxisDataSet = dataSets?.[0] || [];
   }
 
-  const updatedMaxY = (yAxisDataSets.length > 1 && individualMaxY) || [maxY];
+  const updatedMaxY = (yAxisDataSets.length > 1 && individualMaxY) || maxY;
+
+  console.log('UPDATED MAX Y >>>', updatedMaxY);
 
   return {
     xAxisProps: generateXAxisProps({

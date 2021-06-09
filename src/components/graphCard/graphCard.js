@@ -76,10 +76,15 @@ class GraphCard extends React.Component {
       });
 
     const chartAreaProps = {
+      yValueFormat: ({ datum, isMultiAxis, maxY }) => (isMultiAxis && datum.y / maxY) || datum.y,
+      // console.log('VAL FORMAT >>>', obj);
+      // return (isMultiAxis && datum.y / maxY) || datum.y;
+      // },
       xAxisFixLabelOverlap: true,
       xAxisLabelIncrement: graphCardHelpers.getChartXAxisLabelIncrement(graphGranularity),
       xAxisTickFormat,
-      yAxisTickFormat: [graphCardHelpers.yAxisTickFormatLeft, graphCardHelpers.yAxisTickFormatRight]
+      // yAxisTickFormat: [graphCardHelpers.yAxisTickFormatLeft, graphCardHelpers.yAxisTickFormatRight],
+      yAxisTickFormat: graphCardHelpers.yAxisTickFormatLeft
     };
 
     const filteredGraphData = data => {
