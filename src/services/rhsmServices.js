@@ -411,7 +411,7 @@ const getApiVersion = (options = {}) => {
  *         "count": 12,
  *         "product": "RHEL",
  *         "granularity": "daily",
- *         "total_core_hours": 30500.04
+ *         "total_core_hours": 30500.04,
  *         "total_instance_hours": 35
  *       }
  *     }
