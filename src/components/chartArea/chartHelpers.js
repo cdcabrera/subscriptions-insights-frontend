@@ -1,3 +1,7 @@
+import numbro from 'numbro';
+
+window.numbro = numbro;
+
 /**
  * Generate max X and Y values from datasets.
  *
@@ -19,17 +23,19 @@ const generateMaxXY = ({ dataSets = [] } = {}) => {
     });
 
   dataSets.forEach(({ id, data }) => {
+    let dataSetMaxY = 0;
+
     if (Array.isArray(data)) {
       combinedDataSetMaxX = data.length > combinedDataSetMaxX ? data.length : combinedDataSetMaxX;
 
-      const dataSetMaxY = Math.max(...data.map(value => value?.y ?? 0));
+      dataSetMaxY = Math.max(...data.map(value => value?.y ?? 0));
       combinedDataSetsMaxY = dataSetMaxY > combinedDataSetsMaxY ? dataSetMaxY : combinedDataSetsMaxY;
+    }
 
-      if (id) {
-        // individualDataSetsMaxY.push(dataSetMaxY); // note: may still need to include stacked y axis in here
-        individualDataSetsMaxY[id] = dataSetMaxY;
-        // individualDataSetsMaxY[id] = combinedDataSetsMaxY;
-      }
+    if (id) {
+      // individualDataSetsMaxY.push(dataSetMaxY); // note: may still need to include stacked y axis in here
+      individualDataSetsMaxY[id] = dataSetMaxY;
+      // individualDataSetsMaxY[id] = combinedDataSetsMaxY;
     }
   });
 
@@ -44,11 +50,11 @@ const generateMaxXY = ({ dataSets = [] } = {}) => {
  * Generate Y axis domain ranges from dataSets, ignore X axis.
  *
  * @param {object} params
- * @param {Array} params.dataSets
- * @param {number} params.maxY
+ * @param {number|object} params.maxY
  * @returns {{ domain: { y: Array } }}
  */
-const generateDomains = ({ dataSets = [], maxY } = {}) => {
+// const generateDomains = ({ dataSets = [], maxY } = {}) => {
+const generateDomains = ({ maxY } = {}) => {
   const updatedChartDomain = {};
   const generatedDomain = {};
 
@@ -56,14 +62,93 @@ const generateDomains = ({ dataSets = [], maxY } = {}) => {
   //  generatedDomain.x = [0, maxX || 10];
   // }
 
-  const multipleYAxes = dataSets.filter(({ yAxisUseDataSet }) => yAxisUseDataSet === true);
+  if (Object.values(maxY).length) {
+    /*
+    const tempMap = Object.values(maxY).map(value =>
+      Number.parseFloat(
+        numbro(value ?? 0).format({ average: true, mantissa: 2, trimMantissa: true, lowPrecision: false })
+      )
+    );
+    */
+    /*
+    const tempMap = Object.values(maxY).map(value => {
+      // const floored = Math.pow(2.5, Math.floor(Math.log10(value)));
+      // return Math.ceil((value + 1) / floored) * floored;
+      // return Math.ceil(((value > 1 && value - 1) || value) / floored) * floored;
+      const floored = Math.pow(10, Math.floor(Math.log10(value))) || 1;
+      // return Math.ceil(value / floored) * floored;
+      // return Math.ceil(((value > 1 && value - 1) || value + 1) / floored) * floored; ... mostly works seems may be a scenario
+      // produces smaller results ... return Math.ceil((value + 1) / floored) * floored;
+      // return Math.ceil(((value > 1 && value) || value + 1) / floored) * floored;
+      // return Math.ceil(floored);
+      return floored + 1;
+    });
 
+    let tempMax = Math.max(...tempMap);
+    tempMax = Number.parseFloat(
+      numbro(tempMax).format({ average: true, mantissa: 2, trimMantissa: true, lowPrecision: false })
+      // numbro(tempMax).format({ average: true, lowPrecision: false })
+    );
+    */
+
+    const tempMap = Object.values(maxY).map(value => {
+      // const floored = Math.pow(2.5, Math.floor(Math.log10(value)));
+      // return Math.ceil((value + 1) / floored) * floored;
+      // return Math.ceil(((value > 1 && value - 1) || value) / floored) * floored;
+      const floored = Math.pow(1, Math.floor(Math.log10(value))) || 1;
+      // return Math.ceil(value / floored) * floored;
+      // return Math.ceil(((value > 1 && value - 1) || value + 1) / floored) * floored; ... mostly works seems may be a scenario
+      // produces smaller results ... return Math.ceil((value + 1) / floored) * floored;
+      // return Math.ceil(((value > 1 && value) || value + 1) / floored) * floored;
+      // return Math.ceil(floored);
+      return floored + 1;
+    });
+
+    const tempMax = Math.max(...tempMap);
+
+    console.log('>>> tempMax', tempMap, tempMax, maxY);
+
+    generatedDomain.y = [0, tempMax];
+  } else {
+    // const floored = Math.pow(10, Math.floor(Math.log10((maxY > 10 && maxY) || 10)));
+    // const floored = Math.pow(10, Math.floor(Math.log10(maxY))) || 10;
+    // generatedDomain.y = [0, Math.ceil((maxY + 1) / floored) * floored]; // look at consolidating this with the multi-axis formula
+    const floored = Math.pow(10, Math.floor(Math.log10(maxY))) || 10;
+    // generatedDomain.y = [0, floored + 1];
+    // borked generatedDomain.y = [0, Math.ceil((floored + 1) * 2)];
+    generatedDomain.y = [0, Math.ceil((maxY + 1) / floored) * floored];
+  }
+
+  /*
+  if (typeof maxY === 'number') {
+    const floored = Math.pow(10, Math.floor(Math.log10((maxY > 10 && maxY) || 10)));
+    generatedDomain.y = [0, Math.ceil((maxY + 1) / floored) * floored];
+  } else {
+    const tempMap = Object.values(maxY).map(value =>
+      numbro(value ?? 0).format({ average: true, mantissa: 2, trimMantissa: true, lowPrecision: false })
+    );
+    const tempMax = Math.max(...tempMap);
+
+    console.log('>>> tempMax', tempMap, tempMax);
+
+    generatedDomain.y = [0, tempMax];
+
+    // .forEach(([key, value]) => {
+    // });
+  }
+  */
+
+  /*
+  const multipleYAxes = dataSets.filter(({ yAxisUseDataSet }) => yAxisUseDataSet === true);
+  // numbro(maxY).format({ average: true, mantissa: 2, trimMantissa: true, lowPrecision: false })
+  // then parseFloat then take the larger value and use that as the max
   if (multipleYAxes.length > 1) {
-    generatedDomain.y = [0, 1];
+    generatedDomain.y = [0, 1.5];
   } else {
     const floored = Math.pow(10, Math.floor(Math.log10((maxY > 10 && maxY) || 10)));
     generatedDomain.y = [0, Math.ceil((maxY + 1) / floored) * floored];
   }
+   */
 
   if (Object.keys(generatedDomain).length) {
     updatedChartDomain.domain = generatedDomain;
@@ -148,6 +233,7 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
           nextItem,
           isMultiAxis: dataSets.length > 1,
           maxY: (typeof maxY === 'number' && maxY) || maxY?.[id]
+          // maxY: (Number.isNaN(maxY) && 1) || (typeof maxY === 'number' && maxY) || maxY?.[id]
         });
       };
     }
@@ -219,7 +305,7 @@ const generateAxisProps = ({
 
   const updatedMaxY = (yAxisDataSets.length > 1 && individualMaxY) || maxY;
 
-  console.log('UPDATED MAX Y >>>', updatedMaxY);
+  console.log('UPDATED MAX Y >>>', updatedMaxY, maxY);
 
   return {
     xAxisProps: generateXAxisProps({

@@ -133,12 +133,13 @@ class ChartArea extends React.Component {
     const { dataSetsToggle } = this;
     const { xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
 
+    console.log('>>> SETUP', dataSets);
+
     const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
 
     const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets }); // need to use toggled datasets
     const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets }); // need to use toggled datasets
     // const chartDomain = (Object.keys(domain).length && { domain }) || chartHelpers.generateDomains({ dataSets, maxY });
-    const chartDomain = chartHelpers.generateDomains({ dataSets, maxY });
     const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
       dataSets,
       individualMaxY,
@@ -150,8 +151,11 @@ class ChartArea extends React.Component {
       yAxisTickFormat
     });
 
-    const hasData = false;
     const isMultiYAxis = yAxisProps.length > 1;
+    // const chartDomain = chartHelpers.generateDomains({ dataSets, maxY, isMultiYAxis, individualMaxY });
+    const chartDomain = chartHelpers.generateDomains({ maxY: (isMultiYAxis && individualMaxY) || maxY });
+
+    const hasData = false;
 
     console.log('>>> xAxisProps', xAxisProps);
     console.log('>>> yAxisProps', yAxisProps);
