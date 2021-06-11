@@ -354,7 +354,8 @@ class ChartArea extends React.Component {
 
     const getXCoordinate = (x, width, tooltipWidth) => {
       // const padding = 75;
-      let padding = 10;//tooltipWidth * 0.25;
+      // let padding = 10;//tooltipWidth * 0.25;
+      let padding = tooltipWidth * 0.35;
 
       if (padding > 75) {
         // padding = 75;
@@ -371,7 +372,7 @@ class ChartArea extends React.Component {
 
     const getYCoordinate = (y, height, tooltipHeight) => {
       // const padding = 25;
-      const padding = tooltipHeight * 0.33;
+      const padding = tooltipHeight * 0.35;
       let yCoordinate = y + padding;
 
       if (y > height / 2) {
@@ -453,7 +454,7 @@ class ChartArea extends React.Component {
         dx={0}
         dy={0}
         // centerOffset={{x: centerOffset}}
-        centerOffset={{ x: 50, y: 0 }}
+        centerOffset={{ x: 1, y: 1 }}
         // flyout={<ChartCursorFlyout />}
         flyoutStyle={{ fill: 'transparent' }}
         labelComponent={<FlyoutComponent />}
