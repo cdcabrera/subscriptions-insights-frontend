@@ -235,7 +235,7 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
 
     if (stroke) {
       updatedAxisProps.style.axis.stroke = stroke;
-      updatedAxisProps.style.tickLabels.fill = stroke;
+      // updatedAxisProps.style.tickLabels.fill = stroke;
     }
 
     if (strokeWidth) {

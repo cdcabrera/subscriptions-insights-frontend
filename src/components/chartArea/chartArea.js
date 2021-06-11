@@ -155,7 +155,7 @@ class ChartArea extends React.Component {
     // const chartDomain = chartHelpers.generateDomains({ dataSets, maxY, isMultiYAxis, individualMaxY });
     const chartDomain = chartHelpers.generateDomains({ maxY: (isMultiYAxis && individualMaxY) || maxY });
 
-    const hasData = false;
+    const hasData = !!xAxisProps.tickValues;
 
     console.log('>>> xAxisProps', xAxisProps);
     console.log('>>> yAxisProps', yAxisProps);
