@@ -233,12 +233,12 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
       tickFormat: tick => data[tick]?.yAxisLabel || tick
     };
 
-    if (stroke) {
+    if (isMultiAxis && stroke) {
       updatedAxisProps.style.axis.stroke = stroke;
       // updatedAxisProps.style.tickLabels.fill = stroke;
     }
 
-    if (strokeWidth) {
+    if (isMultiAxis && strokeWidth) {
       updatedAxisProps.style.axis.strokeWidth = strokeWidth;
     }
 
