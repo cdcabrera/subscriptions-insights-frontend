@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'victory-create-container';
@@ -292,6 +293,7 @@ class ChartArea extends React.Component {
   getTooltipData() {
     const { dataSetsToggle } = this;
     const { dataSets, chartTooltip } = this.props;
+    const tooltipDataSetLookUp = {};
     let tooltipDataSet = [];
 
     if (chartTooltip && dataSets?.[0]?.data) {
@@ -311,7 +313,7 @@ class ChartArea extends React.Component {
           datum: { x: dataSet.x, y: dataSet.y, index, itemsByKey, dataSets: _cloneDeep(dataSets) }
         };
 
-        return {
+        const updatedTooltipData = {
           x: dataSet.x,
           y: null,
           itemsByKey,
@@ -319,10 +321,13 @@ class ChartArea extends React.Component {
             (React.isValidElement(chartTooltip) && React.cloneElement(chartTooltip, { ...mockDatum })) ||
             chartTooltip({ ...mockDatum })
         };
+
+        tooltipDataSetLookUp[dataSet.x] = updatedTooltipData;
+        return updatedTooltipData;
       });
     }
 
-    return tooltipDataSet;
+    return { tooltipDataSet, tooltipDataSetLookUp };
   }
 
   /**
@@ -339,28 +344,38 @@ class ChartArea extends React.Component {
     }
 
     const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
-    const parsedTooltipData = this.getTooltipData();
+    const { tooltipDataSetLookUp } = this.getTooltipData();
 
     const applyParsedTooltipData = ({ datum }) => {
-      const t = parsedTooltipData.find(v => v.x === datum.x) || {};
+      // const t = parsedTooltipData.find(v => v.x === datum.x) || {};
+      const t = tooltipDataSetLookUp[datum.x] || {};
       return t?.tooltip || '';
     };
 
     const getXCoordinate = (x, width, tooltipWidth) => {
-      let xCoordinate = x + 10;
+      // const padding = 75;
+      let padding = 10;//tooltipWidth * 0.25;
+
+      if (padding > 75) {
+        // padding = 75;
+      }
+
+      let xCoordinate = x + padding;
 
       if (x > width / 2) {
-        xCoordinate = x - 10 - tooltipWidth / 2;
+        xCoordinate = x - padding - tooltipWidth / 2;
       }
 
       return xCoordinate;
     };
 
     const getYCoordinate = (y, height, tooltipHeight) => {
-      let yCoordinate = y + 10;
+      // const padding = 25;
+      const padding = tooltipHeight * 0.33;
+      let yCoordinate = y + padding;
 
       if (y > height / 2) {
-        yCoordinate = y - 10 - tooltipHeight;
+        yCoordinate = y - padding - tooltipHeight;
       }
 
       return yCoordinate;
@@ -374,6 +389,7 @@ class ChartArea extends React.Component {
       const htmlContent = applyParsedTooltipData({ ...obj });
 
       if (htmlContent) {
+        const updatedClassName = tooltipBounds.height <= 0 && 'fadein' || '';
         return (
           <g>
             <foreignObject
@@ -382,7 +398,7 @@ class ChartArea extends React.Component {
               width="100%"
               height="100%"
             >
-              <div ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
+              <div className={updatedClassName} ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
                 {htmlContent}
               </div>
             </foreignObject>
@@ -393,11 +409,55 @@ class ChartArea extends React.Component {
       return <g />;
     };
 
+    const DoIt = chartTooltip;
+
+    const Testo = obj => {
+      // console.log('DO IT >>>', obj);
+      // return <chartTooltip />;
+      return (
+        <g>
+          <foreignObject
+            x={obj.x}
+            y={obj.y}
+            width="100%"
+            height="100%"
+          >
+            <div
+              ref={this.tooltipRef}
+              style={{ display: 'inline-block' }}
+              xmlns="http://www.w3.org/1999/xhtml"
+            >
+              <DoIt {...obj} />
+            </div>
+          </foreignObject>
+        </g>
+      );
+    };
+
+
+    const centerOffset = ({ center, width }) => {
+      const containerRef = this.containerRef.current;
+      const containerWidth = containerRef?.offsetWidth;
+
+      const tooltipRef = this.tooltipRef.current;
+      const flyoutWidth = tooltipRef?.offsetWidth;
+      const offset = flyoutWidth / 2 + 10
+
+
+
+      // return width > center.x + flyoutWidth + 10 ? offset : -offset;
+    };
+
     const labelComponent = (
       <ChartCursorTooltip
-        flyout={<ChartCursorFlyout />}
+        dx={0}
+        dy={0}
+        // centerOffset={{x: centerOffset}}
+        centerOffset={{ x: 50, y: 0 }}
+        // flyout={<ChartCursorFlyout />}
         flyoutStyle={{ fill: 'transparent' }}
         labelComponent={<FlyoutComponent />}
+        // labelComponent={<Testo key="doit" />}
         renderInPortal
       />
     );
