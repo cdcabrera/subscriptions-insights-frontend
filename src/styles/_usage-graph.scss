@@ -46,6 +46,68 @@
 
   .victory-tooltip {
     position: relative;
+    min-width: 150px;
+    font-size: 0.9em;
+    opacity: 0.95;
+    // background-color: var(--pf-global--palette--black-900);
+    background-color: red;
+    color: #ffffff;
+    padding: 8px;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    table {
+      th {
+        padding-right: 5px;
+        text-align: left;
+      }
+      td {
+        padding-left: 5px;
+        text-align: right;
+      }
+      tbody > tr > th {
+        font-weight: normal;
+      }
+    }
+
+    &.left:before,
+    &.right:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      margin-left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent var(--pf-global--palette--black-900) transparent transparent;
+      opacity: 0.95;
+    }
+
+    /*
+    &__left:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      margin-left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent black transparent transparent;
+    }
+    */
+
+    &.right:after {
+      left: 100%;
+      border-color: transparent transparent transparent var(--pf-global--palette--black-900);
+      opacity: 0.95;
+      margin-left: 0;
+    }
+  }
+
+  .victory-tooltipOLD {
+    position: relative;
     // z-index: 10;
     min-width: 150px;
     font-size: 0.9em;

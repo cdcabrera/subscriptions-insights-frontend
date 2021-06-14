@@ -374,11 +374,14 @@ class ChartArea extends React.Component {
       // const padding = 25;
       const padding = tooltipHeight * 0.35;
       let yCoordinate = y + padding;
+      let position = 'left';
 
       if (y > height / 2) {
         yCoordinate = y - padding - tooltipHeight;
+        position = 'right';
       }
 
+      // return { y: yCoordinate, position };
       return yCoordinate;
     };
 
@@ -390,7 +393,8 @@ class ChartArea extends React.Component {
       const htmlContent = applyParsedTooltipData({ ...obj });
 
       if (htmlContent) {
-        const updatedClassName = tooltipBounds.height <= 0 && 'fadein' || '';
+        const updatedClassName = `${tooltipBounds.height <= 0 && 'fadein' || ''}`;
+        // const { y: updatedY, position } = getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height);
         return (
           <g>
             <foreignObject
@@ -400,7 +404,9 @@ class ChartArea extends React.Component {
               height="100%"
             >
               <div className={updatedClassName} ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                {htmlContent}
+                <div className={`victory-tooltip ${ obj.x > containerBounds.width / 2 ? 'right' : 'left' }`}>
+                  {htmlContent}
+                </div>
               </div>
             </foreignObject>
           </g>
@@ -728,7 +734,7 @@ ChartArea.defaultProps = {
   dataSets: [],
   height: 275,
   padding: {
-    bottom: 75,
+    bottom: 80,
     left: 50,
     right: 50,
     top: 50
