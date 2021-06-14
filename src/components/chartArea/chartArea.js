@@ -363,7 +363,7 @@ class ChartArea extends React.Component {
 
       let xCoordinate = x + padding;
 
-      if (x > width / 2) {
+      if (x > width * 0.33) {
         xCoordinate = x - padding - tooltipWidth / 2;
       }
 
@@ -376,7 +376,7 @@ class ChartArea extends React.Component {
       let yCoordinate = y + padding;
       let position = 'left';
 
-      if (y > height / 2) {
+      if (y > height * 0.33) {
         yCoordinate = y - padding - tooltipHeight;
         position = 'right';
       }
@@ -404,7 +404,7 @@ class ChartArea extends React.Component {
               height="100%"
             >
               <div className={updatedClassName} ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                <div className={`victory-tooltip ${ obj.x > containerBounds.width / 2 ? 'right' : 'left' }`}>
+                <div className={`victory-tooltip ${ obj.x > containerBounds.width * 0.33 ? 'right' : 'left' }`}>
                   {htmlContent}
                 </div>
               </div>
@@ -734,7 +734,7 @@ ChartArea.defaultProps = {
   dataSets: [],
   height: 275,
   padding: {
-    bottom: 80,
+    bottom: 75,
     left: 50,
     right: 50,
     top: 50
