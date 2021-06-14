@@ -352,7 +352,7 @@ class ChartArea extends React.Component {
       return t?.tooltip || '';
     };
 
-    const getXCoordinate = (x, width, tooltipWidth) => {
+    const getXCoordinateWORKS = (x, width, tooltipWidth) => {
       // const padding = 75;
       // let padding = 10;//tooltipWidth * 0.25;
       let padding = tooltipWidth * 0.35;
@@ -363,25 +363,77 @@ class ChartArea extends React.Component {
 
       let xCoordinate = x + padding;
 
-      if (x > width * 0.33) {
-        xCoordinate = x - padding - tooltipWidth / 2;
+      if (x > width / 2) {
+        xCoordinate = x - padding - tooltipWidth / 2 - 20;
       }
 
       return xCoordinate;
     };
 
-    const getYCoordinate = (y, height, tooltipHeight) => {
+    const getXCoordinate = (x, width, tooltipWidth) => {
+      const paddingVoroni = 50;
+      const centerTooltip = tooltipWidth / 2;
+
+
+      return (x > width / 2)? x - tooltipWidth + paddingVoroni : x + paddingVoroni;
+
+
+      return (x > width / 2)? x - tooltipWidth / 2 + 50 : x - tooltipWidth / 2 + 50;
+    };
+
+    // WORKS2
+    const getXCoordinateWORKS2 = (x, width, tooltipWidth) => {
+      const center = width / 2 - tooltipWidth / 2;
+
+      // padding is the stoopid voroni padding
+      // return x + (tooltipWidth / 2);
+      // return (x > width / 2)? x + tooltipWidth : x - tooltipWidth;
+      return (x > width / 2)? x - tooltipWidth / 2 + 50 : x - tooltipWidth / 2 + 50;
+
+      /*
+      const padding = 65;
+      let xCoordinate = x + padding;
+      const leftAlignedCoordinate = x - tooltipWidth / 2 - padding * 1.5;
+
+
+      if (x > width / 2) {
+        xCoordinate = leftAlignedCoordinate;
+      }
+      // if (x > width / 2) {
+      //  xCoordinate = x - tooltipWidth / 2 - padding;
+      // }
+
+      return xCoordinate;
+      */
+    };
+
+    const getYCoordinate = (y, height) => height * 0.25;
+
+    // WORKS
+    const getYCoordinateWORKS = (y, height, tooltipHeight) => {
+      const padding =  0;// 20;
+      let yCoordinate = y - tooltipHeight / 2;
+
+      if (y > height / 2) {
+        yCoordinate -= padding;
+      } else {
+        yCoordinate += padding;
+      }
+
       // const padding = 25;
+      /*
       const padding = tooltipHeight * 0.35;
-      let yCoordinate = y + padding;
+      let yCoordinate = y; // + padding;
       let position = 'left';
 
-      if (y > height * 0.33) {
-        yCoordinate = y - padding - tooltipHeight;
+      if (y > height / 2) {
+        // yCoordinate = y - padding - tooltipHeight - 30;
+        yCoordinate = y; // - padding;// - tooltipHeight;
         position = 'right';
       }
 
       // return { y: yCoordinate, position };
+       */
       return yCoordinate;
     };
 
@@ -400,11 +452,12 @@ class ChartArea extends React.Component {
             <foreignObject
               x={getXCoordinate(obj.x, containerBounds.width, tooltipBounds.width)}
               y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height)}
+              // width="100%"
               width="100%"
               height="100%"
             >
-              <div className={updatedClassName} ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                <div className={`victory-tooltip ${ obj.x > containerBounds.width * 0.33 ? 'right' : 'left' }`}>
+              <div className={`victory-tooltip-container ${updatedClassName}`} ref={this.tooltipRef} style={{ display: (obj.y > containerBounds.height - 80 && 'none') || 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
+                <div className={`victory-tooltip ${ obj.x > containerBounds.width / 2 ? 'right' : 'left' }`}>
                   {htmlContent}
                 </div>
               </div>
@@ -460,7 +513,7 @@ class ChartArea extends React.Component {
         dx={0}
         dy={0}
         // centerOffset={{x: centerOffset}}
-        centerOffset={{ x: 1, y: 1 }}
+        centerOffset={{ x: 0, y: 0 }}
         // flyout={<ChartCursorFlyout />}
         flyoutStyle={{ fill: 'transparent' }}
         labelComponent={<FlyoutComponent />}
@@ -475,6 +528,7 @@ class ChartArea extends React.Component {
         labels={obj => obj}
         labelComponent={labelComponent}
         voronoiPadding={50}
+        // voronoiPadding={0}
         mouseFollowTooltips
       />
     );
