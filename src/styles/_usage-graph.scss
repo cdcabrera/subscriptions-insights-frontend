@@ -108,23 +108,23 @@
     &.right:after {
       border-width: 10px;
       border-style: solid;
-      border-color: transparent green transparent transparent;
+      border-color: transparent var(--pf-global--palette--black-900) transparent transparent;
       content: "";
       // left: 10px;
       // margin-left: -20px;
-      left: -10px;
+      left: -9px; // -10px;
       margin-left: 0;
-      opacity: 0.95;
+      // opacity: 0.95;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
     }
 
     &.right:after {
-      border-color: transparent transparent transparent green;
-      left: calc(100% - 15px);
+      border-color: transparent transparent transparent var(--pf-global--palette--black-900);
+      left: calc(100% - 16px);// calc(100% - 15px);
       margin-left: 0;
-      opacity: 0.95;
+      // opacity: 0.95;
     }
   }
 

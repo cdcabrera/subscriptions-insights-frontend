@@ -175,117 +175,6 @@ class ChartArea extends React.Component {
   }
 
   /**
-   * Return x and y axis increments/ticks.
-   *
-   * @returns {object}
-   */
-  /*
-  getChartTicksOLD() {
-    const { xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
-
-    const { xAxisProps, yAxisProps } = chartHelpers.generateChartTicks({
-      xAxisFixLabelOverlap,
-      xAxisLabelIncrement,
-      xAxisTickFormat,
-      yAxisTickFormat,
-      dataSets
-    });
-
-    return {
-      isXAxisTicks: !!xAxisProps.tickValues,
-      xAxisProps,
-      yAxisProps
-    };
-  }
-  */
-
-  /**
-   * Calculate and return the x and y domain range.
-   *
-   * @param {boolean} isXAxisTicks
-   * @returns {object}
-   */
-  // getChartDomainOLD({ isXAxisTicks }) {
-  /*
-    const { dataSetsToggle } = this;
-    const { domain, dataSets } = this.props;
-
-    if (Object.keys(domain).length) {
-      return domain;
-    }
-
-    const updatedDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
-    const { maxX, maxY, individualMaxY, chartDomain } = chartHelpers.generateChartDomains({
-      dataSets: updatedDataSets,
-      isXAxisTicks
-    });
-
-    console.log('>>> >>>>>>>>>>>>>', chartDomain);
-    console.log('>>> >>>>>>>>>>>>>', individualMaxY);
-
-    return {
-      maxX,
-      maxY,
-      chartDomain
-    };
-
-    /*
-    const generatedDomain = {};
-    const updatedChartDomain = {};
-    let dataSetMaxX = 0;
-    let dataSetMaxY = 0;
-
-    const stackedSets = dataSets.filter(set => set.isStacked === true);
-
-    stackedSets.forEach(dataSet => {
-      if (!dataSetsToggle[dataSet.id] && dataSet.data) {
-        let dataSetMaxYStacked = 0;
-
-        dataSet.data.forEach((value, index) => {
-          dataSetMaxYStacked = value && value.y > dataSetMaxYStacked ? value.y : dataSetMaxYStacked;
-
-          if (index === dataSet.data.length - 1) {
-            dataSetMaxY += dataSetMaxYStacked;
-          }
-        });
-      }
-    });
-
-    dataSets.forEach(dataSet => {
-      if (!dataSetsToggle[dataSet.id] && dataSet.data) {
-        dataSetMaxX = dataSet.data.length > dataSetMaxX ? dataSet.data.length : dataSetMaxX;
-
-        dataSet.data.forEach(value => {
-          dataSetMaxY = value && value.y > dataSetMaxY ? value.y : dataSetMaxY;
-        });
-      }
-    });
-
-    if (!isXAxisTicks) {
-      generatedDomain.x = [0, dataSetMaxX || 10];
-    }
-
-    if (Array.isArray(yAxisTickFormat) && yAxisTickFormat.length >= 2) {
-      // generatedDomain.y = [0, 1];
-    } else {
-      const floored = Math.pow(10, Math.floor(Math.log10((dataSetMaxY > 10 && dataSetMaxY) || 10)));
-      generatedDomain.y = [0, Math.ceil((dataSetMaxY + 1) / floored) * floored];
-    }
-
-    if (Object.keys(generatedDomain).length) {
-      updatedChartDomain.domain = generatedDomain;
-    }
-
-    return {
-      maxX: dataSetMaxX,
-      maxY: dataSetMaxY,
-      chartDomain: { ...updatedChartDomain }
-    };
-     * /
-    */
-  // }
-
-  /**
    * Apply data set to custom tooltips.
    *
    * @returns {Array}
@@ -335,6 +224,84 @@ class ChartArea extends React.Component {
    *
    * @returns {Node}
    */
+  renderTooltipOLDFORTESTINGRECENTER() {
+    const { dataSetsToggle } = this;
+    const { chartTooltip, dataSets } = this.props;
+
+    if (!chartTooltip || Object.values(dataSetsToggle).filter(v => v === true).length === dataSets.length) {
+      return null;
+    }
+
+    const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+    const { tooltipDataSetLookUp } = this.getTooltipData();
+
+    const applyParsedTooltipData = ({ datum }) => {
+      const t = tooltipDataSetLookUp[datum.x] || {};
+      return t?.tooltip || '';
+    };
+
+    const getXCoordinate = (x, width, tooltipWidth) => {
+      let xCoordinate = x + 10;
+
+      if (x > width / 2) {
+        xCoordinate = x - 10 - tooltipWidth / 2;
+      }
+
+      return xCoordinate;
+    };
+
+    const getYCoordinate = (y, height) => height * 0.25;
+
+    const FlyoutComponent = obj => {
+      const containerRef = this.containerRef.current;
+      const tooltipRef = this.tooltipRef.current;
+      const containerBounds = (containerRef && containerRef.getBoundingClientRect()) || { width: 0, height: 0 };
+      const tooltipBounds = (tooltipRef && tooltipRef.getBoundingClientRect()) || { width: 0, height: 0 };
+      const htmlContent = applyParsedTooltipData({ ...obj });
+
+      if (htmlContent) {
+        return (
+          <g>
+            <foreignObject
+              x={getXCoordinate(obj.x, containerBounds.width, tooltipBounds.width)}
+              y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height)}
+              width="100%"
+              height="100%"
+            >
+              <div ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
+                {htmlContent}
+              </div>
+            </foreignObject>
+          </g>
+        );
+      }
+
+      return <g />;
+    };
+
+    const labelComponent = (
+      <ChartCursorTooltip
+        // dx={0}
+        // dy={0}
+        centerOffset={{ x: 0, y: 0 }}
+        // flyout={<ChartCursorFlyout />}
+        flyoutStyle={{ fill: 'transparent' }}
+        labelComponent={<FlyoutComponent />}
+        renderInPortal
+      />
+    );
+
+    return (
+      <VictoryVoronoiCursorContainer
+        cursorDimension="x"
+        labels={obj => obj}
+        labelComponent={labelComponent}
+        voronoiPadding={50}
+        mouseFollowTooltips
+      />
+    );
+  }
+
   renderTooltip() {
     const { dataSetsToggle } = this;
     const { chartTooltip, dataSets } = this.props;
@@ -347,95 +314,29 @@ class ChartArea extends React.Component {
     const { tooltipDataSetLookUp } = this.getTooltipData();
 
     const applyParsedTooltipData = ({ datum }) => {
-      // const t = parsedTooltipData.find(v => v.x === datum.x) || {};
       const t = tooltipDataSetLookUp[datum.x] || {};
       return t?.tooltip || '';
     };
 
-    const getXCoordinateWORKS = (x, width, tooltipWidth) => {
-      // const padding = 75;
-      // let padding = 10;//tooltipWidth * 0.25;
-      let padding = tooltipWidth * 0.35;
-
-      if (padding > 75) {
-        // padding = 75;
-      }
-
-      let xCoordinate = x + padding;
-
-      if (x > width / 2) {
-        xCoordinate = x - padding - tooltipWidth / 2 - 20;
-      }
-
-      return xCoordinate;
-    };
-
     const getXCoordinate = (x, width, tooltipWidth) => {
       const paddingVoroni = 50;
-      const centerTooltip = tooltipWidth / 2;
 
+      if (width <= 500 && x > 100 && x < 200) {
+        // borked return x + paddingVoroni - ((tooltipWidth) / 2);
+        return (x + paddingVoroni) - (tooltipWidth / 2);
+        // borked return x - (tooltipWidth - paddingVoroni / 2);
+        // close return x - tooltipWidth / 2;
+        // return x - tooltipWidth / 2;
+        // close return x - (tooltipWidth - paddingVoroni) / 2;
+        // return (x > width / 2)? x - (tooltipWidth + paddingVoroni) / 2 : x - (tooltipWidth - paddingVoroni);
+        // return x - (tooltipWidth + paddingVoroni) / 2;
+        // return x - (tooltipWidth - paddingVoroni) / 2;
+      }
 
       return (x > width / 2)? x - tooltipWidth + paddingVoroni : x + paddingVoroni;
-
-
-      return (x > width / 2)? x - tooltipWidth / 2 + 50 : x - tooltipWidth / 2 + 50;
-    };
-
-    // WORKS2
-    const getXCoordinateWORKS2 = (x, width, tooltipWidth) => {
-      const center = width / 2 - tooltipWidth / 2;
-
-      // padding is the stoopid voroni padding
-      // return x + (tooltipWidth / 2);
-      // return (x > width / 2)? x + tooltipWidth : x - tooltipWidth;
-      return (x > width / 2)? x - tooltipWidth / 2 + 50 : x - tooltipWidth / 2 + 50;
-
-      /*
-      const padding = 65;
-      let xCoordinate = x + padding;
-      const leftAlignedCoordinate = x - tooltipWidth / 2 - padding * 1.5;
-
-
-      if (x > width / 2) {
-        xCoordinate = leftAlignedCoordinate;
-      }
-      // if (x > width / 2) {
-      //  xCoordinate = x - tooltipWidth / 2 - padding;
-      // }
-
-      return xCoordinate;
-      */
     };
 
     const getYCoordinate = (y, height) => height * 0.25;
-
-    // WORKS
-    const getYCoordinateWORKS = (y, height, tooltipHeight) => {
-      const padding =  0;// 20;
-      let yCoordinate = y - tooltipHeight / 2;
-
-      if (y > height / 2) {
-        yCoordinate -= padding;
-      } else {
-        yCoordinate += padding;
-      }
-
-      // const padding = 25;
-      /*
-      const padding = tooltipHeight * 0.35;
-      let yCoordinate = y; // + padding;
-      let position = 'left';
-
-      if (y > height / 2) {
-        // yCoordinate = y - padding - tooltipHeight - 30;
-        yCoordinate = y; // - padding;// - tooltipHeight;
-        position = 'right';
-      }
-
-      // return { y: yCoordinate, position };
-       */
-      return yCoordinate;
-    };
 
     const FlyoutComponent = obj => {
       const containerRef = this.containerRef.current;
@@ -446,13 +347,12 @@ class ChartArea extends React.Component {
 
       if (htmlContent) {
         const updatedClassName = `${tooltipBounds.height <= 0 && 'fadein' || ''}`;
-        // const { y: updatedY, position } = getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height);
+        // TODO: convert "obj.y > containerBounds.height - 80" to pull from the lower/bottom padding instead
         return (
           <g>
             <foreignObject
               x={getXCoordinate(obj.x, containerBounds.width, tooltipBounds.width)}
               y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height)}
-              // width="100%"
               width="100%"
               height="100%"
             >
@@ -469,55 +369,14 @@ class ChartArea extends React.Component {
       return <g />;
     };
 
-    const DoIt = chartTooltip;
-
-    const Testo = obj => {
-      // console.log('DO IT >>>', obj);
-      // return <chartTooltip />;
-      return (
-        <g>
-          <foreignObject
-            x={obj.x}
-            y={obj.y}
-            width="100%"
-            height="100%"
-          >
-            <div
-              ref={this.tooltipRef}
-              style={{ display: 'inline-block' }}
-              xmlns="http://www.w3.org/1999/xhtml"
-            >
-              <DoIt {...obj} />
-            </div>
-          </foreignObject>
-        </g>
-      );
-    };
-
-
-    const centerOffset = ({ center, width }) => {
-      const containerRef = this.containerRef.current;
-      const containerWidth = containerRef?.offsetWidth;
-
-      const tooltipRef = this.tooltipRef.current;
-      const flyoutWidth = tooltipRef?.offsetWidth;
-      const offset = flyoutWidth / 2 + 10
-
-
-
-      // return width > center.x + flyoutWidth + 10 ? offset : -offset;
-    };
-
     const labelComponent = (
       <ChartCursorTooltip
         dx={0}
         dy={0}
-        // centerOffset={{x: centerOffset}}
         centerOffset={{ x: 0, y: 0 }}
         // flyout={<ChartCursorFlyout />}
         flyoutStyle={{ fill: 'transparent' }}
         labelComponent={<FlyoutComponent />}
-        // labelComponent={<Testo key="doit" />}
         renderInPortal
       />
     );
@@ -528,7 +387,6 @@ class ChartArea extends React.Component {
         labels={obj => obj}
         labelComponent={labelComponent}
         voronoiPadding={50}
-        // voronoiPadding={0}
         mouseFollowTooltips
       />
     );
