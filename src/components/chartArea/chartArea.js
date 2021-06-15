@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'victory-create-container';
+import { VictoryPortal } from 'victory';
 import {
   Chart,
   ChartAxis,
@@ -322,21 +323,29 @@ class ChartArea extends React.Component {
       const paddingVoroni = 50;
 
       if (width <= 500 && x > 100 && x < 200) {
-        // borked return x + paddingVoroni - ((tooltipWidth) / 2);
         return (x + paddingVoroni) - (tooltipWidth / 2);
-        // borked return x - (tooltipWidth - paddingVoroni / 2);
-        // close return x - tooltipWidth / 2;
-        // return x - tooltipWidth / 2;
-        // close return x - (tooltipWidth - paddingVoroni) / 2;
-        // return (x > width / 2)? x - (tooltipWidth + paddingVoroni) / 2 : x - (tooltipWidth - paddingVoroni);
-        // return x - (tooltipWidth + paddingVoroni) / 2;
-        // return x - (tooltipWidth - paddingVoroni) / 2;
       }
 
       return (x > width / 2)? x - tooltipWidth + paddingVoroni : x + paddingVoroni;
     };
 
-    const getYCoordinate = (y, height) => height * 0.25;
+    const getYCoordinate = (y, height, tooltipHeight, width) => {
+      if (width <= 500) {
+        const padding = 15;
+        return (y > height / 2) ? (y - tooltipHeight) - padding : y + padding;
+      }
+
+      return height * 0.25
+    };
+
+    const generatePosition = (x, y, width) => {
+      // obj.x > containerBounds.width / 2 ? 'right' : 'left'
+      if (width <= 500 && x > 100 && x < 200) {
+        return 'middle';
+      }
+
+      return x > width / 2 ? 'right' : 'left';
+    };
 
     const FlyoutComponent = obj => {
       const containerRef = this.containerRef.current;
@@ -352,12 +361,12 @@ class ChartArea extends React.Component {
           <g>
             <foreignObject
               x={getXCoordinate(obj.x, containerBounds.width, tooltipBounds.width)}
-              y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height)}
+              y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height, containerBounds.width)}
               width="100%"
               height="100%"
             >
               <div className={`victory-tooltip-container ${updatedClassName}`} ref={this.tooltipRef} style={{ display: (obj.y > containerBounds.height - 80 && 'none') || 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                <div className={`victory-tooltip ${ obj.x > containerBounds.width / 2 ? 'right' : 'left' }`}>
+                <div className={`victory-tooltip ${ generatePosition(obj.x, obj.y, containerBounds.width) }`}>
                   {htmlContent}
                 </div>
               </div>
@@ -369,16 +378,21 @@ class ChartArea extends React.Component {
       return <g />;
     };
 
+    /**
+     * FixMe: PF Charts prop "renderInPortal" is used to adjust layer order with the cursor
+     * renderInPortal no longer appears to function and the cursor appears over the tooltip,
+     * using VictoryPortal directly bypasses the issue.
+     */
     const labelComponent = (
-      <ChartCursorTooltip
-        dx={0}
-        dy={0}
-        centerOffset={{ x: 0, y: 0 }}
-        // flyout={<ChartCursorFlyout />}
-        flyoutStyle={{ fill: 'transparent' }}
-        labelComponent={<FlyoutComponent />}
-        renderInPortal
-      />
+      <VictoryPortal>
+        <ChartCursorTooltip
+          dx={0}
+          dy={0}
+          centerOffset={{ x: 0, y: 0 }}
+          flyoutStyle={{ fill: 'transparent' }}
+          labelComponent={<FlyoutComponent />}
+        />
+      </VictoryPortal>
     );
 
     return (
@@ -546,7 +560,7 @@ class ChartArea extends React.Component {
     return (
       <div
         id="curiosity-chartarea"
-        className="uxui-curiosity__modal uxui-curiosity__modal--loading"
+        className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
         ref={this.containerRef}
       >
         <Chart
