@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'victory-create-container';
-import { VictoryPortal } from 'victory';
 import {
   Chart,
   ChartAxis,
@@ -381,18 +380,17 @@ class ChartArea extends React.Component {
     /**
      * FixMe: PF Charts prop "renderInPortal" is used to adjust layer order with the cursor
      * renderInPortal no longer appears to function and the cursor appears over the tooltip,
-     * using VictoryPortal directly bypasses the issue.
+     * using VictoryPortal directly bypasses the issue, however it creates a "redraw" delay
+     * that visually causes the tooltip redraw to be noticeable.
      */
     const labelComponent = (
-      <VictoryPortal>
-        <ChartCursorTooltip
-          dx={0}
-          dy={0}
-          centerOffset={{ x: 0, y: 0 }}
-          flyoutStyle={{ fill: 'transparent' }}
-          labelComponent={<FlyoutComponent />}
-        />
-      </VictoryPortal>
+      <ChartCursorTooltip
+        dx={0}
+        dy={0}
+        centerOffset={{ x: 0, y: 0 }}
+        flyoutStyle={{ fill: 'transparent' }}
+        labelComponent={<FlyoutComponent />}
+      />
     );
 
     return (

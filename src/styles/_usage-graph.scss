@@ -63,7 +63,7 @@
     // transition: left 1s ease-in-out;
     transition: width 1s ease-in-out, left 1s ease-in-out;
     // transition: width 1s ease-in-out, left 1.5s ease-in-out;
-    background-color: var(--pf-global--palette--black-900);
+    background-color: #000;
     // transform: translateX(0);
     color: #ffffff;
     font-size: 0.9em;
@@ -117,7 +117,7 @@
     &.right:after {
       border-width: 10px;
       border-style: solid;
-      border-color: transparent var(--pf-global--palette--black-900) transparent transparent;
+      border-color: transparent #000 transparent transparent;
       content: "";
       // left: 10px;
       // margin-left: -20px;
@@ -130,7 +130,7 @@
     }
 
     &.right:after {
-      border-color: transparent transparent transparent var(--pf-global--palette--black-900);
+      border-color: transparent transparent transparent #000;
       left: calc(100% - 16px);// calc(100% - 15px);
       margin-left: 0;
       // opacity: 0.95;
@@ -175,6 +175,7 @@
       // position: relative;
       // z-index: -9999;
       // stroke: blue !important;
+      stroke: var(--pf-global--palette--black-100);
     }
   }
 }
