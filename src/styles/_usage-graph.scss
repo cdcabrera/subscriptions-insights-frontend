@@ -44,7 +44,19 @@
   };
 
   .victory-legend-icon {
-    margin-right: 5px;
+    // margin-right: 5px;
+  }
+
+  .victory-icon {
+    display: inline-block;
+    // font-size: 1em;
+    width: 1em;
+    height: 1em;
+    vertical-align: baseline;
+
+    &__threshold {
+      margin-right: 5px;
+    }
   }
 
   .victory-tooltip-container {
@@ -139,13 +151,16 @@
 
   .threshold-legend-icon,
   .legend-icon {
+    /*
     vertical-align: baseline;
     width: 10px;
     height: 10px;
     display: inline-block;
+     */
   }
 
   .threshold-legend-icon {
+    /*
     height: auto;
     vertical-align: middle;
     width: 25px;
@@ -154,6 +169,7 @@
     border-style: dashed;
     margin-left: 2px;
     margin-right: 2px;
+    */
   }
 
   .curiosity-chartarea > .pf-c-chart {

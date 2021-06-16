@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getTooltipDate } from './graphCardHelpers';
 import { translate } from '../i18n/i18n';
+import { ChartIcon } from '../chartArea/chartIcon';
 
 /**
  * A custom chart tooltip.
@@ -17,6 +18,8 @@ const GraphCardChartTooltip = ({ datum, granularity, productLabel, t }) => {
   let header = null;
   const data = [];
   const { itemsByKey = {} } = datum || {};
+
+  console.log('DATUM >>>', datum);
 
   Object.keys(itemsByKey).forEach((key, index) => {
     if (index === 0) {
@@ -64,13 +67,7 @@ const GraphCardChartTooltip = ({ datum, granularity, productLabel, t }) => {
             {data.map(dataFacet => (
               <tr key={`tooltip-${dataFacet.label}`}>
                 <th>
-                  <div
-                    aria-hidden
-                    className="legend-icon victory-legend-icon"
-                    style={{
-                      backgroundColor: dataFacet.color || 'transparent'
-                    }}
-                  />
+                  <ChartIcon fill={dataFacet.color || 'transparent'} />
                   {dataFacet.label}
                 </th>
                 <td>{dataFacet.value}</td>

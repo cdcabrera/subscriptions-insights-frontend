@@ -5,6 +5,7 @@ import { EyeSlashIcon } from '@patternfly/react-icons';
 import { connect, store, reduxTypes } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
+import { ChartIcon } from '../chartArea/chartIcon';
 
 /**
  * A custom chart legend.
@@ -62,31 +63,18 @@ class GraphCardChartLegend extends React.Component {
       <Button
         onClick={() => this.onClick(chartId)}
         onKeyPress={() => this.onClick(chartId)}
-        className="victory-legend-item"
+        // className="victory-legend-item"
         tabIndex={0}
         key={`curiosity-button-${chartId}`}
         variant="link"
         component="a"
         isDisabled={isDisabled}
         icon={
-          ((isDisabled || checkIsToggled) && <EyeSlashIcon />) ||
-          (isThreshold && (
-            <hr
-              aria-hidden
-              className="threshold-legend-icon"
-              style={{
-                visibility: (isDisabled && 'hidden') || (checkIsToggled && 'hidden') || 'visible',
-                borderTopColor: color
-              }}
-            />
-          )) || (
-            <div
-              aria-hidden
-              className="legend-icon"
-              style={{
-                visibility: (isDisabled && 'hidden') || (checkIsToggled && 'hidden') || 'visible',
-                backgroundColor: color
-              }}
+          ((isDisabled || checkIsToggled) && <EyeSlashIcon />) || (
+            <ChartIcon
+              symbol={isThreshold && 'dash'}
+              style={{ visibility: (isDisabled && 'hidden') || (checkIsToggled && 'hidden') || 'visible' }}
+              fill={color}
             />
           )
         }
