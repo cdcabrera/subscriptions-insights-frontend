@@ -347,10 +347,10 @@ class ChartArea extends React.Component {
     };
 
     const FlyoutComponent = obj => {
-      const containerRef = this.containerRef.current;
-      const tooltipRef = this.tooltipRef.current;
-      const containerBounds = (containerRef && containerRef.getBoundingClientRect()) || { width: 0, height: 0 };
-      const tooltipBounds = (tooltipRef && tooltipRef.getBoundingClientRect()) || { width: 0, height: 0 };
+      const containerRef = this.containerRef?.current?.querySelector('svg');
+      const tooltipRef = this.tooltipRef?.current;
+      const containerBounds = containerRef?.getBoundingClientRect() || { width: 0, height: 0 };
+      const tooltipBounds = tooltipRef?.getBoundingClientRect() || { width: 0, height: 0 };
       const htmlContent = applyParsedTooltipData({ ...obj });
 
       if (htmlContent) {
