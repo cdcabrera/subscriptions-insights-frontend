@@ -126,12 +126,8 @@ class GraphCard extends React.Component {
         key={`chart_${JSON.stringify(query)}`}
         {...chartAreaProps}
         dataSets={filteredGraphData(graphData)}
-        chartLegend={({ chart, datum }) => (
-          <GraphCardChartLegend chart={chart} datum={datum} productLabel={productLabel} viewId={viewId} />
-        )}
-        chartTooltip={({ datum }) => (
-          <GraphCardChartTooltip datum={datum} granularity={graphGranularity} productLabel={productLabel} />
-        )}
+        chartLegend={<GraphCardChartLegend productLabel={productLabel} viewId={viewId} />}
+        chartTooltip={<GraphCardChartTooltip granularity={graphGranularity} productLabel={productLabel} />}
       />
     );
   }

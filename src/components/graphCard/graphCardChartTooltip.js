@@ -19,8 +19,6 @@ const GraphCardChartTooltip = ({ datum, granularity, productLabel, t }) => {
   const data = [];
   const { itemsByKey = {} } = datum || {};
 
-  console.log('DATUM >>>', datum);
-
   Object.keys(itemsByKey).forEach((key, index) => {
     if (index === 0) {
       header = getTooltipDate({
