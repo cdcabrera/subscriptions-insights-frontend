@@ -1,21 +1,31 @@
 /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  // VictoryChart as Chart,
+  // VictoryAxis as ChartAxis,
+  VictoryLine as ChartLine,
+  VictoryStack as ChartStack,
+  VictoryArea as PfChartArea,
+  VictoryTooltip as ChartCursorTooltip
+} from 'victory';
 import { createContainer } from 'victory-create-container';
 import {
   Chart,
   ChartAxis,
-  ChartLine,
-  ChartStack,
+  // ChartLine,
+  // ChartStack,
   ChartThreshold,
   ChartThemeColor,
-  ChartArea as PfChartArea,
-  ChartCursorFlyout,
-  ChartCursorTooltip
+  // ChartArea as PfChartArea,
+  // ChartCursorFlyout,
+  // ChartCursorTooltip
+  ChartAxisTheme
 } from '@patternfly/react-charts';
 import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
 import { chartHelpers } from './chartHelpers';
+import { ChartElement } from "./chartElement";
 
 /**
  * FixMe: chart redraw flash related to custom tooltips use
@@ -235,8 +245,8 @@ class ChartArea extends React.Component {
     };
 
     const getXCoordinate = (x, width, tooltipWidth) => {
-      const paddingVoroni = 50;
-      const halfTooltipWidth = (tooltipWidth / 2) + paddingVoroni;
+      const paddingVoroni = 0;//50;
+      const halfTooltipWidth = tooltipWidth * 0.66; //(tooltipWidth / 2) + paddingVoroni;
       const minChartWidth = 500;
 
       if (width <= minChartWidth && x > halfTooltipWidth && x < minChartWidth - halfTooltipWidth) {
@@ -258,8 +268,8 @@ class ChartArea extends React.Component {
     };
 
     const tailPosition = (x, y, width, tooltipWidth) => {
-      const paddingVoroni = 50;
-      const halfTooltipWidth = (tooltipWidth / 2) + paddingVoroni;
+      const paddingVoroni = 0;//50;
+      const halfTooltipWidth = tooltipWidth * 0.66; //(tooltipWidth / 2) + paddingVoroni;
       const minChartWidth = 500;
 
       if (width <= minChartWidth && x > halfTooltipWidth && x < minChartWidth - halfTooltipWidth) {
@@ -311,7 +321,7 @@ class ChartArea extends React.Component {
         dx={0}
         dy={0}
         centerOffset={{ x: 0, y: 0 }}
-        flyoutStyle={{ fill: 'transparent' }}
+        flyoutStyle={{ fill: 'transparent', stroke: 'transparent' }}
         labelComponent={<FlyoutComponent />}
       />
     );
@@ -366,10 +376,70 @@ class ChartArea extends React.Component {
    * @returns {Array}
    */
   renderChart({ isMultiYAxis = false, maxX, maxY = {}, stacked = false }) {
+
+    /*
     const { dataSetsToggle } = this;
     const { dataSets, xValueFormat, yValueFormat } = this.props;
     const charts = [];
     const chartsStacked = [];
+
+    dataSets.forEach(dataSet => {
+      if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
+        const chartElementProps = {
+          dataSet,
+          isMultiYAxis,
+          maxX,
+          maxY, xValueFormat, yValueFormat
+        };
+
+        if (dataSet.isStacked) {
+          chartsStacked.push(<ChartElement key={`chartElement-${dataSet.id}`} {...chartElementProps} />);
+        } else {
+          charts.push(<ChartElement key={`chartElement-${dataSet.id}`} {...chartElementProps} />);
+        }
+      }
+    });
+
+    console.log(chartsStacked);
+
+    return (stacked && chartsStacked) || charts;
+    */
+    /*
+    const { dataSetsToggle } = this;
+    const { dataSets, xValueFormat, yValueFormat } = this.props;
+    const charts = [];
+    const chartsStacked = [];
+
+
+    dataSets.forEach((dataSet, index) => {
+      if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
+        const chartElementProps = {
+          dataSet,
+          isMultiYAxis,
+          maxX,
+          maxY, xValueFormat, yValueFormat
+        };
+
+        // const ChartElem = ({...props}) => <ChartElement key={`chartElement-parent-${dataSet.id}`} {...chartElementProps } />;
+        const element = <PfChartArea key={`chartElement-parent-${dataSet.id}`} data={dataSet.data} />;
+
+
+        if (dataSet.isStacked) {
+          chartsStacked.push(element);
+        } else {
+          charts.push(element);
+        }
+      }
+    });
+
+    return (stacked && chartsStacked) || charts;
+    */
+
+    const { dataSetsToggle } = this;
+    const { dataSets, xValueFormat, yValueFormat } = this.props;
+    const charts = [];
+    const chartsStacked = [];
+
     const chartDefaults = {
       area: {
         component: PfChartArea,
