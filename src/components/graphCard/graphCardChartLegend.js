@@ -63,7 +63,7 @@ class GraphCardChartLegend extends React.Component {
       <Button
         onClick={() => this.onClick(chartId)}
         onKeyPress={() => this.onClick(chartId)}
-        // className="victory-legend-item"
+        className="curiosity-usage-graph__legend-item"
         tabIndex={0}
         key={`curiosity-button-${chartId}`}
         variant="link"
@@ -72,7 +72,7 @@ class GraphCardChartLegend extends React.Component {
         icon={
           ((isDisabled || checkIsToggled) && <EyeSlashIcon />) || (
             <ChartIcon
-              symbol={isThreshold && 'dash'}
+              symbol={(isThreshold && 'dash') || 'square'}
               style={{ visibility: (isDisabled && 'hidden') || (checkIsToggled && 'hidden') || 'visible' }}
               fill={color}
             />
@@ -83,19 +83,6 @@ class GraphCardChartLegend extends React.Component {
       </Button>
     );
 
-    /**
-     * FixMe: PF Tooltip has breaking changes not called out in changelog.md for PF React-core?
-     * Unclear which changelog this is called out in. Had to open the PF React-core component
-     * and the associated PR to determine when breaking changes were activated. v4.30.0
-     *  - https://github.com/patternfly/patternfly-react/pull/4491/files
-     *
-     * Breaking changes:
-     * 1. enableFlip prop is more sensitive, and/or not overridden by declaring "position"
-     *    - enableFlip possibly causes unintended behavior on smaller screen sizes when "distance" prop
-     *      is set to "0"
-     * 2. unit test snapshots updated, causing CI to fail
-     * 3. removing props, deprecating them, having them "[not do anything]"
-     */
     if (tooltipContent) {
       return (
         <Tooltip

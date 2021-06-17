@@ -1,197 +1,125 @@
 .curiosity {
   .curiosity-usage-graph {
-    .pf-c-card__header {
-      border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
-      flex-wrap: wrap;
-      justify-content: space-between;
-      padding-bottom: 1em;
-    }
-
-    .pf-c-card__title {
-      padding: 0;
-    }
-
-    .pf-c-card__actions {
-      margin: inherit;
-    }
-  }
-
-  .curiosity-usage-graph__total {
-    min-width: 175px;
-    padding-left: var(--pf-global--spacer--sm);
-    padding-right: var(--pf-global--spacer--sm);
-    text-align: right;
-    white-space: normal;
-
-    @media (min-width: $pf-global--breakpoint--sm) {
-      white-space: nowrap;
-    }
-  }
-
-  .victory-legend {
-    background-color: #fff;
-    margin-left: 30px;
-    margin-top: -35px;
-    position: relative;
-    // z-index: 100;
-    // z-index: 0;
-  }
-
-  .victory-legend-item {
-    position: relative;
-    // z-index: 11;
-    // z-index: 2;
-  };
-
-  .victory-legend-icon {
-    // margin-right: 5px;
-  }
-
-  .victory-icon {
-    display: inline-block;
-    // font-size: 1em;
-    width: 1em;
-    height: 1em;
-    vertical-align: baseline;
-
-    &__threshold {
-      margin-right: 5px;
-    }
-  }
-
-  .victory-tooltip-container {
-    min-width: 150px;
-    max-width: 300px;
-    overflow: hidden;
-    position: relative;
-    // background-color: red;
-    margin: auto;
-    // z-index: 9999;
-    // z-index: 10;
-  }
-
-  .victory-tooltip {
-    // transition: width 1s ease-in-out;
-    // transition: left 1s ease-in-out;
-    transition: width 1s ease-in-out, left 1s ease-in-out;
-    // transition: width 1s ease-in-out, left 1.5s ease-in-out;
-    background-color: #000;
-    // transform: translateX(0);
-    color: #ffffff;
-    font-size: 0.9em;
-    margin-left: 10px;
-    margin-right: 15px;
-    // min-width: 150px;
-    // max-width: 300px;
-    // opacity: 0.95;
-    padding: 8px;
-    // z-index: 12;
-    // position: relative;
-    // z-index: 10;
-
-    table {
-      // width: 100%;
-      // position: relative;
-      // z-index: 2;
-
-      tbody {
-        // width: 100%;
-        // position: relative;
-        // z-index: 2;
-        // background-color: blue;
+    .pf-c-card {
+      &__header {
+        border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding-bottom: 1em;
       }
 
-      th {
-        padding-right: 5px;
-        text-align: left;
+      &__title {
+        padding: 0;
+      }
 
+      &__actions {
+        margin: inherit;
       }
-      td {
-        padding-left: 5px;
-        text-align: right;
-      }
-      tbody > tr > th {
-        font-weight: normal;
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    }
+
+    &__total {
+      min-width: 175px;
+      padding-left: var(--pf-global--spacer--sm);
+      padding-right: var(--pf-global--spacer--sm);
+      text-align: right;
+      white-space: normal;
+
+      @media (min-width: $pf-global--breakpoint--sm) {
         white-space: nowrap;
       }
     }
 
-    // left: 50px;
-
-    &.right {
-      // left: -100px;
-    }
-
-    &.left:before,
-    &.right:after {
-      border-width: 10px;
-      border-style: solid;
-      border-color: transparent #000 transparent transparent;
-      content: "";
-      // left: 10px;
-      // margin-left: -20px;
-      left: -9px; // -10px;
-      margin-left: 0;
-      // opacity: 0.95;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    &.right:after {
-      border-color: transparent transparent transparent #000;
-      left: calc(100% - 16px);// calc(100% - 15px);
-      margin-left: 0;
-      // opacity: 0.95;
-    }
-  }
-
-  .threshold-legend-icon,
-  .legend-icon {
-    /*
-    vertical-align: baseline;
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-     */
-  }
-
-  .threshold-legend-icon {
-    /*
-    height: auto;
-    vertical-align: middle;
-    width: 25px;
-    border-width: 0;
-    border-top-width: 3px;
-    border-style: dashed;
-    margin-left: 2px;
-    margin-right: 2px;
-    */
-  }
-
-  .curiosity-chartarea > .pf-c-chart {
-
-  }
-
-  .curiosity-chartarea > .pf-c-chart > svg {
-    // display: none;
-    // .curiosity-chartarea > .pf-c-chart {
-    // position: relative;
-    // z-index: 0;
-    // z-index: 10;
-    // overflow: hidden;
-    // z-index: 1000;
-
-    // > line[role="presentation"][vector-effect="non-scaling-stroke"] {
-    // > line[role="presentation"][vector-effect="non-scaling-stroke"]:last-child {
-    > line[role="presentation"][vector-effect="non-scaling-stroke"] {
+    &__legend-item {
       // position: relative;
-      // z-index: -9999;
-      // stroke: blue !important;
-      stroke: var(--pf-global--palette--black-100);
+    };
+
+    &__tooltip {
+      color: #ffffff;
+      font-size: 0.9em;
+      padding: 8px;
+
+      table {
+        tbody {
+        }
+
+        th {
+          padding-right: 5px;
+          text-align: left;
+
+        }
+
+        td {
+          padding-left: 5px;
+          text-align: right;
+        }
+
+        tbody > tr > th {
+          font-weight: normal;
+          max-width: 200px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  .curiosity-chartarea {
+    &__legend {
+      background-color: #fff;
+      margin-left: 30px;
+      margin-top: -35px;
+      position: relative;
+    }
+
+    &__icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      vertical-align: baseline;
+
+      &-threshold {
+        margin-right: 5px;
+      }
+    }
+
+    &__tooltip {
+      &-container {
+        margin: auto;
+        max-width: 300px;
+        min-width: 150px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      transition: width 1s ease-in-out, left 1s ease-in-out;
+      background-color: #000;
+      margin-left: 10px;
+      margin-right: 15px;
+
+      &-left:before,
+      &-right:after {
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent #000 transparent transparent;
+        content: "";
+        left: -9px;  //-10px Compensate for Firefox pixel diff, match margin-left
+        margin-left: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &-right:after {
+        border-color: transparent transparent transparent #000;
+        left: calc(100% - 16px); //-15px Compensate for Firefox pixel diff, match margin-right
+        margin-left: 0;
+      }
+    }
+
+    > .pf-c-chart > svg > line[role="presentation"][vector-effect="non-scaling-stroke"] {
+      position: relative;
+      stroke: var(--pf-global--palette--black-900) !important;
     }
   }
 }

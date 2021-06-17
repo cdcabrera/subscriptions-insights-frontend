@@ -128,19 +128,20 @@ class ChartArea extends React.Component {
     }
   }
 
-  // const { xAxisProps, yAxisProps, chartDomain, hasData } = this.getChartAxisPropsDomain();
-
+  /**
+   * Get axes props
+   *
+   * @returns {{isMultiYAxis: boolean, chartDomain: {domain: {y: Array}}, xAxisProps: Object, maxY: (Object|number),
+   * hasData: boolean, maxX: number, yAxisProps: Array}}
+   */
   getChartAxisPropsDomain() {
     const { dataSetsToggle } = this;
     const { xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets } = this.props;
 
-    console.log('>>> SETUP', dataSets);
-
     const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
 
-    const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets }); // need to use toggled datasets
-    const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets }); // need to use toggled datasets
-    // const chartDomain = (Object.keys(domain).length && { domain }) || chartHelpers.generateDomains({ dataSets, maxY });
+    const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
+    const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
     const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
       dataSets,
       individualMaxY,
@@ -153,15 +154,8 @@ class ChartArea extends React.Component {
     });
 
     const isMultiYAxis = yAxisProps.length > 1;
-    // const chartDomain = chartHelpers.generateDomains({ dataSets, maxY, isMultiYAxis, individualMaxY });
     const chartDomain = chartHelpers.generateDomains({ maxY: (isMultiYAxis && individualMaxY) || maxY });
-
     const hasData = !!xAxisProps.tickValues;
-
-    console.log('>>> xAxisProps', xAxisProps);
-    console.log('>>> yAxisProps', yAxisProps);
-    console.log('>>> chartDomain', chartDomain);
-    console.log('>>> individualMaxY', individualMaxY);
 
     return {
       xAxisProps,
@@ -224,84 +218,6 @@ class ChartArea extends React.Component {
    *
    * @returns {Node}
    */
-  renderTooltipOLDFORTESTINGRECENTER() {
-    const { dataSetsToggle } = this;
-    const { chartTooltip, dataSets } = this.props;
-
-    if (!chartTooltip || Object.values(dataSetsToggle).filter(v => v === true).length === dataSets.length) {
-      return null;
-    }
-
-    const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
-    const { tooltipDataSetLookUp } = this.getTooltipData();
-
-    const applyParsedTooltipData = ({ datum }) => {
-      const t = tooltipDataSetLookUp[datum.x] || {};
-      return t?.tooltip || '';
-    };
-
-    const getXCoordinate = (x, width, tooltipWidth) => {
-      let xCoordinate = x + 10;
-
-      if (x > width / 2) {
-        xCoordinate = x - 10 - tooltipWidth / 2;
-      }
-
-      return xCoordinate;
-    };
-
-    const getYCoordinate = (y, height) => height * 0.25;
-
-    const FlyoutComponent = obj => {
-      const containerRef = this.containerRef.current;
-      const tooltipRef = this.tooltipRef.current;
-      const containerBounds = (containerRef && containerRef.getBoundingClientRect()) || { width: 0, height: 0 };
-      const tooltipBounds = (tooltipRef && tooltipRef.getBoundingClientRect()) || { width: 0, height: 0 };
-      const htmlContent = applyParsedTooltipData({ ...obj });
-
-      if (htmlContent) {
-        return (
-          <g>
-            <foreignObject
-              x={getXCoordinate(obj.x, containerBounds.width, tooltipBounds.width)}
-              y={getYCoordinate(obj.y, containerBounds.height, tooltipBounds.height)}
-              width="100%"
-              height="100%"
-            >
-              <div ref={this.tooltipRef} style={{ display: 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                {htmlContent}
-              </div>
-            </foreignObject>
-          </g>
-        );
-      }
-
-      return <g />;
-    };
-
-    const labelComponent = (
-      <ChartCursorTooltip
-        // dx={0}
-        // dy={0}
-        centerOffset={{ x: 0, y: 0 }}
-        // flyout={<ChartCursorFlyout />}
-        flyoutStyle={{ fill: 'transparent' }}
-        labelComponent={<FlyoutComponent />}
-        renderInPortal
-      />
-    );
-
-    return (
-      <VictoryVoronoiCursorContainer
-        cursorDimension="x"
-        labels={obj => obj}
-        labelComponent={labelComponent}
-        voronoiPadding={50}
-        mouseFollowTooltips
-      />
-    );
-  }
-
   renderTooltip() {
     const { dataSetsToggle } = this;
     const { chartTooltip, dataSets } = this.props;
@@ -337,8 +253,7 @@ class ChartArea extends React.Component {
       return height * 0.25
     };
 
-    const generatePosition = (x, y, width) => {
-      // obj.x > containerBounds.width / 2 ? 'right' : 'left'
+    const tailPosition = (x, y, width) => {
       if (width <= 500 && x > 100 && x < 200) {
         return 'middle';
       }
@@ -364,8 +279,8 @@ class ChartArea extends React.Component {
               width="100%"
               height="100%"
             >
-              <div className={`victory-tooltip-container ${updatedClassName}`} ref={this.tooltipRef} style={{ display: (obj.y > containerBounds.height - 80 && 'none') || 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                <div className={`victory-tooltip ${ generatePosition(obj.x, obj.y, containerBounds.width) }`}>
+              <div className={`curiosity-chartarea__tooltip-container ${updatedClassName}`} ref={this.tooltipRef} style={{ display: (obj.y > containerBounds.height - 80 && 'none') || 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
+                <div className={`curiosity-chartarea__tooltip curiosity-chartarea__tooltip-${ tailPosition(obj.x, obj.y, containerBounds.width) }`}>
                   {htmlContent}
                 </div>
               </div>
@@ -489,9 +404,6 @@ class ChartArea extends React.Component {
         dataColorStroke.data.strokeDasharray = dataSet.strokeDasharray;
       }
 
-      console.log('REN COMPONENT >>> maxY', maxY);
-      console.log('REN COMPONENT >>> isMultiYAxis', isMultiYAxis);
-
       return (
         <ChartComponent
           animate={dataSet.animate || updatedChartDefaults.animate}
@@ -503,14 +415,6 @@ class ChartArea extends React.Component {
           themeColor={dataSet.themeColor}
           themeVariant={dataSet.themeVariant}
           x={(xValueFormat && (datum => xValueFormat({ datum, maxX }))) || undefined}
-          crappy={datum => {
-            console.log('FORMAT Y COMPONENT WORKED >>>', maxY?.[dataSet.id]);
-            return yValueFormat({
-              datum,
-              isMultiAxis: isMultiYAxis,
-              maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
-            });
-          }}
           y={
             (yValueFormat &&
               (datum =>
@@ -549,10 +453,7 @@ class ChartArea extends React.Component {
     const { chartWidth } = this.state;
     const { chartLegend, padding, themeColor, yAxisDisabled } = this.props;
 
-    // const { isXAxisTicks, xAxisProps, yAxisProps } = this.getChartTicks();
-    // const { chartDomain, maxY } = this.getChartDomain({ isXAxisTicks });
     const { xAxisProps, yAxisProps, chartDomain, hasData, isMultiYAxis, maxX, maxY } = this.getChartAxisPropsDomain();
-    // const tooltipComponent = { containerComponent: (maxY >= 0 && this.renderTooltip()) || undefined };
     const tooltipComponent = { containerComponent: (hasData && this.renderTooltip()) || undefined };
 
     return (
@@ -575,7 +476,7 @@ class ChartArea extends React.Component {
           {this.renderChart({ isMultiYAxis, maxX, maxY })}
           <ChartStack>{this.renderChart({ isMultiYAxis, maxX, maxY, stacked: true })}</ChartStack>
         </Chart>
-        {chartLegend && <div className="curiosity-chartarea-description victory-legend">{this.renderLegend()}</div>}
+        {chartLegend && <div className="curiosity-chartarea__legend">{this.renderLegend()}</div>}
       </div>
     );
   }
