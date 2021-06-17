@@ -236,8 +236,10 @@ class ChartArea extends React.Component {
 
     const getXCoordinate = (x, width, tooltipWidth) => {
       const paddingVoroni = 50;
+      const halfTooltipWidth = (tooltipWidth / 2) + paddingVoroni;
+      const minChartWidth = 500;
 
-      if (width <= 500 && x > 100 && x < 200) {
+      if (width <= minChartWidth && x > halfTooltipWidth && x < minChartWidth - halfTooltipWidth) {
         return (x + paddingVoroni) - (tooltipWidth / 2);
       }
 
@@ -245,7 +247,9 @@ class ChartArea extends React.Component {
     };
 
     const getYCoordinate = (y, height, tooltipHeight, width) => {
-      if (width <= 500) {
+      const minChartWidth = 500;
+
+      if (width <= minChartWidth) {
         const padding = 15;
         return (y > height / 2) ? (y - tooltipHeight) - padding : y + padding;
       }
@@ -253,8 +257,12 @@ class ChartArea extends React.Component {
       return height * 0.25
     };
 
-    const tailPosition = (x, y, width) => {
-      if (width <= 500 && x > 100 && x < 200) {
+    const tailPosition = (x, y, width, tooltipWidth) => {
+      const paddingVoroni = 50;
+      const halfTooltipWidth = (tooltipWidth / 2) + paddingVoroni;
+      const minChartWidth = 500;
+
+      if (width <= minChartWidth && x > halfTooltipWidth && x < minChartWidth - halfTooltipWidth) {
         return 'middle';
       }
 
@@ -280,7 +288,7 @@ class ChartArea extends React.Component {
               height="100%"
             >
               <div className={`curiosity-chartarea__tooltip-container ${updatedClassName}`} ref={this.tooltipRef} style={{ display: (obj.y > containerBounds.height - 80 && 'none') || 'inline-block' }} xmlns="http://www.w3.org/1999/xhtml">
-                <div className={`curiosity-chartarea__tooltip curiosity-chartarea__tooltip-${ tailPosition(obj.x, obj.y, containerBounds.width) }`}>
+                <div className={`curiosity-chartarea__tooltip curiosity-chartarea__tooltip-${ tailPosition(obj.x, obj.y, containerBounds.width, tooltipBounds.width) }`}>
                   {htmlContent}
                 </div>
               </div>
