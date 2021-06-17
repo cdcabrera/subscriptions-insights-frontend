@@ -25,7 +25,8 @@ import {
 import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
 import { chartHelpers } from './chartHelpers';
-import { ChartElement } from "./chartElement";
+import { ChartElement } from './chartElement';
+import { ChartTooltip } from './chartTooltip';
 
 /**
  * FixMe: chart redraw flash related to custom tooltips use
@@ -177,6 +178,42 @@ class ChartArea extends React.Component {
       maxY: (isMultiYAxis && individualMaxY) || maxY
     };
   }
+
+  /*
+  parseTooltipData() {
+    const { chartTooltip: content, dataSets } = this.props;
+    const tooltipDataSetLookUp = {};
+
+    if (content && dataSets?.[0].data) {
+      dataSets[0].data.forEach((dataSet, index) => {
+        const itemsByKey = {};
+
+        dataSets.forEach(data => {
+          if (data?.data[index]) {
+            itemsByKey[data.id] = {
+              color: data.stroke || data.fill || data.color || '',
+              data: _cloneDeep(data.data[index])
+            };
+          }
+        });
+
+        const mockDatum = {
+          datum: { x: dataSet.x, y: dataSet.y, index, itemsByKey }
+        };
+
+        tooltipDataSetLookUp[dataSet.x] = {
+          x: dataSet.x,
+          y: null,
+          itemsByKey,
+          tooltip:
+            (React.isValidElement(content) && React.cloneElement(content, { ...mockDatum })) || content({ ...mockDatum })
+        };
+      });
+    }
+
+    return tooltipDataSetLookUp;
+  };
+  */
 
   /**
    * Apply data set to custom tooltips.
@@ -366,7 +403,7 @@ class ChartArea extends React.Component {
   }
 
   /**
-   * Return a list/array of both stacked and non-stacked charts/graphs.
+   * Return a list/array of both stacked and non-stacked Victory component charts/graphs.
    *
    * @param {object} params
    * @param {boolean} params.isMultiYAxis
@@ -376,12 +413,11 @@ class ChartArea extends React.Component {
    * @returns {Array}
    */
   renderChart({ isMultiYAxis = false, maxX, maxY = {}, stacked = false }) {
-
-    /*
     const { dataSetsToggle } = this;
     const { dataSets, xValueFormat, yValueFormat } = this.props;
     const charts = [];
     const chartsStacked = [];
+
 
     dataSets.forEach(dataSet => {
       if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
@@ -389,132 +425,15 @@ class ChartArea extends React.Component {
           dataSet,
           isMultiYAxis,
           maxX,
-          maxY, xValueFormat, yValueFormat
+          maxY,
+          xValueFormat,
+          yValueFormat
         };
 
         if (dataSet.isStacked) {
-          chartsStacked.push(<ChartElement key={`chartElement-${dataSet.id}`} {...chartElementProps} />);
+          chartsStacked.push(ChartElement({ ...ChartElement.defaultProps, ...chartElementProps }));
         } else {
-          charts.push(<ChartElement key={`chartElement-${dataSet.id}`} {...chartElementProps} />);
-        }
-      }
-    });
-
-    console.log(chartsStacked);
-
-    return (stacked && chartsStacked) || charts;
-    */
-    /*
-    const { dataSetsToggle } = this;
-    const { dataSets, xValueFormat, yValueFormat } = this.props;
-    const charts = [];
-    const chartsStacked = [];
-
-
-    dataSets.forEach((dataSet, index) => {
-      if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
-        const chartElementProps = {
-          dataSet,
-          isMultiYAxis,
-          maxX,
-          maxY, xValueFormat, yValueFormat
-        };
-
-        // const ChartElem = ({...props}) => <ChartElement key={`chartElement-parent-${dataSet.id}`} {...chartElementProps } />;
-        const element = <PfChartArea key={`chartElement-parent-${dataSet.id}`} data={dataSet.data} />;
-
-
-        if (dataSet.isStacked) {
-          chartsStacked.push(element);
-        } else {
-          charts.push(element);
-        }
-      }
-    });
-
-    return (stacked && chartsStacked) || charts;
-    */
-
-    const { dataSetsToggle } = this;
-    const { dataSets, xValueFormat, yValueFormat } = this.props;
-    const charts = [];
-    const chartsStacked = [];
-
-    const chartDefaults = {
-      area: {
-        component: PfChartArea,
-        animate: false,
-        interpolation: 'monotoneX'
-      },
-      line: {
-        component: ChartLine,
-        animate: false,
-        interpolation: 'monotoneX'
-      },
-      threshold: {
-        component: ChartThreshold,
-        animate: false,
-        interpolation: 'step'
-      }
-    };
-
-    const setChart = (dataSet, index) => {
-      const chartType = dataSet.chartType || 'area';
-      const updatedChartDefaults = chartDefaults[chartType];
-      const ChartComponent = updatedChartDefaults.component;
-      const dataColorStroke = {
-        data: {}
-      };
-
-      if (dataSet.fill && chartType === 'area') {
-        dataColorStroke.data.fill = dataSet.fill;
-      }
-
-      if (dataSet.stroke) {
-        dataColorStroke.data.stroke = dataSet.stroke;
-      }
-
-      if (dataSet.strokeWidth) {
-        dataColorStroke.data.strokeWidth = dataSet.strokeWidth;
-      }
-
-      if (dataSet.strokeDasharray) {
-        dataColorStroke.data.strokeDasharray = dataSet.strokeDasharray;
-      }
-
-      return (
-        <ChartComponent
-          animate={dataSet.animate || updatedChartDefaults.animate}
-          interpolation={dataSet.interpolation || updatedChartDefaults.interpolation}
-          key={helpers.generateId()}
-          name={`chart-${index}-${chartType}`}
-          data={dataSet.data}
-          style={{ ...(dataSet.style || {}), ...dataColorStroke }}
-          themeColor={dataSet.themeColor}
-          themeVariant={dataSet.themeVariant}
-          x={(xValueFormat && (datum => xValueFormat({ datum, maxX }))) || undefined}
-          y={
-            (yValueFormat &&
-              (datum =>
-                yValueFormat({
-                  datum,
-                  isMultiAxis: isMultiYAxis,
-                  maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
-                }))) ||
-            undefined
-          }
-        />
-      );
-    };
-
-    dataSets.forEach((dataSet, index) => {
-      if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
-        const updatedDataSet = setChart(dataSet, index);
-
-        if (dataSet.isStacked) {
-          chartsStacked.push(updatedDataSet);
-        } else {
-          charts.push(updatedDataSet);
+          charts.push(ChartElement({ ...ChartElement.defaultProps, ...chartElementProps }));
         }
       }
     });
