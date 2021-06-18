@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ChartThreshold } from '@patternfly/react-charts';
-import { VictoryLine as ChartLine, VictoryArea as ChartArea } from 'victory';
+import { ChartThreshold, ChartLine, ChartArea } from '@patternfly/react-charts';
+// import { VictoryLine as ChartLine, VictoryArea as ChartArea } from 'victory';
+// import { ChartContext } from './chartContext';
 
 /**
  * FixMe: Victory charts makes writing wrapper components frustrating.
@@ -20,7 +21,8 @@ import { VictoryLine as ChartLine, VictoryArea as ChartArea } from 'victory';
  * @param {Function} props.yValueFormat
  * @returns {Node}
  */
-const ChartElement = ({ chartDefaults, dataSet, isMultiYAxis, maxX, maxY, xValueFormat, yValueFormat }) => {
+const ChartElement = ({ chartDefaults, dataSet, isMultiYAxis, maxX, maxY, xValueFormat, yValueFormat, ...props }) => {
+  // const { container } = React.useContext(ChartContext);
   const chartType = dataSet.chartType || 'area';
   const updatedChartDefaults = chartDefaults[chartType];
   const ChartComponent = updatedChartDefaults.component;
@@ -46,6 +48,8 @@ const ChartElement = ({ chartDefaults, dataSet, isMultiYAxis, maxX, maxY, xValue
 
   return (
     <ChartComponent
+      // containerComponent={container}
+      {...props}
       animate={dataSet.animate || updatedChartDefaults.animate}
       interpolation={dataSet.interpolation || updatedChartDefaults.interpolation}
       key={`chart-${dataSet.id}-${chartType}`}

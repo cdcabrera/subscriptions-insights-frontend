@@ -29,7 +29,7 @@ import { helpers } from '../../common';
 import { chartHelpers } from './chartHelpers';
 import { ChartElement } from './chartElement';
 import { ChartTooltip } from './chartTooltip';
-import { ChartContext } from './chartContext';
+import { ChartContext, useChartContext } from './chartContext';
 import { useResizeObserver } from '../../hooks/useWindow';
 
 /**
@@ -72,13 +72,17 @@ class Chart extends React.Component {
 }
 */
 const ChartProvider = ({ children, xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets, chartTooltip }) => {
-  const [dataSetsToggle, setDataSetsToggle] = useState({});
+  // const [context, setContext] = useState({});
+  // const [context, setContext] = useChartContext();
+  const { context, callback } = useChartContext();
+  // const [dataSetsToggle, setDataSetsToggle] = useState({});
+  const [dataSetsToggle] = useState({});
   const containerRef = useRef(null);
-  // const { width: chartContainerWidth } = useResizeObserver(containerRef);
 
-  const setChartAxisPropsDomain = () => {
+  const updateChartSettings = () => {
     const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
 
+    const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ chartTooltip, dataSets });
     const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
     const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
     const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
@@ -97,35 +101,51 @@ const ChartProvider = ({ children, xAxisFixLabelOverlap, xAxisLabelIncrement, xA
     const hasData = !!xAxisProps.tickValues;
 
     return {
+      chartContainer: null,
       xAxisProps,
       yAxisProps,
       chartDomain,
       hasData,
       isMultiYAxis,
       maxX,
-      maxY: (isMultiYAxis && individualMaxY) || maxY
+      maxY: (isMultiYAxis && individualMaxY) || maxY,
+      tooltipDataSetLookUp
     };
   };
 
-  const { xAxisProps, yAxisProps, chartDomain, hasData, isMultiYAxis, maxX, maxY } = setChartAxisPropsDomain();
-  const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ chartTooltip, dataSets });
+  // const chartSettings = updateChartSettings();
+  // const context = { chartContainerRef: () => containerRef, chartSettings };
+  /*
+  useEffect(() => {
+    const chartSettings = updateChartSettings();
+    console.log('PROVIDER >>>', chartSettings);
 
-  const chartSettings = {
-    chartContainer: null,
-    xAxisProps,
-    yAxisProps,
-    chartDomain,
-    hasData,
-    isMultiYAxis,
-    maxX,
-    maxY,
-    tooltipDataSetLookUp
-  };
+    const updatedSettings = {
+      chartContainerRef: () => containerRef,
+      chartSettings: {...chartSettings}
+    };
+
+    setContext(updatedSettings);
+  } , [containerRef, dataSets, setContext])
+  */
+  /*
+  useEffect(() => {
+    const chartSettings = updateChartSettings();
+    console.log('PROVIDER >>>', chartSettings);
+
+    const updatedSettings = {
+      chartContainerRef: () => console.log('hello world'), // containerRef,
+      chartSettings: {...chartSettings}
+    };
+
+    // callback(updatedSettings);
+  }, [dataSets]);
+  */
+
+  // FIXME: try passing a simple value
 
   return (
-    // <ChartContext.Provider value={{ container: null, containerRef: () => containerRef, chartData }}>
-    // <ChartContext.Provider value={{ chartContainerRef: () => containerRef, chartContainerWidth, chartSettings }}>
-    <ChartContext.Provider value={{ chartContainerRef: () => containerRef, chartSettings }}>
+    <ChartContext.Provider value="hello world">
       <div
         id="curiosity-chartarea"
         className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"

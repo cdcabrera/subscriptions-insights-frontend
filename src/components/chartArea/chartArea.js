@@ -4,20 +4,21 @@ import PropTypes from 'prop-types';
 import {
   // VictoryChart as Chart,
   // VictoryAxis as ChartAxis,
-  VictoryLine as ChartLine,
-  VictoryStack as ChartStack,
-  VictoryArea as PfChartArea,
+  // VictoryLine as ChartLine,
+  // VictoryStack as ChartStack,
+  // VictoryArea as PfChartArea,
   VictoryTooltip as ChartCursorTooltip
 } from 'victory';
 import { createContainer } from 'victory-create-container';
 import {
   Chart,
   ChartAxis,
-  // ChartLine,
-  // ChartStack,
+  ChartLine,
+  ChartStack,
   ChartThreshold,
   ChartThemeColor,
-  // ChartArea as PfChartArea,
+  ChartContainer,
+  ChartArea as PfChartArea,
   // ChartCursorFlyout,
   // ChartCursorTooltip
   ChartAxisTheme
@@ -27,6 +28,7 @@ import { helpers } from '../../common';
 import { chartHelpers } from './chartHelpers';
 import { ChartElement } from './chartElement';
 import { ChartTooltip } from './chartTooltip';
+import { ChartContext } from './chartContext';
 
 /**
  * FixMe: chart redraw flash related to custom tooltips use
@@ -92,7 +94,9 @@ class ChartArea extends React.Component {
   onToggle = id => {
     const updatedToggle = !this.dataSetsToggle[id];
     this.dataSetsToggle = { ...this.dataSetsToggle, [id]: updatedToggle };
-    this.forceUpdate();
+    // this.forceUpdate();
+
+    this.setState({});
 
     return updatedToggle;
   };
@@ -220,6 +224,7 @@ class ChartArea extends React.Component {
    *
    * @returns {Array}
    */
+  /*
   getTooltipData() {
     const { dataSetsToggle } = this;
     const { dataSets, chartTooltip } = this.props;
@@ -259,13 +264,183 @@ class ChartArea extends React.Component {
 
     return { tooltipDataSet, tooltipDataSetLookUp };
   }
+  */
 
   /**
    * Return a chart/graph tooltip Victory container component to allow custom HTML tooltips.
    *
    * @returns {Node}
    */
+  renderTooltipWORKS() {
+    const {dataSetsToggle} = this;
+    const {chartTooltip, dataSets} = this.props;
+    // const containerRef = () => this.containerRef;
+    const containerRef = this.containerRef;
+
+    if (!chartTooltip || Object.values(dataSetsToggle).filter(v => v === true).length === dataSets.length) {
+      return null;
+    }
+
+    const clonedDataSets = _cloneDeep(dataSets);
+
+    const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+
+    const Tooltip = React.forwardRef((props, ref) => <ChartTooltip {...props} containerRef={ref}/>);
+
+    /**
+     * FixMe: PF Charts prop "renderInPortal" is used to adjust layer order with the cursor
+     * renderInPortal no longer appears to function and the cursor appears over the tooltip,
+     * using VictoryPortal directly bypasses the issue, however it creates a "redraw" delay
+     * that visually causes the tooltip redraw to be noticeable.
+     */
+    const labelComponent = (
+      <ChartCursorTooltip
+        dx={0}
+        dy={0}
+        centerOffset={{x: 0, y: 0}}
+        flyoutStyle={{fill: 'transparent', stroke: 'transparent'}}
+        labelComponent={<Tooltip dataSets={clonedDataSets} content={chartTooltip} ref={containerRef}/>}
+      />
+    );
+
+    return (
+      <VictoryVoronoiCursorContainer
+        cursorDimension="x"
+        labels={obj => obj}
+        labelComponent={labelComponent}
+        voronoiPadding={50}
+        mouseFollowTooltips
+      />
+    );
+  }
+
   renderTooltip() {
+    const { dataSetsToggle } = this;
+    const {chartTooltip, dataSets} = this.props;
+    const containerRef = () => this.containerRef;
+    // const containerRef = this.containerRef;
+
+    if (!chartTooltip || Object.values(dataSetsToggle).filter(v => v === true).length === dataSets.length) {
+      return null;
+    }
+
+    const clonedDataSets = _cloneDeep(dataSets);
+
+    return <ChartTooltip />;
+
+    /*
+    // const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+    const Tooltip = React.forwardRef((props, ref) => <ChartTooltip {...props} containerRef={ref}/>);
+
+    return <Tooltip dataSets={clonedDataSets}
+                    content={chartTooltip}
+      ref={containerRef} />;
+    */
+
+    /*
+    //<ProductContext.Provider value={updatedContext}>
+    return // <ChartContext.Provider value={{ container: VictoryVoronoiCursorContainer, containerRef: containerRef }}>
+      <ChartTooltip
+        dataSets={clonedDataSets}
+        content={chartTooltip}
+        // ref={containerRef}
+        // container={VictoryVoronoiCursorContainer}
+      />
+    */
+    // </ChartContext.Provider>;
+    /*
+    const Tooltip = React.forwardRef((props, ref) => <ChartTooltip {...props} containerRef={ref}/>);
+
+    const UpdatedTooltip = <Tooltip
+      dataSets={clonedDataSets}
+      content={chartTooltip}
+      ref={containerRef}
+      // container={VictoryVoronoiCursorContainer}
+    />;
+
+    return <VictoryVoronoiCursorContainer { ...UpdatedTooltip.props } />
+    */
+  }
+
+  renderTooltipWORKS() {
+    const { dataSetsToggle } = this;
+    const {chartTooltip, dataSets} = this.props;
+    // const containerRef = () => this.containerRef;
+    const containerRef = this.containerRef;
+
+    if (!chartTooltip || Object.values(dataSetsToggle).filter(v => v === true).length === dataSets.length) {
+      return null;
+    }
+
+    const clonedDataSets = _cloneDeep(dataSets);
+
+    const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+
+    const Tooltip = React.forwardRef((props, ref) => <ChartTooltip {...props} containerRef={ref}/>);
+
+    /**
+     * FixMe: PF Charts prop "renderInPortal" is used to adjust layer order with the cursor
+     * renderInPortal no longer appears to function and the cursor appears over the tooltip,
+     * using VictoryPortal directly bypasses the issue, however it creates a "redraw" delay
+     * that visually causes the tooltip redraw to be noticeable.
+     */
+    const labelComponent = (
+      <ChartCursorTooltip
+        dx={0}
+        dy={0}
+        centerOffset={{ x: 0, y: 0 }}
+        flyoutStyle={{ fill: 'transparent', stroke: 'transparent' }}
+        labelComponent={<Tooltip dataSets={clonedDataSets} content={chartTooltip} ref={containerRef} />}
+      />
+    );
+
+    return (
+      <VictoryVoronoiCursorContainer
+        cursorDimension="x"
+        labels={obj => obj}
+        labelComponent={labelComponent}
+        voronoiPadding={50}
+        mouseFollowTooltips
+      />
+    );
+
+    // return <ChartTooltip />;
+    // return <ChartTooltip />;
+
+    // return ChartTooltip({ ...ChartTooltip.defaultProps, containerRef, dataSets, content: chartTooltip });
+    // const Tooltip = React.forwardRef((props, ref) => <ChartTooltip {...props} containerRef={ref}/>);
+    // return <Tooltip dataSets={dataSets} content={chartTooltip} ref={containerRef}/>;
+
+    /**
+     * FixMe: PF Charts prop "renderInPortal" is used to adjust layer order with the cursor
+     * renderInPortal no longer appears to function and the cursor appears over the tooltip,
+     * using VictoryPortal directly bypasses the issue, however it creates a "redraw" delay
+     * that visually causes the tooltip redraw to be noticeable.
+     */
+    /*
+    const labelComponent = (
+      <ChartCursorTooltip
+        dx={0}
+        dy={0}
+        centerOffset={{ x: 0, y: 0 }}
+        flyoutStyle={{ fill: 'transparent', stroke: 'transparent' }}
+        labelComponent={obj => <ChartTooltip passedObj={obj} dataSets={dataSets} content={chartTooltip} ref={containerRef} />}
+      />
+    );
+
+    return (
+      <VictoryVoronoiCursorContainer
+        cursorDimension="x"
+        labels={obj => obj}
+        labelComponent={labelComponent}
+        voronoiPadding={50}
+        mouseFollowTooltips
+      />
+    );
+     */
+  }
+
+  renderTooltipOG() {
     const { dataSetsToggle } = this;
     const { chartTooltip, dataSets } = this.props;
 
@@ -418,7 +593,30 @@ class ChartArea extends React.Component {
     const charts = [];
     const chartsStacked = [];
 
+    /*
+    dataSets
+      .filter(dataSet => !dataSetsToggle[dataSet.id] && dataSet?.data?.length)
+      .forEach(dataSet => {
+        const chartElementProps = {
+          dataSet,
+          isMultiYAxis,
+          maxX,
+          maxY,
+          xValueFormat,
+          yValueFormat
+        };
 
+        const element = <ChartElement key={`chartelement-${dataSet.id}`} {...chartElementProps}/>;
+
+        if (dataSet.isStacked) {
+          chartsStacked.push(element);
+        } else {
+          charts.push(element);
+        }
+      });
+
+    return (stacked && chartsStacked) || charts;
+    */
     dataSets.forEach(dataSet => {
       if (!dataSetsToggle[dataSet.id] && dataSet?.data?.length) {
         const chartElementProps = {
@@ -431,9 +629,14 @@ class ChartArea extends React.Component {
         };
 
         if (dataSet.isStacked) {
+          // const elementStacked = obj => <ChartElement key={`chartelement-stacked-${dataSet.id}`} {...obj} {...chartElementProps} />;
+          // const elementStacked = <ChartElement key={`chartelement-stacked-${dataSet.id}`} {...chartElementProps} />;
           chartsStacked.push(ChartElement({ ...ChartElement.defaultProps, ...chartElementProps }));
+          // chartsStacked.push(elementStacked);
         } else {
+          // const element = <ChartElement key={`chartelement-${dataSet.id}`} {...chartElementProps}/>;
           charts.push(ChartElement({ ...ChartElement.defaultProps, ...chartElementProps }));
+          // charts.push(element);
         }
       }
     });
@@ -447,13 +650,47 @@ class ChartArea extends React.Component {
    * @returns {Node}
    */
   render() {
+    const { containerRef, tooltipRef } = this;
     const { chartWidth } = this.state;
     const { chartLegend, padding, themeColor, yAxisDisabled } = this.props;
 
     const { xAxisProps, yAxisProps, chartDomain, hasData, isMultiYAxis, maxX, maxY } = this.getChartAxisPropsDomain();
-    const tooltipComponent = { containerComponent: (hasData && this.renderTooltip()) || undefined };
+    // const tooltipComponent = { containerComponent: (hasData && this.renderTooltip()) || <ChartContainer /> };
+    let containerComponent = <ChartContainer />;
+
+    if (hasData) {
+      const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+      // containerComponent = this.renderTooltip();
+      /* WORKS
+      containerComponent = (
+        <VictoryVoronoiCursorContainer
+          cursorDimension="x"
+          labels={obj => obj}
+          labelComponent={<ChartCursorTooltip
+            dx={0}
+            dy={0}
+            centerOffset={{ x: 0, y: 0 }}
+            flyoutStyle={{ fill: 'transparent', stroke: 'transparent' }}
+            labelComponent={<ChartTooltip />}
+          />}
+          voronoiPadding={50}
+          mouseFollowTooltips
+        />
+      );
+      */
+      containerComponent = (
+        <VictoryVoronoiCursorContainer
+          cursorDimension="x"
+          labels={obj => obj}
+          labelComponent={<ChartTooltip />}
+          voronoiPadding={50}
+          mouseFollowTooltips
+        />
+      );
+    }
 
     return (
+      <ChartContext.Provider value={{ container: containerComponent, containerRef: () => containerRef }}>
       <div
         id="curiosity-chartarea"
         className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
@@ -463,7 +700,8 @@ class ChartArea extends React.Component {
           animate={{ duration: 0 }}
           width={chartWidth}
           themeColor={themeColor}
-          {...{ padding, ...chartDomain, ...tooltipComponent }}
+          // {...{ padding, ...chartDomain, ...tooltipComponent }}
+          {...{ padding, containerComponent, ...chartDomain }}
         >
           <ChartAxis {...xAxisProps} animate={false} />
           {!yAxisDisabled &&
@@ -475,6 +713,7 @@ class ChartArea extends React.Component {
         </Chart>
         {chartLegend && <div className="curiosity-chartarea__legend">{this.renderLegend()}</div>}
       </div>
+    </ChartContext.Provider>
     );
   }
 }

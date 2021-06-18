@@ -9,7 +9,8 @@ import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_T
 import { graphCardHelpers } from './graphCardHelpers';
 import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
-import { ChartArea } from '../chartArea/chartArea';
+// import { ChartArea } from '../chartArea/chartArea';
+import { Chart as ChartArea } from '../chartArea/chart';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { translate } from '../i18n/i18n';

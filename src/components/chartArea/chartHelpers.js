@@ -1,3 +1,7 @@
+import React from 'react';
+import _cloneDeep from 'lodash/cloneDeep';
+import { helpers } from '../../common';
+
 /**
  * Generate max X and Y values from datasets.
  *
@@ -65,6 +69,47 @@ const generateDomains = ({ maxY } = {}) => {
   return {
     ...updatedChartDomain
   };
+};
+
+/**
+ * Preprocess datasets for tooltips.
+ *
+ * @param {object} params
+ * @param {Node|Function} params.content
+ * @param {Array} params.dataSets
+ * @returns {{}}
+ */
+const generateTooltipData = ({ content = helpers.noop, dataSets = [] } = {}) => {
+  const tooltipDataSetLookUp = {};
+
+  if (content && dataSets?.[0].data) {
+    dataSets[0].data.forEach((dataSet, index) => {
+      const itemsByKey = {};
+
+      dataSets.forEach(data => {
+        if (data?.data[index]) {
+          itemsByKey[data.id] = {
+            color: data.stroke || data.fill || data.color || '',
+            data: _cloneDeep(data.data[index])
+          };
+        }
+      });
+
+      const mockDatum = {
+        datum: { x: dataSet.x, y: dataSet.y, index, itemsByKey }
+      };
+
+      tooltipDataSetLookUp[dataSet.x] = {
+        x: dataSet.x,
+        y: null,
+        itemsByKey,
+        tooltip:
+          (React.isValidElement(content) && React.cloneElement(content, { ...mockDatum })) || content({ ...mockDatum })
+      };
+    });
+  }
+
+  return tooltipDataSetLookUp;
 };
 
 /**
@@ -242,6 +287,7 @@ const chartHelpers = {
   generateAxisProps,
   generateDomains,
   generateMaxXY,
+  generateTooltipData,
   generateXAxisProps,
   generateYAxisProps
 };
@@ -252,6 +298,7 @@ export {
   generateAxisProps,
   generateDomains,
   generateMaxXY,
+  generateTooltipData,
   generateXAxisProps,
   generateYAxisProps
 };
