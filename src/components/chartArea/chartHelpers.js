@@ -71,6 +71,109 @@ const generateDomains = ({ maxY } = {}) => {
   };
 };
 
+const generateElementsProps = ({ dataSets = [], isMultiYAxis, maxX, maxY, xValueFormat, yValueFormat }) => {
+  const elements = [];
+  const stackedElements = [];
+  const elementsById = {};
+  const stackedElementsById = {};
+
+  dataSets.forEach(dataSet => {
+    const {
+      animate,
+      chartType,
+      data,
+      fill,
+      id,
+      isStacked,
+      interpolation,
+      stroke,
+      strokeDasharray,
+      strokeWidth
+    } = dataSet;
+
+    if (data?.length) {
+      /*
+      const chartElementProps = {
+        dataSet,
+        isMultiYAxis,
+        maxX,
+        maxY,
+        xValueFormat,
+        yValueFormat
+      };
+      */
+      const dataColorStroke = {
+        data: {}
+      };
+
+      // if (fill && chartType === 'area') {
+      if (fill) {
+        dataColorStroke.data.fill = fill;
+      }
+
+      if (stroke) {
+        dataColorStroke.data.stroke = stroke;
+      }
+
+      if (strokeDasharray) {
+        dataColorStroke.data.strokeDasharray = strokeDasharray;
+      }
+
+      if (strokeWidth) {
+        dataColorStroke.data.strokeWidth = strokeWidth;
+      }
+
+      const defaultProps = {};
+
+      if (animate) {
+        defaultProps.animate = animate;
+      }
+
+      if (interpolation) {
+        defaultProps.interpolation = interpolation;
+      }
+
+      const chartElementProps = {
+        ...defaultProps,
+        key: `chart-${dataSet.id}-${chartType}`,
+        name: `chart-${dataSet.id}-${chartType}`,
+        data: dataSet.data,
+        style: { ...(dataSet.style || {}), ...dataColorStroke },
+        themeColor: dataSet.themeColor,
+        themeVariant: dataSet.themeVariant,
+        x: (xValueFormat && (datum => xValueFormat({ datum, maxX }))) || undefined,
+        y:
+          (yValueFormat &&
+            (datum =>
+              yValueFormat({
+                datum,
+                isMultiAxis: isMultiYAxis,
+                maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
+              }))) ||
+          undefined
+      };
+
+      const props = { ...chartElementProps }; // chartElement({ ...ChartElement.defaultProps, ...chartElementProps });
+      const updatedProps = { chartType, props };
+
+      if (isStacked) {
+        stackedElementsById[id] = updatedProps;
+        stackedElements.push(updatedProps);
+      } else {
+        elementsById[id] = updatedProps;
+        elements.push(updatedProps);
+      }
+    }
+  });
+
+  return {
+    elements,
+    elementsById,
+    stackedElements,
+    stackedElementsById
+  };
+};
+
 /**
  * Preprocess datasets for tooltips.
  *
@@ -286,6 +389,7 @@ const generateAxisProps = ({
 const chartHelpers = {
   generateAxisProps,
   generateDomains,
+  generateElementsProps,
   generateMaxXY,
   generateTooltipData,
   generateXAxisProps,
@@ -297,6 +401,7 @@ export {
   chartHelpers,
   generateAxisProps,
   generateDomains,
+  generateElementsProps,
   generateMaxXY,
   generateTooltipData,
   generateXAxisProps,

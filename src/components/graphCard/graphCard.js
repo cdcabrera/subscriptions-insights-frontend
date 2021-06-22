@@ -11,6 +11,7 @@ import GraphCardChartTooltip from './graphCardChartTooltip';
 import GraphCardChartLegend from './graphCardChartLegend';
 // import { ChartArea } from '../chartArea/chartArea';
 import { Chart as ChartArea } from '../chartArea/chart';
+// import { ChartProvider as ChartArea } from '../chartArea/chartProvider';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { translate } from '../i18n/i18n';

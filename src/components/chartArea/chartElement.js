@@ -21,6 +21,7 @@ import { ChartThreshold, ChartLine, ChartArea } from '@patternfly/react-charts';
  * @param {Function} props.yValueFormat
  * @returns {Node}
  */
+
 const ChartElement = ({ chartDefaults, dataSet, isMultiYAxis, maxX, maxY, xValueFormat, yValueFormat, ...props }) => {
   // const { container } = React.useContext(ChartContext);
   const chartType = dataSet.chartType || 'area';
@@ -46,29 +47,32 @@ const ChartElement = ({ chartDefaults, dataSet, isMultiYAxis, maxX, maxY, xValue
     dataColorStroke.data.strokeDasharray = dataSet.strokeDasharray;
   }
 
+  const chartComponentProps = {
+    animate: dataSet.animate || updatedChartDefaults.animate,
+    interpolation: dataSet.interpolation || updatedChartDefaults.interpolation,
+    key: `chart-${dataSet.id}-${chartType}`,
+    name: `chart-${dataSet.id}-${chartType}`,
+    data: dataSet.data,
+    style: { ...(dataSet.style || {}), ...dataColorStroke },
+    themeColor: dataSet.themeColor,
+    themeVariant: dataSet.themeVariant,
+    x: (xValueFormat && (datum => xValueFormat({ datum, maxX }))) || undefined,
+    y:
+      (yValueFormat &&
+        (datum =>
+          yValueFormat({
+            datum,
+            isMultiAxis: isMultiYAxis,
+            maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
+          }))) ||
+      undefined
+  };
+
   return (
     <ChartComponent
       // containerComponent={container}
       {...props}
-      animate={dataSet.animate || updatedChartDefaults.animate}
-      interpolation={dataSet.interpolation || updatedChartDefaults.interpolation}
-      key={`chart-${dataSet.id}-${chartType}`}
-      name={`chart-${dataSet.id}-${chartType}`}
-      data={dataSet.data}
-      style={{ ...(dataSet.style || {}), ...dataColorStroke }}
-      themeColor={dataSet.themeColor}
-      themeVariant={dataSet.themeVariant}
-      x={(xValueFormat && (datum => xValueFormat({ datum, maxX }))) || undefined}
-      y={
-        (yValueFormat &&
-          (datum =>
-            yValueFormat({
-              datum,
-              isMultiAxis: isMultiYAxis,
-              maxY: (typeof maxY === 'number' && maxY) || maxY?.[dataSet.id]
-            }))) ||
-        undefined
-      }
+      {...chartComponentProps}
     />
   );
 };

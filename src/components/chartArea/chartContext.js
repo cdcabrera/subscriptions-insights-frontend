@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
+import { helpers } from '../../common';
 // import React from 'react';
 
 /**
@@ -6,8 +7,62 @@ import React, { useState, useCallback, useContext } from 'react';
  *
  * @type {React.Context<{}>}
  */
-const ChartContext = React.createContext({});
+// const ChartContext = React.createContext([{ chartContainerRef: helpers.noop, chartSettings: {} }, helpers.noop]);
+const DEFAULT_CONTEXT = [{ chartContainerRef: helpers.noop, chartSettings: {} }, helpers.noop];
 
+const ChartContext = React.createContext(DEFAULT_CONTEXT);
+
+const useSetChartContext = () => {
+  const chartContext = useContext(ChartContext);
+  const [context, setContext] = useState(chartContext);
+
+  const updateContext = useCallback(settings => {
+    console.log('useChartContext >>>', settings);
+    setContext(settings);
+  }, []);
+
+  return [context, updateContext];
+};
+
+const useGetChartContext = () => useContext(ChartContext);
+
+const useToggleData = () => {
+  const [dataSetsToggle, setDataSetsToggle] = useState({});
+
+  const onHide = useCallback(
+    id => {
+      setDataSetsToggle({ ...dataSetsToggle, [id]: true });
+    },
+    [dataSetsToggle]
+  );
+
+  const onRevert = useCallback(() => {
+    setDataSetsToggle({});
+  }, []);
+
+  const onToggle = useCallback(
+    id => {
+      const updatedToggle = !dataSetsToggle[id];
+      setDataSetsToggle({ ...dataSetsToggle, [id]: updatedToggle });
+      return updatedToggle;
+    },
+    [dataSetsToggle]
+  );
+
+  // ToDo: review return undefined if doesn't exist
+  const getIsToggled = useCallback(id => dataSetsToggle[id] || false, [dataSetsToggle]);
+  // const getIsToggled = useCallback(id => (id && dataSetsToggle[id]) || dataSetsToggle, [dataSetsToggle]);
+
+  return {
+    dataSetsToggle,
+    onHide,
+    onRevert,
+    onToggle,
+    getIsToggled
+  };
+};
+
+/*
 const useChartContext = () => {
   const chartContext = useContext(ChartContext);
   const [context, doit] = useState(null);
@@ -48,9 +103,10 @@ const useChartContext = () => {
   );
 
   return [context, callback];
-  */
+  * /
 };
-
+*/
+/*
 const useChartSettings = () => {
   const obj = useContext(ChartContext);
   // const { context } = useChartContext();
@@ -61,6 +117,7 @@ const useChartSettings = () => {
   // const { chartSettings = {} } = context;
   return chartSettings;
 };
+ */
 
 /*
 const useChartData = () => {
@@ -92,8 +149,9 @@ return {
 // };
 const context = {
   ChartContext,
-  useChartContext,
-  useChartSettings
+  useGetChartContext,
+  useSetChartContext,
+  useToggleData
 };
 
-export { context as default, context, ChartContext, useChartContext, useChartSettings };
+export { context as default, context, ChartContext, useGetChartContext, useSetChartContext, useToggleData };

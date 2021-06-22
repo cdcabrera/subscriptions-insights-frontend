@@ -1,151 +1,112 @@
-/* eslint-disable */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {useMount, useUnmount} from 'react-use';
-import {
-  // VictoryChart as Chart,
-  // VictoryAxis as ChartAxis,
-  VictoryLine as ChartLine,
-  VictoryStack as ChartStack,
-  VictoryArea as PfChartArea,
-  VictoryTooltip as ChartCursorTooltip
-} from 'victory';
-import { createContainer } from 'victory-create-container';
-import {
-  Chart as PfChart,
-  ChartAxis,
-  // ChartLine,
-  // ChartStack,
-  ChartThreshold,
-  ChartThemeColor,
-  ChartContainer,
-  // ChartArea as PfChartArea,
-  // ChartCursorFlyout,
-  // ChartCursorTooltip
-  ChartAxisTheme
-} from '@patternfly/react-charts';
-import _cloneDeep from 'lodash/cloneDeep';
-import { helpers } from '../../common';
+// import {useMount, useUnmount} from 'react-use';
+import { ChartThemeColor } from '@patternfly/react-charts';
 import { chartHelpers } from './chartHelpers';
-import { ChartElement } from './chartElement';
-import { ChartTooltip } from './chartTooltip';
-import { ChartContext, useChartContext } from './chartContext';
+import { ChartContext, useSetChartContext, useToggleData } from './chartContext';
 import { useResizeObserver } from '../../hooks/useWindow';
 
-/**
- * FixMe: chart redraw flash related to custom tooltips use
- * Removing custom tooltips corrects redraw issues. As a temporary patch, caching at the selector alleviates
- * the symptoms.
- */
-/**
- * A wrapper for Patternfly and Victory charts/graphs.
- *
- * @augments React.Component
- * @fires onResizeContainer
- * @fires onHide
- * @fires onRevert
- * @fires onToggle
- */
-/*
-class Chart extends React.Component {
-  state = { chartWidth: 0 };
-
-  dataSetsToggle = {};
-
-  resizeObserver = helpers.noop;
-
-  containerRef = React.createRef();
-
-  tooltipRef = React.createRef();
-
-  componentDidMount() {
-    this.setResizeObserve();
-  }
-
-  componentWillUnmount() {
-    this.resizeObserver();
-  }
-
-  render() {
-    return null;
-  }
-}
-*/
-const ChartProvider = ({ children, xAxisFixLabelOverlap, xAxisLabelIncrement, xAxisTickFormat, yAxisTickFormat, dataSets, chartTooltip }) => {
+const ChartProvider = ({
+  children,
+  xAxisFixLabelOverlap,
+  xAxisLabelIncrement,
+  xAxisTickFormat,
+  yAxisTickFormat,
+  dataSets,
+  chartLegend,
+  chartTooltip,
+  padding,
+  themeColor,
+  xValueFormat,
+  yValueFormat
+}) => {
   // const [context, setContext] = useState({});
-  // const [context, setContext] = useChartContext();
-  const { context, callback } = useChartContext();
-  // const [dataSetsToggle, setDataSetsToggle] = useState({});
-  const [dataSetsToggle] = useState({});
+  const [context, setContext] = useSetChartContext();
+  const { dataSetsToggle } = useToggleData();
   const containerRef = useRef(null);
+  const { width: chartWidth } = useResizeObserver(containerRef);
+  // const [dataSetsToggle, setDataSetsToggle] = useDataSetsToggle();
+  // const [dataSetsToggle, setDataSetsToggle] = useState({});
+  // const [dataSetsToggle] = useState({});
 
-  const updateChartSettings = () => {
-    const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
-
-    const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ chartTooltip, dataSets });
-    const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
-    const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
-    const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
-      dataSets,
-      individualMaxY,
-      maxX,
-      maxY,
-      xAxisFixLabelOverlap,
-      xAxisLabelIncrement,
-      xAxisTickFormat,
-      yAxisTickFormat
-    });
-
-    const isMultiYAxis = yAxisProps.length > 1;
-    const chartDomain = chartHelpers.generateDomains({ maxY: (isMultiYAxis && individualMaxY) || maxY });
-    const hasData = !!xAxisProps.tickValues;
-
-    return {
-      chartContainer: null,
-      xAxisProps,
-      yAxisProps,
-      chartDomain,
-      hasData,
-      isMultiYAxis,
-      maxX,
-      maxY: (isMultiYAxis && individualMaxY) || maxY,
-      tooltipDataSetLookUp
-    };
-  };
-
-  // const chartSettings = updateChartSettings();
-  // const context = { chartContainerRef: () => containerRef, chartSettings };
-  /*
   useEffect(() => {
+    const updateChartSettings = () => {
+      const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
+
+      const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ chartTooltip, dataSets });
+      const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
+      const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
+      const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
+        dataSets,
+        individualMaxY,
+        maxX,
+        maxY,
+        xAxisFixLabelOverlap,
+        xAxisLabelIncrement,
+        xAxisTickFormat,
+        yAxisTickFormat
+      });
+
+      const isMultiYAxis = yAxisProps.length > 1;
+      const chartElementsProps = chartHelpers.generateElementsProps({
+        dataSets,
+        isMultiYAxis,
+        maxX,
+        maxY,
+        xValueFormat,
+        yValueFormat
+      });
+      const chartDomain = chartHelpers.generateDomains({ maxY: (isMultiYAxis && individualMaxY) || maxY });
+      const hasData = !!xAxisProps.tickValues;
+
+      return {
+        // chartContainer: null,
+        xAxisProps,
+        yAxisProps,
+        chartDomain,
+        chartElementsProps,
+        hasData,
+        isMultiYAxis,
+        maxX,
+        maxY: (isMultiYAxis && individualMaxY) || maxY,
+        padding,
+        themeColor,
+        tooltipDataSetLookUp
+      };
+    };
+
     const chartSettings = updateChartSettings();
     console.log('PROVIDER >>>', chartSettings);
+    console.log('PROVIDER >>>', chartWidth);
 
     const updatedSettings = {
-      chartContainerRef: () => containerRef,
-      chartSettings: {...chartSettings}
+      // chartContainerRef: containerRef,
+      chartSettings: { ...chartSettings, chartLegend, chartWidth, dataSets }
     };
 
     setContext(updatedSettings);
-  } , [containerRef, dataSets, setContext])
-  */
-  /*
-  useEffect(() => {
-    const chartSettings = updateChartSettings();
-    console.log('PROVIDER >>>', chartSettings);
+    // } , [containerRef, dataSets, setContext]);
+  }, [
+    yAxisTickFormat,
+    xAxisTickFormat,
+    xAxisLabelIncrement,
+    xAxisFixLabelOverlap,
+    xValueFormat,
+    yValueFormat,
+    themeColor,
+    padding,
+    dataSetsToggle,
+    chartLegend,
+    chartTooltip,
+    chartWidth,
+    dataSets,
+    setContext
+  ]);
 
-    const updatedSettings = {
-      chartContainerRef: () => console.log('hello world'), // containerRef,
-      chartSettings: {...chartSettings}
-    };
-
-    // callback(updatedSettings);
-  }, [dataSets]);
-  */
-
-  // FIXME: try passing a simple value
+  // console.log('>>>', chartWidth);
 
   return (
-    <ChartContext.Provider value="hello world">
+    <ChartContext.Provider value={context}>
       <div
         id="curiosity-chartarea"
         className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
@@ -203,7 +164,7 @@ ChartProvider.propTypes = {
   ),
   // domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   // domain: PropTypes.shape({ x: PropTypes.array, y: PropTypes.array }),
-  height: PropTypes.number,
+  // height: PropTypes.number,
   padding: PropTypes.shape({
     bottom: PropTypes.number,
     left: PropTypes.number,
@@ -216,7 +177,7 @@ ChartProvider.propTypes = {
   xAxisTickFormat: PropTypes.func,
   // yAxisTickFormat: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.func)]),
   yAxisTickFormat: PropTypes.func,
-  yAxisDisabled: PropTypes.bool, // REMOVE THIS
+  // yAxisDisabled: PropTypes.bool, // REMOVE THIS
   xValueFormat: PropTypes.func,
   yValueFormat: PropTypes.func
 };
@@ -234,7 +195,7 @@ ChartProvider.defaultProps = {
   children: null,
   // domain: {},
   dataSets: [],
-  height: 275,
+  // height: 275,
   padding: {
     bottom: 75,
     left: 50,
@@ -246,7 +207,7 @@ ChartProvider.defaultProps = {
   xAxisLabelIncrement: 1,
   xAxisTickFormat: null,
   yAxisTickFormat: null,
-  yAxisDisabled: false,
+  // yAxisDisabled: false,
   xValueFormat: null,
   yValueFormat: null
 };

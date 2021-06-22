@@ -1,21 +1,31 @@
+/* eslint-disable */
 // import React, { useContext, useState } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ChartThemeColor } from '@patternfly/react-charts';
 // import { useChartSettings, ChartContext } from './chartContext';
-import { ChartContext } from './chartContext';
+// import { ChartContext } from './chartContext';
 // import { useResizeObserver } from '../../hooks/useWindow';
 import { ChartProvider } from './chartProvider';
+import ChartElements from "./chartElements";
+import ChartLegend from "./chartLegend";
+// import { ChartContext } from './chartContext';
 
 const Chart = ({
+  chartLegend,
+  dataSets,
+  chartTooltip,
+  padding,
+  themeColor,
   xAxisFixLabelOverlap,
   xAxisLabelIncrement,
   xAxisTickFormat,
   yAxisTickFormat,
-  dataSets,
-  chartTooltip
+  xValueFormat,
+  yValueFormat
 }) => {
-  const str = React.useContext(ChartContext);
-  console.log('>>> chart', str);
+  // const str = React.useContext(ChartContext);
+  // console.log('>>> chart', str);
   // const obj = useChartSettings();
   // console.log('>>> chart', obj);
   // const [dataSetsToggle, setDataSetsToggle] = useState({});
@@ -39,7 +49,9 @@ const Chart = ({
     console.log('>>> chart', chartContainerRef, dataSets);
   }, [chartContainerRef, dataSets]);
   */
-
+  // setting the provider and using the context in the same component may be the issue
+  // console.log('>>>', ChartContext);
+  // {chartLegend && <div className="curiosity-chartarea__legend">{this.renderLegend()}</div>}
   return (
     <ChartProvider
       {...{
@@ -47,11 +59,17 @@ const Chart = ({
         xAxisLabelIncrement,
         xAxisTickFormat,
         yAxisTickFormat,
+        xValueFormat,
+        yValueFormat,
         dataSets,
-        chartTooltip
+        chartLegend,
+        chartTooltip,
+        padding,
+        themeColor
       }}
     >
-      hello world, lorem
+      <ChartElements />
+      <ChartLegend />
     </ChartProvider>
   );
 };
@@ -64,14 +82,24 @@ const Chart = ({
  *     xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number, height: number}}
  */
 Chart.propTypes = {
+  chartLegend: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   chartTooltip: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   dataSets: PropTypes.array,
+  padding: PropTypes.shape({
+    bottom: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number,
+    top: PropTypes.number
+  }),
+  themeColor: PropTypes.oneOf(Object.values(ChartThemeColor)),
   xAxisFixLabelOverlap: PropTypes.bool,
   xAxisLabelIncrement: PropTypes.number,
   xAxisTickFormat: PropTypes.func,
-  yAxisTickFormat: PropTypes.func
+  yAxisTickFormat: PropTypes.func,
+  xValueFormat: PropTypes.func,
+  yValueFormat: PropTypes.func
   /*
-  chartLegend: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+
   chartTooltip: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   children: PropTypes.node,
   dataSets: PropTypes.arrayOf(
@@ -116,7 +144,6 @@ Chart.propTypes = {
     right: PropTypes.number,
     top: PropTypes.number
   }),
-  themeColor: PropTypes.oneOf(Object.values(ChartThemeColor)),
   xAxisFixLabelOverlap: PropTypes.bool,
   xAxisLabelIncrement: PropTypes.number,
   xAxisTickFormat: PropTypes.func,
@@ -139,10 +166,19 @@ Chart.propTypes = {
 Chart.defaultProps = {
   chartTooltip: null,
   dataSets: [],
+  padding: {
+    bottom: 75,
+    left: 50,
+    right: 50,
+    top: 50
+  },
+  themeColor: 'blue',
   xAxisFixLabelOverlap: false,
   xAxisLabelIncrement: 1,
   xAxisTickFormat: null,
-  yAxisTickFormat: null
+  yAxisTickFormat: null,
+  xValueFormat: null,
+  yValueFormat: null
 
   /*
   chartLegend: null,
@@ -157,7 +193,6 @@ Chart.defaultProps = {
     right: 50,
     top: 50
   },
-  themeColor: 'blue',
   xAxisFixLabelOverlap: false,
   xAxisLabelIncrement: 1,
   xAxisTickFormat: null,
