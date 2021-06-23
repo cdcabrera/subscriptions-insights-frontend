@@ -22,8 +22,10 @@ const ChartLegend = () => {
   };
 
   return (
-    (React.isValidElement(chartLegend) && React.cloneElement(chartLegend, { ...legendProps })) ||
-    chartLegend({ ...legendProps })
+    <div className="curiosity-chartarea__legend">
+      {(React.isValidElement(chartLegend) && React.cloneElement(chartLegend, { ...legendProps })) ||
+        chartLegend({ ...legendProps })}
+    </div>
   );
 };
 
