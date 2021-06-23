@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * Note: Victory Charts components require a form of extended "something" applied by consuming components.
+ * Note: Victory Charts components require a form of extended "something" applied by the consuming component.
  * This leads to odd implementations, we return a function that then returns a component to avoid
  * having to consider passing "props" or other params/options.
  */
