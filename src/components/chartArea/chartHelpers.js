@@ -106,8 +106,7 @@ const generateElementsProps = ({ dataSets = [], isMultiYAxis, maxX, maxY, xValue
         data: {}
       };
 
-      // if (fill && chartType === 'area') {
-      if (fill) {
+      if (fill && chartType !== 'line' && chartType !== 'threshold') {
         dataColorStroke.data.fill = fill;
       }
 

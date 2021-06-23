@@ -1,18 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {
+  // VictoryChart as Chart,
+  // VictoryAxis as ChartAxis,
+  VictoryLine as ChartLine,
+  VictoryStack as ChartStack,
+  // VictoryArea as ChartArea,
+  VictoryTooltip as ChartCursorTooltip
+} from 'victory';
+import { createContainer } from 'victory-create-container';
 import {
   Chart,
   ChartArea,
   ChartAxis,
   ChartContainer,
-  ChartLine,
-  ChartStack,
+  // ChartCursorTooltip,
+  // ChartLine,
+  // ChartStack,
   ChartThreshold
 } from '@patternfly/react-charts';
-import { createContainer } from 'victory-create-container';
-import PropTypes from 'prop-types';
+// import { useMount } from 'react-use';
 import { useGetChartContext } from './chartContext';
-// import { ChartTooltip } from './chartTooltip';
-// import { useResizeObserver } from '../../hooks/useWindow';
+import { ChartTooltip } from './chartTooltip';
+import { helpers } from '../../common';
 
 /**
  * Generate a compatible Victory chart element/facet component.
@@ -22,13 +32,7 @@ import { useGetChartContext } from './chartContext';
  * @returns {Node}
  */
 const ChartElements = ({ chartTypeDefaults }) => {
-  // const [{ chartSettings = {}, chartContainerRef }, bob] = useChartSettings();
-  // console.log('>>>', chartSettings, chartContainerRef, bob);
-  // const [{ chartSettings = {} }] = useChartSettings();
-  // const { width: chartWidth } = useResizeObserver(chartContainerRef);
-  // const what = useContext(ChartContext);
-  const { chartSettings = {} } = useGetChartContext();
-  console.log('WHAT >>>', chartSettings);
+  const { chartSettings = {}, chartContainerRef = helpers.noop, chartTooltipRef = helpers.noop } = useGetChartContext();
   const {
     chartDomain,
     chartElementsProps,
@@ -39,25 +43,34 @@ const ChartElements = ({ chartTypeDefaults }) => {
     xAxisProps,
     yAxisProps
   } = chartSettings;
-  console.log('chartElementsProps >>>', chartElementsProps);
 
   let containerComponent = <ChartContainer />;
+  let yAxis = null;
+  let chartElements = null;
+  let stackedChartElements = null;
 
   if (hasData) {
     const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
+    const TooltipLabelComponent = ChartTooltip({ chartSettings, chartContainerRef, chartTooltipRef });
 
     containerComponent = (
       <VictoryVoronoiCursorContainer
         cursorDimension="x"
         labels={obj => obj}
-        // labelComponent={<ChartTooltip />}
+        labelComponent={
+          <ChartCursorTooltip
+            dx={0}
+            dy={0}
+            centerOffset={{ x: 0, y: 0 }}
+            flyoutStyle={{ fill: 'transparent', stroke: 'transparent' }}
+            labelComponent={<TooltipLabelComponent />}
+          />
+        }
         voronoiPadding={50}
         mouseFollowTooltips
       />
     );
   }
-
-  let yAxis = null;
 
   if (Array.isArray(yAxisProps)) {
     yAxis = yAxisProps.map(axisProps => (
@@ -70,18 +83,20 @@ const ChartElements = ({ chartTypeDefaults }) => {
     return <Component {...{ ...defaultProps, ...props }} />;
   };
 
+  chartElements = chartElementsProps?.elements.map(setChartElement);
+  stackedChartElements = chartElementsProps?.stackedElements.reverse().map(setChartElement);
+
   return (
     <Chart
       animate={{ duration: 0 }}
       width={chartWidth}
       themeColor={themeColor}
-      // {...{ padding, ...chartDomain, ...tooltipComponent }}
       {...{ padding, containerComponent, ...chartDomain }}
     >
       <ChartAxis {...xAxisProps} animate={false} />
       {yAxis}
-      {chartElementsProps?.elements.map(setChartElement)}
-      <ChartStack>{chartElementsProps?.stackedElements.reverse().map(setChartElement)}</ChartStack>
+      {chartElements}
+      <ChartStack>{stackedChartElements}</ChartStack>
     </Chart>
   );
 };

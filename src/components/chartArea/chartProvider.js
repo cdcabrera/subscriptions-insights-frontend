@@ -24,6 +24,7 @@ const ChartProvider = ({
   const [context, setContext] = useSetChartContext();
   const { dataSetsToggle } = useToggleData();
   const containerRef = useRef(null);
+  const tooltipRef = useRef(null);
   const { width: chartWidth } = useResizeObserver(containerRef);
   // const [dataSetsToggle, setDataSetsToggle] = useDataSetsToggle();
   // const [dataSetsToggle, setDataSetsToggle] = useState({});
@@ -33,7 +34,7 @@ const ChartProvider = ({
     const updateChartSettings = () => {
       const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
 
-      const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ chartTooltip, dataSets });
+      const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ content: chartTooltip, dataSets });
       const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
       const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
       const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
@@ -80,8 +81,9 @@ const ChartProvider = ({
     console.log('PROVIDER >>>', chartWidth);
 
     const updatedSettings = {
-      // chartContainerRef: containerRef,
-      chartSettings: { ...chartSettings, chartLegend, chartWidth, dataSets }
+      chartContainerRef: () => containerRef,
+      chartSettings: { ...chartSettings, chartLegend, chartWidth, dataSets },
+      chartTooltipRef: () => tooltipRef
     };
 
     setContext(updatedSettings);
