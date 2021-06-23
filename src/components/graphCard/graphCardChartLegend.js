@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip, TooltipPosition } from '@patternfly/react-core';
-import { EyeSlashIcon } from '@patternfly/react-icons';
 import { connect, store, reduxTypes } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
@@ -70,7 +69,7 @@ class GraphCardChartLegend extends React.Component {
         component="a"
         isDisabled={isDisabled}
         icon={
-          ((isDisabled || checkIsToggled) && <EyeSlashIcon />) || (
+          ((isDisabled || checkIsToggled) && <ChartIcon symbol="eyeSlash" />) || (
             <ChartIcon
               symbol={(isThreshold && 'dash') || 'square'}
               style={{ visibility: (isDisabled && 'hidden') || (checkIsToggled && 'hidden') || 'visible' }}
@@ -92,7 +91,7 @@ class GraphCardChartLegend extends React.Component {
           enableFlip={false}
           distance={5}
           entryDelay={100}
-          exitDelay={0}
+          exitDelay={10}
         >
           {button}
         </Tooltip>
