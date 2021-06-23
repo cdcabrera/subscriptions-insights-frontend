@@ -87,7 +87,7 @@ ChartElements.propTypes = {
   chartTypeDefaults: PropTypes.objectOf(
     PropTypes.shape({
       component: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-      animate: PropTypes.bool,
+      animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
       interpolation: PropTypes.oneOf(['monotoneX', 'step'])
     })
   )

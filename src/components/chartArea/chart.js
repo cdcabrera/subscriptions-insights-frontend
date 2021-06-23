@@ -108,7 +108,12 @@ const Chart = ({
         className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
         ref={containerRef}
       >
-        {chartWidth > 0 && [<ChartElements />, <ChartLegend />]}
+        {chartWidth > 0 && (
+          <React.Fragment>
+            <ChartElements />
+            <ChartLegend />
+          </React.Fragment>
+        )}
       </div>
     </ChartContext.Provider>
   );

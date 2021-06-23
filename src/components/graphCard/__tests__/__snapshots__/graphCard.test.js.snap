@@ -3,12 +3,6 @@
 exports[`GraphCard Component should filter result sets: filtered dataSets 1`] = `
 Array [
   Object {
-    "animate": Object {
-      "duration": 250,
-      "onLoad": Object {
-        "duration": 250,
-      },
-    },
     "data": Array [
       Object {
         "date": 2019-06-01T00:00:00.000Z,
@@ -32,12 +26,6 @@ Array [
     "strokeWidth": 2,
   },
   Object {
-    "animate": Object {
-      "duration": 100,
-      "onLoad": Object {
-        "duration": 100,
-      },
-    },
     "data": Array [
       Object {
         "date": 2019-06-01T00:00:00.000Z,
@@ -97,18 +85,28 @@ exports[`GraphCard Component should render a non-connected component: non-connec
       <div
         className=""
       >
-        <ChartArea
-          chartLegend={[Function]}
-          chartTooltip={[Function]}
+        <Chart
+          chartLegend={
+            <Memo(Connect(GraphCardChartLegend))
+              productLabel=""
+              viewId="graphCard"
+            />
+          }
+          chartTooltip={
+            <GraphCardChartTooltip
+              datum={Object {}}
+              granularity="daily"
+              productLabel=""
+              t={[Function]}
+            />
+          }
           dataSets={Array []}
-          domain={Object {}}
-          height={275}
           key="chart_{\\"granularity\\":\\"daily\\",\\"ending\\":\\"2021-02-24T23:59:59.999Z\\",\\"beginning\\":\\"2021-01-25T00:00:00.000Z\\"}"
           padding={
             Object {
               "bottom": 75,
-              "left": 50,
-              "right": 50,
+              "left": 55,
+              "right": 55,
               "top": 50,
             }
           }
@@ -116,7 +114,9 @@ exports[`GraphCard Component should render a non-connected component: non-connec
           xAxisFixLabelOverlap={true}
           xAxisLabelIncrement={5}
           xAxisTickFormat={[Function]}
+          xValueFormat={null}
           yAxisTickFormat={[Function]}
+          yValueFormat={null}
         />
       </div>
     </CardBody>
@@ -128,12 +128,6 @@ exports[`GraphCard Component should render multiple states: error passes values 
 Object {
   "chartBarData": Array [
     Object {
-      "animate": Object {
-        "duration": 250,
-        "onLoad": Object {
-          "duration": 250,
-        },
-      },
       "data": Array [
         Object {
           "date": 2019-06-01T00:00:00.000Z,
@@ -192,18 +186,24 @@ exports[`GraphCard Component should render multiple states: error with 403 statu
       <div
         className="blur"
       >
-        <ChartArea
-          chartLegend={[Function]}
-          chartTooltip={[Function]}
+        <Chart
+          chartLegend={
+            <Memo(Connect(GraphCardChartLegend))
+              productLabel=""
+              viewId="graphCard"
+            />
+          }
+          chartTooltip={
+            <GraphCardChartTooltip
+              datum={Object {}}
+              granularity="daily"
+              productLabel=""
+              t={[Function]}
+            />
+          }
           dataSets={
             Array [
               Object {
-                "animate": Object {
-                  "duration": 250,
-                  "onLoad": Object {
-                    "duration": 250,
-                  },
-                },
                 "data": Array [
                   Object {
                     "date": 2019-06-01T00:00:00.000Z,
@@ -228,14 +228,12 @@ exports[`GraphCard Component should render multiple states: error with 403 statu
               },
             ]
           }
-          domain={Object {}}
-          height={275}
           key="chart_{\\"granularity\\":\\"daily\\",\\"ending\\":\\"2019-06-26T23:59:59.999Z\\",\\"beginning\\":\\"2019-05-25T00:00:00.000Z\\"}"
           padding={
             Object {
               "bottom": 75,
-              "left": 50,
-              "right": 50,
+              "left": 55,
+              "right": 55,
               "top": 50,
             }
           }
@@ -243,7 +241,9 @@ exports[`GraphCard Component should render multiple states: error with 403 statu
           xAxisFixLabelOverlap={true}
           xAxisLabelIncrement={5}
           xAxisTickFormat={[Function]}
+          xValueFormat={null}
           yAxisTickFormat={[Function]}
+          yValueFormat={null}
         />
       </div>
     </CardBody>
@@ -283,18 +283,24 @@ exports[`GraphCard Component should render multiple states: error with 500 statu
       <div
         className="blur"
       >
-        <ChartArea
-          chartLegend={[Function]}
-          chartTooltip={[Function]}
+        <Chart
+          chartLegend={
+            <Memo(Connect(GraphCardChartLegend))
+              productLabel=""
+              viewId="graphCard"
+            />
+          }
+          chartTooltip={
+            <GraphCardChartTooltip
+              datum={Object {}}
+              granularity="daily"
+              productLabel=""
+              t={[Function]}
+            />
+          }
           dataSets={
             Array [
               Object {
-                "animate": Object {
-                  "duration": 250,
-                  "onLoad": Object {
-                    "duration": 250,
-                  },
-                },
                 "data": Array [
                   Object {
                     "date": 2019-06-01T00:00:00.000Z,
@@ -319,14 +325,12 @@ exports[`GraphCard Component should render multiple states: error with 500 statu
               },
             ]
           }
-          domain={Object {}}
-          height={275}
           key="chart_{\\"granularity\\":\\"daily\\",\\"ending\\":\\"2019-06-26T23:59:59.999Z\\",\\"beginning\\":\\"2019-05-25T00:00:00.000Z\\"}"
           padding={
             Object {
               "bottom": 75,
-              "left": 50,
-              "right": 50,
+              "left": 55,
+              "right": 55,
               "top": 50,
             }
           }
@@ -334,7 +338,9 @@ exports[`GraphCard Component should render multiple states: error with 500 statu
           xAxisFixLabelOverlap={true}
           xAxisLabelIncrement={5}
           xAxisTickFormat={[Function]}
+          xValueFormat={null}
           yAxisTickFormat={[Function]}
+          yValueFormat={null}
         />
       </div>
     </CardBody>
@@ -374,18 +380,24 @@ exports[`GraphCard Component should render multiple states: fulfilled 1`] = `
       <div
         className=""
       >
-        <ChartArea
-          chartLegend={[Function]}
-          chartTooltip={[Function]}
+        <Chart
+          chartLegend={
+            <Memo(Connect(GraphCardChartLegend))
+              productLabel=""
+              viewId="graphCard"
+            />
+          }
+          chartTooltip={
+            <GraphCardChartTooltip
+              datum={Object {}}
+              granularity="daily"
+              productLabel=""
+              t={[Function]}
+            />
+          }
           dataSets={
             Array [
               Object {
-                "animate": Object {
-                  "duration": 250,
-                  "onLoad": Object {
-                    "duration": 250,
-                  },
-                },
                 "data": Array [
                   Object {
                     "date": 2019-06-01T00:00:00.000Z,
@@ -410,14 +422,12 @@ exports[`GraphCard Component should render multiple states: fulfilled 1`] = `
               },
             ]
           }
-          domain={Object {}}
-          height={275}
           key="chart_{\\"granularity\\":\\"daily\\",\\"ending\\":\\"2019-06-26T23:59:59.999Z\\",\\"beginning\\":\\"2019-05-25T00:00:00.000Z\\"}"
           padding={
             Object {
               "bottom": 75,
-              "left": 50,
-              "right": 50,
+              "left": 55,
+              "right": 55,
               "top": 50,
             }
           }
@@ -425,7 +435,9 @@ exports[`GraphCard Component should render multiple states: fulfilled 1`] = `
           xAxisFixLabelOverlap={true}
           xAxisLabelIncrement={5}
           xAxisTickFormat={[Function]}
+          xValueFormat={null}
           yAxisTickFormat={[Function]}
+          yValueFormat={null}
         />
       </div>
     </CardBody>

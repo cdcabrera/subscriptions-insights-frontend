@@ -78,12 +78,16 @@ Array [
     "file": "./src/components/graphCard/graphCardChartTooltip.js",
     "keys": Array [
       Object {
+        "key": "curiosity-graph.noDataLabel",
+        "match": "t('curiosity-graph.noDataLabel')",
+      },
+      Object {
         "key": "curiosity-graph.infiniteThresholdLabel",
         "match": "t('curiosity-graph.infiniteThresholdLabel')",
       },
       Object {
-        "key": "curiosity-graph.noDataLabel",
-        "match": "t('curiosity-graph.noDataLabel')",
+        "key": "curiosity-graph.infiniteThresholdLabel",
+        "match": "t('curiosity-graph.infiniteThresholdLabel')",
       },
       Object {
         "key": "curiosity-graph.thresholdLabel",
@@ -249,12 +253,12 @@ Array [
         "match": "t(\`curiosity-view.title\`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })",
       },
       Object {
-        "key": "curiosity-inventory.tab",
-        "match": "t('curiosity-inventory.tab', { context: 'hosts' })",
+        "key": "curiosity-inventory.tabHosts",
+        "match": "t('curiosity-inventory.tabHosts', { context: productId, count: 0 })",
       },
       Object {
-        "key": "curiosity-inventory.tab",
-        "match": "t('curiosity-inventory.tab', { context: 'subscriptions' })",
+        "key": "curiosity-inventory.tabSubscriptions",
+        "match": "t('curiosity-inventory.tabSubscriptions', { context: productId })",
       },
     ],
   },
@@ -287,12 +291,12 @@ Array [
         "match": "t('curiosity-graph.cardHeadingDescription', { context: productId })",
       },
       Object {
-        "key": "curiosity-inventory.tab",
-        "match": "t('curiosity-inventory.tab', { context: 'hosts' })",
+        "key": "curiosity-inventory.tabHosts",
+        "match": "t('curiosity-inventory.tabHosts', { context: productId })",
       },
       Object {
-        "key": "curiosity-inventory.tab",
-        "match": "t('curiosity-inventory.tab', { context: 'subscriptions' })",
+        "key": "curiosity-inventory.tabSubscriptions",
+        "match": "t('curiosity-inventory.tabSubscriptions', { context: productId })",
       },
       Object {
         "key": "curiosity-view.title",
@@ -583,22 +587,6 @@ Array [
   },
   Object {
     "file": "./src/components/inventorySubscriptions/inventorySubscriptions.js",
-    "key": "curiosity-inventory.tab",
-  },
-  Object {
-    "file": "./src/components/productView/productView.js",
-    "key": "curiosity-inventory.tab",
-  },
-  Object {
-    "file": "./src/components/productView/productView.js",
-    "key": "curiosity-inventory.tab",
-  },
-  Object {
-    "file": "./src/components/productView/productViewOpenShiftContainer.js",
-    "key": "curiosity-inventory.tab",
-  },
-  Object {
-    "file": "./src/components/productView/productViewOpenShiftContainer.js",
     "key": "curiosity-inventory.tab",
   },
   Object {
