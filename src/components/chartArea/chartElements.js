@@ -66,7 +66,7 @@ const ChartElements = ({ chartTypeDefaults }) => {
   };
 
   chartElements = chartElementsProps?.elements.map(setChartElement);
-  stackedChartElements = chartElementsProps?.stackedElements.reverse().map(setChartElement);
+  stackedChartElements = chartElementsProps?.stackedElements.map(setChartElement);
 
   return (
     <Chart
