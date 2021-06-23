@@ -1,7 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ChartPoint } from '@patternfly/react-charts';
-import { EyeIcon, EyeSlashIcon, InfinityIcon } from '@patternfly/react-icons';
+import { EyeIcon, EyeSlashIcon, InfinityIcon, SquareIcon, IconSize } from '@patternfly/react-icons';
+
+/**
+ * Emulate pf icon sizing for custom SVGs
+ *
+ * @param {string} size
+ * @returns {string} em measurement
+ */
+const getSize = size => {
+  switch (size) {
+    case 'md':
+      return '1.5em';
+    case 'lg':
+      return '2em';
+    case 'xl':
+      return '3em';
+    case 'sm':
+    default:
+      return '1em';
+  }
+};
 
 /**
  * Render an icon for use outside of Victory charts.
@@ -10,28 +29,50 @@ import { EyeIcon, EyeSlashIcon, InfinityIcon } from '@patternfly/react-icons';
  * @param {string} props.fill
  * @param {string} props.symbol
  * @param {string} props.size
+ * @param {string} props.title
  * @returns {Node}
  */
-const ChartIcon = ({ fill, symbol, size }) => {
+const ChartIcon = ({ fill, symbol, size, title }) => {
+  const svgProps = {};
+  const iconProps = { size, title };
+  const emSvgSize = getSize(size);
+
+  if (title) {
+    svgProps['aria-labelledby'] = title;
+  } else {
+    svgProps['aria-hidden'] = true;
+  }
+
+  if (fill) {
+    iconProps.color = fill;
+  }
+
   const setIcon = () => {
     switch (symbol) {
       case 'dash':
         return (
-          <svg width="100%" height="100%" viewBox="0 0 38 10" role="img" aria-hidden>
-            <rect y="5" width="10" height="10" fill={fill} />
-            <rect x="14" y="5" width="10" height="10" fill={fill} />
-            <rect x="28" y="5" width="10" height="10" fill={fill} />
-          </svg>
+          <span
+            style={{
+              width: emSvgSize,
+              height: `${Number.parseFloat(emSvgSize) / 2}em`
+            }}
+          >
+            <svg width="100%" height="100%" viewBox="0 0 38 10" role="img" {...svgProps}>
+              <rect y="5" width="10" height="10" fill={fill} />
+              <rect x="14" y="5" width="10" height="10" fill={fill} />
+              <rect x="28" y="5" width="10" height="10" fill={fill} />
+            </svg>
+          </span>
         );
       case 'threshold':
         return (
-          <span style={{ width: `${size * 2}px`, height: `${size}px`, display: 'inline-block' }}>
-            <svg width="100%" height="100%" role="img" aria-hidden>
+          <span style={{ width: `${Number.parseFloat(emSvgSize) * 2}em`, height: emSvgSize }}>
+            <svg width="100%" height="100%" viewBox="0 0 18 10" role="img" {...svgProps}>
               <line
                 x1={0}
-                y1={size / 2}
-                x2={size * 3}
-                y2={size / 2}
+                y1={(Number.parseFloat(emSvgSize) * 16) / 2}
+                x2={Number.parseFloat(emSvgSize) * 16 * 3}
+                y2={(Number.parseFloat(emSvgSize) * 16) / 2}
                 stroke={fill}
                 strokeWidth={3}
                 strokeDasharray="4,3"
@@ -40,19 +81,14 @@ const ChartIcon = ({ fill, symbol, size }) => {
           </span>
         );
       case 'eye':
-        return <EyeIcon color={fill} size={(size <= 10 && 'sm') || (size <= 20 && 'md') || 'lg'} />;
+        return <EyeIcon {...iconProps} />;
       case 'eyeSlash':
-        return <EyeSlashIcon color={fill} size={(size <= 10 && 'sm') || (size <= 20 && 'md') || 'lg'} />;
+        return <EyeSlashIcon {...iconProps} />;
       case 'infinity':
-        return <InfinityIcon color={fill} size={(size <= 10 && 'sm') || (size <= 20 && 'md') || 'lg'} />;
+        return <InfinityIcon {...iconProps} />;
+      case 'square':
       default:
-        return (
-          <span style={{ width: `${size}px`, height: `${size}px`, display: 'inline-block' }}>
-            <svg width="100%" height="100%" role="img" aria-hidden>
-              <ChartPoint x={0} y={0} style={{ fill }} symbol={symbol} size={size} />
-            </svg>
-          </span>
-        );
+        return <SquareIcon {...iconProps} />;
     }
   };
 
@@ -61,14 +97,16 @@ const ChartIcon = ({ fill, symbol, size }) => {
 
 ChartIcon.propTypes = {
   fill: PropTypes.string,
-  size: PropTypes.number,
-  symbol: PropTypes.oneOf(['dash', 'eye', 'eyeSlash', 'infinity', 'square', 'threshold'])
+  size: PropTypes.oneOf([...Object.keys(IconSize)]),
+  symbol: PropTypes.oneOf(['dash', 'eye', 'eyeSlash', 'infinity', 'square', 'threshold']),
+  title: PropTypes.string
 };
 
 ChartIcon.defaultProps = {
-  fill: 'transparent',
-  size: 10,
-  symbol: 'square'
+  fill: null,
+  size: 'sm',
+  symbol: 'square',
+  title: null
 };
 
 export { ChartIcon as default, ChartIcon };

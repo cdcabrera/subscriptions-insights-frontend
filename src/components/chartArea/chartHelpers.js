@@ -92,16 +92,6 @@ const generateElementsProps = ({ dataSets = [], isMultiYAxis, maxX, maxY, xValue
     } = dataSet;
 
     if (data?.length) {
-      /*
-      const chartElementProps = {
-        dataSet,
-        isMultiYAxis,
-        maxX,
-        maxY,
-        xValueFormat,
-        yValueFormat
-      };
-      */
       const dataColorStroke = {
         data: {}
       };

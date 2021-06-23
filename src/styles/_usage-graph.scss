@@ -45,7 +45,6 @@
         th {
           padding-right: 5px;
           text-align: left;
-
         }
 
         td {
@@ -76,11 +75,20 @@
       display: inline-block;
       width: 1em;
       height: 1em;
-      vertical-align: baseline;
 
-      &-threshold {
-        margin-right: 5px;
+      &-dash {
+        vertical-align: middle;
+
+        > span {
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+
+          > svg {}
+        }
       }
+
+      &-threshold {}
     }
 
     &__tooltip {
