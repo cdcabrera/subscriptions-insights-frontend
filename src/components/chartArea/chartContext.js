@@ -13,33 +13,68 @@ const DEFAULT_CONTEXT = [
 
 const ChartContext = React.createContext(DEFAULT_CONTEXT);
 
+/**
+ * Get an updated chart context.
+ *
+ * @returns {React.Context<{}>}
+ */
+const useGetChartContext = () => useContext(ChartContext);
+
+/**
+ * Set chart context.
+ *
+ * @returns {Array}
+ */
 const useSetChartContext = () => {
   const chartContext = useContext(ChartContext);
   const [context, setContext] = useState(chartContext);
 
   const updateContext = useCallback(settings => {
-    console.log('useChartContext >>>', settings);
     setContext(settings);
   }, []);
 
   return [context, updateContext];
 };
 
-const useGetChartContext = () => useContext(ChartContext);
-
-const useToggleData = () => {
+const useSetToggleData = () => {
   const [dataSetsToggle, setDataSetsToggle] = useState({});
+
+  const updateDataSetsToggle = useCallback(dataSets => {
+    console.log('TOGGLE 001 >>>', dataSets);
+    setDataSetsToggle(dataSets);
+  }, []);
+
+  return [dataSetsToggle, updateDataSetsToggle];
+};
+
+/*
+const useGetToggleData = () => {
+  const { dataSetsToggle = [] } = useGetChartContext();
+  return dataSetsToggle[0];
+};
+ */
+
+/**
+ * Track, show, and hide chart data layers.
+ *
+ * @returns {{onRevert: Function, onToggle: Function, getIsToggled: Function, dataSetsToggle: object,
+ *     onHide: Function}}
+ */
+const useToggleData = () => {
+  // const [dataSetsToggle, setDataSetsToggle] = useSetToggleData();
+  const { dataSetsToggle: contextDataSetsToggle = [] } = useGetChartContext();
+  const [dataSetsToggle, setDataSetsToggle] = contextDataSetsToggle;
 
   const onHide = useCallback(
     id => {
       setDataSetsToggle({ ...dataSetsToggle, [id]: true });
     },
-    [dataSetsToggle]
+    [dataSetsToggle, setDataSetsToggle]
   );
 
   const onRevert = useCallback(() => {
     setDataSetsToggle({});
-  }, []);
+  }, [setDataSetsToggle]);
 
   const onToggle = useCallback(
     id => {
@@ -47,15 +82,19 @@ const useToggleData = () => {
       setDataSetsToggle({ ...dataSetsToggle, [id]: updatedToggle });
       return updatedToggle;
     },
-    [dataSetsToggle]
+    [dataSetsToggle, setDataSetsToggle]
   );
 
   // ToDo: review return undefined if doesn't exist
   const getIsToggled = useCallback(id => dataSetsToggle[id] || false, [dataSetsToggle]);
   // const getIsToggled = useCallback(id => (id && dataSetsToggle[id]) || dataSetsToggle, [dataSetsToggle]);
 
+  const updatedDataSetsToggled = { dataSetsToggle };
+
+  console.log('TOGGLE 002 >>>', dataSetsToggle);
+
   return {
-    dataSetsToggle,
+    ...updatedDataSetsToggled,
     onHide,
     onRevert,
     onToggle,
@@ -137,7 +176,18 @@ const context = {
   ChartContext,
   useGetChartContext,
   useSetChartContext,
+  // useGetToggleData,
+  useSetToggleData,
   useToggleData
 };
 
-export { context as default, context, ChartContext, useGetChartContext, useSetChartContext, useToggleData };
+export {
+  context as default,
+  context,
+  ChartContext,
+  useGetChartContext,
+  useSetChartContext,
+  // useGetToggleData,
+  useSetToggleData,
+  useToggleData
+};

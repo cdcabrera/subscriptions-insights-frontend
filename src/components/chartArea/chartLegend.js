@@ -1,16 +1,11 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import _cloneDeep from 'lodash/cloneDeep';
 import { useGetChartContext, useToggleData } from './chartContext';
 
 const ChartLegend = () => {
-  // const { chartLegend, dataSets } = useGetChartContext();
-  const { chartSettings = {} } = useGetChartContext();
   const { getIsToggled, onHide, onRevert, onToggle } = useToggleData();
-
+  const { chartSettings = {} } = useGetChartContext();
   const { chartLegend, dataSets } = chartSettings;
-
-  console.log('>>> chartLegend', chartLegend, dataSets);
 
   if (!chartLegend) {
     return null;

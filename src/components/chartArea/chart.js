@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ChartThemeColor } from '@patternfly/react-charts';
-import { ChartContext, useSetChartContext, useToggleData } from './chartContext';
+import { ChartContext, useSetChartContext } from './chartContext';
 import { ChartElements } from './chartElements';
 import { ChartLegend } from './chartLegend';
 import { chartHelpers } from './chartHelpers';
@@ -22,17 +22,23 @@ const Chart = ({
 }) => {
   // const [context, setContext] = useState({});
   const [context, setContext] = useSetChartContext();
-  const { dataSetsToggle } = useToggleData();
+  // const [dataSetsToggle] = useSetToggleData();
+  const [dataSetsToggle, setDataSetsToggle] = useState({});
   const containerRef = useRef(null);
   const tooltipRef = useRef(null);
   const { width: chartWidth } = useResizeObserver(containerRef);
   // const [dataSetsToggle, setDataSetsToggle] = useDataSetsToggle();
   // const [dataSetsToggle, setDataSetsToggle] = useState({});
   // const [dataSetsToggle] = useState({});
+  // console.log('dataSetsToggle 001 >>>', dataSetsToggle);
 
   useEffect(() => {
+    console.log('dataSetsToggle 002 >>>', dataSetsToggle);
+
     const updateChartSettings = () => {
       const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
+
+      console.log('dataSetsToggle 003 >>>', toggledDataSets);
 
       const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ content: chartTooltip, dataSets });
       const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
@@ -50,7 +56,7 @@ const Chart = ({
 
       const isMultiYAxis = yAxisProps.length > 1;
       const chartElementsProps = chartHelpers.generateElementsProps({
-        dataSets,
+        dataSets: toggledDataSets,
         isMultiYAxis,
         maxX,
         maxY,
@@ -79,7 +85,8 @@ const Chart = ({
     const updatedSettings = {
       chartContainerRef: () => containerRef,
       chartSettings: { ...chartSettings, chartLegend, chartWidth, dataSets },
-      chartTooltipRef: () => tooltipRef
+      chartTooltipRef: () => tooltipRef,
+      dataSetsToggle: [dataSetsToggle, setDataSetsToggle]
     };
 
     setContext(updatedSettings);
@@ -183,8 +190,8 @@ Chart.defaultProps = {
   dataSets: [],
   padding: {
     bottom: 75,
-    left: 50,
-    right: 50,
+    left: 55,
+    right: 55,
     top: 50
   },
   themeColor: 'blue',
