@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ChartPoint } from '@patternfly/react-charts';
-import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
+import { EyeIcon, EyeSlashIcon, InfinityIcon } from '@patternfly/react-icons';
 
 /**
  * Render an icon for use outside of Victory charts.
@@ -40,9 +40,11 @@ const ChartIcon = ({ fill, symbol, size }) => {
           </span>
         );
       case 'eye':
-        return <EyeIcon color={fill} size={size >= 10 && 'sm'} />;
+        return <EyeIcon color={fill} size={(size <= 10 && 'sm') || (size <= 20 && 'md') || 'lg'} />;
       case 'eyeSlash':
-        return <EyeSlashIcon color={fill} size={size >= 10 && 'sm'} />;
+        return <EyeSlashIcon color={fill} size={(size <= 10 && 'sm') || (size <= 20 && 'md') || 'lg'} />;
+      case 'infinity':
+        return <InfinityIcon color={fill} size={(size <= 10 && 'sm') || (size <= 20 && 'md') || 'lg'} />;
       default:
         return (
           <span style={{ width: `${size}px`, height: `${size}px`, display: 'inline-block' }}>
@@ -60,7 +62,7 @@ const ChartIcon = ({ fill, symbol, size }) => {
 ChartIcon.propTypes = {
   fill: PropTypes.string,
   size: PropTypes.number,
-  symbol: PropTypes.oneOf(['dash', 'eye', 'eyeSlash', 'square', 'threshold'])
+  symbol: PropTypes.oneOf(['dash', 'eye', 'eyeSlash', 'infinity', 'square', 'threshold'])
 };
 
 ChartIcon.defaultProps = {

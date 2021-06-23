@@ -192,6 +192,7 @@ const generateTooltipData = ({ content = helpers.noop, dataSets = [] } = {}) => 
         if (data?.data[index]) {
           itemsByKey[data.id] = {
             color: data.stroke || data.fill || data.color || '',
+            chartType: data.chartType,
             data: _cloneDeep(data.data[index])
           };
         }
