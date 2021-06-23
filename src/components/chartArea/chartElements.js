@@ -1,28 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  // VictoryChart as Chart,
-  // VictoryAxis as ChartAxis,
-  VictoryLine as ChartLine,
-  VictoryStack as ChartStack,
-  // VictoryArea as ChartArea,
-  VictoryTooltip as ChartCursorTooltip
-} from 'victory';
+import { VictoryStack as ChartStack, VictoryTooltip as ChartCursorTooltip } from 'victory';
 import { createContainer } from 'victory-create-container';
-import {
-  Chart,
-  ChartArea,
-  ChartAxis,
-  ChartContainer,
-  // ChartCursorTooltip,
-  // ChartLine,
-  // ChartStack,
-  ChartThreshold
-} from '@patternfly/react-charts';
-// import { useMount } from 'react-use';
+import { Chart, ChartArea, ChartAxis, ChartContainer, ChartLine, ChartThreshold } from '@patternfly/react-charts';
 import { useGetChartContext } from './chartContext';
-import { ChartTooltip } from './chartTooltip';
-import { helpers } from '../../common';
+import { chartTooltip } from './chartTooltip';
 
 /**
  * Generate a compatible Victory chart element/facet component.
@@ -32,7 +14,7 @@ import { helpers } from '../../common';
  * @returns {Node}
  */
 const ChartElements = ({ chartTypeDefaults }) => {
-  const { chartSettings = {}, chartContainerRef = helpers.noop, chartTooltipRef = helpers.noop } = useGetChartContext();
+  const { chartSettings = {}, chartContainerRef, chartTooltipRef } = useGetChartContext();
   const {
     chartDomain,
     chartElementsProps,
@@ -46,12 +28,12 @@ const ChartElements = ({ chartTypeDefaults }) => {
 
   let containerComponent = <ChartContainer />;
   let yAxis = null;
-  let chartElements = null;
-  let stackedChartElements = null;
+  let chartElements = [];
+  let stackedChartElements = [];
 
   if (hasData) {
     const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
-    const TooltipLabelComponent = ChartTooltip({ chartSettings, chartContainerRef, chartTooltipRef });
+    const TooltipLabelComponent = chartTooltip({ chartSettings, chartContainerRef, chartTooltipRef });
 
     containerComponent = (
       <VictoryVoronoiCursorContainer
@@ -108,12 +90,7 @@ ChartElements.propTypes = {
       animate: PropTypes.bool,
       interpolation: PropTypes.oneOf(['monotoneX', 'step'])
     })
-  ),
-  isMultiYAxis: PropTypes.bool,
-  maxX: PropTypes.number,
-  maxY: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-  xValueFormat: PropTypes.func,
-  yValueFormat: PropTypes.func
+  )
 };
 
 ChartElements.defaultProps = {
@@ -133,12 +110,7 @@ ChartElements.defaultProps = {
       animate: false,
       interpolation: 'step'
     }
-  },
-  isMultiYAxis: false,
-  maxX: undefined,
-  maxY: undefined,
-  xValueFormat: null,
-  yValueFormat: null
+  }
 };
 
 export { ChartElements as default, ChartElements };

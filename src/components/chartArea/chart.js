@@ -1,15 +1,11 @@
-/* eslint-disable */
-// import React, { useContext, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { ChartThemeColor } from '@patternfly/react-charts';
-// import { useChartSettings, ChartContext } from './chartContext';
-// import { ChartContext } from './chartContext';
-// import { useResizeObserver } from '../../hooks/useWindow';
-import { ChartProvider } from './chartProvider';
-import ChartElements from "./chartElements";
-import ChartLegend from "./chartLegend";
-// import { ChartContext } from './chartContext';
+import { ChartContext, useSetChartContext, useToggleData } from './chartContext';
+import { ChartElements } from './chartElements';
+import { ChartLegend } from './chartLegend';
+import { chartHelpers } from './chartHelpers';
+import { useResizeObserver } from '../../hooks/useWindow';
 
 const Chart = ({
   chartLegend,
@@ -24,67 +20,137 @@ const Chart = ({
   xValueFormat,
   yValueFormat
 }) => {
-  // const str = React.useContext(ChartContext);
-  // console.log('>>> chart', str);
-  // const obj = useChartSettings();
-  // console.log('>>> chart', obj);
+  // const [context, setContext] = useState({});
+  const [context, setContext] = useSetChartContext();
+  const { dataSetsToggle } = useToggleData();
+  const containerRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const { width: chartWidth } = useResizeObserver(containerRef);
+  // const [dataSetsToggle, setDataSetsToggle] = useDataSetsToggle();
   // const [dataSetsToggle, setDataSetsToggle] = useState({});
+  // const [dataSetsToggle] = useState({});
 
-  /**
-   * chartContainer,
-   xAxisProps,
-   yAxisProps,
-   chartDomain,
-   hasData,
-   isMultiYAxis,
-   maxX,
-   maxY,
-   tooltipDataSetLookUp
-   */
-  // const { xAxisProps } = useChartSettings();
-  // console.log('>>> chart', xAxisProps, dataSets);
-
-  /*
   useEffect(() => {
-    console.log('>>> chart', chartContainerRef, dataSets);
-  }, [chartContainerRef, dataSets]);
-  */
-  // setting the provider and using the context in the same component may be the issue
-  // console.log('>>>', ChartContext);
-  // {chartLegend && <div className="curiosity-chartarea__legend">{this.renderLegend()}</div>}
-  return (
-    <ChartProvider
-      {...{
+    const updateChartSettings = () => {
+      const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
+
+      const tooltipDataSetLookUp = chartHelpers.generateTooltipData({ content: chartTooltip, dataSets });
+      const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
+      const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
+      const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({
+        dataSets,
+        individualMaxY,
+        maxX,
+        maxY,
         xAxisFixLabelOverlap,
         xAxisLabelIncrement,
         xAxisTickFormat,
-        yAxisTickFormat,
-        xValueFormat,
-        yValueFormat,
+        yAxisTickFormat
+      });
+
+      const isMultiYAxis = yAxisProps.length > 1;
+      const chartElementsProps = chartHelpers.generateElementsProps({
         dataSets,
-        chartLegend,
-        chartTooltip,
+        isMultiYAxis,
+        maxX,
+        maxY,
+        xValueFormat,
+        yValueFormat
+      });
+      const chartDomain = chartHelpers.generateDomains({ maxY: (isMultiYAxis && individualMaxY) || maxY });
+      const hasData = !!xAxisProps.tickValues;
+
+      return {
+        xAxisProps,
+        yAxisProps,
+        chartDomain,
+        chartElementsProps,
+        hasData,
+        isMultiYAxis,
+        maxX,
+        maxY: (isMultiYAxis && individualMaxY) || maxY,
         padding,
-        themeColor
-      }}
-    >
-      <ChartElements />
-      <ChartLegend />
-    </ChartProvider>
+        themeColor,
+        tooltipDataSetLookUp
+      };
+    };
+
+    const chartSettings = updateChartSettings();
+    const updatedSettings = {
+      chartContainerRef: () => containerRef,
+      chartSettings: { ...chartSettings, chartLegend, chartWidth, dataSets },
+      chartTooltipRef: () => tooltipRef
+    };
+
+    setContext(updatedSettings);
+  }, [
+    yAxisTickFormat,
+    xAxisTickFormat,
+    xAxisLabelIncrement,
+    xAxisFixLabelOverlap,
+    xValueFormat,
+    yValueFormat,
+    themeColor,
+    padding,
+    dataSetsToggle,
+    chartLegend,
+    chartTooltip,
+    chartWidth,
+    dataSets,
+    setContext
+  ]);
+
+  return (
+    <ChartContext.Provider value={context}>
+      <div
+        id="curiosity-chartarea"
+        className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+        ref={containerRef}
+      >
+        <ChartElements />
+        <ChartLegend />
+      </div>
+    </ChartContext.Provider>
   );
 };
 
 /**
  * Prop types.
  *
- * @type {{chartLegend: Node|Function, chartTooltip: Node|Function, padding, xAxisTickFormat: Function,
- *     themeColor: string, yAxisTickFormat: Function, domain: object|Array, dataSets: object,
- *     xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number, height: number}}
+ * @type {{chartTooltip: Node|Function, xValueFormat: Function, padding: {top: number, left: number, bottom: number,
+ *     right: number}, xAxisTickFormat: Function, themeColor: string, chartLegend: Node|Function,
+ *     yAxisTickFormat: Function, dataSets: Array, xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number,
+ *     yValueFormat: Function}}
  */
 Chart.propTypes = {
   chartLegend: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   chartTooltip: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  dataSets: PropTypes.array,
+  dataSets: PropTypes.arrayOf(
+    PropTypes.shape({
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.number.isRequired,
+          y: PropTypes.number,
+          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)]),
+          yAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
+        })
+      ),
+      animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+      chartType: PropTypes.oneOf(['area', 'line', 'threshold']),
+      fill: PropTypes.string,
+      stroke: PropTypes.string,
+      strokeWidth: PropTypes.number,
+      strokeDasharray: PropTypes.string,
+      themeColor: PropTypes.string,
+      themeVariant: PropTypes.string,
+      id: PropTypes.string.isRequired,
+      interpolation: PropTypes.string,
+      style: PropTypes.object,
+      isStacked: PropTypes.bool,
+      xAxisUseDataSet: PropTypes.bool,
+      yAxisUseDataSet: PropTypes.bool
+    })
+  ),
   padding: PropTypes.shape({
     bottom: PropTypes.number,
     left: PropTypes.number,
@@ -98,72 +164,21 @@ Chart.propTypes = {
   yAxisTickFormat: PropTypes.func,
   xValueFormat: PropTypes.func,
   yValueFormat: PropTypes.func
-  /*
-
-  chartTooltip: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  children: PropTypes.node,
-  dataSets: PropTypes.arrayOf(
-    PropTypes.shape({
-      data: PropTypes.arrayOf(
-        PropTypes.shape({
-          x: PropTypes.number.isRequired,
-          y: PropTypes.number,
-          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)]), // this doesn't appear to be used, remove it
-          yAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)]) // re-eval this
-        })
-      ),
-      animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-      chartType: PropTypes.oneOf(['area', 'line', 'threshold']),
-      fill: PropTypes.string,
-      stroke: PropTypes.string,
-      strokeWidth: PropTypes.number,
-      strokeDasharray: PropTypes.string,
-      themeColor: PropTypes.string,
-      themeVariant: PropTypes.string,
-      id: PropTypes.string.isRequired,
-      interpolation: PropTypes.string,
-      legendLabel: PropTypes.string,
-      legendSymbolType: PropTypes.string,
-      style: PropTypes.object,
-      isStacked: PropTypes.bool,
-      isThreshold: PropTypes.bool,
-      // isDisplayXAxis: PropTypes.bool, // todo: convert xAxisLabelUseDataSet?
-      // isDisplayYAxis: PropTypes.bool, // we can skip handling independent y axis format callbacks, stick with single
-      xAxisLabelUseDataSet: PropTypes.bool,
-      // yAxisTickFormat: PropTypes.func,
-      xAxisUseDataSet: PropTypes.bool,
-      yAxisUseDataSet: PropTypes.bool
-    })
-  ),
+  // height: PropTypes.number,
   // domain: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  // domain: PropTypes.shape({ x: PropTypes.array, y: PropTypes.array }),
-  height: PropTypes.number,
-  padding: PropTypes.shape({
-    bottom: PropTypes.number,
-    left: PropTypes.number,
-    right: PropTypes.number,
-    top: PropTypes.number
-  }),
-  xAxisFixLabelOverlap: PropTypes.bool,
-  xAxisLabelIncrement: PropTypes.number,
-  xAxisTickFormat: PropTypes.func,
-  // yAxisTickFormat: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.func)]),
-  yAxisTickFormat: PropTypes.func,
-  yAxisDisabled: PropTypes.bool, // REMOVE THIS
-  xValueFormat: PropTypes.func,
-  yValueFormat: PropTypes.func
-
-   */
+  // domain: PropTypes.shape({ x: PropTypes.array, y: PropTypes.array })
 };
 
 /**
  * Default props.
  *
- * @type {{chartLegend: null, chartTooltip: null, padding: {top: number, left: number, bottom: number,
- *     right: number}, xAxisTickFormat: null, themeColor: string, yAxisTickFormat: null, domain: object,
- *     dataSets: Array, xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number, height: number}}
+ * @type {{chartTooltip: Node|Function, xValueFormat: Function, padding: {top: number, left: number, bottom: number,
+ *     right: number}, xAxisTickFormat: Function, themeColor: string, chartLegend: Node|Function,
+ *     yAxisTickFormat: Function, dataSets: Array, xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number,
+ *     yValueFormat: Function}}
  */
 Chart.defaultProps = {
+  chartLegend: null,
   chartTooltip: null,
   dataSets: [],
   padding: {
@@ -179,29 +194,6 @@ Chart.defaultProps = {
   yAxisTickFormat: null,
   xValueFormat: null,
   yValueFormat: null
-
-  /*
-  chartLegend: null,
-  chartTooltip: null,
-  children: null,
-  // domain: {},
-  dataSets: [],
-  height: 275,
-  padding: {
-    bottom: 75,
-    left: 50,
-    right: 50,
-    top: 50
-  },
-  xAxisFixLabelOverlap: false,
-  xAxisLabelIncrement: 1,
-  xAxisTickFormat: null,
-  yAxisTickFormat: null,
-  yAxisDisabled: false,
-  xValueFormat: null,
-  yValueFormat: null
-
-   */
 };
 
 export { Chart as default, Chart };

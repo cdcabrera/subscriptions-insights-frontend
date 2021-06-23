@@ -1,14 +1,15 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { helpers } from '../../common';
-// import React from 'react';
 
 /**
  * Chart context.
  *
  * @type {React.Context<{}>}
  */
-// const ChartContext = React.createContext([{ chartContainerRef: helpers.noop, chartSettings: {} }, helpers.noop]);
-const DEFAULT_CONTEXT = [{ chartContainerRef: helpers.noop, chartSettings: {} }, helpers.noop];
+const DEFAULT_CONTEXT = [
+  { chartContainerRef: helpers.noop, chartSettings: {}, chartTooltipRef: helpers.noop },
+  helpers.noop
+];
 
 const ChartContext = React.createContext(DEFAULT_CONTEXT);
 
@@ -132,21 +133,6 @@ const useChartData = () => {
 };
 */
 
-// const useContainerRef = () => useRef(null);
-// const containerRef = useRef(null);
-// const [ref, setRef] = useState(containerRef);
-
-// const setRef = React.useCallback(ref => {
-//  setContainerRef(ref);
-// });
-
-/*
-return {
-  ref,
-  setRef
-};
-   */
-// };
 const context = {
   ChartContext,
   useGetChartContext,

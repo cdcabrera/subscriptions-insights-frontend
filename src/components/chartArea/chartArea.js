@@ -27,8 +27,10 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
 import { chartHelpers } from './chartHelpers';
 import { ChartElement } from './chartElement';
-import { ChartTooltip } from './chartTooltip';
+// import { ChartTooltip } from './chartTooltip';
 import { ChartContext } from './chartContext';
+
+const ChartTooltip = () => null;
 
 /**
  * FixMe: chart redraw flash related to custom tooltips use
