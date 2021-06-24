@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Chart } from '../../chartArea/chart';
+import { Chart } from '../../chart/chart';
 import { GraphCard } from '../graphCard';
 import {
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
