@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Chart Component should allow tick formatting: x tick format 1`] = `
+<div
+  class="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+  id="curiosity-chartarea"
+/>
+`;
+
+exports[`Chart Component should allow tick formatting: y tick format 1`] = `
+<div
+  class="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+  id="curiosity-chartarea"
+/>
+`;
+
+exports[`Chart Component should handle render displays for both data and threshold: threshold 1`] = `
+<ContextProvider
+  value={
+    Array [
+      Object {
+        "chartContainerRef": [Function],
+        "chartSettings": Object {},
+        "chartTooltipRef": [Function],
+      },
+      [Function],
+    ]
+  }
+>
+  <div
+    className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+    id="curiosity-chartarea"
+  />
+</ContextProvider>
+`;
+
+exports[`Chart Component should handle variation in passed properties with specific methods: variation 1`] = `
+<ContextProvider
+  value={
+    Array [
+      Object {
+        "chartContainerRef": [Function],
+        "chartSettings": Object {},
+        "chartTooltipRef": [Function],
+      },
+      [Function],
+    ]
+  }
+>
+  <div
+    className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+    id="curiosity-chartarea"
+  />
+</ContextProvider>
+`;
+
+exports[`Chart Component should render a basic component: basic 1`] = `
+<ContextProvider
+  value={
+    Array [
+      Object {
+        "chartContainerRef": [Function],
+        "chartSettings": Object {},
+        "chartTooltipRef": [Function],
+      },
+      [Function],
+    ]
+  }
+>
+  <div
+    className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+    id="curiosity-chartarea"
+  />
+</ContextProvider>
+`;
+
+exports[`Chart Component should render basic data: data 1`] = `
+<ContextProvider
+  value={
+    Array [
+      Object {
+        "chartContainerRef": [Function],
+        "chartSettings": Object {},
+        "chartTooltipRef": [Function],
+      },
+      [Function],
+    ]
+  }
+>
+  <div
+    className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+    id="curiosity-chartarea"
+  />
+</ContextProvider>
+`;

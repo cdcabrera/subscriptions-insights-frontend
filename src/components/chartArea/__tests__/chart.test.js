@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { ChartArea } from '../chartArea';
+import { Chart } from '../chart';
 
-describe('ChartArea Component', () => {
+describe('Chart Component', () => {
   it('should render a basic component', () => {
     const props = {};
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
 
     expect(component).toMatchSnapshot('basic');
   });
@@ -55,7 +55,7 @@ describe('ChartArea Component', () => {
       ]
     };
 
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
     expect(component).toMatchSnapshot('data');
   });
 
@@ -87,7 +87,7 @@ describe('ChartArea Component', () => {
       ]
     };
 
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
     expect(component.render()).toMatchSnapshot('y tick format');
 
     component.setProps({
@@ -124,7 +124,7 @@ describe('ChartArea Component', () => {
       ]
     };
 
-    const component = mount(<ChartArea {...props} />);
+    const component = mount(<Chart {...props} />);
     const componentInstance = component.instance();
 
     expect(componentInstance.getChartDomain({ isXAxisTicks: true })).toMatchSnapshot('y axis domain or range');
@@ -168,7 +168,7 @@ describe('ChartArea Component', () => {
       ]
     };
 
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
     expect(component).toMatchSnapshot('threshold');
   });
 
@@ -201,7 +201,7 @@ describe('ChartArea Component', () => {
       ]
     };
 
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
     expect(component).toMatchSnapshot('variation');
 
     // check setChartTicks label increment and tick format directly
@@ -287,7 +287,7 @@ describe('ChartArea Component', () => {
       ]
     };
 
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
 
     // check getTooltipData for tooltip updates
     expect(component.instance().getTooltipData()).toMatchSnapshot('getTooltipData:before');
@@ -346,7 +346,7 @@ describe('ChartArea Component', () => {
       }
     };
 
-    const component = shallow(<ChartArea {...props} />);
+    const component = shallow(<Chart {...props} />);
     expect(component.instance().renderLegend()).toMatchSnapshot('renderLegend: should return a custom legend');
 
     chartMethods.hide('loremGraph');
@@ -363,7 +363,7 @@ describe('ChartArea Component', () => {
   });
 
   it('should set initial width to zero and then resize', () => {
-    const component = shallow(<ChartArea />);
+    const component = shallow(<Chart />);
 
     expect(component.instance().onResizeContainer).toBeDefined();
 
@@ -390,7 +390,7 @@ describe('ChartArea Component', () => {
       unobserve
     }));
 
-    const component = mount(<ChartArea />);
+    const component = mount(<Chart />);
     expect(observe).toHaveBeenCalledTimes(1);
 
     component.unmount();
@@ -403,7 +403,7 @@ describe('ChartArea Component', () => {
       unobserve: jest.fn()
     }));
 
-    const component = mount(<ChartArea />);
+    const component = mount(<Chart />);
     const componentWillUnmount = jest.spyOn(component.instance(), 'componentWillUnmount');
     component.unmount();
     expect(componentWillUnmount).toHaveBeenCalled();
