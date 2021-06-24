@@ -46,27 +46,47 @@ const useToggleData = () => {
   const { dataSetsToggle: contextDataSetsToggle = [] } = useGetChartContext();
   const [dataSetsToggle, setDataSetsToggle] = contextDataSetsToggle;
 
+  /**
+   * Hide a graph layer.
+   *
+   * @type {(function(*): void)|*}
+   */
   const onHide = useCallback(
     id => {
-      setDataSetsToggle({ ...dataSetsToggle, [id]: true });
+      setDataSetsToggle(prevState => ({ ...prevState, [id]: true }));
     },
-    [dataSetsToggle, setDataSetsToggle]
+    [setDataSetsToggle]
   );
 
+  /**
+   * Reset graph layers.
+   *
+   * @type {(function(): void)|*}
+   */
   const onRevert = useCallback(() => {
-    setDataSetsToggle({});
+    setDataSetsToggle(() => ({}));
   }, [setDataSetsToggle]);
 
+  /**
+   * Hide/show graph layers.
+   *
+   * @type {function(*): boolean}
+   */
   const onToggle = useCallback(
     id => {
       const updatedToggle = !dataSetsToggle[id];
-      setDataSetsToggle({ ...dataSetsToggle, [id]: updatedToggle });
+      setDataSetsToggle(prevState => ({ ...prevState, [id]: updatedToggle }));
       return updatedToggle;
     },
     [dataSetsToggle, setDataSetsToggle]
   );
 
   // ToDo: review return undefined if doesn't exist
+  /**
+   * Graph layer status.
+   *
+   * @type {function(*): boolean}
+   */
   const getIsToggled = useCallback(id => dataSetsToggle?.[id] || false, [dataSetsToggle]);
 
   return {
