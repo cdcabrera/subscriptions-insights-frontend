@@ -46,6 +46,7 @@ const useToggleData = () => {
   const { dataSetsToggle: contextDataSetsToggle = [] } = useGetChartContext();
   const [dataSetsToggle, setDataSetsToggle] = contextDataSetsToggle;
 
+  // ToDo: re-evaluate useCallback here, minor ux gain in responsiveness when used
   /**
    * Hide a graph layer.
    *
@@ -58,6 +59,7 @@ const useToggleData = () => {
     [setDataSetsToggle]
   );
 
+  // ToDo: re-evaluate useCallback here.
   /**
    * Reset graph layers.
    *
