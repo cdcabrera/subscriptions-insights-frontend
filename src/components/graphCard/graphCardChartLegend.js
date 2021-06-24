@@ -4,7 +4,7 @@ import { Button, Tooltip, TooltipPosition } from '@patternfly/react-core';
 import { connect, store, reduxTypes } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
-import { ChartIcon } from '../chartArea/chartIcon';
+import { ChartIcon } from '../chart/chartIcon';
 
 /**
  * A custom chart legend.

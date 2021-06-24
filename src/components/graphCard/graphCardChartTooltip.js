@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getTooltipDate } from './graphCardHelpers';
 import { translate } from '../i18n/i18n';
-import { ChartIcon } from '../chartArea/chartIcon';
+import { ChartIcon } from '../chart/chartIcon';
 
 /**
  * A custom chart tooltip.
