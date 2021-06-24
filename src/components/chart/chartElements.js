@@ -32,12 +32,17 @@ const ChartElements = ({ chartTypeDefaults }) => {
   let stackedChartElements = [];
 
   if (hasData) {
+    /**
+     * Note: both cursor and voronoiDimension attrs required if the need is to have...
+     * the tooltip populate consistently without being "near" a chart element y axis point
+     */
     const VictoryVoronoiCursorContainer = createContainer('voronoi', 'cursor');
     const TooltipLabelComponent = chartTooltip({ chartSettings, chartContainerRef, chartTooltipRef });
 
     containerComponent = (
       <VictoryVoronoiCursorContainer
         cursorDimension="x"
+        voronoiDimension="x"
         labels={obj => obj}
         labelComponent={
           <ChartCursorTooltip

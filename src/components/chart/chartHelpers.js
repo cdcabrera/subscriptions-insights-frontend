@@ -136,8 +136,8 @@ const generateElementsProps = ({ dataSets = [], isMultiYAxis, maxX, maxY, xValue
 
       const chartElementProps = {
         ...defaultProps,
-        key: `chart-${dataSet.id}-${chartType}`,
-        name: `chart-${dataSet.id}-${chartType}`,
+        key: `chart-${dataSet.id}-${chartType || ''}`,
+        name: `chart-${dataSet.id}-${chartType || ''}`,
         data: dataSet.data,
         style: { ...(dataSet.style || {}), ...dataColorStroke },
         themeColor: dataSet.themeColor,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { helpers } from '../../common';
 
 /**
  * Note: Victory Charts components require a form of extended "something" applied by the consuming component.
@@ -15,7 +16,12 @@ import React from 'react';
  * @param {number} params.minChartWidth
  * @returns {Function}
  */
-const chartTooltip = ({ chartSettings, chartContainerRef, chartTooltipRef, minChartWidth = 500 }) => {
+const chartTooltip = ({
+  chartSettings = {},
+  chartContainerRef = helpers.noop,
+  chartTooltipRef = helpers.noop,
+  minChartWidth = 500
+}) => {
   /**
    * Return a tooltip x coordinate.
    *
@@ -75,9 +81,12 @@ const chartTooltip = ({ chartSettings, chartContainerRef, chartTooltipRef, minCh
   };
 
   return ({ x, y, datum = {} }) => { // eslint-disable-line
+    const { padding = {}, tooltipDataSetLookUp = {} } = chartSettings;
+
     const containerRef = chartContainerRef();
     const tooltipRef = chartTooltipRef();
-    const content = chartSettings?.tooltipDataSetLookUp?.[datum.x]?.tooltip || '';
+    const content = tooltipDataSetLookUp?.[datum.x]?.tooltip || '';
+    const containerPaddingBottom = padding.bottom ?? 0;
     const containerBounds = containerRef?.current?.querySelector('svg')?.getBoundingClientRect() || {
       width: 0,
       height: 0
@@ -103,7 +112,7 @@ const chartTooltip = ({ chartSettings, chartContainerRef, chartTooltipRef, minCh
             <div
               className={`curiosity-chartarea__tooltip-container ${updatedClassName}`}
               ref={tooltipRef}
-              style={{ display: (y > containerBounds.height - 80 && 'none') || 'inline-block' }}
+              style={{ display: (y > containerBounds.height - containerPaddingBottom && 'none') || 'inline-block' }}
               xmlns="http://www.w3.org/1999/xhtml"
             >
               <div
