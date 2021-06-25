@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ChartThemeColor } from '@patternfly/react-charts';
-import { ChartContext, useSetChartContext } from './chartContext';
+import { ChartContext } from './chartContext';
 import { ChartElements } from './chartElements';
 import { ChartLegend } from './chartLegend';
 import { chartHelpers } from './chartHelpers';
@@ -20,7 +20,7 @@ const Chart = ({
   xValueFormat,
   yValueFormat
 }) => {
-  const [context, setContext] = useSetChartContext();
+  const [context, setContext] = useState();
   const [dataSetsToggle, setDataSetsToggle] = useState({});
   const containerRef = useRef(null);
   const tooltipRef = useRef(null);

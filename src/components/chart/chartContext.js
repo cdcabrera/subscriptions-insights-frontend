@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { helpers } from '../../common';
 
 /**
@@ -18,23 +18,7 @@ const ChartContext = React.createContext(DEFAULT_CONTEXT);
  *
  * @returns {React.Context<{}>}
  */
-const useGetChartContext = () => useContext(ChartContext);
-
-/**
- * Set chart context.
- *
- * @returns {Array}
- */
-const useSetChartContext = () => {
-  const chartContext = useContext(ChartContext);
-  const [value, setValue] = useState(chartContext);
-
-  const updateValue = useCallback(settings => {
-    setValue(settings);
-  }, []);
-
-  return [value, updateValue];
-};
+const useChartContext = () => useContext(ChartContext);
 
 /**
  * Track, show, and hide chart data layers.
@@ -43,10 +27,9 @@ const useSetChartContext = () => {
  *     onHide: Function}}
  */
 const useToggleData = () => {
-  const { dataSetsToggle: contextDataSetsToggle = [] } = useGetChartContext();
+  const { dataSetsToggle: contextDataSetsToggle = [] } = useChartContext();
   const [dataSetsToggle, setDataSetsToggle] = contextDataSetsToggle;
 
-  // ToDo: re-evaluate useCallback here, minor ux gain in responsiveness when used
   /**
    * Hide a graph layer.
    *
@@ -100,11 +83,4 @@ const useToggleData = () => {
   };
 };
 
-export {
-  ChartContext as default,
-  ChartContext,
-  DEFAULT_CONTEXT,
-  useGetChartContext,
-  useSetChartContext,
-  useToggleData
-};
+export { ChartContext as default, ChartContext, DEFAULT_CONTEXT, useChartContext, useToggleData };

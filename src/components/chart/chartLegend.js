@@ -1,6 +1,6 @@
 import React from 'react';
 import _cloneDeep from 'lodash/cloneDeep';
-import { useGetChartContext, useToggleData } from './chartContext';
+import { useChartContext, useToggleData } from './chartContext';
 
 /**
  * Wrapper for rendering an HTML based legend.
@@ -9,7 +9,7 @@ import { useGetChartContext, useToggleData } from './chartContext';
  */
 const ChartLegend = () => {
   const { getIsToggled, onHide, onRevert, onToggle } = useToggleData();
-  const { chartSettings = {} } = useGetChartContext();
+  const { chartSettings = {} } = useChartContext();
   const { chartLegend, dataSets } = chartSettings;
 
   if (!chartLegend) {

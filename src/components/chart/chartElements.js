@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { VictoryStack as ChartStack, VictoryTooltip as ChartCursorTooltip } from 'victory';
 import { createContainer } from 'victory-create-container';
 import { Chart, ChartArea, ChartAxis, ChartContainer, ChartLine, ChartThreshold } from '@patternfly/react-charts';
-import { useGetChartContext } from './chartContext';
+import { useChartContext } from './chartContext';
 import { chartTooltip } from './chartTooltip';
 
 /**
@@ -14,7 +14,7 @@ import { chartTooltip } from './chartTooltip';
  * @returns {Node}
  */
 const ChartElements = ({ chartTypeDefaults }) => {
-  const { chartSettings = {}, chartContainerRef, chartTooltipRef } = useGetChartContext();
+  const { chartSettings = {}, chartContainerRef, chartTooltipRef } = useChartContext();
   const {
     chartDomain,
     chartElementsProps,
