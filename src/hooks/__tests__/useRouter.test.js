@@ -8,7 +8,7 @@ describe('useRouter', () => {
   it('should apply a hook for useHistory', () => {
     const mockDispatch = jest.fn();
     const mockHistoryPush = jest.fn();
-    const mockUseHistory = mockHook(() =>
+    const mockUseHistory = shallowHook(() =>
       routerHooks.useHistory({
         useDispatch: () => action => action(mockDispatch),
         useHistory: () => ({ push: mockHistoryPush })
