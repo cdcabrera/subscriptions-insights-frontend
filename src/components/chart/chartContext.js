@@ -27,13 +27,13 @@ const useGetChartContext = () => useContext(ChartContext);
  */
 const useSetChartContext = () => {
   const chartContext = useContext(ChartContext);
-  const [context, setContext] = useState(chartContext);
+  const [value, setValue] = useState(chartContext);
 
-  const updateContext = useCallback(settings => {
-    setContext(settings);
+  const updateValue = useCallback(settings => {
+    setValue(settings);
   }, []);
 
-  return [context, updateContext];
+  return [value, updateValue];
 };
 
 /**
@@ -100,11 +100,11 @@ const useToggleData = () => {
   };
 };
 
-const context = {
+export {
+  ChartContext as default,
   ChartContext,
+  DEFAULT_CONTEXT,
   useGetChartContext,
   useSetChartContext,
   useToggleData
 };
-
-export { context as default, context, ChartContext, useGetChartContext, useSetChartContext, useToggleData };
