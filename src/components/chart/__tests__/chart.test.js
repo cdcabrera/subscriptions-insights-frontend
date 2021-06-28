@@ -56,13 +56,15 @@ describe('Chart Component', () => {
       ]
     };
 
-    const mockSetValue = jest.fn();
-    const spy = jest.spyOn(chartContext, 'useSetChartContext').mockImplementation(() => [undefined, mockSetValue]);
+    const mockValue = jest.fn();
+    const mock = mockObjectProperty(chartContext.ChartContext, 'Provider', value => {
+      mockValue(value);
+      return null;
+    });
 
-    const component = await mountHookComponent(<Chart {...props} />);
-    expect(component).toMatchSnapshot('mounted');
-    expect(mockSetValue.mock.calls[0]).toMatchSnapshot('settings');
+    await mountHookComponent(<Chart {...props} />);
+    expect(mockValue.mock.calls).toMatchSnapshot('settings');
 
-    spy.mockClear();
+    mock.mockClear();
   });
 });
