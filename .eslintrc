@@ -43,7 +43,8 @@
     "mountHook": "readonly",
     "mountHookComponent": "readonly",
     "mockWindowLocation": "readonly",
-    "shallowHook": "readonly"
+    "shallowHook": "readonly",
+    "shallowHookComponent": "readonly"
   },
   "rules": {
     "arrow-parens": [

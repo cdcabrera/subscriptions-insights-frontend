@@ -110,6 +110,23 @@ global.mountHookComponent = async (component, options = {}) => {
 };
 
 /**
+ * Enzyme for components using hooks.
+ *
+ * @param {Node} component
+ * @param {object} options
+ *
+ * @returns {Promise<null>}
+ */
+global.shallowHookComponent = async (component, options = {}) => {
+  let mountedComponent = null;
+  await act(async () => {
+    mountedComponent = shallow(component, options);
+  });
+  mountedComponent?.update();
+  return mountedComponent;
+};
+
+/**
  * Fire a hook, return the result.
  *
  * @param {Function} useHook
