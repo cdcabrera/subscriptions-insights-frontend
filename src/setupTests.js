@@ -143,7 +143,12 @@ global.mountHook = async (useHook = Function.prototype) => {
     mountedHook = mount(<Hook />);
   });
   mountedHook?.update();
-  return result;
+
+  const unmount = async () => {
+    await act(async () => mountedHook.unmount());
+  };
+
+  return { unmount, result };
 };
 
 /**
