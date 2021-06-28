@@ -39,6 +39,8 @@
     "plugin:jsdoc/recommended"
   ],
   "globals": {
+    "mockObjectProperty": "readonly",
+    "mountHook": "readonly",
     "mountHookComponent": "readonly",
     "mockWindowLocation": "readonly",
     "shallowHook": "readonly"

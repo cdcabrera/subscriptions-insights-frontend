@@ -72,6 +72,27 @@ global.window.insights = {
 };
 
 /**
+ * Mock an object property, restore with mockClear.
+ * A consistent object property mock for scenarios where the property is not a function/Jest fails.
+ *
+ * @param {object} object
+ * @param {string} property
+ * @param {*} mockValue
+ * @returns {{mockClear: Function}}
+ */
+global.mockObjectProperty = (object = {}, property, mockValue) => {
+  const updatedObject = object;
+  const originalProperty = updatedObject[property];
+  updatedObject[property] = mockValue;
+
+  return {
+    mockClear: () => {
+      updatedObject[property] = originalProperty;
+    }
+  };
+};
+
+/**
  * Enzyme for components using hooks.
  *
  * @param {Node} component
@@ -86,6 +107,26 @@ global.mountHookComponent = async (component, options = {}) => {
   });
   mountedComponent?.update();
   return mountedComponent;
+};
+
+/**
+ * Fire a hook, return the result.
+ *
+ * @param {Function} useHook
+ * @returns {*}
+ */
+global.mountHook = async (useHook = Function.prototype) => {
+  let result;
+  let mountedHook;
+  const Hook = () => {
+    result = useHook();
+    return null;
+  };
+  await act(async () => {
+    mountedHook = mount(<Hook />);
+  });
+  mountedHook?.update();
+  return result;
 };
 
 /**
