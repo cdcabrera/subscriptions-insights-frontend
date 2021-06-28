@@ -123,9 +123,6 @@ ChartElements.defaultProps = {
         onLoad: { duration: 100 }
       },
       interpolation: 'step'
-      // tempFiltered.stroke = chartColorGreenDark.value;
-      // tempFiltered.strokeDasharray = '4,3';
-      // tempFiltered.strokeWidth = 3;
     }
   }
 };
