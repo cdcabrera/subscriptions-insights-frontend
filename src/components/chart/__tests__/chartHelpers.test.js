@@ -228,4 +228,10 @@ describe('ChartHelpers', () => {
     generatedProps[1].tickFormat(1);
     expect(mockFormat.mock.calls[1]).toMatchSnapshot('format callback, 1, right axis');
   });
+
+  it('should aggregated generated x,y axis props', () => {
+    const options = {};
+
+    expect(chartHelpers.generateAxisProps(options)).toMatchSnapshot('default settings');
+  });
 });

@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ChartHelpers should aggregated generated x,y axis props: default settings 1`] = `
+Object {
+  "xAxisProps": Object {
+    "fixLabelOverlap": true,
+    "tickFormat": [Function],
+    "tickValues": Array [],
+  },
+  "yAxisProps": Array [
+    Object {
+      "dependentAxis": true,
+      "orientation": "left",
+      "showGrid": true,
+      "style": Object {
+        "axis": Object {},
+        "tickLabels": Object {},
+      },
+      "tickFormat": [Function],
+    },
+  ],
+}
+`;
+
 exports[`ChartHelpers should generate a max x, max y from datasets: max x, y 1`] = `
 Object {
   "individualMaxY": Object {

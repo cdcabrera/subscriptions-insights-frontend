@@ -273,7 +273,7 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
   const axisProps = [];
   const isMultiAxis = dataSets.length > 1;
 
-  dataSets.forEach(({ id, stroke, strokeWidth }, index) => {
+  dataSets.forEach(({ id, stroke, strokeWidth } = {}, index) => {
     const updatedAxisProps = {
       style: { axis: {}, tickLabels: {} },
       tickFormat: tick => tick
