@@ -34,6 +34,665 @@ Object {
 }
 `;
 
+exports[`ChartHelpers should generate element props: props 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "chartType": undefined,
+      "props": Object {
+        "data": Array [
+          Object {
+            "x": 0,
+            "y": 10,
+          },
+          Object {
+            "x": 1,
+            "y": 10,
+          },
+          Object {
+            "x": 2,
+            "y": 10,
+          },
+          Object {
+            "x": 3,
+            "y": 10,
+          },
+          Object {
+            "x": 4,
+            "y": 10,
+          },
+          Object {
+            "x": 5,
+            "y": 10,
+          },
+        ],
+        "key": "chart-lorem-",
+        "name": "chart-lorem-",
+        "style": Object {
+          "data": Object {},
+        },
+        "themeColor": undefined,
+        "themeVariant": undefined,
+        "x": undefined,
+        "y": [Function],
+      },
+    },
+  ],
+  "elementsById": Object {
+    "lorem": Object {
+      "chartType": undefined,
+      "props": Object {
+        "data": Array [
+          Object {
+            "x": 0,
+            "y": 10,
+          },
+          Object {
+            "x": 1,
+            "y": 10,
+          },
+          Object {
+            "x": 2,
+            "y": 10,
+          },
+          Object {
+            "x": 3,
+            "y": 10,
+          },
+          Object {
+            "x": 4,
+            "y": 10,
+          },
+          Object {
+            "x": 5,
+            "y": 10,
+          },
+        ],
+        "key": "chart-lorem-",
+        "name": "chart-lorem-",
+        "style": Object {
+          "data": Object {},
+        },
+        "themeColor": undefined,
+        "themeVariant": undefined,
+        "x": undefined,
+        "y": [Function],
+      },
+    },
+  },
+  "stackedElements": Array [
+    Object {
+      "chartType": undefined,
+      "props": Object {
+        "data": Array [
+          Object {
+            "x": 0,
+            "y": 20,
+          },
+          Object {
+            "x": 1,
+            "y": 10,
+          },
+          Object {
+            "x": 2,
+            "y": 30,
+          },
+          Object {
+            "x": 3,
+            "y": 50,
+          },
+          Object {
+            "x": 4,
+            "y": 100,
+          },
+          Object {
+            "x": 5,
+            "y": 10,
+          },
+        ],
+        "key": "chart-ipsum-",
+        "name": "chart-ipsum-",
+        "style": Object {
+          "data": Object {},
+        },
+        "themeColor": undefined,
+        "themeVariant": undefined,
+        "x": undefined,
+        "y": [Function],
+      },
+    },
+    Object {
+      "chartType": undefined,
+      "props": Object {
+        "data": Array [
+          Object {
+            "x": 0,
+            "y": 20,
+          },
+          Object {
+            "x": 1,
+            "y": 10,
+          },
+          Object {
+            "x": 2,
+            "y": 30,
+          },
+          Object {
+            "x": 3,
+            "y": 50,
+          },
+          Object {
+            "x": 4,
+            "y": 100,
+          },
+          Object {
+            "x": 5,
+            "y": 10,
+          },
+        ],
+        "key": "chart-dolor-",
+        "name": "chart-dolor-",
+        "style": Object {
+          "data": Object {},
+        },
+        "themeColor": undefined,
+        "themeVariant": undefined,
+        "x": undefined,
+        "y": [Function],
+      },
+    },
+  ],
+  "stackedElementsById": Object {
+    "dolor": Object {
+      "chartType": undefined,
+      "props": Object {
+        "data": Array [
+          Object {
+            "x": 0,
+            "y": 20,
+          },
+          Object {
+            "x": 1,
+            "y": 10,
+          },
+          Object {
+            "x": 2,
+            "y": 30,
+          },
+          Object {
+            "x": 3,
+            "y": 50,
+          },
+          Object {
+            "x": 4,
+            "y": 100,
+          },
+          Object {
+            "x": 5,
+            "y": 10,
+          },
+        ],
+        "key": "chart-dolor-",
+        "name": "chart-dolor-",
+        "style": Object {
+          "data": Object {},
+        },
+        "themeColor": undefined,
+        "themeVariant": undefined,
+        "x": undefined,
+        "y": [Function],
+      },
+    },
+    "ipsum": Object {
+      "chartType": undefined,
+      "props": Object {
+        "data": Array [
+          Object {
+            "x": 0,
+            "y": 20,
+          },
+          Object {
+            "x": 1,
+            "y": 10,
+          },
+          Object {
+            "x": 2,
+            "y": 30,
+          },
+          Object {
+            "x": 3,
+            "y": 50,
+          },
+          Object {
+            "x": 4,
+            "y": 100,
+          },
+          Object {
+            "x": 5,
+            "y": 10,
+          },
+        ],
+        "key": "chart-ipsum-",
+        "name": "chart-ipsum-",
+        "style": Object {
+          "data": Object {},
+        },
+        "themeColor": undefined,
+        "themeVariant": undefined,
+        "x": undefined,
+        "y": [Function],
+      },
+    },
+  },
+}
+`;
+
+exports[`ChartHelpers should generate tooltip data/content: tooltip, content 1`] = `
+Array [
+  Array [
+    Object {
+      "datum": Object {
+        "index": 0,
+        "itemsByKey": Object {
+          "dolor": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 0,
+              "y": 20,
+            },
+          },
+          "ipsum": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 0,
+              "y": 20,
+            },
+          },
+          "lorem": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 0,
+              "y": 10,
+            },
+          },
+        },
+        "x": 0,
+        "y": 10,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "datum": Object {
+        "index": 1,
+        "itemsByKey": Object {
+          "dolor": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 1,
+              "y": 10,
+            },
+          },
+          "ipsum": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 1,
+              "y": 10,
+            },
+          },
+          "lorem": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 1,
+              "y": 10,
+            },
+          },
+        },
+        "x": 1,
+        "y": 10,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "datum": Object {
+        "index": 2,
+        "itemsByKey": Object {
+          "dolor": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 2,
+              "y": 30,
+            },
+          },
+          "ipsum": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 2,
+              "y": 30,
+            },
+          },
+          "lorem": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 2,
+              "y": 10,
+            },
+          },
+        },
+        "x": 2,
+        "y": 10,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "datum": Object {
+        "index": 3,
+        "itemsByKey": Object {
+          "dolor": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 3,
+              "y": 50,
+            },
+          },
+          "ipsum": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 3,
+              "y": 50,
+            },
+          },
+          "lorem": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 3,
+              "y": 10,
+            },
+          },
+        },
+        "x": 3,
+        "y": 10,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "datum": Object {
+        "index": 4,
+        "itemsByKey": Object {
+          "dolor": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 4,
+              "y": 100,
+            },
+          },
+          "ipsum": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 4,
+              "y": 100,
+            },
+          },
+          "lorem": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 4,
+              "y": 10,
+            },
+          },
+        },
+        "x": 4,
+        "y": 10,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "datum": Object {
+        "index": 5,
+        "itemsByKey": Object {
+          "dolor": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 5,
+              "y": 10,
+            },
+          },
+          "ipsum": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 5,
+              "y": 10,
+            },
+          },
+          "lorem": Object {
+            "chartType": undefined,
+            "color": "",
+            "data": Object {
+              "x": 5,
+              "y": 10,
+            },
+          },
+        },
+        "x": 5,
+        "y": 10,
+      },
+    },
+  ],
+]
+`;
+
+exports[`ChartHelpers should generate tooltip data/content: tooltip, settings 1`] = `
+Object {
+  "0": Object {
+    "itemsByKey": Object {
+      "dolor": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 0,
+          "y": 20,
+        },
+      },
+      "ipsum": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 0,
+          "y": 20,
+        },
+      },
+      "lorem": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 0,
+          "y": 10,
+        },
+      },
+    },
+    "tooltip": undefined,
+    "x": 0,
+    "y": null,
+  },
+  "1": Object {
+    "itemsByKey": Object {
+      "dolor": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 1,
+          "y": 10,
+        },
+      },
+      "ipsum": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 1,
+          "y": 10,
+        },
+      },
+      "lorem": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 1,
+          "y": 10,
+        },
+      },
+    },
+    "tooltip": undefined,
+    "x": 1,
+    "y": null,
+  },
+  "2": Object {
+    "itemsByKey": Object {
+      "dolor": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 2,
+          "y": 30,
+        },
+      },
+      "ipsum": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 2,
+          "y": 30,
+        },
+      },
+      "lorem": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 2,
+          "y": 10,
+        },
+      },
+    },
+    "tooltip": undefined,
+    "x": 2,
+    "y": null,
+  },
+  "3": Object {
+    "itemsByKey": Object {
+      "dolor": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 3,
+          "y": 50,
+        },
+      },
+      "ipsum": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 3,
+          "y": 50,
+        },
+      },
+      "lorem": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 3,
+          "y": 10,
+        },
+      },
+    },
+    "tooltip": undefined,
+    "x": 3,
+    "y": null,
+  },
+  "4": Object {
+    "itemsByKey": Object {
+      "dolor": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 4,
+          "y": 100,
+        },
+      },
+      "ipsum": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 4,
+          "y": 100,
+        },
+      },
+      "lorem": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 4,
+          "y": 10,
+        },
+      },
+    },
+    "tooltip": undefined,
+    "x": 4,
+    "y": null,
+  },
+  "5": Object {
+    "itemsByKey": Object {
+      "dolor": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 5,
+          "y": 10,
+        },
+      },
+      "ipsum": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 5,
+          "y": 10,
+        },
+      },
+      "lorem": Object {
+        "chartType": undefined,
+        "color": "",
+        "data": Object {
+          "x": 5,
+          "y": 10,
+        },
+      },
+    },
+    "tooltip": undefined,
+    "x": 5,
+    "y": null,
+  },
+}
+`;
+
 exports[`ChartHelpers should return specific properties: specific properties 1`] = `
 Object {
   "generateAxisProps": [Function],
