@@ -7,7 +7,7 @@ import { helpers } from '../../common';
  * @type {React.Context<{}>}
  */
 const DEFAULT_CONTEXT = [
-  { chartContainerRef: helpers.noop, chartSettings: {}, chartTooltipRef: helpers.noop },
+  { chartContainerRef: helpers.noop, chartSettings: {}, chartTooltipRef: helpers.noop, dataSetsToggle: [] },
   helpers.noop
 ];
 
