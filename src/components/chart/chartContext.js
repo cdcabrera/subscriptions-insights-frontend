@@ -21,13 +21,18 @@ const ChartContext = React.createContext(DEFAULT_CONTEXT);
 const useChartContext = () => useContext(ChartContext);
 
 /**
+ * ToDo: reevaluate this alternative pattern of passing hooks as options, helps testing
+ */
+/**
  * Track, show, and hide chart data layers.
  *
+ * @param {object} hooks
+ * @param {Function} hooks.useChartContext
  * @returns {{onRevert: Function, onToggle: Function, getIsToggled: Function, dataSetsToggle: object,
  *     onHide: Function}}
  */
-const useToggleData = () => {
-  const { dataSetsToggle: contextDataSetsToggle = [] } = useChartContext();
+const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext } = {}) => {
+  const { dataSetsToggle: contextDataSetsToggle = [] } = useAliasChartContext();
   const [dataSetsToggle, setDataSetsToggle] = contextDataSetsToggle;
 
   /**
@@ -59,7 +64,7 @@ const useToggleData = () => {
    */
   const onToggle = useCallback(
     id => {
-      const updatedToggle = !dataSetsToggle[id];
+      const updatedToggle = !dataSetsToggle?.[id];
       setDataSetsToggle(prevState => ({ ...prevState, [id]: updatedToggle }));
       return updatedToggle;
     },
@@ -83,4 +88,11 @@ const useToggleData = () => {
   };
 };
 
-export { ChartContext as default, ChartContext, DEFAULT_CONTEXT, useChartContext, useToggleData };
+const context = {
+  ChartContext,
+  DEFAULT_CONTEXT,
+  useChartContext,
+  useToggleData
+};
+
+export { context as default, context, ChartContext, DEFAULT_CONTEXT, useChartContext, useToggleData };
