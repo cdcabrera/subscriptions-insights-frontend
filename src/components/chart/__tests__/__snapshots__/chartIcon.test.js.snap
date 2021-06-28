@@ -7,8 +7,8 @@ exports[`ChartIcon Component should handle basic icons, variations in settings: 
   <span
     style={
       Object {
-        "height": "0.5em",
-        "width": "1em",
+        "height": "1em",
+        "width": "2em",
       }
     }
   >
@@ -51,7 +51,7 @@ exports[`ChartIcon Component should handle basic icons, variations in settings: 
   <EyeIcon
     color="currentColor"
     noVerticalAlign={false}
-    size="sm"
+    size="md"
     title="lorem ipsum eye"
   />
 </span>
@@ -64,8 +64,8 @@ exports[`ChartIcon Component should handle basic icons, variations in settings: 
   <span
     style={
       Object {
-        "height": "1em",
-        "width": "2em",
+        "height": "3em",
+        "width": "6em",
       }
     }
   >
@@ -81,9 +81,9 @@ exports[`ChartIcon Component should handle basic icons, variations in settings: 
         strokeDasharray="4,3"
         strokeWidth={3}
         x1={0}
-        x2={48}
-        y1={8}
-        y2={8}
+        x2={144}
+        y1={24}
+        y2={24}
       />
     </svg>
   </span>
