@@ -21,7 +21,8 @@ const chartTooltip = ({
   chartContainerRef = helpers.noop,
   chartTooltipRef = helpers.noop,
   minChartWidth = 500
-}) => {
+} = {}) => {
+  // ToDo: evaluate using "width" in place of "minWidth" for scenarios where the graph size is smaller
   /**
    * Return a tooltip x coordinate.
    *
@@ -61,6 +62,7 @@ const chartTooltip = ({
     return height * 0.25;
   };
 
+  // ToDo: evaluate using "width" in place of "minWidth" for scenarios where the graph size is smaller
   /**
    * Return a tooltip tail position CSS class.
    *
