@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChartHelpers should generate a max x, max y from datasets: max x, y 1`] = `
+Object {
+  "individualMaxY": Object {
+    "dolor": 100,
+    "ipsum": 100,
+    "lorem": 10,
+  },
+  "maxX": 6,
+  "maxY": 200,
+}
+`;
+
+exports[`ChartHelpers should generate domain ranges: domain, maxY number 1`] = `
+Object {
+  "domain": Object {
+    "y": Array [
+      0,
+      300,
+    ],
+  },
+}
+`;
+
+exports[`ChartHelpers should generate domain ranges: domain, maxY object 1`] = `
+Object {
+  "domain": Object {
+    "y": Array [
+      0,
+      1.25,
+    ],
+  },
+}
+`;
+
+exports[`ChartHelpers should return specific properties: specific properties 1`] = `
+Object {
+  "generateAxisProps": [Function],
+  "generateDomains": [Function],
+  "generateElementsProps": [Function],
+  "generateMaxXY": [Function],
+  "generateTooltipData": [Function],
+  "generateXAxisProps": [Function],
+  "generateYAxisProps": [Function],
+}
+`;
