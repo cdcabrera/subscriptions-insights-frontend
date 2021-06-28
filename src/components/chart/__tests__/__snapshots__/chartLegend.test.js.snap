@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ChartElements Component should handle basic element settings from context: passed chart legend props 1`] = `
+exports[`ChartLegend Component should pass legend props: passed props 1`] = `
 Array [
   Array [
     Object {
@@ -58,4 +58,4 @@ Array [
 ]
 `;
 
-exports[`ChartElements Component should render a basic component: basic 1`] = `null`;
+exports[`ChartLegend Component should render a basic component: basic 1`] = `null`;

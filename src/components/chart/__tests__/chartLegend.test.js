@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { ChartLegend } from '../chartLegend';
 import * as chartContext from '../chartContext';
 
-describe('ChartElements Component', () => {
+describe('ChartLegend Component', () => {
   it('should render a basic component', () => {
     const props = {};
     const component = shallow(<ChartLegend {...props} />);
@@ -11,7 +11,7 @@ describe('ChartElements Component', () => {
     expect(component.render()).toMatchSnapshot('basic');
   });
 
-  it('should handle basic element settings from context', async () => {
+  it('should pass legend props', async () => {
     const props = {};
 
     const mockLegend = jest.fn();
@@ -65,7 +65,7 @@ describe('ChartElements Component', () => {
     const mock = jest.spyOn(chartContext, 'useChartContext').mockImplementation(() => mockContextValue);
 
     await shallowHookComponent(<ChartLegend {...props} />);
-    expect(mockLegend.mock.calls).toMatchSnapshot('passed chart legend props');
+    expect(mockLegend.mock.calls).toMatchSnapshot('passed props');
 
     mock.mockClear();
   });
