@@ -7,6 +7,23 @@ import { ChartLegend } from './chartLegend';
 import { chartHelpers } from './chartHelpers';
 import { useResizeObserver } from '../../hooks/useWindow';
 
+/**
+ * Return a chart and elements with a context provider.
+ *
+ * @param {object} props
+ * @param {Node|Function} props.chartLegend
+ * @param {Node|Function} props.chartTooltip
+ * @param {Array} props.dataSets
+ * @param {object} props.padding
+ * @param {string} props.themeColor
+ * @param {boolean} props.xAxisFixLabelOverlap
+ * @param {number} props.xAxisLabelIncrement
+ * @param {Function} props.xAxisTickFormat
+ * @param {Function} props.yAxisTickFormat
+ * @param {Function} props.xValueFormat
+ * @param {Function} props.yValueFormat
+ * @returns {Node}
+ */
 const Chart = ({
   chartLegend,
   chartTooltip,
@@ -27,6 +44,14 @@ const Chart = ({
   const { width: chartWidth } = useResizeObserver(containerRef);
 
   useEffect(() => {
+    /**
+     * Aggregate chart related settings.
+     *
+     * @returns {{isMultiYAxis: boolean, padding: object, chartDomain: {domain: {y: Array}}, tooltipDataSetLookUp: {},
+     *     xAxisProps: object, themeColor: string, maxY: (object|number), hasData: boolean, maxX: number,
+     *     yAxisProps: Array, chartElementsProps: {elementsById: object, stackedElements: Array,
+     *     stackedElementsById: object, elements: Array}}}
+     */
     const updateChartSettings = () => {
       const toggledDataSets = dataSets.filter(({ id }) => !dataSetsToggle[id]);
 
