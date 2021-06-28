@@ -693,6 +693,82 @@ Object {
 }
 `;
 
+exports[`ChartHelpers should generate x axis props: format callback 1`] = `
+Array [
+  Object {
+    "item": Object {
+      "x": 1,
+      "y": 10,
+    },
+    "maxX": 6,
+    "nextItem": Object {
+      "x": 2,
+      "y": 10,
+    },
+    "previousItem": Object {
+      "x": 0,
+      "y": 10,
+    },
+    "tick": 1,
+  },
+]
+`;
+
+exports[`ChartHelpers should generate x axis props: props 1`] = `
+Object {
+  "tickFormat": [Function],
+  "tickValues": Array [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+  ],
+}
+`;
+
+exports[`ChartHelpers should generate y axis props: format callback, 0, left axis 1`] = `
+Array [
+  Object {
+    "isMultiAxis": true,
+    "maxY": 10,
+    "tick": 10,
+  },
+]
+`;
+
+exports[`ChartHelpers should generate y axis props: format callback, 1, right axis 1`] = `
+Array [
+  Object {
+    "isMultiAxis": true,
+    "maxY": 100,
+    "tick": 100,
+  },
+]
+`;
+
+exports[`ChartHelpers should generate y axis props: props 1`] = `
+Array [
+  Object {
+    "orientation": "left",
+    "style": Object {
+      "axis": Object {},
+      "tickLabels": Object {},
+    },
+    "tickFormat": [Function],
+  },
+  Object {
+    "orientation": "right",
+    "style": Object {
+      "axis": Object {},
+      "tickLabels": Object {},
+    },
+    "tickFormat": [Function],
+  },
+]
+`;
+
 exports[`ChartHelpers should return specific properties: specific properties 1`] = `
 Object {
   "generateAxisProps": [Function],

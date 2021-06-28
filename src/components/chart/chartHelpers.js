@@ -273,10 +273,10 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
   const axisProps = [];
   const isMultiAxis = dataSets.length > 1;
 
-  dataSets.forEach(({ data = [], id, stroke, strokeWidth }, index) => {
+  dataSets.forEach(({ id, stroke, strokeWidth }, index) => {
     const updatedAxisProps = {
       style: { axis: {}, tickLabels: {} },
-      tickFormat: tick => data[tick]?.yAxisLabel || tick
+      tickFormat: tick => tick
     };
 
     if (isMultiAxis && stroke) {
@@ -291,17 +291,10 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
       const updatedMaxY = (typeof maxY === 'number' && maxY) || maxY?.[id];
 
       updatedAxisProps.tickFormat = tick => {
-        const tickIndex = data.indexOf(tick);
-        const previousItem = { ...data[tickIndex - 1] };
-        const nextItem = { ...data[tickIndex + 1] };
-        const item = { ...data[tick] };
         const normalizedTick = (isMultiAxis && tick * updatedMaxY) || tick;
 
         return yAxisTickFormat({
           tick: normalizedTick,
-          previousItem,
-          item,
-          nextItem,
           isMultiAxis,
           maxY: updatedMaxY
         });

@@ -161,8 +161,7 @@ Chart.propTypes = {
         PropTypes.shape({
           x: PropTypes.number.isRequired,
           y: PropTypes.number,
-          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)]),
-          yAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
+          xAxisLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.instanceOf(Date)])
         })
       ),
       animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
