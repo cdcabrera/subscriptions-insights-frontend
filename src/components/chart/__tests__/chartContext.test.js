@@ -24,6 +24,8 @@ describe('ChartContext', () => {
     result.onHide('lorem');
     result.onToggle('ipsum');
 
+    expect(result.getIsToggled('ipsum')).toBe(false);
+
     expect(mockDataSetsToggle).toMatchSnapshot('toggle data');
   });
 });
