@@ -36,6 +36,8 @@ const ProductViewOpenShiftDedicated = ({ productConfig, routeDetail }) => {
     <ProductView
       routeDetail={routeDetail}
       productConfig={productConfig}
+      // inventoryHostsTab={<div>hello world</div>}
+      // hostsTab={<InventoryListTab content={productConfig.initialInventorySettings.tabDisplay} />}
       toolbarProduct={false}
       toolbarGraph={<ToolbarFieldRangedMonthly value={startDate} viewId={viewId} />}
       toolbarGraphDescription
@@ -169,6 +171,12 @@ ProductViewOpenShiftDedicated.defaultProps = {
         cellWidth: 15
       }
     ],
+    initialInventorySettings: {
+      tabDisplay: data => {
+        console.log(data);
+        return null;
+      }
+    },
     initialToolbarFilters: undefined
   }
 };
