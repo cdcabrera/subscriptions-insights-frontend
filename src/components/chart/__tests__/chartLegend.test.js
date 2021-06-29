@@ -69,4 +69,39 @@ describe('ChartLegend Component', () => {
 
     mock.mockClear();
   });
+
+  it('should handle legend elements', async () => {
+    const props = {};
+
+    const mockLegend = <div>lorem ipsum</div>;
+    const mockContextValue = {
+      chartSettings: {
+        chartLegend: mockLegend,
+        dataSets: [
+          {
+            data: [
+              {
+                x: 1,
+                xAxisLabel: '1 x axis label',
+                y: 1
+              },
+              {
+                x: 2,
+                xAxisLabel: '2 x axis label',
+                y: 2
+              }
+            ],
+            id: 'loremGraph'
+          }
+        ]
+      }
+    };
+
+    const mock = jest.spyOn(chartContext, 'useChartContext').mockImplementation(() => mockContextValue);
+
+    const component = await shallowHookComponent(<ChartLegend {...props} />);
+    expect(component).toMatchSnapshot('element');
+
+    mock.mockClear();
+  });
 });
