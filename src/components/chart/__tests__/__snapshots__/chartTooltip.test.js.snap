@@ -107,3 +107,5 @@ exports[`ChartTooltip Component should return a basic component: basic 1`] = `
   </foreignObject>
 </g>
 `;
+
+exports[`ChartTooltip Component should return an empty tooltip when missing content: missing content 1`] = `<g />`;
