@@ -93,6 +93,8 @@ describe('ChartHelpers', () => {
         {
           id: 'dolor',
           isStacked: true,
+          interpolation: 'lorem ipsum interpolation',
+          animate: true,
           data: [
             { x: 0, y: 20 },
             { x: 1, y: 10 },
@@ -205,6 +207,8 @@ describe('ChartHelpers', () => {
         },
         {
           id: 'ipsum',
+          stroke: 'lorem ipsum stroke',
+          strokeWidth: 2,
           data: [
             { x: 0, y: 20 },
             { x: 1, y: 10 },

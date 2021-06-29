@@ -186,6 +186,7 @@ Object {
     Object {
       "chartType": undefined,
       "props": Object {
+        "animate": true,
         "data": Array [
           Object {
             "x": 0,
@@ -212,6 +213,7 @@ Object {
             "y": 10,
           },
         ],
+        "interpolation": "lorem ipsum interpolation",
         "key": "chart-dolor-",
         "name": "chart-dolor-",
         "style": Object {
@@ -228,6 +230,7 @@ Object {
     "dolor": Object {
       "chartType": undefined,
       "props": Object {
+        "animate": true,
         "data": Array [
           Object {
             "x": 0,
@@ -254,6 +257,7 @@ Object {
             "y": 10,
           },
         ],
+        "interpolation": "lorem ipsum interpolation",
         "key": "chart-dolor-",
         "name": "chart-dolor-",
         "style": Object {
@@ -783,7 +787,10 @@ Array [
   Object {
     "orientation": "right",
     "style": Object {
-      "axis": Object {},
+      "axis": Object {
+        "stroke": "lorem ipsum stroke",
+        "strokeWidth": 2,
+      },
       "tickLabels": Object {},
     },
     "tickFormat": [Function],
