@@ -3,8 +3,7 @@ import { helpers } from '../../common';
 
 /**
  * Note: Victory Charts components require a form of extended "something" applied by the consuming component.
- * This leads to odd implementations, we return a function component to avoid having to consider passing "props"
- * or other params/options.
+ * This leads to odd implementations, like returning a function component.
  */
 /**
  * Return a compatible Victory tooltip component.
