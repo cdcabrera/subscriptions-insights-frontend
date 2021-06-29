@@ -67,6 +67,7 @@
     "tabHeading": "Inventory listing",
     "tabHeading_plural": "Inventory listings",
     "tabHosts": "Current systems",
+    "tabHosts_noInstances_OpenShift-dedicated-metrics": "Current instances",
     "tabHosts_OpenShift-dedicated-metrics": "{{count}} instance",
     "tabHosts_OpenShift-dedicated-metrics_plural": "{{count}} instances",
     "tabSubscriptions": "Current subscriptions",
