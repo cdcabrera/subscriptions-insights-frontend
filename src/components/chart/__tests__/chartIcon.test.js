@@ -11,27 +11,38 @@ describe('ChartIcon Component', () => {
   });
 
   it('should handle basic icons, variations in settings', async () => {
-    const props = {
-      size: 'md',
-      symbol: 'eye',
-      title: 'lorem ipsum eye'
-    };
-    const component = shallow(<ChartIcon {...props} />);
-    expect(component).toMatchSnapshot('eye icon');
+    const iconProps = [
+      {
+        size: 'md',
+        symbol: 'eye',
+        title: 'lorem ipsum eye'
+      },
+      {
+        size: 'md',
+        symbol: 'eyeSlash',
+        title: 'lorem ipsum eyeSlash'
+      },
+      {
+        size: 'md',
+        symbol: 'infinity',
+        title: 'lorem ipsum infinity'
+      },
+      {
+        size: 'lg',
+        symbol: 'dash',
+        title: 'lorem ipsum dash'
+      },
+      {
+        size: 'xl',
+        symbol: 'threshold',
+        title: null,
+        fill: '#ff0000'
+      }
+    ];
 
-    component.setProps({
-      size: 'lg',
-      symbol: 'dash',
-      title: 'lorem ipsum dash'
+    iconProps.forEach(({ symbol, ...props }) => {
+      const component = shallow(<ChartIcon symbol={symbol} {...props} />);
+      expect(component).toMatchSnapshot(symbol);
     });
-    expect(component).toMatchSnapshot('dash icon');
-
-    component.setProps({
-      size: 'xl',
-      symbol: 'threshold',
-      title: null,
-      fill: '#ff0000'
-    });
-    expect(component).toMatchSnapshot('threshold icon');
   });
 });

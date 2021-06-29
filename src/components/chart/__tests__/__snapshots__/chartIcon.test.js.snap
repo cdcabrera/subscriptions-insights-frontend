@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ChartIcon Component should handle basic icons, variations in settings: dash icon 1`] = `
+exports[`ChartIcon Component should handle basic icons, variations in settings: dash 1`] = `
 <span
   className="curiosity-chartarea__icon curiosity-chartarea__icon-dash"
 >
@@ -44,7 +44,7 @@ exports[`ChartIcon Component should handle basic icons, variations in settings: 
 </span>
 `;
 
-exports[`ChartIcon Component should handle basic icons, variations in settings: eye icon 1`] = `
+exports[`ChartIcon Component should handle basic icons, variations in settings: eye 1`] = `
 <span
   className="curiosity-chartarea__icon curiosity-chartarea__icon-eye"
 >
@@ -57,7 +57,33 @@ exports[`ChartIcon Component should handle basic icons, variations in settings: 
 </span>
 `;
 
-exports[`ChartIcon Component should handle basic icons, variations in settings: threshold icon 1`] = `
+exports[`ChartIcon Component should handle basic icons, variations in settings: eyeSlash 1`] = `
+<span
+  className="curiosity-chartarea__icon curiosity-chartarea__icon-eyeSlash"
+>
+  <EyeSlashIcon
+    color="currentColor"
+    noVerticalAlign={false}
+    size="md"
+    title="lorem ipsum eyeSlash"
+  />
+</span>
+`;
+
+exports[`ChartIcon Component should handle basic icons, variations in settings: infinity 1`] = `
+<span
+  className="curiosity-chartarea__icon curiosity-chartarea__icon-infinity"
+>
+  <InfinityIcon
+    color="currentColor"
+    noVerticalAlign={false}
+    size="md"
+    title="lorem ipsum infinity"
+  />
+</span>
+`;
+
+exports[`ChartIcon Component should handle basic icons, variations in settings: threshold 1`] = `
 <span
   className="curiosity-chartarea__icon curiosity-chartarea__icon-threshold"
 >
