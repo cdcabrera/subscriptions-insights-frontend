@@ -163,8 +163,11 @@ global.shallowHook = (useHook = Function.prototype) => {
     result = useHook();
     return null;
   };
-  shallow(<Hook />);
-  return result;
+
+  const shallowHook = shallow(<Hook />);
+  const unmount = () => shallowHook.unmount();
+
+  return { unmount, result };
 };
 
 /**

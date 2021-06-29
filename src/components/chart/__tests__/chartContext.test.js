@@ -5,7 +5,7 @@ describe('ChartContext', () => {
     expect(context).toMatchSnapshot('specific properties');
   });
 
-  it('should apply a hook for toggling chart layers', async () => {
+  it('should apply a hook for toggling chart layers', () => {
     const mockDataSetsToggle = {};
 
     const mockSetDataSetsToggle = callback => {
@@ -15,14 +15,14 @@ describe('ChartContext', () => {
       dataSetsToggle: [mockDataSetsToggle, mockSetDataSetsToggle]
     });
 
-    const hook = await shallowHook(() => useToggleData({ useChartContext: mockUseChartContext }));
+    const { result } = shallowHook(() => useToggleData({ useChartContext: mockUseChartContext }));
 
-    hook.onToggle('lorem');
-    hook.onToggle('lorem');
-    hook.onRevert();
-    hook.onToggle('ipsum');
-    hook.onHide('lorem');
-    hook.onToggle('ipsum');
+    result.onToggle('lorem');
+    result.onToggle('lorem');
+    result.onRevert();
+    result.onToggle('ipsum');
+    result.onHide('lorem');
+    result.onToggle('ipsum');
 
     expect(mockDataSetsToggle).toMatchSnapshot('toggle data');
   });
