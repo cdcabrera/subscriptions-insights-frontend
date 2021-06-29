@@ -40,6 +40,7 @@ import { translate } from '../i18n/i18n';
  * Display a product.
  *
  * @param {object} props
+ * @param {Node|boolean} props.inventoryHostsTab
  * @param {object} props.productConfig
  * @param {object} props.routeDetail
  * @param {Function} props.t
@@ -48,7 +49,15 @@ import { translate } from '../i18n/i18n';
  * @param {Node|boolean} props.toolbarProduct
  * @returns {Node}
  */
-const ProductView = ({ productConfig, routeDetail, t, toolbarGraph, toolbarGraphDescription, toolbarProduct }) => {
+const ProductView = ({
+  inventoryHostsTab,
+  productConfig,
+  routeDetail,
+  t,
+  toolbarGraph,
+  toolbarGraphDescription,
+  toolbarProduct
+}) => {
   const {
     graphTallyQuery,
     inventoryHostsQuery,
@@ -146,7 +155,10 @@ const ProductView = ({ productConfig, routeDetail, t, toolbarGraph, toolbarGraph
         <InventoryTabs key={`inventory_${productId}`} productId={productId}>
           <InventoryTab
             key={`inventory_hosts_${productId}`}
-            title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
+            title={
+              (React.isValidElement(inventoryHostsTab) && inventoryHostsTab) ||
+              t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })
+            }
           >
             <ConnectedInventoryList
               key={`inv_${productId}`}
@@ -185,6 +197,7 @@ const ProductView = ({ productConfig, routeDetail, t, toolbarGraph, toolbarGraph
  *    productConfig: object, toolbarProduct: (Node|boolean)}}
  */
 ProductView.propTypes = {
+  inventoryHostsTab: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
   productConfig: PropTypes.shape({
     graphTallyQuery: PropTypes.shape({
       [RHSM_API_QUERY_TYPES.GRANULARITY]: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)])
@@ -230,6 +243,7 @@ ProductView.propTypes = {
  * @type {{t: translate, toolbarGraph: (Node|boolean), toolbarGraphDescription: boolean, toolbarProduct: (Node|boolean)}}
  */
 ProductView.defaultProps = {
+  inventoryHostsTab: null,
   t: translate,
   toolbarGraph: null,
   toolbarGraphDescription: false,
