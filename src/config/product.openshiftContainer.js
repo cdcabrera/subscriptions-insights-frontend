@@ -58,8 +58,8 @@ const config = {
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value
     },
-    { id: 'thresholdSockets', isOptional: true },
-    { id: 'thresholdCores', isOptional: true }
+    { id: 'thresholdSockets', chartType: 'threshold', isOptional: true },
+    { id: 'thresholdCores', chartType: 'threshold', isOptional: true }
   ],
   initialGraphSettings: {},
   initialGuestsFilters: [
