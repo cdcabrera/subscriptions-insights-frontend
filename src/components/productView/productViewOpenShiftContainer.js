@@ -1,24 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  chart_color_blue_100 as chartColorBlueLight,
-  chart_color_blue_300 as chartColorBlueDark
-} from '@patternfly/react-tokens';
-import { Button, Label as PfLabel, Tooltip, TooltipPosition } from '@patternfly/react-core';
+import { Tooltip, TooltipPosition } from '@patternfly/react-core';
 import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
-import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import moment from 'moment';
-import numbro from 'numbro';
 import { PageLayout, PageColumns, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
-import {
-  RHSM_API_PATH_ID_TYPES,
-  RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
-  RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
-  RHSM_API_QUERY_TYPES,
-  RHSM_API_QUERY_UOM_TYPES,
-  RHSM_API_QUERY_SORT_TYPES,
-  RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES
-} from '../../types/rhsmApiTypes';
+import { RHSM_API_PATH_ID_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { apiQueries, useSelector } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import { ToolbarFieldUom } from '../toolbar/toolbarFieldUom';
@@ -28,21 +13,21 @@ import Toolbar from '../toolbar/toolbar';
 import InventoryList from '../inventoryList/inventoryList';
 import InventorySubscriptions from '../inventorySubscriptions/inventorySubscriptions';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
-import { helpers, dateHelpers } from '../../common';
+import { ProductView } from './productView';
 import { translate } from '../i18n/i18n';
+import { helpers } from '../../common';
 
 /**
  * An OpenShift Container Platform encompassing view.
  *
  * @param {object} props
- * @param {Array} props.productConfig
  * @param {object} props.routeDetail
  * @param {Function} props.t
  * @returns {Node}
  */
-const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
+const ProductViewOpenShiftContainer = ({ routeDetail, t }) => {
+  const { productParameter: viewProductLabel, productConfig } = routeDetail;
   const uomValue = useSelector(({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM], null);
-  const { productParameter: viewProductLabel } = routeDetail;
 
   const renderProduct = (config, updatedUomValue) => {
     const {
@@ -188,59 +173,20 @@ const ProductViewOpenShiftContainer = ({ productConfig, routeDetail, t }) => {
 /**
  * Prop types.
  *
- * @type {{t: Function, routeDetail: object, productConfig: Array}}
+ * @type {{t: Function, routeDetail: object}}
  */
 ProductViewOpenShiftContainer.propTypes = {
-  productConfig: PropTypes.arrayOf(
-    PropTypes.shape({
-      productContextFilterUom: PropTypes.bool,
-      query: PropTypes.shape({
-        [RHSM_API_QUERY_TYPES.START_DATE]: PropTypes.string,
-        [RHSM_API_QUERY_TYPES.END_DATE]: PropTypes.string
-      }),
-      graphTallyQuery: PropTypes.shape({
-        [RHSM_API_QUERY_TYPES.GRANULARITY]: PropTypes.oneOf([...Object.values(GRANULARITY_TYPES)])
-      }),
-      inventoryHostsQuery: PropTypes.shape({
-        [RHSM_API_QUERY_TYPES.LIMIT]: PropTypes.number,
-        [RHSM_API_QUERY_TYPES.OFFSET]: PropTypes.number,
-        [RHSM_API_QUERY_TYPES.SORT]: PropTypes.oneOf([...Object.values(RHSM_API_QUERY_SORT_TYPES)]),
-        [RHSM_API_QUERY_TYPES.DIRECTION]: PropTypes.oneOf([...Object.values(SORT_DIRECTION_TYPES)])
-      }),
-      inventorySubscriptionsQuery: PropTypes.shape({
-        [RHSM_API_QUERY_TYPES.LIMIT]: PropTypes.number,
-        [RHSM_API_QUERY_TYPES.OFFSET]: PropTypes.number,
-        [RHSM_API_QUERY_TYPES.SORT]: PropTypes.oneOf([...Object.values(RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES)]),
-        [RHSM_API_QUERY_TYPES.DIRECTION]: PropTypes.oneOf([...Object.values(SORT_DIRECTION_TYPES)])
-      }),
-      initialOption: PropTypes.oneOf(Object.values(RHSM_API_QUERY_UOM_TYPES)),
-      initialGraphFilters: PropTypes.array,
-      initialGuestsFilters: PropTypes.array,
-      initialInventoryFilters: PropTypes.array,
-      initialInventorySettings: PropTypes.shape({
-        hasGuests: PropTypes.func
-      }),
-      initialSubscriptionsInventoryFilters: PropTypes.array,
-      initialToolbarFilters: PropTypes.array,
-      productLabel: PropTypes.string,
-      productId: PropTypes.string,
-      viewId: PropTypes.string
-    })
-  ),
-  routeDetail: PropTypes.shape({
-    pathParameter: PropTypes.string,
-    productParameter: PropTypes.string,
-    viewParameter: PropTypes.string
-  }).isRequired,
+  routeDetail: PropTypes.shape(ProductView.propTypes.routeDetail).isRequired,
   t: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{t: Function, productConfig: Array}}
+ * @type {{t: Function}}
  */
 ProductViewOpenShiftContainer.defaultProps = {
+  /*
   productConfig: [
     {
       productContextFilterUom: true,
@@ -506,6 +452,7 @@ ProductViewOpenShiftContainer.defaultProps = {
       viewId: 'viewOpenShiftMetric'
     }
   ],
+  */
   t: translate
 };
 

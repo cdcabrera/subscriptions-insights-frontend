@@ -1,32 +1,21 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { ProductViewRhel } from '../productViewRhel';
-import { parseRowCellsListData } from '../../inventoryList/inventoryListHelpers';
+import { config } from '../product.satellite';
+import { parseRowCellsListData } from '../../components/inventoryList/inventoryListHelpers';
 import {
   RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_TYPES
-} from '../../../types/rhsmApiTypes';
+} from '../../types/rhsmApiTypes';
 
-describe('ProductViewRhel Component', () => {
-  it('should render a non-connected component', () => {
-    const props = {
-      routeDetail: {
-        pathParameter: 'lorem ipsum',
-        productParameter: 'dolor sit'
-      }
-    };
-
-    const component = shallow(<ProductViewRhel {...props} />);
-    expect(component).toMatchSnapshot('non-connected');
-  });
-
+describe('Product Satellite config', () => {
   it('should set product configuration', () => {
     const {
       initialGraphFilters,
       initialGuestsFilters,
       initialInventoryFilters,
+      inventoryHostsQuery,
+      inventorySubscriptionsQuery,
       query
-    } = ProductViewRhel.defaultProps.productConfig;
+    } = config;
+
     expect({ initialGraphFilters, initialGuestsFilters, initialInventoryFilters, query }).toMatchSnapshot(
       'initial configuration'
     );
@@ -96,12 +85,9 @@ describe('ProductViewRhel Component', () => {
     expect(filteredGuestsDataAuthorized).toMatchSnapshot('filteredGuestsData results, authorized');
 
     expect({
-      hostsInventory:
-        ProductViewRhel.defaultProps.productConfig.inventoryHostsQuery[RHSM_API_QUERY_TYPES.DIRECTION] ===
-        SORT_DIRECTION_TYPES.DESCENDING,
+      hostsInventory: inventoryHostsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING,
       subscriptionsInventory:
-        ProductViewRhel.defaultProps.productConfig.inventorySubscriptionsQuery[RHSM_API_QUERY_TYPES.DIRECTION] ===
-        SORT_DIRECTION_TYPES.DESCENDING
+        inventorySubscriptionsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING
     }).toMatchSnapshot('default sort for inventory should descend');
   });
 });
