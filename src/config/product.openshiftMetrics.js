@@ -111,4 +111,4 @@ const config = {
   initialToolbarFilters: undefined
 };
 
-export { config as default, config, productGroup, productId, productLabel };
+export { config as default, config, productGroup, productId };

@@ -202,4 +202,4 @@ const config = {
   ]
 };
 
-export { config as default, config, productGroup };
+export { config as default, config, productGroup, productId };
