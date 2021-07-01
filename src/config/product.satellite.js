@@ -9,7 +9,6 @@ import {
 } from '@patternfly/react-tokens';
 import { Button, Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import moment from 'moment';
 import {
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -21,9 +20,15 @@ import {
 import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
+// ToDo: evaluate separating products/product tags into individual configs for Satellite
+
 const productGroup = RHSM_API_PATH_ID_TYPES.SATELLITE;
 
+const productId = undefined;
+
 const config = {
+  productGroup,
+  productId,
   query: {
     [RHSM_API_QUERY_TYPES.START_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).startDate.toISOString(),
     [RHSM_API_QUERY_TYPES.END_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).endDate.toISOString()
@@ -67,7 +72,7 @@ const config = {
   initialGuestsFilters: [
     {
       id: 'displayName',
-      header: translate('curiosity-inventory.header', { context: 'guestsDisplayName' }),
+      header: () => translate('curiosity-inventory.header', { context: 'guestsDisplayName' }),
       cell: (data, session) => {
         const { displayName, inventoryId } = data;
         const { inventory: authorized } = session?.authorized || {};
@@ -143,7 +148,7 @@ const config = {
     },
     {
       id: 'measurementType',
-      cell: data => {
+      cell: (data = {}) => {
         const { cloudProvider = {}, measurementType = {} } = data;
         return (
           <React.Fragment>
@@ -175,26 +180,6 @@ const config = {
     }
   ],
   initialInventorySettings: {},
-  initialSubscriptionsInventoryFilters: [
-    {
-      id: 'productName',
-      isSortable: true
-    },
-    {
-      id: 'serviceLevel',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
-    },
-    {
-      id: 'upcomingEventDate',
-      cell: data =>
-        (data?.upcomingEventDate?.value && moment.utc(data?.upcomingEventDate?.value).format('YYYY-DD-MM')) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
-    }
-  ],
   initialToolbarFilters: [
     {
       id: RHSM_API_QUERY_TYPES.SLA
@@ -206,4 +191,4 @@ const config = {
   ]
 };
 
-export { config as default, config, productGroup };
+export { config as default, config, productGroup, productId };
