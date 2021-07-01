@@ -21,9 +21,16 @@ import {
 import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
+// ToDo: evaluate separating products/product tags into individual configs for RHEL
+
 const productGroup = RHSM_API_PATH_ID_TYPES.RHEL;
 
+const productId = undefined;
+
 const config = {
+  productGroup,
+  productId,
+  viewId: `view${productGroup}`,
   query: {
     [RHSM_API_QUERY_TYPES.START_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).startDate.toISOString(),
     [RHSM_API_QUERY_TYPES.END_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).endDate.toISOString()
@@ -67,7 +74,7 @@ const config = {
   initialGuestsFilters: [
     {
       id: 'displayName',
-      header: translate('curiosity-inventory.header', { context: 'guestsDisplayName' }),
+      header: () => translate('curiosity-inventory.header', { context: 'guestsDisplayName' }),
       cell: (data, session) => {
         const { displayName, inventoryId } = data;
         const { inventory: authorized } = session?.authorized || {};
@@ -98,7 +105,7 @@ const config = {
     },
     {
       id: 'lastSeen',
-      cell: data => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
+      cell: (data = {}) => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
       cellWidth: 15
     }
   ],
@@ -143,7 +150,7 @@ const config = {
     },
     {
       id: 'measurementType',
-      cell: data => {
+      cell: (data = {}) => {
         const { cloudProvider = {}, measurementType = {} } = data;
         return (
           <React.Fragment>
@@ -189,7 +196,10 @@ const config = {
     {
       id: 'upcomingEventDate',
       cell: data =>
-        (data?.upcomingEventDate?.value && moment.utc(data?.upcomingEventDate?.value).format('YYYY-DD-MM')) || '',
+        (data?.upcomingEventDate?.value &&
+          helpers.isDate(data?.upcomingEventDate?.value) &&
+          moment.utc(data?.upcomingEventDate?.value).format('YYYY-DD-MM')) ||
+        '',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
@@ -206,4 +216,4 @@ const config = {
   ]
 };
 
-export { config as default, config, productGroup };
+export { config as default, config, productGroup, productId };

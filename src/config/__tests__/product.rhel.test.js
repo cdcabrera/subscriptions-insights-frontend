@@ -6,19 +6,8 @@ import {
 } from '../../types/rhsmApiTypes';
 
 describe('Product RHEL config', () => {
-  it('should set product configuration', () => {
-    const {
-      initialGraphFilters,
-      initialGuestsFilters,
-      initialInventoryFilters,
-      inventoryHostsQuery,
-      inventorySubscriptionsQuery,
-      query
-    } = config;
-
-    expect({ initialGraphFilters, initialGuestsFilters, initialInventoryFilters, query }).toMatchSnapshot(
-      'initial configuration'
-    );
+  it('should apply hosts inventory configuration', () => {
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
 
     const inventoryData = {
       displayName: 'lorem',
@@ -33,11 +22,11 @@ describe('Product RHEL config', () => {
     };
 
     const filteredInventoryData = parseRowCellsListData({
-      filters: initialInventoryFilters,
+      filters: initialFilters,
       cellData: inventoryData
     });
 
-    expect(filteredInventoryData).toMatchSnapshot('filteredInventoryData results');
+    expect(filteredInventoryData).toMatchSnapshot('filtered');
 
     const fallbackInventoryData = {
       ...inventoryData,
@@ -47,19 +36,17 @@ describe('Product RHEL config', () => {
     };
 
     const fallbackFilteredInventoryData = parseRowCellsListData({
-      filters: initialInventoryFilters,
+      filters: initialFilters,
       cellData: fallbackInventoryData
     });
 
-    expect(fallbackFilteredInventoryData).toMatchSnapshot('filteredInventoryData results, fallback display');
+    expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
 
-    const filteredInventoryDataAuthorized = parseRowCellsListData({
-      filters: initialInventoryFilters,
-      cellData: inventoryData,
-      session: { authorized: { inventory: true } }
-    });
+    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
+  });
 
-    expect(filteredInventoryDataAuthorized).toMatchSnapshot('filteredInventoryData results, authorized');
+  it('should apply guest inventory configuration', () => {
+    const { initialGuestsFilters: initialFilters } = config;
 
     const guestsData = {
       displayName: 'lorem',
@@ -70,24 +57,18 @@ describe('Product RHEL config', () => {
     };
 
     const filteredGuestsData = parseRowCellsListData({
-      filters: initialGuestsFilters,
+      filters: initialFilters,
       cellData: guestsData
     });
 
-    expect(filteredGuestsData).toMatchSnapshot('filteredGuestsData results');
+    expect(filteredGuestsData).toMatchSnapshot('filtered');
 
     const filteredGuestsDataAuthorized = parseRowCellsListData({
-      filters: initialGuestsFilters,
+      filters: initialFilters,
       cellData: guestsData,
       session: { authorized: { inventory: true } }
     });
 
-    expect(filteredGuestsDataAuthorized).toMatchSnapshot('filteredGuestsData results, authorized');
-
-    expect({
-      hostsInventory: inventoryHostsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING,
-      subscriptionsInventory:
-        inventorySubscriptionsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING
-    }).toMatchSnapshot('default sort for inventory should descend');
+    expect(filteredGuestsDataAuthorized).toMatchSnapshot('filtered, authorized');
   });
 });
