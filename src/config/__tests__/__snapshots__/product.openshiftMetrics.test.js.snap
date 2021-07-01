@@ -38,13 +38,7 @@ Object {
 }
 `;
 
-exports[`Product OpenShift Metrics config should apply hosts inventory configuration: default sort for inventory should descend 1`] = `
-Object {
-  "hostsInventory": true,
-}
-`;
-
-exports[`Product OpenShift Metrics config should apply hosts inventory configuration: filteredInventoryData results 1`] = `
+exports[`Product OpenShift Metrics config should apply hosts inventory configuration: filtered 1`] = `
 Object {
   "cells": Array [
     Object {
@@ -106,7 +100,7 @@ Object {
 }
 `;
 
-exports[`Product OpenShift Metrics config should apply hosts inventory configuration: filteredInventoryData results, fallback display 1`] = `
+exports[`Product OpenShift Metrics config should apply hosts inventory configuration: filtered, fallback display 1`] = `
 Object {
   "cells": Array [
     Object {
@@ -157,60 +151,5 @@ Object {
       "value": "hello world",
     },
   },
-}
-`;
-
-exports[`Product OpenShift Metrics config should set basic product configuration: initial configuration 1`] = `
-Object {
-  "graphTallyQuery": Object {
-    "granularity": "daily",
-  },
-  "initialGraphFilters": Array [
-    Object {
-      "color": "#06c",
-      "fill": "#8bc1f7",
-      "id": "coreHours",
-      "stroke": "#06c",
-    },
-  ],
-  "initialGraphSettings": Object {
-    "actionDisplay": [Function],
-  },
-  "initialInventoryFilters": Array [
-    Object {
-      "cell": [Function],
-      "id": "displayName",
-      "isSortable": true,
-    },
-    Object {
-      "cell": [Function],
-      "cellWidth": 20,
-      "id": "coreHours",
-      "isSortable": true,
-      "isWrappable": true,
-    },
-    Object {
-      "cell": [Function],
-      "cellWidth": 25,
-      "id": "lastSeen",
-      "isSortable": true,
-      "isWrappable": true,
-    },
-  ],
-  "initialToolbarFilters": undefined,
-  "inventoryHostsQuery": Object {
-    "dir": "desc",
-    "limit": 100,
-    "offset": 0,
-    "sort": "last_seen",
-  },
-  "productGroup": "OpenShift-metrics",
-  "productId": "OpenShift-metrics",
-  "productLabel": "OpenShift Metric",
-  "query": Object {
-    "beginning": "2019-07-01T00:00:00.000Z",
-    "ending": "2019-07-31T23:59:59.999Z",
-  },
-  "viewId": "viewOpenShift-metrics",
 }
 `;

@@ -6,14 +6,9 @@ import {
 } from '../../types/rhsmApiTypes';
 
 describe('Product OpenShift Metrics config', () => {
-  it('should set basic product configuration', () => {
-    expect(config).toMatchSnapshot('initial configuration');
-  });
-
   it('should apply graph configuration', () => {
     const { initialGraphSettings } = config;
 
-    // product action display callback
     expect({
       productActionDisplay: initialGraphSettings.actionDisplay({
         data: {
@@ -100,9 +95,8 @@ describe('Product OpenShift Metrics config', () => {
   });
 
   it('should apply hosts inventory configuration', () => {
-    const { initialInventoryFilters, inventoryHostsQuery } = config;
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
 
-    // filter inventory data checks
     const inventoryData = {
       displayName: 'lorem',
       inventoryId: 'lorem inventory id',
@@ -112,11 +106,11 @@ describe('Product OpenShift Metrics config', () => {
     };
 
     const filteredInventoryData = parseRowCellsListData({
-      filters: initialInventoryFilters,
+      filters: initialFilters,
       cellData: inventoryData
     });
 
-    expect(filteredInventoryData).toMatchSnapshot('filteredInventoryData results');
+    expect(filteredInventoryData).toMatchSnapshot('filtered');
 
     const fallbackInventoryData = {
       ...inventoryData,
@@ -126,14 +120,12 @@ describe('Product OpenShift Metrics config', () => {
     };
 
     const fallbackFilteredInventoryData = parseRowCellsListData({
-      filters: initialInventoryFilters,
+      filters: initialFilters,
       cellData: fallbackInventoryData
     });
 
-    expect(fallbackFilteredInventoryData).toMatchSnapshot('filteredInventoryData results, fallback display');
+    expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
 
-    expect({
-      hostsInventory: inventoryHostsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING
-    }).toMatchSnapshot('default sort for inventory should descend');
+    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
 });
