@@ -304,3 +304,95 @@ Object {
   },
 }
 `;
+
+exports[`Product RHEL config should apply subscriptions inventory configuration: filtered 1`] = `
+Object {
+  "cells": Array [
+    Object {
+      "title": "lorem",
+    },
+    Object {
+      "title": "hello world",
+    },
+    [Function],
+  ],
+  "columnHeaders": Array [
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"productName\\"})",
+      "transforms": Array [],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"serviceLevel\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"upcomingEventDate\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+  ],
+  "data": Object {
+    "productName": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"productName\\"})",
+      "value": "lorem",
+    },
+    "serviceLevel": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"serviceLevel\\"})",
+      "value": "hello world",
+    },
+    "upcomingEventDate": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"upcomingEventDate\\"})",
+      "value": "lorem date obj",
+    },
+  },
+}
+`;
+
+exports[`Product RHEL config should apply subscriptions inventory configuration: filtered, fallback display 1`] = `
+Object {
+  "cells": Array [
+    Object {
+      "title": "lorem",
+    },
+    Object {
+      "title": "",
+    },
+    [Function],
+  ],
+  "columnHeaders": Array [
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"productName\\"})",
+      "transforms": Array [],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"serviceLevel\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"upcomingEventDate\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+  ],
+  "data": Object {
+    "productName": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"productName\\"})",
+      "value": "lorem",
+    },
+    "serviceLevel": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"serviceLevel\\"})",
+      "value": null,
+    },
+    "upcomingEventDate": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"upcomingEventDate\\"})",
+      "value": null,
+    },
+  },
+}
+`;
