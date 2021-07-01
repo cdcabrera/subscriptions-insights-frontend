@@ -105,7 +105,7 @@ const config = {
     },
     {
       id: 'lastSeen',
-      cell: (data = {}) => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
+      cell: data => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
       cellWidth: 15
     }
   ],
