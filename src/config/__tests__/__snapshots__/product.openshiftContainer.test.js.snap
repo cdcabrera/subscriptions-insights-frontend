@@ -1,5 +1,128 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Product OpenShift Container config should apply guest inventory configuration: filtered 1`] = `
+Object {
+  "cells": Array [
+    Object {
+      "title": "lorem",
+    },
+    Object {
+      "title": "lorem inventory id",
+    },
+    Object {
+      "title": <DateFormat
+        date="lorem date obj"
+      />,
+    },
+  ],
+  "columnHeaders": Array [
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+      "transforms": Array [],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"inventoryId\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+  ],
+  "data": Object {
+    "displayName": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"displayName\\"})",
+      "value": "lorem",
+    },
+    "inventoryId": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"inventoryId\\"})",
+      "value": "lorem inventory id",
+    },
+    "lastSeen": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "value": "lorem date obj",
+    },
+    "loremIpsum": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"loremIpsum\\"})",
+      "value": "hello world",
+    },
+    "subscriptionManagerId": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"subscriptionManagerId\\"})",
+      "value": "lorem subscription id",
+    },
+  },
+}
+`;
+
+exports[`Product OpenShift Container config should apply guest inventory configuration: filtered, authorized 1`] = `
+Object {
+  "cells": Array [
+    Object {
+      "title": <Button
+        component="a"
+        href="/insights/inventory/lorem inventory id/"
+        isInline={true}
+        variant="link"
+      >
+        lorem
+      </Button>,
+    },
+    Object {
+      "title": "lorem inventory id",
+    },
+    Object {
+      "title": <DateFormat
+        date="lorem date obj"
+      />,
+    },
+  ],
+  "columnHeaders": Array [
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"guestsDisplayName\\"})",
+      "transforms": Array [],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"inventoryId\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+  ],
+  "data": Object {
+    "displayName": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"displayName\\"})",
+      "value": "lorem",
+    },
+    "inventoryId": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"inventoryId\\"})",
+      "value": "lorem inventory id",
+    },
+    "lastSeen": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "value": "lorem date obj",
+    },
+    "loremIpsum": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"loremIpsum\\"})",
+      "value": "hello world",
+    },
+    "subscriptionManagerId": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"subscriptionManagerId\\"})",
+      "value": "lorem subscription id",
+    },
+  },
+}
+`;
+
 exports[`Product OpenShift Container config should apply hosts inventory configuration: filtered 1`] = `
 Object {
   "cells": Array [

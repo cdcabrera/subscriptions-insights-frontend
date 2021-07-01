@@ -79,4 +79,31 @@ describe('Product OpenShift Container config', () => {
 
     expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
+
+  it('should apply guest inventory configuration', () => {
+    const { initialGuestsFilters: initialFilters } = config;
+
+    const guestsData = {
+      displayName: 'lorem',
+      inventoryId: 'lorem inventory id',
+      subscriptionManagerId: 'lorem subscription id',
+      lastSeen: 'lorem date obj',
+      loremIpsum: 'hello world'
+    };
+
+    const filteredGuestsData = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: guestsData
+    });
+
+    expect(filteredGuestsData).toMatchSnapshot('filtered');
+
+    const filteredGuestsDataAuthorized = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: guestsData,
+      session: { authorized: { inventory: true } }
+    });
+
+    expect(filteredGuestsDataAuthorized).toMatchSnapshot('filtered, authorized');
+  });
 });
