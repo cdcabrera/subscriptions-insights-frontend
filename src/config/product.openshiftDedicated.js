@@ -20,7 +20,12 @@ import { translate } from '../components/i18n/i18n';
 
 const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
+const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS;
+
 const config = {
+  productGroup,
+  productId,
+  viewId: `view${productGroup}`,
   query: {
     [RHSM_API_QUERY_TYPES.START_DATE]: dateHelpers.getRangedMonthDateTime('current').value.startDate.toISOString(),
     [RHSM_API_QUERY_TYPES.END_DATE]: dateHelpers.getRangedMonthDateTime('current').value.endDate.toISOString()
@@ -55,7 +60,7 @@ const config = {
     }
   ],
   initialGraphSettings: {
-    actionDisplay: data => {
+    actionDisplay: (data = {}) => {
       const {
         meta: { totalCoreHours }
       } = data;
@@ -76,7 +81,7 @@ const config = {
   initialInventoryFilters: [
     {
       id: 'displayName',
-      cell: data => {
+      cell: (data = {}) => {
         const { displayName = {}, inventoryId = {}, numberOfGuests = {} } = data;
 
         if (!inventoryId.value) {
@@ -117,7 +122,7 @@ const config = {
     },
     {
       id: 'lastSeen',
-      header: translate('curiosity-inventory.header', { context: 'lastSeen_OpenShift-dedicated-metrics' }),
+      header: () => translate('curiosity-inventory.header', { context: 'lastSeen_OpenShift-dedicated-metrics' }),
       cell: data => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
       isSortable: true,
       isWrappable: true,
@@ -127,4 +132,4 @@ const config = {
   initialToolbarFilters: undefined
 };
 
-export { config as default, config, productGroup };
+export { config as default, config, productGroup, productId };

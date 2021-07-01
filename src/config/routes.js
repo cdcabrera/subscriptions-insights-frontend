@@ -94,8 +94,8 @@ const routes = [
   {
     id: 'openshift-dedicated',
     path: '/openshift-dedicated',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS],
-    productParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS],
+    pathParameter: [openshiftDedicatedConfig.productId],
+    productParameter: [openshiftDedicatedConfig.productGroup],
     productConfig: [openshiftDedicatedConfig],
     redirect: null,
     isSearchable: true,
