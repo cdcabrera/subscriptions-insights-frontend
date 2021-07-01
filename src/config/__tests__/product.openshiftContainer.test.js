@@ -6,51 +6,77 @@ import {
 } from '../../types/rhsmApiTypes';
 
 describe('Product OpenShift Container config', () => {
-  it('should set product configuration', () => {
-    const {
-      initialGraphFilters,
-      initialInventoryFilters,
-      inventoryHostsQuery,
-      inventorySubscriptionsQuery,
-      query
-    } = config;
+  it('should apply hosts inventory configuration', () => {
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
 
-    expect({ initialGraphFilters, initialInventoryFilters, query }).toMatchSnapshot('initial configuration');
-
-    // filter inventory data checks
     const inventoryData = {
       displayName: 'lorem',
       inventoryId: 'lorem inventory id',
-      coreHours: 12.53,
+      numberOfGuests: 3,
+      cores: 20,
+      sockets: 100,
       lastSeen: 'lorem date obj',
       loremIpsum: 'hello world'
     };
 
     const filteredInventoryData = parseRowCellsListData({
-      filters: initialInventoryFilters,
+      filters: initialFilters,
       cellData: inventoryData
     });
 
-    expect(filteredInventoryData).toMatchSnapshot('filteredInventoryData results');
+    expect(filteredInventoryData).toMatchSnapshot('filtered');
 
     const fallbackInventoryData = {
       ...inventoryData,
-      coreHours: null,
       inventoryId: null,
+      numberOfGuests: null,
+      cores: null,
+      sockets: null,
       lastSeen: null
     };
 
     const fallbackFilteredInventoryData = parseRowCellsListData({
-      filters: initialInventoryFilters,
+      filters: initialFilters,
       cellData: fallbackInventoryData
     });
 
-    expect(fallbackFilteredInventoryData).toMatchSnapshot('filteredInventoryData results, fallback display');
+    expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
 
-    expect({
-      hostsInventory: inventoryHostsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING,
-      subscriptionsInventory:
-        inventorySubscriptionsQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING
-    }).toMatchSnapshot('default sort for inventory should descend');
+    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
+  });
+
+  it('should apply subscriptions inventory configuration', () => {
+    const {
+      initialSubscriptionsInventoryFilters: initialFilters,
+      inventorySubscriptionsQuery: inventoryQuery
+    } = config;
+
+    const inventoryData = {
+      productName: 'lorem',
+      serviceLevel: 'hello world',
+      upcomingEventDate: 'lorem date obj'
+    };
+
+    const filteredInventoryData = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: inventoryData
+    });
+
+    expect(filteredInventoryData).toMatchSnapshot('filtered');
+
+    const fallbackInventoryData = {
+      ...inventoryData,
+      serviceLevel: null,
+      upcomingEventDate: null
+    };
+
+    const fallbackFilteredInventoryData = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: fallbackInventoryData
+    });
+
+    expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
+
+    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
 });

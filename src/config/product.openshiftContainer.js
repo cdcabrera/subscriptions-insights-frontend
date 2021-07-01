@@ -20,7 +20,15 @@ import { translate } from '../components/i18n/i18n';
 
 const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
 
+const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
+
+const productLabel = 'OpenShift';
+
 const config = {
+  productGroup,
+  productId,
+  productLabel,
+  viewId: `view${productGroup}`,
   productContextFilterUom: true,
   query: {
     [RHSM_API_QUERY_TYPES.UOM]: RHSM_API_QUERY_UOM_TYPES.CORES,
@@ -65,7 +73,7 @@ const config = {
   initialGuestsFilters: [
     {
       id: 'displayName',
-      header: translate('curiosity-inventory.header', { context: 'guestsDisplayName' }),
+      header: () => translate('curiosity-inventory.header', { context: 'guestsDisplayName' }),
       cell: (data, session) => {
         const { displayName, inventoryId } = data;
         const { inventory: authorized } = session?.authorized || {};
@@ -141,7 +149,7 @@ const config = {
     },
     {
       id: 'sockets',
-      header: translate('curiosity-inventory.header', { context: 'sockets_OpenShift Container Platform' }),
+      header: () => translate('curiosity-inventory.header', { context: 'sockets_OpenShift Container Platform' }),
       isOptional: true,
       isSortable: true,
       isWrappable: true,
@@ -149,7 +157,7 @@ const config = {
     },
     {
       id: 'cores',
-      header: translate('curiosity-inventory.header', { context: 'cores_OpenShift Container Platform' }),
+      header: () => translate('curiosity-inventory.header', { context: 'cores_OpenShift Container Platform' }),
       isOptional: true,
       isSortable: true,
       isWrappable: true,
@@ -178,7 +186,10 @@ const config = {
     {
       id: 'upcomingEventDate',
       cell: data =>
-        (data?.upcomingEventDate?.value && moment.utc(data?.upcomingEventDate?.value).format('YYYY-DD-MM')) || '',
+        (data?.upcomingEventDate?.value &&
+          helpers.isDate(data?.upcomingEventDate?.value) &&
+          moment.utc(data?.upcomingEventDate?.value).format('YYYY-DD-MM')) ||
+        '',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
@@ -188,10 +199,7 @@ const config = {
     {
       id: RHSM_API_QUERY_TYPES.SLA
     }
-  ],
-  productLabel: 'OpenShift',
-  productId: RHSM_API_PATH_ID_TYPES.OPENSHIFT,
-  viewId: 'viewOpenShift'
+  ]
 };
 
 export { config as default, config, productGroup };

@@ -80,8 +80,8 @@ const routes = [
   {
     id: 'openshift-container',
     path: '/openshift-container',
-    pathParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT, openshiftMetricsConfig.productId],
-    productParameter: [RHSM_API_PATH_ID_TYPES.OPENSHIFT, openshiftMetricsConfig.productGroup],
+    pathParameter: [openshiftContainerConfig.productId, openshiftMetricsConfig.productId],
+    productParameter: [openshiftContainerConfig.productGroup, openshiftMetricsConfig.productGroup],
     productConfig: [openshiftContainerConfig, openshiftMetricsConfig],
     redirect: null,
     isSearchable: true,
