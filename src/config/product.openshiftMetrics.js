@@ -16,9 +16,17 @@ import {
 import { dateHelpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
-const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
+const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;
+
+const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;
+
+const productLabel = 'OpenShift Metric';
 
 const config = {
+  productGroup,
+  productId,
+  productLabel,
+  viewId: `view${productGroup}`,
   query: {
     [RHSM_API_QUERY_TYPES.START_DATE]: dateHelpers.getRangedMonthDateTime('current').value.startDate.toISOString(),
     [RHSM_API_QUERY_TYPES.END_DATE]: dateHelpers.getRangedMonthDateTime('current').value.endDate.toISOString()
@@ -41,7 +49,7 @@ const config = {
     }
   ],
   initialGraphSettings: {
-    actionDisplay: data => {
+    actionDisplay: (data = {}) => {
       const {
         meta: { totalCoreHours }
       } = data;
@@ -62,7 +70,7 @@ const config = {
   initialInventoryFilters: [
     {
       id: 'displayName',
-      cell: data => {
+      cell: (data = {}) => {
         const { displayName = {}, inventoryId = {}, numberOfGuests = {} } = data;
 
         if (!inventoryId.value) {
@@ -100,10 +108,7 @@ const config = {
       cellWidth: 25
     }
   ],
-  initialToolbarFilters: undefined,
-  productLabel: 'OpenShift Metric',
-  productId: RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS,
-  viewId: 'viewOpenShiftMetric'
+  initialToolbarFilters: undefined
 };
 
-export { config as default, config, productGroup };
+export { config as default, config, productGroup, productId, productLabel };

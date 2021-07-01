@@ -1,0 +1,216 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Product OpenShift Metrics config should apply graph configuration: product action display should NOT display a total value 1`] = `
+Object {
+  "productActionDisplay": <div
+    className="curiosity-usage-graph__total"
+  />,
+}
+`;
+
+exports[`Product OpenShift Metrics config should apply graph configuration: product action display should display a total value 1`] = `
+Object {
+  "productActionDisplay": <div
+    className="curiosity-usage-graph__total"
+  >
+    t(curiosity-graph.card-action-total, {"context":"coreHours","total":"1.1K"})
+  </div>,
+}
+`;
+
+exports[`Product OpenShift Metrics config should apply graph configuration: product action display should display a total value below 1000 1`] = `
+Object {
+  "productActionDisplay": <div
+    className="curiosity-usage-graph__total"
+  >
+    t(curiosity-graph.card-action-total, {"context":"coreHours","total":"500"})
+  </div>,
+}
+`;
+
+exports[`Product OpenShift Metrics config should apply graph configuration: product action display should display a total value below 1000000 1`] = `
+Object {
+  "productActionDisplay": <div
+    className="curiosity-usage-graph__total"
+  >
+    t(curiosity-graph.card-action-total, {"context":"coreHours","total":"900K"})
+  </div>,
+}
+`;
+
+exports[`Product OpenShift Metrics config should apply hosts inventory configuration: default sort for inventory should descend 1`] = `
+Object {
+  "hostsInventory": true,
+}
+`;
+
+exports[`Product OpenShift Metrics config should apply hosts inventory configuration: filteredInventoryData results 1`] = `
+Object {
+  "cells": Array [
+    Object {
+      "title": <React.Fragment>
+        lorem
+         
+        
+      </React.Fragment>,
+    },
+    Object {
+      "title": "12.53",
+    },
+    Object {
+      "title": <DateFormat
+        date="lorem date obj"
+      />,
+    },
+  ],
+  "columnHeaders": Array [
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"displayName\\"})",
+      "transforms": Array [],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"coreHours\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+  ],
+  "data": Object {
+    "coreHours": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"coreHours\\"})",
+      "value": 12.53,
+    },
+    "displayName": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"displayName\\"})",
+      "value": "lorem",
+    },
+    "inventoryId": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"inventoryId\\"})",
+      "value": "lorem inventory id",
+    },
+    "lastSeen": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "value": "lorem date obj",
+    },
+    "loremIpsum": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"loremIpsum\\"})",
+      "value": "hello world",
+    },
+  },
+}
+`;
+
+exports[`Product OpenShift Metrics config should apply hosts inventory configuration: filteredInventoryData results, fallback display 1`] = `
+Object {
+  "cells": Array [
+    Object {
+      "title": "lorem",
+    },
+    Object {
+      "title": "0.00",
+    },
+    [Function],
+  ],
+  "columnHeaders": Array [
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"displayName\\"})",
+      "transforms": Array [],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"coreHours\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+    Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "transforms": Array [
+        [Function],
+      ],
+    },
+  ],
+  "data": Object {
+    "coreHours": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"coreHours\\"})",
+      "value": null,
+    },
+    "displayName": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"displayName\\"})",
+      "value": "lorem",
+    },
+    "inventoryId": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"inventoryId\\"})",
+      "value": null,
+    },
+    "lastSeen": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"lastSeen\\"})",
+      "value": null,
+    },
+    "loremIpsum": Object {
+      "title": "t(curiosity-inventory.header, {\\"context\\":\\"loremIpsum\\"})",
+      "value": "hello world",
+    },
+  },
+}
+`;
+
+exports[`Product OpenShift Metrics config should set basic product configuration: initial configuration 1`] = `
+Object {
+  "graphTallyQuery": Object {
+    "granularity": "daily",
+  },
+  "initialGraphFilters": Array [
+    Object {
+      "color": "#06c",
+      "fill": "#8bc1f7",
+      "id": "coreHours",
+      "stroke": "#06c",
+    },
+  ],
+  "initialGraphSettings": Object {
+    "actionDisplay": [Function],
+  },
+  "initialInventoryFilters": Array [
+    Object {
+      "cell": [Function],
+      "id": "displayName",
+      "isSortable": true,
+    },
+    Object {
+      "cell": [Function],
+      "cellWidth": 20,
+      "id": "coreHours",
+      "isSortable": true,
+      "isWrappable": true,
+    },
+    Object {
+      "cell": [Function],
+      "cellWidth": 25,
+      "id": "lastSeen",
+      "isSortable": true,
+      "isWrappable": true,
+    },
+  ],
+  "initialToolbarFilters": undefined,
+  "inventoryHostsQuery": Object {
+    "dir": "desc",
+    "limit": 100,
+    "offset": 0,
+    "sort": "last_seen",
+  },
+  "productGroup": "OpenShift-metrics",
+  "productId": "OpenShift-metrics",
+  "productLabel": "OpenShift Metric",
+  "query": Object {
+    "beginning": "2019-07-01T00:00:00.000Z",
+    "ending": "2019-07-31T23:59:59.999Z",
+  },
+  "viewId": "viewOpenShift-metrics",
+}
+`;
