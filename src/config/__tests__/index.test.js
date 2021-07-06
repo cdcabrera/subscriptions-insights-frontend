@@ -1,24 +1,45 @@
+import _isPlainObject from 'lodash/isPlainObject';
 import { config } from '../index';
 
 describe('Configuration', () => {
   it('should have specific config properties', () => {
     expect(Object.keys(config)).toMatchSnapshot('config');
-
-    // expect(Object.keys(config.products)).toMatchSnapshot('products');
-    // expect(config.rbac).toMatchSnapshot('rbac');
-    // expect(config.routes.map(obj => ({ ...Object.entries(obj).map }))).toMatchSnapshot('routes');
   });
 
   it('should have consistent product configuration', () => {
     expect(Object.keys(config.products)).toMatchSnapshot('products');
 
-    // loop through configs and confirm they have a min number of the same properties
-    // it('should set basic product configuration', () => {
-    //  expect(config).toMatchSnapshot('initial configuration');
-    // });
-    // it('should set basic product configuration', () => {
-    //     expect(config).toMatchSnapshot('initial configuration');
-    //   });
+    const inconsistentEntries = [];
+
+    Object.values(config.products).forEach((value, index) => {
+      const {
+        productGroup,
+        productId,
+        viewId,
+        query,
+        graphTallyQuery,
+        inventoryHostsQuery,
+        initialGraphFilters,
+        initialInventoryFilters
+      } = value;
+
+      const entryCheck = {
+        productGroup: typeof productGroup === 'string' ? 'PASS' : 'FAIL',
+        productId: typeof productId === 'string' || productId === null ? 'PASS' : 'FAIL',
+        viewId: typeof viewId === 'string' ? 'PASS' : 'FAIL',
+        query: _isPlainObject(query) ? 'PASS' : 'FAIL',
+        graphTallyQuery: _isPlainObject(graphTallyQuery) ? 'PASS' : 'FAIL',
+        inventoryHostsQuery: _isPlainObject(inventoryHostsQuery) ? 'PASS' : 'FAIL',
+        initialGraphFilters: Array.isArray(initialGraphFilters) ? 'PASS' : 'FAIL',
+        initialInventoryFilters: Array.isArray(initialInventoryFilters) ? 'PASS' : 'FAIL'
+      };
+
+      if (Object.values(entryCheck).indexOf('FAIL') > -1) {
+        inconsistentEntries.push({ [`Entry ${index} inconsistent`]: entryCheck });
+      }
+    });
+
+    expect(inconsistentEntries).toMatchSnapshot('inconsistent entries');
   });
 
   it('should have a consistent rbac configuration', () => {
@@ -34,7 +55,7 @@ describe('Configuration', () => {
   it('should have a consistent route configuration', () => {
     expect(Array.isArray(config.routes)).toBe(true);
 
-    const inconsistentRoutes = [];
+    const inconsistentEntries = [];
 
     config.routes.forEach((value, index) => {
       const entryCheck = {
@@ -52,10 +73,10 @@ describe('Configuration', () => {
       };
 
       if (Object.values(entryCheck).indexOf('FAIL') > -1) {
-        inconsistentRoutes.push({ [`Route ${index} inconsistent`]: entryCheck });
+        inconsistentEntries.push({ [`Entry ${index} inconsistent`]: entryCheck });
       }
     });
 
-    expect(inconsistentRoutes).toMatchSnapshot('inconsistent routes');
+    expect(inconsistentEntries).toMatchSnapshot('inconsistent entries');
   });
 });

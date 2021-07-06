@@ -1,6 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Configuration should have a consistent route configuration: inconsistent routes 1`] = `Array []`;
+exports[`Configuration should have a consistent route configuration: inconsistent entries 1`] = `Array []`;
+
+exports[`Configuration should have consistent product configuration: inconsistent entries 1`] = `Array []`;
 
 exports[`Configuration should have consistent product configuration: products 1`] = `
 Array [

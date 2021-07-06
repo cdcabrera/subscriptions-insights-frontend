@@ -28,7 +28,7 @@ import { translate } from '../components/i18n/i18n';
 
 const productGroup = RHSM_API_PATH_ID_TYPES.RHEL;
 
-const productId = undefined;
+const productId = null;
 
 const config = {
   productGroup,
