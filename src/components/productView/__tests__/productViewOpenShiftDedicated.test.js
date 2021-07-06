@@ -10,8 +10,7 @@ describe('ProductViewOpenShiftDedicated Component', () => {
       routeDetail: {
         pathParameter: 'lorem ipsum',
         productConfig: [config],
-        productParameter: 'lorem ipsum product label',
-        viewParameter: 'dolor sit'
+        productParameter: 'lorem ipsum product label'
       }
     };
 
@@ -19,13 +18,12 @@ describe('ProductViewOpenShiftDedicated Component', () => {
     expect(component).toMatchSnapshot('non-connected');
   });
 
-  it('should pass custom product view props', () => {
+  it('should be a custom product view', () => {
     const props = {
       routeDetail: {
         pathParameter: 'lorem ipsum',
         productConfig: [config],
-        productParameter: 'lorem ipsum product label',
-        viewParameter: 'dolor sit'
+        productParameter: 'lorem ipsum product label'
       }
     };
 
