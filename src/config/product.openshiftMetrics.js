@@ -16,6 +16,8 @@ import {
 import { dateHelpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
+// ToDo: evaluate the need for "productLabel" or using productId
+
 const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;
 
 const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;

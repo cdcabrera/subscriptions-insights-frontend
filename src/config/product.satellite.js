@@ -20,7 +20,10 @@ import {
 import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
-// ToDo: evaluate separating products/product tags into individual configs for Satellite
+/**
+ * ToDo: evaluate separating products/product tags into individual configs...
+ * or using anArray/List then generating "routes.js"
+ */
 
 const productGroup = RHSM_API_PATH_ID_TYPES.SATELLITE;
 
