@@ -10,7 +10,8 @@ exports[`ProductViewDefault Component should render a non-connected component: n
           "lorem": "ipsum",
         },
       ],
-      "productParameter": "dolor sit",
+      "productParameter": "lorem ipsum product label",
+      "viewParameter": "dolor sit",
     }
   }
   t={[Function]}
