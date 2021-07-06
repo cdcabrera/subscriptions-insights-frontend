@@ -10,7 +10,8 @@ describe('ProductViewOpenShiftDedicated Component', () => {
       routeDetail: {
         pathParameter: 'lorem ipsum',
         productConfig: [config],
-        productParameter: 'lorem ipsum product label'
+        productParameter: 'lorem ipsum product label',
+        viewParameter: 'dolor sit'
       }
     };
 
@@ -23,7 +24,8 @@ describe('ProductViewOpenShiftDedicated Component', () => {
       routeDetail: {
         pathParameter: 'lorem ipsum',
         productConfig: [config],
-        productParameter: 'lorem ipsum product label'
+        productParameter: 'lorem ipsum product label',
+        viewParameter: 'dolor sit'
       }
     };
 

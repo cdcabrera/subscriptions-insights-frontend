@@ -8,7 +8,8 @@ describe('ProductView Component', () => {
       routeDetail: {
         pathParameter: 'lorem ipsum',
         productConfig: [{ lorem: 'ipsum' }],
-        productParameter: 'lorem ipsum product label'
+        productParameter: 'lorem ipsum product label',
+        viewParameter: 'dolor sit'
       }
     };
 
