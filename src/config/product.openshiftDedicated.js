@@ -122,7 +122,6 @@ const config = {
     },
     {
       id: 'lastSeen',
-      header: () => translate('curiosity-inventory.header', { context: 'lastSeen_OpenShift-dedicated-metrics' }),
       cell: data => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
       isSortable: true,
       isWrappable: true,

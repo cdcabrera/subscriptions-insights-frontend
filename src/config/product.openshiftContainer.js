@@ -24,7 +24,7 @@ const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
 
 const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
 
-const productLabel = 'OpenShift';
+const productLabel = RHSM_API_PATH_ID_TYPES.OPENSHIFT;
 
 const config = {
   productGroup,

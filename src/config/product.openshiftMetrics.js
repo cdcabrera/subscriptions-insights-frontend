@@ -22,7 +22,7 @@ const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;
 
 const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;
 
-const productLabel = 'OpenShift Metric';
+const productLabel = RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS;
 
 const config = {
   productGroup,
