@@ -1,3 +1,8 @@
+.curiosity-select__container {
+  position: relative;
+  display: inline-block;
+}
+
 .curiosity-select__no-toggle-text {
   span.pf-c-select__toggle-arrow {
     margin-left: var(--pf-c-select__toggle-arrow--MarginRight);
@@ -9,7 +14,29 @@
 }
 
 .curiosity-select__position-right {
+  // display: flex;
+  // width: 100%;
+  // position: relative;
+  // right: 0;
+  // margin: 0;
+  // padding: 0;
+  // text-align: right;
+  // right: 0;
+
+
   > .pf-c-select__menu {
-    right: 0
+    // right: 15px;
+    right: 0;
+    &:focus,&:active {
+      // right: 0;
+    }
+    // display: inline-block;
+    // right: calc(15px);
+    // position: absolute;
+    // margin: 0;
+    // padding: 0;
+    // overflow-y: auto;
+    // max-height: 250px;
+    // overscroll-behavior-y: contain;
   }
 }
