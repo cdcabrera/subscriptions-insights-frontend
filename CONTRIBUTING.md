@@ -83,7 +83,7 @@ Curiosity makes use of the branches `master`, `stage`, `qa`, and `ci`.
 #### Branching and Pull Request Workflow
 It is required that all work is handled through GitHub's fork and pull workflow. 
 
-**Working directly on the master repository is highly discouraged since a form of Continuous Integration is implemented and dependent on branch structure.**
+**Working directly on the master repository is highly discouraged. Continuous Integration is dependent on branch structure.**
 
 1. General development PRs should almost always be opened against the `ci` branch.
 1. It is preferred that PRs to `qa` originate from `ci`, but testing related fixes and general PRs opened against `qa` are allowed.
@@ -111,15 +111,12 @@ It is required that all work is handled through GitHub's fork and pull workflow.
 To serve content you'll need to have Docker, Node, and Yarn installed.
 
 Serving content comes in 3 variations
-- `$ yarn start`, Styled local run, without the Insights proxy. 
+- `$ yarn start`, Styled local run, without the Insights proxy and a mocks server.
+  - You'll be presented with a login, you can attempt user `admin` password `admin` as the credentials.
+    However, the up-to-date credentials are maintained here, [RH Cloud Services Config standalone](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#standalone)
   
   The cons to this are a lack of chroming aspects such as functional login and left navigation.
-- `$ yarn start:proxy`, Styled local run WITH the Insights proxy. 
-   
-  This requires access in order to be used, and you may be asked for your credentials during initial repository setup. The credentials are used to modify your `hosts` for local run.
-- `$ yarn start:standalone`, No Insights styling, just the straight GUI. 
-  
-  Useful for confirming issues between the Insights parent app vs Curiosity Frontend.
+- `$ yarn start:proxy`, Styled local run WITH the Insights proxy.
 
 ### Proxy failing to run?
 Occasionally the proxy setup will attempt to connect, acknowledge that it's connected, but then fail to load the GUI.
