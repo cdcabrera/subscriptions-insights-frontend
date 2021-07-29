@@ -111,25 +111,16 @@ It is required that all work is handled through GitHub's fork and pull workflow.
 To serve content you'll need to have Docker, Node, and Yarn installed.
 
 Serving content comes in 3 variations
-- `$ yarn start`, Styled local run, without the Insights proxy and a mocks server.
+- `$ yarn start`, Styled local run, without the Insights proxy, using a mock server.
   - You'll be presented with a login, you can attempt user `admin` password `admin` as the credentials.
     However, the up-to-date credentials are maintained here, [RH Cloud Services Config standalone](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#standalone)
-  
-  The cons to this are a lack of chroming aspects such as functional login and left navigation.
-- `$ yarn start:proxy`, Styled local run WITH the Insights proxy.
+
+- `$ yarn start:proxy`, Styled local using the Insights proxy.
+  - This requires access in order to be used. In addition, you may be asked for your credentials during initial repository setup. The credentials are used to modify your `hosts` for local run.
 
 ### Proxy failing to run?
 Occasionally the proxy setup will attempt to connect, acknowledge that it's connected, but then fail to load the GUI.
 Things to try:
-
-#### It's the Port, maybe?
-The API requires a secure origin header within its AJAX/XHR calls.
-1. Stop the build
-1. Confirm within `package.json` that the NPM scripts
-   - `$ yarn api:proxy` has a port parameter setting of `443`
-   - `$ yarn api:proxy` has the `domain` or `-d` parameter setup like `...proxy.api.sh -d "https://ci.foo.redhat.com/beta/subscriptions/"...` 
-1. Run the build again, `$ yarn start:proxy`
-1. Confirm you browser is pointed at `https://ci.foo.redhat.com/...`
 
 #### It's Docker?
 1. Stop the build
@@ -142,7 +133,7 @@ The API requires a secure origin header within its AJAX/XHR calls.
 1. Run the build again, `$ yarn start:proxy`
 
 #### It's still failing, and now I'm frustrated!
-You can take the easy way out and just run, `$ yarn start`, it'll be styled and use mock data but you'll have enough access to continue development. 
+You can take the easy way out and just run, `$ yarn start`, it'll be styled and use mock data, but you'll have enough access to continue development. 
 
 ## Build
 ### dotenv files
