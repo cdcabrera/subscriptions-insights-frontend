@@ -31,7 +31,6 @@ module.exports = {
   modulePaths: [],
   resetMocks: true,
   roots: ['<rootDir>/src', '<rootDir>/tests'],
-  setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/config/jest.setupTests.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testMatch: ['<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}', '<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}'],
