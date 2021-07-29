@@ -4,10 +4,13 @@ const CopyPlugin = require('copy-webpack-plugin');
 const commonPlugins = require('./build.plugins');
 const { setupDotenvFilesForEnv, setupWebpackDotenvFilesForEnv } = require('./build.dotenv');
 
+process.env.NODE_ENV = 'development';
+
 setupDotenvFilesForEnv({ env: 'development' });
 
 const DIST_DIR = process.env._BUILD_DIST_DIR;
-const ENV = process.env.REACT_APP_ENV;
+const DOTENV_ENV = process.env.REACT_APP_ENV;
+const PORT = process.env._BUILD_PORT;
 const RELATIVE_DIRNAME = process.env._BUILD_RELATIVE_DIRNAME;
 const STATIC_DIR = process.env._BUILD_STATIC_DIR;
 
@@ -23,7 +26,7 @@ const updatedPlugins = {
     }
   ],
   plugins: [
-    ...setupWebpackDotenvFilesForEnv({ directory: RELATIVE_DIRNAME, env: ENV }),
+    ...setupWebpackDotenvFilesForEnv({ directory: RELATIVE_DIRNAME, env: DOTENV_ENV }),
     new CopyPlugin({
       patterns: [{ from: join(STATIC_DIR, 'locales'), to: join(DIST_DIR, 'locales'), noErrorOnMissing: true }]
     })
@@ -34,7 +37,7 @@ const { config: webpackConfig, plugins } = config({
   appUrl: ['/beta/insights/subscriptions', '/beta/openshift/subscriptions'],
   debug: true,
   deployment: 'beta/apps',
-  port: 3000,
+  port: PORT,
   rootFolder: RELATIVE_DIRNAME,
   skipChrome2: true,
   standalone: true,
