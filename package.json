@@ -109,7 +109,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "victory": "^35.8.6",
-    "victory-create-container": "^35.8.5"
+    "victory-create-container": "^35.9.3"
   },
   "devDependencies": {
     "@babel/core": "7.14.0",
