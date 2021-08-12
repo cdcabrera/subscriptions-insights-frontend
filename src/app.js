@@ -25,6 +25,8 @@ class App extends React.Component {
    */
   render() {
     const { locale } = this.props;
+    // const bob = '';
+    // const bob = '';
 
     return (
       <I18n locale={(locale && locale.value) || null}>

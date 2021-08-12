@@ -182,7 +182,7 @@
     "title_OpenShift-dedicated-metrics": "OpenShift Dedicated",
     "subtitle_OpenShift-dedicated-metrics": "Monitor your OpenShift Dedicated usage for On-Demand subscriptions. <0>Learn more about {{appName}} reporting</0>",
     "description_OpenShift-dedicated-metrics": "Monitor your OpenShift Dedicated usage for On-Demand subscriptions.",
-    "title_RHEL": "Red Hat Enterprise Linux",
+    "title_RHEL": "Red Hat Enterprise Linux test",
     "subtitle_RHEL": "Monitor your Red Hat Enterprise Linux usage by physical, virtual, and public cloud sockets. <0>Learn more about {{appName}} reporting</0>",
     "description_RHEL": "Monitor your Red Hat Enterprise Linux usage by physical, virtual, and public cloud sockets.",
     "title_RHEL for ARM": "Red Hat Enterprise Linux for ARM",

@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const fedModulePlugin = require('@redhat-cloud-services/frontend-components-config/federated-modules');
+const devCopyPlugin = require('./build.plugins.devCopy');
 const { setupWebpackDotenvFilesForEnv } = require('./build.dotenv');
 
 const setHtmlPlugin = () => ({
@@ -22,18 +23,33 @@ const setCommonPlugins = () => {
   const DIST_DIR = process.env._BUILD_DIST_DIR;
   const DOTENV_ENV = process.env.REACT_APP_ENV;
   const RELATIVE_DIRNAME = process.env._BUILD_RELATIVE_DIRNAME;
+  const SRC_DIR = process.env._BUILD_SRC_DIR;
   const STATIC_DIR = process.env._BUILD_STATIC_DIR;
 
   const plugins = [
     ...setupWebpackDotenvFilesForEnv({ directory: RELATIVE_DIRNAME, env: DOTENV_ENV }),
-    new ESLintPlugin({
-      lintDirtyModulesOnly: NODE_ENV !== 'production'
-    }),
-    new CopyPlugin({
-      patterns: [{ from: join(STATIC_DIR, 'locales'), to: join(DIST_DIR, 'locales'), noErrorOnMissing: true }]
-    }),
     fedModulePlugin({ root: RELATIVE_DIRNAME })
   ];
+
+  /*
+  // Development plugins
+  if (NODE_ENV === 'development') {
+    plugins.push(devCopyPlugin({ config: [{ from: join(STATIC_DIR, 'locales/'), to: join(DIST_DIR, 'locales/') }] }));
+    plugins.push(
+      new ESLintPlugin({
+        context: SRC_DIR,
+        failOnError: false,
+        lintDirtyModulesOnly: NODE_ENV !== 'production'
+      })
+    );
+  } else {
+    */
+    plugins.push(
+      new CopyPlugin({
+        patterns: [{ from: join(STATIC_DIR, 'locales'), to: join(DIST_DIR, 'locales'), noErrorOnMissing: true }]
+      })
+    );
+  // }
 
   // Save 20kb of bundle size in prod
   if (NODE_ENV === 'production') {
