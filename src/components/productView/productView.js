@@ -109,6 +109,7 @@ const ProductView = ({ routeDetail, t, toolbarGraph, toolbarGraphDescription, to
 
   return (
     <PageLayout>
+      yo
       <PageHeader productLabel={productLabel} includeTour>
         {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
       </PageHeader>
