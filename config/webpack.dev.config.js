@@ -14,7 +14,7 @@ const { config: webpackConfig, plugins } = config({
   env: (/(prod|qa|ci)(-stable|-beta)$/.test(DEV_BRANCH) && DEV_BRANCH) || 'prod-stable',
   port: Number.parseInt(DEV_PORT, 10),
   rootFolder: _BUILD_RELATIVE_DIRNAME,
-  routes: setProxyRoutes({ DEV_PORT }),
+  // routes: setProxyRoutes({ DEV_PORT }),
   skipChrome2: false,
   standalone: true,
   useProxy: false,

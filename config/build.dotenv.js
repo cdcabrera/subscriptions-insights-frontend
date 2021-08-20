@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
@@ -50,15 +51,40 @@ const setupWebpackDotenvFilesForEnv = ({ directory, env } = {}) => {
  * @param {string} filePath
  * @returns {void}
  */
-const setupDotenvFile = filePath => {
-  const dotenvInitial = dotenv.config({ path: filePath });
-  dotenvExpand(dotenvInitial);
+const setupDotenvFile = (filePath, addedDotEnvParams = {}) => {
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>> expand', process.env.UI_DEPLOY_PATH_PREFIX);
+
+  const cachedDotEnv = {};
+  // const dotenvInitial = dotenv.config({ path: filePath });
+  if (fs.existsSync(filePath)) {
+    const dotenvInitial = dotenv.parse(fs.readFileSync(filePath));
+    // const dotenvInitial = dotenv.config({ path: filePath });
+    // dotenvExpand(dotenvInitial);
+    // cachedDotEnv = {};
+    Object.entries(dotenvInitial).forEach(([key, value]) => {
+      cachedDotEnv[key] = value;
+    });
+  }
+    // Object.entries(addedDotEnvParams).forEach(([key, value]) => {
+    //  cachedDotEnv[key] = value;
+    // });
+
+    dotenvExpand({ignoreProcessEnv: false, parsed: cachedDotEnv});
+  /*
+  const setDotEnv = () => {
+    const dotenvInitial = dotenv.config({ path: filePath });
+    dotenvExpand(dotenvInitial);
+  };
+
+  return setDotEnv;
+  */
 };
 
 /**
  * Setup and access local and specific dotenv file parameters.
  *
  * @param {object} params
+ * @param {object} params.addEnvParams
  * @param {string} params.env
  * @param {string} params.relativePath
  * @param {string} params.dotenvNamePrefix
@@ -66,18 +92,44 @@ const setupDotenvFile = filePath => {
  * @returns {object}
  */
 const setupDotenvFilesForEnv = ({
+  addEnvParams = {},
   env,
   relativePath = path.resolve(__dirname, '..'),
   dotenvNamePrefix = 'BUILD',
   setBuildDefaults = true
 } = {}) => {
-  if (env) {
-    setupDotenvFile(path.resolve(relativePath, `.env.${env}.local`));
-    setupDotenvFile(path.resolve(relativePath, `.env.${env}`));
-  }
+  const setupProcessEnv = (addedDotEnvParams = {}) => {
+    if (env) {
+      setupDotenvFile(path.resolve(relativePath, `.env.${env}.local`), addedDotEnvParams);
+      setupDotenvFile(path.resolve(relativePath, `.env.${env}`), addedDotEnvParams);
+    }
 
-  setupDotenvFile(path.resolve(relativePath, '.env.local'));
-  setupDotenvFile(path.resolve(relativePath, '.env'));
+    setupDotenvFile(path.resolve(relativePath, '.env.local'), addedDotEnvParams);
+    setupDotenvFile(path.resolve(relativePath, '.env'), addedDotEnvParams);
+  };
+
+  setupProcessEnv();
+
+  const cachedAdded = {};
+  Object.entries(addEnvParams).forEach(([key, value]) => {
+    let tempValue = value;
+    if (typeof tempValue === 'function') {
+      tempValue = tempValue(process.env);
+    }
+
+    console.log('WORK >>>>>>>>>>>', key, tempValue);
+
+    process.env[key] = tempValue;
+    cachedAdded[key] = tempValue;
+  });
+
+  console.log('WORK 2 >>>>>>>>>>>>>>>>>>>>', cachedAdded.UI_DEPLOY_PATH_PREFIX, process.env.UI_DEPLOY_PATH_PREFIX);
+  console.log('WORK 2 >>>>>>>>>>>>>>>>>>>>', process.env.REACT_APP_UI_DEPLOY_PATH_PREFIX);
+
+  setupProcessEnv(cachedAdded);
+
+  console.log('WORK 3 >>>>>>>>>>>>>>>>>>>>', process.env.UI_DEPLOY_PATH_PREFIX);
+  console.log('WORK 3 >>>>>>>>>>>>>>>>>>>>', process.env.REACT_APP_CONFIG_SERVICE_LOCALES);
 
   if (setBuildDefaults) {
     const DEV_MODE = process.env[`${dotenvNamePrefix}_DEV_MODE`] || undefined;

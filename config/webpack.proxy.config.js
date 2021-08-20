@@ -3,15 +3,19 @@ const { setHtmlPlugin, setReplacePlugin, setCommonPlugins } = require('./build.p
 const { setupDotenvFilesForEnv } = require('./build.dotenv');
 const setProxyRoutes = require('./spandx.config');
 
-const { _BUILD_RELATIVE_DIRNAME, DEV_BRANCH, DEV_PORT } = setupDotenvFilesForEnv({
-  env: 'proxy'
+// const DEV_BRANCH = process.env.DEV_BRANCH;
+// let BETA_PREFIX = '';
+
+// if (/(prod|qa|ci)-beta/.test(DEV_BRANCH)) {
+// BETA_PREFIX = '/beta';
+// }
+
+const { _BUILD_RELATIVE_DIRNAME, DEV_BRANCH, DEV_PORT, UI_DEPLOY_PATH_PREFIX: BETA_PREFIX } = setupDotenvFilesForEnv({
+  env: 'proxy',
+  addEnvParams: {
+    UI_DEPLOY_PATH_PREFIX: ({ DEV_BRANCH: BRANCH }) => (/(prod|qa|ci)-beta/.test(BRANCH) ? '/beta' : '')
+  }
 });
-
-let BETA_PREFIX = '';
-
-if (/(prod|qa|ci)-beta/.test(DEV_BRANCH)) {
-  BETA_PREFIX = '/beta';
-}
 
 const { config: webpackConfig, plugins } = config({
   appUrl: [`${BETA_PREFIX}/insights/subscriptions`, `${BETA_PREFIX}/openshift/subscriptions`],

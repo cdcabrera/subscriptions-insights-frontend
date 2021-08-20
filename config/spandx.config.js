@@ -8,9 +8,9 @@
  */
 const setProxyRoutes = ({ DEV_PORT, BETA_PREFIX = '' }) => ({
   routes: {
-    '/locales': {
-      host: `https://localhost:${DEV_PORT}${BETA_PREFIX}/apps/subscriptions`
-    }
+    // '/locales': {
+    //  host: `https://localhost:${DEV_PORT}${BETA_PREFIX}/apps/subscriptions`
+    // }
   }
 });
 
