@@ -128,4 +128,39 @@ describe('Product OpenShift Metrics config', () => {
 
     expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
+
+  it('should apply subscriptions inventory configuration', () => {
+    const {
+      initialSubscriptionsInventoryFilters: initialFilters,
+      inventorySubscriptionsQuery: inventoryQuery
+    } = config;
+
+    const inventoryData = {
+      productName: 'lorem',
+      serviceLevel: 'hello world',
+      nextEvent: 'lorem date obj'
+    };
+
+    const filteredInventoryData = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: inventoryData
+    });
+
+    expect(filteredInventoryData).toMatchSnapshot('filtered');
+
+    const fallbackInventoryData = {
+      ...inventoryData,
+      serviceLevel: null,
+      nextEvent: null
+    };
+
+    const fallbackFilteredInventoryData = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: fallbackInventoryData
+    });
+
+    expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
+
+    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
+  });
 });
