@@ -102,7 +102,7 @@ exports[`ProductView Component should allow custom product views: custom graphCa
   >
     <Connect(InventoryTabs)
       key="inventory_lorem ipsum"
-      productId="lorem ipsum"
+      viewId="dolor sit"
     >
       <InventoryTab
         active={false}
@@ -179,7 +179,7 @@ exports[`ProductView Component should allow custom product views: custom toolbar
   >
     <Connect(InventoryTabs)
       key="inventory_lorem ipsum"
-      productId="lorem ipsum"
+      viewId="dolor sit"
     >
       <InventoryTab
         active={false}
@@ -256,7 +256,7 @@ exports[`ProductView Component should allow custom product views: custom toolbar
   >
     <Connect(InventoryTabs)
       key="inventory_lorem ipsum"
-      productId="lorem ipsum"
+      viewId="dolor sit"
     >
       <InventoryTab
         active={false}
@@ -367,7 +367,7 @@ exports[`ProductView Component should render a non-connected component: non-conn
   >
     <Connect(InventoryTabs)
       key="inventory_lorem ipsum"
-      productId="lorem ipsum"
+      viewId="dolor sit"
     >
       <InventoryTab
         active={false}

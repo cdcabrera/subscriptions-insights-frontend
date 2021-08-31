@@ -151,7 +151,7 @@ exports[`ProductViewOpenShiftContainer Component should render a non-connected c
     >
       <Connect(InventoryTabs)
         key="inventory_OpenShift Container Platform"
-        productId="OpenShift Container Platform"
+        viewId="viewOpenShift Container Platform"
       >
         <InventoryTab
           active={false}
@@ -450,7 +450,7 @@ exports[`ProductViewOpenShiftContainer Component should render a non-connected c
     >
       <Connect(InventoryTabs)
         key="inventory_OpenShift-metrics"
-        productId="OpenShift-metrics"
+        viewId="viewOpenShift-metrics"
       >
         <InventoryTab
           active={false}

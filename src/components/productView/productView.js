@@ -147,7 +147,7 @@ const ProductView = ({ routeDetail, t, toolbarGraph, toolbarGraphDescription, to
         </ConnectedGraphCard>
       </PageSection>
       <PageSection>
-        <InventoryTabs key={`inventory_${productId}`} productId={productId}>
+        <InventoryTabs key={`inventory_${productId}`} viewId={viewId}>
           <InventoryTab
             key={`inventory_hosts_${productId}`}
             title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}

@@ -22,7 +22,7 @@ describe('InventoryTabs Component', () => {
     );
 
     const props = {
-      productId: 'lorem',
+      viewId: 'lorem',
       children: [
         <InventoryTab key="lorem" title="lorem">
           ipsum
@@ -40,7 +40,7 @@ describe('InventoryTabs Component', () => {
 
   it('should return an empty render when disabled', () => {
     const props = {
-      productId: 'lorem',
+      viewId: 'lorem',
       children: [
         <InventoryTab key="lorem" title="lorem">
           ipsum
@@ -58,7 +58,7 @@ describe('InventoryTabs Component', () => {
 
   it('should handle updating tabs for redux state', () => {
     const props = {
-      productId: 'lorem',
+      viewId: 'lorem',
       children: [
         <InventoryTab key="lorem" title="lorem">
           ipsum
