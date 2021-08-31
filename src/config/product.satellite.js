@@ -9,6 +9,7 @@ import {
 } from '@patternfly/react-tokens';
 import { Button, Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
+import moment from 'moment';
 import {
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -184,6 +185,34 @@ const config = {
     }
   ],
   initialInventorySettings: {},
+  initialSubscriptionsInventoryFilters: [
+    {
+      id: 'productName',
+      isWrappable: true
+    },
+    {
+      id: 'serviceLevel',
+      isSortable: true,
+      cellWidth: 20
+    },
+    {
+      id: 'quantity',
+      isSortable: true,
+      isWrappable: true,
+      cellWidth: 15
+    },
+    {
+      id: 'nextEventDate',
+      cell: data =>
+        (data?.nextEventDate?.value &&
+          helpers.isDate(data?.nextEventDate?.value) &&
+          moment.utc(data?.nextEventDate?.value).format('YYYY-DD-MM')) ||
+        '',
+      isSortable: true,
+      isWrappable: true,
+      cellWidth: 15
+    }
+  ],
   initialToolbarFilters: [
     {
       id: RHSM_API_QUERY_TYPES.SLA

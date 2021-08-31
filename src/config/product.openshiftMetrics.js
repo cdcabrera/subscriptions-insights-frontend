@@ -6,14 +6,16 @@ import {
 import { Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import numbro from 'numbro';
+import moment from 'moment';
 import {
   RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_TYPES,
   RHSM_API_QUERY_SORT_TYPES,
-  RHSM_API_PATH_ID_TYPES
+  RHSM_API_PATH_ID_TYPES,
+  RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES
 } from '../types/rhsmApiTypes';
-import { dateHelpers } from '../common';
+import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
 // ToDo: evaluate the need for "productLabel" or using productId
@@ -38,6 +40,12 @@ const config = {
   },
   inventoryHostsQuery: {
     [RHSM_API_QUERY_TYPES.SORT]: RHSM_API_QUERY_SORT_TYPES.LAST_SEEN,
+    [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
+    [RHSM_API_QUERY_TYPES.LIMIT]: 100,
+    [RHSM_API_QUERY_TYPES.OFFSET]: 0
+  },
+  inventorySubscriptionsQuery: {
+    [RHSM_API_QUERY_TYPES.SORT]: RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES.NEXT_EVENT_DATE,
     [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
     [RHSM_API_QUERY_TYPES.LIMIT]: 100,
     [RHSM_API_QUERY_TYPES.OFFSET]: 0
@@ -108,6 +116,34 @@ const config = {
       isSortable: true,
       isWrappable: true,
       cellWidth: 25
+    }
+  ],
+  initialSubscriptionsInventoryFilters: [
+    {
+      id: 'productName',
+      isWrappable: true
+    },
+    {
+      id: 'serviceLevel',
+      isSortable: true,
+      cellWidth: 20
+    },
+    {
+      id: 'quantity',
+      isSortable: true,
+      isWrappable: true,
+      cellWidth: 15
+    },
+    {
+      id: 'nextEventDate',
+      cell: data =>
+        (data?.nextEventDate?.value &&
+          helpers.isDate(data?.nextEventDate?.value) &&
+          moment.utc(data?.nextEventDate?.value).format('YYYY-DD-MM')) ||
+        '',
+      isSortable: true,
+      isWrappable: true,
+      cellWidth: 15
     }
   ],
   initialToolbarFilters: undefined

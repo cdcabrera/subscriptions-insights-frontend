@@ -61,12 +61,42 @@ exports[`ProductViewOpenShiftDedicated Component should render a non-connected c
               "isWrappable": true,
             },
           ],
+          "initialSubscriptionsInventoryFilters": Array [
+            Object {
+              "id": "productName",
+              "isWrappable": true,
+            },
+            Object {
+              "cellWidth": 20,
+              "id": "serviceLevel",
+              "isSortable": true,
+            },
+            Object {
+              "cellWidth": 15,
+              "id": "quantity",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+            Object {
+              "cell": [Function],
+              "cellWidth": 15,
+              "id": "nextEventDate",
+              "isSortable": true,
+              "isWrappable": true,
+            },
+          ],
           "initialToolbarFilters": undefined,
           "inventoryHostsQuery": Object {
             "dir": "desc",
             "limit": 100,
             "offset": 0,
             "sort": "last_seen",
+          },
+          "inventorySubscriptionsQuery": Object {
+            "dir": "desc",
+            "limit": 100,
+            "offset": 0,
+            "sort": "next_event_date",
           },
           "productGroup": "OpenShift-dedicated-metrics",
           "productId": "OpenShift-dedicated-metrics",

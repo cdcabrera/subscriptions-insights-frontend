@@ -228,11 +228,16 @@ exports[`ProductViewOpenShiftContainer Component should render a non-connected c
               Array [
                 Object {
                   "id": "productName",
+                  "isWrappable": true,
+                },
+                Object {
+                  "cellWidth": 20,
+                  "id": "serviceLevel",
                   "isSortable": true,
                 },
                 Object {
                   "cellWidth": 15,
-                  "id": "serviceLevel",
+                  "id": "quantity",
                   "isSortable": true,
                   "isWrappable": true,
                 },
@@ -490,6 +495,53 @@ exports[`ProductViewOpenShiftContainer Component should render a non-connected c
               }
             }
             settings={Object {}}
+            viewId="viewOpenShift-metrics"
+          />
+        </InventoryTab>
+        <InventoryTab
+          active={false}
+          key="inventory_subs_OpenShift-metrics"
+          title="t(curiosity-inventory.tabSubscriptions, {\\"context\\":\\"OpenShift-metrics\\"})"
+        >
+          <Connect(InventorySubscriptions)
+            filterInventoryData={
+              Array [
+                Object {
+                  "id": "productName",
+                  "isWrappable": true,
+                },
+                Object {
+                  "cellWidth": 20,
+                  "id": "serviceLevel",
+                  "isSortable": true,
+                },
+                Object {
+                  "cellWidth": 15,
+                  "id": "quantity",
+                  "isSortable": true,
+                  "isWrappable": true,
+                },
+                Object {
+                  "cell": [Function],
+                  "cellWidth": 15,
+                  "id": "nextEventDate",
+                  "isSortable": true,
+                  "isWrappable": true,
+                },
+              ]
+            }
+            key="subs_OpenShift-metrics"
+            productId="OpenShift-metrics"
+            query={
+              Object {
+                "beginning": "2019-07-01T00:00:00.000Z",
+                "dir": "desc",
+                "ending": "2019-07-31T23:59:59.999Z",
+                "limit": 100,
+                "offset": 0,
+                "sort": "next_event_date",
+              }
+            }
             viewId="viewOpenShift-metrics"
           />
         </InventoryTab>

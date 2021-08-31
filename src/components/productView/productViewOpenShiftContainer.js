@@ -140,20 +140,18 @@ const ProductViewOpenShiftContainer = ({ routeDetail, t }) => {
                 viewId={viewId}
               />
             </InventoryTab>
-            {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && initialSubscriptionsInventoryFilters && (
-              <InventoryTab
-                key={`inventory_subs_${productId}`}
-                title={t('curiosity-inventory.tabSubscriptions', { context: productId })}
-              >
-                <InventorySubscriptions
-                  key={`subs_${productId}`}
-                  filterInventoryData={subscriptionsInventoryFilters}
-                  productId={productId}
-                  query={initialInventorySubscriptionsQuery}
-                  viewId={viewId}
-                />
-              </InventoryTab>
-            )}
+            <InventoryTab
+              key={`inventory_subs_${productId}`}
+              title={t('curiosity-inventory.tabSubscriptions', { context: productId })}
+            >
+              <InventorySubscriptions
+                key={`subs_${productId}`}
+                filterInventoryData={subscriptionsInventoryFilters}
+                productId={productId}
+                query={initialInventorySubscriptionsQuery}
+                viewId={viewId}
+              />
+            </InventoryTab>
           </InventoryTabs>
         </PageSection>
       </React.Fragment>

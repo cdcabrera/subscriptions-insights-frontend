@@ -188,10 +188,15 @@ const config = {
   initialSubscriptionsInventoryFilters: [
     {
       id: 'productName',
-      isSortable: true
+      isWrappable: true
     },
     {
       id: 'serviceLevel',
+      isSortable: true,
+      cellWidth: 20
+    },
+    {
+      id: 'quantity',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
