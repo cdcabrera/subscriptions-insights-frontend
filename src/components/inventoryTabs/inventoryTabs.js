@@ -22,12 +22,12 @@ class InventoryTabs extends React.Component {
    * @param {string} params.index tab index
    */
   onTab = ({ index }) => {
-    const { productId } = this.props;
+    const { viewId } = this.props;
 
     store.dispatch({
       type: reduxTypes.inventory.SET_INVENTORY_TAB,
       tabs: {
-        [productId]: index
+        [viewId]: index
       }
     });
   };
@@ -69,7 +69,7 @@ class InventoryTabs extends React.Component {
 /**
  * Prop types.
  *
- * @type {{productId: string, t: Function, children: Node, defaultActiveTab: number, isDisabled: boolean,
+ * @type {{viewId: string, t: Function, children: Node, defaultActiveTab: number, isDisabled: boolean,
  *     activeTab: number}}
  */
 InventoryTabs.propTypes = {
@@ -77,20 +77,21 @@ InventoryTabs.propTypes = {
   children: PropTypes.node.isRequired,
   defaultActiveTab: PropTypes.number,
   isDisabled: PropTypes.bool,
-  productId: PropTypes.string.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
+  viewId: PropTypes.string
 };
 
 /**
  * Default props.
  *
- * @type {{t: translate, defaultActiveTab: number, isDisabled: boolean, activeTab: number}}
+ * @type {{viewId: string, t: translate, defaultActiveTab: number, isDisabled: boolean, activeTab: number}}
  */
 InventoryTabs.defaultProps = {
   activeTab: 0,
   defaultActiveTab: 0,
   isDisabled: helpers.UI_DISABLED_TABLE,
-  t: translate
+  t: translate,
+  viewId: 'inventoryTabs'
 };
 
 /**
@@ -98,7 +99,7 @@ InventoryTabs.defaultProps = {
  *
  * @type {Function}
  */
-const mapStateToProps = ({ inventory }, { productId }) => ({ activeTab: inventory.tabs?.[productId] });
+const mapStateToProps = ({ inventory }, { viewId }) => ({ activeTab: inventory.tabs?.[viewId] });
 
 const ConnectedInventoryTabs = connect(mapStateToProps)(InventoryTabs);
 
