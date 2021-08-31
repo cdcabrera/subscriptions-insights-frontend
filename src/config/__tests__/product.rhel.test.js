@@ -54,7 +54,7 @@ describe('Product RHEL config', () => {
     const inventoryData = {
       productName: 'lorem',
       serviceLevel: 'hello world',
-      upcomingEventDate: 'lorem date obj'
+      nextEvent: 'lorem date obj'
     };
 
     const filteredInventoryData = parseRowCellsListData({
@@ -67,7 +67,7 @@ describe('Product RHEL config', () => {
     const fallbackInventoryData = {
       ...inventoryData,
       serviceLevel: null,
-      upcomingEventDate: null
+      nextEvent: null
     };
 
     const fallbackFilteredInventoryData = parseRowCellsListData({
