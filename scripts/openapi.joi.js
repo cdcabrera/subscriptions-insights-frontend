@@ -4,6 +4,8 @@ const path = require('path');
 const swaggerToJoi = require('swagger-to-joi');
 const SwaggerParser = require('@apidevtools/swagger-parser');
 const enjoi = require('enjoi');
+const Joi = require('joi');
+const { fromJson } = require('json-joi-converter');
 
 const openApiSpecs = [
   {
@@ -71,6 +73,7 @@ const getLocalApiSpec = (inputPaths = []) => {
       console.log(setColor(`Success -> ${inputPathFile}`, 'green'));
       outputPaths.push({
         file: outputPath,
+        outputDir,
         desc: inputPathFile,
         contents: outputYaml?.toString(),
         ...props
@@ -86,28 +89,79 @@ const getLocalApiSpec = (inputPaths = []) => {
 const generateJSON = async file => SwaggerParser.bundle(file);
 
 const generateJoi = (files = []) => {
-  files.forEach(async ({ file }) => {
-    const { components } = await generateJSON(file);
+  files.forEach(async ({ file, outputDir }) => {
+    const all = await generateJSON(file);
+
+    console.log('>>>>', fromJson(JSON.stringify(all, null, 2)));
+
+    // fs.writeFileSync(path.join(outputDir, 'rhsm.json'), JSON.stringify(all, null, 2));
+    // const { components } = await generateJSON(file);
+    // console.log(components.schemas.TallyReport.properties.meta.properties);
+
     // const joi = swaggerToJoi(components);
-    console.log(Object.keys(components.schemas));
+    // console.log(Object.keys(components.schemas.TallyReport));
 
     // const schema = enjoi.schema(components.schemas.GranularityType);
     // const schema = enjoi.schema(components.schemas.TallySnapshot);
-    const schema = enjoi.schema(components.schemas.TallyReport);
-    //console.log(schema);
+    /*
+    const schema = enjoi.schema(all, {
+      subSchemas: {
+
+      },
+      extensions: [
+        // {
+          // type: 'double',
+          // base: Joi.number()
+        // },
+        // {
+          // type: 'enum',
+          // base: Joi.string()
+        // }
+      ]
+    });
+    */
+    // console.log(schema);
     // console.log(joi);
     // console.log(JSON.stringify(components));
 
     // console.log(schema.validate({ date: '2017-08-08T17:32:01Z', instance_count: '5', corehours: '10' }));
     /*
-    console.log(
-      schema.validate({
-        data: [{ date: '2017-08-08T17:32:01Z', instance_count: '5', corehours: '10' }],
-        links: {},
-        meta: {}
-      })
-    );
+    const { error, value } = schema.validate({
+      // data: [{ date: '2017-08-08T17:32:01Z', instance_count: '5', corehours: '10' }],
+      links: {
+        first: 'some path',
+        last: 'some path'
+      },
+      meta: {
+        count: 10
+        // product: 'test'
+        // product: {},
+        // granularity: {}
+      }
+    });
     */
+
+    // console.log('>>>>>>>>', error, value);
+
+    /*
+    console.log(
+      // JSON.stringify(
+        schema.validate({
+          data: [{ date: '2017-08-08T17:32:01Z', instance_count: '5', corehours: '10' }],
+          links: {
+            first: 'some path',
+            last: 'some path'
+          },
+          meta: {
+            count: 10
+            // product: 'test'
+            // product: {},
+            // granularity: {}
+          }
+        })
+      // )
+    );
+     */
   });
 };
 
