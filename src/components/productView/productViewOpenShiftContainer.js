@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, TooltipPosition } from '@patternfly/react-core';
 import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
+import { useRouteDetail } from '../../hooks/useRouter';
 import { PageLayout, PageColumns, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
 import { RHSM_API_PATH_ID_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { apiQueries, useSelector } from '../../redux';
@@ -21,12 +22,11 @@ import { helpers } from '../../common';
  * An OpenShift Container Platform encompassing view.
  *
  * @param {object} props
- * @param {object} props.routeDetail
  * @param {Function} props.t
  * @returns {Node}
  */
-const ProductViewOpenShiftContainer = ({ routeDetail, t }) => {
-  const { productParameter: viewProductLabel, productConfig } = routeDetail;
+const ProductViewOpenShiftContainer = ({ t }) => {
+  const { productParameter: viewProductLabel, productConfig } = useRouteDetail();
   const uomValue = useSelector(({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM], null);
 
   const renderProduct = (config, updatedUomValue) => {
