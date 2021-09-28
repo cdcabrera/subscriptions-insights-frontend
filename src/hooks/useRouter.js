@@ -1,7 +1,7 @@
 import { useHistory as useHistoryRRD, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { useRouteDetail } from '../components/router/routerContext';
 import { routerHelpers } from '../components/router/routerHelpers';
-import { reduxActions, useDispatch } from '../redux';
+import { reduxActions, storeHooks } from '../redux';
 
 /**
  * ToDo: reevaluate this alternative pattern of passing library hooks as options
@@ -18,7 +18,7 @@ import { reduxActions, useDispatch } from '../redux';
  */
 const useHistory = ({
   useHistory: useAliasHistory = useHistoryRRD,
-  useDispatch: useAliasDispatch = useDispatch
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const history = useAliasHistory();
   const dispatch = useAliasDispatch();
