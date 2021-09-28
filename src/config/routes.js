@@ -19,7 +19,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'rhel-arm',
@@ -33,7 +33,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'rhel-ibmpower',
@@ -47,7 +47,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'rhel-ibmz',
@@ -61,7 +61,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'rhel-x86',
@@ -75,7 +75,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'openshift-container',
@@ -117,7 +117,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'satellite-capsule',
@@ -131,7 +131,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'satellite-server',
@@ -145,7 +145,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewDefault'
+    component: 'productView/productView'
   },
   {
     id: 'optin',
