@@ -14,7 +14,6 @@ import Toolbar from '../toolbar/toolbar';
 import InventoryList from '../inventoryList/inventoryList';
 import InventorySubscriptions from '../inventorySubscriptions/inventorySubscriptions';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
-import { ProductView } from './productView';
 import { translate } from '../i18n/i18n';
 import { helpers } from '../../common';
 
@@ -173,10 +172,9 @@ const ProductViewOpenShiftContainer = ({ t }) => {
 /**
  * Prop types.
  *
- * @type {{t: Function, routeDetail: object}}
+ * @type {{t: Function}}
  */
 ProductViewOpenShiftContainer.propTypes = {
-  routeDetail: PropTypes.shape(ProductView.propTypes.routeDetail).isRequired,
   t: PropTypes.func
 };
 
