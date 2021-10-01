@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Tooltip, TooltipPosition } from '@patternfly/react-core';
 import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
 import { useRouteDetail } from '../../hooks/useRouter';
-import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages } from '../pageLayout/pageLayout';
+import { ProductContext, useProductGraphTallyQuery } from './productContext';
+import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { apiQueries } from '../../redux';
 import { ConnectedGraphCard } from '../graphCard/graphCard';
 import { ConnectedToolbar } from '../toolbar/toolbar';
@@ -38,6 +39,160 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, toolbarProduct }) => {
+  const {
+    // pathParameter: routeProductId,
+    productParameter: routeProductLabel,
+    productConfig
+    // viewId: routeViewId
+  } = useRouteDetail();
+
+  const renderProduct = config => {
+    const {
+      graphTallyQuery,
+      inventoryHostsQuery,
+      inventorySubscriptionsQuery,
+      query,
+      initialToolbarFilters,
+      initialGraphFilters,
+      initialGraphSettings,
+      initialGuestsFilters,
+      initialInventoryFilters,
+      initialInventorySettings,
+      initialSubscriptionsInventoryFilters,
+      // productLabel: configProductLabel,
+      // productId: configProductId,
+      productLabel,
+      productId,
+      viewId
+    } = config;
+
+    // const productLabel = configProductLabel || routeProductLabel;
+    // const productId = configProductId || routeProductId;
+
+    const {
+      // query: initialQuery,
+      graphTallyQuery: initialGraphTallyQuery,
+      inventoryHostsQuery: initialInventoryHostsQuery,
+      inventorySubscriptionsQuery: initialInventorySubscriptionsQuery,
+      toolbarQuery: initialToolbarQuery
+    } = apiQueries.parseRhsmQuery(query, { graphTallyQuery, inventoryHostsQuery, inventorySubscriptionsQuery });
+
+    if (!productId || !viewId) {
+      return null;
+    }
+
+    let graphCardTooltip = null;
+
+    if (toolbarGraphDescription) {
+      graphCardTooltip = (
+        <Tooltip
+          content={<p>{t('curiosity-graph.cardHeadingDescription', { context: productId })}</p>}
+          position={TooltipPosition.top}
+          enableFlip={false}
+          distance={5}
+          entryDelay={100}
+          exitDelay={0}
+        >
+          <sup className="curiosity-icon__info">
+            <InfoCircleIcon />
+          </sup>
+        </Tooltip>
+      );
+    }
+
+    const graphCardTitle = (
+      <React.Fragment>
+        {t('curiosity-graph.cardHeading', { context: productId })}
+        {graphCardTooltip}
+      </React.Fragment>
+    );
+
+    return (
+      <ProductContext.Provider value={config}>
+        <PageToolbar>
+          {(React.isValidElement(toolbarProduct) && toolbarProduct) ||
+            (toolbarProduct !== false && (
+              <ConnectedToolbar
+                filterOptions={initialToolbarFilters}
+                productId={productId}
+                query={initialToolbarQuery}
+                viewId={viewId}
+              />
+            ))}
+        </PageToolbar>
+        <PageSection>
+          <ConnectedGraphCard
+            key={`graph_${productId}`}
+            filterGraphData={initialGraphFilters}
+            settings={initialGraphSettings}
+            query={initialGraphTallyQuery}
+            productId={productId}
+            viewId={viewId}
+            cardTitle={graphCardTitle}
+            productLabel={productLabel}
+          >
+            {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
+              (toolbarGraph !== false && (
+                <ToolbarFieldGranularity
+                  viewId={viewId}
+                  value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]}
+                />
+              ))}
+          </ConnectedGraphCard>
+        </PageSection>
+        <PageSection>
+          <InventoryTabs key={`inventory_${productId}`} productId={productId}>
+            <InventoryTab
+              key={`inventory_hosts_${productId}`}
+              title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
+            >
+              <ConnectedInventoryList
+                key={`inv_${productId}`}
+                filterGuestsData={initialGuestsFilters}
+                filterInventoryData={initialInventoryFilters}
+                productId={productId}
+                settings={initialInventorySettings}
+                query={initialInventoryHostsQuery}
+                viewId={viewId}
+              />
+            </InventoryTab>
+            {initialSubscriptionsInventoryFilters && (
+              <InventoryTab
+                key={`inventory_subs_${productId}`}
+                title={t('curiosity-inventory.tabSubscriptions', { context: productId })}
+              >
+                <ConnectedInventorySubscriptions
+                  key={`subs_${productId}`}
+                  filterInventoryData={initialSubscriptionsInventoryFilters}
+                  productId={productId}
+                  query={initialInventorySubscriptionsQuery}
+                  viewId={viewId}
+                />
+              </InventoryTab>
+            )}
+          </InventoryTabs>
+        </PageSection>
+      </ProductContext.Provider>
+    );
+  };
+
+  // <PageMessages>
+  //  <BannerMessages productId={routeProductId} viewId={routeViewId} query={initialQuery} />
+  // </PageMessages>
+
+  return (
+    <PageLayout>
+      <PageHeader productLabel={routeProductLabel}>
+        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: routeProductLabel })}
+      </PageHeader>
+      <PageMessages>
+        <BannerMessages />
+      </PageMessages>
+      <PageColumns>{productConfig.map(config => renderProduct(config))}</PageColumns>
+    </PageLayout>
+  );
+
+  /*
   const {
     pathParameter: productId,
     productConfig,
@@ -96,80 +251,85 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, toolbarProduct 
       {graphCardTooltip}
     </React.Fragment>
   );
+  */
 
+  /*
   return (
-    <PageLayout>
-      <PageHeader productLabel={productLabel}>
-        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
-      </PageHeader>
-      <PageMessages>
-        <BannerMessages productId={productId} viewId={viewId} query={initialQuery} />
-      </PageMessages>
-      <PageToolbar>
-        {(React.isValidElement(toolbarProduct) && toolbarProduct) ||
-          (toolbarProduct !== false && (
-            <ConnectedToolbar
-              filterOptions={initialToolbarFilters}
-              productId={productId}
-              query={initialToolbarQuery}
-              viewId={viewId}
-            />
-          ))}
-      </PageToolbar>
-      <PageSection>
-        <ConnectedGraphCard
-          key={`graph_${productId}`}
-          filterGraphData={initialGraphFilters}
-          settings={initialGraphSettings}
-          query={initialGraphTallyQuery}
-          productId={productId}
-          viewId={viewId}
-          cardTitle={graphCardTitle}
-          productLabel={productLabel}
-        >
-          {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
-            (toolbarGraph !== false && (
-              <ToolbarFieldGranularity
+    <ProductContext.Provider value={productConfig?.[0] || {}}>
+      <PageLayout>
+        <PageHeader productLabel={productLabel}>
+          {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productLabel })}
+        </PageHeader>
+        <PageMessages>
+          <BannerMessages productId={productId} viewId={viewId} query={initialQuery} />
+        </PageMessages>
+        <PageToolbar>
+          {(React.isValidElement(toolbarProduct) && toolbarProduct) ||
+            (toolbarProduct !== false && (
+              <ConnectedToolbar
+                filterOptions={initialToolbarFilters}
+                productId={productId}
+                query={initialToolbarQuery}
                 viewId={viewId}
-                value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]}
               />
             ))}
-        </ConnectedGraphCard>
-      </PageSection>
-      <PageSection>
-        <InventoryTabs key={`inventory_${productId}`} productId={productId}>
-          <InventoryTab
-            key={`inventory_hosts_${productId}`}
-            title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
+        </PageToolbar>
+        <PageSection>
+          <ConnectedGraphCard
+            key={`graph_${productId}`}
+            filterGraphData={initialGraphFilters}
+            settings={initialGraphSettings}
+            query={initialGraphTallyQuery}
+            productId={productId}
+            viewId={viewId}
+            cardTitle={graphCardTitle}
+            productLabel={productLabel}
           >
-            <ConnectedInventoryList
-              key={`inv_${productId}`}
-              filterGuestsData={initialGuestsFilters}
-              filterInventoryData={initialInventoryFilters}
-              productId={productId}
-              settings={initialInventorySettings}
-              query={initialInventoryHostsQuery}
-              viewId={viewId}
-            />
-          </InventoryTab>
-          {initialSubscriptionsInventoryFilters && (
+            {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
+              (toolbarGraph !== false && (
+                <ToolbarFieldGranularity
+                  viewId={viewId}
+                  value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]}
+                />
+              ))}
+          </ConnectedGraphCard>
+        </PageSection>
+        <PageSection>
+          <InventoryTabs key={`inventory_${productId}`} productId={productId}>
             <InventoryTab
-              key={`inventory_subs_${productId}`}
-              title={t('curiosity-inventory.tabSubscriptions', { context: productId })}
+              key={`inventory_hosts_${productId}`}
+              title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
             >
-              <ConnectedInventorySubscriptions
-                key={`subs_${productId}`}
-                filterInventoryData={initialSubscriptionsInventoryFilters}
+              <ConnectedInventoryList
+                key={`inv_${productId}`}
+                filterGuestsData={initialGuestsFilters}
+                filterInventoryData={initialInventoryFilters}
                 productId={productId}
-                query={initialInventorySubscriptionsQuery}
+                settings={initialInventorySettings}
+                query={initialInventoryHostsQuery}
                 viewId={viewId}
               />
             </InventoryTab>
-          )}
-        </InventoryTabs>
-      </PageSection>
-    </PageLayout>
+            {initialSubscriptionsInventoryFilters && (
+              <InventoryTab
+                key={`inventory_subs_${productId}`}
+                title={t('curiosity-inventory.tabSubscriptions', { context: productId })}
+              >
+                <ConnectedInventorySubscriptions
+                  key={`subs_${productId}`}
+                  filterInventoryData={initialSubscriptionsInventoryFilters}
+                  productId={productId}
+                  query={initialInventorySubscriptionsQuery}
+                  viewId={viewId}
+                />
+              </InventoryTab>
+            )}
+          </InventoryTabs>
+        </PageSection>
+      </PageLayout>
+    </ProductContext.Provider>
   );
+   */
 };
 
 /**
