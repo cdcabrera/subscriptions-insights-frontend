@@ -1,3 +1,6 @@
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { store } from '../store';
 import { rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsmServices';
 
@@ -99,12 +102,57 @@ const getSubscriptionsInventory = (id = null, query = {}) => dispatch =>
     }
   });
 
+const useGetMessageReports = (id = null, query = {}) => {
+  return store.dispatch({
+    type: rhsmTypes.GET_MESSAGE_REPORTS_RHSM,
+    payload: rhsmServices.getGraphReports(id, query, { cancelId: 'messageReport' }),
+    meta: {
+      id,
+      query,
+      notifications: {}
+    }
+  });
+  /*
+  const dispatch = useDispatch();
+  return dispatch({
+    type: rhsmTypes.GET_MESSAGE_REPORTS_RHSM,
+    payload: rhsmServices.getGraphReports(id, query, { cancelId: 'messageReport' }),
+    meta: {
+      id,
+      query,
+      notifications: {}
+    }
+  });
+  */
+  /*
+  const dispatch = useDispatch();
+  const callback = useCallback(
+    () =>
+      dispatch({
+        type: rhsmTypes.GET_MESSAGE_REPORTS_RHSM,
+        // payload: rhsmServices.getGraphReports(id, query, { cancelId: 'messageReport' }),
+        meta: {
+          id,
+          query,
+          notifications: {}
+        }
+      }),
+    [dispatch, id, query]
+  );
+
+  console.log('ACTION >>>>>>', callback);
+
+  return callback;
+  */
+};
+
 const rhsmActions = {
   getGraphReportsCapacity,
   getHostsInventory,
   getHostsInventoryGuests,
   getMessageReports,
-  getSubscriptionsInventory
+  getSubscriptionsInventory,
+  useGetMessageReports
 };
 
 export {

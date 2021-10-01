@@ -52,9 +52,11 @@ const BannerMessages = ({ getMessageReports, messages }) => {
         [RHSM_API_QUERY_TYPES.END_DATE]: endDate.toISOString()
       };
 
-      getMessageReports(productId, updatedGraphQuery);
+      // getMessageReports(productId, updatedGraphQuery);
+      reduxActions.rhsm.useGetMessageReports(productId, updatedGraphQuery);
     }
-  }, [getMessageReports, productId, query]);
+    // }, [getMessageReports, productId, query]);
+  }, [productId, query]);
 
   useShallowCompareEffect(() => {
     const updatedMessages = [];
@@ -177,8 +179,12 @@ const mapDispatchToProps = dispatch => ({
  *
  * @type {Function}
  */
+/*
 const mapStateToProps = () => ({});
 
 const ConnectedBannerMessages = connect(mapStateToProps, mapDispatchToProps)(BannerMessages);
 
 export { ConnectedBannerMessages as default, ConnectedBannerMessages, BannerMessages };
+*/
+
+export { BannerMessages as default, BannerMessages };
