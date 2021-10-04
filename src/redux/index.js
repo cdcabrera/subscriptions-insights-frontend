@@ -1,4 +1,4 @@
-import { connect, useDispatch, useSelector as UseSelector, shallowEqual } from 'react-redux';
+import { connect, useSelector as UseSelector, shallowEqual } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { store } from './store';
 import { reduxActions } from './actions';
@@ -17,6 +17,16 @@ import { helpers } from '../common';
  */
 const connectRouter = (mapStateToProps, mapDispatchToProps) => component =>
   withRouter(connect(mapStateToProps, mapDispatchToProps)(component));
+
+/**
+ * FixMe: Appears to be an issue in trying to use Redux Promise with the default "useDispatch"
+ */
+/**
+ * Wrapper for store.dispatch, emulating useDispatch.
+ *
+ * @returns {Function}
+ */
+const useDispatch = () => dispatchEvent => store.dispatch(dispatchEvent);
 
 /**
  * Wrapper for Redux hook, useSelector. Applies test mode and a fallback value.
