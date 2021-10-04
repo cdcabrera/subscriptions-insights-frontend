@@ -1,8 +1,5 @@
-import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { rhsmApiTypes } from '../../types';
-// import { useRouteDetail } from '../../components/router/routerContext';
-import { useRouteDetail } from '../../hooks/useRouter';
 
 /**
  * Selector cache.
@@ -54,10 +51,6 @@ const selector = createSelector([statePropsFilter, queryFilter], (data, query = 
 
   Object.assign(appMessages, { ...cache });
 
-  console.log('WORK SEL 001 >>>>', data);
-  console.log('WORK SEL 002 >>>>', report.fulfilled);
-  console.log('WORK SEL 003 >>>>', appMessages);
-
   // Scan Tally response for Cloud Meter flags
   if (report.fulfilled && appMessages.cloudigradeMismatch !== true) {
     const { [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA]: reportData = [] } = report.data || {};
@@ -68,8 +61,6 @@ const selector = createSelector([statePropsFilter, queryFilter], (data, query = 
         ({ [rhsmApiTypes.RHSM_API_RESPONSE_PRODUCTS_DATA_TYPES.HAS_CLOUDIGRADE_MISMATCH]: mismatch }) =>
           mismatch === true
       );
-
-    console.log('SEL >>>>', cloudigradeMismatch);
 
     appMessages.cloudigradeMismatch = cloudigradeMismatch !== undefined;
 
@@ -91,27 +82,9 @@ const makeSelector = defaultProps => (state, props) => ({
   ...selector(state, props, defaultProps)
 });
 
-const useMakeSelector = ({
-  useRouteDetail: useAliasRouteDetail = useRouteDetail,
-  useSelector: useAliasSelector = useSelector
-} = {}) => {
-  // console.log(useAliasRouteDetail());
-  // console.log(useAliasSelector(state => selector(state, {})));
-  // const testing = useSelector(state => state);
-  // console.log('>>>>>>>>>>>>', testing);
-  // return {};
-
-  const { pathParameter: productId, productParameter: viewId } = useAliasRouteDetail() || {};
-  const result = useAliasSelector(state => selector(state, { productId, viewId }));
-  return {
-    ...result
-  };
-};
-
 const appMessagesSelectors = {
   appMessages: selector,
-  makeAppMessages: makeSelector,
-  useAppMessages: useMakeSelector
+  makeAppMessages: makeSelector
 };
 
-export { appMessagesSelectors as default, appMessagesSelectors, selector, makeSelector, useMakeSelector };
+export { appMessagesSelectors as default, appMessagesSelectors, selector, makeSelector };

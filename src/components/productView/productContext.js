@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
-import { helpers } from '../../common/helpers';
-import { useSelector } from '../../redux';
+import { storeHooks } from '../../redux';
 
 /**
  * Route context.
  *
  * @type {React.Context<{}>}
  */
-// const DEFAULT_CONTEXT = [{}, helpers.noop];
 const DEFAULT_CONTEXT = {};
 
 const ProductContext = React.createContext(DEFAULT_CONTEXT);
@@ -26,20 +24,9 @@ const useProductContext = () => useContext(ProductContext);
  * @returns {object}
  */
 const useProductQueryFactory = queryType => {
-  const { [queryType]: initialQuery, productId, viewId, ...rest } = useContext(ProductContext) || {};
-  // const [productContext] = useProductContext() || {};
-  // const { [queryType]: initialQuery, productId, viewId, ...rest } = productContext;
-  const queryProduct = useSelector(({ view }) => view?.[queryType]?.[productId]);
-  const queryView = useSelector(({ view }) => view?.[queryType]?.[viewId]);
-
-  // console.log('HOOK >>>>>>>>', productContext);
-  console.log('HOOK >>>>>>>>', queryType);
-  console.log('HOOK >>>>>>>>', productId);
-  console.log('HOOK >>>>>>>>', viewId);
-  console.log('HOOK >>>>>>>>', initialQuery);
-  console.log('HOOK >>>>>>>>', queryProduct);
-  console.log('HOOK >>>>>>>>', queryView);
-  console.log('HOOK >>>>>>>>', rest);
+  const { [queryType]: initialQuery, productId, viewId } = useContext(ProductContext) || {};
+  const queryProduct = storeHooks.reactRedux.useSelector(({ view }) => view?.[queryType]?.[productId]);
+  const queryView = storeHooks.reactRedux.useSelector(({ view }) => view?.[queryType]?.[viewId]);
 
   return {
     ...initialQuery,

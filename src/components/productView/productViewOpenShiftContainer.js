@@ -5,7 +5,7 @@ import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-ic
 import { useRouteDetail } from '../../hooks/useRouter';
 import { PageLayout, PageColumns, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
 import { RHSM_API_PATH_ID_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-import { apiQueries, useSelector } from '../../redux';
+import { apiQueries, storeHooks } from '../../redux';
 import GraphCard from '../graphCard/graphCard';
 import { ToolbarFieldUom } from '../toolbar/toolbarFieldUom';
 import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
@@ -26,7 +26,10 @@ import { helpers } from '../../common';
  */
 const ProductViewOpenShiftContainer = ({ t }) => {
   const { productParameter: viewProductLabel, productConfig } = useRouteDetail();
-  const uomValue = useSelector(({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM], null);
+  const uomValue = storeHooks.reactRedux.useSelector(
+    ({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM],
+    null
+  );
 
   const renderProduct = (config, updatedUomValue) => {
     const {
