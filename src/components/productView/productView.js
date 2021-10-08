@@ -59,6 +59,10 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, toolbarProduct 
     initialSubscriptionsInventoryFilters
   } = productConfig?.[0] || {};
 
+  if (!productId || !viewId) {
+    return null;
+  }
+
   const {
     query: initialQuery,
     graphTallyQuery: initialGraphTallyQuery,
@@ -66,10 +70,6 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, toolbarProduct 
     inventorySubscriptionsQuery: initialInventorySubscriptionsQuery,
     toolbarQuery: initialToolbarQuery
   } = apiQueries.parseRhsmQuery(query, { graphTallyQuery, inventoryHostsQuery, inventorySubscriptionsQuery });
-
-  if (!productId || !viewId) {
-    return null;
-  }
 
   let graphCardTooltip = null;
 

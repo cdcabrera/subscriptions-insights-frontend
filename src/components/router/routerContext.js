@@ -6,12 +6,15 @@ import { helpers } from '../../common/helpers';
  *
  * @type {React.Context<{}>}
  */
-const DEFAULT_CONTEXT = [{ routeDetail: {} }, helpers.noop];
+const DEFAULT_CONTEXT = [
+  { routeDetail: { baseName: null, errorRoute: null, routes: [], routeItem: {} } },
+  helpers.noop
+];
 
 const RouterContext = React.createContext(DEFAULT_CONTEXT);
 
 /**
- * Get a router context.
+ * Get an updated router context.
  *
  * @returns {React.Context<{}>}
  */
@@ -20,10 +23,12 @@ const useRouterContext = () => useContext(RouterContext);
 /**
  * Get a route detail from router context.
  *
- * @returns {{routes: Array, routeItem: Array, baseName: string, errorRoute: object}}
+ * @param {object} hooks
+ * @param {Function} hooks.useRouterContext
+ * @returns {{routes: Array, routeItem: object, baseName: string, errorRoute: object}}
  */
-const useRouteDetail = () => {
-  const { routeDetail = { baseName: null, errorRoute: null, routes: [], routeItem: [] } } = useContext(RouterContext);
+const useRouteDetail = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
+  const { routeDetail } = useAliasRouterContext();
   return routeDetail;
 };
 
