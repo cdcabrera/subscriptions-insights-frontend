@@ -29,7 +29,7 @@ import { translate } from '../i18n/i18n';
  * relocating them to this directory if they've been customized beyond a basic layout.
  */
 /**
- * Display a product.
+ * Display product columns.
  *
  * @param {object} props
  * @param {Function} props.t
@@ -59,16 +59,16 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, toolbarProduct 
       viewId
     } = config;
 
+    if (!productId || !viewId) {
+      return null;
+    }
+
     const {
       graphTallyQuery: initialGraphTallyQuery,
       inventoryHostsQuery: initialInventoryHostsQuery,
       inventorySubscriptionsQuery: initialInventorySubscriptionsQuery,
       toolbarQuery: initialToolbarQuery
     } = apiQueries.parseRhsmQuery(query, { graphTallyQuery, inventoryHostsQuery, inventorySubscriptionsQuery });
-
-    if (!productId || !viewId) {
-      return null;
-    }
 
     let graphCardTooltip = null;
 

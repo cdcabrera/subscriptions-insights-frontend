@@ -1,4 +1,3 @@
-import { reactReduxHooks } from '../hooks';
 import { rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsmServices';
 
