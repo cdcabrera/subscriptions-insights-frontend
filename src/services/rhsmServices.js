@@ -752,6 +752,31 @@ const getGraphReports = (id, params = {}, options = {}) => {
 };
 
 /**
+ * Get RHSM API reporting/tally graph/chart data.
+ *
+ * @param {string|Array} id String ID, or an array of product and metric IDs
+ * @param {object} params Query/search params
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
+const getGraphTally = (id, params = {}, options = {}) => {
+  const { cache = true, cancel = true, cancelId } = options;
+  const updatedId = (typeof id === 'string' && [id]) || (Array.isArray(id) && id) || [];
+  const url = `${process.env.REACT_APP_SERVICES_RHSM_TALLY}`;
+  updatedId.forEach((value, index) => url.replace(`{${index}}`, value));
+
+  return serviceCall({
+    url,
+    params,
+    cache,
+    cancel,
+    cancelId
+  });
+};
+
+/**
  * @api {get} /api/rhsm-subscriptions/v1/capacity/products/:product_id Get RHSM graph capacity data, i.e. thresholds
  * @apiDescription Retrieve graph capacity data, such as thresholds.
  *
@@ -1491,6 +1516,7 @@ const rhsmServices = {
   getApiVersion,
   getGraphCapacity,
   getGraphReports,
+  getGraphTally,
   getHostsInventory,
   getHostsInventoryGuests,
   getSubscriptionsInventory
@@ -1507,6 +1533,7 @@ export {
   getApiVersion,
   getGraphCapacity,
   getGraphReports,
+  getGraphTally,
   getHostsInventory,
   getHostsInventoryGuests,
   getSubscriptionsInventory
