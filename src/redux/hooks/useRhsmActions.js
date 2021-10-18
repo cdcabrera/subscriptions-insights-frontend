@@ -18,7 +18,7 @@ import { rhsmServices } from '../../services/rhsmServices';
 const useGetGraphTallyCapacity = (id = null, query = {}) =>
   reactReduxHooks.useDispatch()({
     type: rhsmTypes.GET_GRAPH_TALLY_CAPACITY_RHSM,
-    payload: rhsmServices.getGraphTally(id, query, { cancelId: 'graphTally' }),
+    payload: rhsmServices.getGraphTally(id, query, { cancelId: 'graphTallyCapacity' }),
     meta: {
       id,
       query,

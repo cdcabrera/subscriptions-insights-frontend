@@ -9,7 +9,8 @@ import {
 import {
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_TYPES,
-  RHSM_API_PATH_ID_TYPES
+  RHSM_API_PATH_ID_TYPES,
+  RHSM_API_PATH_METRIC_ID_TYPES as METRIC_ID_TYPES
 } from '../types/rhsmApiTypes';
 import { dateHelpers } from '../common';
 
@@ -40,19 +41,19 @@ const config = {
   inventorySubscriptionsQuery: {},
   initialGraphFilters: [
     {
-      id: RHSM_API_METRIC_TYPES.INSTANCE_HOURS,
+      id: METRIC_ID_TYPES.INSTANCE_HOURS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value
     },
     {
-      id: RHSM_API_METRIC_TYPES.STORAGE_GIBIBYTES,
+      id: METRIC_ID_TYPES.STORAGE_GIBIBYTES,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value
     },
     {
-      id: RHSM_API_METRIC_TYPES.TRANSER_GIBIBYTES,
+      id: METRIC_ID_TYPES.TRANSER_GIBIBYTES,
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value
