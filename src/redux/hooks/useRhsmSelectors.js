@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useRouteDetail } from '../../components/router/routerContext';
 import { selector } from '../selectors/appMessagesSelectors';
+import { useProduct, useProductGraphTallyQuery } from "../../components/productView/productViewContext";
 
 /**
  * Get app messages selector results.
@@ -16,6 +17,22 @@ const useAppMessages = ({
 } = {}) => {
   const { pathParameter: productId, productParameter: viewId } = useAliasRouteDetail() || {};
   const result = useAliasSelector(state => selector(state, { productId, viewId }));
+  return {
+    ...result
+  };
+};
+
+const useTallyCapacity = ({
+  // useRouteDetail: useAliasRouteDetail = useRouteDetail,
+  // useSelector: useAliasSelector = useSelector,
+  useProduct: useAliasProduct = useProduct,
+  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
+}) => {
+  const { productId, viewId } = useAliasProduct();
+  const query = useProductGraphTallyQuery();
+
+  console.log();
+  const result = {};
   return {
     ...result
   };
