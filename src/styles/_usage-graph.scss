@@ -71,6 +71,52 @@
     }
   }
 
+  /**
+   * FixMe: remove margin-left, right, adjustment from "graph-facets" and apply globally
+   * The margin adjustment here is to meet design requirements for RHOSAK. A "global"
+   * adjustment should be applied at the app level in "page-layout.scss"
+   */
+  .curiosity-usage-graph-facets {
+    margin-left: var(--pf-global--spacer--md);
+    margin-right: var(--pf-global--spacer--md);
+    margin-top: var(--pf-global--spacer--md);
+
+    &:last-child {
+      margin-bottom: var(--pf-global--spacer--md);
+    };
+
+    &__facet-column,
+    &__graph-column {
+      height: 100%;
+    }
+
+    &__facet-column {
+      :first-child {
+        margin-bottom: var(--pf-global--spacer--md);
+      }
+    }
+
+    &__facet-card {
+      height: calc(50% - var(--pf-global--spacer--md) / 2);
+    }
+
+    &__graph-card {
+      @extend .curiosity-usage-graph;
+      height: 100%;
+
+      .pf-c-card {
+        &__header {
+          border-bottom-width: 0;
+          padding-bottom: 0;
+        }
+
+        &__body {
+          padding-top: 0;
+        }
+      }
+    }
+  }
+
   .curiosity-chartarea {
     &__legend {
       background-color: #fff;
