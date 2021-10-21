@@ -6,8 +6,8 @@ import { useRouteDetail } from '../../hooks/useRouter';
 import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { apiQueries } from '../../redux';
+import { ConnectedGraphCard as GraphCardDeprecated } from '../graphCard/graphCard.deprecated';
 import { ConnectedGraphCard } from '../graphCard/graphCard';
-import { ConnectedGraphCardFacets } from '../graphCard/graphCardFacets';
 import { ConnectedToolbar } from '../toolbar/toolbar';
 import { ConnectedInventoryList } from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
@@ -116,7 +116,7 @@ const ProductView = ({
         </PageToolbar>
         <PageSection>
           {productId !== RHSM_API_PATH_ID_TYPES.RHOSAK && (
-            <ConnectedGraphCard
+            <GraphCardDeprecated
               key={`graph_${productId}`}
               query={initialGraphTallyQuery}
               productId={productId}
@@ -130,10 +130,10 @@ const ProductView = ({
                     value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]}
                   />
                 ))}
-            </ConnectedGraphCard>
+            </GraphCardDeprecated>
           )}
           {productId === RHSM_API_PATH_ID_TYPES.RHOSAK && (
-            <ConnectedGraphCardFacets
+            <ConnectedGraphCard
               key={`graph_${productId}`}
               query={initialGraphTallyQuery}
               productId={productId}

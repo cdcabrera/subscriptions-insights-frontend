@@ -1,6 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
+import {
+  Card,
+  CardTitle,
+  CardHeader,
+  CardActions,
+  CardBody,
+  CardFooter,
+  Flex,
+  FlexItem,
+  Title
+} from '@patternfly/react-core';
 import { useShallowCompareEffect } from 'react-use';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
@@ -65,6 +75,52 @@ const GraphCard = ({
   if (typeof settings?.actionDisplay === 'function') {
     actionDisplay = settings.actionDisplay({ data: { ...graphData }, meta: { ...meta } });
   }
+
+  return (
+    <Flex className="curiosity-usage-graph-facets">
+      <Flex flex={{ default: 'flex_1' }} direction={{ default: 'column' }} alignSelf={{ default: 'alignSelfStretch' }}>
+        <FlexItem className="curiosity-usage-graph-facets__facet-column">
+          <Card className="curiosity-usage-graph-facets__facet-card fadein">
+            <CardTitle>Today's data transfer</CardTitle>
+            <CardBody>
+              <strong>62</strong>Gibibytes
+            </CardBody>
+            <CardFooter>
+              <small>Last update Sep 13, 2021 8:00 AM</small>
+            </CardFooter>
+          </Card>
+          <Card className="curiosity-usage-graph-facets__facet-card fadein">
+            <CardTitle>This month's data transfer</CardTitle>
+            <CardBody>
+              <strong>934</strong>Gibibytes
+            </CardBody>
+            <CardFooter>
+              <small>Last update Sep 13, 2021 8:00 AM</small>
+            </CardFooter>
+          </Card>
+        </FlexItem>
+      </Flex>
+      <Flex flex={{ default: 'flex_3' }} direction={{ default: 'column' }}>
+        <FlexItem className="curiosity-usage-graph-facets__graph-column">
+          <Card className="curiosity-usage-graph-facets__graph-card fadein">
+            <MinHeight key="graphHeaderMinHeight">
+              <CardHeader>
+                <CardTitle>Test title</CardTitle>
+              </CardHeader>
+            </MinHeight>
+            <MinHeight key="graphBodyMinHeight">
+              <CardBody>
+                <div className={(error && 'blur') || (pending && 'fadein') || ''}>
+                  {pending && <Loader variant="graph" />}
+                  {!pending && <GraphCardChart graphData={graphData} />}
+                </div>
+              </CardBody>
+            </MinHeight>
+          </Card>
+        </FlexItem>
+      </Flex>
+    </Flex>
+  );
 
   return (
     <Card className="curiosity-usage-graph">

@@ -12,13 +12,12 @@ import { GraphCardChart } from './graphCardChart';
 
 /**
  * A chart/graph card.
- * This card makes use of the new Tally API response format. Eventually this component will replace "GraphCard".
  *
  * @param {object} props
  * @param {Node} props.cardTitle
  * @param {Node} props.children
  * @param {boolean} props.error
- * @param {Function} props.getGraphTally
+ * @param {Function} props.getGraphReportsCapacity
  * @param {object} props.graphData
  * @param {object} props.meta
  * @param {boolean} props.isDisabled
@@ -28,11 +27,11 @@ import { GraphCardChart } from './graphCardChart';
  * @param {Function} props.useProductGraphTallyQuery
  * @returns {Node}
  */
-const GraphCardFacets = ({
+const GraphCard = ({
   cardTitle,
   children,
   error,
-  getGraphTally,
+  getGraphReportsCapacity,
   graphData,
   meta,
   isDisabled,
@@ -42,7 +41,7 @@ const GraphCardFacets = ({
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
   const { productId } = useAliasProduct();
-  const { filters, settings } = useAliasProductGraphConfig();
+  const { settings } = useAliasProductGraphConfig();
   const query = useAliasProductGraphTallyQuery();
 
   useShallowCompareEffect(() => {
@@ -52,57 +51,46 @@ const GraphCardFacets = ({
       [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity
     } = query;
 
-    if (!isDisabled && filters.length && granularity && startDate && endDate && productId) {
-      // need to reconsider where this is called... "regular card" which would group all the metrics vs "facet card" which would only need a single metric
-      getGraphTally(
-        filters.map(({ id: metric }) => ({ id: productId, metric })),
-        query
-      );
+    if (!isDisabled && granularity && startDate && endDate && productId) {
+      getGraphReportsCapacity(productId, query);
     }
-  }, [filters, getGraphTally, isDisabled, productId, query]);
+  }, [getGraphReportsCapacity, isDisabled, productId, query]);
 
   if (isDisabled) {
     return null;
   }
 
-  const standaloneFacets = filters.filter(({ isStandalone }) => isStandalone === true);
-  const regularFacets = filters.filter(({ isStandalone }) => isStandalone !== true);
+  let actionDisplay = null;
 
-  const regularCard = () => {
-    let actionDisplay = null;
+  if (typeof settings?.actionDisplay === 'function') {
+    actionDisplay = settings.actionDisplay({ data: { ...graphData }, meta: { ...meta } });
+  }
 
-    if (typeof settings?.actionDisplay === 'function') {
-      actionDisplay = settings.actionDisplay({ data: { ...graphData }, meta: { ...meta } });
-    }
-
-    return (
-      <Card className="curiosity-usage-facet-graph">
-        <MinHeight key="headerMinHeight">
-          <CardHeader>
-            <CardTitle>
-              <Title headingLevel="h2" size="lg">
-                {cardTitle}
-              </Title>
-            </CardTitle>
-            <CardActions className={(error && 'blur') || ''}>
-              <React.Fragment key="actionDisplay">{actionDisplay}</React.Fragment>
-              {children}
-            </CardActions>
-          </CardHeader>
-        </MinHeight>
-        <MinHeight key="bodyMinHeight">
-          <CardBody>
-            <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-              {pending && <Loader variant="graph" />}
-              {!pending && <GraphCardChart graphData={regularFacets} />}
-            </div>
-          </CardBody>
-        </MinHeight>
-      </Card>
-    );
-  };
-
-  return <React.Fragment>{regularFacets.length && regularCard()}</React.Fragment>
+  return (
+    <Card className="curiosity-usage-graph">
+      <MinHeight key="headerMinHeight">
+        <CardHeader>
+          <CardTitle>
+            <Title headingLevel="h2" size="lg">
+              {cardTitle}
+            </Title>
+          </CardTitle>
+          <CardActions className={(error && 'blur') || ''}>
+            <React.Fragment key="actionDisplay">{actionDisplay}</React.Fragment>
+            {children}
+          </CardActions>
+        </CardHeader>
+      </MinHeight>
+      <MinHeight key="bodyMinHeight">
+        <CardBody>
+          <div className={(error && 'blur') || (pending && 'fadein') || ''}>
+            {pending && <Loader variant="graph" />}
+            {!pending && <GraphCardChart graphData={graphData} />}
+          </div>
+        </CardBody>
+      </MinHeight>
+    </Card>
+  );
 };
 
 /**
@@ -112,11 +100,11 @@ const GraphCardFacets = ({
  *     useProductGraphConfig: Function, children: Node, meta: object, pending: boolean, graphData: object,
  *     isDisabled: boolean, error: boolean, cardTitle: Node}}
  */
-GraphCardFacets.propTypes = {
+GraphCard.propTypes = {
   cardTitle: PropTypes.node,
   children: PropTypes.node,
   error: PropTypes.bool,
-  getGraphTally: PropTypes.func,
+  getGraphReportsCapacity: PropTypes.func,
   graphData: PropTypes.object,
   isDisabled: PropTypes.bool,
   meta: PropTypes.object,
@@ -133,11 +121,11 @@ GraphCardFacets.propTypes = {
  *     useProductGraphConfig: Function, children: Node, meta: object, pending: boolean, graphData: object,
  *     isDisabled: boolean, error: boolean, cardTitle: Node}}
  */
-GraphCardFacets.defaultProps = {
+GraphCard.defaultProps = {
   cardTitle: null,
   children: null,
   error: false,
-  getGraphTally: helpers.noop,
+  getGraphReportsCapacity: helpers.noop,
   graphData: {},
   isDisabled: helpers.UI_DISABLED_GRAPH,
   meta: {},
@@ -154,7 +142,7 @@ GraphCardFacets.defaultProps = {
  * @returns {object}
  */
 const mapDispatchToProps = dispatch => ({
-  getGraphTally: (id, query) => dispatch(reduxActions.rhsm.getGraphTally(id, query))
+  getGraphReportsCapacity: (id, query) => dispatch(reduxActions.rhsm.getGraphReportsCapacity(id, query))
 });
 
 /**
@@ -162,8 +150,8 @@ const mapDispatchToProps = dispatch => ({
  *
  * @type {Function}
  */
-const makeMapStateToProps = reduxSelectors.graph.makeGraph();
+const makeMapStateToProps = reduxSelectors.graphCard.makeGraphCard();
 
-const ConnectedGraphCardColumns = connect(makeMapStateToProps, mapDispatchToProps)(GraphCardFacets);
+const ConnectedGraphCard = connect(makeMapStateToProps, mapDispatchToProps)(GraphCard);
 
-export { ConnectedGraphCardColumns as default, ConnectedGraphCardColumns, GraphCardFacets };
+export { ConnectedGraphCard as default, ConnectedGraphCard, GraphCard };
