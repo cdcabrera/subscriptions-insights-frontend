@@ -7,6 +7,7 @@ import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { apiQueries } from '../../redux';
 import { ConnectedGraphCard } from '../graphCard/graphCard';
+import { ConnectedGraphCardFacets } from '../graphCard/graphCardFacets';
 import { ConnectedToolbar } from '../toolbar/toolbar';
 import { ConnectedInventoryList } from '../inventoryList/inventoryList';
 import { helpers } from '../../common';
@@ -14,7 +15,7 @@ import BannerMessages from '../bannerMessages/bannerMessages';
 import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { ConnectedInventorySubscriptions } from '../inventorySubscriptions/inventorySubscriptions';
-import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { RHSM_API_PATH_ID_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -114,38 +115,55 @@ const ProductView = ({
             ))}
         </PageToolbar>
         <PageSection>
-          <ConnectedGraphCard
-            key={`graph_${productId}`}
-            query={initialGraphTallyQuery}
-            productId={productId}
-            viewId={viewId}
-            cardTitle={graphCardTitle}
-          >
-            {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
-              (toolbarGraph !== false && (
-                <ToolbarFieldGranularity
-                  viewId={viewId}
-                  value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]}
-                />
-              ))}
-          </ConnectedGraphCard>
+          {productId !== RHSM_API_PATH_ID_TYPES.RHOSAK && (
+            <ConnectedGraphCard
+              key={`graph_${productId}`}
+              query={initialGraphTallyQuery}
+              productId={productId}
+              viewId={viewId}
+              cardTitle={graphCardTitle}
+            >
+              {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
+                (toolbarGraph !== false && (
+                  <ToolbarFieldGranularity
+                    viewId={viewId}
+                    value={initialGraphTallyQuery[RHSM_API_QUERY_TYPES.GRANULARITY]}
+                  />
+                ))}
+            </ConnectedGraphCard>
+          )}
+          {productId === RHSM_API_PATH_ID_TYPES.RHOSAK && (
+            <ConnectedGraphCardFacets
+              key={`graph_${productId}`}
+              query={initialGraphTallyQuery}
+              productId={productId}
+              viewId={viewId}
+              cardTitle={graphCardTitle}
+            />
+          )}
         </PageSection>
         <PageSection>
-          <InventoryTabs key={`inventory_${productId}`} productId={productId}>
-            <InventoryTab
-              key={`inventory_hosts_${productId}`}
-              title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
-            >
-              <ConnectedInventoryList
-                key={`inv_${productId}`}
-                filterGuestsData={initialGuestsFilters}
-                filterInventoryData={initialInventoryFilters}
-                productId={productId}
-                settings={initialInventorySettings}
-                query={initialInventoryHostsQuery}
-                viewId={viewId}
-              />
-            </InventoryTab>
+          <InventoryTabs
+            key={`inventory_${productId}`}
+            productId={productId}
+            isDisabled={!initialInventoryFilters && !initialSubscriptionsInventoryFilters}
+          >
+            {initialInventoryFilters && (
+              <InventoryTab
+                key={`inventory_hosts_${productId}`}
+                title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
+              >
+                <ConnectedInventoryList
+                  key={`inv_${productId}`}
+                  filterGuestsData={initialGuestsFilters}
+                  filterInventoryData={initialInventoryFilters}
+                  productId={productId}
+                  settings={initialInventorySettings}
+                  query={initialInventoryHostsQuery}
+                  viewId={viewId}
+                />
+              </InventoryTab>
+            )}
             {initialSubscriptionsInventoryFilters && (
               <InventoryTab
                 key={`inventory_subs_${productId}`}
