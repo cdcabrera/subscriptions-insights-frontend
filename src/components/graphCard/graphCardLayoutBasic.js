@@ -1,26 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import {
-//  Card,
-//  CardTitle,
-//  CardHeader,
-//  CardActions,
-//  CardBody,
-//  CardFooter,
-//   Flex,
-//   FlexItem,
-//   Title
-// } from '@patternfly/react-core';
-// import { useShallowCompareEffect } from 'react-use';
+import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
+import { useShallowCompareEffect } from 'react-use';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { helpers } from '../../common';
-// import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-// import { Loader } from '../loader/loader';
-// import { MinHeight } from '../minHeight/minHeight';
-// import { GraphCardChart } from './graphCardChart';
-import GraphCardLayoutFacets from './graphCardLayoutFacets';
-import GraphCardLayoutBasic from './graphCardLayoutBasic';
+import RHSM_API_PATH_METRIC_ID_TYPES, { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { Loader } from '../loader/loader';
+import { MinHeight } from '../minHeight/minHeight';
+import { GraphCardChart } from './graphCardChart';
 
 /**
  * A chart/graph card.
@@ -32,46 +20,30 @@ import GraphCardLayoutBasic from './graphCardLayoutBasic';
  * @param {Function} props.getGraphReportsCapacity
  * @param {object} props.graphData
  * @param {object} props.meta
- * @param {boolean} props.isDisabled
+ * @param {Array} props.metricFilter
  * @param {boolean} props.pending
  * @param {Function} props.useProduct
  * @param {Function} props.useProductGraphConfig
  * @param {Function} props.useProductGraphTallyQuery
  * @returns {Node}
  */
-const GraphCard = ({
+const GraphCardLayoutBasic = ({
   cardTitle,
   children,
   error,
   getGraphReportsCapacity,
   graphData,
   meta,
-  isDisabled,
+  metricFilter,
   pending,
   useProduct: useAliasProduct,
   useProductGraphConfig: useAliasProductGraphConfig,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
   const { productId } = useAliasProduct();
-  const { filters } = useAliasProductGraphConfig();
-  // const query = useAliasProductGraphTallyQuery();
+  const { settings } = useAliasProductGraphConfig();
+  const query = useAliasProductGraphTallyQuery();
 
-  if (isDisabled) {
-    return null;
-  }
-
-  const facetsGraphFilters = filters.filter(({ isStandalone }) => isStandalone === true);
-  const basicGraphFilters = filters.filter(({ isStandalone }) => isStandalone !== true);
-
-  return (
-    <React.Fragment>
-      {basicGraphFilters?.length && <GraphCardLayoutBasic metricFilter={basicGraphFilters} />}
-      {facetsGraphFilters?.length &&
-        facetsGraphFilters.map(facetGraphFilter => <GraphCardLayoutFacets metricFilter={facetGraphFilter} />)}
-    </React.Fragment>
-  );
-
-  /*
   useShallowCompareEffect(() => {
     const {
       [RHSM_API_QUERY_TYPES.START_DATE]: startDate,
@@ -79,60 +51,13 @@ const GraphCard = ({
       [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity
     } = query;
 
-    if (!isDisabled && granularity && startDate && endDate && productId) {
-      getGraphReportsCapacity(productId, query);
+    if (granularity && startDate && endDate && productId) {
+      getGraphReportsCapacity(
+        metricFilter.map(({ id: metric }) => ({ id: productId, metric })),
+        query
+      );
     }
-  }, [getGraphReportsCapacity, isDisabled, productId, query]);
-
-  if (isDisabled) {
-    return null;
-  }
-
-  return (
-    <Flex className="curiosity-usage-graph-facets">
-      <Flex flex={{ default: 'flex_1' }} direction={{ default: 'column' }} alignSelf={{ default: 'alignSelfStretch' }}>
-        <FlexItem className="curiosity-usage-graph-facets__facet-column">
-          <Card className="curiosity-usage-graph-facets__facet-card fadein">
-            <CardTitle>Today's data transfer</CardTitle>
-            <CardBody>
-              <strong>62</strong>Gibibytes
-            </CardBody>
-            <CardFooter>
-              <small>Last update Sep 13, 2021 8:00 AM</small>
-            </CardFooter>
-          </Card>
-          <Card className="curiosity-usage-graph-facets__facet-card fadein">
-            <CardTitle>This month's data transfer</CardTitle>
-            <CardBody>
-              <strong>934</strong>Gibibytes
-            </CardBody>
-            <CardFooter>
-              <small>Last update Sep 13, 2021 8:00 AM</small>
-            </CardFooter>
-          </Card>
-        </FlexItem>
-      </Flex>
-      <Flex flex={{ default: 'flex_3' }} direction={{ default: 'column' }}>
-        <FlexItem className="curiosity-usage-graph-facets__graph-column">
-          <Card className="curiosity-usage-graph-facets__graph-card fadein">
-            <MinHeight key="graphHeaderMinHeight">
-              <CardHeader>
-                <CardTitle>Test title</CardTitle>
-              </CardHeader>
-            </MinHeight>
-            <MinHeight key="graphBodyMinHeight">
-              <CardBody>
-                <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-                  {pending && <Loader variant="graph" />}
-                  {!pending && <GraphCardChart graphData={graphData} />}
-                </div>
-              </CardBody>
-            </MinHeight>
-          </Card>
-        </FlexItem>
-      </Flex>
-    </Flex>
-  );
+  }, [getGraphReportsCapacity, metricFilter, productId, query]);
 
   let actionDisplay = null;
 
@@ -165,7 +90,6 @@ const GraphCard = ({
       </MinHeight>
     </Card>
   );
-  */
 };
 
 /**
@@ -175,7 +99,7 @@ const GraphCard = ({
  *     useProductGraphConfig: Function, children: Node, meta: object, pending: boolean, graphData: object,
  *     isDisabled: boolean, error: boolean, cardTitle: Node}}
  */
-GraphCard.propTypes = {
+GraphCardLayoutBasic.propTypes = {
   cardTitle: PropTypes.node,
   children: PropTypes.node,
   error: PropTypes.bool,
@@ -183,6 +107,11 @@ GraphCard.propTypes = {
   graphData: PropTypes.object,
   isDisabled: PropTypes.bool,
   meta: PropTypes.object,
+  metricFilter: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOf(Object.values(RHSM_API_PATH_METRIC_ID_TYPES)).isRequired
+    })
+  ),
   pending: PropTypes.bool,
   useProduct: PropTypes.func,
   useProductGraphConfig: PropTypes.func,
@@ -196,7 +125,7 @@ GraphCard.propTypes = {
  *     useProductGraphConfig: Function, children: Node, meta: object, pending: boolean, graphData: object,
  *     isDisabled: boolean, error: boolean, cardTitle: Node}}
  */
-GraphCard.defaultProps = {
+GraphCardLayoutBasic.defaultProps = {
   cardTitle: null,
   children: null,
   error: false,
@@ -227,6 +156,6 @@ const mapDispatchToProps = dispatch => ({
  */
 const makeMapStateToProps = reduxSelectors.graphCard.makeGraphCard();
 
-const ConnectedGraphCard = connect(makeMapStateToProps, mapDispatchToProps)(GraphCard);
+const ConnectedGraphCardLayoutBasic = connect(makeMapStateToProps, mapDispatchToProps)(GraphCardLayoutBasic);
 
-export { ConnectedGraphCard as default, ConnectedGraphCard, GraphCard };
+export { ConnectedGraphCardLayoutBasic as default, ConnectedGraphCardLayoutBasic, GraphCardLayoutBasic };
