@@ -1,6 +1,7 @@
 import _get from 'lodash/get';
 import _isPlainObject from 'lodash/isPlainObject';
 import _camelCase from 'lodash/camelCase';
+import _snakeCase from 'lodash/snakeCase';
 import { helpers } from '../../common';
 
 /**
@@ -89,6 +90,8 @@ const setResponseSchemas = (schemas = [], initialValue) =>
  * @param {object} responses.response
  * @param {object} responses.response.schema
  * @param {Array|object} responses.response.data
+ * @param {string} responses.response.keyCase
+ * @param {Function} responses.response.customResponseEntry
  * @param {Function} responses.response.customResponseValue
  * @param {string} responses.response.keyPrefix
  * @returns {Array}
@@ -96,44 +99,73 @@ const setResponseSchemas = (schemas = [], initialValue) =>
 const setNormalizedResponse = (...responses) => {
   const parsedResponses = [];
 
-  responses.forEach(({ schema = {}, data, customResponseValue, keyPrefix: prefix }) => {
-    const isArray = Array.isArray(data);
-    const updatedData = (isArray && data) || (data && [data]) || [];
-    const [generatedSchema = {}] = setResponseSchemas([schema]);
-    const parsedResponse = [];
+  responses.forEach(
+    ({ schema = {}, data, customResponseEntry, customResponseValue, keyPrefix: prefix, keyCase = 'camel' }) => {
+      const isArray = Array.isArray(data);
+      const updatedData = (isArray && data) || (data && [data]) || [];
+      const [generatedSchema = {}] = setResponseSchemas([schema]);
+      const parsedResponse = [];
 
-    updatedData.forEach((value, index) => {
-      const generateReflectedData = ({ dataObj, keyPrefix = '', customValue = null, update = helpers.noop }) => {
-        const updatedDataObj = {};
+      updatedData.forEach((value, index) => {
+        const generateReflectedData = ({
+          dataObj,
+          keyPrefix = '',
+          keyCaseType,
+          customEntry,
+          customValue = null,
+          update = helpers.noop
+        }) => {
+          let updatedDataObj = {};
 
-        Object.entries(dataObj).forEach(([dataObjKey, dataObjValue]) => {
-          const casedDataObjKey = _camelCase(`${keyPrefix} ${dataObjKey}`).trim();
-          let val = dataObjValue;
+          Object.entries(dataObj).forEach(([dataObjKey, dataObjValue]) => {
+            let casedDataObjKey;
 
-          if (typeof val === 'number') {
-            val = (Number.isInteger(val) && Number.parseInt(val, 10)) || Number.parseFloat(val) || val;
+            switch (keyCaseType) {
+              case 'camel':
+                casedDataObjKey = _camelCase(`${keyPrefix} ${dataObjKey}`).trim();
+                break;
+              case 'snake':
+                casedDataObjKey = _snakeCase(`${keyPrefix} ${dataObjKey}`).trim();
+                break;
+              case 'default':
+              default:
+                casedDataObjKey = `${dataObjKey}`.trim();
+                break;
+            }
+
+            let val = dataObjValue;
+
+            if (typeof val === 'number') {
+              val = (Number.isInteger(val) && Number.parseInt(val, 10)) || Number.parseFloat(val) || val;
+            }
+
+            if (typeof customValue === 'function') {
+              updatedDataObj[casedDataObjKey] = customValue({ data: dataObj, key: dataObjKey, value: val, index });
+            } else {
+              updatedDataObj[casedDataObjKey] = val;
+            }
+          });
+
+          if (typeof customEntry === 'function') {
+            updatedDataObj = customEntry(updatedDataObj);
           }
 
-          if (typeof customValue === 'function') {
-            updatedDataObj[casedDataObjKey] = customValue({ data: dataObj, key: dataObjKey, value: val, index });
-          } else {
-            updatedDataObj[casedDataObjKey] = val;
-          }
+          update(updatedDataObj);
+        };
+
+        generateReflectedData({
+          keyPrefix: prefix,
+          dataObj: { ...generatedSchema, ...value },
+          keyCaseType: keyCase,
+          customEntry: customResponseEntry,
+          customValue: customResponseValue,
+          update: generatedData => parsedResponse.push(generatedData)
         });
-
-        update(updatedDataObj);
-      };
-
-      generateReflectedData({
-        keyPrefix: prefix,
-        dataObj: { ...generatedSchema, ...value },
-        customValue: customResponseValue,
-        update: generatedData => parsedResponse.push(generatedData)
       });
-    });
 
-    parsedResponses.push(parsedResponse);
-  });
+      parsedResponses.push(parsedResponse);
+    }
+  );
 
   return parsedResponses;
 };
