@@ -108,21 +108,27 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, useRouteDetail:
           </ConnectedGraphCard>
         </PageSection>
         <PageSection>
-          <InventoryTabs key={`inventory_${productId}`} productId={productId}>
-            <InventoryTab
-              key={`inventory_hosts_${productId}`}
-              title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
-            >
-              <ConnectedInventoryList
-                key={`inv_${productId}`}
-                filterGuestsData={initialGuestsFilters}
-                filterInventoryData={initialInventoryFilters}
-                productId={productId}
-                settings={initialInventorySettings}
-                query={initialInventoryHostsQuery}
-                viewId={viewId}
-              />
-            </InventoryTab>
+          <InventoryTabs
+            key={`inventory_${productId}`}
+            productId={productId}
+            isDisabled={!initialInventoryFilters && !initialSubscriptionsInventoryFilters}
+          >
+            {initialInventoryFilters && (
+              <InventoryTab
+                key={`inventory_hosts_${productId}`}
+                title={t('curiosity-inventory.tabHosts', { context: ['noInstances', productId] })}
+              >
+                <ConnectedInventoryList
+                  key={`inv_${productId}`}
+                  filterGuestsData={initialGuestsFilters}
+                  filterInventoryData={initialInventoryFilters}
+                  productId={productId}
+                  settings={initialInventorySettings}
+                  query={initialInventoryHostsQuery}
+                  viewId={viewId}
+                />
+              </InventoryTab>
+            )}
             {initialSubscriptionsInventoryFilters && (
               <InventoryTab
                 key={`inventory_subs_${productId}`}
