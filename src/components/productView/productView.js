@@ -6,6 +6,7 @@ import { useRouteDetail } from '../../hooks/useRouter';
 import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { apiQueries } from '../../redux';
+import { ConnectedGraphCard as ConnectedGraphCardDeprecated } from '../graphCard/graphCard.deprecated';
 import { ConnectedGraphCard } from '../graphCard/graphCard';
 import { Toolbar } from '../toolbar/toolbar';
 import { ConnectedInventoryList } from '../inventoryList/inventoryList';
@@ -14,6 +15,7 @@ import BannerMessages from '../bannerMessages/bannerMessages';
 import { ToolbarFieldGranularity } from '../toolbar/toolbarFieldGranularity';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { ConnectedInventorySubscriptions } from '../inventorySubscriptions/inventorySubscriptions';
+import { RHSM_API_PATH_ID_TYPES } from '../../types/rhsmApiTypes';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -96,16 +98,27 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, useRouteDetail:
           <Toolbar />
         </PageToolbar>
         <PageSection>
-          <ConnectedGraphCard
-            key={`graph_${productId}`}
-            query={initialGraphTallyQuery}
-            productId={productId}
-            viewId={viewId}
-            cardTitle={graphCardTitle}
-          >
-            {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
-              (toolbarGraph !== false && <ToolbarFieldGranularity />)}
-          </ConnectedGraphCard>
+          {productId !== RHSM_API_PATH_ID_TYPES.RHOSAK && (
+            <ConnectedGraphCardDeprecated
+              key={`graph_${productId}`}
+              query={initialGraphTallyQuery}
+              productId={productId}
+              viewId={viewId}
+              cardTitle={graphCardTitle}
+            >
+              {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
+                (toolbarGraph !== false && <ToolbarFieldGranularity />)}
+            </ConnectedGraphCardDeprecated>
+          )}
+          {productId === RHSM_API_PATH_ID_TYPES.RHOSAK && (
+            <ConnectedGraphCard
+              key={`graph_${productId}`}
+              query={initialGraphTallyQuery}
+              productId={productId}
+              viewId={viewId}
+              cardTitle={graphCardTitle}
+            />
+          )}
         </PageSection>
         <PageSection>
           <InventoryTabs

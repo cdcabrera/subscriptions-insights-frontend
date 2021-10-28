@@ -1,26 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import {
-//  Card,
-//  CardTitle,
-//  CardHeader,
-//  CardActions,
-//  CardBody,
-//  CardFooter,
-//   Flex,
-//   FlexItem,
-//   Title
-// } from '@patternfly/react-core';
-// import { useShallowCompareEffect } from 'react-use';
+import { Card, CardTitle, CardHeader, CardActions, CardBody, Title } from '@patternfly/react-core';
+import { useShallowCompareEffect } from 'react-use';
 import { connect, reduxActions, reduxSelectors } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { helpers } from '../../common';
-// import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-// import { Loader } from '../loader/loader';
-// import { MinHeight } from '../minHeight/minHeight';
-// import { GraphCardChart } from './graphCardChart';
-import GraphCardLayoutFacets from './graphCardLayoutFacets';
-import GraphCardLayoutBasic from './graphCardLayoutBasic';
+import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { Loader } from '../loader/loader';
+import { MinHeight } from '../minHeight/minHeight';
+import { GraphCardChart } from './graphCardChart';
 
 /**
  * A chart/graph card.
@@ -53,25 +41,9 @@ const GraphCard = ({
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
   const { productId } = useAliasProduct();
-  const { filters } = useAliasProductGraphConfig();
-  // const query = useAliasProductGraphTallyQuery();
+  const { settings } = useAliasProductGraphConfig();
+  const query = useAliasProductGraphTallyQuery();
 
-  if (isDisabled) {
-    return null;
-  }
-
-  const facetsGraphFilters = filters.filter(({ isStandalone }) => isStandalone === true);
-  const basicGraphFilters = filters.filter(({ isStandalone }) => isStandalone !== true);
-
-  return (
-    <React.Fragment>
-      {basicGraphFilters?.length && <GraphCardLayoutBasic metricFilter={basicGraphFilters} />}
-      {facetsGraphFilters?.length &&
-        facetsGraphFilters.map(facetGraphFilter => <GraphCardLayoutFacets metricFilter={facetGraphFilter} />)}
-    </React.Fragment>
-  );
-
-  /*
   useShallowCompareEffect(() => {
     const {
       [RHSM_API_QUERY_TYPES.START_DATE]: startDate,
@@ -87,52 +59,6 @@ const GraphCard = ({
   if (isDisabled) {
     return null;
   }
-
-  return (
-    <Flex className="curiosity-usage-graph-facets">
-      <Flex flex={{ default: 'flex_1' }} direction={{ default: 'column' }} alignSelf={{ default: 'alignSelfStretch' }}>
-        <FlexItem className="curiosity-usage-graph-facets__facet-column">
-          <Card className="curiosity-usage-graph-facets__facet-card fadein">
-            <CardTitle>Today's data transfer</CardTitle>
-            <CardBody>
-              <strong>62</strong>Gibibytes
-            </CardBody>
-            <CardFooter>
-              <small>Last update Sep 13, 2021 8:00 AM</small>
-            </CardFooter>
-          </Card>
-          <Card className="curiosity-usage-graph-facets__facet-card fadein">
-            <CardTitle>This month's data transfer</CardTitle>
-            <CardBody>
-              <strong>934</strong>Gibibytes
-            </CardBody>
-            <CardFooter>
-              <small>Last update Sep 13, 2021 8:00 AM</small>
-            </CardFooter>
-          </Card>
-        </FlexItem>
-      </Flex>
-      <Flex flex={{ default: 'flex_3' }} direction={{ default: 'column' }}>
-        <FlexItem className="curiosity-usage-graph-facets__graph-column">
-          <Card className="curiosity-usage-graph-facets__graph-card fadein">
-            <MinHeight key="graphHeaderMinHeight">
-              <CardHeader>
-                <CardTitle>Test title</CardTitle>
-              </CardHeader>
-            </MinHeight>
-            <MinHeight key="graphBodyMinHeight">
-              <CardBody>
-                <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-                  {pending && <Loader variant="graph" />}
-                  {!pending && <GraphCardChart graphData={graphData} />}
-                </div>
-              </CardBody>
-            </MinHeight>
-          </Card>
-        </FlexItem>
-      </Flex>
-    </Flex>
-  );
 
   let actionDisplay = null;
 
@@ -165,7 +91,6 @@ const GraphCard = ({
       </MinHeight>
     </Card>
   );
-  */
 };
 
 /**

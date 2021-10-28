@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { VictoryStack as ChartStack, VictoryTooltip as ChartCursorTooltip } from 'victory';
 import { createContainer } from 'victory-create-container';
-import { Chart, ChartArea, ChartAxis, ChartContainer, ChartLine, ChartThreshold } from '@patternfly/react-charts';
+import { Chart, ChartArea, ChartAxis, ChartContainer, ChartLabel, ChartLine, ChartThreshold } from '@patternfly/react-charts';
 import { useChartContext } from './chartContext';
 import { chartTooltip } from './chartTooltip';
 
@@ -61,7 +61,7 @@ const ChartElements = ({ chartTypeDefaults }) => {
 
   if (Array.isArray(yAxisProps)) {
     yAxis = yAxisProps.map(axisProps => (
-      <ChartAxis key={`yaxis-${axisProps.orientation}`} {...axisProps} animate={false} />
+      <ChartAxis key={`yaxis-${axisProps.orientation}`} {...axisProps} animate={false} label="y axis label" />
     ));
   }
 
@@ -80,7 +80,7 @@ const ChartElements = ({ chartTypeDefaults }) => {
       themeColor={themeColor}
       {...{ padding, containerComponent, ...chartDomain }}
     >
-      <ChartAxis {...xAxisProps} animate={false} />
+      <ChartAxis {...xAxisProps} animate={false} label="x axis label" />
       {yAxis}
       {chartElements}
       <ChartStack>{stackedChartElements}</ChartStack>
