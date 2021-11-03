@@ -34,6 +34,7 @@ const useGraphTallySelector = (
   { useProduct: useAliasProduct = useProduct, useSelector: useAliasSelector = storeHooks.reactRedux.useSelector } = {}
 ) => {
   const [updatedMetricIds, setUpdatedMetricIds] = useState([]);
+  const [selResults, setSelectorResults] = useState([]);
 
   useDeepCompareEffect(() => {
     const updated = (typeof metricIds === 'string' && [metricIds]) || (Array.isArray(metricIds) && metricIds) || [];
@@ -45,6 +46,16 @@ const useGraphTallySelector = (
     productId,
     updatedMetricIds
   ]);
+
+  // const results = useAliasSelector(state => graphSelector(state));
+  // return () => ({ ...results });
+  /*
+  const { productId } = useAliasProduct() || {};
+  const graphSelector = useMemo(() => reduxSelectors.graph.makeGraph({ productId, metrics: updatedMetricIds }), [
+    productId,
+    updatedMetricIds
+  ]);
+  */
 
   return useAliasSelector(state => graphSelector(state));
 };
@@ -75,8 +86,10 @@ const useGraphMetrics = (
   const query = useAliasProductGraphTallyQuery();
   const updatedMetricIds = metricIds.map(filter => filter.id);
   const getGraphTally = useAliasGetGraphTally();
-  const { error, fulfilled, pending, metrics } = useAliasGraphTallySelector(updatedMetricIds) || {};
+  // const doit = useAliasGraphTallySelector(updatedMetricIds) || {};
+  // const { error, fulfilled, pending, metrics } = doit();
   // const selectorResponse = useAliasGraphTallySelector(updatedMetricIds) || {};
+  const { error, fulfilled, pending, metrics } = useAliasGraphTallySelector(updatedMetricIds) || {};
 
   // useShallowCompareEffect(() => {
   //  setUpdatedMetricIds(metricIds.map(filter => filter.id));

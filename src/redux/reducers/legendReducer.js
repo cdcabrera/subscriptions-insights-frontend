@@ -7,11 +7,7 @@ import { reduxHelpers } from '../common/reduxHelpers';
  * @private
  * @type {{reportCapacity: {}, legend: {}, tallyCapacity: {}}}
  */
-const initialState = {
-  // legend: {},
-  reportCapacity: {},
-  tally: {}
-};
+const initialState = {};
 
 /**
  * Apply graph interaction, and generated graph observer/reducer for reportCapacity to state,
@@ -21,12 +17,11 @@ const initialState = {
  * @param {object} action
  * @returns {object|{}}
  */
-const graphReducer = (state = initialState, action) => {
+const legendReducer = (state = initialState, action) => {
   switch (action.type) {
-    /*
     case graphTypes.SET_GRAPH_LEGEND:
       return reduxHelpers.setStateProp(
-        'legend',
+        null,
         {
           [action.viewId]: action.legend
         },
@@ -35,19 +30,11 @@ const graphReducer = (state = initialState, action) => {
           reset: false
         }
       );
-      */
     default:
-      return reduxHelpers.generatedPromiseActionReducer(
-        [
-          { ref: 'reportCapacity', type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM },
-          { ref: 'tally', type: rhsmTypes.GET_GRAPH_TALLY_RHSM }
-        ],
-        state,
-        action
-      );
+      return state;
   }
 };
 
-graphReducer.initialState = initialState;
+legendReducer.initialState = initialState;
 
-export { graphReducer as default, initialState, graphReducer };
+export { legendReducer as default, initialState, legendReducer };

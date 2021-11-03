@@ -6,6 +6,7 @@ import messagesReducer from './messagesReducer';
 import toolbarReducer from './toolbarReducer';
 import userReducer from './userReducer';
 import viewReducer from './viewReducer';
+import legendReducer from './legendReducer';
 
 const reducers = {
   notifications,
@@ -14,7 +15,8 @@ const reducers = {
   messages: messagesReducer,
   toolbar: toolbarReducer,
   user: userReducer,
-  view: viewReducer
+  view: viewReducer,
+  legend: legendReducer
 };
 
 const reduxReducers = combineReducers(reducers);

@@ -5,6 +5,38 @@ import {
   RHSM_API_RESPONSE_TALLY_DATA_TYPES as TALLY_DATA_TYPES,
   RHSM_API_RESPONSE_TALLY_META_TYPES as TALLY_META_TYPES
 } from '../../services/rhsm/rhsmConstants';
+// import {helpers} from "../common";
+
+const createASelector = (selectors, callback) => {
+  const resultsCache = [];
+  let callbackCache;
+
+  return (...args) => {
+    try {
+      let shouldFire = false;
+
+      selectors.forEach((sel, index) => {
+        const selectorResults = sel(...args);
+
+        // If the result isn't equal to the previous result.
+        if (!_isEqual(selectorResults, resultsCache[index])) {
+          shouldFire = true;
+          resultsCache[index] = selectorResults;
+        }
+      });
+
+      if (shouldFire) {
+        callbackCache = callback(...resultsCache);
+      }
+    } catch (e) {
+      // if (helpers.DEV_MODE) {
+      console.warn(`reduxHelpers.createSelector, ${e.message}`);
+      // }
+    }
+
+    return callbackCache;
+  };
+};
 
 /**
  * Create a custom "are objects equal" selector.
@@ -13,6 +45,8 @@ import {
  * @type {Function}}
  */
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, _isEqual);
+
+const doit = [];
 
 /**
  * Return a combined state, props object.
@@ -43,6 +77,8 @@ const statePropsFilter = (state, props, { metrics = [], productId } = {}) => {
  * @type {{ metrics: object }}
  */
 const selector = createDeepEqualSelector([statePropsFilter], response => {
+  console.log('GRAPH SEL BEFORE >>>', response);
+
   const metrics = response || {};
   const updatedResponseData = { pending: false, fulfilled: false, error: false, metrics: {} };
   const objEntries = Object.entries(metrics);
@@ -104,6 +140,11 @@ const selector = createDeepEqualSelector([statePropsFilter], response => {
   } else if (isFulfilled) {
     updatedResponseData.fulfilled = true;
   }
+
+  doit.push(updatedResponseData);
+
+  console.log('GRAPH SEL AFTER >>>', updatedResponseData);
+  console.log('GRAPH SEL AFTER >>>', doit);
 
   return updatedResponseData;
 });

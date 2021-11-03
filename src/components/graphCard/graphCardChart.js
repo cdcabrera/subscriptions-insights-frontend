@@ -86,7 +86,7 @@ const GraphCardChart = ({ metrics, useProductGraphTallyQuery: useAliasProductGra
 
   return (
     <Chart
-      key={`chart_${JSON.stringify(query)}`}
+      // key={`chart_${JSON.stringify(query)}`}
       {...chartAreaProps}
       dataSets={updatedGraphData}
       chartLegend={({ chart, datum }) => <GraphCardChartLegend chart={chart} datum={datum} />}
