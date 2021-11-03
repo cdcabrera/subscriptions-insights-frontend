@@ -8,7 +8,7 @@ import { helpers } from '../../common';
 import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
-import { GraphCardChart } from './graphCardChart';
+import { GraphCardChart } from './graphCardChart.deprecated';
 
 /**
  * A chart/graph card.

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+/*
 import {
   Card,
   CardTitle,
@@ -10,99 +11,44 @@ import {
   Tooltip,
   TooltipPosition
 } from '@patternfly/react-core';
-import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
-import { useProduct, useProductGraphConfig } from '../productView/productViewContext';
+ */
+// import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
+import { useProductGraphConfig } from '../productView/productViewContext';
 import { helpers } from '../../common';
-import { Loader } from '../loader/loader';
-import { MinHeight } from '../minHeight/minHeight';
-import { GraphCardChart } from './graphCardChart';
-import { useGraphMetrics } from './graphCardContext';
-import { translate } from '../i18n/i18n';
+// import { Loader } from '../loader/loader';
+// import { MinHeight } from '../minHeight/minHeight';
+// import { GraphCardChart } from './graphCardChart';
+// import { useGraphMetrics } from './graphCardContext';
+// import { translate } from '../i18n/i18n';
+import { GraphCardMetrics } from './graphCardMetrics';
+import { GraphCardMetric } from './graphCardMetric';
 
 /**
  * A chart/graph card.
  *
  * @param {object} props
- * @param {boolean} props.isCardTitleDescription
  * @param {boolean} props.isDisabled
- * @param {Function} props.t
- * @param {Function} props.useGraphMetrics
- * @param {Function} props.useProduct
  * @param {Function} props.useProductGraphConfig
  * @returns {Node}
  */
-const GraphCard = ({
-  isCardTitleDescription,
-  isDisabled,
-  t,
-  useGraphMetrics: useAliasGraphMetrics,
-  useProduct: useAliasProduct,
-  useProductGraphConfig: useAliasProductGraphConfig
-}) => {
-  const { productId } = useAliasProduct();
-  const { error, pending, metrics } = useAliasGraphMetrics();
-  const { settings } = useAliasProductGraphConfig();
-  const graphData = {};
+const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConfig }) => {
+  const { filters } = useAliasProductGraphConfig();
 
   if (isDisabled) {
     return null;
   }
 
-  let actionDisplay = null;
-  let actionField = null;
+  const groupedMetricIds = filters.filter(({ isStandalone }) => isStandalone !== true);
+  const standaloneMetricIds = filters.filter(({ isStandalone }) => isStandalone === true);
 
-  if (typeof settings?.actionDisplay === 'function') {
-    actionDisplay = settings.actionDisplay({ data: metrics });
-  }
-
-  if (typeof settings?.actionField === 'function') {
-    actionField = settings.actionField({ data: metrics });
-  }
-
-  let graphCardTooltip = null;
-
-  if (isCardTitleDescription) {
-    graphCardTooltip = (
-      <Tooltip
-        content={<p>{t('curiosity-graph.cardHeadingDescription', { context: productId })}</p>}
-        position={TooltipPosition.top}
-        enableFlip={false}
-        distance={5}
-        entryDelay={100}
-        exitDelay={0}
-      >
-        <sup className="curiosity-icon__info">
-          <InfoCircleIcon />
-        </sup>
-      </Tooltip>
-    );
-  }
+  console.log('FILTERED >>>', standaloneMetricIds);
 
   return (
-    <Card className="curiosity-usage-graph">
-      <MinHeight key="headerMinHeight">
-        <CardHeader>
-          <CardTitle>
-            <Title headingLevel="h2" size="lg">
-              {t('curiosity-graph.cardHeading', { context: productId })}
-              {graphCardTooltip}
-            </Title>
-          </CardTitle>
-          <CardActions className={(error && 'blur') || ''}>
-            <React.Fragment key="actionDisplay">{actionDisplay}</React.Fragment>
-            <React.Fragment key="actionField">{actionField}</React.Fragment>
-          </CardActions>
-        </CardHeader>
-      </MinHeight>
-      <MinHeight key="bodyMinHeight">
-        <CardBody>
-          <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-            {pending && <Loader variant="graph" />}
-            {!pending && <GraphCardChart graphData={graphData} />}
-          </div>
-        </CardBody>
-      </MinHeight>
-    </Card>
+    <React.Fragment>
+      {groupedMetricIds.length > 0 && <GraphCardMetrics metricIds={groupedMetricIds} />}
+      {standaloneMetricIds.length > 0 &&
+        standaloneMetricIds.map(metric => <GraphCardMetric key={`graphcard_${metric.id}`} metric={metric} />)}
+    </React.Fragment>
   );
 };
 
@@ -113,11 +59,11 @@ const GraphCard = ({
  *     useGraphMetrics: Function, isCardTitleDescription: boolean}}
  */
 GraphCard.propTypes = {
-  isCardTitleDescription: PropTypes.bool,
+  // isCardTitleDescription: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  t: PropTypes.func,
-  useGraphMetrics: PropTypes.func,
-  useProduct: PropTypes.func,
+  // t: PropTypes.func,
+  // useGraphMetrics: PropTypes.func,
+  // useProduct: PropTypes.func,
   useProductGraphConfig: PropTypes.func
 };
 
@@ -128,11 +74,11 @@ GraphCard.propTypes = {
  *     useGraphMetrics: Function, isCardTitleDescription: boolean}}
  */
 GraphCard.defaultProps = {
-  isCardTitleDescription: false,
+  // isCardTitleDescription: false,
   isDisabled: helpers.UI_DISABLED_GRAPH,
-  t: translate,
-  useGraphMetrics,
-  useProduct,
+  // t: translate,
+  // useGraphMetrics,
+  // useProduct,
   useProductGraphConfig
 };
 

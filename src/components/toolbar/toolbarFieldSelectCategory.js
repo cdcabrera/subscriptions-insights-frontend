@@ -105,6 +105,8 @@ const useSelectCategoryOptions = ({
   const { currentFilter: updatedValue } = useAliasSelector(({ toolbar }) => toolbar.filters?.[viewId], {});
   const { filters = [] } = useAliasProductToolbarConfig();
 
+  console.log('>>>>>>>>>>>>>>>>>>>', filters);
+
   let initialValue;
 
   const updatedOptions = filters.map(({ id, selected }) => {

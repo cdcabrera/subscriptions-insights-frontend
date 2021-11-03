@@ -47,6 +47,8 @@ const Toolbar = ({
     return null;
   }
 
+  console.log('TOOLBAR >>>>>', options);
+
   /**
    * Clear a specific value
    *
@@ -95,12 +97,11 @@ const Toolbar = ({
               </ToolbarItem>
             )}
             {options.map(({ title, value, component, isClearable, options: filterOptions }) => {
-              const chipProps = {};
+              const chipProps = { categoryName: title };
 
               if (isClearable !== false) {
                 chipProps.chips = setSelectedOptions({ options: filterOptions, value });
                 chipProps.deleteChip = () => onClearFilter({ options: filterOptions, value });
-                chipProps.categoryName = title;
               }
 
               return (

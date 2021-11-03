@@ -1,9 +1,18 @@
-import { createSelector } from 'reselect';
+import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
+import _isEqual from 'lodash/isEqual';
 import {
   rhsmConstants,
   RHSM_API_RESPONSE_TALLY_DATA_TYPES as TALLY_DATA_TYPES,
   RHSM_API_RESPONSE_TALLY_META_TYPES as TALLY_META_TYPES
 } from '../../services/rhsm/rhsmConstants';
+
+/**
+ * Create a custom "are objects equal" selector.
+ *
+ * @private
+ * @type {Function}}
+ */
+const createDeepEqualSelector = createSelectorCreator(defaultMemoize, _isEqual);
 
 /**
  * Return a combined state, props object.
@@ -33,7 +42,7 @@ const statePropsFilter = (state, props, { metrics = [], productId } = {}) => {
  *
  * @type {{ metrics: object }}
  */
-const selector = createSelector([statePropsFilter], response => {
+const selector = createDeepEqualSelector([statePropsFilter], response => {
   const metrics = response || {};
   const updatedResponseData = { pending: false, fulfilled: false, error: false, metrics: {} };
   const objEntries = Object.entries(metrics);

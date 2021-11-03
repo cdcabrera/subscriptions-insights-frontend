@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useShallowCompareEffect } from 'react-use';
+import { useDeepCompareEffect, useShallowCompareEffect } from 'react-use';
 import { reduxActions, reduxSelectors, storeHooks } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
@@ -23,27 +23,27 @@ const useGetGraphTally = ({
 /**
  * Consume Redux selector makeGraph.
  *
- * @param {object|Array} metrics
+ * @param {object|Array} metricIds
  * @param {object} options
  * @param {Function} options.useProduct
  * @param {Function} options.useSelector
  * @returns {*}
  */
 const useGraphTallySelector = (
-  metrics,
+  metricIds,
   { useProduct: useAliasProduct = useProduct, useSelector: useAliasSelector = storeHooks.reactRedux.useSelector } = {}
 ) => {
-  const [updatedMetrics, setUpdatedMetrics] = useState([]);
+  const [updatedMetricIds, setUpdatedMetricIds] = useState([]);
 
-  useShallowCompareEffect(() => {
-    const updated = (typeof metrics === 'string' && [metrics]) || (Array.isArray(metrics) && metrics) || [];
-    setUpdatedMetrics(updated);
-  }, [metrics]);
+  useDeepCompareEffect(() => {
+    const updated = (typeof metricIds === 'string' && [metricIds]) || (Array.isArray(metricIds) && metricIds) || [];
+    setUpdatedMetricIds(updated);
+  }, [metricIds]);
 
   const { productId } = useAliasProduct() || {};
-  const graphSelector = useMemo(() => reduxSelectors.graph.makeGraph({ productId, metrics: updatedMetrics }), [
+  const graphSelector = useMemo(() => reduxSelectors.graph.makeGraph({ productId, metrics: updatedMetricIds }), [
     productId,
-    updatedMetrics
+    updatedMetricIds
   ]);
 
   return useAliasSelector(state => graphSelector(state));
@@ -52,27 +52,35 @@ const useGraphTallySelector = (
 /**
  * Get a combined result from action and selector.
  *
+ * @param {Array} metricIds
  * @param {object} options
  * @param {Function} options.useGetGraphTally
  * @param {Function} options.useGraphTallySelector
  * @param {Function} options.useProduct
- * @param {Function} options.useProductGraphConfig
  * @param {Function} options.useProductGraphTallyQuery
  * @returns {{pending: boolean, fulfilled: boolean, metrics: object, error: boolean}}
  */
-const useGraphMetrics = ({
-  useGetGraphTally: useAliasGetGraphTally = useGetGraphTally,
-  useGraphTallySelector: useAliasGraphTallySelector = useGraphTallySelector,
-  useProduct: useAliasProduct = useProduct,
-  useProductGraphConfig: useAliasProductGraphConfig = useProductGraphConfig,
-  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
-} = {}) => {
+const useGraphMetrics = (
+  metricIds,
+  {
+    useGetGraphTally: useAliasGetGraphTally = useGetGraphTally,
+    useGraphTallySelector: useAliasGraphTallySelector = useGraphTallySelector,
+    useProduct: useAliasProduct = useProduct,
+    useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
+  } = {}
+) => {
   const { productId } = useAliasProduct();
-  const { filters } = useAliasProductGraphConfig();
+  // const [updatedResponse, setUpdatedResponse] = useState({});
+  // const [updatedMetricIds, setUpdatedMetricIds] = useState([]);
   const query = useAliasProductGraphTallyQuery();
-  const metricIds = filters.map(filter => filter.id);
+  const updatedMetricIds = metricIds.map(filter => filter.id);
   const getGraphTally = useAliasGetGraphTally();
-  const { error, fulfilled, pending, metrics } = useAliasGraphTallySelector(metricIds) || {};
+  const { error, fulfilled, pending, metrics } = useAliasGraphTallySelector(updatedMetricIds) || {};
+  // const selectorResponse = useAliasGraphTallySelector(updatedMetricIds) || {};
+
+  // useShallowCompareEffect(() => {
+  //  setUpdatedMetricIds(metricIds.map(filter => filter.id));
+  // }, [metricIds, setUpdatedMetricIds]);
 
   useShallowCompareEffect(() => {
     const {
@@ -83,12 +91,21 @@ const useGraphMetrics = ({
 
     if (granularity && startDate && endDate && productId) {
       getGraphTally(
-        metricIds.map(metricId => ({ id: productId, metric: metricId })),
+        updatedMetricIds.map(metricId => ({ id: productId, metric: metricId })),
         query
       );
     }
-  }, [getGraphTally, productId, metricIds, query]);
+  }, [getGraphTally, productId, updatedMetricIds, query]);
 
+  /*
+  useDeepCompareEffect(() => {
+    setUpdatedResponse(selectorResponse);
+  }, [selectorResponse, setUpdatedResponse]);
+  */
+
+  // return {
+  //  ...updatedResponse
+  // };
   return {
     error,
     fulfilled,
