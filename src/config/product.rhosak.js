@@ -46,6 +46,8 @@ const config = {
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value,
+      chartType: 'line',
+      isStacked: false,
       isStandalone: true,
       highlightCards: [
         'display a string',
@@ -58,6 +60,8 @@ const config = {
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value,
+      chartType: 'line',
+      isStacked: false,
       isStandalone: true
     },
     {
@@ -65,6 +69,8 @@ const config = {
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value,
+      chartType: 'line',
+      isStacked: false,
       isStandalone: true
     }
   ],
