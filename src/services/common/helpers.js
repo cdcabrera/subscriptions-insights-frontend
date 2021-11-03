@@ -58,7 +58,7 @@ const responseNormalize = (data, schema) => {
  * @returns {*|{}}
  */
 const schemaResponse = ({ casing, convert = true, id = null, response, schema } = {}) => {
-  const { value, error = { details: [] } } = schema.validate(response, { convert });
+  const { value, error = { details: [] } } = schema?.validate(response, { convert }) || {};
 
   if (error.details.length && !helpers.TEST_MODE) {
     console.error(
