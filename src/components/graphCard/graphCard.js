@@ -23,7 +23,6 @@ import { translate } from '../i18n/i18n';
  * A chart/graph card.
  *
  * @param {object} props
- * @param {Node} props.children
  * @param {boolean} props.isCardTitleDescription
  * @param {boolean} props.isDisabled
  * @param {Function} props.t
@@ -33,7 +32,6 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const GraphCard = ({
-  children,
   isCardTitleDescription,
   isDisabled,
   t,
@@ -51,9 +49,14 @@ const GraphCard = ({
   }
 
   let actionDisplay = null;
+  let actionField = null;
 
   if (typeof settings?.actionDisplay === 'function') {
     actionDisplay = settings.actionDisplay({ data: metrics });
+  }
+
+  if (typeof settings?.actionField === 'function') {
+    actionField = settings.actionField({ data: metrics });
   }
 
   let graphCardTooltip = null;
@@ -87,7 +90,7 @@ const GraphCard = ({
           </CardTitle>
           <CardActions className={(error && 'blur') || ''}>
             <React.Fragment key="actionDisplay">{actionDisplay}</React.Fragment>
-            {children}
+            <React.Fragment key="actionField">{actionField}</React.Fragment>
           </CardActions>
         </CardHeader>
       </MinHeight>
@@ -106,11 +109,10 @@ const GraphCard = ({
 /**
  * Prop types.
  *
- * @type {{useProduct: Function, t: Function, useProductGraphConfig: Function, children: Node, isDisabled: boolean,
+ * @type {{useProduct: Function, t: Function, useProductGraphConfig: Function, isDisabled: boolean,
  *     useGraphMetrics: Function, isCardTitleDescription: boolean}}
  */
 GraphCard.propTypes = {
-  children: PropTypes.node,
   isCardTitleDescription: PropTypes.bool,
   isDisabled: PropTypes.bool,
   t: PropTypes.func,
@@ -122,11 +124,10 @@ GraphCard.propTypes = {
 /**
  * Default props.
  *
- * @type {{useProduct: Function, t: Function, useProductGraphConfig: Function, children: Node, isDisabled: boolean,
+ * @type {{useProduct: Function, t: Function, useProductGraphConfig: Function, isDisabled: boolean,
  *     useGraphMetrics: Function, isCardTitleDescription: boolean}}
  */
 GraphCard.defaultProps = {
-  children: null,
   isCardTitleDescription: false,
   isDisabled: helpers.UI_DISABLED_GRAPH,
   t: translate,
