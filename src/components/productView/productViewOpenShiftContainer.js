@@ -17,6 +17,7 @@ import InventorySubscriptions from '../inventorySubscriptions/inventorySubscript
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { translate } from '../i18n/i18n';
 import { helpers } from '../../common';
+import { SelectPosition } from '../form/select';
 
 /**
  * An OpenShift Container Platform encompassing view.
@@ -107,9 +108,15 @@ const ProductViewOpenShiftContainer = ({ t, useRouteDetail: useAliasRouteDetail 
             viewId={viewId}
             cardTitle={graphCardTitle}
           >
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && uomFilter && <ToolbarFieldUom />}
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && <ToolbarFieldGranularity />}
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS && <ToolbarFieldRangedMonthly />}
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && uomFilter && (
+              <ToolbarFieldUom position={SelectPosition.right} />
+            )}
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && (
+              <ToolbarFieldGranularity position={SelectPosition.right} />
+            )}
+            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS && (
+              <ToolbarFieldRangedMonthly position={SelectPosition.right} />
+            )}
           </GraphCard>
         </PageSection>
         <PageSection>

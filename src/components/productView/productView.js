@@ -17,6 +17,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { ConnectedInventorySubscriptions } from '../inventorySubscriptions/inventorySubscriptions';
 import { RHSM_API_PATH_PRODUCT_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
+import { SelectPosition } from '../form/select';
 
 /**
  * ToDo: base for default product layouts, add additional props for various toolbars
@@ -107,7 +108,7 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, useRouteDetail:
               cardTitle={graphCardTitle}
             >
               {(React.isValidElement(toolbarGraph) && toolbarGraph) ||
-                (toolbarGraph !== false && <ToolbarFieldGranularity />)}
+                (toolbarGraph !== false && <ToolbarFieldGranularity position={SelectPosition.right} />)}
             </ConnectedGraphCardDeprecated>
           )}
           {productId === RHSM_API_PATH_PRODUCT_TYPES.RHOSAK && <GraphCard />}
