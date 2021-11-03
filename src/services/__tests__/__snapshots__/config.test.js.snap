@@ -9,7 +9,88 @@ Array [
 `;
 
 exports[`ServiceConfig should handle cancelling service calls: cancelled request 1`] = `
-Cancel {
-  "message": "cancelled request",
-}
+Array [
+  Object {
+    "message": "cancelled request",
+  },
+  Object {
+    "message": "cancelled request",
+  },
+  Object {
+    "code": undefined,
+    "config": Object {
+      "adapter": [Function],
+      "cancelToken": CancelToken {
+        "promise": Promise {},
+      },
+      "data": undefined,
+      "headers": Object {
+        "Accept": "application/json, text/plain, */*",
+      },
+      "maxBodyLength": -1,
+      "maxContentLength": -1,
+      "method": "get",
+      "timeout": "60000",
+      "transformRequest": Array [
+        [Function],
+      ],
+      "transformResponse": Array [
+        [Function],
+      ],
+      "transitional": Object {
+        "clarifyTimeoutError": false,
+        "forcedJSONParsing": true,
+        "silentJSONParsing": true,
+      },
+      "url": "/test/",
+      "validateStatus": [Function],
+      "xsrfCookieName": "XSRF-TOKEN",
+      "xsrfHeaderName": "X-XSRF-TOKEN",
+    },
+    "data": "success",
+    "headers": undefined,
+    "request": Request {
+      "config": Object {
+        "adapter": [Function],
+        "cancelToken": CancelToken {
+          "promise": Promise {},
+        },
+        "data": undefined,
+        "headers": Object {
+          "Accept": "application/json, text/plain, */*",
+        },
+        "maxBodyLength": -1,
+        "maxContentLength": -1,
+        "method": "get",
+        "timeout": "60000",
+        "transformRequest": Array [
+          [Function],
+        ],
+        "transformResponse": Array [
+          [Function],
+        ],
+        "transitional": Object {
+          "clarifyTimeoutError": false,
+          "forcedJSONParsing": true,
+          "silentJSONParsing": true,
+        },
+        "url": "/test/",
+        "validateStatus": [Function],
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+      },
+      "headers": Object {
+        "Accept": "application/json, text/plain, */*",
+      },
+      "reject": [Function],
+      "resolve": [Function],
+      "responseType": undefined,
+      "timeout": "60000",
+      "url": "/test/",
+      "withCredentials": false,
+    },
+    "status": 200,
+    "statusText": undefined,
+  },
+]
 `;

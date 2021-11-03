@@ -1,0 +1,190 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GraphSelectors should handle a cancelled state: cancelled state 1`] = `
+Object {
+  "error": false,
+  "fulfilled": false,
+  "metrics": Object {
+    "Dolor Sit": Object {
+      "data": Array [],
+      "date": "mock date",
+      "error": false,
+      "errorMessage": "",
+      "fulfilled": false,
+      "meta": Object {
+        "count": 0,
+        "metricId": undefined,
+        "productId": undefined,
+        "totalMonthly": Object {
+          "date": undefined,
+          "hasData": undefined,
+          "value": undefined,
+        },
+      },
+      "metaId": "Lorem Ipsum_Dolor Sit",
+      "metaIdMetric": Object {
+        "id": "Lorem Ipsum",
+        "metric": "Dolor Sit",
+      },
+      "metaQuery": Object {},
+      "pending": true,
+    },
+  },
+  "pending": true,
+}
+`;
+
+exports[`GraphSelectors should handle a fulfilled state: fulfilled state 1`] = `
+Object {
+  "error": false,
+  "fulfilled": true,
+  "metrics": Object {
+    "Dolor Sit": Object {
+      "data": Array [
+        Object {
+          "date": "2019-09-04T00:00:00.000Z",
+          "hasData": true,
+          "x": 0,
+          "y": 10,
+        },
+        Object {
+          "date": "2019-09-05T00:00:00.000Z",
+          "hasData": false,
+          "x": 1,
+          "y": 15,
+        },
+      ],
+      "date": "2019-09-05T00:00:00.000Z",
+      "error": false,
+      "errorMessage": "",
+      "fulfilled": true,
+      "meta": Object {
+        "count": 2,
+        "metricId": "Dolor Sit",
+        "productId": "Lorem Ipsum",
+        "totalMonthly": Object {
+          "date": "2019-09-05T00:00:00.000Z",
+          "hasData": true,
+          "value": 25,
+        },
+      },
+      "metaId": "Lorem Ipsum_Dolor Sit",
+      "metaIdMetric": Object {
+        "id": "Lorem Ipsum",
+        "metric": "Dolor Sit",
+      },
+      "metaQuery": Object {},
+      "pending": false,
+      "status": 304,
+    },
+  },
+  "pending": false,
+}
+`;
+
+exports[`GraphSelectors should handle a pending state: pending state 1`] = `
+Object {
+  "error": false,
+  "fulfilled": false,
+  "metrics": Object {
+    "Dolor Sit": Object {
+      "data": Array [],
+      "error": false,
+      "errorMessage": "",
+      "fulfilled": false,
+      "meta": Object {
+        "count": 0,
+        "metricId": undefined,
+        "productId": undefined,
+        "totalMonthly": Object {
+          "date": undefined,
+          "hasData": undefined,
+          "value": undefined,
+        },
+      },
+      "metaId": "Lorem Ipsum_Dolor Sit",
+      "metaIdMetric": Object {
+        "id": "Lorem Ipsum",
+        "metric": "Dolor Sit",
+      },
+      "metaQuery": Object {},
+      "pending": true,
+    },
+  },
+  "pending": true,
+}
+`;
+
+exports[`GraphSelectors should handle an error state: error state 1`] = `
+Object {
+  "error": true,
+  "fulfilled": false,
+  "metrics": Object {
+    "Dolor Sit": Object {
+      "data": Array [],
+      "error": true,
+      "errorMessage": "I'm a teapot",
+      "fulfilled": false,
+      "meta": Object {
+        "count": 0,
+        "metricId": undefined,
+        "productId": undefined,
+        "totalMonthly": Object {
+          "date": undefined,
+          "hasData": undefined,
+          "value": undefined,
+        },
+      },
+      "metaId": "Lorem Ipsum_Dolor Sit",
+      "metaIdMetric": Object {
+        "id": "Lorem Ipsum",
+        "metric": "Dolor Sit",
+      },
+      "metaQuery": Object {},
+      "pending": false,
+      "status": 418,
+    },
+    "Et all": Object {
+      "data": Array [],
+      "error": true,
+      "errorMessage": "I'm a teapot",
+      "fulfilled": false,
+      "meta": Object {
+        "count": 0,
+        "metricId": undefined,
+        "productId": undefined,
+        "totalMonthly": Object {
+          "date": undefined,
+          "hasData": undefined,
+          "value": undefined,
+        },
+      },
+      "metaId": "Lorem Ipsum_Et all",
+      "metaIdMetric": Object {
+        "id": "Lorem Ipsum",
+        "metric": "Et all",
+      },
+      "metaQuery": Object {},
+      "pending": false,
+      "status": 418,
+    },
+  },
+  "pending": false,
+}
+`;
+
+exports[`GraphSelectors should pass minimal data on missing a reducer response: missing reducer error 1`] = `
+Object {
+  "error": true,
+  "fulfilled": false,
+  "metrics": Object {},
+  "pending": false,
+}
+`;
+
+exports[`GraphSelectors should return specific selectors: selectors 1`] = `
+Object {
+  "graph": [Function],
+  "makeGraph": [Function],
+}
+`;

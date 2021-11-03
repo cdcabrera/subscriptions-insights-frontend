@@ -60,6 +60,7 @@ describe('ServiceConfig', () => {
     const response = await returnPromiseAsync(() =>
       Promise.all([
         service.serviceCall({ url: '/test/', cancel: true }),
+        service.serviceCall({ url: '/test/', cancel: true }),
         service.serviceCall({ url: '/test/', cancel: true })
       ])
     );
