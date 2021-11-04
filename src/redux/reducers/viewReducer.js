@@ -12,6 +12,7 @@ import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
  */
 const initialState = {
   query: {},
+  balls: {},
   graphTallyQuery: {},
   inventoryGuestsQuery: {},
   inventoryHostsQuery: {},
@@ -27,6 +28,17 @@ const initialState = {
  */
 const viewReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'balls':
+      return reduxHelpers.setStateProp(
+        'balls',
+        {
+          balls: 'test'
+        },
+        {
+          state,
+          reset: false
+        }
+      );
     case reduxTypes.query.SET_QUERY_RESET_INVENTORY_LIST:
       const updateResetQueries = (query = {}, id) => {
         const queryIds = routerHelpers.productGroups[id] || (query[id] && [id]) || [];

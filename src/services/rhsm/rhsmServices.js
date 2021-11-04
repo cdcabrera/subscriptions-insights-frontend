@@ -1,6 +1,7 @@
 import { serviceCall } from '../config';
 import { rhsmSchemas } from './rhsmSchemas';
 import { helpers } from '../../common';
+import { rhsmSelectors } from './rhsmSelectors';
 
 /**
  * @api {get} /api/rhsm-subscriptions/v1/version
@@ -1492,8 +1493,8 @@ const getGraphReports = (id, params = {}, options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
- * @param {*} options.errorSchema
- * @param {*} options.responseSchema
+ * @param {Array} options.schema An array of callbacks used to transform the response, ie. [SUCCESS SCHEMA, ERROR SCHEMA]
+ * @param {Array} options.transform An array of callbacks used to transform the response, ie. [SUCCESS TRANSFORM, ERROR TRANSFORM]
  * @returns {Promise<*>}
  */
 const getGraphTally = (id, params = {}, options = {}) => {
@@ -1501,8 +1502,10 @@ const getGraphTally = (id, params = {}, options = {}) => {
     cache = true,
     cancel = true,
     cancelId,
-    errorSchema = rhsmSchemas.errors,
-    responseSchema = rhsmSchemas.tally
+    schema = [rhsmSchemas.tally, rhsmSchemas.errors],
+    // errorSchema = rhsmSchemas.errors,
+    // responseSchema = rhsmSchemas.tally,
+    transform = [rhsmSelectors.tally]
   } = options;
   const updatedId = (typeof id === 'string' && [id]) || (Array.isArray(id) && id) || [];
 
@@ -1517,8 +1520,10 @@ const getGraphTally = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
-    errorSchema,
-    responseSchema
+    schema,
+    // errorSchema,
+    // responseSchema,
+    transform
   });
 };
 

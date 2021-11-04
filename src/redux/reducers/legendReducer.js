@@ -8,9 +8,7 @@ import { reduxHelpers } from '../common/reduxHelpers';
  * @type {{reportCapacity: {}, legend: {}, tallyCapacity: {}}}
  */
 const initialState = {
-  // legend: {},
-  reportCapacity: {},
-  tally: {}
+  test: {}
 };
 
 /**
@@ -21,33 +19,24 @@ const initialState = {
  * @param {object} action
  * @returns {object|{}}
  */
-const graphReducer = (state = initialState, action) => {
+const legendReducer = (state = initialState, action) => {
   switch (action.type) {
-    /*
-    case graphTypes.SET_GRAPH_LEGEND:
+    case `${graphTypes.SET_GRAPH_LEGEND}`:
       return reduxHelpers.setStateProp(
-        'legend',
+        'test',
         {
-          [action.viewId]: action.legend
+          [action.viewId]: action.value
         },
         {
           state,
           reset: false
         }
       );
-      */
     default:
-      return reduxHelpers.generatedPromiseActionReducer(
-        [
-          { ref: 'reportCapacity', type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM },
-          { ref: 'tally', type: rhsmTypes.GET_GRAPH_TALLY_RHSM }
-        ],
-        state,
-        action
-      );
+      return state;
   }
 };
 
-graphReducer.initialState = initialState;
+legendReducer.initialState = initialState;
 
-export { graphReducer as default, initialState, graphReducer };
+export { legendReducer as default, initialState, legendReducer };

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { Button, Tooltip, TooltipPosition } from '@patternfly/react-core';
 import { useMount } from 'react-use';
 import { useProduct } from '../productView/productViewContext';
-import { reduxTypes, storeHooks } from '../../redux';
+import { reduxTypes, storeHooks, store } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 import { ChartIcon } from '../chart/chartIcon';
@@ -30,10 +31,32 @@ const GraphCardChartLegend = ({
   useSelector: useAliasSelector
 }) => {
   const { productLabel, viewId } = useAliasProduct();
-  const legend = useAliasSelector(({ graph }) => graph?.legend);
+  const [firstItem] = datum.dataSets || [];
+  const { id: firstId } = firstItem || {};
+  // const legend = useAliasSelector(({ graph }) => graph?.legend);
+  const legend = useAliasSelector(({ legend: legendReducer }) => legendReducer.test?.[`${viewId}-${firstId}`]);
+  /*
+  const legend = useAliasSelector(({ legend }) => {
+    const items = {};
+    datum.dataSets.forEach(({ id }) => {
+      items[`${viewId}-${id}`] = legend?.[`${viewId}-${id}`];
+    });
+    return {
+      ...items
+    };
+  });
+  */
   const dispatch = useAliasDispatch();
 
   useMount(() => {
+    /*
+    const checkIsToggled = legend || chart.isToggled(firstId);
+
+    if (checkIsToggled) {
+      chart.hide(firstId);
+    }
+    */
+    /*
     datum.dataSets.forEach(({ id }) => {
       const checkIsToggled = legend?.[`${viewId}-${id}`] || chart.isToggled(id);
 
@@ -41,6 +64,7 @@ const GraphCardChartLegend = ({
         chart.hide(id);
       }
     });
+    */
   });
 
   /**
@@ -53,10 +77,13 @@ const GraphCardChartLegend = ({
     const updatedToggle = chart.toggle(id);
 
     dispatch({
+      // type: 'made up'
       type: reduxTypes.graph.SET_GRAPH_LEGEND,
-      legend: {
-        [`${viewId}-${id}`]: updatedToggle
-      }
+      viewId: `${viewId}-${id}`,
+      value: updatedToggle
+      // legend: {
+      //  [`${viewId}-${id}`]: updatedToggle
+      // }
     });
   };
 
@@ -83,7 +110,8 @@ const GraphCardChartLegend = ({
           [<span style={{ whiteSpace: 'nowrap' }} />]
         );
 
-        const checkIsToggled = legend?.[`${viewId}-${id}`] || chart.isToggled(id);
+        // const checkIsToggled = legend?.[`${viewId}-${id}`] || chart.isToggled(id);
+        const checkIsToggled = legend || chart.isToggled(id);
 
         const button = (
           <Button
@@ -172,7 +200,7 @@ GraphCardChartLegend.defaultProps = {
   t: translate,
   useDispatch: storeHooks.reactRedux.useDispatch,
   useProduct,
-  useSelector: storeHooks.reactRedux.useSelector
+  useSelector // storeHooks.reactRedux.useSelector
 };
 
 export { GraphCardChartLegend as default, GraphCardChartLegend };
