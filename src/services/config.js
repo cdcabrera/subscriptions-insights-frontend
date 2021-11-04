@@ -48,14 +48,15 @@ const responseCache = new LruCache({
  * @param {boolean} config.cache
  * @param {boolean} config.cancel
  * @param {string} config.cancelId
- * @param {*} config.errorSchema
- * @param {*} config.responseSchema
+ * @param {Array} config.schema
+ * @param {Array} config.transform
  * @returns {Promise<*>}
  */
 const serviceCall = async config => {
   await platformServices.getUser();
 
   const updatedConfig = { ...config, cache: undefined, cacheResponse: config.cache };
+  const responseTransformers = [];
   const axiosInstance = axios.create();
   const sortedParams =
     (updatedConfig.params && Object.entries(updatedConfig.params).sort(([a], [b]) => a.localeCompare(b))) || [];
@@ -90,41 +91,66 @@ const serviceCall = async config => {
     }
   }
 
-  axiosInstance.interceptors.response.use(
-    response => {
-      const updatedResponse = { ...response };
+  if (updatedConfig.schema) {
+    responseTransformers.push(updatedConfig.schema);
+  }
 
-      if (updatedConfig.responseSchema) {
+  if (updatedConfig.transform) {
+    responseTransformers.push(updatedConfig.transform);
+  }
+
+  responseTransformers.forEach(([successTransform, errorTransform]) => {
+    const transformers = [undefined, response => Promise.reject(response)];
+
+    if (successTransform) {
+      transformers[0] = response => {
+        const updatedResponse = { ...response };
         const { data, error: normalizeError } = serviceHelpers.responseNormalize(
           updatedResponse.data,
-          updatedConfig.responseSchema
+          successTransform
         );
 
         if (!normalizeError) {
           updatedResponse.data = data;
         }
-      }
 
-      if (updatedConfig.cacheResponse === true) {
-        responseCache.set(cacheId, updatedResponse);
-      }
-
-      return updatedResponse;
-    },
-    error => {
-      const updatedError = { ...error };
-
-      if (updatedConfig.errorSchema) {
-        const errorData = updatedError?.response?.data;
-        const { data, error: normalizeError } = serviceHelpers.responseNormalize(errorData, updatedConfig.errorSchema);
-        if (!normalizeError) {
-          updatedError.response = { ...updatedError.response, data };
-        }
-      }
-
-      return updatedError;
+        return updatedResponse;
+      };
     }
-  );
+
+    if (errorTransform) {
+      transformers[1] = response => {
+        const updatedResponse = { ...response };
+        const { data, error: normalizeError } = serviceHelpers.responseNormalize(
+          updatedResponse?.response?.data,
+          errorTransform
+        );
+
+        if (!normalizeError) {
+          updatedResponse.response = { ...updatedResponse.response, data };
+        }
+
+        return updatedResponse;
+      };
+    }
+
+    axiosInstance.interceptors.response.use(...transformers);
+  });
+
+  if (updatedConfig.cacheResponse === true) {
+    axiosInstance.interceptors.response.use(
+      response => {
+        const updatedResponse = { ...response };
+
+        if (updatedConfig.cacheResponse === true) {
+          responseCache.set(cacheId, updatedResponse);
+        }
+
+        return updatedResponse;
+      },
+      response => Promise.reject(response)
+    );
+  }
 
   return axiosInstance(serviceConfig(updatedConfig));
 };

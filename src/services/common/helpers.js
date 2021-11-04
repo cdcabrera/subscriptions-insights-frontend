@@ -30,15 +30,15 @@ const camelCase = obj => {
  * Apply response schema callback to data.
  *
  * @param {object} data
- * @param {Function} schema
+ * @param {Function} callback
  * @returns {{data: *, error}}
  */
-const responseNormalize = (data, schema) => {
+const responseNormalize = (data, callback) => {
   let error;
   let updatedData = data;
 
   try {
-    updatedData = schema(data);
+    updatedData = callback(data);
   } catch (e) {
     error = e;
   }
