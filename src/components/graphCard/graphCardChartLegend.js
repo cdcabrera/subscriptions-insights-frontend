@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Button, Tooltip, TooltipPosition } from '@patternfly/react-core';
 import { useMount } from 'react-use';
 import { useProduct } from '../productView/productViewContext';
-import { reduxTypes, storeHooks, store } from '../../redux';
+import { reduxTypes, storeHooks } from '../../redux';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 import { ChartIcon } from '../chart/chartIcon';
@@ -49,14 +49,6 @@ const GraphCardChartLegend = ({
   const dispatch = useAliasDispatch();
 
   useMount(() => {
-    /*
-    const checkIsToggled = legend || chart.isToggled(firstId);
-
-    if (checkIsToggled) {
-      chart.hide(firstId);
-    }
-    */
-    /*
     datum.dataSets.forEach(({ id }) => {
       const checkIsToggled = legend?.[`${viewId}-${id}`] || chart.isToggled(id);
 
@@ -64,7 +56,6 @@ const GraphCardChartLegend = ({
         chart.hide(id);
       }
     });
-    */
   });
 
   /**
@@ -77,13 +68,9 @@ const GraphCardChartLegend = ({
     const updatedToggle = chart.toggle(id);
 
     dispatch({
-      // type: 'made up'
       type: reduxTypes.graph.SET_GRAPH_LEGEND,
       id: `${viewId}-${id}`,
       value: updatedToggle
-      // legend: {
-      //  [`${viewId}-${id}`]: updatedToggle
-      // }
     });
   };
 

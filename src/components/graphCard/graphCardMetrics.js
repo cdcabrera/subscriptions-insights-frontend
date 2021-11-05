@@ -16,7 +16,7 @@ import { useProduct, useProductGraphConfig } from '../productView/productViewCon
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { GraphCardChart } from './graphCardChart';
-import { useGraphMetrics } from './graphCardContext';
+import { useGraphCardContext, useGraphMetrics } from './graphCardContext';
 import { translate } from '../i18n/i18n';
 import rhsmConstants from '../../services/rhsm/rhsmConstants';
 
@@ -40,11 +40,16 @@ const GraphCardMetrics = ({
   useProduct: useAliasProduct,
   useProductGraphConfig: useAliasProductGraphConfig
 }) => {
+  const { settings = { groupedFilters: [] } } = useGraphCardContext();
   const { productId } = useAliasProduct();
   // const { settings, filters } = useAliasProductGraphConfig();
-  const { settings } = useAliasProductGraphConfig();
+  // const { settings } = useAliasProductGraphConfig();
   // const filteredMetrics = filters.filter(({ isStandalone }) => isStandalone !== true);
-  const { error, pending, metrics } = useAliasGraphMetrics(metricIds);
+  const { error, pending, metrics } = {}; // useAliasGraphMetrics(metricIds);
+
+  if (!settings.groupedFilters.length) {
+    return null;
+  }
 
   let actionDisplay = null;
   let actionField = null;

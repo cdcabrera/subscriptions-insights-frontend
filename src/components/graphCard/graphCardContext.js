@@ -1,5 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { useDeepCompareEffect, useShallowCompareEffect } from 'react-use';
+import { useSelector } from 'react-redux';
 import { reduxActions, reduxSelectors, storeHooks } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
@@ -11,7 +12,7 @@ import { helpers } from '../../common/helpers';
  *
  * @type {React.Context<{}>}
  */
-const DEFAULT_CONTEXT = [{ settings: { groupedFilters: [], standaloneFilters: [], filters: [] } }, helpers.noop];
+const DEFAULT_CONTEXT = [{ settings: { isStandalone: false, metrics: [], metric: undefined } }, helpers.noop];
 
 const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
 
@@ -30,12 +31,41 @@ const useGraphCardContext = () => useContext(GraphCardContext);
  * @param {Function} options.useDispatch
  * @returns {Function}
  */
-const useGetGraphTally = ({
+const useGetGraphTallyOLD = ({
   cancelId = 'graphTally',
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
   return (idMetric = {}, query = {}) => reduxActions.rhsm.getGraphTally(idMetric, query, { cancelId })(dispatch);
+};
+
+const useGetGraphTallyWORKSISH = ({
+  getGraphTally = reduxActions.rhsm.getGraphTally,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
+  useProduct: useAliasProduct = useProduct,
+  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const query = useAliasProductGraphTallyQuery();
+  const dispatch = useAliasDispatch();
+  const { settings = {} } = useAliasGraphCardContext();
+  const { metrics = [] } = settings;
+
+  useShallowCompareEffect(() => {
+    const {
+      [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate,
+      [RHSM_API_QUERY_SET_TYPES.END_DATE]: endDate,
+      [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity
+    } = query;
+
+    if (granularity && startDate && endDate && productId) {
+      getGraphTally(
+        metrics.map(({ id: metricId }) => ({ id: productId, metric: metricId })),
+        query
+      )(dispatch);
+    }
+  }, [dispatch, productId, getGraphTally, metrics, query]);
 };
 
 /**
@@ -47,7 +77,7 @@ const useGetGraphTally = ({
  * @param {Function} options.useSelector
  * @returns {*}
  */
-const useGraphTallySelector = (
+const useGraphTallySelectorOLD = (
   metricIds,
   { useProduct: useAliasProduct = useProduct, useSelector: useAliasSelector = storeHooks.reactRedux.useSelector } = {}
 ) =>
@@ -79,6 +109,88 @@ const useGraphTallySelector = (
 
   // return useAliasSelector(state => graphSelector(state));
   ({});
+
+const useGraphTallySelector = ({
+  useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
+  useProduct: useAliasProduct = useProduct,
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+} = {}) => {
+  const { productId } = useAliasProduct();
+  // const { settings = {} } = useAliasGraphCardContext();
+  const { metrics = [] } = {};
+  const data = {};
+
+  console.log('METRICS >>>', metrics);
+
+  const dataSets = useAliasSelector(({ graph }) =>
+    metrics.map(({ id: metricId, ...metric }) => {
+      const { data: responseData = {} } = graph.tally?.[`${productId}_${metricId}`] || {};
+      const response = {
+        ...metric,
+        id: metricId,
+        data: responseData?.data || [],
+        meta: responseData?.meta || {}
+      };
+
+      data[metricId] = response;
+      return response;
+    })
+  );
+
+  console.log('SEL >>>>', dataSets);
+
+  let isPending = false;
+  let isFulfilled = false;
+  let isError = false;
+  let errorCount = 0;
+
+  dataSets.forEach(({ pending, fulfilled, error, cancelled }) => {
+    const updatedPending = pending || cancelled || false;
+
+    if (updatedPending) {
+      isPending = true;
+    }
+
+    if (fulfilled) {
+      isFulfilled = true;
+    }
+
+    if (error) {
+      errorCount += 1;
+    }
+  });
+
+  if (errorCount === dataSets.length) {
+    isError = true;
+  } else if (isPending) {
+    isPending = true;
+  } else if (isFulfilled) {
+    isFulfilled = true;
+  }
+
+  return {
+    error: isError,
+    fulfilled: isFulfilled,
+    pending: isPending,
+    data,
+    dataSets
+  };
+  /*
+  const { fulfilled, pending, error, data } =
+        useSelector(({ graph }) => graph.tally?.[`${productId}_${metricId}`]) || {};
+  return {
+    fulfilled,
+    pending,
+    error,
+    metrics: {
+      [metricId]: {
+        data: data?.data,
+        meta: data?.meta
+      }
+    }
+  };
+  */
+};
 /**
  * Get a combined result from action and selector.
  *
@@ -88,9 +200,19 @@ const useGraphTallySelector = (
  * @param {Function} options.useGraphTallySelector
  * @param {Function} options.useProduct
  * @param {Function} options.useProductGraphTallyQuery
+ * @param metricIds.useGetGraphTally
+ * @param metricIds.useGraphTallySelector
  * @returns {{pending: boolean, fulfilled: boolean, metrics: object, error: boolean}}
  */
-const useGraphMetrics = (
+const useGraphMetrics = ({
+  useGetGraphTally: useAliasGetGraphTally = useGetGraphTally,
+  useGraphTallySelector: useAliasGraphTallySelector = useGraphTallySelector
+} = {}) => {
+  useAliasGetGraphTally();
+  return useAliasGraphTallySelector() || {};
+};
+
+const useGraphMetricsOLD = (
   metricIds,
   {
     useGetGraphTally: useAliasGetGraphTally = useGetGraphTally,
@@ -150,7 +272,7 @@ const context = {
   GraphCardContext,
   DEFAULT_CONTEXT,
   useGraphCardContext,
-  useGetGraphTally,
+  // useGetGraphTally,
   useGraphTallySelector,
   useGraphMetrics
 };
@@ -162,6 +284,6 @@ export {
   DEFAULT_CONTEXT,
   useGraphCardContext,
   useGraphMetrics,
-  useGetGraphTally,
+  // useGetGraphTally,
   useGraphTallySelector
 };

@@ -197,7 +197,7 @@ const generateElementsProps = ({ dataSets = [], maxX, maxY, xValueFormat, yValue
 const generateTooltipData = ({ content = helpers.noop, dataSets = [] } = {}) => {
   const tooltipDataSetLookUp = {};
 
-  if (content && dataSets?.[0]?.data) {
+  if (content && Array.isArray(dataSets?.[0]?.data)) {
     dataSets[0].data.forEach((dataSet, index) => {
       const itemsByKey = {};
 

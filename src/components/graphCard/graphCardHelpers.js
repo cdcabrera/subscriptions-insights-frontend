@@ -4,17 +4,22 @@ import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../typ
 import { dateHelpers, helpers } from '../../common';
 
 /**
- * Update chart/graph filters with base styling.
+ * Update chart/graph filters with base settings with styling.
  *
  * @param {Array} filters
  * @returns {{standaloneFilters: Array, groupedFilters: Array}}
  */
-const generateBaseStyling = filters => {
+const generateBaseSettings = filters => {
   const standaloneFilters = [];
   const groupedFilters = [];
 
-  filters.forEach(({ isStandalone = false, isThreshold = false, ...settings }) => {
+  filters.forEach(({ id, isStandalone = false, isThreshold = false, ...settings }) => {
+    if (!id) {
+      return;
+    }
+
     const baseFilterSettings = {
+      id,
       isStacked: !isThreshold,
       isStandalone,
       isThreshold,
@@ -205,7 +210,7 @@ const yAxisTickFormat = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
 };
 
 const graphCardHelpers = {
-  generateBaseStyling,
+  generateBaseSettings,
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
@@ -216,7 +221,7 @@ const graphCardHelpers = {
 export {
   graphCardHelpers as default,
   graphCardHelpers,
-  generateBaseStyling,
+  generateBaseSettings,
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
