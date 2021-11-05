@@ -1,6 +1,50 @@
 import moment from 'moment';
+import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../../types/rhsmApiTypes';
 import { dateHelpers, helpers } from '../../common';
+
+/**
+ * Update chart/graph filters with base styling.
+ *
+ * @param {Array} filters
+ * @returns {{standaloneFilters: Array, groupedFilters: Array}}
+ */
+const generateBaseStyling = filters => {
+  const standaloneFilters = [];
+  const groupedFilters = [];
+
+  filters.forEach(({ isStandalone = false, isThreshold = false, ...settings }) => {
+    const baseFilterSettings = {
+      isStacked: !isThreshold,
+      isStandalone,
+      isThreshold,
+      strokeWidth: 2
+    };
+
+    if (isThreshold) {
+      baseFilterSettings.stroke = chartColorGreenDark.value;
+      baseFilterSettings.strokeDasharray = '4,3';
+      baseFilterSettings.strokeWidth = 3;
+    }
+
+    if (isStandalone) {
+      standaloneFilters.push({
+        ...baseFilterSettings,
+        ...settings
+      });
+    } else {
+      groupedFilters.push({
+        ...baseFilterSettings,
+        ...settings
+      });
+    }
+  });
+
+  return {
+    standaloneFilters,
+    groupedFilters
+  };
+};
 
 /**
  * Returns x axis ticks/intervals array for the xAxisTickInterval
@@ -161,6 +205,7 @@ const yAxisTickFormat = ({ tick, locale = helpers.UI_LOCALE_DEFAULT }) => {
 };
 
 const graphCardHelpers = {
+  generateBaseStyling,
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
@@ -171,6 +216,7 @@ const graphCardHelpers = {
 export {
   graphCardHelpers as default,
   graphCardHelpers,
+  generateBaseStyling,
   getChartXAxisLabelIncrement,
   getTooltipDate,
   xAxisTickFormat,
