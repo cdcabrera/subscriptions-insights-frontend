@@ -11,7 +11,7 @@ import { helpers } from '../../common/helpers';
  *
  * @type {React.Context<{}>}
  */
-const DEFAULT_CONTEXT = [{ settings: { groupedFilters: [], standaloneFilters: [], filters: [] } }, helpers.noop];
+const DEFAULT_CONTEXT = [{ settings: { isStandalone: false, metrics: [], metric: undefined } }, helpers.noop];
 
 const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
 

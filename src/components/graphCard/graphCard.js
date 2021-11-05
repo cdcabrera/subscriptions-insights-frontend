@@ -5,7 +5,7 @@ import { GraphCardContext } from './graphCardContext';
 import { helpers } from '../../common';
 import { GraphCardMetrics } from './graphCardMetrics';
 import { GraphCardMetric } from './graphCardMetric';
-import { generateBaseStyling } from './graphCardHelpers';
+import { generateBaseSettings } from './graphCardHelpers';
 
 /**
  * Set up graph cards. Expand filters with base graph settings.
@@ -16,9 +16,11 @@ import { generateBaseStyling } from './graphCardHelpers';
  * @returns {Node}
  */
 const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConfig }) => {
-  const [context, setContext] = useState({});
-  const { filters, settings } = useAliasProductGraphConfig();
+  // const [context, setContext] = useState({});
+  const { filters } = useAliasProductGraphConfig();
+  const { groupedFilters, standaloneFilters } = generateBaseSettings(filters);
 
+  /*
   useEffect(() => {
     const { groupedFilters, standaloneFilters } = generateBaseStyling(filters);
 
@@ -30,18 +32,19 @@ const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConf
       }
     });
   }, [filters, settings, setContext]);
+  */
 
   if (isDisabled) {
     return null;
   }
 
   return (
-    <GraphCardContext.Provider value={context}>
-      <GraphCardMetrics metricFilters={context?.settings?.groupedFilters} />
-      {context?.settings?.standaloneFilters.map(metricFilter => (
+    <React.Fragment>
+      <GraphCardMetrics metricFilters={groupedFilters} />
+      {standaloneFilters.map(metricFilter => (
         <GraphCardMetric key={`graphcard_${metricFilter.id}`} metricFilter={metricFilter} />
       ))}
-    </GraphCardContext.Provider>
+    </React.Fragment>
   );
 };
 
