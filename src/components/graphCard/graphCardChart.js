@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
 import { Card, CardActions, CardBody, CardHeader, CardTitle, Title } from '@patternfly/react-core';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import { useShallowCompareEffect } from 'react-use';
 import { useProduct, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { useGraphCardContext, useGraphMetrics, useGetGraphTallyOLD } from './graphCardContext';
@@ -17,6 +17,7 @@ import { translate } from '../i18n/i18n';
 import { GraphCardChartTitleTooltip } from './graphCardChartTitleTooltip';
 import { storeHooks } from '../../redux/hooks';
 import { reduxActions } from '../../redux/actions';
+import { useMultiSelector } from '../../redux/hooks/useReactRedux';
 
 const useSelectMetric = () => {
   const { productId } = useProduct();
@@ -47,26 +48,136 @@ const useSelectMetric = () => {
   };
 };
 
+const useSelectMetricsTOOLINKED = () => {
+  const { productId } = useProduct();
+  const { settings = {} } = useGraphCardContext();
+  const { metrics = [] } = settings;
+  const data = {};
+
+  const dataSets = useSelector(({ graph }) =>
+    metrics.map(({ id: metricId, ...metric }) => {
+      const { data: responseData = {} } = graph.tally?.[`${productId}_${metricId}`] || {};
+      return {
+        ...metric,
+        id: metricId,
+        data: responseData?.data || [],
+        meta: responseData?.meta || {}
+      };
+    })
+  );
+
+  let isPending = false;
+  let isFulfilled = false;
+  let isError = false;
+  let errorCount = 0;
+
+  dataSets.forEach(dataSet => {
+    const { id: metricId, pending, fulfilled, error, cancelled } = dataSet || {};
+    data[metricId] = dataSet;
+
+    const updatedPending = pending || cancelled || false;
+
+    if (updatedPending) {
+      isPending = true;
+    }
+
+    if (fulfilled) {
+      isFulfilled = true;
+    }
+
+    if (error) {
+      errorCount += 1;
+    }
+  });
+
+  if (errorCount === dataSets.length) {
+    isError = true;
+  } else if (isPending) {
+    isPending = true;
+  } else if (isFulfilled) {
+    isFulfilled = true;
+  }
+
+  return {
+    error: isError,
+    fulfilled: isFulfilled,
+    pending: isPending,
+    data,
+    dataSets
+  };
+};
+
 const useSelectMetrics = () => {
   const { productId } = useProduct();
   const { settings = {} } = useGraphCardContext();
   const { metrics = [] } = settings;
+  const data = {};
 
-  const { fulfilled, pending, error, data } =
-    useSelector(({ graph }) => graph.tally?.[`${productId}_${metric.id}`]) || {};
+  /*
+  const dataSets = useSelector(
+    ({ graph }) =>
+      metrics.map(({ id: metricId, ...metric }) => {
+        const { data: responseData = {} } = graph.tally?.[`${productId}_${metricId}`] || {};
+        return {
+          ...metric,
+          id: metricId,
+          data: responseData?.data || [],
+          meta: responseData?.meta || {}
+        };
+      }),
+    shallowEqual
+  );
+  */
+  const metricResponses = useMultiSelector(
+    // metrics.map(({ id: metricId, ...metric }) => ({ graph }) => ({ id: metricId, ...metric, ...graph.tally?.[`${productId}_${metricId}`]}))
+    metrics.map(({ id: metricId }) => ({ graph }) => graph.tally?.[`${productId}_${metricId}`])
+  );
+
+  let isPending = false;
+  let isFulfilled = false;
+  let isError = false;
+  let errorCount = 0;
+
+  const dataSets = metricResponses.map((metric, index) => {
+    const { pending, fulfilled, error, cancelled } = metric || {};
+    const updatedPending = pending || cancelled || false;
+
+    if (updatedPending) {
+      isPending = true;
+    }
+
+    if (fulfilled) {
+      isFulfilled = true;
+    }
+
+    if (error) {
+      errorCount += 1;
+    }
+
+    const updatedMetric = {
+      ...metrics[index],
+      data: metric?.data?.data || [],
+      meta: metric?.data?.meta || {}
+    };
+    data[metrics[index].id] = updatedMetric;
+
+    return updatedMetric;
+  });
+
+  if (errorCount === dataSets.length) {
+    isError = true;
+  } else if (isPending) {
+    isPending = true;
+  } else if (isFulfilled) {
+    isFulfilled = true;
+  }
 
   return {
-    fulfilled,
-    pending,
-    error,
-    data: {},
-    dataSets: [
-      {
-        // ...metric,
-        data: data?.data,
-        meta: data?.meta
-      }
-    ]
+    error: isError,
+    fulfilled: isFulfilled,
+    pending: isPending,
+    data,
+    dataSets
   };
 };
 
@@ -219,7 +330,7 @@ const GraphCardChart = ({
   // const { metrics } = settings; // use "metrics" in useGraphMetrics to combine settings and data into a "dataSets"
   // const { pending, error, data = {}, dataSets = [] } = {}; // useAliasGraphMetrics();
   // const test = useSelectMetric();
-  const { pending, error, data = {}, dataSets = [] } = useSelectMetric();
+  const { pending, error, data = {}, dataSets = [] } = useSelectMetrics(); // useSelectMetric();
 
   console.log('GRAPH CARD CHART >>>', dataSets);
 
