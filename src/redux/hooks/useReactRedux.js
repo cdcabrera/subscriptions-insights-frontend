@@ -30,7 +30,7 @@ const useSelector = (selector, value = null, options = {}) => {
 };
 
 /**
- * Generate a multiple selectors for use in "useSelector".
+ * Generate a selector from multiple selectors for use in "useSelector".
  *
  * @param {Array} params
  * @returns {Array}
@@ -38,7 +38,7 @@ const useSelector = (selector, value = null, options = {}) => {
 const useMultiSelector = (...params) => {
   const [firstSel, ...selectors] = params;
   const updatedSelectors = (Array.isArray(firstSel) && firstSel) || selectors;
-  const multiSelector = createSelector(updatedSelectors, (...storeResults) => storeResults);
+  const multiSelector = createSelector(updatedSelectors, (...results) => results);
 
   return useSelector(multiSelector, shallowEqual);
 };
