@@ -1,30 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-/*
-import {
-  Card,
-  CardTitle,
-  CardHeader,
-  CardActions,
-  CardBody,
-  Title,
-  Tooltip,
-  TooltipPosition
-} from '@patternfly/react-core';
- */
-// import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
 import { useProductGraphConfig } from '../productView/productViewContext';
+import { GraphCardContext } from './graphCardContext';
 import { helpers } from '../../common';
-// import { Loader } from '../loader/loader';
-// import { MinHeight } from '../minHeight/minHeight';
-// import { GraphCardChart } from './graphCardChart';
-// import { useGraphMetrics } from './graphCardContext';
-// import { translate } from '../i18n/i18n';
 import { GraphCardMetrics } from './graphCardMetrics';
 import { GraphCardMetric } from './graphCardMetric';
+import { generateBaseStyling } from './graphCardHelpers';
 
 /**
- * A chart/graph card.
+ * Set up graph cards. Expand filters with base graph settings.
  *
  * @param {object} props
  * @param {boolean} props.isDisabled
@@ -32,53 +16,52 @@ import { GraphCardMetric } from './graphCardMetric';
  * @returns {Node}
  */
 const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConfig }) => {
-  const { filters } = useAliasProductGraphConfig();
+  const [context, setContext] = useState({});
+  const { filters, settings } = useAliasProductGraphConfig();
+
+  useEffect(() => {
+    const { groupedFilters, standaloneFilters } = generateBaseStyling(filters);
+
+    setContext({
+      settings: {
+        groupedFilters,
+        standaloneFilters,
+        ...settings
+      }
+    });
+  }, [filters, settings, setContext]);
 
   if (isDisabled) {
     return null;
   }
 
-  const groupedMetricIds = filters.filter(({ isStandalone }) => isStandalone !== true);
-  const standaloneMetricIds = filters.filter(({ isStandalone }) => isStandalone === true);
-
-  console.log('FILTERED >>>', standaloneMetricIds);
-
   return (
-    <React.Fragment>
-      {groupedMetricIds.length > 0 && <GraphCardMetrics metricIds={groupedMetricIds} />}
-      {standaloneMetricIds.length > 0 &&
-        standaloneMetricIds.map(metric => <GraphCardMetric key={`graphcard_${metric.id}`} metric={metric} />)}
-    </React.Fragment>
+    <GraphCardContext.Provider value={context}>
+      <GraphCardMetrics metricFilters={context?.settings?.groupedFilters} />
+      {context?.settings?.standaloneFilters.map(metricFilter => (
+        <GraphCardMetric key={`graphcard_${metricFilter.id}`} metricFilter={metricFilter} />
+      ))}
+    </GraphCardContext.Provider>
   );
 };
 
 /**
  * Prop types.
  *
- * @type {{useProduct: Function, t: Function, useProductGraphConfig: Function, isDisabled: boolean,
- *     useGraphMetrics: Function, isCardTitleDescription: boolean}}
+ * @type {{useProductGraphConfig: Function, isDisabled: boolean}}
  */
 GraphCard.propTypes = {
-  // isCardTitleDescription: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  // t: PropTypes.func,
-  // useGraphMetrics: PropTypes.func,
-  // useProduct: PropTypes.func,
   useProductGraphConfig: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{useProduct: Function, t: Function, useProductGraphConfig: Function, isDisabled: boolean,
- *     useGraphMetrics: Function, isCardTitleDescription: boolean}}
+ * @type {{useProductGraphConfig: Function, isDisabled: boolean}}
  */
 GraphCard.defaultProps = {
-  // isCardTitleDescription: false,
   isDisabled: helpers.UI_DISABLED_GRAPH,
-  // t: translate,
-  // useGraphMetrics,
-  // useProduct,
   useProductGraphConfig
 };
 

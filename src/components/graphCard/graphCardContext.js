@@ -1,8 +1,26 @@
-import { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useDeepCompareEffect, useShallowCompareEffect } from 'react-use';
 import { reduxActions, reduxSelectors, storeHooks } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { helpers } from '../../common/helpers';
+
+// TODO: eval moving context into "metric" and "metrics" components instead
+/**
+ * Chart context.
+ *
+ * @type {React.Context<{}>}
+ */
+const DEFAULT_CONTEXT = [{ settings: { groupedFilters: [], standaloneFilters: [], filters: [] } }, helpers.noop];
+
+const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
+
+/**
+ * Get an updated graph card context.
+ *
+ * @returns {React.Context<{}>}
+ */
+const useGraphCardContext = () => useContext(GraphCardContext);
 
 /**
  * Consume Redux RHSM Actions, getGraphTally.
@@ -32,7 +50,8 @@ const useGetGraphTally = ({
 const useGraphTallySelector = (
   metricIds,
   { useProduct: useAliasProduct = useProduct, useSelector: useAliasSelector = storeHooks.reactRedux.useSelector } = {}
-) => {
+) =>
+  /*
   const [updatedMetricIds, setUpdatedMetricIds] = useState([]);
   const [selResults, setSelectorResults] = useState([]);
 
@@ -46,6 +65,7 @@ const useGraphTallySelector = (
     productId,
     updatedMetricIds
   ]);
+   */
 
   // const results = useAliasSelector(state => graphSelector(state));
   // return () => ({ ...results });
@@ -57,9 +77,8 @@ const useGraphTallySelector = (
   ]);
   */
 
-  return useAliasSelector(state => graphSelector(state));
-};
-
+  // return useAliasSelector(state => graphSelector(state));
+  ({});
 /**
  * Get a combined result from action and selector.
  *
@@ -128,9 +147,21 @@ const useGraphMetrics = (
 };
 
 const context = {
+  GraphCardContext,
+  DEFAULT_CONTEXT,
+  useGraphCardContext,
   useGetGraphTally,
   useGraphTallySelector,
   useGraphMetrics
 };
 
-export { context as default, context, useGraphMetrics, useGetGraphTally, useGraphTallySelector };
+export {
+  context as default,
+  context,
+  GraphCardContext,
+  DEFAULT_CONTEXT,
+  useGraphCardContext,
+  useGraphMetrics,
+  useGetGraphTally,
+  useGraphTallySelector
+};
