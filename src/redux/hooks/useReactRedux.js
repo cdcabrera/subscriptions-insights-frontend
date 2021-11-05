@@ -1,4 +1,5 @@
 import { useSelector as UseSelector, shallowEqual } from 'react-redux';
+import { createSelector } from 'reselect';
 import { store } from '../store';
 import { helpers } from '../../common/helpers';
 
@@ -28,10 +29,25 @@ const useSelector = (selector, value = null, options = {}) => {
   return UseSelector(selector, options.equality) ?? value;
 };
 
+/**
+ * Generate a multiple selectors for use in "useSelector".
+ *
+ * @param {Array} params
+ * @returns {Array}
+ */
+const useMultiSelector = (...params) => {
+  const [firstSel, ...selectors] = params;
+  const updatedSelectors = (Array.isArray(firstSel) && firstSel) || selectors;
+  const multiSelector = createSelector(updatedSelectors, (...storeResults) => storeResults);
+
+  return useSelector(multiSelector, shallowEqual);
+};
+
 const reactReduxHooks = {
   shallowEqual,
   useDispatch,
+  useMultiSelector,
   useSelector
 };
 
-export { reactReduxHooks as default, reactReduxHooks, shallowEqual, useDispatch, useSelector };
+export { reactReduxHooks as default, reactReduxHooks, shallowEqual, useDispatch, useMultiSelector, useSelector };
