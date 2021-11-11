@@ -229,14 +229,7 @@ const RHSM_API_QUERY_GRANULARITY_TYPES = {
  *     LAST_SEEN: string, NAME: string}}
  */
 const RHSM_API_QUERY_SORT_TYPES = {
-  CORES: 'cores',
-  CORE_HOURS: 'core_hours',
-  HARDWARE: 'hardware_type',
-  INSTANCE_HOURS: 'instance_hours',
-  LAST_SEEN: 'last_seen',
-  MEASUREMENT: 'measurement_type',
-  NAME: 'display_name',
-  SOCKETS: 'sockets'
+  ...rhsmConstants.RHSM_API_QUERY_INVENTORY_SORT_TYPES
 };
 
 /**
@@ -270,8 +263,7 @@ const RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES = {
  * @type {{ASCENDING: string, DESCENDING: string}}
  */
 const RHSM_API_QUERY_SORT_DIRECTION_TYPES = {
-  ASCENDING: 'asc',
-  DESCENDING: 'desc'
+  ...rhsmConstants.RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES
 };
 
 /**
@@ -328,16 +320,7 @@ const RHSM_API_QUERY_SET_REPORT_CAPACITY_TYPES = {
  *     SLA: string, LIMIT: string}}
  */
 const RHSM_API_QUERY_SET_INVENTORY_TYPES = {
-  DIRECTION: 'dir',
-  DISPLAY_NAME: 'display_name_contains',
-  END_DATE: 'ending',
-  LIMIT: 'limit',
-  OFFSET: 'offset',
-  SLA: 'sla',
-  SORT: 'sort',
-  START_DATE: 'beginning',
-  UOM: 'uom',
-  USAGE: 'usage'
+  ...rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES
 };
 
 /**
@@ -357,7 +340,7 @@ const RHSM_API_QUERY_SET_INVENTORY_GUESTS_TYPES = {
  *     LIMIT: string}}
  */
 const RHSM_API_QUERY_SET_INVENTORY_SUBSCRIPTIONS_TYPES = {
-  ...RHSM_API_QUERY_SET_INVENTORY_TYPES
+  ...rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES
 };
 
 /**

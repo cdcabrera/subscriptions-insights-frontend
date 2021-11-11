@@ -5,6 +5,20 @@ import {
 } from './rhsmConstants';
 import { dateHelpers } from '../../common';
 
+/**
+ * Parse RHSM instances response for caching.
+ *
+ * @param {object} response
+ * @returns {object}
+ */
+const rhsmInstances = response => response;
+
+/**
+ * Parse RHSM tally response for caching.
+ *
+ * @param {object} response
+ * @returns {object}
+ */
 const rhsmTally = response => {
   const updatedResponse = {};
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
@@ -37,7 +51,8 @@ const rhsmTally = response => {
 };
 
 const rhsmTranformers = {
+  instances: rhsmInstances,
   tally: rhsmTally
 };
 
-export { rhsmTranformers as default, rhsmTranformers, rhsmTally };
+export { rhsmTranformers as default, rhsmTranformers, rhsmInstances, rhsmTally };
