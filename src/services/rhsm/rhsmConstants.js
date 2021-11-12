@@ -72,12 +72,14 @@ const RHSM_API_RESPONSE_META_TYPES = {
 /**
  * RHSM response Instance DATA types.
  *
- * @type {{SUBSCRIPTION_MANAGER_ID: string, INVENTORY_ID: string, DISPLAY_NAME: string, LAST_SEEN: string}}
+ * @type {{MEASUREMENTS: string, SUBSCRIPTION_MANAGER_ID: string, INVENTORY_ID: string, DISPLAY_NAME: string,
+ *     LAST_SEEN: string}}
  */
 const RHSM_API_RESPONSE_INSTANCES_DATA_TYPES = {
   DISPLAY_NAME: 'display_name',
   INVENTORY_ID: 'inventory_id',
   LAST_SEEN: 'last_seen',
+  MEASUREMENTS: 'measurements',
   SUBSCRIPTION_MANAGER_ID: 'subscription_manager_id'
 };
 
