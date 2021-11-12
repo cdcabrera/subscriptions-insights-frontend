@@ -120,6 +120,21 @@ const useProductInventoryHostsQuery = ({
   );
 
 /**
+ * ToDo: This will eventually become the primary query function as we transition from the old hosts endpoint.
+ * When the original deprecated inventory is no longer need this needs to be cleaned up.
+ */
+/**
+ * Return an inventory query.
+ *
+ * @param {object} options
+ * @param {string} options.queryType
+ * @param {object} options.schemaCheck
+ * @param {object} options.options
+ * @returns {object}
+ */
+const useProductInventoryInstancesQuery = useProductInventoryHostsQuery;
+
+/**
  * Return an inventory query for subscriptions.
  *
  * @param {object} options
@@ -156,6 +171,7 @@ const useProductContext = ({
   const { [RHSM_API_QUERY_TYPES.UOM]: uomFilter } = useAliasProductQuery();
   const {
     initialGraphFilters = [],
+    initialGuestsFilters = [],
     initialInventoryFilters = [],
     initialSubscriptionsInventoryFilters = [],
     productContextFilterUom,
@@ -174,6 +190,7 @@ const useProductContext = ({
       return {
         ...config,
         initialGraphFilters: initialGraphFilters.filter(filterFilters),
+        initialGuestsFilters: initialGuestsFilters.filter(filterFilters),
         initialInventoryFilters: initialInventoryFilters.filter(filterFilters),
         initialSubscriptionsInventoryFilters: initialSubscriptionsInventoryFilters.filter(filterFilters)
       };
@@ -182,12 +199,14 @@ const useProductContext = ({
     return {
       ...config,
       initialGraphFilters,
+      initialGuestsFilters,
       initialInventoryFilters,
       initialSubscriptionsInventoryFilters
     };
   }, [
     config,
     initialGraphFilters,
+    initialGuestsFilters,
     initialInventoryFilters,
     initialSubscriptionsInventoryFilters,
     productContextFilterUom,
@@ -230,6 +249,21 @@ const useProductGraphConfig = ({ useProductContext: useAliasProductContext = use
 };
 
 /**
+ * Return guests inventory configuration.
+ *
+ * @param {object} options
+ * @param {Function} options.useProductContext
+ * @returns {{settings: object, filters: Array}}
+ */
+const useProductInventoryGuestsConfig = ({ useProductContext: useAliasProductContext = useProductContext } = {}) => {
+  const { initialGuestsFilters, initialGuestsSettings = {} } = useAliasProductContext();
+  return {
+    filters: initialGuestsFilters,
+    settings: initialGuestsSettings
+  };
+};
+
+/**
  * Return hosts inventory configuration.
  *
  * @param {object} options
@@ -243,6 +277,19 @@ const useProductInventoryHostsConfig = ({ useProductContext: useAliasProductCont
     settings: initialInventorySettings
   };
 };
+
+/**
+ * ToDo: This will eventually become the primary config function as we transition from the old hosts endpoint.
+ * When the original deprecated inventory is no longer need this needs to be cleaned up.
+ */
+/**
+ * Return an inventory configuration.
+ *
+ * @param {object} options
+ * @param {Function} options.useProductContext
+ * @returns {{settings: object, filters: Array}}
+ */
+const useProductInventoryInstancesConfig = useProductInventoryHostsConfig;
 
 /**
  * Return subscriptions inventory configuration.
@@ -285,10 +332,13 @@ const context = {
   useGraphTallyQuery: useProductGraphTallyQuery,
   useInventoryGuestsQuery: useProductInventoryGuestsQuery,
   useInventoryHostsQuery: useProductInventoryHostsQuery,
+  useInventoryInstancesQuery: useProductInventoryInstancesQuery,
   useInventorySubscriptionsQuery: useProductInventorySubscriptionsQuery,
   useProduct,
   useGraphConfig: useProductGraphConfig,
+  useInventoryGuestsConfig: useProductInventoryGuestsConfig,
   useInventoryHostsConfig: useProductInventoryHostsConfig,
+  useInventoryInstancesConfig: useProductInventoryInstancesConfig,
   useInventorySubscriptionsConfig: useProductInventorySubscriptionsConfig,
   useToolbarConfig: useProductToolbarConfig
 };
@@ -304,10 +354,13 @@ export {
   useProductGraphTallyQuery,
   useProductInventoryGuestsQuery,
   useProductInventoryHostsQuery,
+  useProductInventoryInstancesQuery,
   useProductInventorySubscriptionsQuery,
   useProduct,
   useProductGraphConfig,
+  useProductInventoryGuestsConfig,
   useProductInventoryHostsConfig,
+  useProductInventoryInstancesConfig,
   useProductInventorySubscriptionsConfig,
   useProductToolbarConfig
 };

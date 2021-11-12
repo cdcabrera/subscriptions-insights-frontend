@@ -8,6 +8,10 @@ import {
 import { dateHelpers } from '../../common';
 
 /**
+ * ToDo: If RHSM Instances is supposed to deprecate Hosts we're missing a property, number_of_guests
+ * Need to confirm with the API devs.
+ */
+/**
  * Parse RHSM instances response for caching.
  *
  * @param {object} response

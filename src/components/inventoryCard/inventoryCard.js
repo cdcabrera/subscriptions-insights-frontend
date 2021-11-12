@@ -16,7 +16,8 @@ import { Pagination } from '../pagination/pagination';
 import { Loader } from '../loader/loader';
 import { helpers } from '../../common/helpers';
 import { translate } from '../i18n/i18n';
-import {inventoryListHelpers} from "./inventoryListHelpers";
+import Table from '../table/table';
+import {inventoryListHelpers} from "../inventoryList/inventoryListHelpers";
 import GuestsList from "../guestsList/guestsList";
 
 /**
@@ -42,6 +43,7 @@ const InventoryList = ({
   const { viewId } = useAliasProduct();
   const query = useAliasProductInventoryInstancesQuery();
   const { settings, filters: filterInventoryData } = useAliasProductInventoryInstancesConfig();
+  const session = useAliasSessionSelector();
   const { error, fulfilled, pending, listData = [] } = useAliasInventorySelector();
 
   /*
@@ -68,6 +70,8 @@ const InventoryList = ({
     );
   }
 
+  const onColumnSort = () => {};
+
   const onPage = () => {};
 
   const itemCount = 0;
@@ -88,7 +92,7 @@ const InventoryList = ({
     const { columnHeaders, cells } = inventoryListHelpers.parseRowCellsListData({
       filters: inventoryListHelpers.parseInventoryFilters({
         filters: filterInventoryData,
-        onSort: this.onColumnSort,
+        onSort: onColumnSort,
         query
       }),
       cellData,
@@ -157,7 +161,15 @@ const InventoryList = ({
                 }}
               />
             )}
-            {!pending && this.renderTable()}
+            {!pending && (
+              <Table
+                borders
+                variant={TableVariant.compact}
+                className="curiosity-inventory-list"
+                columnHeaders={updatedColumnHeaders}
+                rows={updatedRows}
+              />
+            )}
           </div>
         </CardBody>
       </MinHeight>
