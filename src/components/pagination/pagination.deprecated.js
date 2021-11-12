@@ -29,7 +29,7 @@ import { paginationHelpers } from './paginationHelpers';
  * @param {string} props.variant
  * @returns {Node}
  */
-const PaginationOLD = ({
+const Pagination = ({
   dropDirection,
   isDisabled,
   isCompact,
@@ -55,47 +55,6 @@ const PaginationOLD = ({
   />
 );
 
-const Pagination = ({
-  dropDirection,
-  isCompact,
-  isDisabled,
-  itemCountDefault,
-  offsetDefault,
-  perPageDefault,
-  variant
-}) => {
-  const onPerPage = () => {
-
-  };
-  // selector values: itemCount, updatedOffset, updatedPerPage
-  // dropDirection="up"
-  //                 isDisabled={pending || error}
-  //
-  //                 itemCount={itemCount}
-  //                 offset={updatedOffset}
-  //
-  //                 onPage={this.onPage}
-  //                 onPerPage={this.onPage}
-  //
-  //                 perPage={updatedPerPage}
-
-  return (
-    <PfPagination
-      dropDirection={dropDirection}
-      isCompact={isCompact}
-      isDisabled={isDisabled || !itemCount}
-      itemCount={itemCount}
-      onSetPage={(event, page, limit) =>
-        onPage({ event, perPage: limit, offset: paginationHelpers.calculateOffsetFromPage(page, limit) })
-      }
-      onPerPageSelect={(event, limit) => onPerPage({ event, perPage: limit, offset: Pagination.defaultProps.offset })}
-      page={paginationHelpers.calculatePageFromOffset(offset || Pagination.defaultProps.offset, perPage)}
-      perPage={perPage}
-      variant={variant}
-    />
-  );
-};
-
 /**
  * Prop types
  *
@@ -107,9 +66,11 @@ Pagination.propTypes = {
   dropDirection: PropTypes.oneOf(['up', 'down']),
   isCompact: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  itemCountDefault: PropTypes.number,
-  offsetDefault: PropTypes.number,
-  perPageDefault: PropTypes.number,
+  itemCount: PropTypes.number,
+  offset: PropTypes.number,
+  onPage: PropTypes.func,
+  onPerPage: PropTypes.func,
+  perPage: PropTypes.number,
   variant: PropTypes.string
 };
 
@@ -124,9 +85,11 @@ Pagination.defaultProps = {
   dropDirection: 'down',
   isCompact: false,
   isDisabled: false,
-  itemCountDefault: 0,
-  offsetDefault: 0,
-  perPageDefault: 10,
+  itemCount: 0,
+  offset: 0,
+  onPage: helpers.noop,
+  onPerPage: helpers.noop,
+  perPage: 10,
   variant: null
 };
 

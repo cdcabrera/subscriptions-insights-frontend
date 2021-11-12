@@ -120,6 +120,21 @@ const useProductInventoryHostsQuery = ({
   );
 
 /**
+ * ToDo: This will eventually become the primary query function as we transition from the old hosts endpoint.
+ * When the original deprecated inventory is no longer need this needs to be cleaned up.
+ */
+/**
+ * Return an inventory query.
+ *
+ * @param {object} options
+ * @param {string} options.queryType
+ * @param {object} options.schemaCheck
+ * @param {object} options.options
+ * @returns {object}
+ */
+const useProductInventoryInstancesQuery = useProductInventoryHostsQuery;
+
+/**
  * Return an inventory query for subscriptions.
  *
  * @param {object} options
@@ -245,6 +260,19 @@ const useProductInventoryHostsConfig = ({ useProductContext: useAliasProductCont
 };
 
 /**
+ * ToDo: This will eventually become the primary config function as we transition from the old hosts endpoint.
+ * When the original deprecated inventory is no longer need this needs to be cleaned up.
+ */
+/**
+ * Return an inventory configuration.
+ *
+ * @param {object} options
+ * @param {Function} options.useProductContext
+ * @returns {{settings: object, filters: Array}}
+ */
+const useProductInventoryInstancesConfig = useProductInventoryHostsConfig;
+
+/**
  * Return subscriptions inventory configuration.
  *
  * @param {object} options
@@ -285,10 +313,12 @@ const context = {
   useGraphTallyQuery: useProductGraphTallyQuery,
   useInventoryGuestsQuery: useProductInventoryGuestsQuery,
   useInventoryHostsQuery: useProductInventoryHostsQuery,
+  useInventoryInstancesQuery: useProductInventoryInstancesQuery,
   useInventorySubscriptionsQuery: useProductInventorySubscriptionsQuery,
   useProduct,
   useGraphConfig: useProductGraphConfig,
   useInventoryHostsConfig: useProductInventoryHostsConfig,
+  useInventoryInstancesConfig: useProductInventoryInstancesConfig,
   useInventorySubscriptionsConfig: useProductInventorySubscriptionsConfig,
   useToolbarConfig: useProductToolbarConfig
 };
@@ -304,10 +334,12 @@ export {
   useProductGraphTallyQuery,
   useProductInventoryGuestsQuery,
   useProductInventoryHostsQuery,
+  useProductInventoryInstancesQuery,
   useProductInventorySubscriptionsQuery,
   useProduct,
   useProductGraphConfig,
   useProductInventoryHostsConfig,
+  useProductInventoryInstancesConfig,
   useProductInventorySubscriptionsConfig,
   useProductToolbarConfig
 };

@@ -12,7 +12,7 @@ import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import GuestsList from '../guestsList/guestsList';
 import { inventoryListHelpers } from './inventoryListHelpers';
-import Pagination from '../pagination/pagination';
+import Pagination from '../pagination/pagination.deprecated';
 import { ToolbarFieldDisplayName } from '../toolbar/toolbarFieldDisplayName';
 import { paginationHelpers } from '../pagination/paginationHelpers';
 import {

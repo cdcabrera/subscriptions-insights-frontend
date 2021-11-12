@@ -11,7 +11,7 @@ import Table from '../table/table';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import { inventoryListHelpers } from '../inventoryList/inventoryListHelpers';
-import Pagination from '../pagination/pagination';
+import Pagination from '../pagination/pagination.deprecated';
 import { paginationHelpers } from '../pagination/paginationHelpers';
 import {
   RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
