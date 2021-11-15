@@ -2,6 +2,7 @@ import axios, { CancelToken } from 'axios';
 import LruCache from 'lru-cache';
 import { platformServices } from './platformServices';
 import { serviceHelpers } from './common/helpers';
+import { helpers } from '../common';
 
 /**
  * Apply consistent service configuration.
@@ -155,6 +156,97 @@ const serviceCall = async config => {
   }
 
   return axiosInstance(serviceConfig(updatedConfig));
+};
+
+/**
+ * @param {object} config
+ * @param {Promise} config.response
+ * @param {boolean} config.cacheId
+ * @param {Array} config.status
+ * @param {Array} config.schema
+ * @param {Array} config.transform
+ * @returns {Promise<*>}
+ */
+const mockServiceCall = async config => {
+  const updatedConfig = { ...config, cacheResponse: !!config.cacheId };
+  let updatedPromise = updatedConfig.response;
+  const responseTransformers = [];
+  const { cacheId } = updatedConfig;
+
+  if (updatedConfig.cacheResponse) {
+    const cachedResponse = responseCache.get(cacheId);
+
+    if (cachedResponse) {
+      return Promise.resolve({
+        ...cachedResponse,
+        status: 304,
+        statusText: 'Not Modified'
+      });
+    }
+  }
+
+  if (updatedConfig.schema) {
+    responseTransformers.push(updatedConfig.schema);
+  }
+
+  if (updatedConfig.transform) {
+    responseTransformers.push(updatedConfig.transform);
+  }
+
+  responseTransformers.forEach(([successTransform, errorTransform]) => {
+    const transformers = [undefined, response => Promise.reject(response)];
+
+    if (successTransform) {
+      transformers[0] = response => {
+        let updatedResponse = response;
+        const { data, error: normalizeError } = serviceHelpers.passDataToCallback(updatedResponse, successTransform);
+
+        if (!normalizeError) {
+          updatedResponse = data;
+        }
+
+        return updatedResponse;
+      };
+    }
+
+    if (errorTransform) {
+      transformers[1] = response => {
+        let updatedResponse = response;
+        const { data, error: normalizeError } = serviceHelpers.passDataToCallback(updatedResponse, errorTransform);
+
+        if (!normalizeError) {
+          updatedResponse = data;
+        }
+
+        return Promise.reject(updatedResponse);
+      };
+    }
+
+    updatedPromise = updatedPromise.then(...transformers);
+  });
+
+  updatedPromise = updatedPromise.then(
+    response => {},
+    response => {
+      const responseIsString = typeof response === 'string';
+      const status = updatedConfig?.status?.[1]?.status;
+      const message =
+        updatedConfig?.status?.[1]?.message || (responseIsString && response) || response?.message || 'error';
+      return Promise.reject({ ...(helpers.isError(response) && response), message, status });
+    }
+  );
+
+  if (updatedConfig.cacheResponse === true) {
+    updatedPromise = updatedPromise.then(
+      response => {
+        responseCache.set(cacheId, response);
+        return response;
+      },
+      response => Promise.reject(response)
+    );
+  }
+
+  return updatedPromise;
 };
 
 const config = { serviceCall, serviceConfig };

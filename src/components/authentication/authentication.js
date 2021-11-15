@@ -11,6 +11,9 @@ import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
 
 /**
+ * ToDo: consider adding authentication context for passing session in context.
+ */
+/**
  * An authentication pass-through component.
  *
  * @augments React.Component

@@ -3,7 +3,7 @@ import LocaleCode from 'locale-code';
 import _isPlainObject from 'lodash/isPlainObject';
 import { rbacConfig as permissions } from '../config';
 import { getUser, getUserPermissions } from './platformServices';
-import { serviceCall } from './config';
+import mockServiceCall, { serviceCall } from './config';
 import { helpers } from '../common';
 
 /**
@@ -12,38 +12,55 @@ import { helpers } from '../common';
  * @returns {Promise<{data: {permissions: (void|*[]), user: void}, message: string, status: number}>}
  */
 const authorizeUser = async () => {
-  const updatedPermissions = Object.keys(permissions);
-  let message = '{ auth.getUser, getUserPermissions } = insights.chrome';
-  let userData;
-  let userPermissions;
+  const authorize = async () => {
+    const updatedPermissions = Object.keys(permissions);
+    // let message = '{ auth.getUser, getUserPermissions } = insights.chrome';
+    let message;
+    let userData;
+    let userPermissions;
 
-  try {
-    userData = await getUser();
+    try {
+      userData = await getUser();
 
-    if (updatedPermissions.length) {
-      const allPermissions = await Promise.all(updatedPermissions.map(app => getUserPermissions(app)));
+      if (updatedPermissions.length) {
+        const allPermissions = await Promise.all(updatedPermissions.map(app => getUserPermissions(app)));
 
-      if (Array.isArray(allPermissions)) {
-        userPermissions = [...allPermissions.flat()];
+        if (Array.isArray(allPermissions)) {
+          userPermissions = [...allPermissions.flat()];
+        }
+      } else {
+        userPermissions = await getUserPermissions();
       }
-    } else {
-      userPermissions = await getUserPermissions();
+    } catch (e) {
+      message = e.message;
     }
-  } catch (e) {
-    message = e.message;
-  }
 
-  if (_isPlainObject(userData) && Object.keys(userData).length) {
-    return Promise.resolve({ data: { user: userData, permissions: userPermissions || [] }, message, status: 200 });
-  }
+    if (_isPlainObject(userData) && Object.keys(userData).length) {
+      // return Promise.resolve({ data: { user: userData, permissions: userPermissions || [] }, message, status: 200 });
+      return Promise.resolve({ user: userData, permissions: userPermissions || [] });
+    }
 
-  const emulatedErrorResponse = {
-    ...new Error(message),
-    message,
-    status: 418
+    /*
+    const emulatedErrorResponse = {
+      ...new Error(message),
+      message,
+      status: 418
+    };
+    */
+
+    return Promise.reject(new Error(message));
   };
 
-  return Promise.reject(emulatedErrorResponse);
+  return mockServiceCall({
+    response: authorize(),
+    cacheId: null,
+    status: [
+      { status: 200, message: '{ auth.getUser, getUserPermissions } = insights.chrome' },
+      { status: 418, message: `I'm a teapot` }
+    ],
+    schema: [],
+    transform: []
+  });
 };
 
 /**

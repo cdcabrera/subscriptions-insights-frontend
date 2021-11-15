@@ -18,6 +18,14 @@ const generateId = prefix =>
 const isDate = date => Object.prototype.toString.call(date) === '[object Date]';
 
 /**
+ * Check if "is an Error"
+ *
+ * @param {Error|*} error
+ * @returns {boolean}
+ */
+const isError = error => Object.prototype.toString.call(error) === '[object Error]';
+
+/**
  * Check if "is a Promise", "Promise like".
  *
  * @param {Promise|*} obj
@@ -300,6 +308,7 @@ const helpers = {
   browserExpose,
   generateId,
   isDate,
+  isError,
   isPromise,
   noop,
   noopPromise,
