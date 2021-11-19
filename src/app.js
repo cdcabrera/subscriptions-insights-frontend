@@ -28,6 +28,7 @@ class App extends React.Component {
 
     return (
       <I18n locale={(locale && locale.value) || null}>
+        hey
         <NotificationsPortal />
         <Authentication>
           <Router />
