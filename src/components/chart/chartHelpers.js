@@ -101,18 +101,8 @@ const generateElementsProps = ({ dataSets = [], maxX, maxY, xValueFormat, yValue
   const stackedElementsById = {};
 
   dataSets.forEach(dataSet => {
-    const {
-      animate,
-      chartType,
-      data,
-      fill,
-      id,
-      isStacked,
-      interpolation,
-      stroke,
-      strokeDasharray,
-      strokeWidth
-    } = dataSet;
+    const { animate, chartType, data, fill, id, isStacked, interpolation, stroke, strokeDasharray, strokeWidth } =
+      dataSet;
 
     if (data?.length) {
       const dataColorStroke = {
