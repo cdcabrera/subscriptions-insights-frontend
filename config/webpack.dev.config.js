@@ -6,6 +6,7 @@ const { _BUILD_RELATIVE_DIRNAME, DEV_BRANCH, DEV_PORT } = setupDotenvFilesForEnv
 
 const { config: webpackConfig, plugins } = config({
   appUrl: ['/insights/subscriptions', '/openshift/subscriptions'],
+  client: { overlay: false },
   debug: true,
   deployment: 'apps',
   env: (/(prod|qa|ci)(-stable|-beta)$/.test(DEV_BRANCH) && DEV_BRANCH) || 'prod-stable',

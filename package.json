@@ -116,7 +116,7 @@
   "devDependencies": {
     "@babel/core": "7.16.0",
     "@babel/eslint-parser": "^7.16.3",
-    "@redhat-cloud-services/frontend-components-config": "4.3.5",
+    "@redhat-cloud-services/frontend-components-config": "4.5.6",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
     "apidoc-mock": "^4.0.2",
     "babel-jest": "^27.4.2",
