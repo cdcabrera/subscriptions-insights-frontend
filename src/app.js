@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useMount } from 'react-use';
 import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications';
-import { connectRouter, reduxActions } from './redux';
+import { connect, reduxActions } from './redux';
 import { helpers } from './common/helpers';
 import { I18n } from './components/i18n/i18n';
 import { Router } from './components/router';
@@ -10,32 +11,25 @@ import Authentication from './components/authentication/authentication';
 /**
  * Application
  *
- * @augments React.Component
+ * @param {object} props
+ * @param {Function} props.getLocale
+ * @param {object} props.locale
+ * @returns {Node}
  */
-class App extends React.Component {
-  componentDidMount() {
-    const { getLocale } = this.props;
+const App = ({ getLocale, locale }) => {
+  useMount(() => {
     getLocale();
-  }
+  });
 
-  /**
-   * Render application.
-   *
-   * @returns {Node}
-   */
-  render() {
-    const { locale } = this.props;
-
-    return (
-      <I18n locale={(locale && locale.value) || null}>
-        <NotificationsPortal />
-        <Authentication>
-          <Router />
-        </Authentication>
-      </I18n>
-    );
-  }
-}
+  return (
+    <I18n locale={(locale && locale.value) || null}>
+      <NotificationsPortal />
+      <Authentication>
+        <Router />
+      </Authentication>
+    </I18n>
+  );
+};
 
 /**
  * Prop types.
@@ -77,6 +71,6 @@ const mapDispatchToProps = dispatch => ({
  */
 const mapStateToProps = state => ({ locale: state.user.session.locale });
 
-const ConnectedApp = connectRouter(mapStateToProps, mapDispatchToProps)(App);
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 
 export { ConnectedApp as default, ConnectedApp, App };

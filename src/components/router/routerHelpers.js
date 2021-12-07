@@ -108,7 +108,6 @@ const generateRoutes = (config = routesConfig) =>
     activateOnError,
     component,
     disabled,
-    exact: true,
     id,
     path: routePath,
     redirect

@@ -80,7 +80,7 @@ const routes = [
   },
   {
     id: 'openshift-container',
-    path: '/openshift-container',
+    path: 'openshift-container',
     pathParameter: [openshiftContainerConfig.productId, openshiftMetricsConfig.productId],
     productParameter: [openshiftContainerConfig.productGroup, openshiftMetricsConfig.productGroup],
     productConfig: [openshiftContainerConfig, openshiftMetricsConfig],

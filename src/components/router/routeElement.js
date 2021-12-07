@@ -14,31 +14,28 @@ import { CreateElement } from '../createElement/createElement';
  * @param {Array} props.routes
  * @returns {Node}
  */
-const Router = ({ routes } = {}) => {
-  const [updatedRoutes, setUpdatedRoutes] = useState([]);
+const RouteElement = ({ activateOnError,
+  component,
+  disabled,
+  id,
+  path
+}) => {
+  const [route, setRoute] = useState(null);
   const [redirectDefault, setRedirectDefault] = useState(null);
 
   /**
    * Initialize routes.
    */
-  useMount(() => {
-
-  });
-  /*
   useMount(async () => {
     const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
 
-    const results = await Promise.all(
-      routes.map(async item => {
-        if (item.disabled) {
-          return null;
-        }
+    if (disabled) {
+      return setRoute(null);
+    }
 
-        const View = await routerHelpers.importView(item.component);
+    const View = await routerHelpers.importView(item.component);
 
-        console.log('ROUTER 001 >>>>', View);
-
-        return (
+    return setRoute(
           <Route
             key={item.path}
             path={item.path}
@@ -87,10 +84,9 @@ const Router = ({ routes } = {}) => {
       })
     );
 
-    setUpdatedRoutes(results);
+    setUpdatedRoutes(result);
     setRedirectDefault(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
   });
-  */
 
   return (
     <React.Suspense fallback={<Loader variant="title" />}>
@@ -107,7 +103,7 @@ const Router = ({ routes } = {}) => {
  *
  * @type {{routes: Array}}
  */
-Router.propTypes = {
+RouteElement.propTypes = {
   routes: PropTypes.arrayOf(
     PropTypes.shape({
       activateOnError: PropTypes.boolean,
@@ -125,8 +121,8 @@ Router.propTypes = {
  *
  * @type {{routes: Array}}
  */
-Router.defaultProps = {
+RouteElement.defaultProps = {
   routes: routerHelpers.routes
 };
 
-export { Router as default, Router };
+export { RouteElement as default, RouteElement };

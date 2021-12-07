@@ -44,6 +44,8 @@ import { translate } from '../i18n/i18n';
 const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, useRouteDetail: useAliasRouteDetail }) => {
   const { pathParameter: routeProductId, productParameter: routeProductLabel, productConfig } = useAliasRouteDetail();
 
+  console.log('TEST >>>', routeProductId, routeProductLabel, productConfig);
+
   const renderProduct = config => {
     const {
       graphTallyQuery,

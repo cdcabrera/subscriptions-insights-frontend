@@ -28,7 +28,8 @@ const useRouterContext = () => useContext(RouterContext);
  * @returns {{routes: Array, routeItem: object, baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
-  const { routeDetail } = useAliasRouterContext();
+  const { routeDetail, ...rest } = useAliasRouterContext();
+  console.log('USE ROUTE HOOK >>>', rest);
   return routeDetail;
 };
 
