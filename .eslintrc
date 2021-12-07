@@ -139,7 +139,7 @@
     "react/jsx-one-expression-per-line": 0,
     "react/jsx-no-constructed-context-values": 1,
     "react/no-unused-prop-types": 1,
-    "react/no-unstable-nested-components": 1,
+    "react/no-unstable-nested-components": 0,
     "react/jsx-no-useless-fragment": 1,
     "react/state-in-constructor": [ 1, "never" ],
     "space-before-function-paren": 0,
