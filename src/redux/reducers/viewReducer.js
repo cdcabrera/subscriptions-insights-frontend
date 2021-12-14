@@ -184,6 +184,34 @@ const viewReducer = (state = initialState, action) => {
           reset: false
         }
       );
+    case reduxTypes.query.SET_QUERY_RHSM_GUESTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.LIMIT]:
+      return reduxHelpers.setStateProp(
+        'inventoryGuestsQuery',
+        {
+          [action.viewId]: {
+            ...state.inventoryGuestsQuery[action.viewId],
+            [RHSM_API_QUERY_TYPES.LIMIT]: action[RHSM_API_QUERY_TYPES.LIMIT]
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    case reduxTypes.query.SET_QUERY_RHSM_GUESTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.OFFSET]:
+      return reduxHelpers.setStateProp(
+        'inventoryGuestsQuery',
+        {
+          [action.viewId]: {
+            ...state.inventoryGuestsQuery[action.viewId],
+            [RHSM_API_QUERY_TYPES.OFFSET]: action[RHSM_API_QUERY_TYPES.OFFSET]
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
     case reduxTypes.query.SET_QUERY_RHSM_HOSTS_INVENTORY_TYPES[RHSM_API_QUERY_TYPES.DISPLAY_NAME]:
       return reduxHelpers.setStateProp(
         'inventoryHostsQuery',

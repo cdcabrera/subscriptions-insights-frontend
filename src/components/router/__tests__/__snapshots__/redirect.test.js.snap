@@ -151,6 +151,10 @@ Object {
           "id": "sla",
         },
       ],
+      "inventoryGuestsQuery": Object {
+        "limit": 100,
+        "offset": 0,
+      },
       "inventoryHostsQuery": Object {
         "dir": "desc",
         "limit": 100,

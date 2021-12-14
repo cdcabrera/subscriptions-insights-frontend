@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InventoryCardContext should handle instances inventory API responses: instances inventory, cancelled 1`] = `
+Object {
+  "data": Object {},
+  "error": undefined,
+  "fulfilled": undefined,
+  "pending": true,
+}
+`;
+
+exports[`InventoryCardContext should handle instances inventory API responses: instances inventory, error 1`] = `
+Object {
+  "data": Object {},
+  "error": true,
+  "fulfilled": undefined,
+  "pending": false,
+}
+`;
+
+exports[`InventoryCardContext should handle instances inventory API responses: instances inventory, fulfilled 1`] = `
+Object {
+  "data": Object {},
+  "error": undefined,
+  "fulfilled": true,
+  "pending": false,
+}
+`;
+
+exports[`InventoryCardContext should handle instances inventory API responses: instances inventory, pending 1`] = `
+Object {
+  "data": Object {},
+  "error": undefined,
+  "fulfilled": undefined,
+  "pending": true,
+}
+`;
+
+exports[`InventoryCardContext should return specific properties: specific properties 1`] = `
+Object {
+  "useGetInstancesInventory": [Function],
+  "useOnColumnSortInstances": [Function],
+  "useOnPageInstances": [Function],
+}
+`;

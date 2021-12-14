@@ -25,19 +25,22 @@ const useProductViewContext = () => useContext(ProductViewContext);
  *
  * @param {string} queryType An identifier used to pull from both config and Redux, they should named the same.
  * @param {object} options
+ * @param {string} options.overrideId A custom identifier, used for scenarios like the Guest inventory IDs
  * @param {object} options.useProductViewContext
  * @returns {object}
  */
 const useProductQueryFactory = (
   queryType,
-  { useProductViewContext: useAliasProductViewContext = useProductViewContext } = {}
+  { overrideId, useProductViewContext: useAliasProductViewContext = useProductViewContext } = {}
 ) => {
   const { [queryType]: initialQuery, productId, viewId } = useAliasProductViewContext();
+  const queryOverride = storeHooks.reactRedux.useSelector(({ view }) => view?.[queryType]?.[overrideId], undefined);
   const queryProduct = storeHooks.reactRedux.useSelector(({ view }) => view?.[queryType]?.[productId], undefined);
   const queryView = storeHooks.reactRedux.useSelector(({ view }) => view?.[queryType]?.[viewId], undefined);
 
   return {
     ...initialQuery,
+    ...queryOverride,
     ...queryProduct,
     ...queryView
   };
@@ -230,6 +233,26 @@ const useProductGraphConfig = ({ useProductContext: useAliasProductContext = use
 };
 
 /**
+ * Return guests inventory configuration.
+ *
+ * @param {object} options
+ * @param {Function} options.useProductContext
+ * @returns {{settings: object, filters: Array}}
+ */
+const useProductInventoryGuestsConfig = ({ useProductContext: useAliasProductContext = useProductContext } = {}) => {
+  const {
+    inventoryGuestsQuery: initialQuery = {},
+    initialGuestsFilters,
+    initialGuestsSettings = {}
+  } = useAliasProductContext();
+  return {
+    filters: initialGuestsFilters,
+    initialQuery,
+    settings: initialGuestsSettings
+  };
+};
+
+/**
  * Return hosts inventory configuration.
  *
  * @param {object} options
@@ -288,6 +311,7 @@ const context = {
   useInventorySubscriptionsQuery: useProductInventorySubscriptionsQuery,
   useProduct,
   useGraphConfig: useProductGraphConfig,
+  useInventoryGuestsConfig: useProductInventoryGuestsConfig,
   useInventoryHostsConfig: useProductInventoryHostsConfig,
   useInventorySubscriptionsConfig: useProductInventorySubscriptionsConfig,
   useToolbarConfig: useProductToolbarConfig
@@ -307,6 +331,7 @@ export {
   useProductInventorySubscriptionsQuery,
   useProduct,
   useProductGraphConfig,
+  useProductInventoryGuestsConfig,
   useProductInventoryHostsConfig,
   useProductInventorySubscriptionsConfig,
   useProductToolbarConfig

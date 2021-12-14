@@ -120,6 +120,10 @@ Object {
       "id": "sla",
     },
   ],
+  "inventoryGuestsQuery": Object {
+    "limit": 100,
+    "offset": 0,
+  },
   "inventoryHostsQuery": Object {
     "dir": "desc",
     "limit": 100,
@@ -242,6 +246,10 @@ Object {
       "id": "sla",
     },
   ],
+  "inventoryGuestsQuery": Object {
+    "limit": 100,
+    "offset": 0,
+  },
   "inventoryHostsQuery": Object {
     "dir": "desc",
     "limit": 100,
@@ -318,6 +326,20 @@ Object {
 }
 `;
 
+exports[`ProductViewContext should apply hooks for retrieving specific config filters and settings: productInventoryGuestsConfig 1`] = `
+Object {
+  "filters": Array [
+    Object {
+      "sit": "dolor",
+    },
+  ],
+  "initialQuery": Object {},
+  "settings": Object {
+    "sit": "dolor",
+  },
+}
+`;
+
 exports[`ProductViewContext should apply hooks for retrieving specific config filters and settings: productInventoryHostsConfig 1`] = `
 Object {
   "filters": Array [
@@ -389,6 +411,7 @@ Object {
   },
   "useGraphConfig": [Function],
   "useGraphTallyQuery": [Function],
+  "useInventoryGuestsConfig": [Function],
   "useInventoryGuestsQuery": [Function],
   "useInventoryHostsConfig": [Function],
   "useInventoryHostsQuery": [Function],
