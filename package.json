@@ -78,7 +78,7 @@
     "@joi/date": "^2.1.0",
     "@patternfly/patternfly": "4.135.2",
     "@patternfly/react-charts": "6.15.23",
-    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-core": "4.181.1",
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/react-styles": "4.11.16",
     "@patternfly/react-table": "4.30.3",
