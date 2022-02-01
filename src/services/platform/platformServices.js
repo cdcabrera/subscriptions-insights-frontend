@@ -1,9 +1,9 @@
 import _set from 'lodash/set';
-import { helpers } from '../common';
+import { helpers } from '../../common';
 import {
   platformApiTypes,
   PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES
-} from '../types/platformApiTypes';
+} from '../../types/platformApiTypes';
 
 /**
  * Basic user authentication.
