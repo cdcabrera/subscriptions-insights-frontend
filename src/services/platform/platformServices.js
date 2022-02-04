@@ -1,4 +1,4 @@
-import { serviceCall } from '../common/api';
+import { AxiosConfig } from '../common/serviceConfig';
 import { rbacConfig } from '../../config';
 import { platformSchemas } from './platformSchemas';
 import { platformTransformers } from './platformTransformers';
@@ -6,7 +6,7 @@ import { PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES } 
 import { helpers } from '../../common';
 
 /**
- * Basic user authentication.
+ * Basic user authentication, use emulated serviceCall for transforms.
  *
  * @param {object} options
  * @returns {Promise<void>}
@@ -15,16 +15,16 @@ const getUser = async (options = {}) => {
   const { insights } = window;
   const { cache = true, schema = [platformSchemas.user], transform = [platformTransformers.user] } = options;
 
-  return serviceCall({
+  return new AxiosConfig({
     url: async () => insights.chrome.auth.getUser(),
     cache,
     schema,
     transform
-  });
+  }).serviceCall();
 };
 
 /**
- * Basic user permissions.
+ * Basic user permissions, use emulated service call for transforms.
  *
  * @param {string} appName
  * @param {object} permissions
@@ -40,7 +40,7 @@ const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => 
   } = options;
   const updatedPermissions = Object.keys(permissions);
 
-  return serviceCall({
+  return new AxiosConfig({
     url: async () => {
       let userPermissions;
 
@@ -76,7 +76,7 @@ const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => 
     cache,
     schema,
     transform
-  });
+  }).serviceCall();
 };
 
 /**

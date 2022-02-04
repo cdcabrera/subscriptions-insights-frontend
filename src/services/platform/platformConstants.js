@@ -53,6 +53,7 @@ const PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES = {
   RESOURCE_DEFS: 'resourceDefinitions'
 };
 
+// ToDo: clean up this app name piece, these facets come through the helpers and src/config/rbac.json
 const PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES = {
   SUBSCRIPTIONS: process.env.REACT_APP_UI_NAME
 };
