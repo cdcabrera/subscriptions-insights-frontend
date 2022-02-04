@@ -1,54 +1,7 @@
 import Cookies from 'js-cookie';
 import LocaleCode from 'locale-code';
-// import _isPlainObject from 'lodash/isPlainObject';
-// import { rbacConfig as permissions } from '../../config';
-// import { getUser, getUserPermissions } from '../platform/platformServices';
 import { serviceCall } from '../config';
 import { helpers } from '../../common';
-
-/**
- * Apply an emulated API response to the platforms getUser method.
- *
- * @returns {Promise<{data: {permissions: (void|*[]), user: void}, message: string, status: number}>}
- */
-// const authorizeUser = () => Promise.all([getUser(), getUserPermissions()]);
-/*
-  const updatedPermissions = Object.keys(permissions);
-  let message = '{ auth.getUser, getUserPermissions } = insights.chrome';
-  let userData;
-  let userPermissions;
-
-  try {
-    userData = await getUser();
-
-    console.log('001 >>>>>', userData);
-
-    if (updatedPermissions.length) {
-      const allPermissions = await Promise.all(updatedPermissions.map(app => getUserPermissions(app)));
-
-      if (Array.isArray(allPermissions)) {
-        userPermissions = [...allPermissions.flat()];
-      }
-    } else {
-      userPermissions = await getUserPermissions();
-    }
-  } catch (e) {
-    message = e.message;
-  }
-
-  if (_isPlainObject(userData) && Object.keys(userData).length) {
-    return Promise.resolve({ data: { user: userData, permissions: userPermissions || [] }, message, status: 200 });
-  }
-
-  const emulatedErrorResponse = {
-    ...new Error(message),
-    message,
-    status: 418
-  };
-
-  return Promise.reject(emulatedErrorResponse);
-  */
-// };
 
 /**
  * Return a platform locale value from a cookie.
@@ -80,13 +33,6 @@ const getLocale = () => {
     })
   );
 };
-
-/*
-const logoutUser = () =>
-  new Promise(resolve => {
-    resolve({});
-  });
- */
 
 /**
  * @apiMock {DelayResponse} 2000
@@ -292,7 +238,6 @@ const updateAccountOptIn = (params = {}) =>
     params
   });
 
-// const userServices = { authorizeUser, getLocale, logoutUser, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
 const userServices = { getLocale, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
 
 /**
@@ -300,13 +245,4 @@ const userServices = { getLocale, deleteAccountOptIn, getAccountOptIn, updateAcc
  */
 helpers.browserExpose({ userServices });
 
-export {
-  userServices as default,
-  userServices,
-  // authorizeUser,
-  getLocale,
-  // logoutUser,
-  deleteAccountOptIn,
-  getAccountOptIn,
-  updateAccountOptIn
-};
+export { userServices as default, userServices, getLocale, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };

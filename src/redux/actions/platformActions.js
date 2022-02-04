@@ -37,7 +37,6 @@ const clearNotifications = () => RcsClearNotifications();
 const authorizeUser = () => dispatch =>
   dispatch({
     type: platformTypes.PLATFORM_USER_AUTH,
-    // payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions(), userServices.getLocale()])
     payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions()])
   });
 

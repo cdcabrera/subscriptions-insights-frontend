@@ -4,29 +4,6 @@ import { schemaResponse } from '../common/helpers';
 
 const Joi = JoiBase.extend(JoiDate);
 
-/*
-const authObj = {
-  user: {
-    identity: {
-      user: {
-        is_org_admin: false
-      }
-    },
-    entitlements: {
-      [APP_TYPES.SUBSCRIPTIONS]: {
-        is_entitled: false
-      }
-    }
-  },
-  permissions: [
-    {
-      permission: '',
-      resourceDefinitions: ''
-    }
-  ]
-};
- */
-
 /**
  * User response item.
  *
@@ -63,7 +40,6 @@ const userResponseSchema = Joi.object()
  */
 const permissionsItem = Joi.object({
   permission: Joi.string().optional().allow(null),
-  // resourceDefinitions: Joi.string().optional().allow(null)
   resourceDefinitions: Joi.array().optional().default([])
 })
   .unknown(true)
@@ -74,13 +50,9 @@ const permissionsItem = Joi.object({
  *
  * @type {*} Joi schema
  */
-// const permissionsResponseSchema = Joi.object().keys({
-//  data: Joi.array().items(permissionsItem).default([])
-// });
 const permissionsResponseSchema = Joi.array().items(permissionsItem).default([]);
 
 const platformSchemas = {
-  // authorize: response => schemaResponse({ response, schema: authorizeResponseSchema, id: 'User authorization' })
   user: response => schemaResponse({ response, schema: userResponseSchema, id: 'User auth' }),
   permissions: response => schemaResponse({ response, schema: permissionsResponseSchema, id: 'Permissions auth' })
 };

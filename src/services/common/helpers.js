@@ -58,8 +58,6 @@ const passDataToCallback = (data, callback) => {
  * @returns {*|{}}
  */
 const schemaResponse = ({ casing, convert = true, id = null, response, schema } = {}) => {
-  console.log('SCHEMA >>>>', response);
-
   const { value, error = { details: [] } } = schema?.validate(response, { convert }) || {};
 
   if (error.details.length && !helpers.TEST_MODE) {

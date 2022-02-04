@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ServiceConfig should do things consistently: 001, funcs 1`] = `Promise {}`;
+
+exports[`ServiceConfig should do things consistently: 001, original 1`] = `Promise {}`;
+
+exports[`ServiceConfig should have specific functions: serviceConfig 1`] = `
+Object {
+  "axiosConfig": [Function],
+  "globalCancelTokens": Object {},
+  "globalResponseCache": LRUCache {
+    Symbol(max): 100,
+    Symbol(lengthCalculator): [Function],
+    Symbol(allowStale): false,
+    Symbol(maxAge): 30000,
+    Symbol(dispose): undefined,
+    Symbol(noDisposeOnSet): false,
+    Symbol(updateAgeOnGet): true,
+    Symbol(cache): Map {},
+    Symbol(lruList): Yallist {
+      "head": null,
+      "length": 0,
+      "tail": null,
+    },
+    Symbol(length): 0,
+  },
+  "globalXhrTimeout": 60000,
+}
+`;
+
+exports[`ServiceConfig should pass a configuration to Axios: 002, function 1`] = `
+Array [
+  Array [],
+]
+`;

@@ -3,20 +3,6 @@ import LruCache from 'lru-cache';
 import { serviceHelpers } from './helpers';
 
 /**
- * Apply consistent service configuration.
- *
- * @param {object} passedConfig
- * @returns {object}
- */
-/*
-const serviceConfig = (passedConfig = {}) => ({
-  headers: {},
-  timeout: process.env.REACT_APP_AJAX_TIMEOUT,
-  ...passedConfig
-});
-*/
-
-/**
  * Cache Axios service call cancel tokens.
  *
  * @private
@@ -55,22 +41,11 @@ const responseCache = new LruCache({
  * @returns {Promise<*>}
  */
 const serviceCall = async (config = {}) => {
-  // const updatedConfig = { authenticate: true, mock: false, ...config, cache: undefined, cacheResponse: config.cache };
   const updatedConfig = {
-    // authenticate: true,
-    // onStart: () => {},
-    // headers: {},
-    // timeout: process.env.REACT_APP_AJAX_TIMEOUT,
     ...config,
     cache: undefined,
     cacheResponse: config.cache
-    // mock: !config.url
   };
-
-  // if (typeof updatedConfig.onStart === 'function') {
-  // await platformServices.getUser();
-  // await updatedConfig.onStart();
-  // }
 
   const responseTransformers = [];
   const cancelledMessage = 'cancelled request';
@@ -171,7 +146,6 @@ const serviceCall = async (config = {}) => {
   }
 
   if (typeof updatedConfig.url === 'function') {
-    // delete updatedConfig.url;
     const emulateCallback = updatedConfig.url;
     updatedConfig.url = '/';
 
@@ -195,28 +169,17 @@ const serviceCall = async (config = {}) => {
           config: adapterConfig
         });
     } else {
-      /*
-      const emulatedErrorResponse = adapterConfig => ({
-        ...new Error(message),
-        message,
-        status: 418,
-        statusText: message,
-        config: adapterConfig
-      });
-      */
-      // updatedConfig.adapter = adapterConfig => Promise.reject(emulatedErrorResponse(adapterConfig));
-
       updatedConfig.adapter = adapterConfig =>
         Promise.reject({ // eslint-disable-line
           ...new Error(message),
           message,
           status: 418,
-          // statusText: message,
           config: adapterConfig
         });
     }
-    // return axiosInstance(updatedConfig);
   }
+
+  console.log('API >>>>>>>', updatedConfig);
 
   return axiosInstance(updatedConfig);
 };

@@ -1,3 +1,4 @@
+// import { AxiosConfig } from '../common/serviceConfig';
 import { serviceCall } from '../common/api';
 import { rbacConfig } from '../../config';
 import { platformSchemas } from './platformSchemas';
@@ -6,7 +7,7 @@ import { PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES } 
 import { helpers } from '../../common';
 
 /**
- * Basic user authentication.
+ * Basic user authentication, use emulated serviceCall for transforms.
  *
  * @param {object} options
  * @returns {Promise<void>}
@@ -24,7 +25,7 @@ const getUser = async (options = {}) => {
 };
 
 /**
- * Basic user permissions.
+ * Basic user permissions, use emulated service call for transforms.
  *
  * @param {string} appName
  * @param {object} permissions
@@ -39,7 +40,6 @@ const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => 
     transform = [platformTransformers.permissions]
   } = options;
   const updatedPermissions = Object.keys(permissions);
-
   return serviceCall({
     url: async () => {
       let userPermissions;
@@ -77,6 +77,7 @@ const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => 
     schema,
     transform
   });
+  // return setup.serviceCall();
 };
 
 /**

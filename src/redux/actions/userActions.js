@@ -13,8 +13,6 @@ const authorizeUser = () => dispatch =>
   dispatch({
     type: userTypes.USER_AUTH,
     payload: Promise.all([getUser(), getUserPermissions()])
-    // payload: userServices.authorizeUser()
-    // import { getUser, getUserPermissions } from '../platform/platformServices';
   });
 
 /**
