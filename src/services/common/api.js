@@ -1,8 +1,6 @@
-// import axios, { CancelToken } from 'axios';
-// import LruCache from 'lru-cache';
-import { platformServices } from './platform/platformServices';
-// import { serviceHelpers } from './common/helpers';
-import { serviceCall as axios } from './common/api';
+import axios, { CancelToken } from 'axios';
+import LruCache from 'lru-cache';
+import { serviceHelpers } from './helpers';
 
 /**
  * Apply consistent service configuration.
@@ -10,19 +8,13 @@ import { serviceCall as axios } from './common/api';
  * @param {object} passedConfig
  * @returns {object}
  */
+/*
 const serviceConfig = (passedConfig = {}) => ({
   headers: {},
   timeout: process.env.REACT_APP_AJAX_TIMEOUT,
   ...passedConfig
 });
-
-const serviceCall = async (config = {}) => {
-  if (!config.emulate) {
-    await platformServices.getUser();
-  }
-
-  return axios(serviceConfig(config));
-};
+*/
 
 /**
  * Cache Axios service call cancel tokens.
@@ -30,20 +22,18 @@ const serviceCall = async (config = {}) => {
  * @private
  * @type {object}
  */
-// const cancelTokens = {};
+const cancelTokens = {};
 
 /**
  * Cache Axios service call responses.
  *
  * @type {object}
  */
-/*
 const responseCache = new LruCache({
-  ttl: Number.parseInt(process.env.REACT_APP_AJAX_CACHE, 10),
+  maxAge: Number.parseInt(process.env.REACT_APP_AJAX_CACHE, 10) || 30000,
   max: 100,
   updateAgeOnGet: true
 });
- */
 
 /**
  * Set Axios configuration, which includes response schema validation and caching.
@@ -64,27 +54,30 @@ const responseCache = new LruCache({
  * @param {Array} config.transform
  * @returns {Promise<*>}
  */
-/*
-const serviceCallOLD = async (config = {}) => {
+const serviceCall = async (config = {}) => {
   // const updatedConfig = { authenticate: true, mock: false, ...config, cache: undefined, cacheResponse: config.cache };
   const updatedConfig = {
-    authenticate: true,
+    // authenticate: true,
+    // onStart: () => {},
+    // headers: {},
+    // timeout: process.env.REACT_APP_AJAX_TIMEOUT,
     ...config,
     cache: undefined,
     cacheResponse: config.cache
     // mock: !config.url
   };
 
-  if (updatedConfig.authenticate) {
-    await platformServices.getUser();
-  }
+  // if (typeof updatedConfig.onStart === 'function') {
+  // await platformServices.getUser();
+  // await updatedConfig.onStart();
+  // }
 
   const responseTransformers = [];
   const cancelledMessage = 'cancelled request';
   const axiosInstance = axios.create();
   const sortedParams =
     (updatedConfig.params && Object.entries(updatedConfig.params).sort(([a], [b]) => a.localeCompare(b))) || [];
-  const cacheId = `${updatedConfig.url}-${JSON.stringify(sortedParams)}`;
+  const cacheId = `${updatedConfig.url || ''}-${JSON.stringify(sortedParams)}`;
 
   if (updatedConfig.cancel === true) {
     const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.url}`;
@@ -111,17 +104,8 @@ const serviceCallOLD = async (config = {}) => {
           config: adapterConfig
         });
 
-      return axiosInstance(serviceConfig(updatedConfig));
+      return axiosInstance(updatedConfig);
     }
-  }
-
-  if (updatedConfig.mock === true) {
-    axiosInstance.interceptors.request.use(
-      req => req,
-      reqError => {
-        Promise.resolve(reqError);
-      }
-    );
   }
 
   if (updatedConfig.schema) {
@@ -186,10 +170,57 @@ const serviceCallOLD = async (config = {}) => {
     );
   }
 
-  return axiosInstance(serviceConfig(updatedConfig));
+  if (typeof updatedConfig.url === 'function') {
+    // delete updatedConfig.url;
+    const emulateCallback = updatedConfig.url;
+    updatedConfig.url = '/';
+
+    let message = `success, emulated`;
+    let emulatedResponse;
+    let isSuccess = true;
+
+    try {
+      emulatedResponse = await emulateCallback();
+    } catch (e) {
+      isSuccess = false;
+      message = e.message;
+    }
+
+    if (isSuccess) {
+      updatedConfig.adapter = adapterConfig =>
+        Promise.resolve({
+          data: emulatedResponse,
+          status: 200,
+          statusText: message,
+          config: adapterConfig
+        });
+    } else {
+      /*
+      const emulatedErrorResponse = adapterConfig => ({
+        ...new Error(message),
+        message,
+        status: 418,
+        statusText: message,
+        config: adapterConfig
+      });
+      */
+      // updatedConfig.adapter = adapterConfig => Promise.reject(emulatedErrorResponse(adapterConfig));
+
+      updatedConfig.adapter = adapterConfig =>
+        Promise.reject({ // eslint-disable-line
+          ...new Error(message),
+          message,
+          status: 418,
+          // statusText: message,
+          config: adapterConfig
+        });
+    }
+    // return axiosInstance(updatedConfig);
+  }
+
+  return axiosInstance(updatedConfig);
 };
- */
 
-const config = { serviceCall, serviceConfig };
+const api = { serviceCall };
 
-export { config as default, config, serviceCall, serviceConfig };
+export { api as default, api, serviceCall };

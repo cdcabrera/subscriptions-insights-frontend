@@ -1,64 +1,82 @@
-import _set from 'lodash/set';
+import { serviceCall } from '../common/api';
+import { rbacConfig } from '../../config';
+import { platformSchemas } from './platformSchemas';
+import { platformTransformers } from './platformTransformers';
+import { PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES } from './platformConstants';
 import { helpers } from '../../common';
-import {
-  platformApiTypes,
-  PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES
-} from '../../types/platformApiTypes';
 
 /**
  * Basic user authentication.
  *
+ * @param {object} options
  * @returns {Promise<void>}
  */
-const getUser = async () => {
+const getUser = async (options = {}) => {
   const { insights } = window;
-  try {
-    return (
-      (helpers.DEV_MODE &&
-        _set(
-          {},
-          [
-            platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY,
-            platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_TYPES.USER,
-            platformApiTypes.PLATFORM_API_RESPONSE_USER_IDENTITY_USER_TYPES.ORG_ADMIN
-          ],
-          process.env.REACT_APP_DEBUG_ORG_ADMIN === 'true'
-        )) ||
-      (await insights.chrome.auth.getUser())
-    );
-  } catch (e) {
-    throw new Error(`{ getUser } = insights.chrome.auth, ${e.message}`);
-  }
+  const { cache = true, schema = [platformSchemas.user], transform = [platformTransformers.user] } = options;
+
+  return serviceCall({
+    url: async () => insights.chrome.auth.getUser(),
+    cache,
+    schema,
+    transform
+  });
 };
 
-/**
- * FixMe: revert this back towards async/await
- * Removed because there appears to be some quirky behavior where permissions will not come through
- * unless the function, and/or await are specifically returned, i.e. "return await insights.chrome...".
- */
 /**
  * Basic user permissions.
  *
  * @param {string} appName
+ * @param {object} permissions
+ * @param {object} options
  * @returns {Promise<void>}
  */
-const getUserPermissions = appName => {
+const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => {
   const { insights } = window;
-  try {
-    return (
-      (helpers.DEV_MODE && [
-        {
-          [USER_PERMISSION_TYPES.PERMISSION]: process.env.REACT_APP_DEBUG_PERMISSION_APP_ONE
-        },
-        {
-          [USER_PERMISSION_TYPES.PERMISSION]: process.env.REACT_APP_DEBUG_PERMISSION_APP_TWO
+  const {
+    cache = true,
+    schema = [platformSchemas.permissions],
+    transform = [platformTransformers.permissions]
+  } = options;
+  const updatedPermissions = Object.keys(permissions);
+
+  return serviceCall({
+    url: async () => {
+      let userPermissions;
+
+      if (appName) {
+        userPermissions = await insights.chrome.getUserPermissions(appName);
+      } else if (updatedPermissions.length) {
+        const allPermissions = await Promise.all(
+          updatedPermissions.map(app => insights.chrome.getUserPermissions(app))
+        );
+
+        if (Array.isArray(allPermissions) && allPermissions.filter(value => value !== undefined).length) {
+          userPermissions = [...allPermissions.flat()];
         }
-      ]) ||
-      insights.chrome.getUserPermissions(appName)
-    );
-  } catch (e) {
-    throw new Error(`{ getUserPermissions } = insights.chrome, ${e.message}`);
-  }
+      }
+
+      if (helpers.DEV_MODE) {
+        userPermissions = [
+          {
+            [USER_PERMISSION_TYPES.PERMISSION]: process.env.REACT_APP_DEBUG_PERMISSION_APP_ONE
+          },
+          {
+            [USER_PERMISSION_TYPES.PERMISSION]: process.env.REACT_APP_DEBUG_PERMISSION_APP_TWO
+          }
+        ];
+      }
+
+      if (!userPermissions) {
+        throw new Error(`{ getUserPermissions } = insights.chrome, permissions undefined`);
+      }
+
+      return userPermissions;
+    },
+    cache,
+    schema,
+    transform
+  });
 };
 
 /**
