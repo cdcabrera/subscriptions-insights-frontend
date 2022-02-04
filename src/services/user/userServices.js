@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import LocaleCode from 'locale-code';
-import _isPlainObject from 'lodash/isPlainObject';
-import { rbacConfig as permissions } from '../../config';
-import { getUser, getUserPermissions } from '../platform/platformServices';
+// import _isPlainObject from 'lodash/isPlainObject';
+// import { rbacConfig as permissions } from '../../config';
+// import { getUser, getUserPermissions } from '../platform/platformServices';
 import { serviceCall } from '../config';
 import { helpers } from '../../common';
 
@@ -11,7 +11,8 @@ import { helpers } from '../../common';
  *
  * @returns {Promise<{data: {permissions: (void|*[]), user: void}, message: string, status: number}>}
  */
-const authorizeUser = async () => {
+// const authorizeUser = () => Promise.all([getUser(), getUserPermissions()]);
+/*
   const updatedPermissions = Object.keys(permissions);
   let message = '{ auth.getUser, getUserPermissions } = insights.chrome';
   let userData;
@@ -19,6 +20,8 @@ const authorizeUser = async () => {
 
   try {
     userData = await getUser();
+
+    console.log('001 >>>>>', userData);
 
     if (updatedPermissions.length) {
       const allPermissions = await Promise.all(updatedPermissions.map(app => getUserPermissions(app)));
@@ -44,7 +47,8 @@ const authorizeUser = async () => {
   };
 
   return Promise.reject(emulatedErrorResponse);
-};
+  */
+// };
 
 /**
  * Return a platform locale value from a cookie.
@@ -77,10 +81,12 @@ const getLocale = () => {
   );
 };
 
+/*
 const logoutUser = () =>
   new Promise(resolve => {
     resolve({});
   });
+ */
 
 /**
  * @apiMock {DelayResponse} 2000
@@ -286,7 +292,8 @@ const updateAccountOptIn = (params = {}) =>
     params
   });
 
-const userServices = { authorizeUser, getLocale, logoutUser, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
+// const userServices = { authorizeUser, getLocale, logoutUser, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
+const userServices = { getLocale, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
 
 /**
  * Expose services to the browser's developer console.
@@ -296,9 +303,9 @@ helpers.browserExpose({ userServices });
 export {
   userServices as default,
   userServices,
-  authorizeUser,
+  // authorizeUser,
   getLocale,
-  logoutUser,
+  // logoutUser,
   deleteAccountOptIn,
   getAccountOptIn,
   updateAccountOptIn
