@@ -1,5 +1,6 @@
 import { platformServices } from './platform/platformServices';
-import { AxiosConfig } from './common/serviceConfig';
+// import { AxiosConfig } from './common/serviceConfig';
+import { serviceCall as axiosServiceCall } from './common/api';
 
 /**
  * Apply custom service configuration.
@@ -27,7 +28,7 @@ const serviceConfig = (passedConfig = {}) => ({
  */
 const serviceCall = async (config = {}) => {
   await platformServices.getUser();
-  return new AxiosConfig(serviceConfig(config)).serviceCall();
+  return axiosServiceCall(serviceConfig(config));
 };
 
 const config = { serviceCall, serviceConfig };

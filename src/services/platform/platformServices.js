@@ -1,4 +1,5 @@
-import { AxiosConfig } from '../common/serviceConfig';
+// import { AxiosConfig } from '../common/serviceConfig';
+import { serviceCall } from '../common/api';
 import { rbacConfig } from '../../config';
 import { platformSchemas } from './platformSchemas';
 import { platformTransformers } from './platformTransformers';
@@ -15,12 +16,12 @@ const getUser = async (options = {}) => {
   const { insights } = window;
   const { cache = true, schema = [platformSchemas.user], transform = [platformTransformers.user] } = options;
 
-  return new AxiosConfig({
+  return serviceCall({
     url: async () => insights.chrome.auth.getUser(),
     cache,
     schema,
     transform
-  }).serviceCall();
+  });
 };
 
 /**
@@ -39,8 +40,7 @@ const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => 
     transform = [platformTransformers.permissions]
   } = options;
   const updatedPermissions = Object.keys(permissions);
-
-  return new AxiosConfig({
+  return serviceCall({
     url: async () => {
       let userPermissions;
 
@@ -76,7 +76,8 @@ const getUserPermissions = (appName, permissions = rbacConfig, options = {}) => 
     cache,
     schema,
     transform
-  }).serviceCall();
+  });
+  // return setup.serviceCall();
 };
 
 /**
