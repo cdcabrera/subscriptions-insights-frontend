@@ -5,10 +5,14 @@ import { useShallowCompareEffect } from 'react-use';
 import { reduxTypes, storeHooks } from '../../redux';
 import { useProduct, useProductToolbarConfig } from '../productView/productViewContext';
 import { Select } from '../form/select';
-import { RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 import { ToolbarFieldGranularity, toolbarFieldOptions as granularityOptions } from './toolbarFieldGranularity';
 import { ToolbarFieldRangedMonthly, toolbarFieldOptions as rangedMonthlyOptions } from './toolbarFieldRangedMonthly';
+import {
+  ToolbarFieldBillingProvider,
+  toolbarFieldOptions as billingProviderOptions
+} from './toolbarFieldBillingProvider';
 import { ToolbarFieldSla, toolbarFieldOptions as slaOptions } from './toolbarFieldSla';
 import { ToolbarFieldUom, toolbarFieldOptions as uomOptions } from './toolbarFieldUom';
 import { ToolbarFieldUsage, toolbarFieldOptions as usageOptions } from './toolbarFieldUsage';
@@ -22,35 +26,42 @@ const toolbarFieldOptions = [
   {
     title: translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.GRANULARITY }),
     value: RHSM_API_QUERY_TYPES.GRANULARITY,
-    component: <ToolbarFieldGranularity key="selectCategory_granularity" isFilter />,
+    component: props => <ToolbarFieldGranularity key="selectCategory_granularity" {...props} />,
     options: granularityOptions,
     isClearable: false
   },
   {
     title: translate('curiosity-toolbar.category', { context: 'rangedMonthly' }),
     value: 'rangedMonthly',
-    component: <ToolbarFieldRangedMonthly key="selectCategory_rangedMonthly" isFilter />,
+    component: props => <ToolbarFieldRangedMonthly key="selectCategory_rangedMonthly" {...props} />,
     options: rangedMonthlyOptions,
     isClearable: false
   },
   {
     title: translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.UOM }),
     value: RHSM_API_QUERY_TYPES.UOM,
-    component: <ToolbarFieldUom key="selectCategory_uom" isFilter />,
+    component: props => <ToolbarFieldUom key="selectCategory_uom" {...props} />,
     options: uomOptions,
     isClearable: false
   },
   {
+    title: translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.BILLING_PROVIDER }),
+    value: RHSM_API_QUERY_TYPES.BILLING_PROVIDER,
+    component: props => <ToolbarFieldBillingProvider key="selectCategory_billingProvider" {...props} />,
+    options: billingProviderOptions,
+    isClearable: true
+  },
+  {
     title: translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA }),
     value: RHSM_API_QUERY_TYPES.SLA,
-    component: <ToolbarFieldSla key="selectCategory_sla" isFilter />,
+    component: props => <ToolbarFieldSla key="selectCategory_sla" {...props} />,
     options: slaOptions,
     isClearable: true
   },
   {
     title: translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE }),
     value: RHSM_API_QUERY_TYPES.USAGE,
-    component: <ToolbarFieldUsage key="selectCategory_usage" isFilter />,
+    component: props => <ToolbarFieldUsage key="selectCategory_usage" {...props} />,
     options: usageOptions,
     isClearable: true
   }

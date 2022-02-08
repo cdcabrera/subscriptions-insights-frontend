@@ -219,6 +219,11 @@ const config = {
   ],
   initialToolbarFilters: [
     {
+      id: RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER
+    }
+  ],
+  initialSecondaryToolbarFilters: [
+    {
       id: 'rangedMonthly'
     }
   ]
