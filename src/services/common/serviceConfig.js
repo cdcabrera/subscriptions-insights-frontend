@@ -149,11 +149,32 @@ class AxiosConfigPROBSWITHASYNC {
   }
 }
 */
+
+/**
+ * Generate a cache ID.
+ *
+ * @param {object} config
+ * @param {object} config.params
+ * @param {string|Function} config.url
+ * @returns {string}
+ */
 const setCacheId = (config = {}) => {
   const sortedParams = (config.params && Object.entries(config.params).sort(([a], [b]) => a.localeCompare(b))) || [];
   return `${config.url || ''}-${JSON.stringify(sortedParams)}`;
 };
 
+/**
+ * Generate a cancel token.
+ *
+ * @param {object} config
+ * @param {boolean} config.cancel
+ * @param {string} config.cancelId
+ * @param {string|Function} config.url
+ * @param {object} options
+ * @param {string} options.cancelledMessage
+ * @param {object} options.cancelTokens
+ * @returns {object}
+ */
 const setCancel = (config = {}, { cancelledMessage = '', cancelTokens } = {}) => {
   const updatedConfig = { ...config };
   const updatedCancelTokens = cancelTokens;
@@ -174,6 +195,16 @@ const setCancel = (config = {}, { cancelledMessage = '', cancelTokens } = {}) =>
   return updatedConfig;
 };
 
+/**
+ * Confirm transformation config, format, return an array of transformations (schema checks, response transforms).
+ *
+ * @param {object} config
+ * @param {Array} config.schema
+ * @param {Array} config.transform
+ * @param {object} options
+ * @param {string} options.cancelledMessage
+ * @returns {Array}
+ */
 const setTransformations = (config = {}, { cancelledMessage = '' } = {}) => {
   const responseTransformers = [];
 
@@ -230,6 +261,14 @@ const setTransformations = (config = {}, { cancelledMessage = '' } = {}) => {
   });
 };
 
+/**
+ * Return an emulated service response with a function. Applies a consistent way of returning data in scenarios where
+ * global functions are provided.
+ *
+ * @param {object} config
+ * @param {string|Function} config.url
+ * @returns {Promise}
+ */
 const setEmulatedService = async config => {
   const updatedConfig = { ...config };
 
@@ -270,6 +309,24 @@ const setEmulatedService = async config => {
   return updatedConfig;
 };
 
+/**
+ * Set Axios configuration.
+ *
+ * @param {object} config
+ * @param {object} config.cache
+ * @param {boolean} config.cancel
+ * @param {string} config.cancelId
+ * @param {object} config.params
+ * @param {Array} config.schema
+ * @param {Array} config.transform
+ * @param {string|Function} config.url
+ * @param {object} options
+ * @param {string} options.cancelledMessage
+ * @param {object} options.cancelTokens
+ * @param {object} options.responseCache
+ * @param {number} options.xhrTimeout
+ * @returns {Promise}
+ */
 const axiosConfig = async (
   config = {},
   {
