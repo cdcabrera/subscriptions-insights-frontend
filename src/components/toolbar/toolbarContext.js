@@ -118,6 +118,14 @@ const useToolbarFieldClearAll = ({
   };
 };
 
+/**
+ * Return list of secondary toolbar fields for display.
+ *
+ * @param {object} options
+ * @param {Array} options.categoryOptions
+ * @param {Function} options.useProductToolbarConfig
+ * @returns {Array}
+ */
 const useToolbarSecondaryFields = ({
   categoryOptions = toolbarFieldOptions,
   useProductToolbarConfig: useAliasProductToolbarConfig = useProductToolbarConfig
