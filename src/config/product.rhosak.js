@@ -10,6 +10,7 @@ import {
 import { Button } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import moment from 'moment';
+// import { Tooltip } from '../components/tooltip/tooltip';
 import { RHSM_API_QUERY_SUBSCRIPTIONS_SORT_TYPES } from '../types/rhsmApiTypes';
 import {
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -137,6 +138,32 @@ const config = {
         return <React.Fragment>{updatedDisplayName}</React.Fragment>;
       },
       isSortable: true
+    },
+    {
+      id: RHSM_API_PATH_METRIC_TYPES.BILLING_PROVIDER,
+      tooltip: translate('curiosity-inventory.header', {
+        context: ['tooltip', RHSM_API_PATH_METRIC_TYPES.BILLING_PROVIDER]
+      }),
+      /*
+      header: () => (
+        <Tooltip
+          content={translate('curiosity-inventory.header', {
+            context: [RHSM_API_PATH_METRIC_TYPES.BILLING_PROVIDER, 'tooltip']
+          })}
+        >
+          {translate('curiosity-inventory.header', {
+            context: RHSM_API_PATH_METRIC_TYPES.BILLING_PROVIDER
+          })}
+        </Tooltip>
+      ),
+       */
+      cell: ({ [RHSM_API_PATH_METRIC_TYPES.BILLING_PROVIDER]: provider = 'test' }) =>
+        translate('curiosity-inventory.measurement', {
+          context: [RHSM_API_PATH_METRIC_TYPES.BILLING_PROVIDER, provider]
+        }),
+      isSortable: true,
+      isWrappable: true,
+      cellWidth: 15
     },
     {
       id: RHSM_API_PATH_METRIC_TYPES.TRANSFER_GIBIBYTES,

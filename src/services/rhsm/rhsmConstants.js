@@ -37,6 +37,7 @@ const RHSM_API_PATH_PRODUCT_TYPES = {
  *     TRANSFER_GIBIBYTES: string, CORE_SECONDS: string}}
  */
 const RHSM_API_PATH_METRIC_TYPES = {
+  BILLING_PROVIDER: 'Billing-provider',
   CORES: 'Cores',
   SOCKETS: 'Sockets',
   CORE_SECONDS: 'Core-seconds',
