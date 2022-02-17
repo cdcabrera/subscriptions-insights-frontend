@@ -7,6 +7,9 @@ Object {
       "title": "lorem ipsum",
     },
     Object {
+      "title": "t(curiosity-inventory.measurement_Billing-provider, {})",
+    },
+    Object {
       "title": "t(curiosity-inventory.measurement, {\\"context\\":\\"Transfer-gibibytes\\",\\"total\\":\\"0.00035\\"})",
     },
     Object {
@@ -25,6 +28,22 @@ Object {
     Object {
       "title": "t(curiosity-inventory.header, {\\"context\\":\\"display_name\\"})",
       "transforms": Array [],
+    },
+    Object {
+      "title": <Tooltip
+        content="t(curiosity-inventory.header, {\\"context\\":\\"tooltip_Billing-provider\\"})"
+        distance={5}
+        enableFlip={false}
+        entryDelay={100}
+        exitDelay={0}
+        isNoWrap={false}
+        position="top"
+      >
+        t(curiosity-inventory.header, {"context":"Billing-provider"})
+      </Tooltip>,
+      "transforms": Array [
+        [Function],
+      ],
     },
     Object {
       "title": "t(curiosity-inventory.header, {\\"context\\":\\"Transfer-gibibytes\\"})",
@@ -92,6 +111,9 @@ Object {
       </React.Fragment>,
     },
     Object {
+      "title": "t(curiosity-inventory.measurement_Billing-provider, {})",
+    },
+    Object {
       "title": "t(curiosity-inventory.measurement, {\\"context\\":\\"Transfer-gibibytes\\",\\"total\\":\\"0.00035\\"})",
     },
     Object {
@@ -110,6 +132,22 @@ Object {
     Object {
       "title": "t(curiosity-inventory.header, {\\"context\\":\\"display_name\\"})",
       "transforms": Array [],
+    },
+    Object {
+      "title": <Tooltip
+        content="t(curiosity-inventory.header, {\\"context\\":\\"tooltip_Billing-provider\\"})"
+        distance={5}
+        enableFlip={false}
+        entryDelay={100}
+        exitDelay={0}
+        isNoWrap={false}
+        position="top"
+      >
+        t(curiosity-inventory.header, {"context":"Billing-provider"})
+      </Tooltip>,
+      "transforms": Array [
+        [Function],
+      ],
     },
     Object {
       "title": "t(curiosity-inventory.header, {\\"context\\":\\"Transfer-gibibytes\\"})",
