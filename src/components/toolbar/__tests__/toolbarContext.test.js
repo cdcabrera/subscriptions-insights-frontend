@@ -1,4 +1,10 @@
-import { context, useToolbarFieldClear, useToolbarFieldClearAll, useToolbarFieldQueries } from '../toolbarContext';
+import {
+  context,
+  useToolbarFieldClear,
+  useToolbarFieldClearAll,
+  useToolbarFieldQueries,
+  useToolbarSecondaryFields
+} from '../toolbarContext';
 import { store } from '../../../redux/store';
 import { RHSM_API_QUERY_TYPES } from '../../../types/rhsmApiTypes';
 
@@ -50,10 +56,30 @@ describe('ToolbarContext', () => {
   it('should apply a hook for retrieving api queries specific to toolbar', () => {
     const { result: productQuery } = shallowHook(() =>
       useToolbarFieldQueries({
-        useProductQuery: () => ({ lorem: 'ipsum', [RHSM_API_QUERY_TYPES.SLA]: 'testSla' }),
+        useProductQuery: () => ({
+          lorem: 'ipsum',
+          [RHSM_API_QUERY_TYPES.SLA]: 'testSla',
+          [RHSM_API_QUERY_TYPES.USAGE]: 'testUsage',
+          [RHSM_API_QUERY_TYPES.BILLING_PROVIDER]: 'testProvider'
+        }),
         useProductGraphTallyQuery: () => ({ dolor: 'sit', [RHSM_API_QUERY_TYPES.GRANULARITY]: 'testGranularity' })
       })
     );
     expect(productQuery).toMatchSnapshot('query');
+  });
+
+  it('should apply a hook for retrieving secondary toolbar field components', () => {
+    const { result: secondaryFields } = shallowHook(() =>
+      useToolbarSecondaryFields({
+        useProductToolbarConfig: () => ({
+          secondaryFilters: [
+            {
+              id: 'rangedMonthly'
+            }
+          ]
+        })
+      })
+    );
+    expect(secondaryFields).toMatchSnapshot('secondary field, rangedMonthly');
   });
 });

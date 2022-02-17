@@ -99,11 +99,21 @@ Array [
 
 exports[`ToolbarContext should apply a hook for retrieving api queries specific to toolbar: query 1`] = `
 Object {
+  "billing_provider": "testProvider",
   "granularity": "testGranularity",
   "sla": "testSla",
   "uom": undefined,
-  "usage": undefined,
+  "usage": "testUsage",
 }
+`;
+
+exports[`ToolbarContext should apply a hook for retrieving secondary toolbar field components: secondary field, rangedMonthly 1`] = `
+Array [
+  <RangedMonthly
+    isFilter={false}
+    position="right"
+  />,
+]
 `;
 
 exports[`ToolbarContext should return specific properties: specific properties 1`] = `
@@ -111,5 +121,6 @@ Object {
   "useToolbarFieldClear": [Function],
   "useToolbarFieldClearAll": [Function],
   "useToolbarFieldQueries": [Function],
+  "useToolbarSecondaryFields": [Function],
 }
 `;
