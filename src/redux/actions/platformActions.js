@@ -30,6 +30,17 @@ const removeNotification = id => RcsRemoveNotification(id);
 const clearNotifications = () => RcsClearNotifications();
 
 /**
+ * Get an emulated and combined API response from the platforms "getUser" and "getUserPermissions" global methods.
+ *
+ * @returns {Function}
+ */
+const authorizeUser = () => dispatch =>
+  dispatch({
+    type: platformTypes.PLATFORM_USER_AUTH,
+    payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions()])
+  });
+
+/**
  * Hide platform global filter.
  *
  * @param {boolean} isHidden
@@ -103,6 +114,7 @@ const platformActions = {
   addNotification,
   removeNotification,
   clearNotifications,
+  authorizeUser,
   hideGlobalFilter,
   initializeChrome,
   onNavigation,
@@ -116,6 +128,7 @@ export {
   addNotification,
   removeNotification,
   clearNotifications,
+  authorizeUser,
   hideGlobalFilter,
   initializeChrome,
   onNavigation,

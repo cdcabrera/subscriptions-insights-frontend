@@ -1,5 +1,6 @@
 import { userTypes } from '../types';
 import { userServices } from '../../services/user/userServices';
+import { getUser, getUserPermissions } from '../../services/platform/platformServices';
 import { helpers } from '../../common/helpers';
 import { translate } from '../../components/i18n/i18n';
 
@@ -11,7 +12,7 @@ import { translate } from '../../components/i18n/i18n';
 const authorizeUser = () => dispatch =>
   dispatch({
     type: userTypes.USER_AUTH,
-    payload: userServices.authorizeUser()
+    payload: Promise.all([getUser(), getUserPermissions()])
   });
 
 /**
