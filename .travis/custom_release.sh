@@ -18,12 +18,12 @@ release()
 #
 releaseDev()
 {
-  if [[ "${TRAVIS_BRANCH}" = "ci-beta" || "${TRAVIS_BRANCH}" = "dev" || "${TRAVIS_BRANCH}" = "ci" ]] && [[ $TRAVIS_BUILD_STAGE_NAME == *"Beta"* ]]; then
+  if [[ "${TRAVIS_BRANCH}" = "ci-beta" || "${TRAVIS_BRANCH}" = "ci" || "${TRAVIS_BRANCH}" = "dev" || "${TRAVIS_BRANCH}" = "develop" ]] && [[ $TRAVIS_BUILD_STAGE_NAME == *"Beta"* ]]; then
     release "ci-beta"
     release "qa-beta"
   fi
 
-  if [[ "${TRAVIS_BRANCH}" = "ci-stable" || "${TRAVIS_BRANCH}" = "test" || "${TRAVIS_BRANCH}" = "qa" ]] && [[ $TRAVIS_BUILD_STAGE_NAME != *"Beta"* ]];  then
+  if [[ "${TRAVIS_BRANCH}" = "ci-stable" || "${TRAVIS_BRANCH}" = "test" || "${TRAVIS_BRANCH}" = "qa" || "${TRAVIS_BRANCH}" = "dev" || "${TRAVIS_BRANCH}" = "develop" ]] && [[ $TRAVIS_BUILD_STAGE_NAME != *"Beta"* ]];  then
     release "ci-stable"
     release "qa-stable"
   fi
