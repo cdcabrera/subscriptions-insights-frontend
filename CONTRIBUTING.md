@@ -64,31 +64,25 @@ For Github issues that looks like
 Settings for [Standard Version](https://github.com/conventional-changelog/standard-version#readme) can be found in [package.json](./package.json)
 
 ### Branching, Pull Requests, and Releases
-Curiosity makes use of the branches `main`, `stage`, `qa`, and `ci`. 
+Curiosity makes use of the branches `main`, `stage`, and `develop`. 
 - `main` branch is a protected representation of production environments
    - Adding commits, or a PR, into `main` should generate a `prod-stable` branch within the deploy repository [curiosity-frontend-build](https://github.com/RedHatInsights/curiosity-frontend-build)
    - The `prod-stable` branch is manually deployed through coordination with the operations team.
 - `stage` branch is a protected representation of production environments
    - Adding commits, or a PR, into `stage` should generate a `prod-beta` branch within the deploy repository [curiosity-frontend-build](https://github.com/RedHatInsights/curiosity-frontend-build)
    - The `prod-beta` branch is manually deployed through coordination with the operations team.
-- `qa` branch is a representation of `ci-stable`, `qa-stable` and `stage-stable`.
-   - Adding commits, or a PR, into `ci-stable` should generate `ci-*` and `qa-*` branches within the deploy repository [curiosity-frontend-build](https://github.com/RedHatInsights/curiosity-frontend-build)
-   - The `ci-*` and `qa-*` branches are automatically deployed within an averaged time for `https://ci.*.redhat.com`, `https://qa.*.redhat.com` and `https://*.stage.redhat.com`
-   - In the future, once the API is fully deployed to QA, this will be a representation of `qa-beta` and `qa-stable`
-- `ci` branch is a representation of `ci-beta`, `qa-beta` and `stage-beta`.
-   - Adding commits, or a PR, into `ci-beta` should generate `ci-*` and `qa-*` branches within the deploy repository [curiosity-frontend-build](https://github.com/RedHatInsights/curiosity-frontend-build)
-   - The `ci-*` and `qa-*` branches are automatically deployed within an averaged time for `https://ci.*.redhat.com`, `https://qa.*.redhat.com` and  `https://*.stage.redhat.com`
-   - In the future, once the API is fully deployed to QA, this will be a representation of `ci-beta` and `ci-stable`
+- `develop` branch is a representation of `qa-beta/stable` and `stage-beta/stable`.
+  - Adding commits, or a PR, into `develop` should generate `qa-*` branches within the deploy repository [curiosity-frontend-build](https://github.com/RedHatInsights/curiosity-frontend-build)
+  - The `qa-*` branches are automatically deployed within an averaged time for `https://*.stage.redhat.com`
 
 #### Branching and Pull Request Workflow
 It is required that all work is handled through GitHub's fork and pull workflow. 
 
 **Working directly on the main repository is highly discouraged. Continuous Integration is dependent on branch structure.**
 
-1. General development PRs should almost always be opened against the `ci` branch.
-1. It is preferred that PRs to `qa` originate from `ci`, but testing related fixes and general PRs opened against `qa` are allowed.
-1  PRs from `ci` to `qa` are allowed
-1. PRs from `qa` to `stage` are preferred.
+1. General development PRs should always be opened against the `develop` branch.
+1  PRs from a feature-\[feature name] branch to `stage` are allowed
+1. PRs from `develop` to `stage` are preferred.
 1. PRs to `stage` require a QE team members approval/sign-off.
 1. PRs to `main` are only allowed from `stage`.
 1. PRs to `main` branch are considered production ready releases.
@@ -96,7 +90,7 @@ It is required that all work is handled through GitHub's fork and pull workflow.
 1. All PRs to production, main branch, should have a final review, coordination, from Quality Engineering.
 
 ```
-   PR fork -> ci <-> qa -> stage -> main
+   PR fork -> develop/feature -> stage -> main
 ```
 
 ### Releases and Tagging
@@ -106,7 +100,7 @@ It is required that all work is handled through GitHub's fork and pull workflow.
 1. Tagging and `CHANGELOG.md` updates should be coordinated against a consistent release cycle, and can take place at an independent time.
 1. Tagging should make use of semver.
 1. Manipulating tags against commits directly should be avoided in favor of a semantic version increment, iteration.
-1. Once a release commit and tag have been implemented `stage`, `qa`, and `ci` will be rebased accordingly.
+1. Once a release commit and tag have been implemented `stage` and `develop` will be rebased accordingly.
 
 ## Serving content, or getting everything to run in your local environment.
 To serve content you'll need to have Docker, Node, and Yarn installed.
@@ -115,25 +109,25 @@ Serving content comes in 3 variations
 - `$ yarn start`, Styled local run, without the Insights proxy, using a mock server.
   - You'll be presented with a login, you can attempt to login with user `admin` password `admin` as the credentials.
     However, the up-to-date credentials are maintained here, [RH Cloud Services Config standalone](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#standalone)
-  - By default `local` run uses the `prod-stable` branch of the [Insights chroming repo](https://github.com/RedHatInsights/insights-chrome) (see the repo for additional branches). You can run a branch of your choice by either running the terminal command
+  - By default `local` run uses the `stage-stable` branch of the [Insights chroming repo](https://github.com/RedHatInsights/insights-chrome) (see the repo for additional branches). You can run a branch of your choice by either running the terminal command
      ```
-      $ export DEV_BRANCH=ci-beta; yarn start
+      $ export DEV_BRANCH=stage-beta; yarn start
      ```
     or by placing the parameter in a `.env.local` dotenv file in the root directory of the project (you can use .env.development and .env.proxy as examples)
      ```
-      DEV_BRANCH=ci-beta
+      DEV_BRANCH=stage-beta
      ```
   - Terminal messaging should indicate the path at which the app can be opened, you may need to scroll up.
 
 - `$ yarn start:proxy`, Styled local using the Insights proxy.
   - This requires access in order to be used. In addition, you may be asked for your credentials during initial repository setup. The credentials are used to modify your `hosts` for local run.
-  - By default `proxy` run uses the `ci-stable` branch of the [Insights chroming repo](https://github.com/RedHatInsights/insights-chrome) (see the repo for additional branches). You can run a branch of your choice by either running the terminal command
+  - By default `proxy` run uses the `stage-beta` branch of the [Insights chroming repo](https://github.com/RedHatInsights/insights-chrome) (see the repo for additional branches). You can run a branch of your choice by either running the terminal command
      ```
-      $ export DEV_BRANCH=ci-beta; yarn start:proxy
+      $ export DEV_BRANCH=stage-stable; yarn start:proxy
      ```
     or by placing the parameter in a `.env.local` dotenv file in the root directory of the project (you can use .env.development and .env.proxy as examples)
      ```
-      DEV_BRANCH=ci-beta
+      DEV_BRANCH=stage-stable
      ```
   - Terminal messaging should indicate the path at which the app can be opened, you may need to scroll up.
 
