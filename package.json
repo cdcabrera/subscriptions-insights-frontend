@@ -57,7 +57,7 @@
     "build:js": "export NODE_ENV=production; webpack --config config/webpack.prod.config.js",
     "build:post": "bash ./scripts/post.sh",
     "build:pre": "bash ./scripts/pre.sh",
-    "build:deps": "ncu --doctor -u --doctorInstall \"yarn\" --doctorTest \"yarn test:deps\"",
+    "build:deps": "ncu --doctor -u --doctorInstall \"yarn\" --doctorTest \"yarn test:deps\" --reject \"@patternfly/*, @redhat-cloud-services/frontend*, victory*\"",
     "dev:chrome": "bash ./scripts/dev.chrome.sh -b prod-stable",
     "release": "standard-version",
     "start": "run-p -l api:dev start:js",
