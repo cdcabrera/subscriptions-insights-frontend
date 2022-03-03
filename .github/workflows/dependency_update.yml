@@ -34,7 +34,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.DEPS }}
+          draft: true
           branch: deps-update
           base: ci
           labels: "build"
