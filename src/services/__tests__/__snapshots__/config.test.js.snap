@@ -46,6 +46,100 @@ Array [
         "data": undefined,
         "headers": Object {
           "Accept": "application/json, text/plain, */*",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        "maxBodyLength": -1,
+        "maxContentLength": -1,
+        "method": "post",
+        "timeout": "60000",
+        "transformRequest": Array [
+          [Function],
+        ],
+        "transformResponse": Array [
+          [Function],
+        ],
+        "transitional": Object {
+          "clarifyTimeoutError": false,
+          "forcedJSONParsing": true,
+          "silentJSONParsing": true,
+        },
+        "url": "/test/",
+        "validateStatus": [Function],
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+      },
+      "data": "success",
+      "headers": undefined,
+      "request": Request {
+        "config": Object {
+          "adapter": [Function],
+          "cacheResponse": false,
+          "cancelToken": CancelToken {
+            "promise": Promise {
+              "then": [Function],
+            },
+          },
+          "data": undefined,
+          "headers": Object {
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          "maxBodyLength": -1,
+          "maxContentLength": -1,
+          "method": "post",
+          "timeout": "60000",
+          "transformRequest": Array [
+            [Function],
+          ],
+          "transformResponse": Array [
+            [Function],
+          ],
+          "transitional": Object {
+            "clarifyTimeoutError": false,
+            "forcedJSONParsing": true,
+            "silentJSONParsing": true,
+          },
+          "url": "/test/",
+          "validateStatus": [Function],
+          "xsrfCookieName": "XSRF-TOKEN",
+          "xsrfHeaderName": "X-XSRF-TOKEN",
+        },
+        "headers": Object {
+          "Accept": "application/json, text/plain, */*",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        "reject": [Function],
+        "resolve": [Function],
+        "responseType": undefined,
+        "timeout": "60000",
+        "url": "/test/",
+        "withCredentials": false,
+      },
+      "status": 200,
+      "statusText": undefined,
+    },
+  },
+  Object {
+    "reason": Cancel {
+      "message": "cancelled request",
+    },
+    "status": "rejected",
+  },
+  Object {
+    "status": "fulfilled",
+    "value": Response {
+      "code": undefined,
+      "config": Object {
+        "adapter": [Function],
+        "cacheResponse": false,
+        "cancelToken": CancelToken {
+          "promise": Promise {
+            "then": [Function],
+          },
+        },
+        "data": undefined,
+        "headers": Object {
+          "Accept": "application/json, text/plain, */*",
         },
         "maxBodyLength": -1,
         "maxContentLength": -1,
@@ -166,5 +260,10 @@ exports[`ServiceConfig should handle transforming service call responses: transf
 Array [
   "success-schema-transform",
   "success-transform",
+  "error-error-transform",
+  Array [
+    "cancelled request",
+    undefined,
+  ],
 ]
 `;

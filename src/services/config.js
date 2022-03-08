@@ -88,7 +88,7 @@ const serviceCall = async config => {
   }
 
   if (updatedConfig.cancel === true) {
-    const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.url}`;
+    const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.method}-${updatedConfig.url}`;
 
     if (cancelTokens[cancelTokensId]) {
       cancelTokens[cancelTokensId].cancel(cancelledMessage);

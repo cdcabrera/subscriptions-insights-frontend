@@ -36,6 +36,12 @@ describe('ServiceConfig', () => {
       responseText: 'success',
       timeout: 1
     });
+
+    moxios.stubRequest(/\/error.*?/, {
+      status: 404,
+      responseText: 'error',
+      timeout: 1
+    });
   });
 
   afterAll(() => {
@@ -86,9 +92,12 @@ describe('ServiceConfig', () => {
   });
 
   it('should handle cancelling service calls', async () => {
+    // Highlight cancel takes into account url and method
     const responseAll = await returnPromiseAsync(() =>
       Promise.all([
         service.serviceCall({ url: '/test/', cancel: true }),
+        service.serviceCall({ url: '/test/', method: 'post', cancel: true }),
+        service.serviceCall({ url: '/test/', method: 'post', cancel: true }),
         service.serviceCall({ url: '/test/', cancel: true }),
         service.serviceCall({ url: '/test/', cancel: true })
       ])
@@ -96,9 +105,12 @@ describe('ServiceConfig', () => {
 
     expect(responseAll).toMatchSnapshot('cancelled request, Promise.all');
 
+    // Highlight cancel takes into account url and method
     const responseAllSettled = await returnPromiseAsync(() =>
       Promise.allSettled([
         service.serviceCall({ url: '/test/', cancel: true }),
+        service.serviceCall({ url: '/test/', method: 'post', cancel: true }),
+        service.serviceCall({ url: '/test/', method: 'post', cancel: true }),
         service.serviceCall({ url: '/test/', cancel: true }),
         service.serviceCall({ url: '/test/', cancel: true })
       ])
@@ -186,6 +198,45 @@ describe('ServiceConfig', () => {
       transform: [successResponse => `${successResponse}-transform`]
     });
     responses.push(responseTwo.data);
+
+    // Third, use error transform
+    let responseThree;
+    try {
+      responseThree = await service.serviceCall({
+        cache: true,
+        url: '/error/',
+        transform: [
+          successResponse => `${successResponse}-transform`,
+          errorResponse => `${errorResponse}-error-transform`
+        ]
+      });
+    } catch (e) {
+      responseThree = e.response || e;
+    }
+
+    responses.push(responseThree.data);
+
+    // Fourth, use error transform with cancel
+    const responseFourConfig = {
+      cache: true,
+      cancel: true,
+      url: '/error/',
+      transform: [
+        successResponse => `${successResponse}-transform`,
+        errorResponse => `${errorResponse}-cancel-transform`
+      ]
+    };
+
+    const responseFour = await Promise.allSettled([
+      service.serviceCall({
+        ...responseFourConfig
+      }),
+      service.serviceCall({
+        ...responseFourConfig
+      })
+    ]);
+
+    responses.push(responseFour.map(({ reason }) => reason.message));
 
     expect(responses).toMatchSnapshot('transformed responses');
   });
