@@ -66,7 +66,13 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
   let cancelCount = 0;
 
   const parsedSelectorResponse = selectorResponse.map(response => {
-    const { pending, fulfilled, error, cancelled, data } = response || {};
+    let updatedResponse = response;
+
+    if (typeof updatedResponse.pending !== 'boolean') {
+      updatedResponse = { fulfilled: true, data: updatedResponse };
+    }
+
+    const { pending, fulfilled, error, cancelled, data } = updatedResponse;
 
     if (pending) {
       isPending = true;
