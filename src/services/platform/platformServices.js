@@ -21,6 +21,7 @@ const getUser = async (options = {}) => {
   return axiosServiceCall({
     url: async () => {
       try {
+        /*
         return (
           (helpers.DEV_MODE &&
             _set(
@@ -34,6 +35,27 @@ const getUser = async (options = {}) => {
             )) ||
           (await insights.chrome.auth.getUser())
         );
+        */
+
+        return await insights.chrome.auth.getUser();
+
+        // return await Promise.all([]);
+        /*
+        return new Promise(async (resolve, reject) => {
+          setTimeout(() => reject(new Error('FAIL TIMEOUT')), 9000);
+          const test = await insights.chrome.auth.getUser();
+          resolve(test);
+        });
+        */
+        /*
+        const test = async () => {
+          setTimeout(() => Promise.reject(new Error('FAIL TIMEOUT')), 9000);
+          const doit = await insights.chrome.auth.getUser();
+          return Promise.resolve(doit);
+        };
+
+        return await test();
+        */
       } catch (e) {
         throw new Error(`{ getUser } = insights.chrome.auth, ${e.message}`);
       }

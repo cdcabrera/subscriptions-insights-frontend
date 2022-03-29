@@ -11,6 +11,7 @@ import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
+import { useSession } from './authenticationContext';
 
 /**
  * An authentication pass-through component.
@@ -38,17 +39,22 @@ const Authentication = ({
   initializeChrome,
   isDisabled,
   onNavigation,
-  session,
+  // session,
   setAppName,
   t,
   useDispatch: useAliasDispatch,
-  useHistory: useAliasHistory
+  useHistory: useAliasHistory,
+  useSession: useAliasSession
 }) => {
   const [unregister, setUnregister] = useState(() => helpers.noop);
   const dispatch = useAliasDispatch();
   const history = useAliasHistory();
-  const { errorCodes, pending, status: httpStatus, authorized } = session || {};
+  // const { errorCodes, pending, status: httpStatus, authorized } = session || {};
+  const { errorCodes, pending, status: httpStatus, authorized } = {};
+  const test = useAliasSession();
   const { [appName]: isAuthorized } = authorized || {};
+
+  console.log('>>>>>>>>>>>>>>>>>>>', test);
 
   useMount(async () => {
     if (!isAuthorized) {
@@ -109,6 +115,7 @@ Authentication.propTypes = {
   isDisabled: PropTypes.bool,
   onNavigation: PropTypes.func,
   setAppName: PropTypes.func,
+  /*
   session: PropTypes.shape({
     authorized: PropTypes.shape({
       [routerHelpers.appName]: PropTypes.bool
@@ -117,9 +124,11 @@ Authentication.propTypes = {
     pending: PropTypes.bool,
     status: PropTypes.number
   }),
+   */
   t: PropTypes.func,
   useDispatch: PropTypes.func,
-  useHistory: PropTypes.func
+  useHistory: PropTypes.func,
+  useSession: PropTypes.func
 };
 
 /**
@@ -137,15 +146,16 @@ Authentication.defaultProps = {
   isDisabled: helpers.UI_DISABLED,
   onNavigation: reduxActions.platform.onNavigation,
   setAppName: reduxActions.platform.setAppName,
-  session: {
-    authorized: {},
-    errorCodes: [],
-    pending: false,
-    status: null
-  },
+  // session: {
+  //  authorized: {},
+  //  errorCodes: [],
+  //  pending: false,
+  //  status: null
+  // },
   t: translate,
   useDispatch: storeHooks.reactRedux.useDispatch,
-  useHistory: routerHooks.useHistory
+  useHistory: routerHooks.useHistory,
+  useSession
 };
 
 /**
