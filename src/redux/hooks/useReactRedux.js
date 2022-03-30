@@ -58,7 +58,13 @@ const useSelectors = (
   });
 
   const multiSelector = createSelector(updatedSelectors, (...results) => results);
-  const listMultiSelectorResponse = useAliasSelector(multiSelector, equality) ?? value;
+
+  let listMultiSelectorResponse = (useAliasSelector(multiSelector, equality) ?? value) || [];
+  const undefinedMultiSelectorResponse = listMultiSelectorResponse.filter(response => response === undefined);
+
+  if (undefinedMultiSelectorResponse.length === listMultiSelectorResponse.length) {
+    listMultiSelectorResponse = [];
+  }
 
   if (selectorIds.size && selectorIds.size === listMultiSelectorResponse.length) {
     const idMultiSelectorResponse = {};
@@ -66,8 +72,6 @@ const useSelectors = (
     Array.from(selectorIds).forEach((id, index) => {
       idMultiSelectorResponse[id] = listMultiSelectorResponse[index];
     });
-
-    console.log('>>>>>>>> idMultiSelectorResponse', idMultiSelectorResponse);
 
     return idMultiSelectorResponse;
   }
@@ -90,27 +94,37 @@ const useSelectors = (
 const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = useSelectors, customResponse } = {}) => {
   const selectorResponse = useAliasSelectors(selectors, []);
   const isSelectorResponseArray = Array.isArray(selectorResponse);
-  const cancelledById = {};
-  const cancelledList = [];
-  const errorList = [];
-  const errorById = {};
-  const fulfilledList = [];
-  const pendingList = [];
-  const originalResponseByList = [];
-  const originalResponsesById = {};
-  const idList = [];
 
-  let isFirstResponseFulfilled = false;
-  let isFirstResponseError = false;
-  let firstResponseFulfilled;
-  let firstResponseError;
-  let firstResponse;
+  const cancelledById = {};
+  const cancelledByList = [];
+  const cancelledDataById = {};
+  const cancelledDataByList = [];
+
+  const errorByList = [];
+  const errorById = {};
+  const errorDataById = {};
+  const errorDataByList = [];
+
+  const fulfilledByList = [];
+  const fulfilledById = {};
+  const fulfilledDataById = {};
+  const fulfilledDataByList = [];
+
+  const pendingByList = [];
+
+  const responsesById = {};
+  const responsesByList = [];
+  const dataById = {};
+  const dataByList = [];
+
+  const idList = [];
 
   const updatedSelectorResponse = (isSelectorResponseArray && selectorResponse) || Object.entries(selectorResponse);
 
   updatedSelectorResponse.forEach(response => {
-    const updatedResponse = (isSelectorResponseArray && response) || response[1];
-    const id = (!isSelectorResponseArray && response[0]) || null;
+    const id = (!isSelectorResponseArray && response?.[0]) || null;
+
+    const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response;
     const isServiceResponse =
       typeof updatedResponse.cancelled === 'boolean' ||
       typeof updatedResponse.error === 'boolean' ||
@@ -125,60 +139,60 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
       idList.push(id);
     }
 
-    if ((fulfilled && !firstResponse) || (error && !firstResponse)) {
-      firstResponse = updatedResponse;
-      isFirstResponseFulfilled = fulfilled;
-      isFirstResponseError = error;
+    if (cancelled) {
+      cancelledByList.push(updatedResponse);
+      cancelledDataByList.push(updatedResponse?.data || updatedResponse);
 
-      if (fulfilled) {
-        firstResponseFulfilled = updatedResponse;
+      if (id !== null) {
+        cancelledById[id] = cancelledByList[cancelledByList.length - 1];
+        cancelledDataById[id] =
+          cancelledByList[cancelledByList.length - 1]?.data || cancelledByList[cancelledByList.length - 1];
       }
+    }
 
-      if (error) {
-        firstResponseError = updatedResponse;
+    if (error) {
+      errorByList.push({
+        ...updatedResponse,
+        ...new Error(message || `Error: useSelectorsAllResponse${(id && `, ${id}`) || ''}`)
+      });
+      errorDataByList.push(updatedResponse?.data || updatedResponse);
+
+      if (id !== null) {
+        errorById[id] = errorByList[errorByList.length - 1];
+        errorDataById[id] = errorByList[errorByList.length - 1]?.data || errorByList[errorByList.length - 1];
+      }
+    }
+
+    if (fulfilled) {
+      fulfilledByList.push(updatedResponse);
+      fulfilledDataByList.push(updatedResponse?.data || updatedResponse);
+
+      if (id !== null) {
+        fulfilledById[id] = fulfilledByList[fulfilledByList.length - 1];
+        fulfilledDataById[id] =
+          fulfilledByList[fulfilledByList.length - 1]?.data || fulfilledByList[fulfilledByList.length - 1];
       }
     }
 
     if (pending) {
-      pendingList.push(updatedResponse);
-    }
-
-    if (fulfilled) {
-      fulfilledList.push(updatedResponse);
-    }
-
-    if (error) {
-      errorList.push({
-        ...updatedResponse,
-        ...new Error(message || `Error: useSelectorsAllResponse${(id && `, ${id}`) || ''}`)
-      });
-    }
-
-    if (cancelled) {
-      cancelledList.push(updatedResponse);
+      pendingByList.push(updatedResponse);
     }
 
     if (id !== null) {
-      if (error) {
-        errorById[id] = errorList[errorList.length - 1];
-      }
-
-      if (cancelled) {
-        cancelledById[id] = cancelledList[cancelledList.length - 1];
-      }
-
-      originalResponsesById[id] = updatedResponse;
+      responsesById[id] = updatedResponse;
+      dataById[id] = updatedResponse?.data || updatedResponse;
     }
-    originalResponseByList.push(updatedResponse);
+
+    responsesByList.push(updatedResponse);
+    dataByList.push(updatedResponse?.data || updatedResponse);
   });
 
   const isById = idList.length === updatedSelectorResponse.length;
+
   const response = {
     responses: {
-      errorId: errorById,
-      errorList,
-      id: originalResponsesById,
-      list: originalResponseByList
+      id: responsesById,
+      list: responsesByList
     },
     cancelled: false,
     data: (isById && {}) || [],
@@ -194,20 +208,24 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
         { ...response, responses: { ...response.responses } },
         {
           cancelledById,
-          cancelledList,
-          errorList,
+          cancelledByList,
+          cancelledDataById,
+          cancelledDataByList,
+          dataById,
+          dataByList,
+          errorByList,
           errorById,
-          fulfilledList,
-          pendingList,
-          originalResponseByList,
-          originalResponsesById,
+          errorDataById,
+          errorDataByList,
+          fulfilledByList,
+          fulfilledById,
+          fulfilledDataById,
+          fulfilledDataByList,
           idList,
           isById,
-          isFirstResponseFulfilled,
-          firstResponseFulfilled,
-          isFirstResponseError,
-          firstResponseError,
-          firstResponse,
+          pendingByList,
+          responsesByList,
+          responsesById,
           updatedSelectorResponse
         }
       )
@@ -216,31 +234,31 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
     return response;
   }
 
-  if (errorList.length) {
-    response.message = new Error(errorList[0]);
+  if (errorByList.length) {
+    response.message = new Error(errorByList[0]);
     response.error = true;
-    response.data = (isById && errorById) || errorList;
+    response.data = (isById && errorDataById) || errorDataByList;
     return response;
   }
 
-  if (pendingList.length) {
+  if (pendingByList.length) {
     response.pending = true;
     return response;
   }
 
-  if (cancelledList.length === originalResponseByList.length) {
-    response.message = new Error('Cancelled useSelectorsAllResponse');
+  if (cancelledByList.length === responsesByList.length) {
+    response.message = new Error('Cancelled useSelectorsResponse');
     response.cancelled = true;
-    response.data = (isById && cancelledById) || cancelledList;
+    response.data = (isById && cancelledById) || cancelledByList;
     return response;
   }
 
   if (
-    fulfilledList.length === originalResponseByList.length ||
-    cancelledList.length + fulfilledList.length === originalResponseByList.length
+    fulfilledByList.length === responsesByList.length ||
+    cancelledByList.length + fulfilledByList.length === responsesByList.length
   ) {
     response.fulfilled = true;
-    response.data = (isById && originalResponsesById) || originalResponseByList;
+    response.data = (isById && dataById) || dataByList;
     return response;
   }
 
@@ -260,16 +278,16 @@ const useSelectorsAllSettledResponse = (
   selectors,
   { useSelectorsResponse: useAliasSelectorsResponse = useSelectorsResponse } = {}
 ) => {
-  const customResponse = (baseResponse, { pendingList, originalResponseByList, originalResponsesById, isById }) => {
+  const customResponse = (baseResponse, { pendingByList, dataById, dataByList, isById }) => {
     const response = { ...baseResponse };
 
-    if (pendingList.length) {
+    if (pendingByList.length) {
       response.pending = true;
       return response;
     }
 
     response.fulfilled = true;
-    response.data = (isById && originalResponsesById) || originalResponseByList;
+    response.data = (isById && dataById) || dataByList;
     return response;
   };
 
@@ -292,44 +310,47 @@ const useSelectorsAnyResponse = (
   const customResponse = (
     baseResponse,
     {
-      cancelledById,
-      cancelledList,
-      errorList,
-      fulfilledList,
-      pendingList,
-      originalResponseByList,
-      originalResponsesById,
-      idList,
+      cancelledByList,
+      cancelledDataById,
+      cancelledDataByList,
+      dataById,
+      dataByList,
+      errorByList,
+      fulfilledByList,
+      fulfilledDataById,
+      fulfilledDataByList,
+      pendingByList,
+      responsesByList,
       isById
     }
   ) => {
     const response = { ...baseResponse };
 
-    if (fulfilledList.length) {
+    if (fulfilledByList.length) {
       response.fulfilled = true;
-      response.data = (isById && originalResponsesById[idList[0]]) || originalResponseByList[0];
+      response.data = (isById && fulfilledDataById[Object.keys(fulfilledDataById)[0]]) || fulfilledDataByList[0];
       return response;
     }
 
-    if (pendingList.length) {
+    if (pendingByList.length) {
       response.pending = true;
       return response;
     }
 
     if (
-      errorList.length === originalResponseByList.length ||
-      cancelledList.length + errorList.length === originalResponseByList.length
+      errorByList.length === responsesByList.length ||
+      cancelledByList.length + errorByList.length === responsesByList.length
     ) {
-      response.message = helpers.aggregatedError(errorList);
+      response.message = helpers.aggregatedError(errorByList);
       response.error = true;
-      response.data = (isById && originalResponsesById) || originalResponseByList;
+      response.data = (isById && dataById) || dataByList;
       return response;
     }
 
-    if (cancelledList.length === originalResponseByList.length) {
+    if (cancelledByList.length === responsesByList.length) {
       response.message = new Error('Cancelled useSelectorsAllResponse');
       response.cancelled = true;
-      response.data = (isById && cancelledById) || cancelledList;
+      response.data = (isById && cancelledDataById) || cancelledDataByList;
       return response;
     }
 
@@ -355,41 +376,48 @@ const useSelectorsRaceResponse = (
   const customResponse = (
     baseResponse,
     {
-      cancelledById,
-      cancelledList,
-      errorList,
-      fulfilledList,
-      pendingList,
-      originalResponseByList,
-      originalResponsesById,
+      cancelledByList,
+      cancelledDataById,
+      cancelledDataByList,
+      dataById,
+      dataByList,
+      errorByList,
+      errorDataById,
+      errorDataByList,
+      fulfilledByList,
+      fulfilledDataById,
+      fulfilledDataByList,
+      pendingByList,
+      responsesByList,
       idList,
       isById
     }
   ) => {
     const response = { ...baseResponse };
 
-    if (fulfilledList.length) {
+    if (fulfilledByList.length) {
       response.fulfilled = true;
-      response.data = (isById && originalResponsesById[idList[0]]) || originalResponseByList[0];
+      response.data = (isById && dataById[idList[0]]) || dataByList[0];
+      response.data = (isById && fulfilledDataById[Object.keys(fulfilledDataById)[0]]) || fulfilledDataByList[0];
       return response;
     }
 
-    if (errorList.length) {
-      response.message = new Error(errorList[0]);
+    if (errorByList.length) {
+      response.message = new Error(errorByList[0]);
       response.error = true;
-      response.data = (isById && originalResponsesById[idList[0]]) || originalResponseByList[0];
+      response.data = (isById && errorDataById[Object.keys(errorDataById)[0]]) || errorDataByList[0];
       return response;
     }
 
-    if (pendingList.length) {
+    if (pendingByList.length) {
       response.pending = true;
       return response;
     }
 
-    if (cancelledList.length === originalResponseByList.length) {
+    if (cancelledByList.length === responsesByList.length) {
       response.message = new Error('Cancelled useSelectorsAllResponse');
       response.cancelled = true;
-      response.data = (isById && cancelledById) || cancelledList;
+      response.data = (isById && cancelledDataById[Object.keys(cancelledDataById)[0]]) || cancelledDataByList[0];
       return response;
     }
 
