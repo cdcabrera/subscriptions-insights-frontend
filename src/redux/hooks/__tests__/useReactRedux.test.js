@@ -106,5 +106,14 @@ describe('useReactRedux', () => {
     });
 
     expect(fulfilledFulfilled).toMatchSnapshot('aggregated calls, fulfilled');
+
+    const fulfilledFulfilledById = reactReduxHooks.useSelectorsResponse(() => {}, {
+      useSelectors: () => ({
+        lorem: { fulfilled: true },
+        ipsum: { fulfilled: true }
+      })
+    });
+
+    expect(fulfilledFulfilledById).toMatchSnapshot('aggregated calls, fulfilled by ID');
   });
 });

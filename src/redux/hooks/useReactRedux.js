@@ -137,6 +137,7 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
 
     if (id !== null) {
       idList.push(id);
+      updatedResponse.id = id;
     }
 
     if (cancelled) {

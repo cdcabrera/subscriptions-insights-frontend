@@ -113,6 +113,48 @@ Object {
 }
 `;
 
+exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, fulfilled by ID 1`] = `
+Object {
+  "cancelled": false,
+  "data": Object {
+    "ipsum": Object {
+      "fulfilled": true,
+      "id": "ipsum",
+    },
+    "lorem": Object {
+      "fulfilled": true,
+      "id": "lorem",
+    },
+  },
+  "error": false,
+  "fulfilled": true,
+  "message": null,
+  "pending": false,
+  "responses": Object {
+    "id": Object {
+      "ipsum": Object {
+        "fulfilled": true,
+        "id": "ipsum",
+      },
+      "lorem": Object {
+        "fulfilled": true,
+        "id": "lorem",
+      },
+    },
+    "list": Array [
+      Object {
+        "fulfilled": true,
+        "id": "lorem",
+      },
+      Object {
+        "fulfilled": true,
+        "id": "ipsum",
+      },
+    ],
+  },
+}
+`;
+
 exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, fulfilled cancelled 1`] = `
 Object {
   "cancelled": false,
