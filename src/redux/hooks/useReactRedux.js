@@ -235,7 +235,9 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
   }
 
   if (errorByList.length) {
-    response.message = new Error(errorByList[0]);
+    response.message = new Error(
+      errorByList[0]?.message || `useSelectorsResponse, ${JSON.stringify(errorByList[0])}`
+    );
     response.error = true;
     response.data = (isById && errorDataById) || errorDataByList;
     return response;
@@ -348,7 +350,7 @@ const useSelectorsAnyResponse = (
     }
 
     if (cancelledByList.length === responsesByList.length) {
-      response.message = new Error('Cancelled useSelectorsAllResponse');
+      response.message = new Error('Cancelled useSelectorsAnyResponse');
       response.cancelled = true;
       response.data = (isById && cancelledDataById) || cancelledDataByList;
       return response;
@@ -403,7 +405,9 @@ const useSelectorsRaceResponse = (
     }
 
     if (errorByList.length) {
-      response.message = new Error(errorByList[0]);
+      response.message = new Error(
+        errorByList[0]?.message || `useSelectorsRaceResponse, ${JSON.stringify(errorByList[0])}`
+      );
       response.error = true;
       response.data = (isById && errorDataById[Object.keys(errorDataById)[0]]) || errorDataByList[0];
       return response;
@@ -415,7 +419,7 @@ const useSelectorsRaceResponse = (
     }
 
     if (cancelledByList.length === responsesByList.length) {
-      response.message = new Error('Cancelled useSelectorsAllResponse');
+      response.message = new Error('Cancelled useSelectorsRaceResponse');
       response.cancelled = true;
       response.data = (isById && cancelledDataById[Object.keys(cancelledDataById)[0]]) || cancelledDataByList[0];
       return response;

@@ -3,30 +3,84 @@
 exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, cancelled 1`] = `
 Object {
   "cancelled": true,
-  "data": Array [],
+  "data": Array [
+    Object {
+      "cancelled": true,
+    },
+    Object {
+      "cancelled": true,
+    },
+  ],
   "error": false,
   "fulfilled": false,
+  "message": [Error: Cancelled useSelectorsResponse],
   "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "cancelled": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+  },
 }
 `;
 
 exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, cancelled error 1`] = `
 Object {
   "cancelled": false,
-  "data": Array [],
+  "data": Array [
+    Object {
+      "error": true,
+    },
+  ],
   "error": true,
   "fulfilled": false,
+  "message": [Error: useSelectorsResponse, {"error":true}],
   "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "cancelled": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+  },
 }
 `;
 
 exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, error 1`] = `
 Object {
   "cancelled": false,
-  "data": Array [],
+  "data": Array [
+    Object {
+      "error": true,
+    },
+    Object {
+      "error": true,
+    },
+  ],
   "error": true,
   "fulfilled": false,
+  "message": [Error: useSelectorsResponse, {"error":true}],
   "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "error": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+  },
 }
 `;
 
@@ -34,12 +88,28 @@ exports[`useReactRedux should apply a hook for aggregating multiple selector res
 Object {
   "cancelled": false,
   "data": Array [
-    undefined,
-    undefined,
+    Object {
+      "fulfilled": true,
+    },
+    Object {
+      "fulfilled": true,
+    },
   ],
   "error": false,
   "fulfilled": true,
+  "message": null,
   "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "fulfilled": true,
+      },
+    ],
+  },
 }
 `;
 
@@ -47,11 +117,28 @@ exports[`useReactRedux should apply a hook for aggregating multiple selector res
 Object {
   "cancelled": false,
   "data": Array [
-    undefined,
+    Object {
+      "fulfilled": true,
+    },
+    Object {
+      "cancelled": true,
+    },
   ],
   "error": false,
   "fulfilled": true,
+  "message": null,
   "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+  },
 }
 `;
 
@@ -59,23 +146,47 @@ exports[`useReactRedux should apply a hook for aggregating multiple selector res
 Object {
   "cancelled": false,
   "data": Array [
-    undefined,
+    Object {
+      "error": true,
+    },
   ],
-  "error": false,
-  "fulfilled": true,
+  "error": true,
+  "fulfilled": false,
+  "message": [Error: useSelectorsResponse, {"error":true}],
   "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+  },
 }
 `;
 
 exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, fulfilled pending 1`] = `
 Object {
   "cancelled": false,
-  "data": Array [
-    undefined,
-  ],
+  "data": Array [],
   "error": false,
   "fulfilled": false,
+  "message": null,
   "pending": true,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "pending": true,
+      },
+    ],
+  },
 }
 `;
 
@@ -85,7 +196,19 @@ Object {
   "data": Array [],
   "error": false,
   "fulfilled": false,
+  "message": null,
   "pending": true,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "pending": true,
+      },
+      Object {
+        "pending": true,
+      },
+    ],
+  },
 }
 `;
 
@@ -95,17 +218,45 @@ Object {
   "data": Array [],
   "error": false,
   "fulfilled": false,
+  "message": null,
   "pending": true,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "pending": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+  },
 }
 `;
 
 exports[`useReactRedux should apply a hook for aggregating multiple selector responses with useSelectorsResponse: aggregated calls, pending error 1`] = `
 Object {
   "cancelled": false,
-  "data": Array [],
-  "error": false,
+  "data": Array [
+    Object {
+      "error": true,
+    },
+  ],
+  "error": true,
   "fulfilled": false,
-  "pending": true,
+  "message": [Error: useSelectorsResponse, {"error":true}],
+  "pending": false,
+  "responses": Object {
+    "id": Object {},
+    "list": Array [
+      Object {
+        "pending": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+  },
 }
 `;
 
@@ -126,6 +277,9 @@ Object {
   "useDispatch": [Function],
   "useSelector": [Function],
   "useSelectors": [Function],
+  "useSelectorsAllSettledResponse": [Function],
+  "useSelectorsAnyResponse": [Function],
+  "useSelectorsRaceResponse": [Function],
   "useSelectorsResponse": [Function],
 }
 `;
