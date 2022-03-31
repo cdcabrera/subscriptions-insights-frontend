@@ -116,4 +116,256 @@ describe('useReactRedux', () => {
 
     expect(fulfilledFulfilledById).toMatchSnapshot('aggregated calls, fulfilled by ID');
   });
+
+  it('should apply hooks for aggregating multiple selector responses', () => {
+    const generatedSelectorResponses = hook => {
+      const responses = {};
+
+      responses.cancelledCancelled = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [{ cancelled: true }, { cancelled: true }],
+              cancelledDataByList: [{ cancelled: true }, { cancelled: true }],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [],
+              fulfilledDataByList: [],
+              pendingByList: [],
+              dataByList: [{ cancelled: true }, { cancelled: true }],
+              responsesByList: [{ cancelled: true }, { cancelled: true }]
+            }
+          )
+      });
+
+      responses.errorError = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [{ error: true }, { error: true }],
+              errorDataByList: [{ error: true }, { error: true }],
+              fulfilledByList: [],
+              fulfilledDataByList: [],
+              pendingByList: [],
+              dataByList: [{ error: true }, { error: true }],
+              responsesByList: [{ error: true }, { error: true }]
+            }
+          )
+      });
+
+      responses.errorCancelled = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [{ cancelled: true }],
+              cancelledDataByList: [{ cancelled: true }],
+              errorByList: [{ error: true }],
+              errorDataByList: [{ error: true }],
+              fulfilledByList: [],
+              fulfilledDataByList: [],
+              pendingByList: [],
+              dataByList: [{ error: true }, { cancelled: true }],
+              responsesByList: [{ error: true }, { cancelled: true }]
+            }
+          )
+      });
+
+      responses.pendingError = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [{ error: true }],
+              errorDataByList: [{ error: true }],
+              fulfilledByList: [],
+              fulfilledDataByList: [],
+              pendingByList: [{ pending: true }],
+              dataByList: [{ pending: true }, { error: true }],
+              responsesByList: [{ pending: true }, { error: true }]
+            }
+          )
+      });
+
+      responses.pendingCancelled = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [{ cancelled: true }],
+              cancelledDataByList: [{ cancelled: true }],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [],
+              fulfilledDataByList: [],
+              pendingByList: [{ pending: true }],
+              dataByList: [{ pending: true }, { cancelled: true }],
+              responsesByList: [{ pending: true }, { cancelled: true }]
+            }
+          )
+      });
+
+      responses.pendingPending = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [],
+              fulfilledDataByList: [],
+              pendingByList: [{ pending: true }],
+              dataByList: [{ pending: true }],
+              responsesByList: [{ pending: true }]
+            }
+          )
+      });
+
+      responses.fulfilledError = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [{ error: true }],
+              errorDataByList: [{ error: true }],
+              fulfilledByList: [{ fulfilled: true }],
+              fulfilledDataByList: [{ fulfilled: true }],
+              pendingByList: [],
+              dataByList: [{ fulfilled: true }, { error: true }],
+              responsesByList: [{ fulfilled: true }, { error: true }]
+            }
+          )
+      });
+
+      responses.fulfilledCancelled = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [{ cancelled: true }],
+              cancelledDataByList: [{ cancelled: true }],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [{ fulfilled: true }],
+              fulfilledDataByList: [{ fulfilled: true }],
+              pendingByList: [],
+              dataByList: [{ fulfilled: true }, { cancelled: true }],
+              responsesByList: [{ fulfilled: true }, { cancelled: true }]
+            }
+          )
+      });
+
+      responses.fulfilledPending = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [{ fulfilled: true }],
+              fulfilledDataByList: [{ fulfilled: true }],
+              pendingByList: [{ pending: true }],
+              dataByList: [{ fulfilled: true }, { pending: true }],
+              responsesByList: [{ fulfilled: true }, { pending: true }]
+            }
+          )
+      });
+
+      responses.fulfilledFulfilled = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [{ fulfilled: true }, { fulfilled: true }],
+              fulfilledDataByList: [{ fulfilled: true }, { fulfilled: true }],
+              pendingByList: [],
+              dataByList: [{ fulfilled: true }, { fulfilled: true }],
+              responsesByList: [{ fulfilled: true }, { fulfilled: true }]
+            }
+          )
+      });
+
+      responses.fulfilledFulfilledById = hook(() => {}, {
+        useSelectorsResponse: (_, { customResponse }) =>
+          customResponse(
+            {
+              lorem: 'ipsum'
+            },
+            {
+              cancelledByList: [],
+              cancelledDataByList: [],
+              errorByList: [],
+              errorDataByList: [],
+              fulfilledByList: [
+                { id: 'lorem', fulfilled: true },
+                { id: 'ipsum', fulfilled: true }
+              ],
+              fulfilledDataByList: [
+                { id: 'lorem', fulfilled: true },
+                { id: 'ipsum', fulfilled: true }
+              ],
+              pendingByList: [],
+              dataByList: [
+                { id: 'lorem', fulfilled: true },
+                { id: 'ipsum', fulfilled: true }
+              ],
+              responsesByList: [
+                { id: 'lorem', fulfilled: true },
+                { id: 'ipsum', fulfilled: true }
+              ]
+            }
+          )
+      });
+
+      return responses;
+    };
+
+    expect(generatedSelectorResponses(reactReduxHooks.useSelectorsAllSettledResponse)).toMatchSnapshot(
+      'aggregated calls, useSelectorsAllSettledResponse'
+    );
+
+    expect(generatedSelectorResponses(reactReduxHooks.useSelectorsAnyResponse)).toMatchSnapshot(
+      'aggregated calls, useSelectorsAnyResponse'
+    );
+
+    expect(generatedSelectorResponses(reactReduxHooks.useSelectorsRaceResponse)).toMatchSnapshot(
+      'aggregated calls, useSelectorsRaceResponse'
+    );
+  });
 });

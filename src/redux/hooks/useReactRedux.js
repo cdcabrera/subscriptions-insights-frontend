@@ -247,7 +247,7 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
     return response;
   }
 
-  if (cancelledByList.length === responsesByList.length) {
+  if (cancelledByList.length && cancelledByList.length === responsesByList.length) {
     response.message = new Error('Cancelled useSelectorsResponse');
     response.cancelled = true;
     response.data = (isById && cancelledById) || cancelledByList;
@@ -255,8 +255,9 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
   }
 
   if (
-    fulfilledByList.length === responsesByList.length ||
-    cancelledByList.length + fulfilledByList.length === responsesByList.length
+    fulfilledByList.length &&
+    (fulfilledByList.length === responsesByList.length ||
+      cancelledByList.length + fulfilledByList.length === responsesByList.length)
   ) {
     response.fulfilled = true;
     response.data = (isById && dataById) || dataByList;
@@ -282,7 +283,7 @@ const useSelectorsAllSettledResponse = (
   const customResponse = (baseResponse, { pendingByList, dataById, dataByList, isById }) => {
     const response = { ...baseResponse };
 
-    if (pendingByList.length) {
+    if (pendingByList?.length) {
       response.pending = true;
       return response;
     }
@@ -314,9 +315,9 @@ const useSelectorsAnyResponse = (
       cancelledByList,
       cancelledDataById,
       cancelledDataByList,
-      dataById,
-      dataByList,
       errorByList,
+      errorDataById,
+      errorDataByList,
       fulfilledByList,
       fulfilledDataById,
       fulfilledDataByList,
@@ -327,28 +328,36 @@ const useSelectorsAnyResponse = (
   ) => {
     const response = { ...baseResponse };
 
-    if (fulfilledByList.length) {
+    if (fulfilledByList?.length) {
+      let data = fulfilledDataByList?.[0];
+
+      if (isById) {
+        const keyList = Object.keys(fulfilledDataById);
+        data = (keyList?.[0] && fulfilledDataById[keyList[0]]) || undefined;
+      }
+
       response.fulfilled = true;
-      response.data = (isById && fulfilledDataById[Object.keys(fulfilledDataById)[0]]) || fulfilledDataByList[0];
+      response.data = data;
       return response;
     }
 
-    if (pendingByList.length) {
+    if (pendingByList?.length) {
       response.pending = true;
       return response;
     }
 
     if (
-      errorByList.length === responsesByList.length ||
-      cancelledByList.length + errorByList.length === responsesByList.length
+      errorByList?.length &&
+      (errorByList?.length === responsesByList?.length ||
+        cancelledByList?.length + errorByList?.length === responsesByList?.length)
     ) {
-      response.message = helpers.aggregatedError(errorByList);
+      response.message = helpers.aggregatedError(errorByList, 'useSelectorsAnyResponse');
       response.error = true;
-      response.data = (isById && dataById) || dataByList;
+      response.data = (isById && errorDataById) || errorDataByList;
       return response;
     }
 
-    if (cancelledByList.length === responsesByList.length) {
+    if (cancelledByList?.length && cancelledByList?.length === responsesByList?.length) {
       response.message = new Error('Cancelled useSelectorsAnyResponse');
       response.cancelled = true;
       response.data = (isById && cancelledDataById) || cancelledDataByList;
@@ -380,8 +389,6 @@ const useSelectorsRaceResponse = (
       cancelledByList,
       cancelledDataById,
       cancelledDataByList,
-      dataById,
-      dataByList,
       errorByList,
       errorDataById,
       errorDataByList,
@@ -390,37 +397,56 @@ const useSelectorsRaceResponse = (
       fulfilledDataByList,
       pendingByList,
       responsesByList,
-      idList,
       isById
     }
   ) => {
     const response = { ...baseResponse };
 
-    if (fulfilledByList.length) {
+    if (fulfilledByList?.length) {
+      let data = fulfilledDataByList?.[0];
+
+      if (isById) {
+        const keyList = Object.keys(fulfilledDataById);
+        data = (keyList?.[0] && fulfilledDataById[keyList[0]]) || undefined;
+      }
+
       response.fulfilled = true;
-      response.data = (isById && dataById[idList[0]]) || dataByList[0];
-      response.data = (isById && fulfilledDataById[Object.keys(fulfilledDataById)[0]]) || fulfilledDataByList[0];
+      response.data = data;
       return response;
     }
 
-    if (errorByList.length) {
+    if (errorByList?.length) {
+      let data = errorDataByList?.[0];
+
+      if (isById) {
+        const keyList = Object.keys(errorDataById);
+        data = (keyList?.[0] && errorDataById[keyList[0]]) || undefined;
+      }
+
       response.message = new Error(
         errorByList[0]?.message || `useSelectorsRaceResponse, ${JSON.stringify(errorByList[0])}`
       );
       response.error = true;
-      response.data = (isById && errorDataById[Object.keys(errorDataById)[0]]) || errorDataByList[0];
+      response.data = data;
       return response;
     }
 
-    if (pendingByList.length) {
+    if (pendingByList?.length) {
       response.pending = true;
       return response;
     }
 
-    if (cancelledByList.length === responsesByList.length) {
+    if (cancelledByList?.length && cancelledByList?.length === responsesByList?.length) {
+      let data = cancelledDataByList?.[0];
+
+      if (isById) {
+        const keyList = Object.keys(cancelledDataById);
+        data = (keyList?.[0] && cancelledDataById[keyList[0]]) || undefined;
+      }
+
       response.message = new Error('Cancelled useSelectorsRaceResponse');
       response.cancelled = true;
-      response.data = (isById && cancelledDataById[Object.keys(cancelledDataById)[0]]) || cancelledDataByList[0];
+      response.data = data;
       return response;
     }
 

@@ -313,6 +313,283 @@ Array [
 ]
 `;
 
+exports[`useReactRedux should apply hooks for aggregating multiple selector responses: aggregated calls, useSelectorsAllSettledResponse 1`] = `
+Object {
+  "cancelledCancelled": Object {
+    "data": Array [
+      Object {
+        "cancelled": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "errorCancelled": Object {
+    "data": Array [
+      Object {
+        "error": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "errorError": Object {
+    "data": Array [
+      Object {
+        "error": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledCancelled": Object {
+    "data": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledError": Object {
+    "data": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledFulfilled": Object {
+    "data": Array [
+      Object {
+        "fulfilled": true,
+      },
+      Object {
+        "fulfilled": true,
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledFulfilledById": Object {
+    "data": Array [
+      Object {
+        "fulfilled": true,
+        "id": "lorem",
+      },
+      Object {
+        "fulfilled": true,
+        "id": "ipsum",
+      },
+    ],
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledPending": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+  "pendingCancelled": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+  "pendingError": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+  "pendingPending": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+}
+`;
+
+exports[`useReactRedux should apply hooks for aggregating multiple selector responses: aggregated calls, useSelectorsAnyResponse 1`] = `
+Object {
+  "cancelledCancelled": Object {
+    "cancelled": true,
+    "data": Array [
+      Object {
+        "cancelled": true,
+      },
+      Object {
+        "cancelled": true,
+      },
+    ],
+    "lorem": "ipsum",
+    "message": [Error: Cancelled useSelectorsAnyResponse],
+  },
+  "errorCancelled": Object {
+    "data": Array [
+      Object {
+        "error": true,
+      },
+    ],
+    "error": true,
+    "lorem": "ipsum",
+    "message": [AggregateError: useSelectorsAnyResponse],
+  },
+  "errorError": Object {
+    "data": Array [
+      Object {
+        "error": true,
+      },
+      Object {
+        "error": true,
+      },
+    ],
+    "error": true,
+    "lorem": "ipsum",
+    "message": [AggregateError: useSelectorsAnyResponse],
+  },
+  "fulfilledCancelled": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledError": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledFulfilled": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledFulfilledById": Object {
+    "data": Object {
+      "fulfilled": true,
+      "id": "lorem",
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledPending": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "pendingCancelled": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+  "pendingError": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+  "pendingPending": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+}
+`;
+
+exports[`useReactRedux should apply hooks for aggregating multiple selector responses: aggregated calls, useSelectorsRaceResponse 1`] = `
+Object {
+  "cancelledCancelled": Object {
+    "cancelled": true,
+    "data": Object {
+      "cancelled": true,
+    },
+    "lorem": "ipsum",
+    "message": [Error: Cancelled useSelectorsRaceResponse],
+  },
+  "errorCancelled": Object {
+    "data": Object {
+      "error": true,
+    },
+    "error": true,
+    "lorem": "ipsum",
+    "message": [Error: useSelectorsRaceResponse, {"error":true}],
+  },
+  "errorError": Object {
+    "data": Object {
+      "error": true,
+    },
+    "error": true,
+    "lorem": "ipsum",
+    "message": [Error: useSelectorsRaceResponse, {"error":true}],
+  },
+  "fulfilledCancelled": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledError": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledFulfilled": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledFulfilledById": Object {
+    "data": Object {
+      "fulfilled": true,
+      "id": "lorem",
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "fulfilledPending": Object {
+    "data": Object {
+      "fulfilled": true,
+    },
+    "fulfilled": true,
+    "lorem": "ipsum",
+  },
+  "pendingCancelled": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+  "pendingError": Object {
+    "data": Object {
+      "error": true,
+    },
+    "error": true,
+    "lorem": "ipsum",
+    "message": [Error: useSelectorsRaceResponse, {"error":true}],
+  },
+  "pendingPending": Object {
+    "lorem": "ipsum",
+    "pending": true,
+  },
+}
+`;
+
 exports[`useReactRedux should return specific properties: specific properties 1`] = `
 Object {
   "shallowEqual": [Function],
