@@ -4,13 +4,14 @@ import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { useMount, useUnmount } from 'react-use';
-import { connect, reduxActions, reduxSelectors, storeHooks } from '../../redux';
+import { reduxActions, storeHooks } from '../../redux';
 import { routerHooks } from '../../hooks/useRouter';
 import { routerHelpers, Redirect } from '../router';
 import { rhsmApiTypes } from '../../types';
 import { helpers } from '../../common';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
+import { AuthenticationContext, useSession, useAuth } from './authenticationContext';
 
 /**
  * An authentication pass-through component.
@@ -23,11 +24,12 @@ import { translate } from '../i18n/i18n';
  * @param {Function} props.initializeChrome
  * @param {boolean} props.isDisabled
  * @param {Function} props.onNavigation
- * @param {object} props.session
  * @param {Function} props.setAppName
  * @param {Function} props.t
  * @param {Function} props.useDispatch
  * @param {Function} props.useHistory
+ * @param {Function} props.useSession
+ * @param props.useAuth
  * @returns {React.ReactNode}
  */
 const Authentication = ({
@@ -38,17 +40,22 @@ const Authentication = ({
   initializeChrome,
   isDisabled,
   onNavigation,
-  session,
   setAppName,
   t,
   useDispatch: useAliasDispatch,
-  useHistory: useAliasHistory
+  useHistory: useAliasHistory,
+  useSession: useAliasSession
+  // useAuth: useAliasAuth
 }) => {
   const [unregister, setUnregister] = useState(() => helpers.noop);
   const dispatch = useAliasDispatch();
   const history = useAliasHistory();
-  const { errorCodes, pending, status: httpStatus, authorized } = session || {};
-  const { [appName]: isAuthorized } = authorized || {};
+  // const { errorCodes, pending, status: httpStatus, authorized } = session || {};
+  // const { pending, data: authData = {} } = useAliasAuth();
+  //  const { authorized = {}, errorCodes, errorStatus } = authData;
+  const { pending, data: sessionData = {} } = useAliasSession();
+  const { authorized = {}, errorCodes, errorStatus } = sessionData;
+  const { [appName]: isAuthorized } = authorized;
 
   useMount(async () => {
     if (!isAuthorized) {
@@ -81,7 +88,7 @@ const Authentication = ({
 
   if (
     (errorCodes && errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
-    httpStatus === 418
+    errorStatus === 418
   ) {
     return <Redirect route={routerHelpers.getErrorRoute.path} />;
   }
@@ -91,6 +98,41 @@ const Authentication = ({
       <NotAuthorized serviceName={helpers.UI_DISPLAY_NAME} />
     </MessageView>
   );
+
+  /*
+  const renderContent = () => {
+    if (isDisabled) {
+      return (
+        <MessageView>
+          <Maintenance description={t('curiosity-auth.maintenanceCopy', '...')} />
+        </MessageView>
+      );
+    }
+
+    if (isAuthorized) {
+      return children;
+    }
+
+    if (pending) {
+      return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
+    }
+
+    if (
+      (errorCodes && errorCodes.includes(rhsmApiTypes.RHSM_API_RESPONSE_ERROR_DATA_CODE_TYPES.OPTIN)) ||
+      errorStatus === 418
+    ) {
+      return <Redirect route={routerHelpers.getErrorRoute.path} />;
+    }
+
+    return (
+      <MessageView>
+        <NotAuthorized serviceName={helpers.UI_DISPLAY_NAME} />
+      </MessageView>
+    );
+  };
+
+  return <AuthenticationContext.Provider value={authData}>{renderContent()}</AuthenticationContext.Provider>;
+   */
 };
 
 /**
@@ -109,17 +151,11 @@ Authentication.propTypes = {
   isDisabled: PropTypes.bool,
   onNavigation: PropTypes.func,
   setAppName: PropTypes.func,
-  session: PropTypes.shape({
-    authorized: PropTypes.shape({
-      [routerHelpers.appName]: PropTypes.bool
-    }),
-    errorCodes: PropTypes.arrayOf(PropTypes.string),
-    pending: PropTypes.bool,
-    status: PropTypes.number
-  }),
   t: PropTypes.func,
   useDispatch: PropTypes.func,
-  useHistory: PropTypes.func
+  useHistory: PropTypes.func,
+  // useAuth: PropTypes.func
+  useSession: PropTypes.func
 };
 
 /**
@@ -137,24 +173,11 @@ Authentication.defaultProps = {
   isDisabled: helpers.UI_DISABLED,
   onNavigation: reduxActions.platform.onNavigation,
   setAppName: reduxActions.platform.setAppName,
-  session: {
-    authorized: {},
-    errorCodes: [],
-    pending: false,
-    status: null
-  },
   t: translate,
   useDispatch: storeHooks.reactRedux.useDispatch,
-  useHistory: routerHooks.useHistory
+  useHistory: routerHooks.useHistory,
+  // useAuth
+  useSession
 };
 
-/**
- * Create a selector from applied state, props.
- *
- * @type {Function}
- */
-const makeMapStateToProps = reduxSelectors.user.makeUserSession();
-
-const ConnectedAuthentication = connect(makeMapStateToProps)(Authentication);
-
-export { ConnectedAuthentication as default, ConnectedAuthentication, Authentication };
+export { Authentication as default, Authentication };
