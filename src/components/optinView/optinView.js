@@ -44,7 +44,7 @@ const OptinView = ({
   useSession: useAliasSession
 }) => {
   const dispatch = useAliasDispatch();
-  const { data: sessionData } = useAliasSession();
+  const { errorStatus } = useAliasSession();
   const { error, fulfilled, pending } = useAliasSelectorsResponse(({ user }) => user?.optin);
 
   /**
@@ -61,7 +61,7 @@ const OptinView = ({
    * @returns {Node}
    */
   const renderOptinForm = () => {
-    const disableButton = sessionData?.errorStatus !== 403;
+    const disableButton = errorStatus !== 403;
 
     if (pending) {
       return (

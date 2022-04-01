@@ -35,7 +35,7 @@ const InventoryGuests = ({
   useSession: useAliasSession
 }) => {
   const [previousData, setPreviousData] = useState([]);
-  const { data: sessionData } = useAliasSession();
+  const sessionData = useAliasSession();
   const { filters: filterGuestsData } = useAliasProductInventoryGuestsConfig();
 
   const query = useAliasProductInventoryGuestsQuery({ options: { overrideId: id } });
@@ -48,8 +48,6 @@ const InventoryGuests = ({
     const updatedData = [...previousData, ...(listData || [])];
     setPreviousData(updatedData);
   });
-
-  console.log('>>>>>', sessionData);
 
   /**
    * Render a scroll table loader.
@@ -149,8 +147,9 @@ const InventoryGuests = ({
 /**
  * Prop types.
  *
- * @type {{useProductInventoryGuestsConfig: Function, session: object, useOnScroll: Function, numberOfGuests: number,
- *     id: string, useGetGuestsInventory: Function, useProductInventoryGuestsQuery: Function, defaultPerPage: number}}
+ * @type {{useProductInventoryGuestsConfig: Function, useSession: Function, numberOfGuests: number, id: string,
+ *     useOnScroll: Function, useGetGuestsInventory: Function, useProductInventoryGuestsQuery: Function,
+ *     defaultPerPage: number}}
  */
 InventoryGuests.propTypes = {
   defaultPerPage: PropTypes.number,
@@ -166,7 +165,7 @@ InventoryGuests.propTypes = {
 /**
  * Default props.
  *
- * @type {{useProductInventoryGuestsConfig: Function, session: object, useOnScroll: Function,
+ * @type {{useProductInventoryGuestsConfig: Function, useSession: Function, useOnScroll: Function,
  *     useGetGuestsInventory: Function, useProductInventoryGuestsQuery: Function, defaultPerPage: number}}
  */
 InventoryGuests.defaultProps = {

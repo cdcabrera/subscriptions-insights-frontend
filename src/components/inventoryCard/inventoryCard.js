@@ -26,12 +26,12 @@ import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances 
  * @param {boolean} props.isDisabled
  * @param {number} props.perPageDefault
  * @param {Function} props.t
- * @param {object} props.session
  * @param {Function} props.useGetInventory
  * @param {Function} props.useOnPage
  * @param {Function} props.useOnColumnSort
  * @param {Function} props.useProductInventoryConfig
  * @param {Function} props.useProductInventoryQuery
+ * @param {Function} props.useSession
  * @fires onColumnSort
  * @fires onPage
  * @fires onUpdateInventoryData
@@ -49,7 +49,7 @@ const InventoryCard = ({
   useProductInventoryQuery: useAliasProductInventoryQuery,
   useSession: useAliasSession
 }) => {
-  const { data: sessionData } = useAliasSession();
+  const sessionData = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
@@ -191,8 +191,8 @@ const InventoryCard = ({
 /**
  * Prop types.
  *
- * @type {{useOnPage: Function, t: Function, session: object, perPageDefault: number, isDisabled: boolean,
- *     useProductInventoryConfig: Function, useGetInventory: Function, useOnColumnSort: Function,
+ * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, t: Function, perPageDefault: number,
+ *     isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function, useOnColumnSort: Function,
  *     useProductInventoryQuery: Function}}
  */
 InventoryCard.propTypes = {
@@ -211,8 +211,8 @@ InventoryCard.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnPage: Function, t: Function, session: object, perPageDefault: number, isDisabled: boolean,
- *     useProductInventoryConfig: Function, useGetInventory: Function, useOnColumnSort: Function,
+ * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, t: Function, perPageDefault: number,
+ *     isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function, useOnColumnSort: Function,
  *     useProductInventoryQuery: Function}}
  */
 InventoryCard.defaultProps = {
