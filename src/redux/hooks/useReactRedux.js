@@ -131,9 +131,7 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
       typeof updatedResponse.fulfilled === 'boolean' ||
       typeof updatedResponse.pending === 'boolean';
 
-    const { pending, fulfilled, error, cancelled, message } = (isServiceResponse && updatedResponse) || {
-      fulfilled: true
-    };
+    const { pending, fulfilled, error, cancelled, message } = (isServiceResponse && updatedResponse) || {};
 
     if (id !== null) {
       idList.push(id);
@@ -280,7 +278,10 @@ const useSelectorsAllSettledResponse = (
   selectors,
   { useSelectorsResponse: useAliasSelectorsResponse = useSelectorsResponse } = {}
 ) => {
-  const customResponse = (baseResponse, { pendingByList, dataById, dataByList, isById }) => {
+  const customResponse = (
+    baseResponse,
+    { cancelledByList, errorByList, fulfilledByList, pendingByList, dataById, dataByList, isById }
+  ) => {
     const response = { ...baseResponse };
 
     if (pendingByList?.length) {
@@ -288,8 +289,17 @@ const useSelectorsAllSettledResponse = (
       return response;
     }
 
-    response.fulfilled = true;
-    response.data = (isById && dataById) || dataByList;
+    if (
+      errorByList?.length + fulfilledByList?.length + cancelledByList?.length === dataByList?.length ||
+      errorByList?.length === dataByList?.length ||
+      fulfilledByList?.length === dataByList?.length ||
+      cancelledByList?.length === dataByList?.length
+    ) {
+      response.fulfilled = true;
+      response.data = (isById && dataById) || dataByList;
+      return response;
+    }
+
     return response;
   };
 
