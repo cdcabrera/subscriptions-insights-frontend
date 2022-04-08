@@ -42,7 +42,7 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, useRouteDetail: useAliasRouteDetail }) => {
-  const { pathParameter: routeProductId, productParameter: routeProductLabel, productConfig } = useAliasRouteDetail();
+  const { productParameter: routeProductLabel, productConfig } = useAliasRouteDetail();
 
   const renderProduct = config => {
     const {
