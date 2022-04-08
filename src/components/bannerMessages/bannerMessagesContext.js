@@ -1,32 +1,61 @@
 import { useShallowCompareEffect } from 'react-use';
-import { reduxSelectors, storeHooks } from '../../redux';
-import { useRouteDetail } from '../router/routerContext';
-import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
-import RHSM_API_RESPONSE_TALLY_META_TYPES, { rhsmConstants } from '../../services/rhsm/rhsmConstants';
+import { reduxActions, storeHooks } from '../../redux';
+import { useProduct, useProductQuery } from '../productView/productViewContext';
+import { dateHelpers } from '../../common';
+import {
+  rhsmConstants,
+  RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
+  RHSM_API_QUERY_SET_TYPES
+} from '../../services/rhsm/rhsmConstants';
 
 /**
- * Get app messages selector results.
+ * Get app messages.
  *
  * @param {object} options
+ * @param {Function} options.getMessageReports
+ * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
+ * @param {Function} options.useProductQuery
  * @param {Function} options.useSelectorsResponse
  * @returns {object}
  */
-const useAppMessages = ({
+const useGetAppMessages = ({
+  getMessageReports = reduxActions.rhsm.getMessageReports,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct,
+  useProductQuery: useAliasProductQuery = useProductQuery,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
   const { productId } = useAliasProduct();
-  const { fulfilled, data } = useAliasSelectorsResponse({
+  const query = useAliasProductQuery();
+  const dispatch = useAliasDispatch();
+  const { error, fulfilled, pending, data } = useAliasSelectorsResponse({
     id: 'messages',
     selector: ({ messages }) => messages?.report?.[productId]
   });
-  let cloudigradeMismatch = false;
+
+  useShallowCompareEffect(() => {
+    if (productId) {
+      const { startDate, endDate } = dateHelpers.getRangedDateTime('CURRENT');
+      const updatedQuery = {
+        ...query,
+        [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: GRANULARITY_TYPES.DAILY,
+        [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate.toISOString(),
+        [RHSM_API_QUERY_SET_TYPES.END_DATE]: endDate.toISOString()
+      };
+
+      getMessageReports(productId, updatedQuery)(dispatch);
+    }
+  }, [productId, query]);
+
+  const updatedData = {
+    cloudigradeMismatch: false
+  };
 
   if (fulfilled) {
     const { messages = {} } = data || {};
 
-    cloudigradeMismatch =
+    updatedData.cloudigradeMismatch =
       messages?.data
         ?.reverse()
         ?.find(
@@ -36,41 +65,17 @@ const useAppMessages = ({
   }
 
   return {
-    cloudigradeMismatch
+    error,
+    fulfilled,
+    pending,
+    data: {
+      ...updatedData
+    }
   };
 };
-/*
-const useAppMessageSelectors = ({
-  useRouteDetail: useAliasRouteDetail = useRouteDetail,
-  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
-} = {}) => {
-  const { pathParameter: productId } = useAliasRouteDetail() || {};
-  const { error, cancelled, fulfilled, pending, data } = useAliasSelectorsResponse(
-    ({ messages }) => messages?.report?.[productId]
-  );
-
-
-};
-
-const useGetMessages = ({
-  useRouteDetail: useAliasRouteDetail = useRouteDetail,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
-} = {}) => {
-  const { pathParameter: productId, productParameter: viewId } = useAliasRouteDetail() || {};
-  // const result = useAliasSelector(state => reduxSelectors.appMessages.appMessages(state, { productId, viewId }));
-  // return {
-  //  ...result
-  // };
-  useShallowCompareEffect(() => {
-
-  }, []);
-
-
-};
-*/
 
 const context = {
-  useAppMessages
+  useGetAppMessages
 };
 
-export { context as default, context, useAppMessages };
+export { context as default, context, useGetAppMessages };
