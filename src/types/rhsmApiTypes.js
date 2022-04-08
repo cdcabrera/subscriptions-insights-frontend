@@ -107,16 +107,7 @@ const RHSM_API_RESPONSE_CAPACITY_DATA = RHSM_API_RESPONSE_DATA;
  *     HYPERVISOR_CORES: string, HAS_INFINITE: string, PHYSICAL_CORES: string}}
  */
 const RHSM_API_RESPONSE_CAPACITY_DATA_TYPES = {
-  CLOUD_CORES: 'cloud_cores',
-  CLOUD_INSTANCES: 'cloud_instance_count',
-  CLOUD_SOCKETS: 'cloud_sockets',
-  CORES: 'cores',
-  DATE: 'date',
-  HYPERVISOR_CORES: 'hypervisor_cores',
-  HYPERVISOR_SOCKETS: 'hypervisor_sockets',
-  PHYSICAL_CORES: 'physical_cores',
-  PHYSICAL_SOCKETS: 'physical_sockets',
-  SOCKETS: 'sockets',
+  ...rhsmConstants.RHSM_API_RESPONSE_CAPACITY_DATA_TYPES,
   HAS_INFINITE: 'has_infinite_quantity'
 };
 

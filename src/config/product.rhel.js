@@ -61,23 +61,30 @@ const config = {
   initialGraphFilters: [
     {
       id: 'physicalSockets',
+      // id: RHSM_API_PATH_METRIC_TYPES.PHYSICAL_SOCKETS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value
     },
     {
       id: 'hypervisorSockets',
+      // id: RHSM_API_PATH_METRIC_TYPES.HYPERVISOR_SOCKETS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value
     },
     {
       id: 'cloudSockets',
+      // id: RHSM_API_PATH_METRIC_TYPES.CLOUD_SOCKETS,
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value
     },
-    { id: 'thresholdSockets', chartType: 'threshold' }
+    {
+      id: 'thresholdSockets',
+      // id: RHSM_API_PATH_METRIC_TYPES.CAPACITY_SOCKETS,
+      chartType: 'threshold'
+    }
   ],
   initialGuestsFilters: [
     {

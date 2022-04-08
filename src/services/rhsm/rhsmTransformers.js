@@ -1,5 +1,7 @@
 import moment from 'moment';
 import {
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES as CAPACITY_DATA_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_META_TYPES as CAPACITY_META_TYPES,
   RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INSTANCES_DATA_TYPES,
   RHSM_API_RESPONSE_INSTANCES_META_TYPES as INSTANCES_META_TYPES,
   RHSM_API_RESPONSE_TALLY_DATA_TYPES as TALLY_DATA_TYPES,
@@ -7,6 +9,42 @@ import {
   rhsmConstants
 } from './rhsmConstants';
 import { dateHelpers } from '../../common';
+
+/**
+ * FixMe: Capacity endpoint should mirror metric_id behavior, similar to Tally
+ */
+/**
+ * Parse RHSM capacity response for caching.
+ *
+ * @param {object} response
+ * @returns {object}
+ */
+const rhsmCapacity = response => {
+  const updatedResponse = {};
+  const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
+    response || {};
+  const currentDay = moment.utc(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
+
+  updatedResponse.data = data.map(
+    (
+      { [CAPACITY_DATA_TYPES.DATE]: date, [CAPACITY_DATA_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity },
+      index
+    ) => ({
+      x: index,
+      y: null,
+      date,
+      hasInfiniteQuantity,
+      isCurrentDate: moment.utc(date).format('MM-D-YYYY') === currentDay
+    })
+  );
+
+  updatedResponse.meta = {
+    count: meta[CAPACITY_META_TYPES.COUNT],
+    productId: meta[CAPACITY_META_TYPES.PRODUCT]
+  };
+
+  return updatedResponse;
+};
 
 /**
  * FixMe: If RHSM Instances is deprecating Hosts we're missing a property, number_of_guests
@@ -91,8 +129,9 @@ const rhsmTally = response => {
 };
 
 const rhsmTransformers = {
+  capacity: rhsmCapacity,
   instances: rhsmInstances,
   tally: rhsmTally
 };
 
-export { rhsmTransformers as default, rhsmTransformers, rhsmInstances, rhsmTally };
+export { rhsmTransformers as default, rhsmTransformers, rhsmCapacity, rhsmInstances, rhsmTally };
