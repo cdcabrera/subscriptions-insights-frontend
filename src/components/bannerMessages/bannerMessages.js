@@ -3,31 +3,37 @@ import PropTypes from 'prop-types';
 import { Alert, AlertActionCloseButton, AlertVariant, Button } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { useShallowCompareEffect } from 'react-use';
-import { apiQueries, storeHooks } from '../../redux';
+import { storeHooks } from '../../redux';
 import { translate } from '../i18n/i18n';
 import { dateHelpers, helpers } from '../../common';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
-import { useRouteDetail } from '../../hooks/useRouter';
+import { useAppMessages } from './bannerMessagesContext';
+import { useProduct, useProductQuery } from '../productView/productViewContext';
 
 /**
  * Render banner messages.
  *
  * @param {object} props
  * @param {Array} props.messages
- * @param {Function} props.useRouteDetail
+ * @param {Function} props.useProduct
+ * @param {Function} props.useProductQuery
  * @param {Function} props.useAppMessages
  * @returns {Node}
  */
-const BannerMessages = ({ messages, useRouteDetail: useAliasRouteDetail, useAppMessages: useAliasAppMessages }) => {
+const BannerMessages = ({
+  messages,
+  useProduct: useAliasProduct,
+  useProductQuery: useAliasProductQuery,
+  useAppMessages: useAliasAppMessages
+}) => {
   const [hideAlerts, setHideAlerts] = useState({});
   const [alerts, setAlerts] = useState([]);
-  const { pathParameter: productId, productConfig } = useAliasRouteDetail() || {};
-  const isProductConfig = productConfig?.length === 1 && productConfig?.[0];
-  const { query } = apiQueries.parseRhsmQuery(productConfig?.[0]?.query || {});
-  const { appMessages } = useAliasAppMessages();
+  const { productId } = useAliasProduct();
+  const query = useAliasProductQuery();
+  const appMessages = useAliasAppMessages();
 
   useShallowCompareEffect(() => {
-    if (productId && isProductConfig) {
+    if (productId) {
       const { startDate, endDate } = dateHelpers.getRangedDateTime('CURRENT');
       const updatedGraphQuery = {
         ...query,
@@ -38,7 +44,7 @@ const BannerMessages = ({ messages, useRouteDetail: useAliasRouteDetail, useAppM
 
       storeHooks.rhsmActions.useGetMessageReports(productId, updatedGraphQuery);
     }
-  }, [productId, isProductConfig, query]);
+  }, [productId, query]);
 
   useShallowCompareEffect(() => {
     const updatedMessages = [];
@@ -93,7 +99,8 @@ BannerMessages.propTypes = {
     })
   ),
   useAppMessages: PropTypes.func,
-  useRouteDetail: PropTypes.func
+  useProduct: PropTypes.func,
+  useProductQuery: PropTypes.func
 };
 
 /**
@@ -126,8 +133,9 @@ BannerMessages.defaultProps = {
       )
     }
   ],
-  useAppMessages: storeHooks.rhsmSelectors.useAppMessages,
-  useRouteDetail
+  useAppMessages,
+  useProduct,
+  useProductQuery
 };
 
 export { BannerMessages as default, BannerMessages };
