@@ -64,6 +64,49 @@ const getGraphTally =
   };
 
 /**
+ * Get a RHSM response from multiple Tally and Capacity IDs and metrics.
+ *
+ * @param {object|Array} idMetric An object, or an Array of objects, in the form of { id: PRODUCT_ID, metric: METRIC_ID }
+ * @param {object} query
+ * @param {object} options
+ * @param {string} options.cancelId
+ * @returns {Function}
+ */
+const getGraphTallyCapacity =
+  (idMetric = {}, query = {}, options = {}) =>
+  dispatch => {
+    const { cancelId = 'graphTallyCapacity' } = options;
+    const multiMetric = (Array.isArray(idMetric) && idMetric) || [idMetric];
+    const multiDispatch = [];
+
+    multiMetric.forEach(({ id, metric }) => {
+      let payload;
+      if (/^capacity_/.test(metric)) {
+        payload = rhsmServices.getGraphCapacityMetric([id, metric], query, {
+          cancelId: `${cancelId}_${id}_${metric}`
+        });
+      } else {
+        payload = rhsmServices.getGraphTally([id, metric], query, {
+          cancelId: `${cancelId}_${id}_${metric}`
+        });
+      }
+
+      multiDispatch.push({
+        type: rhsmTypes.GET_GRAPH_TALLY_RHSM,
+        payload,
+        meta: {
+          id: `${id}_${metric}`,
+          idMetric: { id, metric },
+          query,
+          notifications: {}
+        }
+      });
+    });
+
+    return Promise.all(dispatch(multiDispatch));
+  };
+
+/**
  * Get a hosts response listing from RHSM subscriptions.
  *
  * @param {string} id
@@ -166,6 +209,7 @@ const getSubscriptionsInventory =
 const rhsmActions = {
   getGraphReportsCapacity,
   getGraphTally,
+  getGraphTallyCapacity,
   getHostsInventory,
   getHostsInventoryGuests,
   getInstancesInventory,
@@ -178,6 +222,7 @@ export {
   rhsmActions,
   getGraphReportsCapacity,
   getGraphTally,
+  getGraphTallyCapacity,
   getHostsInventory,
   getHostsInventoryGuests,
   getInstancesInventory,

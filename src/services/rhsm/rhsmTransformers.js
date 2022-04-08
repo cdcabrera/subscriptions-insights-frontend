@@ -12,14 +12,19 @@ import { dateHelpers } from '../../common';
 
 /**
  * FixMe: Capacity endpoint should mirror metric_id behavior, similar to Tally
+ * We're temporarily allowing the passing of a made-up metric parameter then using
+ * that to pull out the required property.
  */
 /**
  * Parse RHSM capacity response for caching.
  *
  * @param {object} response
+ * @param {object} config API call configuration
  * @returns {object}
  */
-const rhsmCapacity = response => {
+const rhsmCapacity = (response, config) => {
+  const metric = config?.params?.[rhsmConstants.RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES.METRIC];
+  const updatedMetric = metric.replace(/^capacity_/i, '');
   const updatedResponse = {};
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
     response || {};
@@ -27,11 +32,11 @@ const rhsmCapacity = response => {
 
   updatedResponse.data = data.map(
     (
-      { [CAPACITY_DATA_TYPES.DATE]: date, [CAPACITY_DATA_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity },
+      { [CAPACITY_DATA_TYPES.DATE]: date, [CAPACITY_DATA_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity, ...props },
       index
     ) => ({
       x: index,
-      y: null,
+      y: hasInfiniteQuantity === true ? null : props[updatedMetric],
       date,
       hasInfiniteQuantity,
       isCurrentDate: moment.utc(date).format('MM-D-YYYY') === currentDay
@@ -40,6 +45,7 @@ const rhsmCapacity = response => {
 
   updatedResponse.meta = {
     count: meta[CAPACITY_META_TYPES.COUNT],
+    metricId: updatedMetric,
     productId: meta[CAPACITY_META_TYPES.PRODUCT]
   };
 

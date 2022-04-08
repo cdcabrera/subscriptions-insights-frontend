@@ -1,6 +1,7 @@
 import { serviceCall } from '../config';
 import { rhsmSchemas } from './rhsmSchemas';
 import { helpers } from '../../common';
+import { rhsmConstants } from './rhsmConstants';
 import { rhsmTransformers } from './rhsmTransformers';
 
 /**
@@ -1826,6 +1827,46 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
 };
 
 /**
+ * ToDo: Replace getGraphCapacity with the functionality from getGraphCapacityMetrics
+ * We're temporarily creating a distinction between old and new capacity calls similar
+ * to old and new Tally calls while we transition to the metrics way of handling graph
+ * displays.
+ */
+/**
+ * Get RHSM API capacity/threshold graph/chart data.
+ *
+ * @param {string} id Product ID
+ * @param {object} params Query/search params
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
+const getGraphCapacityMetric = (id, params = {}, options = {}) => {
+  const {
+    cache = true,
+    cancel = true,
+    cancelId,
+    schema = [rhsmSchemas.capacity, rhsmSchemas.errors],
+    transform = [rhsmTransformers.capacity]
+  } = options;
+  const updatedId = (typeof id === 'string' && [id]) || (Array.isArray(id) && id) || [];
+
+  const url = `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${updatedId[0]}`;
+  const metric = updatedId?.[1] ? { [rhsmConstants.RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES.METRIC]: updatedId[1] } : {};
+
+  return serviceCall({
+    url,
+    params: { ...params, ...metric },
+    cache,
+    cancel,
+    cancelId,
+    schema,
+    transform
+  });
+};
+
+/**
  * @apiMock {DelayResponse} 500
  * @api {get} /api/rhsm-subscriptions/v1/hosts/products/:product_id Get RHSM hosts/systems table/inventory data
  * @apiDescription Retrieve hosts/systems table/inventory data.
@@ -2393,6 +2434,7 @@ const getSubscriptionsInventory = (id, params = {}, options = {}) => {
 const rhsmServices = {
   getApiVersion,
   getGraphCapacity,
+  getGraphCapacityMetric,
   getGraphReports,
   getGraphTally,
   getHostsInventory,
@@ -2411,6 +2453,7 @@ export {
   rhsmServices,
   getApiVersion,
   getGraphCapacity,
+  getGraphCapacityMetric,
   getGraphReports,
   getGraphTally,
   getHostsInventory,

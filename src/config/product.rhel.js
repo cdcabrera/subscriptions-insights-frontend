@@ -19,6 +19,7 @@ import {
   RHSM_API_QUERY_UOM_TYPES,
   RHSM_API_PATH_ID_TYPES
 } from '../types/rhsmApiTypes';
+import { RHSM_API_PATH_METRIC_TYPES } from '../services/rhsm/rhsmConstants';
 import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
@@ -60,29 +61,29 @@ const config = {
   },
   initialGraphFilters: [
     {
-      id: 'physicalSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.PHYSICAL_SOCKETS,
+      // id: 'physicalSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.PHYSICAL_SOCKETS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value
     },
     {
-      id: 'hypervisorSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.HYPERVISOR_SOCKETS,
+      // id: 'hypervisorSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.HYPERVISOR_SOCKETS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value
     },
     {
-      id: 'cloudSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.CLOUD_SOCKETS,
+      // id: 'cloudSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.CLOUD_SOCKETS,
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value
     },
     {
-      id: 'thresholdSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.CAPACITY_SOCKETS,
+      // id: 'thresholdSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.CAPACITY_SOCKETS,
       chartType: 'threshold'
     }
   ],

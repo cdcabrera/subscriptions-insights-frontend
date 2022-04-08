@@ -43,6 +43,8 @@ const GraphCardChart = ({
   const getGraphTally = useAliasGetGraphTally();
 
   useShallowCompareEffect(() => {
+    // need a way to make a distinction between a metric ID used for capacity vs tally
+    // getGraphTally(metrics.map(({ id: metricId }) => ({ id: productId, metric: metricId, isCapacity: false })));
     getGraphTally(metrics.map(({ id: metricId }) => ({ id: productId, metric: metricId })));
   }, [metrics, productId, getGraphTally]);
 

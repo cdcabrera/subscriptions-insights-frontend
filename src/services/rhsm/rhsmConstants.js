@@ -42,7 +42,10 @@ const RHSM_API_PATH_METRIC_TYPES = {
   CORE_SECONDS: 'Core-seconds',
   INSTANCE_HOURS: 'Instance-hours',
   STORAGE_GIBIBYTES: 'Storage-gibibytes',
-  TRANSFER_GIBIBYTES: 'Transfer-gibibytes'
+  TRANSFER_GIBIBYTES: 'Transfer-gibibytes',
+  PHYSICAL_SOCKETS: 'physical_sockets',
+  HYPERVISOR_SOCKETS: 'hypervisor_sockets',
+  
 };
 
 /**
@@ -295,13 +298,18 @@ const RHSM_API_QUERY_SET_INVENTORY_TYPES = {
 };
 
 /**
+ * ToDo: Remove "metric" when Capacity is updated to use metrics
+ * Metric is used as a query param stop-gap for metrics behavior used in Tally.
+ */
+/**
  * RHSM query parameter options for TALLY, CAPACITY endpoints.
  *
- * @type {{GRANULARITY: string, USAGE: string, END_DATE: string, SLA: string, START_DATE: string}}
+ * @type {{GRANULARITY: string, USAGE: string, METRIC: string, END_DATE: string, SLA: string, START_DATE: string}}
  */
 const RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES = {
   END_DATE: 'ending',
   GRANULARITY: 'granularity',
+  METRIC: 'metric',
   SLA: 'sla',
   START_DATE: 'beginning',
   USAGE: 'usage'
