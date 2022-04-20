@@ -1,4 +1,6 @@
 const swaggerToJoi = require('swagger-to-joi');
+const SwaggerParser = require('@apidevtools/swagger-parser');
+
 const { join: joinPath } = require('path');
 const { execSync } = require('child_process');
 const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs');
@@ -77,6 +79,47 @@ const getApiSpec = (inputPaths = []) => {
   return outputPaths;
 };
 
+/* works
+const swaggerBundleParser = async file => {
+  if (!existsSync(file)) {
+    return '';
+  }
+
+  const bundle = await SwaggerParser.dereference(
+    'https://raw.githubusercontent.com/RedHatInsights/rhsm-subscriptions/develop/api/rhsm-subscriptions-api-spec.yaml'
+  );
+  // console.log('HEY>>>>', bundle);
+  writeFileSync(file, bundle.toString());
+};
+*/
+
+const swaggerBundleParser = async file => {
+  const specPath =
+    'https://raw.githubusercontent.com/RedHatInsights/rhsm-subscriptions/develop/api/rhsm-subscriptions-api-spec.yaml';
+  const parser = new SwaggerParser();
+  const dereferenced = await parser.dereference(specPath);
+  // const parsed = await parser.parse(specPath);
+  const refs = parser.$refs.paths();
+
+  console.log('>>>>> refs', refs);
+
+  writeFileSync('./updatedSpec.json', JSON.stringify(dereferenced, null, 2));
+
+  return dereferenced;
+
+  /*
+  if (!existsSync(file)) {
+    return '';
+  }
+
+  const bundle = await SwaggerParser.dereference(
+    'https://raw.githubusercontent.com/RedHatInsights/rhsm-subscriptions/develop/api/rhsm-subscriptions-api-spec.yaml'
+  );
+  // console.log('HEY>>>>', bundle);
+  writeFileSync(file, bundle.toString());
+  */
+};
+
 const fileContents = file => {
   if (!existsSync(file)) {
     return '';
@@ -129,21 +172,19 @@ const parseRefs = (json, str) => {
 };
 
 const [{ file }] = getApiSpec(spec);
-// const { components = {}, info = {}, paths = {} } = fileContents(file);
-const { json: jsonFile, str: stringFile } = fileContents(file);
 
-const parsedRefs = parseRefs(jsonFile, stringFile);
-
-console.log(parsedRefs);
-
-// console.log('001 >>>>>>>>>>>>>>>>> contents', paths['/tally/products/{product_id}/{metric_id}']);
-// console.log('001 >>>>>>>>>>>>>>>>> contents', JSON.stringify(components, null, 2));
-
-// const joiTextObject = swaggerToJoi(paths['/tally/products/{product_id}/{metric_id}']);
-// console.log('001 >>>>>>>>>>>>>>>>>>>', fileCont);
-// const joiTextObject = swaggerToJoi({ ...fileCont, openapi: '3.0.0' });
-// const joiTextObject = swaggerToJoi(fileCont.paths, fileCont.components);
-
-const joiTextObject = swaggerToJoi(parsedRefs.paths, parsedRefs.components);
-
-console.log('002 >>>>>>>>>>>>>>>>>>> text object', joiTextObject);
+swaggerBundleParser(file).then(success => {
+  console.log('>>>>>>>>>> success', success);
+  // const { components = {}, info = {}, paths = {} } = fileContents(file);
+  // const { json: jsonFile, str: stringFile } = fileContents(file);
+  // const parsedRefs = parseRefs(jsonFile, stringFile);
+  // console.log(parsedRefs);
+  // console.log('001 >>>>>>>>>>>>>>>>> contents', paths['/tally/products/{product_id}/{metric_id}']);
+  // console.log('001 >>>>>>>>>>>>>>>>> contents', JSON.stringify(components, null, 2));
+  // const joiTextObject = swaggerToJoi(paths['/tally/products/{product_id}/{metric_id}']);
+  // console.log('001 >>>>>>>>>>>>>>>>>>>', fileCont);
+  // const joiTextObject = swaggerToJoi({ ...fileCont, openapi: '3.0.0' });
+  // const joiTextObject = swaggerToJoi(fileCont.paths, fileCont.components);
+  const joiTextObject = swaggerToJoi(success.paths, success.components);
+  console.log('002 >>>>>>>>>>>>>>>>>>> text object', joiTextObject);
+});

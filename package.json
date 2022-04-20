@@ -116,6 +116,7 @@
     "victory-create-container": "36.3.1"
   },
   "devDependencies": {
+    "@apidevtools/swagger-parser": "^10.0.3",
     "@babel/core": "7.17.8",
     "@babel/eslint-parser": "^7.17.0",
     "@redhat-cloud-services/frontend-components-config": "4.6.6",

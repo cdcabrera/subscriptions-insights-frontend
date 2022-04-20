@@ -9,8 +9,12 @@
     {
       "url": "/{PATH_PREFIX}/{APP_NAME}/v1",
       "variables": {
-        "PATH_PREFIX": { "default": "api" },
-        "APP_NAME": { "default": "rhsm-subscriptions" }
+        "PATH_PREFIX": {
+          "default": "api"
+        },
+        "APP_NAME": {
+          "default": "rhsm-subscriptions"
+        }
       }
     },
     {
@@ -25,8 +29,12 @@
           ],
           "default": "ci.cloud.redhat.com"
         },
-        "PATH_PREFIX": { "default": "api" },
-        "APP_NAME": { "default": "rhsm-subscriptions" }
+        "PATH_PREFIX": {
+          "default": "api"
+        },
+        "APP_NAME": {
+          "default": "rhsm-subscriptions"
+        }
       }
     }
   ],
@@ -36,7 +44,9 @@
       "get": {
         "summary": "Request version and build information about the deployed application.",
         "operationId": "getVersion",
-        "tags": ["version"],
+        "tags": [
+          "version"
+        ],
         "responses": {
           "200": {
             "description": "The request for version information was successful.",
@@ -47,10 +57,18 @@
                     "build": {
                       "type": "object",
                       "properties": {
-                        "version": { "type": "string" },
-                        "artifact": { "type": "string" },
-                        "name": { "type": "string" },
-                        "group": { "type": "string" }
+                        "version": {
+                          "type": "string"
+                        },
+                        "artifact": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "group": {
+                          "type": "string"
+                        }
                       }
                     }
                   }
@@ -59,7 +77,42 @@
             }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -75,21 +128,35 @@
             "content": {
               "application/vnd.api+json": {
                 "schema": {
-                  "required": ["meta", "data"],
+                  "required": [
+                    "meta",
+                    "data"
+                  ],
                   "properties": {
                     "meta": {
                       "type": "object",
-                      "required": ["account_number", "org_id"],
+                      "required": [
+                        "account_number",
+                        "org_id"
+                      ],
                       "properties": {
-                        "account_number": { "type": "string" },
-                        "org_id": { "type": "string" }
+                        "account_number": {
+                          "type": "string"
+                        },
+                        "org_id": {
+                          "type": "string"
+                        }
                       }
                     },
                     "data": {
                       "type": "object",
-                      "required": ["opt_in_complete"],
+                      "required": [
+                        "opt_in_complete"
+                      ],
                       "properties": {
-                        "opt_in_complete": { "type": "boolean" },
+                        "opt_in_complete": {
+                          "type": "boolean"
+                        },
                         "account": {
                           "type": "object",
                           "required": [
@@ -101,10 +168,18 @@
                             "last_updated"
                           ],
                           "properties": {
-                            "account_number": { "type": "string" },
-                            "tally_sync_enabled": { "type": "boolean" },
-                            "tally_reporting_enabled": { "type": "boolean" },
-                            "opt_in_type": { "type": "string" },
+                            "account_number": {
+                              "type": "string"
+                            },
+                            "tally_sync_enabled": {
+                              "type": "boolean"
+                            },
+                            "tally_reporting_enabled": {
+                              "type": "boolean"
+                            },
+                            "opt_in_type": {
+                              "type": "string"
+                            },
                             "created": {
                               "type": "string",
                               "format": "date-time"
@@ -125,9 +200,15 @@
                             "last_updated"
                           ],
                           "properties": {
-                            "org_id": { "type": "string" },
-                            "conduit_sync_enabled": { "type": "boolean" },
-                            "opt_in_type": { "type": "string" },
+                            "org_id": {
+                              "type": "string"
+                            },
+                            "conduit_sync_enabled": {
+                              "type": "boolean"
+                            },
+                            "opt_in_type": {
+                              "type": "string"
+                            },
                             "created": {
                               "type": "string",
                               "format": "date-time"
@@ -161,42 +242,198 @@
                       "last_updated": "2017-08-04T17:32:05Z"
                     }
                   },
-                  "meta": { "account_number": 12345, "org_id": 1111 }
+                  "meta": {
+                    "account_number": 12345,
+                    "org_id": 1111
+                  }
                 }
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
       "put": {
-        "summary": "Create/Update an account's opt-in configuration. Account and Org ID are defined by the\nidentity header. If no parameters are specified, all everything will be enabled.",
+        "summary": "Create/Update an account's opt-in configuration. Account and Org ID are defined by the identity header. If no parameters are specified, all everything will be enabled.",
         "operationId": "putOptInConfig",
         "parameters": [
           {
             "name": "enable_tally_sync",
             "in": "query",
             "required": false,
-            "schema": { "type": "boolean", "default": true }
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
           },
           {
             "name": "enable_tally_reporting",
             "in": "query",
             "required": false,
-            "schema": { "type": "boolean", "default": true }
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
           },
           {
             "name": "enable_conduit_sync",
             "in": "query",
             "required": false,
-            "schema": { "type": "boolean", "default": true }
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
           }
         ],
         "responses": {
@@ -205,21 +442,35 @@
             "content": {
               "application/vnd.api+json": {
                 "schema": {
-                  "required": ["meta", "data"],
+                  "required": [
+                    "meta",
+                    "data"
+                  ],
                   "properties": {
                     "meta": {
                       "type": "object",
-                      "required": ["account_number", "org_id"],
+                      "required": [
+                        "account_number",
+                        "org_id"
+                      ],
                       "properties": {
-                        "account_number": { "type": "string" },
-                        "org_id": { "type": "string" }
+                        "account_number": {
+                          "type": "string"
+                        },
+                        "org_id": {
+                          "type": "string"
+                        }
                       }
                     },
                     "data": {
                       "type": "object",
-                      "required": ["opt_in_complete"],
+                      "required": [
+                        "opt_in_complete"
+                      ],
                       "properties": {
-                        "opt_in_complete": { "type": "boolean" },
+                        "opt_in_complete": {
+                          "type": "boolean"
+                        },
                         "account": {
                           "type": "object",
                           "required": [
@@ -231,10 +482,18 @@
                             "last_updated"
                           ],
                           "properties": {
-                            "account_number": { "type": "string" },
-                            "tally_sync_enabled": { "type": "boolean" },
-                            "tally_reporting_enabled": { "type": "boolean" },
-                            "opt_in_type": { "type": "string" },
+                            "account_number": {
+                              "type": "string"
+                            },
+                            "tally_sync_enabled": {
+                              "type": "boolean"
+                            },
+                            "tally_reporting_enabled": {
+                              "type": "boolean"
+                            },
+                            "opt_in_type": {
+                              "type": "string"
+                            },
                             "created": {
                               "type": "string",
                               "format": "date-time"
@@ -255,9 +514,15 @@
                             "last_updated"
                           ],
                           "properties": {
-                            "org_id": { "type": "string" },
-                            "conduit_sync_enabled": { "type": "boolean" },
-                            "opt_in_type": { "type": "string" },
+                            "org_id": {
+                              "type": "string"
+                            },
+                            "conduit_sync_enabled": {
+                              "type": "boolean"
+                            },
+                            "opt_in_type": {
+                              "type": "string"
+                            },
                             "created": {
                               "type": "string",
                               "format": "date-time"
@@ -291,35 +556,326 @@
                       "last_updated": "2017-08-04T17:32:05Z"
                     }
                   },
-                  "meta": { "account_number": 12345, "org_id": 1111 }
+                  "meta": {
+                    "account_number": 12345,
+                    "org_id": 1111
+                  }
                 }
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "summary": "Delete an opt-in config for the associated account/org. The account number and org ID are\npulled from the identity header.",
+        "summary": "Delete an opt-in config for the associated account/org. The account number and org ID are pulled from the identity header.",
         "operationId": "deleteOptInConfig",
         "responses": {
           "204": {
             "description": "Successfully deleted the opt-in configuration for the accociated account/org"
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -376,7 +932,11 @@
           "in": "query",
           "schema": {
             "type": "string",
-            "enum": ["physical", "virtual", "cloud"]
+            "enum": [
+              "physical",
+              "virtual",
+              "cloud"
+            ]
           },
           "description": "The category to fetch graph data for (optional)"
         },
@@ -385,7 +945,7 @@
           "in": "query",
           "required": true,
           "schema": {
-            "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+            "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
             "type": "string",
             "enum": [
               "Hourly",
@@ -402,9 +962,15 @@
           "name": "sla",
           "in": "query",
           "schema": {
-            "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+            "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
             "type": "string",
-            "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+            "enum": [
+              "",
+              "Premium",
+              "Standard",
+              "Self-Support",
+              "_ANY"
+            ]
           },
           "description": "Include only report data matching the specified service level."
         },
@@ -412,7 +978,7 @@
           "name": "usage",
           "in": "query",
           "schema": {
-            "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+            "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
             "type": "string",
             "enum": [
               "",
@@ -429,7 +995,15 @@
           "in": "query",
           "schema": {
             "type": "string",
-            "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+            "enum": [
+              "",
+              "red hat",
+              "aws",
+              "gcp",
+              "azure",
+              "oracle",
+              "_ANY"
+            ]
           },
           "description": "Include only report data matching the specified billing provider"
         },
@@ -437,26 +1011,37 @@
           "name": "beginning",
           "in": "query",
           "required": true,
-          "schema": { "type": "string", "format": "date-time" },
-          "description": "Defines the start of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": "Defines the start of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
         },
         {
           "name": "ending",
           "in": "query",
           "required": true,
-          "schema": { "type": "string", "format": "date-time" },
-          "description": "Defines the end of the report period.  Defaults to the current time. Dates should\nbe provided in UTC."
+          "schema": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": "Defines the end of the report period.  Defaults to the current time. Dates should be provided in UTC."
         },
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer" },
+          "schema": {
+            "type": "integer"
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          },
           "description": "The numbers of items to return"
         }
       ],
@@ -475,46 +1060,79 @@
                       "type": "array",
                       "items": {
                         "description": "Data point for a given tally report.",
-                        "required": ["date", "value"],
+                        "required": [
+                          "date",
+                          "value"
+                        ],
                         "properties": {
                           "date": {
                             "description": "The date for this datapoint.",
                             "type": "string",
                             "format": "date-time"
                           },
-                          "value": { "type": "number", "format": "double" },
-                          "has_data": { "type": "boolean" }
+                          "value": {
+                            "type": "number",
+                            "format": "double"
+                          },
+                          "has_data": {
+                            "type": "boolean"
+                          }
                         }
                       }
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
-                        "count": { "type": "integer" },
+                        "count": {
+                          "type": "integer"
+                        },
                         "total_monthly": {
                           "description": "Data point for a given tally report.",
-                          "required": ["date", "value"],
+                          "required": [
+                            "date",
+                            "value"
+                          ],
                           "properties": {
                             "date": {
                               "description": "The date for this datapoint.",
                               "type": "string",
                               "format": "date-time"
                             },
-                            "value": { "type": "number", "format": "double" },
-                            "has_data": { "type": "boolean" }
+                            "value": {
+                              "type": "number",
+                              "format": "double"
+                            },
+                            "has_data": {
+                              "type": "boolean"
+                            }
                           }
                         },
-                        "has_cloudigrade_data": { "type": "boolean" },
-                        "has_cloudigrade_mismatch": { "type": "boolean" },
+                        "has_cloudigrade_data": {
+                          "type": "boolean"
+                        },
+                        "has_cloudigrade_mismatch": {
+                          "type": "boolean"
+                        },
                         "product": {
                           "type": "string",
                           "enum": [
@@ -536,9 +1154,11 @@
                             "rhosak"
                           ]
                         },
-                        "metric_id": { "type": "string" },
+                        "metric_id": {
+                          "type": "string"
+                        },
                         "service_level": {
-                          "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                          "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -549,7 +1169,7 @@
                           ]
                         },
                         "usage": {
-                          "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                          "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -560,7 +1180,7 @@
                           ]
                         },
                         "granularity": {
-                          "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+                          "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
                           "type": "string",
                           "enum": [
                             "Hourly",
@@ -575,11 +1195,11 @@
                           "type": "string",
                           "enum": [
                             "",
-                            "Red Hat",
-                            "Aws",
-                            "Gcp",
-                            "Azure",
-                            "Oracle",
+                            "red hat",
+                            "aws",
+                            "gcp",
+                            "azure",
+                            "oracle",
                             "_ANY"
                           ]
                         }
@@ -596,16 +1216,162 @@
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "tags": ["tally"]
+        "tags": [
+          "tally"
+        ]
       }
     },
     "/tally/products/{product_id}": {
@@ -641,19 +1407,24 @@
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer" },
+          "schema": {
+            "type": "integer"
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          },
           "description": "The numbers of items to return"
         }
       ],
       "get": {
         "deprecated": true,
-        "summary": "(Deprecated for removal after 2022-05-01). Fetch a tally report for an account and product. If page header parameters are omitted,\nthen any gaps in the resulting report snapshots are filled with a default fake snapshot.",
+        "summary": "(Deprecated for removal after 2022-05-01). Fetch a tally report for an account and product. If page header parameters are omitted, then any gaps in the resulting report snapshots are filled with a default fake snapshot.",
         "description": "Deprecated: use /tally/products/{product_id}/{metric_id} instead",
         "operationId": "getTallyReport",
         "parameters": [
@@ -662,7 +1433,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+              "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
               "type": "string",
               "enum": [
                 "Hourly",
@@ -679,9 +1450,15 @@
             "name": "sla",
             "in": "query",
             "schema": {
-              "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+              "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
-              "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+              "enum": [
+                "",
+                "Premium",
+                "Standard",
+                "Self-Support",
+                "_ANY"
+              ]
             },
             "description": "Include only snapshots matching the specified service level."
           },
@@ -689,7 +1466,7 @@
             "name": "usage",
             "in": "query",
             "schema": {
-              "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+              "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
               "enum": [
                 "",
@@ -705,21 +1482,30 @@
             "name": "beginning",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the start of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the start of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
           },
           {
             "name": "ending",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the end of the report period.  Defaults to the current time. Dates should\nbe provided in UTC."
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the end of the report period.  Defaults to the current time. Dates should be provided in UTC."
           },
           {
             "name": "use_running_totals_format",
             "in": "query",
             "required": false,
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -734,10 +1520,13 @@
                       "type": "array",
                       "items": {
                         "deprecated": true,
-                        "required": ["date", "instance_count"],
+                        "required": [
+                          "date",
+                          "instance_count"
+                        ],
                         "properties": {
                           "date": {
-                            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must\nconsult the 'granularity' field in the TallyReport to determine the length of time each\nTallySnapshot covers.",
+                            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must consult the 'granularity' field in the TallyReport to determine the length of time each TallySnapshot covers.",
                             "type": "string",
                             "format": "date-time"
                           },
@@ -836,14 +1625,16 @@
                             "minimum": 0,
                             "default": 0
                           },
-                          "has_data": { "type": "boolean" },
+                          "has_data": {
+                            "type": "boolean"
+                          },
                           "has_cloudigrade_data": {
                             "description": "Indicates whether this tally report was enriched with data from Cloudigrade.",
                             "type": "boolean",
                             "default": false
                           },
                           "has_cloudigrade_mismatch": {
-                            "description": "Indicates whether this tally report appears to have a mismatch in reporting\nbetween Cloudigrade and other data sources. This may or may not indicate an issue with data\ndata sources.",
+                            "description": "Indicates whether this tally report appears to have a mismatch in reporting between Cloudigrade and other data sources. This may or may not indicate an issue with data data sources.",
                             "type": "boolean",
                             "default": false
                           }
@@ -852,17 +1643,30 @@
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
-                        "count": { "type": "integer" },
+                        "count": {
+                          "type": "integer"
+                        },
                         "total_core_hours": {
                           "type": "number",
                           "format": "double"
@@ -893,7 +1697,7 @@
                           ]
                         },
                         "service_level": {
-                          "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                          "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -904,7 +1708,7 @@
                           ]
                         },
                         "usage": {
-                          "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                          "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -915,7 +1719,7 @@
                           ]
                         },
                         "granularity": {
-                          "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+                          "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
                           "type": "string",
                           "enum": [
                             "Hourly",
@@ -927,7 +1731,11 @@
                           ]
                         }
                       },
-                      "required": ["count", "product", "granularity"]
+                      "required": [
+                        "count",
+                        "product",
+                        "granularity"
+                      ]
                     }
                   }
                 },
@@ -992,16 +1800,162 @@
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "tags": ["tally"]
+        "tags": [
+          "tally"
+        ]
       }
     },
     "/capacity/products/{product_id}": {
@@ -1037,13 +1991,18 @@
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer" },
+          "schema": {
+            "type": "integer"
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          },
           "description": "The numbers of items to return"
         }
       ],
@@ -1056,7 +2015,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+              "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
               "type": "string",
               "enum": [
                 "Hourly",
@@ -1073,9 +2032,15 @@
             "name": "sla",
             "in": "query",
             "schema": {
-              "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+              "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
-              "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+              "enum": [
+                "",
+                "Premium",
+                "Standard",
+                "Self-Support",
+                "_ANY"
+              ]
             },
             "description": "Include only capacity for the specified service level."
           },
@@ -1083,7 +2048,7 @@
             "name": "usage",
             "in": "query",
             "schema": {
-              "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+              "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
               "enum": [
                 "",
@@ -1099,15 +2064,21 @@
             "name": "beginning",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the start of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the start of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
           },
           {
             "name": "ending",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the end of the report period.  Defaults to the current time. Dates should\nbe provided in UTC."
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the end of the report period.  Defaults to the current time. Dates should be provided in UTC."
           }
         ],
         "responses": {
@@ -1120,12 +2091,15 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "required": ["date", "has_infinite_quantity"],
+                        "required": [
+                          "date",
+                          "has_infinite_quantity"
+                        ],
                         "properties": {
                           "date": {
                             "type": "string",
                             "format": "date-time",
-                            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must\nconsult the 'granularity' field in the CapacityReport to determine the length of time each\nCapacitySnapshot covers."
+                            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must consult the 'granularity' field in the CapacityReport to determine the length of time each CapacitySnapshot covers."
                           },
                           "sockets": {
                             "description": "Total socket capacity.",
@@ -1164,7 +2138,7 @@
                             "minimum": 0
                           },
                           "has_infinite_quantity": {
-                            "description": "Indicates whether this snapshot has an infinite quantity subscription included.\nIf there is an infinite quantity subscription involved, there is no meaningful number for\ncapacity.",
+                            "description": "Indicates whether this snapshot has an infinite quantity subscription included. If there is an infinite quantity subscription involved, there is no meaningful number for capacity.",
                             "type": "boolean"
                           }
                         }
@@ -1172,17 +2146,30 @@
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
-                        "count": { "type": "integer" },
+                        "count": {
+                          "type": "integer"
+                        },
                         "product": {
                           "type": "string",
                           "enum": [
@@ -1205,7 +2192,7 @@
                           ]
                         },
                         "granularity": {
-                          "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+                          "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
                           "type": "string",
                           "enum": [
                             "Hourly",
@@ -1217,7 +2204,7 @@
                           ]
                         },
                         "service_level": {
-                          "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                          "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -1228,7 +2215,7 @@
                           ]
                         },
                         "usage": {
-                          "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                          "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -1239,7 +2226,11 @@
                           ]
                         }
                       },
-                      "required": ["count", "product", "granularity"]
+                      "required": [
+                        "count",
+                        "product",
+                        "granularity"
+                      ]
                     }
                   }
                 },
@@ -1297,16 +2288,162 @@
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "tags": ["capacity"]
+        "tags": [
+          "capacity"
+        ]
       }
     },
     "/hosts/products/{product_id}": {
@@ -1342,13 +2479,19 @@
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer" },
+          "schema": {
+            "type": "integer"
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1, "maximum": 100 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
           "description": "The numbers of items to return"
         }
       ],
@@ -1360,9 +2503,15 @@
             "name": "sla",
             "in": "query",
             "schema": {
-              "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+              "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
-              "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+              "enum": [
+                "",
+                "Premium",
+                "Standard",
+                "Self-Support",
+                "_ANY"
+              ]
             },
             "description": "Include only hosts for the specified service level."
           },
@@ -1370,7 +2519,7 @@
             "name": "usage",
             "in": "query",
             "schema": {
-              "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+              "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
               "enum": [
                 "",
@@ -1388,29 +2537,41 @@
             "schema": {
               "description": "The unit-of-measure for the capacity.",
               "type": "string",
-              "enum": ["cores", "sockets"]
+              "enum": [
+                "cores",
+                "sockets"
+              ]
             },
             "description": "Filter hosts to those that contribute to a specific unit of measure"
           },
           {
             "name": "display_name_contains",
             "description": "Include only hosts containing the specified display name. Passing an empty string behaves the same way as passing null",
-            "schema": { "type": "string", "default": "" },
+            "schema": {
+              "type": "string",
+              "default": ""
+            },
             "in": "query"
           },
           {
             "name": "beginning",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the start of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z.\nOnly applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the start of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z. Only applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
           },
           {
             "name": "ending",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the end of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z.\nOnly applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the end of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z. Only applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
           },
           {
             "name": "sort",
@@ -1433,7 +2594,13 @@
           {
             "name": "dir",
             "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"] },
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
             "description": "Which direction to sort by (default: asc)"
           }
         ],
@@ -1524,17 +2691,30 @@
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
-                        "count": { "type": "integer" },
+                        "count": {
+                          "type": "integer"
+                        },
                         "product": {
                           "type": "string",
                           "enum": [
@@ -1557,7 +2737,7 @@
                           ]
                         },
                         "service_level": {
-                          "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                          "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -1568,7 +2748,7 @@
                           ]
                         },
                         "usage": {
-                          "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                          "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -1581,10 +2761,16 @@
                         "uom": {
                           "description": "The unit-of-measure for the capacity.",
                           "type": "string",
-                          "enum": ["cores", "sockets"]
+                          "enum": [
+                            "cores",
+                            "sockets"
+                          ]
                         }
                       },
-                      "required": ["count", "product"]
+                      "required": [
+                        "count",
+                        "product"
+                      ]
                     }
                   }
                 },
@@ -1626,16 +2812,162 @@
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "tags": ["hosts"]
+        "tags": [
+          "hosts"
+        ]
       }
     },
     "/hosts/{hypervisor_uuid}/guests": {
@@ -1645,19 +2977,27 @@
           "name": "hypervisor_uuid",
           "in": "path",
           "required": true,
-          "schema": { "type": "string" },
+          "schema": {
+            "type": "string"
+          },
           "description": "The subscription-manager ID for the hypervisor we wish to query"
         },
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer" },
+          "schema": {
+            "type": "integer"
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1, "maximum": 100 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
           "description": "The numbers of items to return"
         }
       ],
@@ -1751,16 +3091,33 @@
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
-                      "required": ["count"],
-                      "properties": { "count": { "type": "integer" } }
+                      "required": [
+                        "count"
+                      ],
+                      "properties": {
+                        "count": {
+                          "type": "integer"
+                        }
+                      }
                     }
                   }
                 },
@@ -1785,21 +3142,169 @@
                     "previous": null,
                     "next": "/api/rhsm-subscriptions/v1/hosts/a283ffb6-e0f3-4dbe-9732-ccfdb297ba07/guests?offset=5&limit=5"
                   },
-                  "meta": { "count": 10 }
+                  "meta": {
+                    "count": 10
+                  }
                 }
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "tags": ["hosts"]
+        "tags": [
+          "hosts"
+        ]
       }
     },
     "/instances/products/{product_id}": {
@@ -1834,13 +3339,19 @@
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer" },
+          "schema": {
+            "type": "integer"
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1, "maximum": 100 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
           "description": "The numbers of items to return"
         }
       ],
@@ -1851,9 +3362,15 @@
             "name": "sla",
             "in": "query",
             "schema": {
-              "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+              "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
-              "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+              "enum": [
+                "",
+                "Premium",
+                "Standard",
+                "Self-Support",
+                "_ANY"
+              ]
             },
             "description": "Include only hosts for the specified service level."
           },
@@ -1861,7 +3378,7 @@
             "name": "usage",
             "in": "query",
             "schema": {
-              "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+              "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
               "enum": [
                 "",
@@ -1878,35 +3395,54 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+              "enum": [
+                "",
+                "red hat",
+                "aws",
+                "gcp",
+                "azure",
+                "oracle",
+                "_ANY"
+              ]
             },
             "description": "Include only hosts for the specified billing provider."
           },
           {
             "name": "billing_account_id",
             "description": "Include only hosts containing the specified billing account ID.",
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "in": "query"
           },
           {
             "name": "display_name_contains",
             "description": "Include only hosts containing the specified display name. Passing an empty string behaves the same way as passing null",
-            "schema": { "type": "string", "default": "" },
+            "schema": {
+              "type": "string",
+              "default": ""
+            },
             "in": "query"
           },
           {
             "name": "beginning",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the start of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z.\nOnly applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the start of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z. Only applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
           },
           {
             "name": "ending",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the end of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z.\nOnly applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the end of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z. Only applicable for OpenShift-dedicated-metrics and OpenShift-metrics products"
           },
           {
             "name": "sort",
@@ -1930,11 +3466,19 @@
           {
             "name": "dir",
             "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"] },
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
             "description": "Which direction to sort by (default: asc)"
           }
         ],
-        "tags": ["instances"],
+        "tags": [
+          "instances"
+        ],
         "responses": {
           "200": {
             "description": "The request for instances was successful.",
@@ -1952,25 +3496,34 @@
                         "description": "The representation of a product cluster data",
                         "type": "object",
                         "properties": {
-                          "id": { "type": "string" },
-                          "display_name": { "type": "string" },
+                          "id": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string"
+                          },
                           "billing_provider": {
                             "type": "string",
                             "enum": [
                               "",
-                              "Red Hat",
-                              "Aws",
-                              "Gcp",
-                              "Azure",
-                              "Oracle",
+                              "red hat",
+                              "aws",
+                              "gcp",
+                              "azure",
+                              "oracle",
                               "_ANY"
                             ]
                           },
-                          "billing_account_id": { "type": "string" },
+                          "billing_account_id": {
+                            "type": "string"
+                          },
                           "measurements": {
                             "description": "Must be in the same order as \"measurements\" in the meta. (i.e. in the example instance.measurements[0] is the instance-hours, measurements[1] is storage-gibibytes, and measurements[2] is the transfer-gibibytes.",
                             "type": "array",
-                            "items": { "format": "double", "type": "number" }
+                            "items": {
+                              "format": "double",
+                              "type": "number"
+                            }
                           },
                           "last_seen": {
                             "format": "date-time",
@@ -1980,26 +3533,44 @@
                         "example": {
                           "id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
                           "display_name": "rhv.example.com",
-                          "measurements": [42, null, 1],
+                          "measurements": [
+                            42,
+                            null,
+                            1
+                          ],
                           "last_seen": "2020-01-01T00:00:00Z"
                         }
                       }
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
                       "title": "Root Type for InstanceMeta",
                       "description": "The details of the entire list of InstanceData",
                       "type": "object",
                       "properties": {
-                        "count": { "format": "int32", "type": "integer" },
+                        "count": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
                         "product": {
                           "type": "string",
                           "enum": [
@@ -2022,7 +3593,7 @@
                           ]
                         },
                         "service_level": {
-                          "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                          "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -2033,7 +3604,7 @@
                           ]
                         },
                         "usage": {
-                          "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                          "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -2047,17 +3618,19 @@
                           "type": "string",
                           "enum": [
                             "",
-                            "Red Hat",
-                            "Aws",
-                            "Gcp",
-                            "Azure",
-                            "Oracle",
+                            "red hat",
+                            "aws",
+                            "gcp",
+                            "azure",
+                            "oracle",
                             "_ANY"
                           ]
                         },
                         "measurements": {
                           "type": "array",
-                          "items": { "type": "string" }
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "example": {
@@ -2093,7 +3666,9 @@
                       "last": "string",
                       "next": "string"
                     },
-                    "meta": { "count": 10 }
+                    "meta": {
+                      "count": 10
+                    }
                   }
                 }
               }
@@ -2135,13 +3710,19 @@
         {
           "name": "offset",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 0 },
+          "schema": {
+            "type": "integer",
+            "minimum": 0
+          },
           "description": "The number of items to skip before starting to collect the result set"
         },
         {
           "name": "limit",
           "in": "query",
-          "schema": { "type": "integer", "minimum": 1 },
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          },
           "description": "The numbers of items to return"
         }
       ],
@@ -2153,9 +3734,15 @@
             "name": "sla",
             "in": "query",
             "schema": {
-              "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+              "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
-              "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+              "enum": [
+                "",
+                "Premium",
+                "Standard",
+                "Self-Support",
+                "_ANY"
+              ]
             },
             "description": "Include only capacity for the specified service level."
           },
@@ -2163,7 +3750,7 @@
             "name": "usage",
             "in": "query",
             "schema": {
-              "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+              "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
               "type": "string",
               "enum": [
                 "",
@@ -2178,14 +3765,20 @@
           {
             "name": "beginning",
             "in": "query",
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the start of the report period. Dates should be provided in ISO 8601\nformat but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the start of the report period. Dates should be provided in ISO 8601 format but the only accepted offset is UTC. E.g. 2017-07-21T17:32:28Z"
           },
           {
             "name": "ending",
             "in": "query",
-            "schema": { "type": "string", "format": "date-time" },
-            "description": "Defines the end of the report period.  Defaults to the current time. Dates should\nbe provided in UTC."
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Defines the end of the report period.  Defaults to the current time. Dates should be provided in UTC."
           },
           {
             "name": "uom",
@@ -2193,7 +3786,10 @@
             "schema": {
               "description": "The unit-of-measure for the capacity.",
               "type": "string",
-              "enum": ["cores", "sockets"]
+              "enum": [
+                "cores",
+                "sockets"
+              ]
             },
             "description": "Filter subscriptions to those that contribute to a specific unit of measure"
           },
@@ -2218,7 +3814,13 @@
           {
             "name": "dir",
             "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"] },
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
             "description": "Which direction to sort by (default: asc)"
           }
         ],
@@ -2242,7 +3844,7 @@
                             "type": "string"
                           },
                           "service_level": {
-                            "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                            "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                             "type": "string",
                             "enum": [
                               "",
@@ -2253,7 +3855,7 @@
                             ]
                           },
                           "usage": {
-                            "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                            "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                             "type": "string",
                             "enum": [
                               "",
@@ -2268,8 +3870,12 @@
                             "type": "array",
                             "items": {
                               "properties": {
-                                "id": { "type": "string" },
-                                "number": { "type": "string" }
+                                "id": {
+                                  "type": "string"
+                                },
+                                "number": {
+                                  "type": "string"
+                                }
                               }
                             }
                           },
@@ -2281,7 +3887,10 @@
                           "next_event_type": {
                             "description": "The most immediate subscription event, such as a subscription beginning or ending.",
                             "type": "string",
-                            "enum": ["Subscription Start", "Subscription End"]
+                            "enum": [
+                              "Subscription Start",
+                              "Subscription End"
+                            ]
                           },
                           "quantity": {
                             "description": "The summed subscription quantities across the active subscriptions for the offering.",
@@ -2310,24 +3919,40 @@
                           "uom": {
                             "description": "The unit-of-measure for the capacity.",
                             "type": "string",
-                            "enum": ["cores", "sockets"]
+                            "enum": [
+                              "cores",
+                              "sockets"
+                            ]
                           }
                         }
                       }
                     },
                     "links": {
                       "properties": {
-                        "first": { "type": "string" },
-                        "last": { "type": "string" },
-                        "previous": { "type": "string" },
-                        "next": { "type": "string" }
+                        "first": {
+                          "type": "string"
+                        },
+                        "last": {
+                          "type": "string"
+                        },
+                        "previous": {
+                          "type": "string"
+                        },
+                        "next": {
+                          "type": "string"
+                        }
                       },
-                      "required": ["first", "last"]
+                      "required": [
+                        "first",
+                        "last"
+                      ]
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
-                        "count": { "type": "integer" },
+                        "count": {
+                          "type": "integer"
+                        },
                         "product": {
                           "type": "string",
                           "enum": [
@@ -2350,7 +3975,7 @@
                           ]
                         },
                         "service_level": {
-                          "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                          "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -2361,7 +3986,7 @@
                           ]
                         },
                         "usage": {
-                          "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                          "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                           "type": "string",
                           "enum": [
                             "",
@@ -2374,14 +3999,24 @@
                         "uom": {
                           "description": "The unit-of-measure for the capacity.",
                           "type": "string",
-                          "enum": ["cores", "sockets"]
+                          "enum": [
+                            "cores",
+                            "sockets"
+                          ]
                         },
                         "subscription_type": {
                           "type": "string",
-                          "enum": ["On-demand", "Annual"]
+                          "enum": [
+                            "On-demand",
+                            "Annual"
+                          ]
                         }
                       },
-                      "required": ["count", "product", "subscription_type"]
+                      "required": [
+                        "count",
+                        "product",
+                        "subscription_type"
+                      ]
                     }
                   }
                 },
@@ -2393,9 +4028,18 @@
                       "service_level": "Premium",
                       "usage": "Production",
                       "subscriptions": [
-                        { "id": "1234567890", "number": "1234567891" },
-                        { "id": "1234567892", "number": "1234567893" },
-                        { "id": "1234567894", "number": "1234567895" }
+                        {
+                          "id": "1234567890",
+                          "number": "1234567891"
+                        },
+                        {
+                          "id": "1234567892",
+                          "number": "1234567893"
+                        },
+                        {
+                          "id": "1234567894",
+                          "number": "1234567895"
+                        }
                       ],
                       "next_event_date": "2020-04-01T00:00:00Z",
                       "next_event_type": "Subscription Begin",
@@ -2411,9 +4055,18 @@
                       "service_level": "Self-Support",
                       "usage": "Production",
                       "subscriptions": [
-                        { "id": "1234567896", "number": "1234567897" },
-                        { "id": "1234567898", "number": "1234567899" },
-                        { "id": "1234567900", "number": "1234567901" }
+                        {
+                          "id": "1234567896",
+                          "number": "1234567897"
+                        },
+                        {
+                          "id": "1234567898",
+                          "number": "1234567899"
+                        },
+                        {
+                          "id": "1234567900",
+                          "number": "1234567901"
+                        }
                       ],
                       "next_event_date": "2020-04-02T00:00:00Z",
                       "next_event_type": "Subscription Begin",
@@ -2429,9 +4082,18 @@
                       "service_level": "Premium",
                       "usage": "Production",
                       "subscriptions": [
-                        { "id": "1234567902", "number": "1234567903" },
-                        { "id": "1234567904", "number": "1234567905" },
-                        { "id": "1234567906", "number": "1234567907" }
+                        {
+                          "id": "1234567902",
+                          "number": "1234567903"
+                        },
+                        {
+                          "id": "1234567904",
+                          "number": "1234567905"
+                        },
+                        {
+                          "id": "1234567906",
+                          "number": "1234567907"
+                        }
                       ],
                       "next_event_date": "2020-04-01T00:00:00Z",
                       "next_event_type": "Subscription End",
@@ -2442,25 +4104,213 @@
                       "uom": "Cores"
                     }
                   ],
-                  "meta": { "count": 3 }
+                  "meta": {
+                    "count": 3
+                  }
                 }
               }
             }
           },
-          "400": { "$ref": "../spec/error-responses.yaml#/$defs/BadRequest" },
-          "403": { "$ref": "../spec/error-responses.yaml#/$defs/Forbidden" },
+          "400": {
+            "description": "The server could could not process the current request.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The request was valid, but the request was refused by the server.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
-            "$ref": "../spec/error-responses.yaml#/$defs/ResourceNotFound"
+            "description": "The requested resource was not found.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "../spec/error-responses.yaml#/$defs/InternalServerError"
+            "description": "An internal server error has occurred and is not recoverable.",
+            "content": {
+              "application/vnd.api+json": {
+                "schema": {
+                  "required": [
+                    "errors"
+                  ],
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "required": [
+                          "status",
+                          "code",
+                          "title"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "tags": ["subscriptions"]
+        "tags": [
+          "subscriptions"
+        ]
       }
     },
-    "/openapi.json": { "$ref": "../spec/openapi-paths.yaml#/openapi-json" },
-    "/openapi.yaml": { "$ref": "../spec/openapi-paths.yaml#/openapi-yaml" }
+    "/openapi.json": {
+      "get": {
+        "description": "Get the OpenAPI spec in JSON format.",
+        "operationId": "getOpenApiJson",
+        "tags": [
+          "root"
+        ],
+        "responses": {
+          "200": {
+            "description": "The request to get the OpenAPI JSON was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.yaml": {
+      "get": {
+        "description": "Get the OpenAPI spec in YAML format.",
+        "operationId": "getOpenApiYaml",
+        "tags": [
+          "root"
+        ],
+        "responses": {
+          "200": {
+            "description": "The request to get the OpenAPI YAML was successful.",
+            "content": {
+              "application/x-yaml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "components": {
     "securitySchemes": {
@@ -2473,17 +4323,30 @@
     },
     "schemas": {
       "GranularityType": {
-        "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+        "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
         "type": "string",
-        "enum": ["Hourly", "Daily", "Weekly", "Monthly", "Quarterly", "Yearly"]
+        "enum": [
+          "Hourly",
+          "Daily",
+          "Weekly",
+          "Monthly",
+          "Quarterly",
+          "Yearly"
+        ]
       },
       "ServiceLevelType": {
-        "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+        "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
         "type": "string",
-        "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+        "enum": [
+          "",
+          "Premium",
+          "Standard",
+          "Self-Support",
+          "_ANY"
+        ]
       },
       "UsageType": {
-        "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+        "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
         "type": "string",
         "enum": [
           "",
@@ -2495,7 +4358,15 @@
       },
       "BillingProviderType": {
         "type": "string",
-        "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+        "enum": [
+          "",
+          "red hat",
+          "aws",
+          "gcp",
+          "azure",
+          "oracle",
+          "_ANY"
+        ]
       },
       "ProductId": {
         "type": "string",
@@ -2531,47 +4402,88 @@
       },
       "ReportCategory": {
         "type": "string",
-        "enum": ["physical", "virtual", "cloud"]
+        "enum": [
+          "physical",
+          "virtual",
+          "cloud"
+        ]
       },
       "Uom": {
         "description": "The unit-of-measure for the capacity.",
         "type": "string",
-        "enum": ["cores", "sockets"]
+        "enum": [
+          "cores",
+          "sockets"
+        ]
       },
-      "SortDirection": { "type": "string", "enum": ["asc", "desc"] },
+      "SortDirection": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
       "VersionInfo": {
         "properties": {
           "build": {
             "type": "object",
             "properties": {
-              "version": { "type": "string" },
-              "artifact": { "type": "string" },
-              "name": { "type": "string" },
-              "group": { "type": "string" }
+              "version": {
+                "type": "string"
+              },
+              "artifact": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string"
+              }
             }
           }
         }
       },
       "MetaCount": {
-        "required": ["count"],
-        "properties": { "count": { "type": "integer" } }
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        }
       },
       "OptInConfig": {
-        "required": ["meta", "data"],
+        "required": [
+          "meta",
+          "data"
+        ],
         "properties": {
           "meta": {
             "type": "object",
-            "required": ["account_number", "org_id"],
+            "required": [
+              "account_number",
+              "org_id"
+            ],
             "properties": {
-              "account_number": { "type": "string" },
-              "org_id": { "type": "string" }
+              "account_number": {
+                "type": "string"
+              },
+              "org_id": {
+                "type": "string"
+              }
             }
           },
           "data": {
             "type": "object",
-            "required": ["opt_in_complete"],
+            "required": [
+              "opt_in_complete"
+            ],
             "properties": {
-              "opt_in_complete": { "type": "boolean" },
+              "opt_in_complete": {
+                "type": "boolean"
+              },
               "account": {
                 "type": "object",
                 "required": [
@@ -2583,12 +4495,26 @@
                   "last_updated"
                 ],
                 "properties": {
-                  "account_number": { "type": "string" },
-                  "tally_sync_enabled": { "type": "boolean" },
-                  "tally_reporting_enabled": { "type": "boolean" },
-                  "opt_in_type": { "type": "string" },
-                  "created": { "type": "string", "format": "date-time" },
-                  "last_updated": { "type": "string", "format": "date-time" }
+                  "account_number": {
+                    "type": "string"
+                  },
+                  "tally_sync_enabled": {
+                    "type": "boolean"
+                  },
+                  "tally_reporting_enabled": {
+                    "type": "boolean"
+                  },
+                  "opt_in_type": {
+                    "type": "string"
+                  },
+                  "created": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "last_updated": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
                 }
               },
               "org": {
@@ -2601,11 +4527,23 @@
                   "last_updated"
                 ],
                 "properties": {
-                  "org_id": { "type": "string" },
-                  "conduit_sync_enabled": { "type": "boolean" },
-                  "opt_in_type": { "type": "string" },
-                  "created": { "type": "string", "format": "date-time" },
-                  "last_updated": { "type": "string", "format": "date-time" }
+                  "org_id": {
+                    "type": "string"
+                  },
+                  "conduit_sync_enabled": {
+                    "type": "boolean"
+                  },
+                  "opt_in_type": {
+                    "type": "string"
+                  },
+                  "created": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "last_updated": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
                 }
               }
             }
@@ -2614,12 +4552,23 @@
       },
       "PageLinks": {
         "properties": {
-          "first": { "type": "string" },
-          "last": { "type": "string" },
-          "previous": { "type": "string" },
-          "next": { "type": "string" }
+          "first": {
+            "type": "string"
+          },
+          "last": {
+            "type": "string"
+          },
+          "previous": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          }
         },
-        "required": ["first", "last"]
+        "required": [
+          "first",
+          "last"
+        ]
       },
       "TallyReportData": {
         "properties": {
@@ -2627,46 +4576,79 @@
             "type": "array",
             "items": {
               "description": "Data point for a given tally report.",
-              "required": ["date", "value"],
+              "required": [
+                "date",
+                "value"
+              ],
               "properties": {
                 "date": {
                   "description": "The date for this datapoint.",
                   "type": "string",
                   "format": "date-time"
                 },
-                "value": { "type": "number", "format": "double" },
-                "has_data": { "type": "boolean" }
+                "value": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "has_data": {
+                  "type": "boolean"
+                }
               }
             }
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
             "type": "object",
             "properties": {
-              "count": { "type": "integer" },
+              "count": {
+                "type": "integer"
+              },
               "total_monthly": {
                 "description": "Data point for a given tally report.",
-                "required": ["date", "value"],
+                "required": [
+                  "date",
+                  "value"
+                ],
                 "properties": {
                   "date": {
                     "description": "The date for this datapoint.",
                     "type": "string",
                     "format": "date-time"
                   },
-                  "value": { "type": "number", "format": "double" },
-                  "has_data": { "type": "boolean" }
+                  "value": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "has_data": {
+                    "type": "boolean"
+                  }
                 }
               },
-              "has_cloudigrade_data": { "type": "boolean" },
-              "has_cloudigrade_mismatch": { "type": "boolean" },
+              "has_cloudigrade_data": {
+                "type": "boolean"
+              },
+              "has_cloudigrade_mismatch": {
+                "type": "boolean"
+              },
               "product": {
                 "type": "string",
                 "enum": [
@@ -2688,14 +4670,22 @@
                   "rhosak"
                 ]
               },
-              "metric_id": { "type": "string" },
+              "metric_id": {
+                "type": "string"
+              },
               "service_level": {
-                "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
-                "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                "enum": [
+                  "",
+                  "Premium",
+                  "Standard",
+                  "Self-Support",
+                  "_ANY"
+                ]
               },
               "usage": {
-                "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
                 "enum": [
                   "",
@@ -2706,7 +4696,7 @@
                 ]
               },
               "granularity": {
-                "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+                "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
                 "type": "string",
                 "enum": [
                   "Hourly",
@@ -2719,24 +4709,45 @@
               },
               "billing_provider": {
                 "type": "string",
-                "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+                "enum": [
+                  "",
+                  "red hat",
+                  "aws",
+                  "gcp",
+                  "azure",
+                  "oracle",
+                  "_ANY"
+                ]
               }
             },
-            "required": ["count", "product", "metric_id", "granularity"]
+            "required": [
+              "count",
+              "product",
+              "metric_id",
+              "granularity"
+            ]
           }
         }
       },
       "TallyReportDataPoint": {
         "description": "Data point for a given tally report.",
-        "required": ["date", "value"],
+        "required": [
+          "date",
+          "value"
+        ],
         "properties": {
           "date": {
             "description": "The date for this datapoint.",
             "type": "string",
             "format": "date-time"
           },
-          "value": { "type": "number", "format": "double" },
-          "has_data": { "type": "boolean" }
+          "value": {
+            "type": "number",
+            "format": "double"
+          },
+          "has_data": {
+            "type": "boolean"
+          }
         }
       },
       "TallyReport": {
@@ -2746,10 +4757,13 @@
             "type": "array",
             "items": {
               "deprecated": true,
-              "required": ["date", "instance_count"],
+              "required": [
+                "date",
+                "instance_count"
+              ],
               "properties": {
                 "date": {
-                  "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must\nconsult the 'granularity' field in the TallyReport to determine the length of time each\nTallySnapshot covers.",
+                  "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must consult the 'granularity' field in the TallyReport to determine the length of time each TallySnapshot covers.",
                   "type": "string",
                   "format": "date-time"
                 },
@@ -2848,14 +4862,16 @@
                   "minimum": 0,
                   "default": 0
                 },
-                "has_data": { "type": "boolean" },
+                "has_data": {
+                  "type": "boolean"
+                },
                 "has_cloudigrade_data": {
                   "description": "Indicates whether this tally report was enriched with data from Cloudigrade.",
                   "type": "boolean",
                   "default": false
                 },
                 "has_cloudigrade_mismatch": {
-                  "description": "Indicates whether this tally report appears to have a mismatch in reporting\nbetween Cloudigrade and other data sources. This may or may not indicate an issue with data\ndata sources.",
+                  "description": "Indicates whether this tally report appears to have a mismatch in reporting between Cloudigrade and other data sources. This may or may not indicate an issue with data data sources.",
                   "type": "boolean",
                   "default": false
                 }
@@ -2864,19 +4880,38 @@
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
             "type": "object",
             "properties": {
-              "count": { "type": "integer" },
-              "total_core_hours": { "type": "number", "format": "double" },
-              "total_instance_hours": { "type": "number", "format": "double" },
+              "count": {
+                "type": "integer"
+              },
+              "total_core_hours": {
+                "type": "number",
+                "format": "double"
+              },
+              "total_instance_hours": {
+                "type": "number",
+                "format": "double"
+              },
               "product": {
                 "type": "string",
                 "enum": [
@@ -2899,12 +4934,18 @@
                 ]
               },
               "service_level": {
-                "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
-                "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                "enum": [
+                  "",
+                  "Premium",
+                  "Standard",
+                  "Self-Support",
+                  "_ANY"
+                ]
               },
               "usage": {
-                "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
                 "enum": [
                   "",
@@ -2915,7 +4956,7 @@
                 ]
               },
               "granularity": {
-                "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+                "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
                 "type": "string",
                 "enum": [
                   "Hourly",
@@ -2927,16 +4968,23 @@
                 ]
               }
             },
-            "required": ["count", "product", "granularity"]
+            "required": [
+              "count",
+              "product",
+              "granularity"
+            ]
           }
         }
       },
       "TallySnapshot": {
         "deprecated": true,
-        "required": ["date", "instance_count"],
+        "required": [
+          "date",
+          "instance_count"
+        ],
         "properties": {
           "date": {
-            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must\nconsult the 'granularity' field in the TallyReport to determine the length of time each\nTallySnapshot covers.",
+            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must consult the 'granularity' field in the TallyReport to determine the length of time each TallySnapshot covers.",
             "type": "string",
             "format": "date-time"
           },
@@ -3035,14 +5083,16 @@
             "minimum": 0,
             "default": 0
           },
-          "has_data": { "type": "boolean" },
+          "has_data": {
+            "type": "boolean"
+          },
           "has_cloudigrade_data": {
             "description": "Indicates whether this tally report was enriched with data from Cloudigrade.",
             "type": "boolean",
             "default": false
           },
           "has_cloudigrade_mismatch": {
-            "description": "Indicates whether this tally report appears to have a mismatch in reporting\nbetween Cloudigrade and other data sources. This may or may not indicate an issue with data\ndata sources.",
+            "description": "Indicates whether this tally report appears to have a mismatch in reporting between Cloudigrade and other data sources. This may or may not indicate an issue with data data sources.",
             "type": "boolean",
             "default": false
           }
@@ -3053,12 +5103,15 @@
           "data": {
             "type": "array",
             "items": {
-              "required": ["date", "has_infinite_quantity"],
+              "required": [
+                "date",
+                "has_infinite_quantity"
+              ],
               "properties": {
                 "date": {
                   "type": "string",
                   "format": "date-time",
-                  "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must\nconsult the 'granularity' field in the CapacityReport to determine the length of time each\nCapacitySnapshot covers."
+                  "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must consult the 'granularity' field in the CapacityReport to determine the length of time each CapacitySnapshot covers."
                 },
                 "sockets": {
                   "description": "Total socket capacity.",
@@ -3097,7 +5150,7 @@
                   "minimum": 0
                 },
                 "has_infinite_quantity": {
-                  "description": "Indicates whether this snapshot has an infinite quantity subscription included.\nIf there is an infinite quantity subscription involved, there is no meaningful number for\ncapacity.",
+                  "description": "Indicates whether this snapshot has an infinite quantity subscription included. If there is an infinite quantity subscription involved, there is no meaningful number for capacity.",
                   "type": "boolean"
                 }
               }
@@ -3105,17 +5158,30 @@
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
             "type": "object",
             "properties": {
-              "count": { "type": "integer" },
+              "count": {
+                "type": "integer"
+              },
               "product": {
                 "type": "string",
                 "enum": [
@@ -3138,7 +5204,7 @@
                 ]
               },
               "granularity": {
-                "description": "Describes the significance of each date in the snapshot list. For example if the\ngranularity is set to 'weekly', the dates in the snapshot list will represent the start\nof a seven day period.",
+                "description": "Describes the significance of each date in the snapshot list. For example if the granularity is set to 'weekly', the dates in the snapshot list will represent the start of a seven day period.",
                 "type": "string",
                 "enum": [
                   "Hourly",
@@ -3150,12 +5216,18 @@
                 ]
               },
               "service_level": {
-                "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
-                "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                "enum": [
+                  "",
+                  "Premium",
+                  "Standard",
+                  "Self-Support",
+                  "_ANY"
+                ]
               },
               "usage": {
-                "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
                 "enum": [
                   "",
@@ -3166,17 +5238,24 @@
                 ]
               }
             },
-            "required": ["count", "product", "granularity"]
+            "required": [
+              "count",
+              "product",
+              "granularity"
+            ]
           }
         }
       },
       "CapacitySnapshot": {
-        "required": ["date", "has_infinite_quantity"],
+        "required": [
+          "date",
+          "has_infinite_quantity"
+        ],
         "properties": {
           "date": {
             "type": "string",
             "format": "date-time",
-            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must\nconsult the 'granularity' field in the CapacityReport to determine the length of time each\nCapacitySnapshot covers."
+            "description": "The start date for this snapshot entry. Dates are returned in UTC. Clients must consult the 'granularity' field in the CapacityReport to determine the length of time each CapacitySnapshot covers."
           },
           "sockets": {
             "description": "Total socket capacity.",
@@ -3215,7 +5294,7 @@
             "minimum": 0
           },
           "has_infinite_quantity": {
-            "description": "Indicates whether this snapshot has an infinite quantity subscription included.\nIf there is an infinite quantity subscription involved, there is no meaningful number for\ncapacity.",
+            "description": "Indicates whether this snapshot has an infinite quantity subscription included. If there is an infinite quantity subscription involved, there is no meaningful number for capacity.",
             "type": "boolean"
           }
         }
@@ -3238,7 +5317,11 @@
           "data": {
             "type": "array",
             "items": {
-              "required": ["display_name", "hardware_type", "last_seen"],
+              "required": [
+                "display_name",
+                "hardware_type",
+                "last_seen"
+              ],
               "properties": {
                 "inventory_id": {
                   "description": "The HBI identifier for this host.",
@@ -3268,8 +5351,14 @@
                   "format": "int32",
                   "minimum": 0
                 },
-                "core_hours": { "type": "number", "format": "double" },
-                "instance_hours": { "type": "number", "format": "double" },
+                "core_hours": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "instance_hours": {
+                  "type": "number",
+                  "format": "double"
+                },
                 "hardware_type": {
                   "description": "What the type of the host is (e.g. hypervisor, physical, etc.).",
                   "type": "string"
@@ -3305,17 +5394,30 @@
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
             "type": "object",
             "properties": {
-              "count": { "type": "integer" },
+              "count": {
+                "type": "integer"
+              },
               "product": {
                 "type": "string",
                 "enum": [
@@ -3338,12 +5440,18 @@
                 ]
               },
               "service_level": {
-                "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
-                "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                "enum": [
+                  "",
+                  "Premium",
+                  "Standard",
+                  "Self-Support",
+                  "_ANY"
+                ]
               },
               "usage": {
-                "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
                 "enum": [
                   "",
@@ -3356,10 +5464,16 @@
               "uom": {
                 "description": "The unit-of-measure for the capacity.",
                 "type": "string",
-                "enum": ["cores", "sockets"]
+                "enum": [
+                  "cores",
+                  "sockets"
+                ]
               }
             },
-            "required": ["count", "product"]
+            "required": [
+              "count",
+              "product"
+            ]
           }
         }
       },
@@ -3368,7 +5482,11 @@
           "data": {
             "type": "array",
             "items": {
-              "required": ["display_name", "hardware_type", "last_seen"],
+              "required": [
+                "display_name",
+                "hardware_type",
+                "last_seen"
+              ],
               "properties": {
                 "inventory_id": {
                   "description": "The HBI identifier for this host.",
@@ -3398,8 +5516,14 @@
                   "format": "int32",
                   "minimum": 0
                 },
-                "core_hours": { "type": "number", "format": "double" },
-                "instance_hours": { "type": "number", "format": "double" },
+                "core_hours": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "instance_hours": {
+                  "type": "number",
+                  "format": "double"
+                },
                 "hardware_type": {
                   "description": "What the type of the host is (e.g. hypervisor, physical, etc.).",
                   "type": "string"
@@ -3435,21 +5559,42 @@
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
-            "required": ["count"],
-            "properties": { "count": { "type": "integer" } }
+            "required": [
+              "count"
+            ],
+            "properties": {
+              "count": {
+                "type": "integer"
+              }
+            }
           }
         }
       },
       "Host": {
-        "required": ["display_name", "hardware_type", "last_seen"],
+        "required": [
+          "display_name",
+          "hardware_type",
+          "last_seen"
+        ],
         "properties": {
           "inventory_id": {
             "description": "The HBI identifier for this host.",
@@ -3479,8 +5624,14 @@
             "format": "int32",
             "minimum": 0
           },
-          "core_hours": { "type": "number", "format": "double" },
-          "instance_hours": { "type": "number", "format": "double" },
+          "core_hours": {
+            "type": "number",
+            "format": "double"
+          },
+          "instance_hours": {
+            "type": "number",
+            "format": "double"
+          },
           "hardware_type": {
             "description": "What the type of the host is (e.g. hypervisor, physical, etc.).",
             "type": "string"
@@ -3518,7 +5669,10 @@
         "description": "The details of the entire list of InstanceData",
         "type": "object",
         "properties": {
-          "count": { "format": "int32", "type": "integer" },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
           "product": {
             "type": "string",
             "enum": [
@@ -3541,12 +5695,18 @@
             ]
           },
           "service_level": {
-            "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+            "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
             "type": "string",
-            "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+            "enum": [
+              "",
+              "Premium",
+              "Standard",
+              "Self-Support",
+              "_ANY"
+            ]
           },
           "usage": {
-            "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+            "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
             "type": "string",
             "enum": [
               "",
@@ -3558,9 +5718,22 @@
           },
           "billing_provider": {
             "type": "string",
-            "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+            "enum": [
+              "",
+              "red hat",
+              "aws",
+              "gcp",
+              "azure",
+              "oracle",
+              "_ANY"
+            ]
           },
-          "measurements": { "type": "array", "items": { "type": "string" } }
+          "measurements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         },
         "example": {
           "count": 10,
@@ -3586,51 +5759,81 @@
               "description": "The representation of a product cluster data",
               "type": "object",
               "properties": {
-                "id": { "type": "string" },
-                "display_name": { "type": "string" },
+                "id": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string"
+                },
                 "billing_provider": {
                   "type": "string",
                   "enum": [
                     "",
-                    "Red Hat",
-                    "Aws",
-                    "Gcp",
-                    "Azure",
-                    "Oracle",
+                    "red hat",
+                    "aws",
+                    "gcp",
+                    "azure",
+                    "oracle",
                     "_ANY"
                   ]
                 },
-                "billing_account_id": { "type": "string" },
+                "billing_account_id": {
+                  "type": "string"
+                },
                 "measurements": {
                   "description": "Must be in the same order as \"measurements\" in the meta. (i.e. in the example instance.measurements[0] is the instance-hours, measurements[1] is storage-gibibytes, and measurements[2] is the transfer-gibibytes.",
                   "type": "array",
-                  "items": { "format": "double", "type": "number" }
+                  "items": {
+                    "format": "double",
+                    "type": "number"
+                  }
                 },
-                "last_seen": { "format": "date-time", "type": "string" }
+                "last_seen": {
+                  "format": "date-time",
+                  "type": "string"
+                }
               },
               "example": {
                 "id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
                 "display_name": "rhv.example.com",
-                "measurements": [42, null, 1],
+                "measurements": [
+                  42,
+                  null,
+                  1
+                ],
                 "last_seen": "2020-01-01T00:00:00Z"
               }
             }
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
             "title": "Root Type for InstanceMeta",
             "description": "The details of the entire list of InstanceData",
             "type": "object",
             "properties": {
-              "count": { "format": "int32", "type": "integer" },
+              "count": {
+                "format": "int32",
+                "type": "integer"
+              },
               "product": {
                 "type": "string",
                 "enum": [
@@ -3653,12 +5856,18 @@
                 ]
               },
               "service_level": {
-                "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
-                "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                "enum": [
+                  "",
+                  "Premium",
+                  "Standard",
+                  "Self-Support",
+                  "_ANY"
+                ]
               },
               "usage": {
-                "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
                 "enum": [
                   "",
@@ -3670,9 +5879,22 @@
               },
               "billing_provider": {
                 "type": "string",
-                "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+                "enum": [
+                  "",
+                  "red hat",
+                  "aws",
+                  "gcp",
+                  "azure",
+                  "oracle",
+                  "_ANY"
+                ]
               },
-              "measurements": { "type": "array", "items": { "type": "string" } }
+              "measurements": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
             },
             "example": {
               "count": 10,
@@ -3702,8 +5924,14 @@
               "last_seen": "2020-01-01T00:00:00Z"
             }
           ],
-          "links": { "first": "string", "last": "string", "next": "string" },
-          "meta": { "count": 10 }
+          "links": {
+            "first": "string",
+            "last": "string",
+            "next": "string"
+          },
+          "meta": {
+            "count": 10
+          }
         }
       },
       "InstanceReportSort": {
@@ -3725,76 +5953,156 @@
         "description": "The representation of a product cluster data",
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "display_name": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
           "billing_provider": {
             "type": "string",
-            "enum": ["", "Red Hat", "Aws", "Gcp", "Azure", "Oracle", "_ANY"]
+            "enum": [
+              "",
+              "red hat",
+              "aws",
+              "gcp",
+              "azure",
+              "oracle",
+              "_ANY"
+            ]
           },
-          "billing_account_id": { "type": "string" },
+          "billing_account_id": {
+            "type": "string"
+          },
           "measurements": {
             "description": "Must be in the same order as \"measurements\" in the meta. (i.e. in the example instance.measurements[0] is the instance-hours, measurements[1] is storage-gibibytes, and measurements[2] is the transfer-gibibytes.",
             "type": "array",
-            "items": { "format": "double", "type": "number" }
+            "items": {
+              "format": "double",
+              "type": "number"
+            }
           },
-          "last_seen": { "format": "date-time", "type": "string" }
+          "last_seen": {
+            "format": "date-time",
+            "type": "string"
+          }
         },
         "example": {
           "id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
           "display_name": "rhv.example.com",
-          "measurements": [42, null, 1],
+          "measurements": [
+            42,
+            null,
+            1
+          ],
           "last_seen": "2020-01-01T00:00:00Z"
         }
       },
       "CandlepinPool": {
         "description": "Subset of Candlepin pool data that rhsm-subscriptions understands.",
         "properties": {
-          "accountNumber": { "type": "string" },
-          "activeSubscription": { "type": "boolean" },
-          "startDate": { "type": "string", "format": "date-time" },
-          "endDate": { "type": "string", "format": "date-time" },
-          "quantity": { "type": "integer", "format": "int64" },
-          "productId": { "type": "string" },
+          "accountNumber": {
+            "type": "string"
+          },
+          "activeSubscription": {
+            "type": "boolean"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "productId": {
+            "type": "string"
+          },
           "productAttributes": {
             "type": "array",
             "items": {
               "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
               }
             }
           },
           "providedProducts": {
             "type": "array",
-            "items": { "properties": { "productId": { "type": "string" } } }
+            "items": {
+              "properties": {
+                "productId": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "derivedProvidedProducts": {
             "type": "array",
-            "items": { "properties": { "productId": { "type": "string" } } }
+            "items": {
+              "properties": {
+                "productId": {
+                  "type": "string"
+                }
+              }
+            }
           },
-          "subscriptionId": { "type": "string" },
-          "type": { "type": "string" }
+          "subscriptionId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
         }
       },
       "CandlepinProductAttribute": {
         "properties": {
-          "name": { "type": "string" },
-          "value": { "type": "string" }
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
         }
       },
       "CandlepinProvidedProduct": {
-        "properties": { "productId": { "type": "string" } }
+        "properties": {
+          "productId": {
+            "type": "string"
+          }
+        }
       },
-      "SubscriptionType": { "type": "string", "enum": ["On-demand", "Annual"] },
+      "SubscriptionType": {
+        "type": "string",
+        "enum": [
+          "On-demand",
+          "Annual"
+        ]
+      },
       "SubscriptionEventType": {
         "description": "The most immediate subscription event, such as a subscription beginning or ending.",
         "type": "string",
-        "enum": ["Subscription Start", "Subscription End"]
+        "enum": [
+          "Subscription Start",
+          "Subscription End"
+        ]
       },
       "SkuCapacitySubscription": {
         "properties": {
-          "id": { "type": "string" },
-          "number": { "type": "string" }
+          "id": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          }
         }
       },
       "SkuCapacity": {
@@ -3808,12 +6116,18 @@
             "type": "string"
           },
           "service_level": {
-            "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+            "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
             "type": "string",
-            "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+            "enum": [
+              "",
+              "Premium",
+              "Standard",
+              "Self-Support",
+              "_ANY"
+            ]
           },
           "usage": {
-            "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+            "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
             "type": "string",
             "enum": [
               "",
@@ -3828,8 +6142,12 @@
             "type": "array",
             "items": {
               "properties": {
-                "id": { "type": "string" },
-                "number": { "type": "string" }
+                "id": {
+                  "type": "string"
+                },
+                "number": {
+                  "type": "string"
+                }
               }
             }
           },
@@ -3841,7 +6159,10 @@
           "next_event_type": {
             "description": "The most immediate subscription event, such as a subscription beginning or ending.",
             "type": "string",
-            "enum": ["Subscription Start", "Subscription End"]
+            "enum": [
+              "Subscription Start",
+              "Subscription End"
+            ]
           },
           "quantity": {
             "description": "The summed subscription quantities across the active subscriptions for the offering.",
@@ -3870,7 +6191,10 @@
           "uom": {
             "description": "The unit-of-measure for the capacity.",
             "type": "string",
-            "enum": ["cores", "sockets"]
+            "enum": [
+              "cores",
+              "sockets"
+            ]
           }
         }
       },
@@ -3902,12 +6226,18 @@
                   "type": "string"
                 },
                 "service_level": {
-                  "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                  "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                   "type": "string",
-                  "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                  "enum": [
+                    "",
+                    "Premium",
+                    "Standard",
+                    "Self-Support",
+                    "_ANY"
+                  ]
                 },
                 "usage": {
-                  "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                  "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                   "type": "string",
                   "enum": [
                     "",
@@ -3922,8 +6252,12 @@
                   "type": "array",
                   "items": {
                     "properties": {
-                      "id": { "type": "string" },
-                      "number": { "type": "string" }
+                      "id": {
+                        "type": "string"
+                      },
+                      "number": {
+                        "type": "string"
+                      }
                     }
                   }
                 },
@@ -3935,7 +6269,10 @@
                 "next_event_type": {
                   "description": "The most immediate subscription event, such as a subscription beginning or ending.",
                   "type": "string",
-                  "enum": ["Subscription Start", "Subscription End"]
+                  "enum": [
+                    "Subscription Start",
+                    "Subscription End"
+                  ]
                 },
                 "quantity": {
                   "description": "The summed subscription quantities across the active subscriptions for the offering.",
@@ -3964,24 +6301,40 @@
                 "uom": {
                   "description": "The unit-of-measure for the capacity.",
                   "type": "string",
-                  "enum": ["cores", "sockets"]
+                  "enum": [
+                    "cores",
+                    "sockets"
+                  ]
                 }
               }
             }
           },
           "links": {
             "properties": {
-              "first": { "type": "string" },
-              "last": { "type": "string" },
-              "previous": { "type": "string" },
-              "next": { "type": "string" }
+              "first": {
+                "type": "string"
+              },
+              "last": {
+                "type": "string"
+              },
+              "previous": {
+                "type": "string"
+              },
+              "next": {
+                "type": "string"
+              }
             },
-            "required": ["first", "last"]
+            "required": [
+              "first",
+              "last"
+            ]
           },
           "meta": {
             "type": "object",
             "properties": {
-              "count": { "type": "integer" },
+              "count": {
+                "type": "integer"
+              },
               "product": {
                 "type": "string",
                 "enum": [
@@ -4004,12 +6357,18 @@
                 ]
               },
               "service_level": {
-                "description": "Describes the service level that the report was made against. Not set if it\nwasn't specified as a query parameter.",
+                "description": "Describes the service level that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
-                "enum": ["", "Premium", "Standard", "Self-Support", "_ANY"]
+                "enum": [
+                  "",
+                  "Premium",
+                  "Standard",
+                  "Self-Support",
+                  "_ANY"
+                ]
               },
               "usage": {
-                "description": "Describes the usage that the report was made against. Not set if it wasn't\nspecified as a query parameter.",
+                "description": "Describes the usage that the report was made against. Not set if it wasn't specified as a query parameter.",
                 "type": "string",
                 "enum": [
                   "",
@@ -4022,18 +6381,32 @@
               "uom": {
                 "description": "The unit-of-measure for the capacity.",
                 "type": "string",
-                "enum": ["cores", "sockets"]
+                "enum": [
+                  "cores",
+                  "sockets"
+                ]
               },
               "subscription_type": {
                 "type": "string",
-                "enum": ["On-demand", "Annual"]
+                "enum": [
+                  "On-demand",
+                  "Annual"
+                ]
               }
             },
-            "required": ["count", "product", "subscription_type"]
+            "required": [
+              "count",
+              "product",
+              "subscription_type"
+            ]
           }
         }
       }
     }
   },
-  "security": [{ "3ScaleIdentity": [] }]
+  "security": [
+    {
+      "3ScaleIdentity": []
+    }
+  ]
 }
