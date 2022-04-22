@@ -162,6 +162,8 @@ You can take the easy way out and just run, `$ yarn start`, it'll be styled and 
 
 ## Build
 ### Maintenance
+NPM and API spec updates are central to maintaining Curiosity. API specs are used to generate facets of the GUI.
+
 #### NPMs
 Our schedule for updating NPMs
 - dependabot running once a week on low level packages that require only testing confirmation
@@ -173,6 +175,12 @@ Our schedule for updating NPMs
    - dependency-name: "*i18next*"
    - dependency-name: "victory*"
    - dependency-name: "react-router*"
+#### API Specs
+Our schedule for updating API Specs
+- Task/issue/story dependent
+  - `$ yarn build:specs`
+- 1x a month: specs are updated alongside our NPMs
+  - `$ yarn build:deps` 
 
 ### dotenv files
 Our current build leverages `dotenv`, or `.env*`, files to apply environment build configuration. 
