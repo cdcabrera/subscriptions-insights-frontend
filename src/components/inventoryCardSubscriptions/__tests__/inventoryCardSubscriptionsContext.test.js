@@ -125,8 +125,8 @@ describe('InventoryCardSubscriptionsContext', () => {
       useProduct: () => ({ productId: 'lorem' })
     });
 
-    onColumnSort(null, { direction: SORT_DIRECTION_TYPES.DESCENDING, id: 'loremIpsumColumnOne' });
-    onColumnSort(null, { direction: SORT_DIRECTION_TYPES.ASCENDING, id: 'loremIpsumColumnOne' });
+    onColumnSort(null, { direction: SORT_DIRECTION_TYPES.DESC, id: 'loremIpsumColumnOne' });
+    onColumnSort(null, { direction: SORT_DIRECTION_TYPES.ASC, id: 'loremIpsumColumnOne' });
 
     expect(mockDispatch.mock.calls).toMatchSnapshot('onColumnSort event, dispatch');
     mockDispatch.mockClear();

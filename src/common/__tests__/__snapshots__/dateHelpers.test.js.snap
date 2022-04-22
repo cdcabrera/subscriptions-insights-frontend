@@ -395,6 +395,13 @@ Object {
 exports[`DateHelpers should return a predictable range based on granularity: granularity range of time 1`] = `
 Array [
   Object {
+    "granularity": "Hourly",
+    "range": Object {
+      "endDate": 2019-07-20T23:59:59.999Z,
+      "startDate": 2019-06-20T00:00:00.000Z,
+    },
+  },
+  Object {
     "granularity": "Daily",
     "range": Object {
       "endDate": 2019-07-20T23:59:59.999Z,
@@ -420,6 +427,13 @@ Array [
     "range": Object {
       "endDate": 2019-07-01T23:59:59.999Z,
       "startDate": 2016-07-01T00:00:00.000Z,
+    },
+  },
+  Object {
+    "granularity": "Yearly",
+    "range": Object {
+      "endDate": 2019-07-20T23:59:59.999Z,
+      "startDate": 2019-06-20T00:00:00.000Z,
     },
   },
 ]

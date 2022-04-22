@@ -241,6 +241,11 @@ exports[`ProductViewOpenShiftContainer Component should render a basic component
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+                  "value": "Hourly",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
                   "value": "Daily",
                 },
@@ -258,6 +263,11 @@ exports[`ProductViewOpenShiftContainer Component should render a basic component
                   "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
                   "value": "Quarterly",
+                },
+                Object {
+                  "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+                  "value": "Yearly",
                 },
               ]
             }

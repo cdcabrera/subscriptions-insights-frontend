@@ -9,6 +9,11 @@ Array [
         Array [
           Object {
             "selected": false,
+            "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+            "value": "Hourly",
+          },
+          Object {
+            "selected": false,
             "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
             "value": "Daily",
           },
@@ -27,6 +32,11 @@ Array [
             "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
             "value": "Quarterly",
           },
+          Object {
+            "selected": false,
+            "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+            "value": "Yearly",
+          },
         ]
       }
       position="left"
@@ -36,6 +46,11 @@ Array [
     />,
     "isClearable": false,
     "options": Array [
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+        "value": "Hourly",
+      },
       Object {
         "selected": false,
         "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
@@ -55,6 +70,11 @@ Array [
         "selected": false,
         "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
         "value": "Quarterly",
+      },
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+        "value": "Yearly",
       },
     ],
     "selected": false,
@@ -344,6 +364,11 @@ Array [
         Array [
           Object {
             "selected": false,
+            "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+            "value": "",
+          },
+          Object {
+            "selected": false,
             "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
             "value": "Premium",
           },
@@ -359,8 +384,8 @@ Array [
           },
           Object {
             "selected": false,
-            "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-            "value": "",
+            "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+            "value": "_ANY",
           },
         ]
       }
@@ -371,6 +396,11 @@ Array [
     />,
     "isClearable": true,
     "options": Array [
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+        "value": "",
+      },
       Object {
         "selected": false,
         "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
@@ -388,8 +418,8 @@ Array [
       },
       Object {
         "selected": false,
-        "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-        "value": "",
+        "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+        "value": "_ANY",
       },
     ],
     "selected": false,
@@ -401,6 +431,11 @@ Array [
       isFilter={true}
       options={
         Array [
+          Object {
+            "selected": false,
+            "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+            "value": "",
+          },
           Object {
             "selected": false,
             "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
@@ -418,8 +453,8 @@ Array [
           },
           Object {
             "selected": false,
-            "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-            "value": "",
+            "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+            "value": "_ANY",
           },
         ]
       }
@@ -430,6 +465,11 @@ Array [
     />,
     "isClearable": true,
     "options": Array [
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+        "value": "",
+      },
       Object {
         "selected": false,
         "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
@@ -447,8 +487,8 @@ Array [
       },
       Object {
         "selected": false,
-        "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-        "value": "",
+        "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+        "value": "_ANY",
       },
     ],
     "selected": false,
@@ -508,6 +548,11 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
             Array [
               Object {
                 "selected": false,
+                "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+                "value": "",
+              },
+              Object {
+                "selected": false,
                 "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
                 "value": "Premium",
               },
@@ -523,8 +568,8 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
               },
               Object {
                 "selected": false,
-                "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-                "value": "",
+                "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+                "value": "_ANY",
               },
             ]
           }
@@ -535,6 +580,11 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
         />,
         "isClearable": true,
         "options": Array [
+          Object {
+            "selected": false,
+            "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+            "value": "",
+          },
           Object {
             "selected": false,
             "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
@@ -552,8 +602,8 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
           },
           Object {
             "selected": false,
-            "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-            "value": "",
+            "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+            "value": "_ANY",
           },
         ],
         "selected": false,
@@ -565,6 +615,11 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
           isFilter={true}
           options={
             Array [
+              Object {
+                "selected": false,
+                "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+                "value": "",
+              },
               Object {
                 "selected": false,
                 "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
@@ -582,8 +637,8 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
               },
               Object {
                 "selected": false,
-                "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-                "value": "",
+                "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+                "value": "_ANY",
               },
             ]
           }
@@ -594,6 +649,11 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
         />,
         "isClearable": true,
         "options": Array [
+          Object {
+            "selected": false,
+            "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+            "value": "",
+          },
           Object {
             "selected": false,
             "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
@@ -611,8 +671,8 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
           },
           Object {
             "selected": false,
-            "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-            "value": "",
+            "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+            "value": "_ANY",
           },
         ],
         "selected": false,
@@ -647,6 +707,11 @@ Object {
           Array [
             Object {
               "selected": false,
+              "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+              "value": "",
+            },
+            Object {
+              "selected": false,
               "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
               "value": "Production",
             },
@@ -662,8 +727,8 @@ Object {
             },
             Object {
               "selected": false,
-              "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-              "value": "",
+              "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+              "value": "_ANY",
             },
           ]
         }
@@ -674,6 +739,11 @@ Object {
       />,
       "isClearable": true,
       "options": Array [
+        Object {
+          "selected": false,
+          "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+          "value": "",
+        },
         Object {
           "selected": false,
           "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
@@ -691,8 +761,8 @@ Object {
         },
         Object {
           "selected": false,
-          "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-          "value": "",
+          "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+          "value": "_ANY",
         },
       ],
       "selected": false,
@@ -704,6 +774,11 @@ Object {
         isFilter={true}
         options={
           Array [
+            Object {
+              "selected": false,
+              "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+              "value": "",
+            },
             Object {
               "selected": false,
               "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
@@ -721,8 +796,8 @@ Object {
             },
             Object {
               "selected": false,
-              "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-              "value": "",
+              "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+              "value": "_ANY",
             },
           ]
         }
@@ -733,6 +808,11 @@ Object {
       />,
       "isClearable": true,
       "options": Array [
+        Object {
+          "selected": false,
+          "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+          "value": "",
+        },
         Object {
           "selected": false,
           "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
@@ -750,8 +830,8 @@ Object {
         },
         Object {
           "selected": false,
-          "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-          "value": "",
+          "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+          "value": "_ANY",
         },
       ],
       "selected": true,
@@ -774,6 +854,11 @@ Object {
           Array [
             Object {
               "selected": false,
+              "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+              "value": "",
+            },
+            Object {
+              "selected": false,
               "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
               "value": "Production",
             },
@@ -789,8 +874,8 @@ Object {
             },
             Object {
               "selected": false,
-              "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-              "value": "",
+              "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+              "value": "_ANY",
             },
           ]
         }
@@ -801,6 +886,11 @@ Object {
       />,
       "isClearable": true,
       "options": Array [
+        Object {
+          "selected": false,
+          "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+          "value": "",
+        },
         Object {
           "selected": false,
           "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
@@ -818,8 +908,8 @@ Object {
         },
         Object {
           "selected": false,
-          "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-          "value": "",
+          "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+          "value": "_ANY",
         },
       ],
       "selected": true,
@@ -831,6 +921,11 @@ Object {
         isFilter={true}
         options={
           Array [
+            Object {
+              "selected": false,
+              "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+              "value": "",
+            },
             Object {
               "selected": false,
               "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
@@ -848,8 +943,8 @@ Object {
             },
             Object {
               "selected": false,
-              "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-              "value": "",
+              "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+              "value": "_ANY",
             },
           ]
         }
@@ -860,6 +955,11 @@ Object {
       />,
       "isClearable": true,
       "options": Array [
+        Object {
+          "selected": false,
+          "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+          "value": "",
+        },
         Object {
           "selected": false,
           "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
@@ -877,8 +977,8 @@ Object {
         },
         Object {
           "selected": false,
-          "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-          "value": "",
+          "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+          "value": "_ANY",
         },
       ],
       "selected": false,

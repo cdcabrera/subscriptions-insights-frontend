@@ -66,10 +66,10 @@ class InventoryList extends React.Component {
 
     switch (direction) {
       case SortByDirection.desc:
-        updatedDirection = SORT_DIRECTION_TYPES.DESCENDING;
+        updatedDirection = SORT_DIRECTION_TYPES.DESC;
         break;
       default:
-        updatedDirection = SORT_DIRECTION_TYPES.ASCENDING;
+        updatedDirection = SORT_DIRECTION_TYPES.ASC;
         break;
     }
 

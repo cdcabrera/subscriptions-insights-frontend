@@ -79,7 +79,7 @@ describe('Product RHOSAK config', () => {
 
     expect(filteredInventoryDataAuthorized).toMatchSnapshot('filtered, authorized');
 
-    expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
+    expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESC).toBe(true);
   });
 
   it('should apply subscriptions inventory configuration', () => {
@@ -114,6 +114,6 @@ describe('Product RHOSAK config', () => {
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
 
-    expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
+    expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESC).toBe(true);
   });
 });

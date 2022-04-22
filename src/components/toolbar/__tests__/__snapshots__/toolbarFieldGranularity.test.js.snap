@@ -4,6 +4,11 @@ exports[`ToolbarFieldGranularity Component should export select options: toolbar
 Array [
   Object {
     "selected": false,
+    "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+    "value": "Hourly",
+  },
+  Object {
+    "selected": false,
     "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
     "value": "Daily",
   },
@@ -22,6 +27,11 @@ Array [
     "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
     "value": "Quarterly",
   },
+  Object {
+    "selected": false,
+    "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+    "value": "Yearly",
+  },
 ]
 `;
 
@@ -34,7 +44,7 @@ Array [
         "viewId": undefined,
       },
       Object {
-        "granularity": "Daily",
+        "granularity": "Hourly",
         "type": "SET_QUERY_RHSM_granularity",
         "viewId": undefined,
       },
@@ -98,6 +108,11 @@ exports[`ToolbarFieldGranularity Component should render a basic component: basi
     Array [
       Object {
         "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+        "value": "Hourly",
+      },
+      Object {
+        "selected": false,
         "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
         "value": "Daily",
       },
@@ -115,6 +130,11 @@ exports[`ToolbarFieldGranularity Component should render a basic component: basi
         "selected": false,
         "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
         "value": "Quarterly",
+      },
+      Object {
+        "selected": false,
+        "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+        "value": "Yearly",
       },
     ]
   }

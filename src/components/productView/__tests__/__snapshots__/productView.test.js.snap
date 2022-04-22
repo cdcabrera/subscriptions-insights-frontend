@@ -96,6 +96,11 @@ exports[`ProductView Component should allow custom inventory displays via config
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+                  "value": "Hourly",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
                   "value": "Daily",
                 },
@@ -113,6 +118,11 @@ exports[`ProductView Component should allow custom inventory displays via config
                   "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
                   "value": "Quarterly",
+                },
+                Object {
+                  "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+                  "value": "Yearly",
                 },
               ]
             }
@@ -247,6 +257,11 @@ exports[`ProductView Component should allow custom product views via props: cust
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+                  "value": "Hourly",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
                   "value": "Daily",
                 },
@@ -264,6 +279,11 @@ exports[`ProductView Component should allow custom product views via props: cust
                   "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
                   "value": "Quarterly",
+                },
+                Object {
+                  "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+                  "value": "Yearly",
                 },
               ]
             }
@@ -445,6 +465,11 @@ exports[`ProductView Component should render a basic component: basic 1`] = `
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Hourly\\"})",
+                  "value": "Hourly",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Daily\\"})",
                   "value": "Daily",
                 },
@@ -462,6 +487,11 @@ exports[`ProductView Component should render a basic component: basic 1`] = `
                   "selected": false,
                   "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Quarterly\\"})",
                   "value": "Quarterly",
+                },
+                Object {
+                  "selected": false,
+                  "title": "t(curiosity-toolbar.granularity, {\\"context\\":\\"Yearly\\"})",
+                  "value": "Yearly",
                 },
               ]
             }

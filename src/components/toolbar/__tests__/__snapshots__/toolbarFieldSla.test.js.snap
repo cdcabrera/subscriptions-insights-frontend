@@ -4,6 +4,11 @@ exports[`ToolbarFieldSla Component should export select options: toolbarFieldOpt
 Array [
   Object {
     "selected": false,
+    "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+    "value": "",
+  },
+  Object {
+    "selected": false,
     "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
     "value": "Premium",
   },
@@ -19,8 +24,8 @@ Array [
   },
   Object {
     "selected": false,
-    "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-    "value": "",
+    "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+    "value": "_ANY",
   },
 ]
 `;
@@ -34,7 +39,7 @@ Array [
         "viewId": undefined,
       },
       Object {
-        "sla": "Premium",
+        "sla": "",
         "type": "SET_QUERY_RHSM_sla",
         "viewId": undefined,
       },
@@ -78,6 +83,11 @@ exports[`ToolbarFieldSla Component should render a basic component: basic 1`] = 
     Array [
       Object {
         "selected": false,
+        "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+        "value": "",
+      },
+      Object {
+        "selected": false,
         "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
         "value": "Premium",
       },
@@ -93,8 +103,8 @@ exports[`ToolbarFieldSla Component should render a basic component: basic 1`] = 
       },
       Object {
         "selected": false,
-        "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-        "value": "",
+        "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+        "value": "_ANY",
       },
     ]
   }

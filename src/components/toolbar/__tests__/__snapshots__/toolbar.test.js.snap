@@ -43,6 +43,11 @@ exports[`Toolbar Component should handle updating toolbar chips: chips 1`] = `
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+                  "value": "",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
                   "value": "Premium",
                 },
@@ -58,8 +63,8 @@ exports[`Toolbar Component should handle updating toolbar chips: chips 1`] = `
                 },
                 Object {
                   "selected": false,
-                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-                  "value": "",
+                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+                  "value": "_ANY",
                 },
               ]
             }
@@ -114,6 +119,11 @@ exports[`Toolbar Component should hide categories when a single filter is availa
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+                  "value": "",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
                   "value": "Premium",
                 },
@@ -129,8 +139,8 @@ exports[`Toolbar Component should hide categories when a single filter is availa
                 },
                 Object {
                   "selected": false,
-                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-                  "value": "",
+                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+                  "value": "_ANY",
                 },
               ]
             }
@@ -192,6 +202,11 @@ exports[`Toolbar Component should render a basic component: basic 1`] = `
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
+                  "value": "",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"Premium\\"})",
                   "value": "Premium",
                 },
@@ -207,8 +222,8 @@ exports[`Toolbar Component should render a basic component: basic 1`] = `
                 },
                 Object {
                   "selected": false,
-                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"none\\"})",
-                  "value": "",
+                  "title": "t(curiosity-toolbar.sla, {\\"context\\":\\"_ANY\\"})",
+                  "value": "_ANY",
                 },
               ]
             }
@@ -232,6 +247,11 @@ exports[`Toolbar Component should render a basic component: basic 1`] = `
               Array [
                 Object {
                   "selected": false,
+                  "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+                  "value": "",
+                },
+                Object {
+                  "selected": false,
                   "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
                   "value": "Production",
                 },
@@ -247,8 +267,8 @@ exports[`Toolbar Component should render a basic component: basic 1`] = `
                 },
                 Object {
                   "selected": false,
-                  "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-                  "value": "",
+                  "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+                  "value": "_ANY",
                 },
               ]
             }

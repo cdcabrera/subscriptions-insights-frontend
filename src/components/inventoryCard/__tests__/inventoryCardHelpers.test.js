@@ -172,12 +172,12 @@ describe('InventoryListHelpers', () => {
       ascending: applySortFilters({
         filter,
         onSort: () => {},
-        query: { [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.ASCENDING }
+        query: { [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.ASC }
       }),
       descending: applySortFilters({
         filter,
         onSort: () => {},
-        query: { [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING }
+        query: { [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESC }
       })
     }).toMatchSnapshot('sortable, direction');
 
@@ -186,7 +186,7 @@ describe('InventoryListHelpers', () => {
         filter,
         onSort: () => {},
         query: {
-          [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.ASCENDING,
+          [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.ASC,
           [RHSM_API_QUERY_TYPES.SORT]: 'lorem'
         }
       })

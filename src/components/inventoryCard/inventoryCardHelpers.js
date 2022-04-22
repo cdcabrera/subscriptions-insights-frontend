@@ -177,7 +177,7 @@ const applySortFilters = ({ filter = {}, onSort, query = {} } = {}) => {
   // set sort direction
   if (hasSort && !updatedFilter.sortDirection && query?.[RHSM_API_QUERY_TYPES.DIRECTION]) {
     switch (query?.[RHSM_API_QUERY_TYPES.DIRECTION]) {
-      case SORT_DIRECTION_TYPES.DESCENDING:
+      case SORT_DIRECTION_TYPES.DESC:
         updatedFilter.sortDirection = SortByDirection.desc;
         break;
       default:

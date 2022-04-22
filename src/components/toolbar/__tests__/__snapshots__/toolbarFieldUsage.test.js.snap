@@ -4,6 +4,11 @@ exports[`ToolbarFieldSla Component should export select options: toolbarFieldOpt
 Array [
   Object {
     "selected": false,
+    "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+    "value": "",
+  },
+  Object {
+    "selected": false,
     "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
     "value": "Production",
   },
@@ -19,8 +24,8 @@ Array [
   },
   Object {
     "selected": false,
-    "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-    "value": "",
+    "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+    "value": "_ANY",
   },
 ]
 `;
@@ -35,7 +40,7 @@ Array [
       },
       Object {
         "type": "SET_QUERY_RHSM_usage",
-        "usage": "Production",
+        "usage": "",
         "viewId": undefined,
       },
     ],
@@ -78,11 +83,16 @@ exports[`ToolbarFieldSla Component should render a basic component: basic 1`] = 
     Array [
       Object {
         "selected": false,
+        "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
+        "value": "",
+      },
+      Object {
+        "selected": false,
         "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Production\\"})",
         "value": "Production",
       },
       Object {
-        "selected": true,
+        "selected": false,
         "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"Development/Test\\"})",
         "value": "Development/Test",
       },
@@ -93,14 +103,14 @@ exports[`ToolbarFieldSla Component should render a basic component: basic 1`] = 
       },
       Object {
         "selected": false,
-        "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"unspecified\\"})",
-        "value": "",
+        "title": "t(curiosity-toolbar.usage, {\\"context\\":\\"_ANY\\"})",
+        "value": "_ANY",
       },
     ]
   }
   placeholder="t(curiosity-toolbar.placeholder, {\\"context\\":\\"usage\\"})"
   position="left"
-  selectedOptions="Development/Test"
+  selectedOptions={null}
   toggleIcon={null}
   variant="single"
 />

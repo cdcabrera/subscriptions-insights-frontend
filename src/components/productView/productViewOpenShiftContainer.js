@@ -5,7 +5,7 @@ import InfoCircleIcon from '@patternfly/react-icons/dist/js/icons/info-circle-ic
 import { useRouteDetail } from '../../hooks/useRouter';
 import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageColumns, PageHeader, PageSection, PageToolbar } from '../pageLayout/pageLayout';
-import { RHSM_API_PATH_ID_TYPES, RHSM_API_QUERY_TYPES } from '../../types/rhsmApiTypes';
+import { RHSM_API_PATH_PRODUCT_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { apiQueries, storeHooks } from '../../redux';
 import GraphCard from '../graphCard/graphCard.deprecated';
 import { SelectPosition } from '../form/select';
@@ -30,7 +30,7 @@ import { helpers } from '../../common';
 const ProductViewOpenShiftContainer = ({ t, useRouteDetail: useAliasRouteDetail }) => {
   const { productParameter: viewProductLabel, productConfig } = useAliasRouteDetail();
   const uomValue = storeHooks.reactRedux.useSelector(
-    ({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_TYPES.UOM],
+    ({ view }) => view.query?.[productConfig[0].viewId]?.[RHSM_API_QUERY_SET_TYPES.UOM],
     null
   );
 
@@ -60,7 +60,7 @@ const ProductViewOpenShiftContainer = ({ t, useRouteDetail: useAliasRouteDetail 
     let uomFilter;
 
     if (productContextFilterUom) {
-      uomFilter = updatedUomValue || query[RHSM_API_QUERY_TYPES.UOM];
+      uomFilter = updatedUomValue || query[RHSM_API_QUERY_SET_TYPES.UOM];
 
       const filter = ({ id, isOptional }) => {
         if (!isOptional) {
@@ -103,13 +103,13 @@ const ProductViewOpenShiftContainer = ({ t, useRouteDetail: useAliasRouteDetail 
             viewId={viewId}
             cardTitle={graphCardTitle}
           >
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && uomFilter && (
+            {productId === RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_CONTAINER_PLATFORM && uomFilter && (
               <ToolbarFieldUom position={SelectPosition.right} />
             )}
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT && (
+            {productId === RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_CONTAINER_PLATFORM && (
               <ToolbarFieldGranularity position={SelectPosition.right} />
             )}
-            {productId === RHSM_API_PATH_ID_TYPES.OPENSHIFT_METRICS && (
+            {productId === RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS && (
               <ToolbarFieldRangedMonthly position={SelectPosition.right} />
             )}
           </GraphCard>

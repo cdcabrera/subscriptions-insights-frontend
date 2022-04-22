@@ -126,6 +126,6 @@ describe('Product OpenShift Metrics config', () => {
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
 
-    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
+    expect(inventoryQuery[RHSM_API_QUERY_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESC).toBe(true);
   });
 });
