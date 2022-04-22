@@ -32,22 +32,6 @@ describe('Service Helpers', () => {
     expect({ success, error }).toMatchSnapshot('timeout error');
   });
 
-  it('should support camel casing obj keys', () => {
-    expect(
-      serviceHelpers.camelCase({
-        lorem_ipsum: [
-          {
-            dolor_sit: [
-              {
-                hello_world: 1
-              }
-            ]
-          }
-        ]
-      })
-    ).toMatchSnapshot('camelCase');
-  });
-
   it('should support applying data to a supplied callback', () => {
     const mockSchema = jest.fn();
 
@@ -65,25 +49,5 @@ describe('Service Helpers', () => {
         { dolor: 'sit' }
       )
     ).toMatchSnapshot('passDataToCallback, error');
-  });
-
-  it('should attempt to apply a Joi schema to a response', () => {
-    const mockValidate = jest.fn().mockImplementation(response => ({ value: response }));
-
-    serviceHelpers.schemaResponse({
-      schema: { validate: mockValidate },
-      response: { lorem_ipsum: 'dolor_sit' }
-    });
-    expect(mockValidate.mock.calls).toMatchSnapshot('schemaResponse, parameters');
-
-    expect(
-      serviceHelpers.schemaResponse({
-        schema: { validate: mockValidate },
-        response: { lorem_ipsum: 'dolor_sit' },
-        casing: 'camel'
-      })
-    ).toMatchSnapshot('schemaResponse, camelCasing');
-
-    mockValidate.mockClear();
   });
 });

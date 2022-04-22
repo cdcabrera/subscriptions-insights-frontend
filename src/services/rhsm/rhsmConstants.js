@@ -1,4 +1,4 @@
-import { schemaArrayToObject } from '../common/helpers'; // eslint-disable-line
+import { schemaArrayToObject } from '../common/schemaHelpers';
 import rhsmApi from './rhsmApi.json';
 
 /**

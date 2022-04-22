@@ -1,29 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Service Helpers should attempt to apply a Joi schema to a response: schemaResponse, camelCasing 1`] = `
-Object {
-  "loremIpsum": "dolor_sit",
-}
-`;
-
-exports[`Service Helpers should attempt to apply a Joi schema to a response: schemaResponse, parameters 1`] = `
-Array [
-  Array [
-    Object {
-      "lorem_ipsum": "dolor_sit",
-    },
-    Object {
-      "convert": true,
-    },
-  ],
-]
-`;
-
 exports[`Service Helpers should have specific functions: serviceHelpers 1`] = `
 Object {
-  "camelCase": [Function],
   "passDataToCallback": [Function],
-  "schemaResponse": [Function],
   "timeoutFunctionCancel": [Function],
 }
 `;
@@ -48,20 +27,6 @@ Array [
     "lorem ipsum",
   ],
 ]
-`;
-
-exports[`Service Helpers should support camel casing obj keys: camelCase 1`] = `
-Object {
-  "loremIpsum": Array [
-    Object {
-      "dolorSit": Array [
-        Object {
-          "helloWorld": 1,
-        },
-      ],
-    },
-  ],
-}
 `;
 
 exports[`Service Helpers should support cancelling function calls: timeout error 1`] = `

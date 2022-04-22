@@ -1,6 +1,6 @@
 import JoiBase from 'joi';
 import JoiDate from '@joi/date';
-import { schemaResponse } from '../common/helpers';
+import { schemaResponse } from '../common/schemaHelpers';
 
 const Joi = JoiBase.extend(JoiDate);
 

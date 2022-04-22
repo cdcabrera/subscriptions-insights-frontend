@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Schema Helpers should attempt to apply a Joi schema to a response: schemaResponse, camelCasing 1`] = `
+Object {
+  "loremIpsum": "dolor_sit",
+}
+`;
+
+exports[`Schema Helpers should attempt to apply a Joi schema to a response: schemaResponse, parameters 1`] = `
+Array [
+  Array [
+    Object {
+      "lorem_ipsum": "dolor_sit",
+    },
+    Object {
+      "convert": true,
+    },
+  ],
+]
+`;
+
+exports[`Schema Helpers should have specific functions: schemaHelpers 1`] = `
+Object {
+  "camelCase": [Function],
+  "schemaArrayToObject": [Function],
+  "schemaEnums": [Function],
+  "schemaResponse": [Function],
+}
+`;
+
+exports[`Schema Helpers should support camel casing obj keys: camelCase 1`] = `
+Object {
+  "loremIpsum": Array [
+    Object {
+      "dolorSit": Array [
+        Object {
+          "helloWorld": 1,
+        },
+      ],
+    },
+  ],
+}
+`;
