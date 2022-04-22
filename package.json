@@ -50,6 +50,7 @@
     ]
   },
   "scripts": {
+    "api:apis": "node ./scripts/generate.apis.js serve",
     "api:dev": "mock -p 5000 -w ./src/services -w ./src/services/rhsm",
     "api:docs": "node ./scripts/openapi.docs.js",
     "api:proxy-hosts": "bash ./scripts/proxy.api.sh",
@@ -58,13 +59,14 @@
     "build:post": "bash ./scripts/post.sh",
     "build:pre": "bash ./scripts/pre.sh",
     "build:deps": "bash ./scripts/dependencies.sh --doctor -u --doctorInstall \"yarn\" --doctorTest \"yarn test:deps\" --reject \"@patternfly/*, @redhat-cloud-services/frontend*, victory*\"",
+    "build:apis": "node ./scripts/generate.apis.js; jest --roots=./src --updateSnapshot",
     "dev:chrome": "bash ./scripts/dev.chrome.sh -b prod-stable",
     "release": "standard-version",
-    "start": "run-p -l api:dev start:js",
+    "start": "run-p -l api:apis api:dev start:js",
     "start:js": "export NODE_ENV=development; webpack serve --config config/webpack.dev.config.js",
     "start:js-proxy": "export NODE_ENV=development; webpack serve --config config/webpack.proxy.config.js",
     "start:proxy": "run-s -l api:proxy-hosts start:js-proxy",
-    "test": "export NODE_ENV=test; run-s test:spell* test:lint test:ci",
+    "test": "export NODE_ENV=test; run-s test:spell* test:lint test:ci test:apis",
     "test:ci": "export CI=true; jest ./src --coverage",
     "test:clearCache": "jest --clearCache",
     "test:dev": "export NODE_ENV=test; run-s test:spell test:lint test:local",
@@ -74,6 +76,7 @@
     "test:lint": "eslint --ext=json --ext=js --ext=jsx src",
     "test:spell-support": "cspell ./README.md ./config/README.md ./CONTRIBUTING.md --config ./config/cspell.config.json",
     "test:spell": "cspell './public/locales/**/en*json' './src/**/*.js' --config ./config/cspell.config.json",
+    "test:apis": "node ./scripts/generate.apis.js test",
     "test:local": "jest --roots=./src --watch"
   },
   "dependencies": {
@@ -157,7 +160,6 @@
     "redux-mock-store": "^1.5.4",
     "standard-version": "^9.3.2",
     "swagger-ui-express": "^4.3.0",
-    "swagger-to-joi": "^1.2.7",
     "webpack-bundle-analyzer": "^4.5.0",
     "yamljs": "^0.3.0"
   }
