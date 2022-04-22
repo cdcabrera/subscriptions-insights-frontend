@@ -1,4 +1,5 @@
 import _camelCase from 'lodash/camelCase';
+import _snakeCase from 'lodash/snakeCase';
 import _isPlainObject from 'lodash/isPlainObject';
 import { helpers } from '../../common';
 
@@ -109,9 +110,18 @@ const schemaResponse = ({ casing, convert = true, id = null, response, schema } 
   }
 };
 
+const schemaArrayToObject = arr => {
+  const obj = {};
+  arr.forEach(value => {
+    obj[_snakeCase(value).toUpperCase()] = value;
+  });
+  return obj;
+};
+
 const serviceHelpers = {
   camelCase,
   passDataToCallback,
+  schemaArrayToObject,
   schemaResponse,
   timeoutFunctionCancel
 };
@@ -121,6 +131,7 @@ export {
   serviceHelpers,
   camelCase,
   passDataToCallback,
+  schemaArrayToObject,
   schemaResponse,
   timeoutFunctionCancel
 };
