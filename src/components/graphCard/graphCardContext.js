@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { reduxActions, storeHooks } from '../../redux';
-import { useProduct, useProductGraphTallyQuery } from '../productView/productViewContext';
+import { useProduct, useProductGraphTallyQuery, useProductGraphConfig } from '../productView/productViewContext';
+import { graphCardHelpers } from './graphCardHelpers';
 import { helpers } from '../../common/helpers';
 
 /**
@@ -18,6 +19,45 @@ const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
  * @returns {React.Context<{}>}
  */
 const useGraphCardContext = () => useContext(GraphCardContext);
+
+/**
+ * Get grouped, or standalone, settings to be applied towards context.
+ *
+ * @param {Function} useProductGraphConfig
+ * @returns {{ groupedContextSettings: {settings: object}, standaloneContextSettings: { id: string, settings: object }[] }}
+ */
+const useGardCardSettings = ({ useProductGraphConfig: useAliasProductGraphConfig = useProductGraphConfig } = {}) => {
+  const { filters, settings } = useAliasProductGraphConfig();
+  const { groupedFilters, standaloneFilters } = graphCardHelpers.generateChartSettings(filters);
+
+  return {
+    groupedContextSettings:
+      (groupedFilters.length && {
+        settings: {
+          ...settings,
+          isStandalone: false,
+          metric: undefined,
+          metrics: groupedFilters
+        }
+      }) ||
+      undefined,
+    standaloneContextSettings: standaloneFilters.map(metricFilter => ({
+      id: metricFilter.id,
+      settings: {
+        padding: {
+          bottom: 75,
+          left: 75,
+          right: 45,
+          top: 45
+        },
+        ...settings,
+        isStandalone: true,
+        metric: metricFilter,
+        metrics: [metricFilter]
+      }
+    }))
+  };
+};
 
 /**
  * Use Redux RHSM Actions, getGraphTally.
@@ -119,6 +159,7 @@ const context = {
   DEFAULT_CONTEXT,
   useGetGraphTally,
   useGraphCardContext,
+  useGardCardSettings,
   useMetricsSelector
 };
 
@@ -129,5 +170,6 @@ export {
   DEFAULT_CONTEXT,
   useGetGraphTally,
   useGraphCardContext,
+  useGardCardSettings,
   useMetricsSelector
 };
