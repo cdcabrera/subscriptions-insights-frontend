@@ -42,7 +42,6 @@ const useGardCardSettings = ({ useProductGraphConfig: useAliasProductGraphConfig
       }) ||
       undefined,
     standaloneContextSettings: standaloneFilters.map(metricFilter => ({
-      id: metricFilter.id,
       settings: {
         padding: {
           bottom: 75,

@@ -29,7 +29,7 @@ const GraphCard = ({ isDisabled, useGardCardSettings: useAliasGardCardSettings }
       )) ||
         null}
       {standaloneContextSettings?.map(contextSettings => (
-        <GraphCardContext.Provider key={`graphCard_${contextSettings.id}`} value={contextSettings}>
+        <GraphCardContext.Provider key={`graphCard_${contextSettings?.metric?.id}`} value={contextSettings}>
           <GraphCardMetricTotals>
             <GraphCardChart />
           </GraphCardMetricTotals>
