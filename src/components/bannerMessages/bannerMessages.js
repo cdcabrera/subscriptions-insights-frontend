@@ -7,6 +7,7 @@ import { useGetAppMessages } from './bannerMessagesContext';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
+// ToDo: consider using the alert group component for stackability
 /**
  * Render banner messages.
  *
