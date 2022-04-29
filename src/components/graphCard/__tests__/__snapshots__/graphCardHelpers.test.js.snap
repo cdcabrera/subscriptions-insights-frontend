@@ -2,24 +2,30 @@
 
 exports[`GraphCardHelpers generateChartSettings should return base graph settings: basic filters 1`] = `
 Object {
-  "groupedFilters": Array [
-    Object {
-      "dolor": "sit",
-      "id": "dolorSit",
-      "isStacked": true,
+  "groupedFiltersSettings": Object {
+    "settings": Object {
       "isStandalone": false,
-      "isThreshold": false,
-      "strokeWidth": 2,
+      "metric": undefined,
+      "metrics": Array [
+        Object {
+          "dolor": "sit",
+          "id": "dolorSit",
+          "isStacked": true,
+          "isStandalone": false,
+          "isThreshold": false,
+          "strokeWidth": 2,
+        },
+      ],
     },
-  ],
-  "standaloneFilters": Array [],
+  },
+  "standaloneFiltersSettings": Array [],
 }
 `;
 
 exports[`GraphCardHelpers generateChartSettings should return base graph settings: no filters 1`] = `
 Object {
-  "groupedFilters": Array [],
-  "standaloneFilters": Array [],
+  "groupedFiltersSettings": undefined,
+  "standaloneFiltersSettings": Array [],
 }
 `;
 
