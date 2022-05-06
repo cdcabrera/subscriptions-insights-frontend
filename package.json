@@ -81,7 +81,9 @@
     "test:spell-support": "cspell ./README.md ./config/README.md ./CONTRIBUTING.md --config ./config/cspell.config.json",
     "test:spell": "cspell './public/locales/**/en*json' './src/**/*.js' --config ./config/cspell.config.json",
     "test:local": "jest --roots=./src --watch",
-    "verify": "run-s test:ephemeral build:ephemeral"
+    "verify": "run-s test:ephemeral build:ephemeral",
+    "installdocs": "yarn global add theme-patternfly-org-standalone-alt",
+    "docs": "pf-docs start"
   },
   "dependencies": {
     "@joi/date": "^2.1.0",
@@ -164,6 +166,7 @@
     "standard-version": "^9.3.2",
     "swagger-ui-express": "^4.3.0",
     "webpack-bundle-analyzer": "^4.5.0",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "theme-patternfly-org-standalone-alt": ""
   }
 }
