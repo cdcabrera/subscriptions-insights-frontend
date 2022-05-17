@@ -32,4 +32,4 @@ public/locales/*.json
 .proxy
 .docs
 .openapi
-pfdocs
+pf-docs

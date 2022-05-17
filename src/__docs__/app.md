@@ -1,6 +1,6 @@
 ---
 id: One component
-section: application
+section: frank
 ---
 
 A **One** is used to lorem ipsum.
@@ -10,6 +10,7 @@ A **One** is used to lorem ipsum.
 ### Basic component
 ```js
 import React from 'react';
+
 const Example = () => {
   return <React.Fragment>hello world</React.Fragment>
 }

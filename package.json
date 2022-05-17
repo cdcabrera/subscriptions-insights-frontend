@@ -83,7 +83,8 @@
     "test:local": "jest --roots=./src --watch",
     "verify": "run-s test:ephemeral build:ephemeral",
     "installdocs": "yarn global add theme-patternfly-org-standalone-alt",
-    "docs": "pf-docs start"
+    "docs": "pf-docs start",
+    "docs:generate": "pf-docs generate"
   },
   "dependencies": {
     "@joi/date": "^2.1.0",
@@ -167,6 +168,6 @@
     "swagger-ui-express": "^4.3.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "yamljs": "^0.3.0",
-    "theme-patternfly-org-standalone-alt": ""
+    "pf-docs": "^0.0.2"
   }
 }
