@@ -5,7 +5,13 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
+// import './jest.playwright';
 import { setupDotenvFilesForEnv } from './build.dotenv';
+import './jest.puppeteer';
+
+// global['jest-playwright'] = {
+//  resetContextPerTest: true
+// };
 
 /**
  * Set dotenv params.

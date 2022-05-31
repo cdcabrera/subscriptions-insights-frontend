@@ -36,14 +36,18 @@
     "airbnb/hooks",
     "prettier",
     "plugin:jest/recommended",
-    "plugin:jsdoc/recommended"
+    "plugin:jsdoc/recommended",
+    "plugin:playwright/jest-playwright"
+    // "plugin:playwright/playwright-test"
   ],
   "globals": {
+    // "browser": "readonly",
     "mockObjectProperty": "readonly",
     "mountHook": "readonly",
     "mountHookComponent": "readonly",
     "mountHookWrapper": "readonly",
     "mockWindowLocation": "readonly",
+    // "page": "readonly",
     "shallowHook": "readonly",
     "shallowHookComponent": "readonly",
     "shallowHookWrapper": "readonly",
@@ -77,7 +81,7 @@
     "jest/no-done-callback": 0,
     "jest/no-standalone-expect": [
       2,
-      { "additionalTestBlockFunctions": ["skipIt"] }
+      { "additionalTestBlockFunctions": ["skipIt", "it.playwright"] }
     ],
     "jest/prefer-to-have-length": 0,
     "jsdoc/check-tag-names": [
