@@ -81,6 +81,7 @@
     "test:lint": "eslint --ext=json --ext=js --ext=jsx src",
     "test:screenshots": "run-s ",
     "test:screenshot": "export IS_SCREENCAPTURE=true; jest ./tests/screenshot.test.js --watch",
+    "test:screenshot-playwright": "export IS_SCREENCAPTURE=true; playwright test ./tests/screenshot.test.js",
     "test:spell-support": "cspell ./README.md ./config/README.md ./CONTRIBUTING.md --config ./config/cspell.config.json",
     "test:spell": "cspell './public/locales/**/en*json' './src/**/*.js' --config ./config/cspell.config.json",
     "test:local": "jest --roots=./src --watch",
@@ -128,6 +129,7 @@
   "devDependencies": {
     "@babel/core": "7.17.10",
     "@babel/eslint-parser": "^7.17.0",
+    "@playwright/test": "^1.22.2",
     "@redhat-cloud-services/frontend-components-config": "4.6.11",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "apidoc-mock": "^4.0.3",
@@ -159,7 +161,6 @@
     "glob": "^8.0.1",
     "jest": "27.5.1",
     "jest-image-snapshot": "5.1.0",
-    "jest-playwright-preset": "1.7.2",
     "jest-resolve": "28.0.3",
     "jest-watch-typeahead": "1.1.0",
     "moxios": "^0.4.0",

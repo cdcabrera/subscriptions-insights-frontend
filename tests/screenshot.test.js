@@ -1,5 +1,6 @@
 // const jestPlaywright = require('jest-playwright-preset');
 // import { Browser, Page } from 'playwright';
+const { test } = require('@playwright/test');
 const routesConfig = require('../src/config/routes');
 const { routes: rt } = routesConfig;
 // const { Browser } = require('playwright');
@@ -91,7 +92,7 @@ describe('Screenshot confirmations', () => {
     // await page?.close();
   });
 
-  it('should display correct browser', async () => {
+  test('should display correct browser', async ({ page }) => {
     // const browser = await chromium.launch();
     // const page = await browser.newPage();
 
@@ -100,12 +101,13 @@ describe('Screenshot confirmations', () => {
     // const result = await page.$eval('.string-major', el => el.innerHTML);
     // expect(result).toContain('Chrome');
 
-    await page.goto('http://localhost:3000/insights/subscriptions/rhel');
+    // await page.goto('http://localhost:3000/insights/subscriptions/rhel');
     // await page.goto('/insights/subscriptions/rhel');
     // await page.reload();
     // await page.waitForURL('/insights/subscriptions/rhel', { waitUntil: 'networkidle' });
     // await page.locator('.curiosity').waitFor();
     // const result = await page.$eval('main.subscriptions', el => el.innerHTML);
+    await page.goto('./rhel');
     const result = await page.$eval('.curiosity', el => el.innerHTML);
     expect(result).toMatchSnapshot('toolbarFieldUsage html');
   });
