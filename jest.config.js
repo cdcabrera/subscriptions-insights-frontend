@@ -1,10 +1,12 @@
-const puppeteerConfig = {};
+const screencaptureConfig = {};
 
-if (process.env.IS_PUPPETEER === 'true') {
-  console.log('Setting up puppeteer...');
-  puppeteerConfig.globalSetup = '<rootDir>/config/jest.puppeteer.setup.js';
-  puppeteerConfig.globalTeardown = '<rootDir>/config/jest.puppeteer.teardown.js';
-  puppeteerConfig.testEnvironment = '<rootDir>/config/jest.puppeteer.env.js';
+if (process.env.IS_SCREENCAPTURE === 'true') {
+  console.log('Setting up screen capture...');
+  screencaptureConfig.preset = 'jest-playwright-preset';
+  screencaptureConfig.testTimeout = 60000;
+  // puppeteerConfig.globalSetup = '<rootDir>/config/jest.puppeteer.setup.js';
+  // puppeteerConfig.globalTeardown = '<rootDir>/config/jest.puppeteer.teardown.js';
+  // puppeteerConfig.testEnvironment = '<rootDir>/config/jest.puppeteer.env.js';
 
   // puppeteerConfig.preset = 'jest-puppeteer';
   // puppeteerConfig.testEnvironment = undefined;
@@ -66,5 +68,5 @@ const jestConfig = {
 
 module.exports = {
   ...jestConfig,
-  ...puppeteerConfig
+  ...screencaptureConfig
 };
