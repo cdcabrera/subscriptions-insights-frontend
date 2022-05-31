@@ -4,6 +4,7 @@
 // const { Cluster } = require('puppeteer-cluster');
 // const sharp = require('sharp');
 const { chromium } = require('playwright');
+const { setup: setupDevServer, teardown: teardownDevServer } = require('jest-process-manager');
 /**
  * Set image processing cache.
  */
@@ -155,6 +156,16 @@ const writeScreenshots = async ({
   await browser.close();
   */
 
+  const serverOptions = {
+    command: `yarn start`,
+    port: 3000,
+    protocol: 'http',
+    launchTimeout: 60000,
+    debug: false
+  };
+
+  await setupDevServer(serverOptions);
+
   const fullPageScreenshot = true;
   const waitForSelector = 'section.curiosity';
   const url = 'http://localhost:3000/insights/subscriptions/rhel';
@@ -180,6 +191,8 @@ const writeScreenshots = async ({
 
   await page.locator(waitForSelector).screenshot({ path: './screenshot.png' });
   await browser.close();
+
+  await teardownDevServer();
 })();
 
 const writeScreenshot = () => {
