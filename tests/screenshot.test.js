@@ -4,10 +4,10 @@ const routesConfig = require('../src/config/routes');
 const { routes: rt } = routesConfig;
 // const { Browser } = require('playwright');
 // Needs to be higher than the default Playwright timeout
-jest.setTimeout(40 * 1000);
+// jest.setTimeout(40 * 1000);
 // global['jest-playwright'] = {};
 
-const { chromium } = require('playwright'); // Or 'firefox' or 'webkit'.
+// const { chromium } = require('playwright'); // Or 'firefox' or 'webkit'.
 // let browser;
 // let page;
 

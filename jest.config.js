@@ -1,6 +1,19 @@
-process.env.JEST_PLAYWRIGHT_CONFIG = './jest-playwright.config.js';
+const puppeteerConfig = {};
 
-module.exports = {
+if (process.env.IS_PUPPETEER === 'true') {
+  console.log('Setting up puppeteer...');
+  puppeteerConfig.globalSetup = '<rootDir>/config/jest.puppeteer.setup.js';
+  puppeteerConfig.globalTeardown = '<rootDir>/config/jest.puppeteer.teardown.js';
+  puppeteerConfig.testEnvironment = '<rootDir>/config/jest.puppeteer.env.js';
+
+  // puppeteerConfig.preset = 'jest-puppeteer';
+  // puppeteerConfig.testEnvironment = undefined;
+  // puppeteerConfig.setupFilesAfterEnv = [];
+  // puppeteerConfig.setupFilesAfterEnv = ['core-js', '<rootDir>/config/jest.setupTests.js'];
+  // puppeteerConfig.setupFilesAfterEnv = [require.resolve('expect-puppeteer'), '<rootDir>/config/jest.setupTests.js'];
+}
+
+const jestConfig = {
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!src/**/.*/**',
@@ -33,37 +46,12 @@ module.exports = {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy'
   },
   modulePaths: [],
-  preset: 'jest-playwright-preset',
   resetMocks: true,
   roots: ['<rootDir>/src', '<rootDir>/tests'],
-  // setupFilesAfterEnv: ['expect-playwright', '<rootDir>/config/jest.setupTests.js'],
-  // setupFilesAfterEnv: ['core-js', '<rootDir>/config/jest.setupTests.js'],
-  // setupFilesAfterEnv: ['<rootDir>/config/jest.setupTests.js'],
-  setupFilesAfterEnv: ['expect-playwright', 'core-js', '<rootDir>/config/jest.setupTests.js'],
+  setupFilesAfterEnv: ['<rootDir>/config/jest.setupTests.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testMatch: ['<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}', '<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}'],
   testEnvironment: 'jsdom',
-  testEnvironmentOptions: {
-    'jest-playwright': {
-      resetContextPerTest: true
-    }
-    //
-    /*
-    use: {
-      ignoreHTTPSErrors: true,
-      baseURL: 'http://localhost:3000/insights/subscriptions',
-      browserName: 'chromium',
-      headless: true
-      // video: 'on-first-retry'
-      // https://playwright.dev/docs/test-configuration#record-video
-      // review using video conditionally for package updates
-    },
-    expect: {
-      toHaveScreenshot: { maxDiffPixels: 100 }
-    }
-     */
-    // }
-  },
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
     '^.+\\.css$': '<rootDir>/config/jest.transform.style.js',
@@ -74,4 +62,9 @@ module.exports = {
     '^.+\\.module\\.(css|sass|scss)$'
   ],
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname']
+};
+
+module.exports = {
+  ...jestConfig,
+  ...puppeteerConfig
 };

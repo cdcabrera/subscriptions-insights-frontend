@@ -5,18 +5,18 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
-// import './jest.playwright';
 import { setupDotenvFilesForEnv } from './build.dotenv';
-import './jest.puppeteer';
-
-// global['jest-playwright'] = {
-//  resetContextPerTest: true
-// };
+// import './jest.puppeteer';
+// import 'expect-puppeteer';
 
 /**
  * Set dotenv params.
  */
 setupDotenvFilesForEnv({ env: process.env.NODE_ENV });
+console.log('process.env.IS_PUPPETEER >>>>>>>', process.env.IS_PUPPETEER, typeof process.env.IS_PUPPETEER);
+if (process.env.IS_PUPPETEER === 'true') {
+  // require('expect-puppeteer');
+}
 
 /**
  * Set enzyme adapter.
