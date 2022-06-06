@@ -25,6 +25,8 @@ module.exports = {
       statements: 90
     }
   },
+  globalSetup: '<rootDir>/config/jest.globalSetup.js',
+  globalTeardown: '<rootDir>/config/jest.globalTeardown.js',
   moduleFileExtensions: ['web.js', 'js', 'web.ts', 'ts', 'web.tsx', 'tsx', 'json', 'web.jsx', 'jsx', 'node'],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',
@@ -46,5 +48,9 @@ module.exports = {
     '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
     '^.+\\.module\\.(css|sass|scss)$'
   ],
-  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname']
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+    '<rootDir>/config/jest.screenshot-watch.js'
+  ]
 };

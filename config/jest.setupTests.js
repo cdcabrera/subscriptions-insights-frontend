@@ -6,11 +6,22 @@ import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
 import { setupDotenvFilesForEnv } from './build.dotenv';
+// import { setItUp } from './jest.screenshot';
 
 /**
  * Set dotenv params.
  */
 setupDotenvFilesForEnv({ env: process.env.NODE_ENV });
+
+if (process.env.IS_SCREENCAPTURE === 'true') {
+  // jest.setTimeout(60000);
+}
+
+/**
+ * Set screenshot/elementshot.
+ */
+// setItUp();
+// setupScreenshots();
 
 /**
  * Set enzyme adapter.
