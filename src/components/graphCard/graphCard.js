@@ -4,7 +4,7 @@ import { useProductGraphConfig } from '../productView/productViewContext';
 import { helpers } from '../../common';
 import { GraphCardMetricTotals } from './graphCardMetricTotals';
 import { GraphCardChart } from './graphCardChart';
-import { GraphCardContext } from './graphCardContext';
+import {GraphCardContext, useGetMetrics, useGetTallyCapacity} from './graphCardContext';
 import { graphCardHelpers } from './graphCardHelpers';
 
 /**
@@ -13,9 +13,16 @@ import { graphCardHelpers } from './graphCardHelpers';
  * @param {object} props
  * @param {boolean} props.isDisabled
  * @param {Function} props.useProductGraphConfig
+ * @param {Function} props.useGetTally
+ * @param {Function} props.useGetTallyCapacity
  * @returns {Node}
  */
-const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConfig }) => {
+const GraphCard = ({
+  isDisabled,
+  useProductGraphConfig: useAliasProductGraphConfig,
+  useGetTally: useAliasGetTally,
+  useGetTallyCapacity: useAliasGetTallyCapacity
+}) => {
   const { filters, settings } = useAliasProductGraphConfig();
   const { groupedFiltersSettings, standaloneFiltersSettings } = graphCardHelpers.generateChartSettings(
     filters,
@@ -30,14 +37,14 @@ const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConf
     <React.Fragment>
       {(groupedFiltersSettings && (
         <GraphCardContext.Provider value={groupedFiltersSettings}>
-          <GraphCardChart />
+          <GraphCardChart useGetGraphData={useAliasGetTallyCapacity} />
         </GraphCardContext.Provider>
       )) ||
         null}
       {standaloneFiltersSettings?.map(filtersSettings => (
         <GraphCardContext.Provider key={`graphCard_${filtersSettings?.metric?.id}`} value={filtersSettings}>
           <GraphCardMetricTotals>
-            <GraphCardChart />
+            <GraphCardChart useGetGraphData={useAliasGetTally} />
           </GraphCardMetricTotals>
         </GraphCardContext.Provider>
       ))}
@@ -48,21 +55,25 @@ const GraphCard = ({ isDisabled, useProductGraphConfig: useAliasProductGraphConf
 /**
  * Prop types.
  *
- * @type {{useProductGraphConfig: Function, isDisabled: boolean}}
+ * @type {{useProductGraphConfig: Function, useGetTally: Function, useGetTallyCapacity: Function, isDisabled: boolean}}
  */
 GraphCard.propTypes = {
   isDisabled: PropTypes.bool,
-  useProductGraphConfig: PropTypes.func
+  useProductGraphConfig: PropTypes.func,
+  useGetTally: PropTypes.func,
+  useGetTallyCapacity: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{useProductGraphConfig: Function, isDisabled: boolean}}
+ * @type {{useProductGraphConfig: Function, useGetTally: Function, useGetTallyCapacity: Function, isDisabled: boolean}}
  */
 GraphCard.defaultProps = {
   isDisabled: helpers.UI_DISABLED_GRAPH,
-  useProductGraphConfig
+  useProductGraphConfig,
+  useGetTally: useGetMetrics,
+  useGetTallyCapacity
 };
 
 export { GraphCard as default, GraphCard };

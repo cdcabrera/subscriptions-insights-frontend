@@ -18,7 +18,8 @@ import {
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_SET_TYPES,
   RHSM_API_PATH_PRODUCT_TYPES,
-  RHSM_API_PATH_METRIC_TYPES
+  RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES as CAPACITY_TYPES
 } from '../services/rhsm/rhsmConstants';
 import { dateHelpers, helpers } from '../common';
 import { translate, EMPTY_CONTEXT } from '../components/i18n/i18n';
@@ -75,6 +76,7 @@ const config = {
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value,
       chartType: 'line',
+      // isCapacity: false,
       isStacked: false,
       isStandalone: true,
       yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
@@ -85,6 +87,16 @@ const config = {
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value,
       chartType: 'line',
+      isStacked: false,
+      isStandalone: true,
+      yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
+    },
+    {
+      id: CAPACITY_TYPES.SOCKETS,
+      fill: chartColorCyanLight.value,
+      stroke: chartColorCyanDark.value,
+      color: chartColorCyanDark.value,
+      chartType: 'threshold',
       isStacked: false,
       isStandalone: true,
       yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })

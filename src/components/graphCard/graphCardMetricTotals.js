@@ -4,7 +4,7 @@ import { Card, CardBody, CardFooter, CardTitle, Flex, FlexItem } from '@patternf
 import moment from 'moment';
 import _camelCase from 'lodash/camelCase';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
-import { useMetricsSelector } from './graphCardContext';
+import { useGetMetrics, useMetricsSelector } from './graphCardContext';
 import { MinHeight } from '../minHeight/minHeight';
 import { Loader, SkeletonSize } from '../loader/loader';
 import { dateHelpers, helpers } from '../../common';
@@ -170,6 +170,7 @@ GraphCardMetricTotals.defaultProps = {
   children: null,
   t: translate,
   useMetricsSelector,
+  // useMetricsSelector: useGetMetrics,
   useProductGraphTallyQuery
 };
 
