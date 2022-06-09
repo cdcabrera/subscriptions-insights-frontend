@@ -97,6 +97,18 @@ const RHSM_API_RESPONSE_ERRORS_CODE_TYPES = {
 };
 
 /**
+ * RHSM response Capacity DATA types.
+ *
+ * @type {{CORES: string, DATE: string, SOCKETS: string, HAS_INFINITE_QUANTITY: string}}
+ */
+const RHSM_API_RESPONSE_CAPACITY_DATA_TYPES = {
+  CORES: 'cores',
+  DATE: 'date',
+  HAS_INFINITE_QUANTITY: 'has_infinite_quantity',
+  SOCKETS: 'sockets'
+};
+
+/**
  * FixMe: Appears we combined future guests used with instances. Investigate moving "INVENTORY_ID" and "SUBSCRIPTION_MANAGER_ID".
  * They're current associated with "hosts" guests. Need to also determine if this is something that needs to be added to "instances"
  * or if keeping them added to guests only is enough.
@@ -372,6 +384,7 @@ const RHSM_API_QUERY_SET_TYPES = {
 const rhsmConstants = {
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES,
   RHSM_API_RESPONSE_DATA,
   RHSM_API_RESPONSE_META,
   RHSM_API_RESPONSE_META_TYPES,
@@ -406,6 +419,7 @@ export {
   rhsmConstants,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES,
   RHSM_API_RESPONSE_DATA,
   RHSM_API_RESPONSE_META,
   RHSM_API_RESPONSE_META_TYPES,

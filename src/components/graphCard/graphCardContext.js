@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useShallowCompareEffect } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { helpers } from '../../common/helpers';
@@ -19,23 +20,127 @@ const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
  */
 const useGraphCardContext = () => useContext(GraphCardContext);
 
-/**
- * Use Redux RHSM Actions, getGraphTally.
- *
- * @param {object} options
- * @param {Function} options.useDispatch
- * @param {Function} options.useProductGraphTallyQuery
- * @returns {Function}
- */
-const useGetGraphTally = ({
+const useGetMetrics = ({
+  // getGraphTally = reduxActions.rhsm.getGraphTally,
+  // getGraphCapacity = reduxActions.rhsm.getGraphCapacity,
+  getGraphMetrics = reduxActions.rhsm.getGraphMetrics,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
+  useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
+  useProduct: useAliasProduct = useProduct,
+  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery,
+  // useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsAllSettledResponse
 } = {}) => {
+  const { productId } = useAliasProduct();
   const query = useAliasProductGraphTallyQuery();
   const dispatch = useAliasDispatch();
+  const { settings = {} } = useAliasGraphCardContext();
+  const { metrics = [] } = settings;
 
-  return metrics => reduxActions.rhsm.getGraphTally(metrics, query)(dispatch);
+  const {
+    error,
+    fulfilled,
+    pending,
+    data = []
+  } = useAliasSelectorsResponse(
+    metrics.map(
+      ({ id: metricId, isCapacity }) =>
+        ({ graph }) =>
+          isCapacity ? graph.capacity?.[`${productId}_${metricId}`] : graph.tally?.[`${productId}_${metricId}`]
+    )
+  );
+
+  useShallowCompareEffect(() => {
+    const updatedMetrics = metrics.map(({ id: metricId, isCapacity }) => ({
+      id: productId,
+      metric: metricId,
+      isCapacity
+    }));
+    getGraphMetrics(updatedMetrics, query)(dispatch);
+  }, [dispatch, getGraphMetrics, metrics, productId, query]);
+
+  /**
+   * Apply graph config settings to metric data.
+   */
+  const dataById = {};
+  const dataByList = data?.map((metricData, index) => {
+    const updatedMetricData = {
+      ...metrics[index],
+      ...metricData
+    };
+    dataById[metrics[index].id] = updatedMetricData;
+    return updatedMetricData;
+  });
+
+  return {
+    data: dataById,
+    dataSets: dataByList,
+    error,
+    fulfilled,
+    pending
+  };
 };
+
+const useGetTally = ({
+  getGraphTally = reduxActions.rhsm.getGraphTally,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
+  useProduct: useAliasProduct = useProduct,
+  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery,
+  // useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsAllSettledResponse
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const query = useAliasProductGraphTallyQuery();
+  const dispatch = useAliasDispatch();
+  const { settings = {} } = useAliasGraphCardContext();
+  const { metrics = [] } = settings;
+
+  const {
+    error,
+    fulfilled,
+    pending,
+    data = []
+  } = useAliasSelectorsResponse(
+    metrics.map(
+      ({ id: metricId }) =>
+        ({ graph }) =>
+          graph.tally?.[`${productId}_${metricId}`]
+    )
+    // metrics.map(({ id: metricId }) => ({
+    //  id: metricId,
+    //  selector: ({ graph }) => graph.tally?.[`${productId}_${metricId}`]
+    // }))
+  );
+
+  useShallowCompareEffect(() => {
+    const updatedMetrics = metrics.map(({ id: metricId }) => ({ id: productId, metric: metricId }));
+    getGraphTally(updatedMetrics, query)(dispatch);
+  }, [dispatch, getGraphTally, metrics, productId, query]);
+
+  /**
+   * Apply graph config settings to metric data.
+   */
+  const dataById = {};
+  const dataByList = data?.map((metricData, index) => {
+    const updatedMetricData = {
+      ...metrics[index],
+      ...metricData
+    };
+    dataById[metrics[index].id] = updatedMetricData;
+    return updatedMetricData;
+  });
+
+  return {
+    data: dataById,
+    dataSets: dataByList,
+    error,
+    fulfilled,
+    pending
+  };
+};
+
+const useGetTallyCapacity = () => {};
 
 /**
  * Get multiple metrics from store.
@@ -117,7 +222,9 @@ const useMetricsSelector = ({
 const context = {
   GraphCardContext,
   DEFAULT_CONTEXT,
-  useGetGraphTally,
+  useGetMetrics,
+  useGetTally,
+  useGetTallyCapacity,
   useGraphCardContext,
   useMetricsSelector
 };
@@ -127,7 +234,10 @@ export {
   context,
   GraphCardContext,
   DEFAULT_CONTEXT,
-  useGetGraphTally,
+  // useGetGraphTally,
+  useGetMetrics,
+  useGetTally,
+  useGetTallyCapacity,
   useGraphCardContext,
   useMetricsSelector
 };

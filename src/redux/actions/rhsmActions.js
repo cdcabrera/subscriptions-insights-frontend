@@ -19,7 +19,7 @@ const getGraphReportsCapacity =
       type: rhsmTypes.GET_GRAPH_REPORT_CAPACITY_RHSM,
       payload: Promise.all([
         rhsmServices.getGraphReports(id, query, { cancelId }),
-        rhsmServices.getGraphCapacity(id, query, { cancelId })
+        rhsmServices.getGraphCapacity_deprecated(id, query, { cancelId })
       ]),
       meta: {
         id,
@@ -62,6 +62,81 @@ const getGraphTally =
 
     return Promise.all(dispatch(multiDispatch));
   };
+
+/**
+ * Get a RHSM response from multiple Tally, or Capacity, IDs and metrics.
+ *
+ * @param {object|Array} idMetric An object, or an Array of objects, in the form of { id: PRODUCT_ID, metric: METRIC_ID, isCapacity: boolean }
+ * @param {object} query
+ * @param {object} options
+ * @param {string} options.cancelId
+ * @returns {Function}
+ */
+const getGraphMetrics =
+  (idMetric = {}, query = {}, options = {}) =>
+  dispatch => {
+    const { cancelId = 'graphTally' } = options;
+    const multiMetric = (Array.isArray(idMetric) && idMetric) || [idMetric];
+    const multiDispatch = [];
+
+    multiMetric.forEach(({ id, metric, isCapacity }) => {
+      const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
+      const methodType = isCapacity ? rhsmTypes.GET_GRAPH_CAPACITY_RHSM : rhsmTypes.GET_GRAPH_TALLY_RHSM;
+      const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
+      console.log('>>>>>>>>> ACTION', id, metric, isCapacity);
+
+      multiDispatch.push({
+        type: methodType,
+        payload: methodService([id, metric], query, {
+          cancelId: `${methodCancelId}_${id}`
+        }),
+        meta: {
+          id: `${id}_${metric}`,
+          idMetric: { id, metric },
+          query,
+          notifications: {}
+        }
+      });
+    });
+
+    return Promise.all(dispatch(multiDispatch));
+  };
+
+/**
+ * Get a RHSM response from multiple Tally IDs and metrics.
+ *
+ * @param {object|Array} idMetric An object, or an Array of objects, in the form of { id: PRODUCT_ID, metric: METRIC_ID }
+ * @param {object} query
+ * @param {object} options
+ * @param {string} options.cancelId
+ * @returns {Function}
+ */
+/*
+const getGraphCapacity =
+  (idMetric = {}, query = {}, options = {}) =>
+  dispatch => {
+    const { cancelId = 'graphCapacity' } = options;
+    const multiMetric = (Array.isArray(idMetric) && idMetric) || [idMetric];
+    const multiDispatch = [];
+
+    multiMetric.forEach(({ id, metric }) => {
+      multiDispatch.push({
+        type: rhsmTypes.GET_GRAPH_CAPACITY_RHSM,
+        payload: rhsmServices.getGraphCapacity([id, metric], query, {
+          cancelId: `${cancelId}_${id}_${metric}`
+        }),
+        meta: {
+          id: `${id}_${metric}`,
+          idMetric: { id, metric },
+          query,
+          notifications: {}
+        }
+      });
+    });
+
+    return Promise.all(dispatch(multiDispatch));
+  };
+*/
 
 /**
  * Get a hosts response listing from RHSM subscriptions.
@@ -164,6 +239,7 @@ const getSubscriptionsInventory =
     });
 
 const rhsmActions = {
+  getGraphMetrics,
   getGraphReportsCapacity,
   getGraphTally,
   getHostsInventory,
@@ -176,6 +252,7 @@ const rhsmActions = {
 export {
   rhsmActions as default,
   rhsmActions,
+  getGraphMetrics,
   getGraphReportsCapacity,
   getGraphTally,
   getHostsInventory,

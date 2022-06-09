@@ -1487,7 +1487,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  */
 /* Get RHSM API reporting/tally graph/chart data.
  *
- * @param {string|Array} id String ID, or an array of IDs
+ * @param {string|Array} id String ID, or an array of identifiers to update a dotenv url path
  * @param {object} params Query/search params
  * @param {object} options
  * @param {boolean} options.cache
@@ -1814,7 +1814,7 @@ const getGraphTally = (id, params = {}, options = {}) => {
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getGraphCapacity = (id, params = {}, options = {}) => {
+const getGraphCapacity_deprecated = (id, params = {}, options = {}) => {
   const { cache = true, cancel = true, cancelId } = options;
   return serviceCall({
     url: `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${id}`,
@@ -1822,6 +1822,47 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId
+  });
+};
+
+/**
+ * Get RHSM API capacity/threshold graph/chart data.
+ *
+ * @param {string|Array} id String ID, or an array of identifiers to update a dotenv url path
+ * @param {object} params Query/search params
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
+const getGraphCapacity = (id, params = {}, options = {}) => {
+  const {
+    cache = true,
+    cancel = true,
+    cancelId,
+    schema = [rhsmSchemas.capacity, rhsmSchemas.errors],
+    transform = [rhsmTransformers.capacity]
+  } = options;
+  const updatedId = (typeof id === 'string' && [id]) || (Array.isArray(id) && id) || [];
+  const url = `${process.env.REACT_APP_SERVICES_RHSM_CAPACITY}${updatedId?.[0]}`;
+
+  /**
+   * ToDo: remove this if/when capacity supports metric identifiers in its path
+   * We're emulating metric identifiers for the capacity endpoint to align with Tally updates,
+   * and provide consistency for consuming components. The value is passed via service config
+   * to the transformer.
+   */
+  const _metricId = updatedId?.[1];
+
+  return serviceCall({
+    url,
+    params,
+    cache,
+    cancel,
+    cancelId,
+    schema,
+    transform,
+    _metricId
   });
 };
 
@@ -2403,6 +2444,7 @@ const getSubscriptionsInventory = (id, params = {}, options = {}) => {
 const rhsmServices = {
   getApiVersion,
   getGraphCapacity,
+  getGraphCapacity_deprecated,
   getGraphReports,
   getGraphTally,
   getHostsInventory,
@@ -2421,6 +2463,7 @@ export {
   rhsmServices,
   getApiVersion,
   getGraphCapacity,
+  getGraphCapacity_deprecated,
   getGraphReports,
   getGraphTally,
   getHostsInventory,
