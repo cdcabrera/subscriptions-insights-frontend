@@ -47,7 +47,8 @@ const GraphCardChartTooltip = ({
       if (itemsByKey[key]?.chartType === ChartTypeVariant.threshold) {
         let thresholdStringValue = itemsByKey[key]?.data.y ?? t('curiosity-graph.label_noData');
 
-        if (itemsByKey[key]?.data.hasInfinite) {
+        // ToDo: Remove hasInfinite once deprecated graphCard components are removed
+        if (itemsByKey[key]?.data.hasInfinite || itemsByKey[key]?.data.hasInfiniteQuantity) {
           if (tempDataFacet.color) {
             thresholdStringValue = (
               <ChartIcon
@@ -139,6 +140,7 @@ GraphCardChartTooltip.propTypes = {
           date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
           hasData: PropTypes.bool,
           hasInfinite: PropTypes.bool,
+          hasInfiniteQuantity: PropTypes.bool,
           y: PropTypes.number
         })
       })
