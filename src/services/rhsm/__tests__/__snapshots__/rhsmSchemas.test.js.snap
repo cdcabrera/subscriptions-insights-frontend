@@ -2,6 +2,7 @@
 
 exports[`RHSM Schemas should have specific response schemas: specific schemas 1`] = `
 {
+  "capacity": [Function],
   "errors": [Function],
   "guests": [Function],
   "instances": [Function],
