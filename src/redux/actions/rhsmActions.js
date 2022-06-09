@@ -1,6 +1,7 @@
 import { rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsm/rhsmServices';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+// import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { generateChartIds } from '../../components/graphCard/graphCardHelpers';
 
 /**
  * Get a combined RHSM response from reporting and capacity.
@@ -84,6 +85,8 @@ const getGraphMetrics =
       const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
       const methodType = isCapacity ? rhsmTypes.GET_GRAPH_CAPACITY_RHSM : rhsmTypes.GET_GRAPH_TALLY_RHSM;
       const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
+      // const metricCategory = metricQuery?.[RHSM_API_QUERY_SET_TYPES.CATEGORY] || undefined;
+      const generatedId = generateChartIds({ metric, productId: id, query: metricQuery });
 
       multiDispatch.push({
         type: methodType,
@@ -91,12 +94,14 @@ const getGraphMetrics =
           [id, metric],
           { ...query, ...metricQuery },
           {
-            cancelId: `${methodCancelId}_${id}`
+            cancelId: `${methodCancelId}_${generatedId}`
           }
         ),
         meta: {
-          id: `${id}_${metric}`,
-          idMetric: { id, metric, category: metricQuery?.[RHSM_API_QUERY_SET_TYPES.CATEGORY] },
+          // id: `${id}_${metric}${(metricCategory && `_${metricCategory}`) || ''}`,
+          // id: `${metric}${(metricCategory && `_${metricCategory}`) || ''}_${id}`,
+          id: generatedId,
+          // idMetric: { id, metric, category: metricQuery?.[RHSM_API_QUERY_SET_TYPES.CATEGORY] },
           query: { ...query, ...metricQuery },
           notifications: {}
         }
