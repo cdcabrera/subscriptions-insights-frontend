@@ -97,6 +97,18 @@ const RHSM_API_RESPONSE_ERRORS_CODE_TYPES = {
 };
 
 /**
+ * RHSM response Capacity DATA types.
+ *
+ * @type {{CORES: string, DATE: string, SOCKETS: string, HAS_INFINITE_QUANTITY: string}}
+ */
+const RHSM_API_RESPONSE_CAPACITY_DATA_TYPES = {
+  CORES: 'cores',
+  DATE: 'date',
+  HAS_INFINITE_QUANTITY: 'has_infinite_quantity',
+  SOCKETS: 'sockets'
+};
+
+/**
  * FixMe: Appears we combined future guests used with instances. Investigate moving "INVENTORY_ID" and "SUBSCRIPTION_MANAGER_ID".
  * They're current associated with "hosts" guests. Need to also determine if this is something that needs to be added to "instances"
  * or if keeping them added to guests only is enough.
@@ -344,6 +356,7 @@ const RHSM_API_QUERY_SET_TYPES = {
  *     RHSM_API_RESPONSE_INSTANCES_DATA_TYPES: {MEASUREMENTS: string, BILLING_ACCOUNT_ID: string, SUBSCRIPTION_MANAGER_ID: string,
  *     INVENTORY_ID: string, NUMBER_OF_GUESTS: string, BILLING_PROVIDER: string, DISPLAY_NAME: string, LAST_SEEN: string},
  *     RHSM_API_RESPONSE_SLA_TYPES: {PREMIUM: string, SELF: string, NONE: string, STANDARD: string},
+ *     RHSM_API_RESPONSE_CAPACITY_DATA_TYPES: {CORES: string, DATE: string, SOCKETS: string, HAS_INFINITE_QUANTITY: string},
  *     RHSM_API_RESPONSE_META_TYPES: {PRODUCT: string, COUNT: string}, RHSM_API_RESPONSE_ERRORS_CODE_TYPES: {GENERIC: string, OPTIN: string},
  *     RHSM_API_QUERY_GRANULARITY_TYPES: {WEEKLY: string, QUARTERLY: string, DAILY: string, MONTHLY: string},
  *     RHSM_API_RESPONSE_UOM_TYPES: {CORES: string, SOCKETS: string}, RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES: {ASCENDING: string,
@@ -372,6 +385,7 @@ const RHSM_API_QUERY_SET_TYPES = {
 const rhsmConstants = {
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES,
   RHSM_API_RESPONSE_DATA,
   RHSM_API_RESPONSE_META,
   RHSM_API_RESPONSE_META_TYPES,
@@ -406,6 +420,7 @@ export {
   rhsmConstants,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES,
   RHSM_API_RESPONSE_DATA,
   RHSM_API_RESPONSE_META,
   RHSM_API_RESPONSE_META_TYPES,
