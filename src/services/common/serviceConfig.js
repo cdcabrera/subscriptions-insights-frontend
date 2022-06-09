@@ -27,6 +27,19 @@ const globalResponseCache = new LruCache({
   updateAgeOnGet: true
 });
 
+const getConfigHash = obj =>
+  `${window.btoa(
+    JSON.stringify(obj, (key, value) => {
+      if (value !== obj && _isPlainObject(value)) {
+        return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
+      }
+      if (typeof value === 'function') {
+        return value.toString();
+      }
+      return value;
+    })
+  )}`;
+
 // ToDo: consider another way of hashing cacheIDs. base64 could get a little large depending on settings, i.e. md5
 /**
  * Set Axios configuration. This includes response schema validation and caching.
@@ -68,20 +81,7 @@ const axiosServiceCall = async (
   updatedConfig.cacheResponse = updatedConfig.cacheResponse === true && updatedConfig.method === 'get';
 
   // account for alterations to transforms, and other config props
-  const cacheId =
-    (updatedConfig.cacheResponse === true &&
-      `${window.btoa(
-        JSON.stringify(updatedConfig, (key, value) => {
-          if (value !== updatedConfig && _isPlainObject(value)) {
-            return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
-          }
-          if (typeof value === 'function') {
-            return value.toString();
-          }
-          return value;
-        })
-      )}`) ||
-    null;
+  const cacheId = (updatedConfig.cacheResponse === true && getConfigHash(updatedConfig)) || null;
 
   // simple check to place responsibility on consumer, primarily used for testing
   if (updatedConfig.exposeCacheId === true) {
@@ -89,9 +89,10 @@ const axiosServiceCall = async (
   }
 
   if (updatedConfig.cancel === true) {
-    const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.method}-${
-      (typeof updatedConfig.url === 'function' && updatedConfig.url.toString()) || updatedConfig.url
-    }`;
+    // const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.method}-${
+    //  (typeof updatedConfig.url === 'function' && updatedConfig.url.toString()) || updatedConfig.url
+    // }`;
+    const cancelTokensId = getConfigHash(updatedConfig);
 
     if (globalCancelTokens[cancelTokensId]) {
       globalCancelTokens[cancelTokensId].cancel(cancelledMessage);

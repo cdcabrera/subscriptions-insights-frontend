@@ -124,6 +124,17 @@ exports[`RHSM Constants should have specific properties: all exported constants 
     "AWS": "aws",
     "RED_HAT": "red hat",
   },
+  "RHSM_API_RESPONSE_CAPACITY_DATA_TYPES": {
+    "CORES": "cores",
+    "DATE": "date",
+    "HAS_INFINITE_QUANTITY": "has_infinite_quantity",
+    "SOCKETS": "sockets",
+  },
+  "RHSM_API_RESPONSE_CAPACITY_META_TYPES": {
+    "COUNT": "count",
+    "METRIC_ID": "metric_id",
+    "PRODUCT": "product",
+  },
   "RHSM_API_RESPONSE_DATA": "data",
   "RHSM_API_RESPONSE_ERRORS": "errors",
   "RHSM_API_RESPONSE_ERRORS_CODE_TYPES": {
@@ -344,6 +355,17 @@ exports[`RHSM Constants should have specific properties: all exported constants 
     "RHSM_API_RESPONSE_BILLING_PROVIDER_TYPES": {
       "AWS": "aws",
       "RED_HAT": "red hat",
+    },
+    "RHSM_API_RESPONSE_CAPACITY_DATA_TYPES": {
+      "CORES": "cores",
+      "DATE": "date",
+      "HAS_INFINITE_QUANTITY": "has_infinite_quantity",
+      "SOCKETS": "sockets",
+    },
+    "RHSM_API_RESPONSE_CAPACITY_META_TYPES": {
+      "COUNT": "count",
+      "METRIC_ID": "metric_id",
+      "PRODUCT": "product",
     },
     "RHSM_API_RESPONSE_DATA": "data",
     "RHSM_API_RESPONSE_ERRORS": "errors",
@@ -566,6 +588,17 @@ exports[`RHSM Constants should have specific properties: all exported constants 
     "RHSM_API_RESPONSE_BILLING_PROVIDER_TYPES": {
       "AWS": "aws",
       "RED_HAT": "red hat",
+    },
+    "RHSM_API_RESPONSE_CAPACITY_DATA_TYPES": {
+      "CORES": "cores",
+      "DATE": "date",
+      "HAS_INFINITE_QUANTITY": "has_infinite_quantity",
+      "SOCKETS": "sockets",
+    },
+    "RHSM_API_RESPONSE_CAPACITY_META_TYPES": {
+      "COUNT": "count",
+      "METRIC_ID": "metric_id",
+      "PRODUCT": "product",
     },
     "RHSM_API_RESPONSE_DATA": "data",
     "RHSM_API_RESPONSE_ERRORS": "errors",
@@ -792,6 +825,17 @@ exports[`RHSM Constants should have specific properties: specific constants 1`] 
   "RHSM_API_RESPONSE_BILLING_PROVIDER_TYPES": {
     "AWS": "aws",
     "RED_HAT": "red hat",
+  },
+  "RHSM_API_RESPONSE_CAPACITY_DATA_TYPES": {
+    "CORES": "cores",
+    "DATE": "date",
+    "HAS_INFINITE_QUANTITY": "has_infinite_quantity",
+    "SOCKETS": "sockets",
+  },
+  "RHSM_API_RESPONSE_CAPACITY_META_TYPES": {
+    "COUNT": "count",
+    "METRIC_ID": "metric_id",
+    "PRODUCT": "product",
   },
   "RHSM_API_RESPONSE_DATA": "data",
   "RHSM_API_RESPONSE_ERRORS": "errors",
