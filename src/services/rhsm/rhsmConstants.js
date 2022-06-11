@@ -43,7 +43,10 @@ const RHSM_API_PATH_METRIC_TYPES = {
   INSTANCE_HOURS: 'Instance-hours',
   STORAGE_GIBIBYTES: 'Storage-gibibytes',
   STORAGE_GIBIBYTE_MONTHS: 'Storage-gibibyte-months',
-  TRANSFER_GIBIBYTES: 'Transfer-gibibytes'
+  TRANSFER_GIBIBYTES: 'Transfer-gibibytes',
+  PHYSICAL_SOCKETS: 'Physical-sockets',
+  HYPERVISOR_SOCKETS: 'Hypervisor-sockets',
+  CLOUD_SOCKETS: 'Cloud-sockets'
 };
 
 /**

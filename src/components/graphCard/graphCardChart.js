@@ -43,6 +43,7 @@ const GraphCardChart = ({
 
   if (typeof actionDisplay === 'function') {
     updatedActionDisplay = actionDisplay({ data: { ...data } });
+    // actionDisplay = settings.actionDisplay({ data: { ...graphData }, meta: { ...meta } });
   }
 
   return (

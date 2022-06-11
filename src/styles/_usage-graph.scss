@@ -159,13 +159,23 @@
     }
 
     &__icon {
-      display: inline-block;
+      vertical-align: middle;
       width: 1em;
       height: 1em;
 
-      &-dash {
-        vertical-align: middle;
+      > span {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
 
+        > svg {}
+      }
+
+      &-dash {
+        // vertical-align: middle;
+        display: inline-block;
+
+        /*
         > span {
           align-items: center;
           display: flex;
@@ -173,6 +183,7 @@
 
           > svg {}
         }
+        */
       }
 
       &-threshold {}
