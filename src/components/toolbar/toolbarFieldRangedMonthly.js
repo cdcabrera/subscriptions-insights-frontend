@@ -12,10 +12,13 @@ import { translate } from '../i18n/i18n';
  *
  * @type {{title: (string|Node), value: string, selected: boolean}[]}
  */
-const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRanges.map(dateTime => ({
-  ...dateTime,
-  selected: false
-}));
+const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRanges.map(dateTime => {
+  console.log('OPTIONS >>>>>>>>>>>>>>>', dateTime);
+  return {
+    ...dateTime,
+    selected: false
+  };
+});
 
 /**
  * On select update granularity.
@@ -84,8 +87,16 @@ const ToolbarFieldRangedMonthly = ({
 
   const updatedOptions = options.map(option => ({
     ...option,
+    title:
+      (typeof option.title === 'function' && option.title()) ||
+      (React.isValidElement(options.title) && <options.title />) ||
+      // (React.isValidElement(options.title) && <options.title />.props.children)||
+      // <React.Fragment>hey</React.Fragment>.props.children,
+      option.title,
     selected: option.title === updatedValue || option.value.startDate.toISOString() === updatedValue
   }));
+
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> OPTIONS', updatedOptions);
 
   return (
     <Select

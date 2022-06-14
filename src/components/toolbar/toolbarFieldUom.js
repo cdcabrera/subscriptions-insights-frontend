@@ -12,7 +12,7 @@ import { translate } from '../i18n/i18n';
  * @type {{title: (string|Node), value: string, selected: boolean}[]}
  */
 const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
-  title: translate('curiosity-toolbar.uom', { context: type }),
+  title: () => translate('curiosity-toolbar.uom', { context: type }),
   value: type,
   selected: false
 }));
@@ -70,7 +70,11 @@ const ToolbarFieldUom = ({
   const { [RHSM_API_QUERY_TYPES.UOM]: updatedValue } = useAliasProductQuery();
   const onSelect = useAliasOnSelect();
 
-  const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
+  const updatedOptions = options.map(option => ({
+    ...option,
+    title: (typeof option.title === 'function' && option.title()) || option.title,
+    selected: option.value === updatedValue
+  }));
 
   return (
     <Select

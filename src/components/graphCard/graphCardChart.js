@@ -41,8 +41,12 @@ const GraphCardChart = ({
   const standaloneMetricId = (metric?.id && `_${metric?.id}`) || '';
   let updatedActionDisplay = null;
 
-  if (typeof actionDisplay === 'function') {
+  if (React.isValidElement(actionDisplay)) {
+    updatedActionDisplay = actionDisplay;
+  } else if (typeof actionDisplay === 'function') {
     updatedActionDisplay = actionDisplay({ data: { ...data } });
+    // updatedActionDisplay = actionDisplay({ data: { meta: {}, ...data } });
+    // actionDisplay = settings.actionDisplay({ data: { ...graphData }, meta: { ...meta } });
   }
 
   return (

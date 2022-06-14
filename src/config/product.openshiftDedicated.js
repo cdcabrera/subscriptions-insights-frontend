@@ -7,21 +7,24 @@ import {
 } from '@patternfly/react-tokens';
 import { Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
+import { SelectPosition } from '../components/form/select';
+import { ToolbarFieldRangedMonthly } from '../components/toolbar/toolbarFieldRangedMonthly';
 import {
-  RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
+  RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
+  RHSM_API_QUERY_INVENTORY_SORT_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
-  RHSM_API_QUERY_TYPES,
-  RHSM_API_QUERY_SORT_TYPES,
-  RHSM_API_PATH_ID_TYPES
-} from '../types/rhsmApiTypes';
+  RHSM_API_QUERY_SET_TYPES,
+  RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_PATH_PRODUCT_TYPES
+} from '../services/rhsm/rhsmConstants';
 import { dateHelpers, helpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
-const productGroup = RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS;
+const productGroup = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
-const productId = RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS;
+const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
-const productLabel = RHSM_API_PATH_ID_TYPES.OPENSHIFT_DEDICATED_METRICS;
+const productLabel = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
 const config = {
   productGroup,
@@ -29,21 +32,21 @@ const config = {
   productLabel,
   viewId: `view${productGroup}`,
   query: {
-    [RHSM_API_QUERY_TYPES.START_DATE]: dateHelpers.getRangedMonthDateTime('current').value.startDate.toISOString(),
-    [RHSM_API_QUERY_TYPES.END_DATE]: dateHelpers.getRangedMonthDateTime('current').value.endDate.toISOString()
+    [RHSM_API_QUERY_SET_TYPES.START_DATE]: dateHelpers.getRangedMonthDateTime('current').value.startDate.toISOString(),
+    [RHSM_API_QUERY_SET_TYPES.END_DATE]: dateHelpers.getRangedMonthDateTime('current').value.endDate.toISOString()
   },
   graphTallyQuery: {
-    [RHSM_API_QUERY_TYPES.GRANULARITY]: GRANULARITY_TYPES.DAILY
+    [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: GRANULARITY_TYPES.DAILY
   },
   inventoryHostsQuery: {
-    [RHSM_API_QUERY_TYPES.SORT]: RHSM_API_QUERY_SORT_TYPES.LAST_SEEN,
-    [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
-    [RHSM_API_QUERY_TYPES.LIMIT]: 100,
-    [RHSM_API_QUERY_TYPES.OFFSET]: 0
+    [RHSM_API_QUERY_SET_TYPES.SORT]: RHSM_API_QUERY_INVENTORY_SORT_TYPES.LAST_SEEN,
+    [RHSM_API_QUERY_SET_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
+    [RHSM_API_QUERY_SET_TYPES.LIMIT]: 100,
+    [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
   },
   initialGraphFilters: [
     {
-      id: 'coreHours',
+      id: RHSM_API_PATH_METRIC_TYPES.CORE_HOURS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value,
@@ -52,7 +55,7 @@ const config = {
       yAxisUseDataSet: true
     },
     {
-      id: 'instanceHours',
+      id: RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value,
@@ -62,10 +65,9 @@ const config = {
     }
   ],
   initialGraphSettings: {
-    actionDisplay: (data = {}) => {
-      const {
-        meta: { totalCoreHours }
-      } = data;
+    actionDisplay: (responseById = {}) => {
+      const { [RHSM_API_PATH_METRIC_TYPES.CORE_HOURS]: coreHours = {} } = responseById.data;
+      const { totalCoreHours } = coreHours.meta || {};
       let displayContent;
 
       if (totalCoreHours) {
@@ -78,7 +80,12 @@ const config = {
         });
       }
 
-      return <div className="curiosity-usage-graph__total">{displayContent || null}</div>;
+      return (
+        <React.Fragment>
+          <div className="curiosity-usage-graph__total">{displayContent || null}</div>
+          <ToolbarFieldRangedMonthly position={SelectPosition.right} />
+        </React.Fragment>
+      );
     }
   },
   initialInventoryFilters: [
