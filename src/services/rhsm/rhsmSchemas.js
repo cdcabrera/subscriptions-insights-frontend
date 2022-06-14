@@ -195,6 +195,21 @@ const subscriptionsResponseSchema = Joi.object().keys({
  *
  * @type {*} Joi schema
  */
+const tallyDeprecatedItem = Joi.object({
+  date: Joi.date().utc().allow(null),
+  has_cloudigrade_data: Joi.boolean().optional().allow(null),
+  has_cloudigrade_mismatch: Joi.boolean().optional().allow(null),
+  has_data: Joi.boolean().optional().allow(null),
+  value: Joi.number().allow(null).default(0)
+})
+  .unknown(true)
+  .default();
+
+/**
+ * Tally response item.
+ *
+ * @type {*} Joi schema
+ */
 const tallyItem = Joi.object({
   date: Joi.date().utc().allow(null),
   has_data: Joi.boolean().optional().allow(null),
@@ -213,6 +228,7 @@ const tallyMetaSchema = metaResponseSchema
     has_cloudigrade_data: Joi.boolean().optional().allow(null),
     has_cloudigrade_mismatch: Joi.boolean().optional().allow(null),
     metric_id: Joi.string().valid(...Object.values(rhsmConstants.RHSM_API_PATH_METRIC_TYPES)),
+    total_core_hours: Joi.number().allow(null).default(0),
     total_monthly: tallyItem
   })
   .unknown(true);

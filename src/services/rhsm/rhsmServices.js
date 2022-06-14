@@ -925,6 +925,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "metric_id": "Cores",
  *         "product": "RHEL",
  *         "service_level": "",
+ *         "total_core_hours": 30500.04,
  *         "total_monthly": {
  *           "date": "2020-07-31T00:00:00Z",
  *           "value": 50,
@@ -1109,6 +1110,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "metric_id": "Transfer-gibibytes",
  *         "product": "RHEL",
  *         "service_level": "",
+ *         "total_core_hours": 30500.04,
  *         "total_monthly": {
  *           "date": "2020-07-31T00:00:00Z",
  *           "value": 1024,
@@ -1293,6 +1295,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "metric_id": "Storage-gibibyte-months",
  *         "product": "RHEL",
  *         "service_level": "",
+ *         "total_core_hours": 30500.04,
  *         "total_monthly": {
  *           "date": "2020-07-31T00:00:00Z",
  *           "value": 2048,
@@ -1476,6 +1479,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "metric_id": "Instance-hours",
  *         "product": "RHEL",
  *         "service_level": "",
+ *         "total_core_hours": 30500.04,
  *         "total_monthly": {
  *           "date": "2020-07-31T00:00:00Z",
  *           "value": 2000,

@@ -12,7 +12,7 @@ import { translate } from '../i18n/i18n';
  * @type {{title: (string|Node), value: string, selected: boolean}[]}
  */
 const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
-  title: translate('curiosity-toolbar.sla', { context: (type === '' && 'none') || type }),
+  title: () => translate('curiosity-toolbar.sla', { context: (type === '' && 'none') || type }),
   value: type,
   selected: false
 }));
@@ -71,7 +71,11 @@ const ToolbarFieldSla = ({
   const { [RHSM_API_QUERY_TYPES.SLA]: updatedValue } = useAliasProductQuery();
   const onSelect = useAliasOnSelect();
 
-  const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
+  const updatedOptions = options.map(option => ({
+    ...option,
+    title: (typeof option.title === 'function' && option.title()) || option.title,
+    selected: option.value === updatedValue
+  }));
 
   return (
     <Select

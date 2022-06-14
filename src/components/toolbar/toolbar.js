@@ -83,7 +83,11 @@ const Toolbar = ({
    */
   const setSelectedOptions = ({ options: filterOptions, value }) => {
     const query = filterOptions.find(({ value: optionValue }) => optionValue === toolbarFieldQueries?.[value]);
-    return (query?.title && [query?.title]) || [];
+    let updatedQueryTitle;
+    if (query?.title) {
+      updatedQueryTitle = (typeof query.title === 'function' && [query.title()]) || [query.title];
+    }
+    return updatedQueryTitle || [];
   };
 
   return (
@@ -103,7 +107,7 @@ const Toolbar = ({
               </ToolbarItem>
             )}
             {options.map(({ title, value, component: OptionComponent, isClearable, options: filterOptions }) => {
-              const chipProps = { categoryName: title };
+              const chipProps = { categoryName: (typeof title === 'function' && title()) || title };
 
               if (isClearable !== false) {
                 chipProps.chips = setSelectedOptions({ options: filterOptions, value });

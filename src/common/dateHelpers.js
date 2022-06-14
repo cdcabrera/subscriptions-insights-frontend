@@ -98,16 +98,20 @@ const getRangedMonthDateTime = month => {
     startDateUpdated.add(1, 'month');
 
     dateTime.title = translate('curiosity-toolbar.granularityRangedMonthly', { context: dateTime.title });
+    // dateTime.title = function(){ return translate('curiosity-toolbar.granularityRangedMonthly', { context: dateTime.title }) };
     keyDateTimeRanges[title.toLowerCase()] = { ...dateTime };
     keyDateTimeRanges[titleIndex] = { ...dateTime };
     listDateTimeRanges.push(dateTime);
   }
+
+  console.log('>>>>>>>>>>>>>>>>> DATE HELPERS', listDateTimeRanges);
 
   listDateTimeRanges = listDateTimeRanges.reverse();
   listDateTimeRanges[0] = {
     ...listDateTimeRanges[0],
     isCurrent: true,
     _title: 'current',
+    // title: translate('curiosity-toolbar.granularityRangedMonthly', { context: 'current' })
     title: translate('curiosity-toolbar.granularityRangedMonthly', { context: 'current' })
   };
 

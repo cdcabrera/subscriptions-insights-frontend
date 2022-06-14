@@ -158,6 +158,7 @@ const rhsmTally = response => {
     cloudigradeHasMismatch: meta[TALLY_META_TYPES.HAS_CLOUDIGRADE_MISMATCH],
     metricId: meta[TALLY_META_TYPES.METRIC_ID],
     productId: meta[TALLY_META_TYPES.PRODUCT],
+    totalCoreHours: meta[TALLY_META_TYPES.TOTAL_CORE_HOURS],
     totalMonthlyDate: meta[TALLY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_META_TYPES.DATE],
     totalMonthlyHasData: meta[TALLY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_META_TYPES.HAS_DATA],
     totalMonthlyValue: meta[TALLY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_META_TYPES.VALUE]

@@ -37,13 +37,17 @@ const RHSM_API_PATH_PRODUCT_TYPES = {
  *     TRANSFER_GIBIBYTES: string, CORE_SECONDS: string}}
  */
 const RHSM_API_PATH_METRIC_TYPES = {
+  CORE_HOURS: 'Core-hours',
   CORES: 'Cores',
   SOCKETS: 'Sockets',
   CORE_SECONDS: 'Core-seconds',
   INSTANCE_HOURS: 'Instance-hours',
   STORAGE_GIBIBYTES: 'Storage-gibibytes',
   STORAGE_GIBIBYTE_MONTHS: 'Storage-gibibyte-months',
-  TRANSFER_GIBIBYTES: 'Transfer-gibibytes'
+  TRANSFER_GIBIBYTES: 'Transfer-gibibytes',
+  PHYSICAL_SOCKETS: 'Physical-sockets',
+  HYPERVISOR_SOCKETS: 'Hypervisor-sockets',
+  CLOUD_SOCKETS: 'Cloud-sockets'
 };
 
 /**
@@ -194,6 +198,7 @@ const RHSM_API_RESPONSE_TALLY_META_TYPES = {
   HAS_CLOUDIGRADE_MISMATCH: 'has_cloudigrade_mismatch',
   HAS_DATA: 'has_data',
   METRIC_ID: 'metric_id',
+  TOTAL_CORE_HOURS: 'total_core_hours',
   TOTAL_MONTHLY: 'total_monthly'
 };
 

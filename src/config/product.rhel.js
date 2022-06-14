@@ -10,16 +10,26 @@ import {
 import { Button, Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import moment from 'moment';
+import { SelectPosition } from '../components/form/select';
+import { ToolbarFieldGranularity } from '../components/toolbar/toolbarFieldGranularity';
+// import {
+// RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
+// RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
+// RHSM_API_QUERY_SORT_TYPES,
+// RHSM_API_QUERY_TYPES,
+// RHSM_API_QUERY_UOM_TYPES,
+// RHSM_API_PATH_ID_TYPES
+// } from '../types/rhsmApiTypes';
 import {
+  RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
-  RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
-  RHSM_API_QUERY_SORT_TYPES,
-  RHSM_API_QUERY_TYPES,
+  RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
+  RHSM_API_QUERY_INVENTORY_SORT_TYPES as INVENTORY_SORT_TYPES,
+  RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES as SUBSCRIPTIONS_SORT_TYPES,
+  RHSM_API_QUERY_SET_TYPES,
   RHSM_API_QUERY_UOM_TYPES,
-  RHSM_API_PATH_ID_TYPES
-} from '../types/rhsmApiTypes';
-import {
-  RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES,
+  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES as CAPACITY_TYPES,
   RHSM_API_RESPONSE_SUBSCRIPTIONS_DATA_TYPES as SUBSCRIPTIONS_INVENTORY_TYPES
 } from '../services/rhsm/rhsmConstants';
 import { dateHelpers, helpers } from '../common';
@@ -32,11 +42,11 @@ import { translate } from '../components/i18n/i18n';
  * or using anArray/List then generating "routes.js"
  */
 
-const productGroup = RHSM_API_PATH_ID_TYPES.RHEL;
+const productGroup = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
 
 const productId = null;
 
-const productLabel = RHSM_API_PATH_ID_TYPES.RHEL;
+const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
 
 const config = {
   productGroup,
@@ -44,46 +54,54 @@ const config = {
   productLabel,
   viewId: `view${productGroup}`,
   query: {
-    [RHSM_API_QUERY_TYPES.UOM]: RHSM_API_QUERY_UOM_TYPES.SOCKETS,
-    [RHSM_API_QUERY_TYPES.START_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).startDate.toISOString(),
-    [RHSM_API_QUERY_TYPES.END_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).endDate.toISOString()
+    [RHSM_API_QUERY_SET_TYPES.UOM]: RHSM_API_QUERY_UOM_TYPES.SOCKETS,
+    [RHSM_API_QUERY_SET_TYPES.START_DATE]: dateHelpers
+      .getRangedDateTime(GRANULARITY_TYPES.DAILY)
+      .startDate.toISOString(),
+    [RHSM_API_QUERY_SET_TYPES.END_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).endDate.toISOString()
   },
   graphTallyQuery: {
-    [RHSM_API_QUERY_TYPES.GRANULARITY]: GRANULARITY_TYPES.DAILY
+    [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: GRANULARITY_TYPES.DAILY
   },
   inventoryHostsQuery: {
-    [RHSM_API_QUERY_TYPES.SORT]: RHSM_API_QUERY_SORT_TYPES.LAST_SEEN,
-    [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
-    [RHSM_API_QUERY_TYPES.LIMIT]: 100,
-    [RHSM_API_QUERY_TYPES.OFFSET]: 0
+    [RHSM_API_QUERY_SET_TYPES.SORT]: INVENTORY_SORT_TYPES.LAST_SEEN,
+    [RHSM_API_QUERY_SET_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
+    [RHSM_API_QUERY_SET_TYPES.LIMIT]: 100,
+    [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
   },
   inventorySubscriptionsQuery: {
-    [RHSM_API_QUERY_TYPES.SORT]: RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES.NEXT_EVENT_DATE,
-    [RHSM_API_QUERY_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
-    [RHSM_API_QUERY_TYPES.LIMIT]: 100,
-    [RHSM_API_QUERY_TYPES.OFFSET]: 0
+    [RHSM_API_QUERY_SET_TYPES.SORT]: SUBSCRIPTIONS_SORT_TYPES.NEXT_EVENT_DATE,
+    [RHSM_API_QUERY_SET_TYPES.DIRECTION]: SORT_DIRECTION_TYPES.DESCENDING,
+    [RHSM_API_QUERY_SET_TYPES.LIMIT]: 100,
+    [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
   },
   initialGraphFilters: [
     {
-      id: 'physicalSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.PHYSICAL_SOCKETS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value
     },
     {
-      id: 'hypervisorSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.HYPERVISOR_SOCKETS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value
     },
     {
-      id: 'cloudSockets',
+      id: RHSM_API_PATH_METRIC_TYPES.CLOUD_SOCKETS,
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value
     },
-    { id: 'thresholdSockets', chartType: 'threshold' }
+    {
+      id: CAPACITY_TYPES.SOCKETS,
+      chartType: 'threshold'
+    }
   ],
+  initialGraphSettings: {
+    actionDisplay: <ToolbarFieldGranularity position={SelectPosition.right} />
+  },
   initialGuestsFilters: [
     {
       id: 'displayName',
@@ -250,10 +268,10 @@ const config = {
   ],
   initialToolbarFilters: [
     {
-      id: RHSM_API_QUERY_TYPES.SLA
+      id: RHSM_API_QUERY_SET_TYPES.SLA
     },
     {
-      id: RHSM_API_QUERY_TYPES.USAGE,
+      id: RHSM_API_QUERY_SET_TYPES.USAGE,
       selected: true
     }
   ]
