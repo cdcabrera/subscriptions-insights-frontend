@@ -45,8 +45,6 @@ const GraphCardChart = ({
     updatedActionDisplay = actionDisplay;
   } else if (typeof actionDisplay === 'function') {
     updatedActionDisplay = actionDisplay({ data: { ...data } });
-    // updatedActionDisplay = actionDisplay({ data: { meta: {}, ...data } });
-    // actionDisplay = settings.actionDisplay({ data: { ...graphData }, meta: { ...meta } });
   }
 
   return (
