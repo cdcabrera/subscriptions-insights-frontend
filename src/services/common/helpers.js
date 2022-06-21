@@ -2,6 +2,27 @@ import _camelCase from 'lodash/camelCase';
 import _isPlainObject from 'lodash/isPlainObject';
 import { helpers } from '../../common';
 
+const sessionStore = (data, remove = false, { extend = true, id = helpers.UI_NAME, expire } = {}) => {
+  const sessionExpire = helpers.STORE_EXPIRE; // Number.parseInt(helpers.STORE_EXPIRE, 10);
+  const { sessionStorage, atob, btoa, JSON } = window;
+  // window.sessionStorage.get();
+  let store = sessionStorage.getItem(id);
+
+  if (remove) {
+    sessionStorage.removeItem(id);
+  } else if (data) {
+    let updatedData = data;
+
+    if (!_isPlainObject(updatedData)) {
+      updatedData = { value: updatedData };
+    }
+
+    sessionStorage.setItem(id, JSON.stringify());
+  }
+
+  return store;
+};
+
 /**
  * A timeout cancel for function calls.
  *

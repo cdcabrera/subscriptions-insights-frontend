@@ -54,6 +54,16 @@ const getApiVersion = (options = {}) => {
   });
 };
 
+const getApiConfig = (options = {}) => {
+  const { cache = false, cancel = true, cancelId } = options;
+  return serviceCall({
+    url: process.env.REACT_APP_SERVICES_RHSM_CONFIG,
+    cache,
+    cancel,
+    cancelId
+  });
+};
+
 /**
  * @apiMock {DelayResponse} 250
  * @apiMock {RandomSuccess}

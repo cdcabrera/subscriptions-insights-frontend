@@ -27,6 +27,8 @@ const globalResponseCache = new LruCache({
   updateAgeOnGet: true
 });
 
+const globalSessionCache = ;
+
 // ToDo: consider another way of hashing cacheIDs. base64 could get a little large depending on settings, i.e. md5
 /**
  * Set Axios configuration. This includes response schema validation and caching.
