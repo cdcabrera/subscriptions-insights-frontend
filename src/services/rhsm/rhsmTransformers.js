@@ -68,20 +68,13 @@ const rhsmTally = response => {
     (
       { [TALLY_DATA_TYPES.DATE]: date, [TALLY_DATA_TYPES.VALUE]: value, [TALLY_DATA_TYPES.HAS_DATA]: hasData },
       index
-    ) => {
-      const updatedDate = moment.utc(date);
-      const isCurrentDate = updatedDate.format('MM-D-YYYY') === currentDay;
-      const isFutureDate = updatedDate.diff(currentDay) > 0;
-      //
-      return {
-        x: index,
-        y: hasData === false && isFutureDate ? null : value,
-        date,
-        hasData,
-        isCurrentDate,
-        isFutureDate
-      };
-    }
+    ) => ({
+      x: index,
+      y: hasData === true ? value : null,
+      date,
+      hasData,
+      isCurrentDate: moment.utc(date).format('MM-D-YYYY') === currentDay
+    })
   );
 
   updatedResponse.meta = {
