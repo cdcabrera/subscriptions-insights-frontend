@@ -62,7 +62,9 @@ const rhsmTally = response => {
   const updatedResponse = {};
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
     response || {};
-  const currentDay = moment.utc(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
+  const currentUTCDay = moment.utc(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
+  const currentRegionalDay = moment(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
+  let isCurrentDateSet = false;
 
   updatedResponse.data = data.map(
     (
@@ -70,9 +72,22 @@ const rhsmTally = response => {
       index
     ) => {
       const updatedDate = moment.utc(date);
-      const isCurrentDate = updatedDate.format('MM-D-YYYY') === currentDay;
-      const isFutureDate = updatedDate.diff(currentDay) > 0;
-      //
+      let isCurrentDate;
+      const isCurrentUTCDate = updatedDate.format('MM-D-YYYY') === currentUTCDay;
+      const isCurrentRegionalDate = updatedDate.format('MM-D-YYYY') === currentRegionalDay;
+
+      if (isCurrentDateSet === false && isCurrentUTCDate && hasData === true) {
+        isCurrentDateSet = true;
+        isCurrentDate = true;
+      }
+
+      if (isCurrentDateSet === false && isCurrentRegionalDate) {
+        isCurrentDateSet = true;
+        isCurrentDate = true;
+      }
+
+      const isFutureDate = updatedDate.diff(currentUTCDay) > 0;
+
       return {
         x: index,
         y: hasData === false && isFutureDate ? null : value,
