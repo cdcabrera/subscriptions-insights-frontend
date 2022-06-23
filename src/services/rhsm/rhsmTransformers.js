@@ -64,7 +64,8 @@ const rhsmTally = response => {
     response || {};
   const currentUTCDay = moment.utc(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
   const currentRegionalDay = moment(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
-  let isCurrentDateSet = false;
+  let currentUTCDateHasData = false;
+  // let isCurrentDateSet = false;
 
   updatedResponse.data = data.map(
     (
@@ -72,19 +73,40 @@ const rhsmTally = response => {
       index
     ) => {
       const updatedDate = moment.utc(date);
-      let isCurrentDate;
       const isCurrentUTCDate = updatedDate.format('MM-D-YYYY') === currentUTCDay;
       const isCurrentRegionalDate = updatedDate.format('MM-D-YYYY') === currentRegionalDay;
 
-      if (isCurrentDateSet === false && isCurrentUTCDate && hasData === true) {
-        isCurrentDateSet = true;
-        isCurrentDate = true;
+      if (isCurrentUTCDate && hasData === true) {
+        //  isCurrentDateSet = true;
+        currentUTCDateHasData = true;
       }
 
-      if (isCurrentDateSet === false && isCurrentRegionalDate) {
-        isCurrentDateSet = true;
-        isCurrentDate = true;
-      }
+      // let isCurrentDate = isCurrentRegionalDate;
+
+      // if (isCurrentDateSet === false && isCurrentUTCDate && hasData === true) {
+      //  isCurrentDateSet = true;
+      //  isCurrentDate = true;
+      // }
+
+      // if (isCurrentDateSet === false && isCurrentRegionalDate) {
+      //  isCurrentDateSet = true;
+      //  isCurrentDate = true;
+      // }
+
+      console.log('>>> DATE TIMES UTC >>>', {
+        date: updatedDate.format('MM-D-YYYY'),
+        currentUTCDay,
+        isCurrentUTCDate,
+        hasData,
+        value
+      });
+      console.log('>>> DATE TIMES REGIONAL >>>', {
+        date: updatedDate.format('MM-D-YYYY'),
+        currentRegionalDay,
+        isCurrentRegionalDate,
+        hasData,
+        value
+      });
 
       const isFutureDate = updatedDate.diff(currentUTCDay) > 0;
 
@@ -93,11 +115,18 @@ const rhsmTally = response => {
         y: hasData === false && isFutureDate ? null : value,
         date,
         hasData,
-        isCurrentDate,
-        isFutureDate
+        isCurrentDate: currentUTCDateHasData,
+        isFutureDate,
+        isCurrentRegionalDate,
+        isCurrentUTCDate
       };
     }
   );
+
+  if (!currentUTCDateHasData) {
+    const obj = updatedResponse.data.find(objs => objs.isCurrentRegionalDate === true);
+    obj.isCurrentDate = true;
+  }
 
   updatedResponse.meta = {
     count: meta[TALLY_META_TYPES.COUNT],
