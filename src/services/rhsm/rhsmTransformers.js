@@ -112,7 +112,8 @@ const rhsmTally = response => {
 
       return {
         x: index,
-        y: hasData === false && isFutureDate ? null : value,
+        y: (hasData === false && isFutureDate) || (hasData === false && isCurrentUTCDate) ? null : value,
+        // y: hasData === false && isFutureDate ? null : value,
         date,
         hasData,
         isCurrentDate: currentUTCDateHasData,
@@ -124,8 +125,15 @@ const rhsmTally = response => {
   );
 
   if (!currentUTCDateHasData) {
-    const obj = updatedResponse.data.find(objs => objs.isCurrentRegionalDate === true);
-    obj.isCurrentDate = true;
+    // throws error
+    // const obj = updatedResponse.data.find(objs => objs.isCurrentRegionalDate === true);
+    // obj.isCurrentDate = true;
+
+    updatedResponse.data = updatedResponse.data.map(({ isCurrentRegionalDate, ...props }) => ({
+      ...props,
+      isCurrentRegionalDate,
+      isCurrentDate: isCurrentRegionalDate === true
+    }));
   }
 
   updatedResponse.meta = {
@@ -137,6 +145,10 @@ const rhsmTally = response => {
     totalMonthlyHasData: meta[TALLY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_META_TYPES.HAS_DATA],
     totalMonthlyValue: meta[TALLY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_META_TYPES.VALUE]
   };
+
+  console.log('>>>>>>>>>>>>>>> RESPONSE >>>>>>>>>>>>>>>>');
+  console.log(updatedResponse);
+  console.log('>>>>>>>>>>>>>>> RESPONSE >>>>>>>>>>>>>>>>');
 
   return updatedResponse;
 };
