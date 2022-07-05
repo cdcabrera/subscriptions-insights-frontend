@@ -106,7 +106,8 @@ const config = {
         .numberDisplay(tick)
         ?.format({ average: true, mantissa: 5, trimMantissa: true, lowPrecision: true })
         ?.toUpperCase();
-    }
+    },
+    yAxisCrossAxis: false
   },
   initialInventoryFilters: [
     {

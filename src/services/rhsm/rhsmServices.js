@@ -764,155 +764,155 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *     {
  *       "data": [
  *         {
- *           "date": "2020-07-01T00:00:00Z",
+ *           "date": "2022-07-01T00:00:00Z",
+ *           "value": 14,
+ *           "has_data": true
+ *         },
+ *         {
+ *           "date": "2022-07-02T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-02T00:00:00Z",
+ *           "date": "2022-07-03T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-03T00:00:00Z",
+ *           "date": "2022-07-04T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-04T00:00:00Z",
- *           "value": 25,
- *           "has_data": true
- *         },
- *         {
- *           "date": "2020-07-05T00:00:00Z",
+ *           "date": "2022-07-05T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-06T00:00:00Z",
+ *           "date": "2022-07-06T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-07T00:00:00Z",
+ *           "date": "2022-07-07T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-08T00:00:00Z",
+ *           "date": "2022-07-08T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-09T00:00:00Z",
+ *           "date": "2022-07-09T00:00:00Z",
  *           "value": 1000,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-10T00:00:00Z",
+ *           "date": "2022-07-10T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-11T00:00:00Z",
+ *           "date": "2022-07-11T00:00:00Z",
  *           "value": 50.090125,
  *           "has_data": null
  *         },
  *         {
- *           "date": "2020-07-12T00:00:00Z",
+ *           "date": "2022-07-12T00:00:00Z",
  *           "has_data": null
  *         },
  *         {
- *           "date": "2020-07-13T00:00:00Z",
+ *           "date": "2022-07-13T00:00:00Z",
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-14T00:00:00Z",
+ *           "date": "2022-07-14T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-15T00:00:00Z",
+ *           "date": "2022-07-15T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-16T00:00:00Z",
+ *           "date": "2022-07-16T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-17T00:00:00Z",
+ *           "date": "2022-07-17T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-18T00:00:00Z",
+ *           "date": "2022-07-18T00:00:00Z",
  *           "value": null,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-19T00:00:00Z",
+ *           "date": "2022-07-19T00:00:00Z",
  *           "value": null,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-20T00:00:00Z",
+ *           "date": "2022-07-20T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-21T00:00:00Z",
+ *           "date": "2022-07-21T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-22T00:00:00Z",
+ *           "date": "2022-07-22T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-23T00:00:00Z",
+ *           "date": "2022-07-23T00:00:00Z",
  *           "value": 0,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-24T00:00:00Z",
+ *           "date": "2022-07-24T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-25T00:00:00Z",
+ *           "date": "2022-07-25T00:00:00Z",
  *           "value": 90,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-26T00:00:00Z",
+ *           "date": "2022-07-26T00:00:00Z",
  *           "value": 104,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-27T00:00:00Z",
+ *           "date": "2022-07-27T00:00:00Z",
  *           "value": 70,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-28T00:00:00Z",
+ *           "date": "2022-07-28T00:00:00Z",
  *           "value": 82,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-29T00:00:00Z",
+ *           "date": "2022-07-29T00:00:00Z",
  *           "value": 86,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-30T00:00:00Z",
+ *           "date": "2022-07-30T00:00:00Z",
  *           "value": 90,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 144,
  *           "has_data": true
  *         }
@@ -926,7 +926,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "product": "RHEL",
  *         "service_level": "",
  *         "total_monthly": {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 50,
  *           "has_data": true
  *         },
@@ -945,157 +945,157 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *     {
  *       "data": [
  *         {
- *           "date": "2020-07-01T00:00:00Z",
+ *           "date": "2022-07-01T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-02T00:00:00Z",
+ *           "date": "2022-07-02T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-03T00:00:00Z",
+ *           "date": "2022-07-03T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-04T00:00:00Z",
+ *           "date": "2022-07-04T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-05T00:00:00Z",
+ *           "date": "2022-07-05T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-06T00:00:00Z",
+ *           "date": "2022-07-06T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-07T00:00:00Z",
+ *           "date": "2022-07-07T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-08T00:00:00Z",
+ *           "date": "2022-07-08T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-09T00:00:00Z",
+ *           "date": "2022-07-09T00:00:00Z",
  *           "value": 1000,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-10T00:00:00Z",
+ *           "date": "2022-07-10T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-11T00:00:00Z",
+ *           "date": "2022-07-11T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-12T00:00:00Z",
+ *           "date": "2022-07-12T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-13T00:00:00Z",
+ *           "date": "2022-07-13T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-14T00:00:00Z",
+ *           "date": "2022-07-14T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-15T00:00:00Z",
+ *           "date": "2022-07-15T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-16T00:00:00Z",
+ *           "date": "2022-07-16T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-17T00:00:00Z",
+ *           "date": "2022-07-17T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-18T00:00:00Z",
+ *           "date": "2022-07-18T00:00:00Z",
  *           "value": null,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-19T00:00:00Z",
+ *           "date": "2022-07-19T00:00:00Z",
  *           "value": null,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-20T00:00:00Z",
+ *           "date": "2022-07-20T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-21T00:00:00Z",
+ *           "date": "2022-07-21T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-22T00:00:00Z",
+ *           "date": "2022-07-22T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-23T00:00:00Z",
+ *           "date": "2022-07-23T00:00:00Z",
  *           "value": 0,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-24T00:00:00Z",
+ *           "date": "2022-07-24T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-25T00:00:00Z",
+ *           "date": "2022-07-25T00:00:00Z",
  *           "value": 90,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-26T00:00:00Z",
+ *           "date": "2022-07-26T00:00:00Z",
  *           "value": 104,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-27T00:00:00Z",
+ *           "date": "2022-07-27T00:00:00Z",
  *           "value": 70,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-28T00:00:00Z",
+ *           "date": "2022-07-28T00:00:00Z",
  *           "value": 82,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-29T00:00:00Z",
+ *           "date": "2022-07-29T00:00:00Z",
  *           "value": 86,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-30T00:00:00Z",
+ *           "date": "2022-07-30T00:00:00Z",
  *           "value": 90,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 144,
  *           "has_data": true
  *         }
@@ -1110,7 +1110,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "product": "RHEL",
  *         "service_level": "",
  *         "total_monthly": {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 1024,
  *           "has_data": true
  *         },
@@ -1129,157 +1129,157 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *     {
  *       "data": [
  *         {
- *           "date": "2020-07-01T00:00:00Z",
+ *           "date": "2022-07-01T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-02T00:00:00Z",
+ *           "date": "2022-07-02T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-03T00:00:00Z",
+ *           "date": "2022-07-03T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-04T00:00:00Z",
+ *           "date": "2022-07-04T00:00:00Z",
  *           "value": 25,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-05T00:00:00Z",
+ *           "date": "2022-07-05T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-06T00:00:00Z",
+ *           "date": "2022-07-06T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-07T00:00:00Z",
+ *           "date": "2022-07-07T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-08T00:00:00Z",
+ *           "date": "2022-07-08T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-09T00:00:00Z",
+ *           "date": "2022-07-09T00:00:00Z",
  *           "value": 1000,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-10T00:00:00Z",
+ *           "date": "2022-07-10T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-11T00:00:00Z",
+ *           "date": "2022-07-11T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-12T00:00:00Z",
+ *           "date": "2022-07-12T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-13T00:00:00Z",
+ *           "date": "2022-07-13T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-14T00:00:00Z",
+ *           "date": "2022-07-14T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-15T00:00:00Z",
+ *           "date": "2022-07-15T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-16T00:00:00Z",
+ *           "date": "2022-07-16T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-17T00:00:00Z",
+ *           "date": "2022-07-17T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-18T00:00:00Z",
+ *           "date": "2022-07-18T00:00:00Z",
  *           "value": null,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-19T00:00:00Z",
+ *           "date": "2022-07-19T00:00:00Z",
  *           "value": null,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-20T00:00:00Z",
+ *           "date": "2022-07-20T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-21T00:00:00Z",
+ *           "date": "2022-07-21T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-22T00:00:00Z",
+ *           "date": "2022-07-22T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-23T00:00:00Z",
+ *           "date": "2022-07-23T00:00:00Z",
  *           "value": 0,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-24T00:00:00Z",
+ *           "date": "2022-07-24T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-25T00:00:00Z",
+ *           "date": "2022-07-25T00:00:00Z",
  *           "value": 90,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-26T00:00:00Z",
+ *           "date": "2022-07-26T00:00:00Z",
  *           "value": 104,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-27T00:00:00Z",
+ *           "date": "2022-07-27T00:00:00Z",
  *           "value": 70,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-28T00:00:00Z",
+ *           "date": "2022-07-28T00:00:00Z",
  *           "value": 82,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-29T00:00:00Z",
+ *           "date": "2022-07-29T00:00:00Z",
  *           "value": 86,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-30T00:00:00Z",
+ *           "date": "2022-07-30T00:00:00Z",
  *           "value": 90,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 144,
  *           "has_data": true
  *         }
@@ -1294,7 +1294,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "product": "RHEL",
  *         "service_level": "",
  *         "total_monthly": {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 2048,
  *           "has_data": true
  *         },
@@ -1313,159 +1313,159 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *     {
  *       "data": [
  *         {
- *           "date": "2020-07-01T00:00:00Z",
- *           "value": 25,
+ *           "date": "2022-07-01T00:00:00Z",
+ *           "value": 14,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-02T00:00:00Z",
+ *           "date": "2022-07-02T00:00:00Z",
  *           "value": 25,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-03T00:00:00Z",
+ *           "date": "2022-07-03T00:00:00Z",
  *           "value": 25,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-04T00:00:00Z",
+ *           "date": "2022-07-04T00:00:00Z",
  *           "value": 25,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-05T00:00:00Z",
+ *           "date": "2022-07-05T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-06T00:00:00Z",
+ *           "date": "2022-07-06T00:00:00Z",
  *           "value": 0,
  *           "has_data": true
  *         },
  *         {
- *           "date": "2020-07-07T00:00:00Z",
+ *           "date": "2022-07-07T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-08T00:00:00Z",
+ *           "date": "2022-07-08T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-09T00:00:00Z",
+ *           "date": "2022-07-09T00:00:00Z",
  *           "value": 1000,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-10T00:00:00Z",
+ *           "date": "2022-07-10T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-11T00:00:00Z",
+ *           "date": "2022-07-11T00:00:00Z",
  *           "value": 50,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-12T00:00:00Z",
+ *           "date": "2022-07-12T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-13T00:00:00Z",
+ *           "date": "2022-07-13T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-14T00:00:00Z",
+ *           "date": "2022-07-14T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-15T00:00:00Z",
+ *           "date": "2022-07-15T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-16T00:00:00Z",
+ *           "date": "2022-07-16T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-17T00:00:00Z",
+ *           "date": "2022-07-17T00:00:00Z",
  *           "value": null,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-18T00:00:00Z",
+ *           "date": "2022-07-18T00:00:00Z",
  *           "value": null,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-19T00:00:00Z",
+ *           "date": "2022-07-19T00:00:00Z",
  *           "value": null,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-20T00:00:00Z",
- *           "value": 0,
- *           "has_data": true
- *         },
- *         {
- *           "date": "2020-07-21T00:00:00Z",
- *           "value": 0,
- *           "has_data": true
- *         },
- *         {
- *           "date": "2020-07-22T00:00:00Z",
- *           "value": 0,
- *           "has_data": true
- *         },
- *         {
- *           "date": "2020-07-23T00:00:00Z",
+ *           "date": "2022-07-20T00:00:00Z",
  *           "value": 0,
  *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-24T00:00:00Z",
+ *           "date": "2022-07-21T00:00:00Z",
  *           "value": 0,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-25T00:00:00Z",
+ *           "date": "2022-07-22T00:00:00Z",
+ *           "value": 0,
+ *           "has_data": false
+ *         },
+ *         {
+ *           "date": "2022-07-23T00:00:00Z",
+ *           "value": 0,
+ *           "has_data": false
+ *         },
+ *         {
+ *           "date": "2022-07-24T00:00:00Z",
+ *           "value": 0,
+ *           "has_data": false
+ *         },
+ *         {
+ *           "date": "2022-07-25T00:00:00Z",
  *           "value": 90,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-26T00:00:00Z",
+ *           "date": "2022-07-26T00:00:00Z",
  *           "value": 104,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-27T00:00:00Z",
+ *           "date": "2022-07-27T00:00:00Z",
  *           "value": 70,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-28T00:00:00Z",
+ *           "date": "2022-07-28T00:00:00Z",
  *           "value": 82,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-29T00:00:00Z",
+ *           "date": "2022-07-29T00:00:00Z",
  *           "value": 86,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-30T00:00:00Z",
+ *           "date": "2022-07-30T00:00:00Z",
  *           "value": 90,
- *           "has_data": true
+ *           "has_data": false
  *         },
  *         {
- *           "date": "2020-07-31T00:00:00Z",
+ *           "date": "2022-07-31T00:00:00Z",
  *           "value": 144,
- *           "has_data": true
+ *           "has_data": false
  *         }
  *       ],
  *       "links": {},
@@ -1477,8 +1477,8 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         "product": "RHEL",
  *         "service_level": "",
  *         "total_monthly": {
- *           "date": "2020-07-31T00:00:00Z",
- *           "value": 2000,
+ *           "date": "2022-07-01T00:00:00Z",
+ *           "value": 14,
  *           "has_data": true
  *         },
  *         "usage": ""

@@ -359,18 +359,22 @@ const generateAxisProps = ({
   maxY,
   xAxisChartLabel,
   yAxisChartLabel,
+  xAxisCrossAxis = false,
+  yAxisCrossAxis = false,
   xAxisFixLabelOverlap = true,
   xAxisLabelIncrement = 1,
   xAxisTickFormat,
   yAxisTickFormat
 } = {}) => {
   const xAxisPropDefaults = {
-    fixLabelOverlap: xAxisFixLabelOverlap
+    fixLabelOverlap: xAxisFixLabelOverlap,
+    crossAxis: xAxisCrossAxis
   };
 
   const yAxisPropDefaults = {
     dependentAxis: true,
-    showGrid: true
+    showGrid: true,
+    crossAxis: yAxisCrossAxis
   };
 
   let yAxisDataSets = [];
