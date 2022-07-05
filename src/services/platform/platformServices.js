@@ -32,21 +32,21 @@ import {
  *
  * @apiSuccessExample {html} Success-Response:
  *     HTTP/1.1 200 OK
- * <!DOCTYPE html>
- * <html>
- * <body>
- * <script>
- *     if (document.cookie.indexOf("KEYCLOAK_3P_COOKIE") !== -1) {
- *         document.cookie = "KEYCLOAK_3P_COOKIE_SAMESITE=; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure"
- *         document.cookie = "KEYCLOAK_3P_COOKIE=; expires=Thu, 01 Jan 1970 00:00:00 GMT"
- *         window.parent.postMessage("supported", "*")
- *     }
- *     else {
- *         window.parent.postMessage("unsupported", "*")
- *     }
- * </script>
- * <noscript><img src="/akam/13/pixel_1e66e0cc?a=dD1mYzkxNTJlZDlkNDIzNjBjZmI3YzYxMDcyMDY1YjBjYWQ0OTgzM2NiJmpzPW9mZg==" style="visibility: hidden; position: absolute; left: -999px; top: -999px;" /></noscript></body>
- * </html>
+ *     <!DOCTYPE html>
+ *     <html>
+ *       <body>
+ *         <script>
+ *           if (document.cookie.indexOf("KEYCLOAK_3P_COOKIE") !== -1) {
+ *               document.cookie = "KEYCLOAK_3P_COOKIE_SAMESITE=; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure"
+ *               document.cookie = "KEYCLOAK_3P_COOKIE=; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+ *               window.parent.postMessage("supported", "*")
+ *           }
+ *           else {
+ *             window.parent.postMessage("unsupported", "*")
+ *           }
+ *         </script>
+ *       </body>
+ *     </html>
  */
 /**
  * @api {get} /auth/realms/redhat-external/protocol/openid-connect/auth
@@ -56,16 +56,12 @@ import {
  *     HTTP/1.1 200 OK
  *     <!DOCTYPE html>
  *     <html>
- *       <body>
- *         <script>
- *           window.location = "step2.html"
- *         </script>
- *       </body>
+ *       <body />
  *     </html>
  */
 /**
  * @api {get} /auth/realms/redhat-external/protocol/openid-connect/token
- * @apiDescription auth endpoint
+ * @apiDescription token endpoint
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
@@ -78,7 +74,8 @@ import {
  *       "id_token":"123.123.123-123-123-123-123-123-123-123-123-123-123-123-123",
  *       "not-before-policy":0,
  *       "session_state":"123-123-123-123-13",
- *       "scope":"openid api.iam.service_accounts"}
+ *       "scope":"openid api.iam.service_accounts"
+ *     }
  */
 /**
  * Basic user authentication.
