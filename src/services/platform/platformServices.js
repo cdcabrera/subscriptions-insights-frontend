@@ -11,7 +11,7 @@ import {
 
 /**
  * @api {get} /auth/realms/redhat-external/protocol/openid-connect/3p-cookies/step1.html
- * @apiDescription 3p-cookies
+ * @apiDescription Mock keycloak bypass
  *
  * @apiSuccessExample {html} Success-Response:
  *     HTTP/1.1 200 OK
@@ -19,63 +19,12 @@ import {
  *     <html>
  *       <body>
  *         <script>
- *           document.cookie = "KEYCLOAK_3P_COOKIE_SAMESITE=supported; max-age=60; samesite=none; secure"
- *           document.cookie = "KEYCLOAK_3P_COOKIE=supported; max-age=60"
- *           window.location = "step2.html"
+ *           document.cookie = "KEYCLOAK_3P_COOKIE_SAMESITE=; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure"
+ *           document.cookie = "KEYCLOAK_3P_COOKIE=; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+ *           window.parent.postMessage("supported", "*")
  *         </script>
  *       </body>
  *     </html>
- */
-/**
- * @api {get} /auth/realms/redhat-external/protocol/openid-connect/3p-cookies/step2.html
- * @apiDescription 3p-cookies
- *
- * @apiSuccessExample {html} Success-Response:
- *     HTTP/1.1 200 OK
- *     <!DOCTYPE html>
- *     <html>
- *       <body>
- *         <script>
- *           if (document.cookie.indexOf("KEYCLOAK_3P_COOKIE") !== -1) {
- *               document.cookie = "KEYCLOAK_3P_COOKIE_SAMESITE=; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure"
- *               document.cookie = "KEYCLOAK_3P_COOKIE=; expires=Thu, 01 Jan 1970 00:00:00 GMT"
- *               window.parent.postMessage("supported", "*")
- *           }
- *           else {
- *             window.parent.postMessage("unsupported", "*")
- *           }
- *         </script>
- *       </body>
- *     </html>
- */
-/**
- * @api {get} /auth/realms/redhat-external/protocol/openid-connect/auth
- * @apiDescription auth endpoint
- *
- * @apiSuccessExample {html} Success-Response:
- *     HTTP/1.1 200 OK
- *     <!DOCTYPE html>
- *     <html>
- *       <body />
- *     </html>
- */
-/**
- * @api {get} /auth/realms/redhat-external/protocol/openid-connect/token
- * @apiDescription token endpoint
- *
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "access_token":"123.123.123-1--123-13-123-123-123-123-123-123",
- *       "expires_in":900,
- *       "refresh_expires_in":36000,
- *       "refresh_token":"123.123.123-123",
- *       "token_type":"Bearer",
- *       "id_token":"123.123.123-123-123-123-123-123-123-123-123-123-123-123-123",
- *       "not-before-policy":0,
- *       "session_state":"123-123-123-123-13",
- *       "scope":"openid api.iam.service_accounts"
- *     }
  */
 /**
  * Basic user authentication.
