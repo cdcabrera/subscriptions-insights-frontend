@@ -68,7 +68,6 @@ const rhsmTally = response => {
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
     response || {};
   const currentDate = moment.utc(dateHelpers.getCurrentDate()).format('MM-D-YYYY');
-  const isFirstMonth = moment.utc(currentDate).date() === 1;
   let futureDateCount = 0;
 
   updatedResponse.data = data.map(
@@ -85,7 +84,7 @@ const rhsmTally = response => {
       }
 
       return {
-        x: isFirstMonth ? index + 1 : index,
+        x: index,
         y: (hasData === false && isFutureDate) || (hasData === false && isCurrentDate) ? null : value,
         date,
         hasData,
@@ -106,7 +105,7 @@ const rhsmTally = response => {
         isCurrentDate: false
       },
       ...updatedResponse.data
-    ];
+    ].map((props, index) => ({ ...props, x: index }));
   }
 
   updatedResponse.meta = {
