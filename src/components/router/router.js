@@ -1,11 +1,44 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect as ReactRouterDomRedirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useMount } from 'react-use';
 import { RouterContext } from './routerContext';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
+
+/**
+ * Generate route with context
+ *
+ * @param {object} props
+ * @param {*} props.activateOnErrorRoute
+ * @param {object} props.item
+ * @param {*} props.routes
+ * @param {React.ReactNode} props.View
+ * @returns {React.ReactNode}
+ */
+const Element = ({ activateOnErrorRoute, item, routes, View }) => {
+  const routeConfig = item.id && routerHelpers.getRouteConfig({ id: item.id });
+  const routeDetail = {
+    baseName: routerHelpers.dynamicBaseName(),
+    errorRoute: activateOnErrorRoute,
+    routes,
+    routeItem: { ...item },
+    ...routeConfig
+  };
+
+  return (
+    <RouterContext.Provider value={{ routeDetail, useLocation, useNavigate, useParams }}>
+      <View routeDetail={routeDetail} />
+    </RouterContext.Provider>
+  );
+};
+
+Element.propTypes = {
+  activateOnErrorRoute: PropTypes.any.isRequired,
+  item: PropTypes.any.isRequired,
+  routes: PropTypes.any.isRequired,
+  View: PropTypes.any.isRequired
+};
 
 /**
  * Load routes.
@@ -31,48 +64,11 @@ const Router = ({ routes } = {}) => {
         }
 
         const View = await routerHelpers.importView(item.component);
-
         return (
           <Route
-            exact={item.exact}
             key={item.path}
             path={item.path}
-            strict={item.strict}
-            render={({ location, ...routeProps }) => {
-              const routeConfig = item.id && routerHelpers.getRouteConfig({ id: item.id });
-              const { URLSearchParams, decodeURIComponent } = window;
-              const parsedSearch = {};
-
-              [
-                ...new Set(
-                  [...new URLSearchParams(decodeURIComponent(location.search))].map(
-                    ([param, value]) => `${param}~${value}`
-                  )
-                )
-              ].forEach(v => {
-                const [param, value] = v.split('~');
-                parsedSearch[param] = value;
-              });
-
-              const updatedLocation = {
-                ...location,
-                parsedSearch
-              };
-
-              const routeDetail = {
-                baseName: routerHelpers.dynamicBaseName(),
-                errorRoute: activateOnErrorRoute,
-                routes,
-                routeItem: { ...item },
-                ...routeConfig
-              };
-
-              return (
-                <RouterContext.Provider value={{ routeDetail }}>
-                  <View routeDetail={routeDetail} location={updatedLocation} {...routeProps} />
-                </RouterContext.Provider>
-              );
-            }}
+            element={<Element activateOnErrorRoute={activateOnErrorRoute} View={View} item={item} routes={routes} />}
           />
         );
       })
@@ -84,10 +80,12 @@ const Router = ({ routes } = {}) => {
 
   return (
     <React.Suspense fallback={<Loader variant="title" />}>
-      <Switch>
+      <Routes>
         {updatedRoutes}
-        {redirectDefault && <ReactRouterDomRedirect to={redirectDefault.redirect} />}
-      </Switch>
+        {redirectDefault && (
+          <Route key="redirect" path="*" element={<Navigate replace to={redirectDefault.redirect} />} />
+        )}
+      </Routes>
     </React.Suspense>
   );
 };
