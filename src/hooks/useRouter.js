@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams, useRouteMatch } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRouteDetail } from '../components/router/routerContext';
 import { routerHelpers } from '../components/router/routerHelpers';
 import { reduxActions, storeHooks } from '../redux';
@@ -8,7 +8,7 @@ import { reduxActions, storeHooks } from '../redux';
  *
  * @param {object} options
  * @param {boolean} options.isSetAppNav Allow setting the Platform's left navigation if conditions are met or fallback to history.push.
- * @param {Function} options.useHistory
+ * @param {Function} options.useNavigate
  * @param {Function} options.useDispatch
  * @returns {object}
  */
@@ -39,8 +39,7 @@ const routerHooks = {
   useHistory,
   useLocation,
   useParams,
-  useRouteDetail,
-  useRouteMatch
+  useRouteDetail
 };
 
-export { routerHooks as default, routerHooks, useHistory, useLocation, useParams, useRouteDetail, useRouteMatch };
+export { routerHooks as default, routerHooks, useHistory, useLocation, useParams, useRouteDetail };
