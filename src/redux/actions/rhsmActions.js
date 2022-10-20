@@ -1,5 +1,6 @@
 import { rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsm/rhsmServices';
+import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 
 /**
  * Get a combined RHSM response from reporting and capacity.
@@ -79,20 +80,24 @@ const getGraphMetrics =
     const multiMetric = (Array.isArray(idMetric) && idMetric) || [idMetric];
     const multiDispatch = [];
 
-    multiMetric.forEach(({ id, metric, isCapacity }) => {
+    multiMetric.forEach(({ id, metric, isCapacity, query: metricQuery }) => {
       const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
       const methodType = isCapacity ? rhsmTypes.GET_GRAPH_CAPACITY_RHSM : rhsmTypes.GET_GRAPH_TALLY_RHSM;
       const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
 
       multiDispatch.push({
         type: methodType,
-        payload: methodService([id, metric], query, {
-          cancelId: `${methodCancelId}_${id}`
-        }),
+        payload: methodService(
+          [id, metric],
+          { ...query, ...metricQuery },
+          {
+            cancelId: `${methodCancelId}_${id}`
+          }
+        ),
         meta: {
           id: `${id}_${metric}`,
-          idMetric: { id, metric },
-          query,
+          idMetric: { id, metric, category: metricQuery?.[RHSM_API_QUERY_SET_TYPES.CATEGORY] },
+          query: { ...query, ...metricQuery },
           notifications: {}
         }
       });

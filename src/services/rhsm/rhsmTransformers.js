@@ -1,5 +1,6 @@
 import moment from 'moment';
 import {
+  RHSM_API_QUERY_SET_TYPES,
   RHSM_API_RESPONSE_CAPACITY_DATA_TYPES as CAPACITY_DATA_TYPES,
   RHSM_API_RESPONSE_CAPACITY_META_TYPES as CAPACITY_META_TYPES,
   RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INSTANCES_DATA_TYPES,
@@ -21,9 +22,10 @@ import { dateHelpers } from '../../common';
  * @param {object} response
  * @param {object} config
  * @param {string} config._metricId
+ * @param {string} config.params
  * @returns {object}
  */
-const rhsmCapacity = (response, { _metricId } = {}) => {
+const rhsmCapacity = (response, { _metricId, params } = {}) => {
   const updatedResponse = {};
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
     response || {};
@@ -74,6 +76,7 @@ const rhsmCapacity = (response, { _metricId } = {}) => {
   }
 
   updatedResponse.meta = {
+    category: params?.[RHSM_API_QUERY_SET_TYPES.CATEGORY],
     count: meta[CAPACITY_META_TYPES.COUNT],
     metricId: _metricId,
     productId: meta[CAPACITY_META_TYPES.PRODUCT]
@@ -135,9 +138,11 @@ const rhsmInstances = response => {
  * Parse RHSM tally response for caching.
  *
  * @param {object} response
+ * @param {object} config
+ * @param {string} config.params
  * @returns {object}
  */
-const rhsmTally = response => {
+const rhsmTally = (response, { params }) => {
   const updatedResponse = {};
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
     response || {};
@@ -184,6 +189,7 @@ const rhsmTally = response => {
   }
 
   updatedResponse.meta = {
+    category: params?.[RHSM_API_QUERY_SET_TYPES.CATEGORY],
     count: meta[TALLY_META_TYPES.COUNT],
     cloudigradeHasMismatch: meta?.[TALLY_META_TYPES.HAS_CLOUDIGRADE_MISMATCH],
     metricId: meta[TALLY_META_TYPES.METRIC_ID],
