@@ -1,7 +1,6 @@
 import axios, { CancelToken } from 'axios';
 import LruCache from 'lru-cache';
-import _isPlainObject from 'lodash/isPlainObject';
-import { serviceHelpers } from './helpers';
+import { md5Hash, serviceHelpers } from './helpers';
 
 /**
  * Set Axios XHR default timeout.
@@ -26,19 +25,6 @@ const globalResponseCache = new LruCache({
   max: 100,
   updateAgeOnGet: true
 });
-
-const getConfigHash = obj =>
-  `${window.btoa(
-    JSON.stringify(obj, (key, value) => {
-      if (value !== obj && _isPlainObject(value)) {
-        return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
-      }
-      if (typeof value === 'function') {
-        return value.toString();
-      }
-      return value;
-    })
-  )}`;
 
 // ToDo: consider another way of hashing cacheIDs. base64 could get a little large depending on settings, i.e. md5
 /**
@@ -81,7 +67,7 @@ const axiosServiceCall = async (
   updatedConfig.cacheResponse = updatedConfig.cacheResponse === true && updatedConfig.method === 'get';
 
   // account for alterations to transforms, and other config props
-  const cacheId = (updatedConfig.cacheResponse === true && getConfigHash(updatedConfig)) || null;
+  const cacheId = (updatedConfig.cacheResponse === true && md5Hash(updatedConfig)) || null;
 
   // simple check to place responsibility on consumer, primarily used for testing
   if (updatedConfig.exposeCacheId === true) {
@@ -89,10 +75,7 @@ const axiosServiceCall = async (
   }
 
   if (updatedConfig.cancel === true) {
-    // const cancelTokensId = `${updatedConfig.cancelId || ''}-${updatedConfig.method}-${
-    //  (typeof updatedConfig.url === 'function' && updatedConfig.url.toString()) || updatedConfig.url
-    // }`;
-    const cancelTokensId = getConfigHash(updatedConfig);
+    const cancelTokensId = md5Hash(updatedConfig);
 
     if (globalCancelTokens[cancelTokensId]) {
       globalCancelTokens[cancelTokensId].cancel(cancelledMessage);

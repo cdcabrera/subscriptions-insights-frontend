@@ -3,6 +3,11 @@ import _isPlainObject from 'lodash/isPlainObject';
 import { helpers } from '../../common';
 
 /**
+ * Pass through md5Hash
+ */
+const { md5Hash } = helpers;
+
+/**
  * A timeout cancel for function calls.
  *
  * @param {Function} func Callback to be executed or cancelled
@@ -111,6 +116,7 @@ const schemaResponse = ({ casing, convert = true, id = null, response, schema } 
 
 const serviceHelpers = {
   camelCase,
+  md5Hash,
   passDataToCallback,
   schemaResponse,
   timeoutFunctionCancel
@@ -120,6 +126,7 @@ export {
   serviceHelpers as default,
   serviceHelpers,
   camelCase,
+  md5Hash,
   passDataToCallback,
   schemaResponse,
   timeoutFunctionCancel
