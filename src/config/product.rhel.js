@@ -19,10 +19,10 @@ import moment from 'moment';
 // RHSM_API_PATH_ID_TYPES
 // '../types/rhsmApiTypes';
 import {
-  // RHSM_API_QUERY_CATEGORY_TYPES as CATEGORY_TYPES,
+  RHSM_API_QUERY_CATEGORY_TYPES as CATEGORY_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
-  // RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_PATH_METRIC_TYPES,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES as INVENTORY_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES as SUBSCRIPTIONS_SORT_TYPES,
@@ -52,7 +52,7 @@ const config = {
   productGroup,
   productId,
   productLabel,
-  productDisplay: DISPLAY_TYPES.LEGACY,
+  productDisplay: DISPLAY_TYPES.HOURLY,
   viewId: `view${productGroup}`,
   query: {
     [RHSM_API_QUERY_SET_TYPES.UOM]: RHSM_API_QUERY_UOM_TYPES.SOCKETS,
@@ -78,38 +78,34 @@ const config = {
   },
   initialGraphFilters: [
     {
-      id: 'physicalSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value,
       query: {
-        // [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.PHYSICAL
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.PHYSICAL
       }
     },
     {
-      id: 'hypervisorSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value,
       query: {
-        // [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.HYPERVISOR
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.HYPERVISOR
       }
     },
     {
-      id: 'cloudSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value,
       query: {
-        // [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.CLOUD
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.CLOUD
       }
     },
     {
-      id: 'thresholdSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       chartType: ChartTypeVariant.threshold
     }
   ],
