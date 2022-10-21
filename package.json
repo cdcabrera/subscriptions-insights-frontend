@@ -82,6 +82,7 @@
     "@redhat-cloud-services/frontend-components-utilities": "3.3.0",
     "axios": "^0.27.2",
     "classnames": "^2.3.2",
+    "crypto-js": "^4.1.1",
     "i18next": "^21.9.2",
     "i18next-http-backend": "^1.4.4",
     "iso-639-1": "^2.1.15",

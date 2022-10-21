@@ -1,4 +1,6 @@
 import numbro from 'numbro';
+import cryptoMd5 from 'crypto-js/md5';
+import _isPlainObject from 'lodash/isPlainObject';
 
 /**
  * Fill for AggregatedError
@@ -48,6 +50,28 @@ const isDate = date => Object.prototype.toString.call(date) === '[object Date]';
  * @returns {boolean}
  */
 const isPromise = obj => /^\[object (Promise|Async|AsyncFunction)]/.test(Object.prototype.toString.call(obj));
+
+/**
+ * Generate a consistent md5 hash
+ *
+ * @param {object} obj
+ * @returns {*|string}
+ */
+const md5Hash = obj =>
+  cryptoMd5(
+    JSON.stringify(
+      Object.entries(obj).sort(([a], [b]) => a.localeCompare(b)),
+      (key, value) => {
+        if (value !== obj && _isPlainObject(value)) {
+          return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
+        }
+        if (typeof value === 'function') {
+          return value.toString();
+        }
+        return value;
+      }
+    )
+  ).toString();
 
 /**
  * An empty function.
@@ -334,6 +358,7 @@ const helpers = {
   generateId,
   isDate,
   isPromise,
+  md5Hash,
   noop,
   noopPromise,
   noopTranslate,
