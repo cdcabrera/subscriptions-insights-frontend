@@ -10,24 +10,17 @@ import {
 import { Button, Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import moment from 'moment';
-// import // RHSM_API_QUERY_CATEGORY_TYPES as CATEGORY_TYPES,
-// RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
-// RHSM_API_QUERY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
-// RHSM_API_QUERY_SORT_TYPES
-// RHSM_API_QUERY_TYPES
-// RHSM_API_QUERY_UOM_TYPES
-// RHSM_API_PATH_ID_TYPES
-// '../types/rhsmApiTypes';
 import {
-  // RHSM_API_QUERY_CATEGORY_TYPES as CATEGORY_TYPES,
+  RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_PATH_PRODUCT_TYPES,
+  RHSM_API_QUERY_CATEGORY_TYPES as CATEGORY_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
-  // RHSM_API_PATH_METRIC_TYPES,
-  RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES as INVENTORY_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES as SUBSCRIPTIONS_SORT_TYPES,
   RHSM_API_QUERY_SET_TYPES,
   RHSM_API_QUERY_UOM_TYPES,
+  RHSM_API_RESPONSE_HOSTS_DATA_TYPES as INVENTORY_TYPES,
   RHSM_API_RESPONSE_SUBSCRIPTIONS_DATA_TYPES as SUBSCRIPTIONS_INVENTORY_TYPES,
   RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES
 } from '../services/rhsm/rhsmConstants';
@@ -52,7 +45,7 @@ const config = {
   productGroup,
   productId,
   productLabel,
-  productDisplay: DISPLAY_TYPES.LEGACY,
+  productDisplay: DISPLAY_TYPES.PARTIAL,
   viewId: `view${productGroup}`,
   query: {
     [RHSM_API_QUERY_SET_TYPES.UOM]: RHSM_API_QUERY_UOM_TYPES.SOCKETS,
@@ -78,38 +71,34 @@ const config = {
   },
   initialGraphFilters: [
     {
-      id: 'physicalSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value,
       query: {
-        // [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.PHYSICAL
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.PHYSICAL
       }
     },
     {
-      id: 'hypervisorSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value,
       query: {
-        // [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.HYPERVISOR
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.HYPERVISOR
       }
     },
     {
-      id: 'cloudSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorPurpleLight.value,
       stroke: chartColorPurpleDark.value,
       color: chartColorPurpleDark.value,
       query: {
-        // [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.CLOUD
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.CLOUD
       }
     },
     {
-      id: 'thresholdSockets',
-      // id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       chartType: ChartTypeVariant.threshold
     }
   ],
@@ -153,9 +142,11 @@ const config = {
   ],
   initialInventoryFilters: [
     {
-      id: 'displayName',
-      cell: (data, session) => {
-        const { displayName = {}, inventoryId = {}, numberOfGuests = {} } = data;
+      id: INVENTORY_TYPES.DISPLAY_NAME,
+      cell: (
+        { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {} },
+        session
+      ) => {
         const { inventory: authorized } = session?.authorized || {};
 
         if (!inventoryId.value) {
@@ -177,53 +168,47 @@ const config = {
           );
         }
 
-        return (
-          <React.Fragment>
-            {updatedDisplayName}{' '}
-            {(numberOfGuests.value &&
-              translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests.value }, [
-                <PfLabel color="blue" />
-              ])) ||
-              ''}
-          </React.Fragment>
-        );
+        return updatedDisplayName;
       },
       isSortable: true
     },
     {
-      id: 'measurementType',
-      cell: (data = {}) => {
-        const { cloudProvider = {}, measurementType = {} } = data;
-        return (
-          <React.Fragment>
-            {translate('curiosity-inventory.measurementType', { context: measurementType.value })}{' '}
-            {(cloudProvider.value && (
-              <PfLabel color="purple">
-                {translate('curiosity-inventory.cloudProvider', { context: cloudProvider.value })}
-              </PfLabel>
-            )) ||
-              ''}
-          </React.Fragment>
-        );
-      },
+      id: INVENTORY_TYPES.MEASUREMENT_TYPE,
+      cell: ({
+        [INVENTORY_TYPES.CLOUD_PROVIDER]: cloudProvider,
+        [INVENTORY_TYPES.MEASUREMENT_TYPE]: measurementType
+      } = {}) => (
+        <React.Fragment>
+          {translate('curiosity-inventory.measurementType', { context: measurementType?.value })}{' '}
+          {(cloudProvider?.value && (
+            <PfLabel color="purple">
+              {translate('curiosity-inventory.cloudProvider', { context: cloudProvider?.value })}
+            </PfLabel>
+          )) ||
+            ''}
+        </React.Fragment>
+      ),
       isSortable: true,
       cellWidth: 20
     },
     {
-      id: 'sockets',
+      id: INVENTORY_TYPES.SOCKETS,
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
     },
     {
-      id: 'lastSeen',
-      cell: data => (data?.lastSeen?.value && <DateFormat date={data?.lastSeen?.value} />) || '',
+      id: INVENTORY_TYPES.LAST_SEEN,
+      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) =>
+        (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
     }
   ],
-  initialInventorySettings: {},
+  initialInventorySettings: {
+    isHosts: true
+  },
   initialSubscriptionsInventoryFilters: [
     {
       id: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
@@ -284,6 +269,11 @@ const config = {
     {
       id: RHSM_API_QUERY_SET_TYPES.USAGE,
       selected: true
+    }
+  ],
+  initialSecondaryToolbarFilters: [
+    {
+      id: RHSM_API_QUERY_SET_TYPES.GRANULARITY
     }
   ]
 };
