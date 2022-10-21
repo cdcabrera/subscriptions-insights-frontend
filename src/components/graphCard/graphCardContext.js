@@ -25,19 +25,19 @@ const useGraphCardContext = () => useContext(GraphCardContext);
  *
  * @param {object} options
  * @param {Function} options.useGraphCardContext
- * @param {Function} options.useProduct
  * @param {Function} options.useSelectorsResponse
  * @returns {{data: {}, pending: boolean, fulfilled: boolean, responses: {errorList: *[], errorId: {},
  *     id: {}, list: *[]}, cancelled: boolean, dataSets: unknown[], message: null, error: boolean}}
  */
 const useMetricsSelector = ({
   useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
-  useProduct: useAliasProduct = useProduct,
+  // useProduct: useAliasProduct = useProduct,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsAllSettledResponse
 } = {}) => {
-  const { productId } = useAliasProduct();
+  // const { productId } = useAliasProduct();
   const { settings = {} } = useAliasGraphCardContext();
   const { metrics = [] } = settings;
+  console.log('>>>>>', metrics);
 
   const {
     error,
@@ -49,7 +49,9 @@ const useMetricsSelector = ({
     metrics.map(
       ({ id: metricId, isCapacity }) =>
         ({ graph }) =>
-          isCapacity ? graph.capacity?.[`${productId}_${metricId}`] : graph.tally?.[`${productId}_${metricId}`]
+          isCapacity ? graph.capacity?.[metricId] : graph.tally?.[metricId]
+      // ? graph.capacity?.[`${metricId}${(query?.category && `_${query?.category}`) || ''}_${productId}`]
+      // : graph.tally?.[`${metricId}${(query?.category && `_${query.category}`) || ''}_${productId}`]
     )
   );
 
@@ -61,8 +63,10 @@ const useMetricsSelector = ({
     const updatedMetricData = {
       ...metrics[index],
       ...metricData
+      // id: metrics[index]?.meta?._id || metrics[index].id
     };
     dataById[metrics[index].id] = updatedMetricData;
+    // dataById[metrics[index]?.meta?._id || metrics[index].id] = updatedMetricData;
     return updatedMetricData;
   });
 
@@ -106,10 +110,11 @@ const useGetMetrics = ({
   const response = useAliasMetricsSelector();
 
   useShallowCompareEffect(() => {
-    const updatedMetrics = metrics.map(({ id: metricId, isCapacity }) => ({
+    const updatedMetrics = metrics.map(({ metric: metricId, isCapacity, query: metricQuery }) => ({
       id: productId,
       metric: metricId,
-      isCapacity
+      isCapacity,
+      query: metricQuery
     }));
     getGraphMetrics(updatedMetrics, query)(dispatch);
   }, [dispatch, getGraphMetrics, metrics, productId, query]);

@@ -30,7 +30,7 @@ const GraphCardMetricTotals = ({
 }) => {
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets = [] } = useAliasMetricsSelector();
-  const { data = [], id: metricId, meta = {} } = dataSets[0] || {};
+  const { data = [], metric: metricId, meta = {} } = dataSets[0] || {};
   const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
   const {
     date: currentDate,
