@@ -281,6 +281,11 @@ const config = {
       id: RHSM_API_QUERY_SET_TYPES.USAGE,
       selected: true
     }
+  ],
+  initialSecondaryToolbarFilters: [
+    {
+      id: RHSM_API_QUERY_SET_TYPES.GRANULARITY
+    }
   ]
 };
 
