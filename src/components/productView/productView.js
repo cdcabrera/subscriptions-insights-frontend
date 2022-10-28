@@ -145,7 +145,7 @@ const ProductView = ({ t, toolbarGraph, toolbarGraphDescription, useRouteDetail:
             {!helpers.UI_DISABLED_TABLE_HOSTS && productDisplay === DISPLAY_TYPES.PARTIAL && initialInventoryFilters && (
               <InventoryTab
                 key={`inventory_instances_${productId}`}
-                title={t('curiosity-inventory.tabInstances', { context: [productId] })}
+                title={t('curiosity-inventory.tabHosts', { context: [productId] })}
               >
                 <InventoryCardHosts />
               </InventoryTab>
