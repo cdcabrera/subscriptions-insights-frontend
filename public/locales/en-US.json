@@ -179,6 +179,7 @@
     "header_instanceHours": "Instance hours",
     "header_Instance-hours": "Instance hours",
     "header_measurementType": "Type",
+    "header_measurement_type": "Type",
     "header_inventoryId": "UUID",
     "header_sockets": "Subscribed sockets",
     "header_sockets_OpenShift Container Platform": "Sockets",
