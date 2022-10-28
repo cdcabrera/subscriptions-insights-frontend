@@ -22,8 +22,7 @@ const GraphCardChartTitleTooltip = ({
 }) => {
   const { productId } = useAliasProduct();
   const { settings = {} } = useAliasGraphCardContext();
-  const { isCardTitleDescription, metric } = settings;
-  const standaloneMetricId = (metric?.id && `_${metric?.id}`) || '';
+  const { isCardTitleDescription, isStandalone, metric } = settings;
 
   if (!isCardTitleDescription) {
     return null;
@@ -31,7 +30,9 @@ const GraphCardChartTitleTooltip = ({
 
   return (
     <Tooltip
-      content={<p>{t(`curiosity-graph.cardHeadingDescription${standaloneMetricId}`, { context: productId })}</p>}
+      content={
+        <p>{t(`curiosity-graph.cardHeadingDescription`, { context: (isStandalone && metric?.id) || productId })}</p>
+      }
       position={TooltipPosition.top}
       enableFlip={false}
       distance={5}

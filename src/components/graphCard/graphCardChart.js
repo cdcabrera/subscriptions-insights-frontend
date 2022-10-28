@@ -33,12 +33,11 @@ const GraphCardChart = ({
 }) => {
   const { productId } = useAliasProduct();
   const { settings = {} } = useAliasGraphCardContext();
-  const { actionDisplay, metric } = settings;
+  const { actionDisplay, isStandalone, metric } = settings;
 
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
   const { pending, error, data = {}, dataSets = [] } = useAliasGetMetrics();
 
-  const standaloneMetricId = (metric?.id && `_${metric?.id}`) || '';
   let updatedActionDisplay = null;
 
   if (typeof actionDisplay === 'function') {
@@ -51,7 +50,7 @@ const GraphCardChart = ({
         <CardHeader>
           <CardTitle>
             <Title headingLevel="h2" size="lg">
-              {t(`curiosity-graph.cardHeading${standaloneMetricId}`, { context: productId })}
+              {t('curiosity-graph.cardHeading', { context: (isStandalone && metric?.id) || productId })}
               <GraphCardChartTitleTooltip />
             </Title>
           </CardTitle>
