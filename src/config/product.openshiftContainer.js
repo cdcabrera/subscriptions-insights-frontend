@@ -40,7 +40,9 @@ const config = {
   productContextFilterUom: true,
   query: {
     [RHSM_API_QUERY_SET_TYPES.UOM]: RHSM_API_QUERY_UOM_TYPES.CORES,
-    [RHSM_API_QUERY_SET_TYPES.START_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).startDate.toISOString(),
+    [RHSM_API_QUERY_SET_TYPES.START_DATE]: dateHelpers
+      .getRangedDateTime(GRANULARITY_TYPES.DAILY)
+      .startDate.toISOString(),
     [RHSM_API_QUERY_SET_TYPES.END_DATE]: dateHelpers.getRangedDateTime(GRANULARITY_TYPES.DAILY).endDate.toISOString()
   },
   graphTallyQuery: {
