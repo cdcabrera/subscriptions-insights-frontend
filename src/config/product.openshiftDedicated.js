@@ -8,6 +8,7 @@ import {
 import { Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import {
+  RHSM_API_PATH_METRIC_TYPES,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -16,7 +17,7 @@ import {
   RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES
 } from '../services/rhsm/rhsmConstants';
 import { ChartTypeVariant } from '../components/chart/chart';
-import { dateHelpers, helpers } from '../common';
+import { dateHelpers } from '../common';
 import { translate } from '../components/i18n/i18n';
 
 const productGroup = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_DEDICATED_METRICS;
@@ -46,7 +47,7 @@ const config = {
   },
   initialGraphFilters: [
     {
-      id: 'coreHours',
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       fill: chartColorBlueLight.value,
       stroke: chartColorBlueDark.value,
       color: chartColorBlueDark.value,
@@ -55,7 +56,7 @@ const config = {
       yAxisUseDataSet: true
     },
     {
-      id: 'instanceHours',
+      metric: RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS,
       fill: chartColorCyanLight.value,
       stroke: chartColorCyanDark.value,
       color: chartColorCyanDark.value,
@@ -66,6 +67,8 @@ const config = {
   ],
   initialGraphSettings: {
     actionDisplay: (data = {}) => {
+      console.log('>>>>>', data);
+      /*
       const {
         meta: { totalCoreHours }
       } = data;
@@ -82,6 +85,7 @@ const config = {
       }
 
       return <div className="curiosity-usage-graph__total">{displayContent || null}</div>;
+      */
     }
   },
   initialInventoryFilters: [
