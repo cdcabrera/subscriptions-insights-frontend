@@ -101,14 +101,17 @@ const RHSM_API_RESPONSE_ERRORS_CODE_TYPES = {
 /**
  * RHSM response Hosts DATA types.
  *
- * @type {{MEASUREMENT_TYPE: string, CORES: string, HARDWARE_TYPE: string, SUBSCRIPTION_MANAGER_ID: string, SOCKETS: string,
- *     INVENTORY_ID: string, NUMBER_OF_GUESTS: string, DISPLAY_NAME: string, CLOUD_PROVIDER: string, LAST_SEEN: string}}
+ * @type {{MEASUREMENT_TYPE: string, CORES: string, CORE_HOURS: string, HARDWARE_TYPE: string,
+ *     SUBSCRIPTION_MANAGER_ID: string, INSTANCE_HOURS: string, SOCKETS: string, INVENTORY_ID: string, NUMBER_OF_GUESTS: string,
+ *     DISPLAY_NAME: string, CLOUD_PROVIDER: string, LAST_SEEN: string}}
  */
 const RHSM_API_RESPONSE_HOSTS_DATA_TYPES = {
+  CORE_HOURS: 'core_hours',
   CORES: 'cores',
   CLOUD_PROVIDER: 'cloud_provider',
   DISPLAY_NAME: 'display_name',
   HARDWARE_TYPE: 'hardware_type',
+  INSTANCE_HOURS: 'instance_hours',
   INVENTORY_ID: 'inventory_id',
   LAST_SEEN: 'last_seen',
   MEASUREMENT_TYPE: 'measurement_type',
@@ -326,19 +329,36 @@ const RHSM_API_QUERY_CATEGORY_TYPES = {
 const RHSM_API_QUERY_GRANULARITY_TYPES = RHSM_API_RESPONSE_GRANULARITY_TYPES;
 
 /**
- * ToDo: Clean up sort params once hosts is fully deprecated
- * These sort params are focused on the instances api NOT hosts. Since there
- * are minor differences, hosts sort params are maintained in /types/rhsmApiTypes.js as
- * we migrate towards hosts deprecation. Subscriptions sorts
+ * ToDo: Remove RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES once hosts is fully deprecated
+ * These sort params are focused on the hosts api.
  */
 /**
  * RHSM API query/search parameter SORT type values for HOSTS.
  *
- * @type {{CORES: string, STORAGE_GIBIBYTES: string, SOCKETS: string, INSTANCE_HOURS: string,
- *     TRANSFER_GIBIBYTES: string, BILLING_PROVIDER: string, CORE_SECONDS: string, LAST_SEEN: string, NAME: string}}
+ * @type {{CORES: string, CORE_HOURS: string, HARDWARE: string, INSTANCE_HOURS: string, SOCKETS: string, MEASUREMENT: string,
+ *     LAST_SEEN: string, NAME: string}}
+ */
+const RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES = {
+  CORES: 'cores',
+  CORE_HOURS: 'core_hours',
+  HARDWARE: 'hardware_type',
+  INSTANCE_HOURS: 'instance_hours',
+  LAST_SEEN: 'last_seen',
+  MEASUREMENT: 'measurement_type',
+  NAME: 'display_name',
+  SOCKETS: 'sockets'
+};
+
+/**
+ * RHSM API query/search parameter SORT type values for general inventory displays.
+ *
+ * @type {{CORES: string, CORE_HOURS: string, STORAGE_GIBIBYTES: string, SOCKETS: string, INSTANCE_HOURS: string,
+ *     TRANSFER_GIBIBYTES: string, BILLING_PROVIDER: string, CORE_SECONDS: string, STORAGE_GIBIBYTE_MONTHS: string,
+ *     LAST_SEEN: string, NAME: string}}
  */
 const RHSM_API_QUERY_INVENTORY_SORT_TYPES = {
   ...RHSM_API_PATH_METRIC_TYPES,
+  ...RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES,
   BILLING_PROVIDER: 'billing_provider',
   LAST_SEEN: 'last_seen',
   NAME: 'display_name'
@@ -515,6 +535,7 @@ const rhsmConstants = {
   RHSM_API_RESPONSE_USAGE_TYPES,
   RHSM_API_QUERY_CATEGORY_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES,
+  RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES,
@@ -557,6 +578,7 @@ export {
   RHSM_API_RESPONSE_USAGE_TYPES,
   RHSM_API_QUERY_CATEGORY_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES,
+  RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_INVENTORY_SUBSCRIPTIONS_SORT_TYPES,
