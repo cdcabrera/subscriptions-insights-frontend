@@ -106,7 +106,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewOpenShiftDedicated'
+    component: 'productView/productView'
   },
   {
     id: 'rhacs',
