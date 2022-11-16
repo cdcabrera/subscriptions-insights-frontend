@@ -5,7 +5,11 @@ import { TableVariant } from '@patternfly/react-table';
 import { Bullseye, Card, CardActions, CardBody, CardFooter, CardHeader, CardHeaderMain } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import { useSession } from '../authentication/authenticationContext';
-import { useProductInventoryHostsConfig, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import {
+  useProduct,
+  useProductInventoryHostsConfig,
+  useProductInventoryHostsQuery
+} from '../productView/productViewContext';
 import { helpers } from '../../common';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
@@ -30,6 +34,7 @@ import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances 
  * @param {Function} props.useGetInventory
  * @param {Function} props.useOnPage
  * @param {Function} props.useOnColumnSort
+ * @param {Function} props.useProduct
  * @param {Function} props.useProductInventoryConfig
  * @param {Function} props.useProductInventoryQuery
  * @param {Function} props.useSession
@@ -46,6 +51,7 @@ const InventoryCard = ({
   useGetInventory: useAliasGetInventory,
   useOnPage: useAliasOnPage,
   useOnColumnSort: useAliasOnColumnSort,
+  useProduct: useAliasProduct,
   useProductInventoryConfig: useAliasProductInventoryConfig,
   useProductInventoryQuery: useAliasProductInventoryQuery,
   useSession: useAliasSession
@@ -55,6 +61,7 @@ const InventoryCard = ({
   const query = useAliasProductInventoryQuery();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
+  const { productId } = useAliasProduct();
   const { filters: filterInventoryData, settings } = useAliasProductInventoryConfig();
   const { error, fulfilled, pending, data = {} } = useAliasGetInventory({ isDisabled });
   const { data: listData = [], meta = {} } = data;
@@ -71,7 +78,8 @@ const InventoryCard = ({
           }),
           cellData,
           meta,
-          session: sessionData
+          session: sessionData,
+          productId
         });
 
         updatedColumnHeaders = columnHeaders;
@@ -201,9 +209,9 @@ const InventoryCard = ({
 /**
  * Prop types.
  *
- * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, t: Function, perPageDefault: number,
- *     isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function, useOnColumnSort: Function,
- *     useProductInventoryQuery: Function}}
+ * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, useProduct: Function, t: Function,
+ *     perPageDefault: number, isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function,
+ *     useOnColumnSort: Function, useProductInventoryQuery: Function}}
  */
 InventoryCard.propTypes = {
   cardActions: PropTypes.node,
@@ -213,6 +221,7 @@ InventoryCard.propTypes = {
   useGetInventory: PropTypes.func,
   useOnPage: PropTypes.func,
   useOnColumnSort: PropTypes.func,
+  useProduct: PropTypes.func,
   useProductInventoryConfig: PropTypes.func,
   useProductInventoryQuery: PropTypes.func,
   useSession: PropTypes.func
@@ -221,9 +230,9 @@ InventoryCard.propTypes = {
 /**
  * Default props.
  *
- * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, t: Function, perPageDefault: number,
- *     isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function, useOnColumnSort: Function,
- *     useProductInventoryQuery: Function}}
+ * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, useProduct: Function, t: translate,
+ *     perPageDefault: number, isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function,
+ *     useOnColumnSort: Function, useProductInventoryQuery: Function}}
  */
 InventoryCard.defaultProps = {
   cardActions: (
@@ -237,6 +246,7 @@ InventoryCard.defaultProps = {
   useGetInventory: useGetInstancesInventory,
   useOnPage: useOnPageInstances,
   useOnColumnSort: useOnColumnSortInstances,
+  useProduct,
   useProductInventoryConfig: useProductInventoryHostsConfig,
   useProductInventoryQuery: useProductInventoryHostsQuery,
   useSession
