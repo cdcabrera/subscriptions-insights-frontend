@@ -37,19 +37,6 @@ class GuestsList extends React.Component {
     }
   }
 
-  /*
-  componentWillUnmount() {
-    const { id } = this.props;
-
-    store.dispatch([
-      {
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_GUESTS_LIST,
-        viewId: id
-      }
-    ]);
-  }
-  */
-
   /**
    * Call the RHSM APIs, apply filters.
    *
@@ -181,24 +168,7 @@ class GuestsList extends React.Component {
   render() {
     const { currentPage } = this.state;
     const { error, filterGuestsData, listData, numberOfGuests, pending, perPageDefault } = this.props;
-    console.log(
-      '>>>',
-      currentPage,
-      filterGuestsData,
-      listData,
-      numberOfGuests,
-      pending,
-      perPageDefault,
-      this.renderTable
-    );
 
-    return (
-      <div key={`guests-container-${JSON.stringify(listData)}`} className={`fadein ${(error && 'blur') || ''}`}>
-        hey
-      </div>
-    );
-
-    /*
     return (
       <div className={`fadein ${(error && 'blur') || ''}`}>
         {pending && currentPage === 0 && (
@@ -217,7 +187,6 @@ class GuestsList extends React.Component {
         {((!pending && currentPage === 0) || currentPage > 0) && this.renderTable()}
       </div>
     );
-     */
   }
 }
 

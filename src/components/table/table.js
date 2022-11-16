@@ -96,7 +96,7 @@ class Table extends React.Component {
    * @param {number} params.index
    * @param {boolean} params.isOpen
    */
-  onCollapse = ({ index, isOpen = true } = {}) => {
+  onCollapse = ({ index, isOpen }) => {
     const { updatedRows } = this.state;
     updatedRows[index].isOpen = isOpen;
 
@@ -107,16 +107,9 @@ class Table extends React.Component {
       updatedRows[index + 1].cells = [{ title: '' }];
     }
 
-    console.log('>>> updated rows', index, updatedRows);
-
-    this.setState(
-      {
-        updatedRows
-      },
-      () => {
-        this.forceUpdate();
-      }
-    );
+    this.setState({
+      updatedRows
+    });
   };
 
   /**

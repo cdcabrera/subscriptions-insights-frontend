@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useShallowCompareEffect } from 'react-use';
+import { useDeepCompareEffect } from 'react-use';
 import { TableVariant } from '@patternfly/react-table';
 import { Bullseye, Card, CardActions, CardBody, CardFooter, CardHeader, CardHeaderMain } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import { useSession } from '../authentication/authenticationContext';
-import {
-  useProductInventoryHostsConfig,
-  useProductInventoryHostsQuery
-  // useProductInventoryGuestsConfig
-} from '../productView/productViewContext';
+import { useProductInventoryHostsConfig, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { helpers } from '../../common';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
@@ -59,57 +55,58 @@ const InventoryCard = ({
   const query = useAliasProductInventoryQuery();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
-  // const { filters: filterGuestsData } = useProductInventoryGuestsConfig();
   const { filters: filterInventoryData, settings } = useAliasProductInventoryConfig();
   const { error, fulfilled, pending, data = {} } = useAliasGetInventory({ isDisabled });
   const { data: listData = [], meta = {} } = data;
 
-  useShallowCompareEffect(() => {
-    let updatedColumnHeaders = [];
-    const updatedRows = listData.map(({ ...cellData }) => {
-      const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
-        filters: inventoryCardHelpers.parseInventoryFilters({
-          filters: filterInventoryData,
-          onSort: onColumnSort,
-          query
-        }),
-        cellData,
-        meta,
-        session: sessionData
+  useDeepCompareEffect(() => {
+    if (fulfilled && listData.length) {
+      let updatedColumnHeaders = [];
+      const updatedRows = listData.map(({ ...cellData }) => {
+        const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
+          filters: inventoryCardHelpers.parseInventoryFilters({
+            filters: filterInventoryData,
+            onSort: onColumnSort,
+            query
+          }),
+          cellData,
+          meta,
+          session: sessionData
+        });
+
+        updatedColumnHeaders = columnHeaders;
+        const subscriptionManagerId = cellData?.subscriptionManagerId;
+        const numberOfGuests = cellData?.numberOfGuests;
+        let isSubTable;
+
+        // Is there a subTable, callback, or attempt to determine, return boolean
+        if (typeof settings?.hasSubTable === 'function') {
+          isSubTable = settings.hasSubTable({ ...cellData }, { ...sessionData });
+        } else {
+          isSubTable = numberOfGuests > 0 && subscriptionManagerId;
+        }
+
+        return {
+          cells,
+          expandedContent:
+            (isSubTable && (
+              <InventoryGuests
+                key={`guests-${subscriptionManagerId}`}
+                // filterGuestsData={filterGuestsData}
+                numberOfGuests={numberOfGuests}
+                id={subscriptionManagerId}
+              />
+            )) ||
+            undefined
+        };
       });
 
-      updatedColumnHeaders = columnHeaders;
-      const subscriptionManagerId = cellData?.subscriptionManagerId;
-      const numberOfGuests = cellData?.numberOfGuests;
-      let isSubTable;
-
-      // Is there a subTable, callback, or attempt to determine, return boolean
-      if (typeof settings?.hasSubTable === 'function') {
-        isSubTable = settings.hasSubTable({ ...cellData }, { ...sessionData });
-      } else {
-        isSubTable = numberOfGuests > 0 && subscriptionManagerId;
-      }
-
-      return {
-        cells,
-        expandedContent:
-          (isSubTable && (
-            <InventoryGuests
-              key={`guests-${subscriptionManagerId}`}
-              // filterGuestsData={filterGuestsData}
-              numberOfGuests={numberOfGuests}
-              id={subscriptionManagerId}
-            />
-          )) ||
-          undefined
-      };
-    });
-
-    setUpdatedColumnsRows(() => ({
-      columnHeaders: updatedColumnHeaders,
-      rows: updatedRows
-    }));
-  }, [listData]);
+      setUpdatedColumnsRows(() => ({
+        columnHeaders: updatedColumnHeaders,
+        rows: updatedRows
+      }));
+    }
+  }, [fulfilled, listData]);
 
   if (isDisabled) {
     return (
