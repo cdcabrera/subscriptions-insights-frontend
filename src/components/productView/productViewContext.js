@@ -90,7 +90,7 @@ const useProductGraphTallyQuery = ({
  * @returns {object}
  */
 const useProductInventoryGuestsQuery = ({
-  defaultLimit = 100,
+  defaultLimit = 1,
   defaultOffset = 0,
   queryType = 'inventoryGuestsQuery',
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,

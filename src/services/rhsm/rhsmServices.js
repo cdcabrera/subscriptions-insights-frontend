@@ -2567,7 +2567,7 @@ const getHostsInventory = (id, params = {}, options = {}) => {
  */
 const getHostsInventoryGuests = (id, params = {}, options = {}) => {
   const {
-    cache = true,
+    cache = false,
     cancel = false,
     cancelId,
     schema = [rhsmSchemas.guests, rhsmSchemas.errors],

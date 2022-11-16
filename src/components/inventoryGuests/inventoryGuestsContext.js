@@ -1,3 +1,4 @@
+// import { useState } from 'react';
 import { useUnmount, useShallowCompareEffect } from 'react-use';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useProductInventoryGuestsQuery } from '../productView/productViewContext';
@@ -57,6 +58,74 @@ const useGetGuestsInventory = (
 
   return {
     ...response
+  };
+};
+
+/* workish
+const useGuestsInventory = (
+  id,
+  {
+    getInventory = reduxActions.rhsm.getHostsInventoryGuests,
+    useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+    useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
+    useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  } = {}
+) => {
+  const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
+  const dispatch = useAliasDispatch();
+  const { error, fulfilled, pending, data } = useAliasSelectorsResponse(
+    ({ inventory }) => inventory?.hostsGuests?.[id]
+  );
+
+  useShallowCompareEffect(() => {
+    getInventory(id, query)(dispatch);
+  }, [dispatch, id, query]);
+
+  return {
+    error,
+    fulfilled,
+    pending,
+    data: (data?.length === 1 && data[0]) || data || {}
+  };
+};
+ */
+
+const useGuestsInventory = (
+  id,
+  {
+    getInventory = reduxActions.rhsm.getHostsInventoryGuests,
+    useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+    useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
+    useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  } = {}
+) => {
+  // const [updatedData, setUpdatedData] = useState([]);
+  const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
+  const dispatch = useAliasDispatch();
+  const { error, fulfilled, pending, data } = useAliasSelectorsResponse(
+    ({ inventory }) => inventory?.hostsGuests?.[id]
+  );
+
+  useShallowCompareEffect(() => {
+    getInventory(id, query)(dispatch);
+  }, [dispatch, id, query]);
+
+  /*
+  useShallowCompareEffect(() => {
+    const { data: listData = [] } = (data?.length === 1 && data[0]) || data || {};
+
+    if (fulfilled && listData.length) {
+      setUpdatedData(prevState => [...prevState, ...listData]);
+    }
+  }, [fulfilled, data]);
+  */
+
+  return {
+    error,
+    fulfilled,
+    pending,
+    // data: updatedData
+    data: (data?.length === 1 && data[0]) || data || {}
   };
 };
 
@@ -132,9 +201,17 @@ const useOnScroll = (
 };
 
 const context = {
+  useGuestsInventory,
   useGetGuestsInventory,
   useOnScroll,
   useSelectorsGuestsInventory
 };
 
-export { context as default, context, useGetGuestsInventory, useOnScroll, useSelectorsGuestsInventory };
+export {
+  context as default,
+  context,
+  useGuestsInventory,
+  useGetGuestsInventory,
+  useOnScroll,
+  useSelectorsGuestsInventory
+};

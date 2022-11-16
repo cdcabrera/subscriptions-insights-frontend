@@ -6,10 +6,12 @@ import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableTo
 import { useSession } from '../authentication/authenticationContext';
 import { useProductInventoryHostsConfig, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { helpers } from '../../common';
-import Table from '../table/table';
+// import Table from '../table/table';
+import { Table } from '../table/table.new';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import InventoryGuests from '../inventoryGuests/inventoryGuests';
+// import InventoryGuests from '../inventoryGuests/guestsList.deprecated';
 import { inventoryCardHelpers } from './inventoryCardHelpers';
 import Pagination from '../pagination/pagination';
 import { ToolbarFieldDisplayName } from '../toolbar/toolbarFieldDisplayName';
@@ -111,17 +113,27 @@ const InventoryCard = ({
         isSubTable = numberOfGuests > 0 && subscriptionManagerId;
       }
 
+      console.log('INVENTORY updated >>>');
+
       return {
         cells,
         expandedContent:
-          (isSubTable && <InventoryGuests numberOfGuests={numberOfGuests} id={subscriptionManagerId} />) || undefined
+          (isSubTable && (
+            <InventoryGuests
+              key={`guests-${subscriptionManagerId}`}
+              numberOfGuests={numberOfGuests}
+              id={subscriptionManagerId}
+            />
+          )) ||
+          undefined
       };
     });
 
     return (
       <Table
-        borders
-        variant={TableVariant.compact}
+        // borders
+        isBorders
+        // variant={TableVariant.compact}
         className="curiosity-inventory-list"
         columnHeaders={updatedColumnHeaders}
         rows={updatedRows}

@@ -11,6 +11,7 @@ import {
   SortByDirection
 } from '@patternfly/react-table';
 import _isEqualWith from 'lodash/isEqualWith';
+import _cloneDeep from 'lodash/cloneDeep';
 import { TableEmpty } from './tableEmpty';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
@@ -66,6 +67,7 @@ class Table extends React.Component {
     const { updatedRows } = this.state;
 
     if (updatedRows === null) {
+      console.log('YO ROW DATA MOUNT >>>');
       this.setRowData();
     }
   }
@@ -84,6 +86,7 @@ class Table extends React.Component {
       !_isEqualWith(prevProps.rows, rows, customizer) ||
       !_isEqualWith(prevProps.columnHeaders, columnHeaders, customizer)
     ) {
+      console.log('YO ROW DATA UPDATE >>>');
       this.setRowData();
     }
   }
@@ -98,18 +101,26 @@ class Table extends React.Component {
    */
   onCollapse = ({ index, isOpen }) => {
     const { updatedRows } = this.state;
+    // rest.event.persist();
     updatedRows[index].isOpen = isOpen;
+
+    // console.log('WHAT IS GOING ON >>>>', isOpen, rest);
 
     if (isOpen) {
       updatedRows[index + 1].fullWidth = false;
-      updatedRows[index + 1].cells = [{ title: updatedRows[index + 1].expandedContent }];
+      updatedRows[index + 1].cells = [{ title: updatedRows[index + 1].expandedContent() }];
     } else {
       updatedRows[index + 1].cells = [{ title: '' }];
     }
 
-    this.setState({
-      updatedRows
-    });
+    this.setState(
+      {
+        updatedRows
+      },
+      () => {
+        this.forceUpdate();
+      }
+    );
   };
 
   /**
@@ -165,7 +176,7 @@ class Table extends React.Component {
     let isCollapsible = false;
     let isSortable = false;
 
-    rows.forEach(({ expandedContent, cells, isExpanded }) => {
+    _cloneDeep(rows).forEach(({ expandedContent, cells, isExpanded }) => {
       const rowObj = {
         cells: []
       };
@@ -179,7 +190,7 @@ class Table extends React.Component {
           parent: updatedRows.length - 1,
           fullWidth: true,
           cells: [{ title: '' }],
-          expandedContent
+          expandedContent: () => expandedContent
         });
       }
 
@@ -195,7 +206,7 @@ class Table extends React.Component {
       });
     });
 
-    columnHeaders.forEach((columnHeader, index) => {
+    _cloneDeep(columnHeaders).forEach((columnHeader, index) => {
       if (columnHeader?.title !== undefined) {
         const { onSort, sortActive, sortDirection, title, ...settings } = columnHeader;
         const tempColumnHeader = {

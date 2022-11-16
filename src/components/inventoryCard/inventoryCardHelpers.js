@@ -68,16 +68,16 @@ const applyHeaderRowCellFilters = ({ filters = [], cellData = {}, meta = {}, ses
       sortDirection,
       transforms
     }) => {
-      const headerCellUpdated = { title: translate('curiosity-inventory.header', { context: id }), transforms: [] };
-      const bodyCellUpdated = { title: '' };
+      const headerCellUpdated = { content: translate('curiosity-inventory.header', { context: id }), transforms: [] };
+      const bodyCellUpdated = { content: '' };
 
       // set filtered base header and body cells, or if filter doesn't exist skip
       if (cellData[id]) {
-        headerCellUpdated.title = cellData[id]?.title ?? id;
-        bodyCellUpdated.title = cellData[id]?.value ?? '';
+        headerCellUpdated.content = cellData[id]?.title ?? id;
+        bodyCellUpdated.content = cellData[id]?.value ?? '';
       } else if (isStandalone === true) {
-        headerCellUpdated.title = '';
-        bodyCellUpdated.title = '';
+        headerCellUpdated.content = '';
+        bodyCellUpdated.content = '';
       } else {
         if (helpers.DEV_MODE || helpers.REVIEW_MODE) {
           console.warn(`Warning: Filter "${id}" not found in "table row" response data.`, cellData);
@@ -104,7 +104,7 @@ const applyHeaderRowCellFilters = ({ filters = [], cellData = {}, meta = {}, ses
             params: [{ ...cellData }, { ...session }, { ...meta }]
           });
           if (updatedHeaderCellTooltip) {
-            headerCellUpdated.title = <Tooltip content={updatedHeaderCellTooltip}>{headerCellUpdated.title}</Tooltip>;
+            headerCellUpdated.content = <Tooltip content={updatedHeaderCellTooltip}>{headerCellUpdated.title}</Tooltip>;
           }
 
           delete headerCellUpdated.tooltip;
@@ -289,11 +289,11 @@ const parseRowCellsListData = ({ filters = [], cellData = {}, meta = {}, session
   // Apply basic translation and value
   Object.entries(cellData).forEach(([key, value = '']) => {
     allCells[key] = {
-      title: translate('curiosity-inventory.header', { context: key }),
-      value
+      dataLabel: translate('curiosity-inventory.header', { context: key }),
+      content: value
     };
 
-    updatedColumnHeaders.push(allCells[key].title);
+    updatedColumnHeaders.push(allCells[key].dataLabel);
     updatedCells.push(value || '...');
   });
 

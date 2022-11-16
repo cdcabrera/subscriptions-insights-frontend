@@ -1,13 +1,16 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMount, useUnmount, useShallowCompareEffect } from 'react-use';
 import { TableVariant } from '@patternfly/react-table';
 import { useSession } from '../authentication/authenticationContext';
 import { useProductInventoryGuestsConfig, useProductInventoryGuestsQuery } from '../productView/productViewContext';
 import { Loader } from '../loader/loader';
 import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { Table } from '../table/table';
-import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
+import { useGetGuestsInventory, useOnScroll, useGuestsInventory, useSelectorsGuestsInventory } from './inventoryGuestsContext';
 
 /**
  * A system inventory guests component.
@@ -28,118 +31,52 @@ const InventoryGuests = ({
   defaultPerPage,
   id,
   numberOfGuests,
+  useDispatch: useAliasDispatch,
   useGetGuestsInventory: useAliasGetGuestsInventory,
   useOnScroll: useAliasOnScroll,
   useProductInventoryGuestsQuery: useAliasProductInventoryGuestsQuery,
   useProductInventoryGuestsConfig: useAliasProductInventoryGuestsConfig,
   useSession: useAliasSession
 }) => {
-  const [previousData, setPreviousData] = useState([]);
+  // const [previousData, setPreviousData] = useState([]);
   const sessionData = useAliasSession();
   const { filters: filterGuestsData } = useAliasProductInventoryGuestsConfig();
 
   const query = useAliasProductInventoryGuestsQuery({ options: { overrideId: id } });
   const { [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage } = query;
 
-  const { error, pending, data = {} } = useAliasGetGuestsInventory(id);
-  const { data: listData = [] } = data;
+  // useGetGuestsInventory(id);
+  //  const { error, pending, data = {} } = useSelectorsGuestsInventory(id);
+  // const { error, pending, data = {} } = useAliasGetGuestsInventory(id);
+  const { error, fulfilled, pending, data = [] } = useGuestsInventory(id);
 
-  const onScroll = useAliasOnScroll(id, () => {
-    const updatedData = [...previousData, ...(listData || [])];
-    setPreviousData(updatedData);
-  });
+  let updatedRowCount = 0;
 
-  /**
-   * Render a scroll table loader.
-   *
-   * @returns {Node}
+  if (currentPage === 0) {
+    updatedRowCount = numberOfGuests < defaultPerPage ? numberOfGuests : defaultPerPage;
+  }
+
+  /*
+  return <div>
+    work work work<br/>error={error.toString()}<br/>fulfilled={fulfilled.toString()}<br/>pending={pending.toString()}
+  </div>;
    */
-  const renderLoader = () => {
-    if (currentPage > 0 && pending) {
-      const scrollLoader = (
-        <Loader
-          variant="table"
-          tableProps={{
-            borders: false,
-            colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
-            colWidth: (filterGuestsData?.length && filterGuestsData.map(({ cellWidth }) => cellWidth)) || [],
-            rowCount: 0,
-            variant: TableVariant.compact
-          }}
-        />
-      );
-
-      return <div className="curiosity-table-scroll-loader__custom">{scrollLoader}</div>;
-    }
-
-    return null;
-  };
-
-  /**
-   * Render a guests table.
-   *
-   * @returns {Node}
-   */
-  const renderTable = () => {
-    let updatedColumnHeaders = [];
-
-    const updatedRows = [...previousData, ...(listData || [])].map(({ ...cellData }) => {
-      const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
-        filters: filterGuestsData,
-        cellData,
-        session: sessionData
-      });
-
-      updatedColumnHeaders = columnHeaders;
-
-      return {
-        cells
-      };
-    });
-
-    // ToDo: Review having the height be a calc value
-    // Include the table header
-    let updatedHeight = (numberOfGuests + 1) * 42;
-    updatedHeight = (updatedHeight < 275 && updatedHeight) || 275;
-
-    return (
-      <div className="curiosity-table-scroll" style={{ height: `${updatedHeight}px` }}>
-        <div
-          className={`curiosity-table-scroll-list${(updatedHeight < 275 && '__no-scroll') || ''}`}
-          onScroll={onScroll}
-        >
-          {renderLoader()}
-          {(updatedRows.length && (
-            <Table
-              borders={false}
-              variant={TableVariant.compact}
-              className="curiosity-guests-list"
-              columnHeaders={updatedColumnHeaders}
-              rows={updatedRows}
-            />
-          )) ||
-            null}
-        </div>
-      </div>
-    );
-  };
 
   return (
-    <div className={`fadein ${(error && 'blur') || ''}`}>
-      {pending && currentPage === 0 && (
+    <div key={`guests-item-${id}`}>
+      {!data.length && (
         <Loader
           variant="table"
           tableProps={{
             borders: false,
             className: 'curiosity-guests-list',
-            colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
+            colCount: filterGuestsData?.length || (data?.[0] && Object.keys(data[0]).length) || 1,
             colWidth: (filterGuestsData?.length && filterGuestsData.map(({ cellWidth }) => cellWidth)) || [],
-            rowCount: numberOfGuests < defaultPerPage ? numberOfGuests : defaultPerPage,
+            rowCount: updatedRowCount,
             variant: TableVariant.compact
           }}
         />
-      )}
-      {((!pending && currentPage === 0) || currentPage > 0) && renderTable()}
+      ) || <React.Fragment>work</React.Fragment>}
     </div>
   );
 };
@@ -159,7 +96,8 @@ InventoryGuests.propTypes = {
   useOnScroll: PropTypes.func,
   useProductInventoryGuestsConfig: PropTypes.func,
   useProductInventoryGuestsQuery: PropTypes.func,
-  useSession: PropTypes.func
+  useSession: PropTypes.func,
+  useDispatch: PropTypes.func
 };
 
 /**
@@ -174,7 +112,8 @@ InventoryGuests.defaultProps = {
   useOnScroll,
   useProductInventoryGuestsConfig,
   useProductInventoryGuestsQuery,
-  useSession
+  useSession,
+  useDispatch: storeHooks.reactRedux.useDispatch
 };
 
 export { InventoryGuests as default, InventoryGuests };
