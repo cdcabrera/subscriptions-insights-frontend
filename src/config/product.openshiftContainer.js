@@ -195,7 +195,7 @@ const config = {
         (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
       isSortable: true,
       isWrappable: true,
-      cellWidth: 15
+      cellWidth: 20
     }
   ],
   initialInventorySettings: {},
