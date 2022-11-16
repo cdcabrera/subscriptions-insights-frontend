@@ -1,4 +1,5 @@
-import { useUnmount, useShallowCompareEffect } from 'react-use';
+import { useState } from 'react';
+import { useDeepCompareEffect, useUnmount, useShallowCompareEffect } from 'react-use';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useProductInventoryGuestsQuery } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
@@ -47,15 +48,28 @@ const useGetGuestsInventory = (
     useSelectorsInventory: useAliasSelectorsInventory = useSelectorsGuestsInventory
   } = {}
 ) => {
+  const [updatedData, setUpdatedData] = useState([]);
   const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
   const dispatch = useAliasDispatch();
-  const response = useAliasSelectorsInventory(id);
+  const { data, fulfilled, ...response } = useAliasSelectorsInventory(id);
+  const { data: listData = [] } = data;
 
   useShallowCompareEffect(() => {
     getInventory(id, query)(dispatch);
   }, [dispatch, id, query]);
 
+  useDeepCompareEffect(() => {
+    if (fulfilled) {
+      setUpdatedData(prevState => [...prevState, ...listData]);
+    }
+  }, [fulfilled, listData]);
+
+  // console.log('>>> data', updatedData);
+
   return {
+    data: updatedData,
+    // data,
+    fulfilled,
     ...response
   };
 };
@@ -95,6 +109,10 @@ const useOnScroll = (
       {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_GUESTS_LIST,
         viewId: id
+      },
+      {
+        type: reduxTypes.inventory.CLEAR_INVENTORY_GUESTS,
+        id
       }
     ]);
   });
@@ -110,7 +128,7 @@ const useOnScroll = (
     const { target } = event;
     const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
 
-    if (numberOfGuests > (currentPage + 1) * limit && bottom && !pending) {
+    if (numberOfGuests > currentPage + limit && bottom && !pending) {
       if (typeof successCallback === 'function') {
         successCallback(event);
       }
@@ -119,7 +137,7 @@ const useOnScroll = (
         {
           type: reduxTypes.query.SET_QUERY_RHSM_GUESTS_INVENTORY_TYPES[RHSM_API_QUERY_SET_TYPES.OFFSET],
           viewId: id,
-          [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage + 1
+          [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage + limit
         },
         {
           type: reduxTypes.query.SET_QUERY_RHSM_GUESTS_INVENTORY_TYPES[RHSM_API_QUERY_SET_TYPES.LIMIT],

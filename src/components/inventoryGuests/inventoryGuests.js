@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { TableVariant } from '@patternfly/react-table';
 import { useSession } from '../authentication/authenticationContext';
@@ -34,18 +35,18 @@ const InventoryGuests = ({
   useProductInventoryGuestsConfig: useAliasProductInventoryGuestsConfig,
   useSession: useAliasSession
 }) => {
-  const [previousData, setPreviousData] = useState([]);
+  // const [previousData, setPreviousData] = useState([]);
   const sessionData = useAliasSession();
   const { filters: filterGuestsData } = useAliasProductInventoryGuestsConfig();
 
   const query = useAliasProductInventoryGuestsQuery({ options: { overrideId: id } });
   const { [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage } = query;
 
-  const { error, pending, data = {} } = useAliasGetGuestsInventory(id);
-  const { data: listData = [] } = data;
+  const { error, pending, data: listData = [] } = useAliasGetGuestsInventory(id);
+  // const { data: listData = [] } = data;
 
   const onScroll = useAliasOnScroll(id, () => {
-    setPreviousData(prevState => [...prevState, ...(listData || [])]);
+    // setPreviousData(prevState => [...prevState, ...(listData || [])]);
   });
 
   /**
@@ -82,7 +83,8 @@ const InventoryGuests = ({
   const renderTable = () => {
     let updatedColumnHeaders = [];
 
-    const updatedRows = [...previousData, ...(listData || [])].map(({ ...cellData }) => {
+    // const updatedRows = ((previousData.length && previousData) || listData).map(({ ...cellData }) => {
+    const updatedRows = listData.map(({ ...cellData }) => {
       const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
         filters: filterGuestsData,
         cellData,
@@ -124,7 +126,7 @@ const InventoryGuests = ({
   };
 
   return (
-    <div className={`fadein ${(error && 'blur') || ''}`}>
+    <div className="fadein">
       {pending && currentPage === 0 && (
         <Loader
           variant="table"
