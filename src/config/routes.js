@@ -92,7 +92,7 @@ const routes = [
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: false,
-    component: 'productView/productViewOpenShiftContainer'
+    component: 'productView/productView'
   },
   {
     id: 'openshift-dedicated',
