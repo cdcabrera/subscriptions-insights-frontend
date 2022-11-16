@@ -64,11 +64,8 @@ const useGetGuestsInventory = (
     }
   }, [fulfilled, listData]);
 
-  // console.log('>>> data', updatedData);
-
   return {
     data: updatedData,
-    // data,
     fulfilled,
     ...response
   };
@@ -78,7 +75,6 @@ const useGetGuestsInventory = (
  * Use paging as onScroll event for guests inventory.
  *
  * @param {string} id
- * @param {Function} successCallback
  * @param {object} options
  * @param {Function} options.useDispatch
  * @param {Function} options.useSelectorsInventory
@@ -87,7 +83,6 @@ const useGetGuestsInventory = (
  */
 const useOnScroll = (
   id,
-  successCallback,
   {
     useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
     useSelectorsInventory: useAliasSelectorsInventory = useSelectorsGuestsInventory,
@@ -129,10 +124,6 @@ const useOnScroll = (
     const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
 
     if (numberOfGuests > currentPage + limit && bottom && !pending) {
-      if (typeof successCallback === 'function') {
-        successCallback(event);
-      }
-
       dispatch([
         {
           type: reduxTypes.query.SET_QUERY_RHSM_GUESTS_INVENTORY_TYPES[RHSM_API_QUERY_SET_TYPES.OFFSET],
