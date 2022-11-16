@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useShallowCompareEffect } from 'react-use';
 import { TableVariant } from '@patternfly/react-table';
 import { Bullseye, Card, CardActions, CardBody, CardFooter, CardHeader, CardHeaderMain } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import { useSession } from '../authentication/authenticationContext';
-import { useProductInventoryHostsConfig, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import {
+  useProductInventoryHostsConfig,
+  useProductInventoryHostsQuery
+  // useProductInventoryGuestsConfig
+} from '../productView/productViewContext';
 import { helpers } from '../../common';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
@@ -49,44 +54,18 @@ const InventoryCard = ({
   useProductInventoryQuery: useAliasProductInventoryQuery,
   useSession: useAliasSession
 }) => {
+  const [updatedColumnsRows, setUpdatedColumnsRows] = useState({ columnHeaders: [], rows: [] });
   const sessionData = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
+  // const { filters: filterGuestsData } = useProductInventoryGuestsConfig();
   const { filters: filterInventoryData, settings } = useAliasProductInventoryConfig();
   const { error, fulfilled, pending, data = {} } = useAliasGetInventory({ isDisabled });
   const { data: listData = [], meta = {} } = data;
 
-  if (isDisabled) {
-    return (
-      <Card className="curiosity-inventory-card__disabled">
-        <CardBody>
-          <Bullseye>{t('curiosity-inventory.tab', { context: 'disabled' })}</Bullseye>
-        </CardBody>
-      </Card>
-    );
-  }
-
-  const itemCount = meta?.count;
-  const updatedPerPage = query[RHSM_API_QUERY_SET_TYPES.LIMIT] || perPageDefault;
-  const updatedOffset = query[RHSM_API_QUERY_SET_TYPES.OFFSET];
-  const isLastPage = paginationHelpers.isLastPage(updatedOffset, updatedPerPage, itemCount);
-
-  // Set an updated key to force refresh minHeight
-  const minHeightContentRefreshKey =
-    (fulfilled === true && itemCount < updatedPerPage && `bodyMinHeight-${updatedPerPage}-resize`) ||
-    (fulfilled === true && isLastPage && `bodyMinHeight-${updatedPerPage}-resize`) ||
-    (error === true && `bodyMinHeight-${updatedPerPage}-resize`) ||
-    `bodyMinHeight-${updatedPerPage}`;
-
-  /**
-   * Render an inventory table.
-   *
-   * @returns {Node}
-   */
-  const renderTable = () => {
+  useShallowCompareEffect(() => {
     let updatedColumnHeaders = [];
-
     const updatedRows = listData.map(({ ...cellData }) => {
       const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
         filters: inventoryCardHelpers.parseInventoryFilters({
@@ -114,20 +93,45 @@ const InventoryCard = ({
       return {
         cells,
         expandedContent:
-          (isSubTable && <InventoryGuests numberOfGuests={numberOfGuests} id={subscriptionManagerId} />) || undefined
+          (isSubTable && (
+            <InventoryGuests
+              key={`guests-${subscriptionManagerId}`}
+              // filterGuestsData={filterGuestsData}
+              numberOfGuests={numberOfGuests}
+              id={subscriptionManagerId}
+            />
+          )) ||
+          undefined
       };
     });
 
+    setUpdatedColumnsRows(() => ({
+      columnHeaders: updatedColumnHeaders,
+      rows: updatedRows
+    }));
+  }, [listData]);
+
+  if (isDisabled) {
     return (
-      <Table
-        borders
-        variant={TableVariant.compact}
-        className="curiosity-inventory-list"
-        columnHeaders={updatedColumnHeaders}
-        rows={updatedRows}
-      />
+      <Card className="curiosity-inventory-card__disabled">
+        <CardBody>
+          <Bullseye>{t('curiosity-inventory.tab', { context: 'disabled' })}</Bullseye>
+        </CardBody>
+      </Card>
     );
-  };
+  }
+
+  const itemCount = meta?.count;
+  const updatedPerPage = query[RHSM_API_QUERY_SET_TYPES.LIMIT] || perPageDefault;
+  const updatedOffset = query[RHSM_API_QUERY_SET_TYPES.OFFSET];
+  const isLastPage = paginationHelpers.isLastPage(updatedOffset, updatedPerPage, itemCount);
+
+  // Set an updated key to force refresh minHeight
+  const minHeightContentRefreshKey =
+    (fulfilled === true && itemCount < updatedPerPage && `bodyMinHeight-${updatedPerPage}-resize`) ||
+    (fulfilled === true && isLastPage && `bodyMinHeight-${updatedPerPage}-resize`) ||
+    (error === true && `bodyMinHeight-${updatedPerPage}-resize`) ||
+    `bodyMinHeight-${updatedPerPage}`;
 
   return (
     <Card className="curiosity-inventory-card">
@@ -163,7 +167,15 @@ const InventoryCard = ({
                 }}
               />
             )}
-            {!pending && renderTable()}
+            {!pending && (
+              <Table
+                borders
+                variant={TableVariant.compact}
+                className="curiosity-inventory-list"
+                columnHeaders={updatedColumnsRows.columnHeaders}
+                rows={updatedColumnsRows.rows}
+              />
+            )}
           </div>
         </CardBody>
       </MinHeight>
