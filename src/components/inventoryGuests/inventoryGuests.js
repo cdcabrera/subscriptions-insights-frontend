@@ -45,8 +45,7 @@ const InventoryGuests = ({
   const { data: listData = [] } = data;
 
   const onScroll = useAliasOnScroll(id, () => {
-    const updatedData = [...previousData, ...(listData || [])];
-    setPreviousData(updatedData);
+    setPreviousData(prevState => [...prevState, ...(listData || [])]);
   });
 
   /**

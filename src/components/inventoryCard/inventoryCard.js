@@ -10,7 +10,7 @@ import { helpers } from '../../common';
 import Table from '../table/table';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
-import InventoryGuests from '../inventoryGuests/inventoryGuests';
+import { InventoryGuests } from '../inventoryGuests/inventoryGuests';
 import { inventoryCardHelpers } from './inventoryCardHelpers';
 import Pagination from '../pagination/pagination';
 import { ToolbarFieldDisplayName } from '../toolbar/toolbarFieldDisplayName';
