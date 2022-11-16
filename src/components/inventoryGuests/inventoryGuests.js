@@ -79,34 +79,28 @@ const InventoryGuests = ({
     return null;
   };
 
-  /**
-   * Render a guests table.
-   *
-   * @returns {Node}
-   */
-  const renderTable = () => {
-    let updatedColumnHeaders = [];
-
-    const updatedRows = listData.map(({ ...cellData }) => {
-      const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
-        filters: filterGuestsData,
-        cellData,
-        session: sessionData
-      });
-
-      updatedColumnHeaders = columnHeaders;
-
-      return {
-        cells
-      };
+  let updatedColumnHeaders = [];
+  const updatedRows = listData.map(({ ...cellData }) => {
+    const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
+      filters: filterGuestsData,
+      cellData,
+      session: sessionData
     });
 
-    // ToDo: Review having the height be a calc value
-    // Include the table header
-    let updatedHeight = (numberOfGuests + 1) * 42;
-    updatedHeight = (updatedHeight < 275 && updatedHeight) || 275;
+    updatedColumnHeaders = columnHeaders;
 
-    return (
+    return {
+      cells
+    };
+  });
+
+  // ToDo: Review having the height be a calc value
+  // Include the table header
+  let updatedHeight = (numberOfGuests + 1) * 42;
+  updatedHeight = (updatedHeight < 275 && updatedHeight) || 275;
+
+  return (
+    <div className="fadein">
       <div className="curiosity-table-scroll" style={{ height: `${updatedHeight}px` }}>
         <div
           className={`curiosity-table-scroll-list${(updatedHeight < 275 && '__no-scroll') || ''}`}
@@ -125,10 +119,8 @@ const InventoryGuests = ({
             null}
         </div>
       </div>
-    );
-  };
-
-  return <div className="fadein">{renderTable()}</div>;
+    </div>
+  );
 };
 
 /**
