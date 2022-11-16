@@ -102,6 +102,7 @@ const config = {
       chartType: ChartTypeVariant.threshold
     }
   ],
+  initialGraphSettings: {},
   initialGuestsFilters: [
     {
       id: 'displayName',
@@ -144,7 +145,11 @@ const config = {
     {
       id: INVENTORY_TYPES.DISPLAY_NAME,
       cell: (
-        { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {} },
+        {
+          [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
+          [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {},
+          [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests = {}
+        } = {},
         session
       ) => {
         const { inventory: authorized } = session?.authorized || {};
@@ -168,7 +173,16 @@ const config = {
           );
         }
 
-        return updatedDisplayName;
+        return (
+          <React.Fragment>
+            {updatedDisplayName}{' '}
+            {(numberOfGuests.value &&
+              translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests.value }, [
+                <PfLabel color="blue" />
+              ])) ||
+              ''}
+          </React.Fragment>
+        );
       },
       isSortable: true
     },
