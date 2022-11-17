@@ -166,15 +166,6 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     ],
   },
   {
-    "file": "./src/components/inventoryCard/inventoryList.deprecated.js",
-    "keys": [
-      {
-        "key": "curiosity-inventory.tab",
-        "match": "t('curiosity-inventory.tab', { context: 'disabled' })",
-      },
-    ],
-  },
-  {
     "file": "./src/components/inventoryTabs/inventoryTabs.js",
     "keys": [
       {
@@ -272,18 +263,6 @@ exports[`I18n Component should generate a predictable locale key output snapshot
   {
     "file": "./src/components/productView/productView.js",
     "keys": [
-      {
-        "key": "curiosity-graph.cardHeadingDescription",
-        "match": "t('curiosity-graph.cardHeadingDescription', { context: productId })",
-      },
-      {
-        "key": "curiosity-graph.cardHeading",
-        "match": "t('curiosity-graph.cardHeading', { context: productId })",
-      },
-      {
-        "key": "curiosity-inventory.tabHosts",
-        "match": "t('curiosity-inventory.tabHosts', { context: [productId] })",
-      },
       {
         "key": "curiosity-inventory.tabHosts",
         "match": "t('curiosity-inventory.tabHosts', { context: [productId] })",
@@ -423,7 +402,7 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     "keys": [
       {
         "key": "curiosity-toolbar.category",
-        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.GRANULARITY })",
+        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_SET_TYPES.GRANULARITY })",
       },
       {
         "key": "curiosity-toolbar.category",
@@ -431,19 +410,19 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       },
       {
         "key": "curiosity-toolbar.category",
-        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.UOM })",
+        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_SET_TYPES.UOM })",
       },
       {
         "key": "curiosity-toolbar.category",
-        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.BILLING_PROVIDER })",
+        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER })",
       },
       {
         "key": "curiosity-toolbar.category",
-        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.SLA })",
+        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_SET_TYPES.SLA })",
       },
       {
         "key": "curiosity-toolbar.category",
-        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_TYPES.USAGE })",
+        "match": "translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_SET_TYPES.USAGE })",
       },
       {
         "key": "curiosity-toolbar.placeholder_filter",
@@ -742,10 +721,6 @@ exports[`I18n Component should have locale keys that exist in the default langua
 [
   {
     "file": "./src/components/inventoryCard/inventoryCard.js",
-    "key": "curiosity-inventory.tab",
-  },
-  {
-    "file": "./src/components/inventoryCard/inventoryList.deprecated.js",
     "key": "curiosity-inventory.tab",
   },
   {

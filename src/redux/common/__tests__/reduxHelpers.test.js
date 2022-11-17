@@ -2,7 +2,7 @@ import { reduxHelpers } from '../reduxHelpers';
 import {
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_SET_TYPES,
-  RHSM_API_RESPONSE_CAPACITY_DATA_TYPES
+  RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES
 } from '../../../services/rhsm/rhsmConstants';
 
 describe('ReduxHelpers', () => {
@@ -23,7 +23,7 @@ describe('ReduxHelpers', () => {
       [RHSM_API_QUERY_SET_TYPES.LIMIT]: 10,
       [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
     };
-    expect(reduxHelpers.setApiQuery(rhsmQuery, RHSM_API_RESPONSE_CAPACITY_DATA_TYPES)).toMatchSnapshot('rhsm query');
+    expect(reduxHelpers.setApiQuery(rhsmQuery, RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES)).toMatchSnapshot('rhsm query');
   });
 
   it('should generate an expected API response with an existing schema', () => {
