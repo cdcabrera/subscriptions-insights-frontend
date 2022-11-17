@@ -193,7 +193,8 @@ const applySortFilters = ({ filter = {}, onSort, query = {} } = {}) => {
     hasSort &&
     typeof updatedFilter.sortActive !== 'boolean' &&
     query?.[RHSM_API_QUERY_SET_TYPES.SORT] &&
-    (query?.[RHSM_API_QUERY_SET_TYPES.SORT] === updatedId || _camelCase(query?.[RHSM_API_QUERY_SET_TYPES.SORT]) === updatedId)
+    (query?.[RHSM_API_QUERY_SET_TYPES.SORT] === updatedId ||
+      _camelCase(query?.[RHSM_API_QUERY_SET_TYPES.SORT]) === updatedId)
   ) {
     updatedFilter.sortActive = true;
   }

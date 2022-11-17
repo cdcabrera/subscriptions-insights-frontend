@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { reduxTypes, storeHooks } from '../../redux';
 import { useProduct, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { Select, SelectPosition } from '../form/select';
-import { RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import {
+  RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES,
+  RHSM_API_QUERY_SET_TYPES
+} from '../../services/rhsm/rhsmConstants';
 import { dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
 

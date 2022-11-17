@@ -2,7 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ToolbarFieldUsage, toolbarFieldOptions, useOnSelect } from '../toolbarFieldUsage';
 import { store } from '../../../redux/store';
-import { RHSM_API_QUERY_USAGE_TYPES as USAGE_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../../services/rhsm/rhsmConstants';
+import {
+  RHSM_API_QUERY_USAGE_TYPES as USAGE_TYPES,
+  RHSM_API_QUERY_SET_TYPES
+} from '../../../services/rhsm/rhsmConstants';
 
 describe('ToolbarFieldSla Component', () => {
   let mockDispatch;
