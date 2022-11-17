@@ -1,7 +1,7 @@
 import React from 'react';
 import { ToolbarItem } from '@patternfly/react-core';
 import { useProductQuery, useProductGraphTallyQuery, useProductToolbarConfig } from '../productView/productViewContext';
-import { RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES } from '../../services/rhsm/rhsmConstants';
+import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useOnSelect as useSelectCategoryOnSelect, toolbarFieldOptions } from './toolbarFieldSelectCategory';
 import { useOnSelect as useBillingProviderOnSelect } from './toolbarFieldBillingProvider';
 import { useOnSelect as useSlaOnSelect } from './toolbarFieldSla';
@@ -22,19 +22,19 @@ const useToolbarFieldQueries = ({
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
 } = {}) => {
   const {
-    [RHSM_API_QUERY_TYPES.BILLING_PROVIDER]: billingProvider,
-    [RHSM_API_QUERY_TYPES.SLA]: sla,
-    [RHSM_API_QUERY_TYPES.UOM]: uom,
-    [RHSM_API_QUERY_TYPES.USAGE]: usage
+    [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
+    [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
+    [RHSM_API_QUERY_SET_TYPES.UOM]: uom,
+    [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
   } = useAliasProductQuery();
-  const { [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
+  const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
 
   return {
-    [RHSM_API_QUERY_TYPES.BILLING_PROVIDER]: billingProvider,
-    [RHSM_API_QUERY_TYPES.GRANULARITY]: granularity,
-    [RHSM_API_QUERY_TYPES.SLA]: sla,
-    [RHSM_API_QUERY_TYPES.UOM]: uom,
-    [RHSM_API_QUERY_TYPES.USAGE]: usage
+    [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
+    [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity,
+    [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
+    [RHSM_API_QUERY_SET_TYPES.UOM]: uom,
+    [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
   };
 };
 
@@ -58,13 +58,13 @@ const useToolbarFieldClear = ({
 
   return field => {
     switch (field) {
-      case RHSM_API_QUERY_TYPES.BILLING_PROVIDER:
+      case RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER:
         billingOnSelect();
         break;
-      case RHSM_API_QUERY_TYPES.SLA:
+      case RHSM_API_QUERY_SET_TYPES.SLA:
         slaOnSelect();
         break;
-      case RHSM_API_QUERY_TYPES.USAGE:
+      case RHSM_API_QUERY_SET_TYPES.USAGE:
         usageOnSelect();
         break;
       default:
@@ -92,9 +92,9 @@ const useToolbarFieldClearAll = ({
   useUsageOnSelect: useAliasUsageOnSelect = useUsageOnSelect
 } = {}) => {
   const {
-    [RHSM_API_QUERY_TYPES.BILLING_PROVIDER]: billingProvider,
-    [RHSM_API_QUERY_TYPES.SLA]: sla,
-    [RHSM_API_QUERY_TYPES.USAGE]: usage
+    [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
+    [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
+    [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
   } = useAliasProductQuery();
   const billingOnSelect = useAliasBillingProviderOnSelect();
   const slaOnSelect = useAliasSlaOnSelect();
