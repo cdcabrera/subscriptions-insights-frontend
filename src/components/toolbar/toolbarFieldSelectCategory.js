@@ -16,6 +16,7 @@ import {
 import { ToolbarFieldSla, toolbarFieldOptions as slaOptions } from './toolbarFieldSla';
 import { ToolbarFieldUom, toolbarFieldOptions as uomOptions } from './toolbarFieldUom';
 import { ToolbarFieldUsage, toolbarFieldOptions as usageOptions } from './toolbarFieldUsage';
+import { ToolbarFieldArchitecture } from './toolbarFieldArchitecture';
 
 /**
  * Select field options. Use function instead of arrow func to help with component
@@ -76,6 +77,15 @@ const toolbarFieldOptions = [
       return <ToolbarFieldUsage key="selectCategory_usage" {...props} />;
     },
     options: usageOptions,
+    isClearable: true
+  },
+  {
+    title: translate('curiosity-toolbar.category', { context: RHSM_API_QUERY_SET_TYPES.ARCHITECTURE }),
+    value: RHSM_API_QUERY_SET_TYPES.ARCHITECTURE,
+    component: function Architecture(props) {
+      return <ToolbarFieldArchitecture key="selectCategory_architecture" {...props} />;
+    },
+    options: [],
     isClearable: true
   }
 ].map(option => ({
