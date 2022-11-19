@@ -151,6 +151,18 @@ const useProductInventorySubscriptionsQuery = ({
   );
 
 /**
+ * Return a unified query for toolbars
+ *
+ * @returns {object}
+ */
+const useProductToolbarQuery = () => ({
+  ...useProductQuery(),
+  ...useProductGraphTallyQuery(),
+  ...useProductInventoryHostsQuery(),
+  ...useProductInventorySubscriptionsQuery()
+});
+
+/**
  * Get a filtered product configuration context.
  *
  * @param {object} options
@@ -324,7 +336,8 @@ const context = {
   useInventoryGuestsConfig: useProductInventoryGuestsConfig,
   useInventoryHostsConfig: useProductInventoryHostsConfig,
   useInventorySubscriptionsConfig: useProductInventorySubscriptionsConfig,
-  useToolbarConfig: useProductToolbarConfig
+  useToolbarConfig: useProductToolbarConfig,
+  useToolbarQuery: useProductToolbarQuery
 };
 
 export {
@@ -344,5 +357,6 @@ export {
   useProductInventoryGuestsConfig,
   useProductInventoryHostsConfig,
   useProductInventorySubscriptionsConfig,
-  useProductToolbarConfig
+  useProductToolbarConfig,
+  useProductToolbarQuery
 };

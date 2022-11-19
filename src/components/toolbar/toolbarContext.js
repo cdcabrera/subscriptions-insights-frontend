@@ -1,6 +1,6 @@
 import React from 'react';
 import { ToolbarItem } from '@patternfly/react-core';
-import { useProductQuery, useProductGraphTallyQuery, useProductToolbarConfig } from '../productView/productViewContext';
+import { useProductQuery, useProductToolbarConfig, useProductToolbarQuery } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useOnSelect as useSelectCategoryOnSelect, toolbarFieldOptions } from './toolbarFieldSelectCategory';
 import { useOnSelect as useBillingProviderOnSelect } from './toolbarFieldBillingProvider';
@@ -13,14 +13,15 @@ import { helpers } from '../../common/helpers';
  * Return current values for categories/queries.
  *
  * @param {object} options
- * @param {Function} options.useProductQuery
- * @param {Function} options.useProductGraphTallyQuery
+ * @param {Function} options.useProductToolbarQuery
  * @returns {object}
  */
 const useToolbarFieldQueries = ({
-  useProductQuery: useAliasProductQuery = useProductQuery,
-  useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
+  useProductToolbarQuery: useAliasProductToolbarQuery = useProductToolbarQuery
+  // useProductQuery: useAliasProductQuery = useProductQuery,
+  // useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
 } = {}) => {
+  /*
   const {
     [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
     [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
@@ -28,7 +29,13 @@ const useToolbarFieldQueries = ({
     [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
   } = useAliasProductQuery();
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
+  */
+  const unifiedQuery = useAliasProductToolbarQuery();
+  console.log('>>>>', unifiedQuery);
 
+  return unifiedQuery;
+
+  /*
   return {
     [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
     [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity,
@@ -36,6 +43,7 @@ const useToolbarFieldQueries = ({
     [RHSM_API_QUERY_SET_TYPES.UOM]: uom,
     [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
   };
+  */
 };
 
 /**

@@ -77,13 +77,14 @@ const Toolbar = ({
    * Set selected options for chip display.
    *
    * @param {object} params
-   * @param {Array} params.options
    * @param {*} params.value
    * @returns {Array}
    */
-  const setSelectedOptions = ({ options: filterOptions, value }) => {
-    const query = filterOptions.find(({ value: optionValue }) => optionValue === toolbarFieldQueries?.[value]);
-    return (query?.title && [query?.title]) || [];
+  const setSelectedOptions = ({ value } = {}) => {
+    // const query = filterOptions.find(({ value: optionValue }) => optionValue === toolbarFieldQueries?.[value]);
+    // return (query?.title && [query?.title]) || [];
+    const categoryValue = toolbarFieldQueries?.[value];
+    return (categoryValue && [t('toolbar.label', { context: ['chip', categoryValue] })]) || [];
   };
 
   return (
