@@ -1,8 +1,9 @@
 import React from 'react';
 import { ToolbarItem } from '@patternfly/react-core';
-import { useProductQuery, useProductToolbarConfig, useProductToolbarQuery } from '../productView/productViewContext';
+import { useProductQuery, useProductToolbarConfig } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useOnSelect as useSelectCategoryOnSelect, toolbarFieldOptions } from './toolbarFieldSelectCategory';
+import { useOnSelect as useArchitectureOnSelect } from './toolbarFieldArchitecture';
 import { useOnSelect as useBillingProviderOnSelect } from './toolbarFieldBillingProvider';
 import { useOnSelect as useSlaOnSelect } from './toolbarFieldSla';
 import { useOnSelect as useUsageOnSelect } from './toolbarFieldUsage';
@@ -10,62 +11,31 @@ import { SelectPosition } from '../form/select';
 import { helpers } from '../../common/helpers';
 
 /**
- * Return current values for categories/queries.
+ * Clear a specific toolbar category using a select component's OnSelect hook.
  *
  * @param {object} options
- * @param {Function} options.useProductToolbarQuery
- * @returns {object}
- */
-const useToolbarFieldQueries = ({
-  useProductToolbarQuery: useAliasProductToolbarQuery = useProductToolbarQuery
-  // useProductQuery: useAliasProductQuery = useProductQuery,
-  // useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
-} = {}) => {
-  /*
-  const {
-    [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
-    [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
-    [RHSM_API_QUERY_SET_TYPES.UOM]: uom,
-    [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
-  } = useAliasProductQuery();
-  const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
-  */
-  const unifiedQuery = useAliasProductToolbarQuery();
-  console.log('>>>>', unifiedQuery);
-
-  return unifiedQuery;
-
-  /*
-  return {
-    [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
-    [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity,
-    [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
-    [RHSM_API_QUERY_SET_TYPES.UOM]: uom,
-    [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
-  };
-  */
-};
-
-/**
- * Clear a specific toolbar category.
- *
- * @param {object} options
+ * @param {Function} options.useArchitectureOnSelect
  * @param {Function} options.useBillingProviderOnSelect
  * @param {Function} options.useSlaOnSelect
  * @param {Function} options.useUsageOnSelect
  * @returns {Function}
  */
 const useToolbarFieldClear = ({
+  useArchitectureOnSelect: useAliasArchitectureOnSelect = useArchitectureOnSelect,
   useBillingProviderOnSelect: useAliasBillingProviderOnSelect = useBillingProviderOnSelect,
   useSlaOnSelect: useAliasSlaOnSelect = useSlaOnSelect,
   useUsageOnSelect: useAliasUsageOnSelect = useUsageOnSelect
 } = {}) => {
+  const architectureOnSelect = useAliasArchitectureOnSelect();
   const billingOnSelect = useAliasBillingProviderOnSelect();
   const slaOnSelect = useAliasSlaOnSelect();
   const usageOnSelect = useAliasUsageOnSelect();
 
   return field => {
     switch (field) {
+      case RHSM_API_QUERY_SET_TYPES.ARCHITECTURE:
+        architectureOnSelect();
+        break;
       case RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER:
         billingOnSelect();
         break;
@@ -86,6 +56,7 @@ const useToolbarFieldClear = ({
  *
  * @param {object} options
  * @param {Function} options.useProductQuery
+ * @param {Function} options.useArchitectureOnSelect
  * @param {Function} options.useSelectCategoryOnSelect
  * @param {Function} options.useBillingProviderOnSelect
  * @param {Function} options.useSlaOnSelect
@@ -94,22 +65,29 @@ const useToolbarFieldClear = ({
  */
 const useToolbarFieldClearAll = ({
   useProductQuery: useAliasProductQuery = useProductQuery,
+  useArchitectureOnSelect: useAliasArchitectureOnSelect = useArchitectureOnSelect,
   useSelectCategoryOnSelect: useAliasSelectCategoryOnSelect = useSelectCategoryOnSelect,
   useBillingProviderOnSelect: useAliasBillingProviderOnSelect = useBillingProviderOnSelect,
   useSlaOnSelect: useAliasSlaOnSelect = useSlaOnSelect,
   useUsageOnSelect: useAliasUsageOnSelect = useUsageOnSelect
 } = {}) => {
   const {
+    [RHSM_API_QUERY_SET_TYPES.ARCHITECTURE]: architecture,
     [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: billingProvider,
     [RHSM_API_QUERY_SET_TYPES.SLA]: sla,
     [RHSM_API_QUERY_SET_TYPES.USAGE]: usage
   } = useAliasProductQuery();
+  const architectureOnSelect = useAliasArchitectureOnSelect();
   const billingOnSelect = useAliasBillingProviderOnSelect();
   const slaOnSelect = useAliasSlaOnSelect();
   const usageOnSelect = useAliasUsageOnSelect();
   const selectCategoryOnSelect = useAliasSelectCategoryOnSelect();
 
   return hardFilterReset => {
+    if (typeof architecture === 'string') {
+      architectureOnSelect();
+    }
+
     if (typeof billingProvider === 'string') {
       billingOnSelect();
     }
@@ -160,15 +138,7 @@ const useToolbarSecondaryFields = ({
 const context = {
   useToolbarFieldClear,
   useToolbarFieldClearAll,
-  useToolbarFieldQueries,
   useToolbarSecondaryFields
 };
 
-export {
-  context as default,
-  context,
-  useToolbarFieldClear,
-  useToolbarFieldClearAll,
-  useToolbarFieldQueries,
-  useToolbarSecondaryFields
-};
+export { context as default, context, useToolbarFieldClear, useToolbarFieldClearAll, useToolbarSecondaryFields };

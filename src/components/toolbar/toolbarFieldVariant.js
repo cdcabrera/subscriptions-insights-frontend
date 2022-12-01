@@ -21,7 +21,7 @@ const useToolbarFieldOptions = ({ useProduct: useAliasProduct = useProduct } = {
   if (Array.isArray(productVariants)) {
     options.push(
       ...productVariants.map(type => ({
-        title: translate('curiosity-toolbar.variant', { context: (type === '' && 'unspecified') || type }),
+        title: translate('curiosity-toolbar.label', { context: ['variant', (type === '' && 'unspecified') || type] }),
         value: type,
         selected: false
       }))
