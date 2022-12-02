@@ -7,16 +7,17 @@ import { useProduct, useProductToolbarConfig } from '../productView/productViewC
 import { Select } from '../form/select';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
-import { ToolbarFieldGranularity, toolbarFieldOptions as granularityOptions } from './toolbarFieldGranularity';
-import { ToolbarFieldRangedMonthly, toolbarFieldOptions as rangedMonthlyOptions } from './toolbarFieldRangedMonthly';
+import { ToolbarFieldArchitecture } from './toolbarFieldArchitecture';
 import {
   ToolbarFieldBillingProvider,
   toolbarFieldOptions as billingProviderOptions
 } from './toolbarFieldBillingProvider';
+import { ToolbarFieldGranularity, toolbarFieldOptions as granularityOptions } from './toolbarFieldGranularity';
+import { ToolbarFieldRangedMonthly, toolbarFieldOptions as rangedMonthlyOptions } from './toolbarFieldRangedMonthly';
 import { ToolbarFieldSla, toolbarFieldOptions as slaOptions } from './toolbarFieldSla';
 import { ToolbarFieldUom, toolbarFieldOptions as uomOptions } from './toolbarFieldUom';
 import { ToolbarFieldUsage, toolbarFieldOptions as usageOptions } from './toolbarFieldUsage';
-import { ToolbarFieldArchitecture } from './toolbarFieldArchitecture';
+import { ToolbarFieldVariant } from './toolbarFieldVariant';
 
 /**
  * Select field options. Use function instead of arrow func to help with component
@@ -77,6 +78,15 @@ const toolbarFieldOptions = [
       return <ToolbarFieldUsage key="selectCategory_usage" {...props} />;
     },
     options: usageOptions,
+    isClearable: true
+  },
+  {
+    title: translate('curiosity-toolbar.label', { context: ['category', RHSM_API_QUERY_SET_TYPES.VARIANT] }),
+    value: RHSM_API_QUERY_SET_TYPES.VARIANT,
+    component: function Variant(props) {
+      return <ToolbarFieldVariant key="selectCategory_variant" {...props} />;
+    },
+    options: [],
     isClearable: true
   },
   {

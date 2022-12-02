@@ -78,7 +78,6 @@ const Toolbar = ({
    */
   const setSelectedOptions = ({ value } = {}) => {
     const categoryValue = toolbarFieldQueries?.[value];
-    console.log('>>>', [value, categoryValue]);
     return (categoryValue && [t('curiosity-toolbar.label', { context: [value, categoryValue] })]) || [];
   };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from '../../hooks/useRouter';
-import { useProduct } from '../productView/productViewContext';
+import { useProduct, useProductToolbarQuery } from '../productView/productViewContext';
 import { reduxTypes, storeHooks } from '../../redux';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { Select, SelectPosition } from '../form/select';
@@ -38,19 +37,15 @@ const useToolbarFieldOptions = ({ useProduct: useAliasProduct = useProduct } = {
  *
  * @param {object} options
  * @param {Function} options.useDispatch
- * @param {Function} options.useHistory
  * @param {Function} options.useProduct
  * @returns {Function}
  */
 const useOnSelect = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useHistory: useAliasHistory = useHistory,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { viewId } = useAliasProduct();
   const dispatch = useAliasDispatch();
-  const history = useAliasHistory({ isSetAppNav: true });
-  console.log('>>>', history);
 
   return ({ value = null } = {}) => {
     dispatch([
@@ -65,8 +60,6 @@ const useOnSelect = ({
         value
       }
     ]);
-
-    // history.push(value);
   };
 };
 
@@ -79,7 +72,7 @@ const useOnSelect = ({
  * @param {string} props.position
  * @param {Function} props.t
  * @param {Function} props.useOnSelect
- * @param {Function} props.useProduct
+ * @param {Function} props.useProductToolbarQuery
  * @param {Function} props.useToolbarFieldOptions
  * @returns {Node}
  */
@@ -88,10 +81,10 @@ const ToolbarFieldArchitecture = ({
   position,
   t,
   useOnSelect: useAliasOnSelect,
-  useProduct: useAliasProduct,
+  useProductToolbarQuery: useAliasProductToolbarQuery,
   useToolbarFieldOptions: useAliasToolbarFieldOptions
 }) => {
-  const { productId: updatedValue } = useAliasProduct();
+  const { [RHSM_API_QUERY_SET_TYPES.ARCHITECTURE]: updatedValue } = useAliasProductToolbarQuery();
   const onSelect = useAliasOnSelect();
   const options = useAliasToolbarFieldOptions();
   const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
@@ -112,30 +105,30 @@ const ToolbarFieldArchitecture = ({
 /**
  * Prop types.
  *
- * @type {{useOnSelect: Function, useProduct: Function, t: Function, isFilter: boolean, position: string,
- *     useToolbarFieldOptions: Function}}
+ * @type {{useOnSelect: Function, t: Function, useProductToolbarQuery: Function, isFilter: boolean,
+ *     position: string, useToolbarFieldOptions: Function}}
  */
 ToolbarFieldArchitecture.propTypes = {
   isFilter: PropTypes.bool,
   position: PropTypes.string,
   t: PropTypes.func,
   useOnSelect: PropTypes.func,
-  useProduct: PropTypes.func,
+  useProductToolbarQuery: PropTypes.func,
   useToolbarFieldOptions: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, useProduct: Function, t: translate, isFilter: boolean, position: string,
- *     useToolbarFieldOptions: Function}}
+ * @type {{useOnSelect: Function, t: translate, useProductToolbarQuery: Function, isFilter: boolean,
+ *     position: string, useToolbarFieldOptions: Function}}
  */
 ToolbarFieldArchitecture.defaultProps = {
   isFilter: false,
   position: SelectPosition.left,
   t: translate,
   useOnSelect,
-  useProduct,
+  useProductToolbarQuery,
   useToolbarFieldOptions
 };
 
