@@ -376,7 +376,7 @@ exports[`Product RHOSAK config should apply subscriptions inventory configuratio
       "title": "lorem",
     },
     {
-      "title": "t(curiosity-inventory.measurement_billing_provider, {"context":"none"})",
+      "title": "t(curiosity-inventory.label_billing_provider, {"context":"none"})",
     },
     {
       "title": "hello world",
@@ -459,7 +459,7 @@ exports[`Product RHOSAK config should apply subscriptions inventory configuratio
       "title": "lorem",
     },
     {
-      "title": "t(curiosity-inventory.measurement_billing_provider, {"context":"none"})",
+      "title": "t(curiosity-inventory.label_billing_provider, {"context":"none"})",
     },
     {
       "title": "",
