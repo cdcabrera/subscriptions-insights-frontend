@@ -1,4 +1,4 @@
-import { useHistory as useHistoryRRD, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRouteDetail } from '../components/router/routerContext';
 import { routerHelpers } from '../components/router/routerHelpers';
 import { reduxActions, storeHooks } from '../redux';
@@ -8,20 +8,19 @@ import { reduxActions, storeHooks } from '../redux';
  *
  * @param {object} options
  * @param {boolean} options.isSetAppNav Allow setting the Platform's left navigation if conditions are met or fallback to history.push.
- * @param {Function} options.useHistory
+ * @param {Function} options.useNavigate
  * @param {Function} options.useDispatch
  * @returns {object}
  */
 const useHistory = ({
   isSetAppNav = false,
-  useHistory: useAliasHistory = useHistoryRRD,
+  useNavigate: useAliasNavigate = useNavigate,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
-  const history = useAliasHistory();
+  const navigate = useAliasNavigate();
   const dispatch = useAliasDispatch();
 
   return {
-    ...history,
     push: (pathLocation, historyState) => {
       const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
       const { productParameter, id, routeHref } = routerHelpers.getRouteConfig({ pathName, id: pathName });
@@ -31,7 +30,7 @@ const useHistory = ({
         return dispatch(reduxActions.platform.setAppNav(id));
       }
 
-      return history?.push(routeHref || (pathName && `${pathName}${search}${hash}`) || pathLocation, historyState);
+      return navigate(routeHref || (pathName && `${pathName}${search}${hash}`) || pathLocation, historyState);
     }
   };
 };
@@ -40,8 +39,7 @@ const routerHooks = {
   useHistory,
   useLocation,
   useParams,
-  useRouteDetail,
-  useRouteMatch
+  useRouteDetail
 };
 
-export { routerHooks as default, routerHooks, useHistory, useLocation, useParams, useRouteDetail, useRouteMatch };
+export { routerHooks as default, routerHooks, useHistory, useLocation, useParams, useRouteDetail };
