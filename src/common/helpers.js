@@ -61,23 +61,14 @@ const isPromise = obj => /^\[object (Promise|Async|AsyncFunction)]/.test(Object.
  */
 const generateHash = (anyValue, { method = cryptoSha1 } = {}) =>
   method(
-    JSON.stringify(
-      {
-        value:
-          (_isPlainObject(anyValue) && Object.entries(anyValue).sort(([a], [b]) => a.localeCompare(b))) ||
-          (Array.isArray(anyValue) && anyValue) ||
-          `${typeof anyValue}${anyValue?.toString() || anyValue}`
-      },
-      (key, value) => {
-        if (value !== anyValue && _isPlainObject(value)) {
-          return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
-        }
-        if (typeof value === 'function') {
-          return value.toString();
-        }
-        return value;
-      }
-    )
+    JSON.stringify({
+      value:
+        (_isPlainObject(anyValue) &&
+          Object.entries(anyValue)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .toString()) ||
+        `${typeof anyValue}${anyValue?.toString() || anyValue}`
+    })
   ).toString();
 
 /**

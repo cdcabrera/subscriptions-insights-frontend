@@ -148,23 +148,27 @@ exports[`Helpers should have specific functions: helpers 1`] = `
 
 exports[`Helpers should support generated consistent hashes from objects, primitive values: hash, object and primitive values 1`] = `
 {
-  "valueArray": "6abafa96eb7763c60585d01b00d26401af68852a",
+  "valueArray": "41d49497cb062fec8dd0a1e9298650aeb2364f35",
   "valueArrayConfirmSort": true,
-  "valueArraySort": "badcb2557a2648cf906797747ddab1c6c6c1fd4d",
-  "valueBoolFalse": "c26064a8031add38b1fa508928893fadccf1de8b",
-  "valueBoolTrue": "41a1d6ee98970161af1b75e2290afcd9f544d288",
-  "valueFloat": "1e70d0255351d4e191b010df44e8ffd1d980aa53",
-  "valueFunctionHelloWorld": "4c0c0018a209310592329c80554fe8f9cc38f309",
-  "valueFunctionLoremIpsum": "0a1bf10c4148e2a399eeb9b157fe12f68911267d",
-  "valueInt": "bbe5e4dce6f5f4b167e512d2f7aafbe4e1b23069",
-  "valueNull": "81bfa081af1e51ef617a195a05eef28d20f4710f",
-  "valueObject": "b5cd8abdd561b4ea4e71b8a8d0639e136f77a555",
-  "valueSet": "19165127a3bb30872b0bf5335dbaabf8c1b6a7bd",
+  "valueArraySort": "8ff5ed8b5abfb2aaa702bc720b1ed011b5074792",
+  "valueBoolFalse": "fd585f7ce09952f9c9500adddf8ec1cc18f32504",
+  "valueBoolTrue": "05d56a2be446d1c4bdb97dcc2c93f351a5212f6e",
+  "valueFloat": "3c1c6df0b9a0750c02d03f0129c0ce0f6f2df2c1",
+  "valueFunctionConfirm": true,
+  "valueFunctionHelloWorld": "8daa9f7ce99a92428cfd07b81453718db32ec677",
+  "valueFunctionLoremIpsum": "3e9ef0485423ff4d7b136d07b335f164c9beff62",
+  "valueInt": "dc1758c52431d256e685a0adf1e87a625a228d9b",
+  "valueNull": "db181a5edfc433158238dbf8deedc61083c15705",
+  "valueObject": "4af9d946649bc000dc3de2641a2d205fdb62f397",
+  "valueObjectAgain": "b1464be428675b232133d12d1649c7826e6c7d5b",
+  "valueObjectConfirm": true,
+  "valueObjectConfirmSort": true,
+  "valueSet": "217ad48afcf8b57ea5c4e0a33ca8e21d550b079f",
   "valueSetConfirmSort": true,
-  "valueSetSort": "19165127a3bb30872b0bf5335dbaabf8c1b6a7bd",
-  "valueSymbol": "6d3878e9be565e0df002d66e0f4350078289503e",
-  "valueUndefined": "c61131bd38b00b2b7e3fdd98493d2a3ada08de55",
+  "valueSetSort": "217ad48afcf8b57ea5c4e0a33ca8e21d550b079f",
+  "valueSymbol": "81e08eb158c0872685b72bd659574aa746f29293",
+  "valueUndefined": "0b8e7cb2b0eff19444438e445a0a252d2b9e6f9c",
 }
 `;
 
-exports[`Helpers should support generated consistent hashes from objects, primitive values: method md5 1`] = `"5ec8a033ea20082fe2b16b8a8c343492"`;
+exports[`Helpers should support generated consistent hashes from objects, primitive values: method md5 1`] = `"03daec27a64d6a0394c1741586a5fa17"`;

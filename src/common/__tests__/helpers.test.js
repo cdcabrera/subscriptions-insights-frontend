@@ -33,8 +33,27 @@ describe('Helpers', () => {
   it('should support generated consistent hashes from objects, primitive values', () => {
     expect({
       valueObject: helpers.generateHash({ lorem: 'ipsum', dolor: ['sit', null, undefined, 1, () => 'hello world'] }),
+      valueObjectAgain: helpers.generateHash({
+        lorem: 'ipsum',
+        dolor: ['sit', null, undefined, 1, () => 'lorem ipsum']
+      }),
+      valueObjectConfirm:
+        helpers.generateHash({ lorem: 'ipsum', dolor: ['sit', null, undefined, 1, () => 'hello world'] }) !==
+        helpers.generateHash({
+          lorem: 'ipsum',
+          dolor: ['sit', null, undefined, 1, () => 'lorem ipsum']
+        }),
+      valueObjectConfirmSort:
+        helpers.generateHash({ lorem: 'ipsum', dolor: ['sit', null, undefined, 1, () => 'hello world'] }) !==
+        helpers.generateHash({
+          dolor: ['sit', null, undefined, 1, () => 'lorem ipsum'],
+          lorem: 'ipsum'
+        }),
       valueFunctionHelloWorld: helpers.generateHash(() => 'hello world'),
       valueFunctionLoremIpsum: helpers.generateHash(function loremIpsum() { return 'lorem ipsum'; }), // eslint-disable-line
+      valueFunctionConfirm:
+        helpers.generateHash(() => Promise.reject(new Error('dolor.sit'))) !==
+        helpers.generateHash(() => Promise.reject('dolor.sit')),  // eslint-disable-line
       valueInt: helpers.generateHash(200),
       valueFloat: helpers.generateHash(20.000006),
       valueNull: helpers.generateHash(null),
