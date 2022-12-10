@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
-import { useProduct, useProductGraphTallyQuery } from '../productView/productViewContext';
+import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { helpers } from '../../common/helpers';
+import { graphCardHelpers } from './graphCardHelpers';
 
 /**
  * Chart context.
@@ -19,6 +20,40 @@ const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
  * @returns {React.Context<{}>}
  */
 const useGraphCardContext = () => useContext(GraphCardContext);
+
+/**
+ * Parse filters settings for context.
+ *
+ * @param {object} options
+ * @param {Function} options.useProduct
+ * @param {Function} options.useProductGraphConfig
+ * @returns {{standaloneFiltersSettings: { settings: {} }[], groupedFiltersSettings: { settings: {} }}}
+ */
+const useParseFiltersSettings = ({
+  useProduct: useAliasProduct = useProduct,
+  useProductGraphConfig: useAliasProductGraphConfig = useProductGraphConfig
+} = {}) => {
+  const [{ groupedFiltersSettings = {}, standaloneFiltersSettings = [] } = {}, setUpdatedSettings] = useState();
+  const { productId } = useAliasProduct();
+  const { filters = [], settings = {} } = useAliasProductGraphConfig();
+
+  useEffect(() => {
+    if (filters && productId) {
+      const updatedSettings = graphCardHelpers.generateChartSettings({
+        filters,
+        settings,
+        productId
+      });
+
+      setUpdatedSettings(updatedSettings);
+    }
+  }, [filters, settings, productId]);
+
+  return {
+    groupedFiltersSettings,
+    standaloneFiltersSettings
+  };
+};
 
 /**
  * Transform multiple metrics from store for chart/graph consumption.
@@ -97,27 +132,21 @@ const useGetMetrics = ({
   const { productId } = useAliasProduct();
   const query = useAliasProductGraphTallyQuery();
   const dispatch = useAliasDispatch();
+  const response = useAliasMetricsSelector();
   const { settings = {} } = useAliasGraphCardContext();
   const { metrics = [] } = settings;
 
-  const { pending, ...response } = useAliasMetricsSelector();
-
   useShallowCompareEffect(() => {
-    if (!pending) {
-      const updatedMetrics = metrics.map(({ metric: metricId, isCapacity, query: metricQuery }) => ({
-        id: productId,
-        metric: metricId,
-        isCapacity,
-        query: metricQuery
-      }));
-      getGraphMetrics(updatedMetrics, query)(dispatch);
-    }
+    const updatedMetrics = metrics.map(({ metric: metricId, isCapacity, query: metricQuery }) => ({
+      id: productId,
+      metric: metricId,
+      isCapacity,
+      query: metricQuery
+    }));
+    getGraphMetrics(updatedMetrics, query)(dispatch);
   }, [metrics, productId, query]);
 
-  return {
-    ...response,
-    pending
-  };
+  return response;
 };
 
 const context = {
@@ -125,7 +154,8 @@ const context = {
   DEFAULT_CONTEXT,
   useGetMetrics,
   useGraphCardContext,
-  useMetricsSelector
+  useMetricsSelector,
+  useParseFiltersSettings
 };
 
 export {
@@ -135,5 +165,6 @@ export {
   DEFAULT_CONTEXT,
   useGetMetrics,
   useGraphCardContext,
-  useMetricsSelector
+  useMetricsSelector,
+  useParseFiltersSettings
 };
