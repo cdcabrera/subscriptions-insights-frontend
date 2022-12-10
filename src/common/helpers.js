@@ -80,18 +80,6 @@ const generateHash = (anyValue, { method = cryptoSha1 } = {}) =>
     })
   ).toString();
 
-const generateHashworksish = (anyValue, { method = cryptoSha1 } = {}) =>
-  method(
-    JSON.stringify({
-      value:
-        (_isPlainObject(anyValue) &&
-          Object.entries(anyValue)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .toString() + JSON.stringify(anyValue)) ||
-        `${typeof anyValue}${anyValue?.toString() || anyValue}`
-    })
-  ).toString();
-
 /**
  * An empty function.
  * Typically used as a default prop.
