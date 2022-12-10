@@ -54,17 +54,22 @@ const isPromise = obj => /^\[object (Promise|Async|AsyncFunction)]/.test(Object.
 /**
  * Generate a consistent hash
  *
- * @param {object} obj
+ * @param {*|object} anyValue
  * @param {object} options
  * @param {Function} options.method
  * @returns {*|string}
  */
-const generateHash = (obj, { method = cryptoSha1 } = {}) =>
+const generateHash = (anyValue, { method = cryptoSha1 } = {}) =>
   method(
     JSON.stringify(
-      Object.entries(obj).sort(([a], [b]) => a.localeCompare(b)),
+      {
+        value:
+          (_isPlainObject(anyValue) && Object.entries(anyValue).sort(([a], [b]) => a.localeCompare(b))) ||
+          (typeof anyValue === 'function' && anyValue.toString()) ||
+          anyValue
+      },
       (key, value) => {
-        if (value !== obj && _isPlainObject(value)) {
+        if (value !== anyValue && _isPlainObject(value)) {
           return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
         }
         if (typeof value === 'function') {
