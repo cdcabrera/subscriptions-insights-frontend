@@ -64,9 +64,30 @@ const generateHash = (anyValue, { method = cryptoSha1 } = {}) =>
     JSON.stringify({
       value:
         (_isPlainObject(anyValue) &&
+          JSON.stringify(
+            Object.entries(anyValue).sort(([a], [b]) => a.localeCompare(b)),
+            (key, value) => {
+              if (value !== anyValue && _isPlainObject(value)) {
+                return JSON.stringify(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)) || []);
+              }
+              if (typeof value === 'function') {
+                return value.toString();
+              }
+              return value;
+            }
+          )) ||
+        `${typeof anyValue}${anyValue?.toString() || anyValue}`
+    })
+  ).toString();
+
+const generateHashworksish = (anyValue, { method = cryptoSha1 } = {}) =>
+  method(
+    JSON.stringify({
+      value:
+        (_isPlainObject(anyValue) &&
           Object.entries(anyValue)
             .sort(([a], [b]) => a.localeCompare(b))
-            .toString()) ||
+            .toString() + JSON.stringify(anyValue)) ||
         `${typeof anyValue}${anyValue?.toString() || anyValue}`
     })
   ).toString();

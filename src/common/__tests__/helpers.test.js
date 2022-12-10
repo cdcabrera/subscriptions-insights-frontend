@@ -44,6 +44,12 @@ describe('Helpers', () => {
           dolor: ['sit', null, undefined, 1, () => 'lorem ipsum']
         }),
       valueObjectConfirmSort:
+        helpers.generateHash({ lorem: 'ipsum', dolor: ['sit', null, undefined, 1, () => 'hello world'] }) ===
+        helpers.generateHash({
+          dolor: ['sit', null, undefined, 1, () => 'hello world'],
+          lorem: 'ipsum'
+        }),
+      valueObjectConfirmSortDiff:
         helpers.generateHash({ lorem: 'ipsum', dolor: ['sit', null, undefined, 1, () => 'hello world'] }) !==
         helpers.generateHash({
           dolor: ['sit', null, undefined, 1, () => 'lorem ipsum'],

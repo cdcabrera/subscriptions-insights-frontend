@@ -159,10 +159,11 @@ exports[`Helpers should support generated consistent hashes from objects, primit
   "valueFunctionLoremIpsum": "3e9ef0485423ff4d7b136d07b335f164c9beff62",
   "valueInt": "dc1758c52431d256e685a0adf1e87a625a228d9b",
   "valueNull": "db181a5edfc433158238dbf8deedc61083c15705",
-  "valueObject": "4af9d946649bc000dc3de2641a2d205fdb62f397",
-  "valueObjectAgain": "b1464be428675b232133d12d1649c7826e6c7d5b",
+  "valueObject": "d84105df88bfa1487a6527930629ec4d28f08984",
+  "valueObjectAgain": "a2c7ddbcd87ca742253b359e658493cabcddd0d0",
   "valueObjectConfirm": true,
   "valueObjectConfirmSort": true,
+  "valueObjectConfirmSortDiff": true,
   "valueSet": "217ad48afcf8b57ea5c4e0a33ca8e21d550b079f",
   "valueSetConfirmSort": true,
   "valueSetSort": "217ad48afcf8b57ea5c4e0a33ca8e21d550b079f",
@@ -171,4 +172,4 @@ exports[`Helpers should support generated consistent hashes from objects, primit
 }
 `;
 
-exports[`Helpers should support generated consistent hashes from objects, primitive values: method md5 1`] = `"03daec27a64d6a0394c1741586a5fa17"`;
+exports[`Helpers should support generated consistent hashes from objects, primitive values: method md5 1`] = `"4c54a4070554ab0addfed6c7616358c8"`;
