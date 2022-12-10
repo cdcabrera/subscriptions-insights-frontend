@@ -76,10 +76,7 @@ const axiosServiceCall = async (
 
   if (updatedConfig.cancel === true) {
     const cancelTokensId =
-      updatedConfig.cancelId ||
-      `${updatedConfig.method}-${
-        (typeof updatedConfig.url === 'function' && updatedConfig.url.toString()) || updatedConfig.url
-      }`;
+      updatedConfig.cancelId || serviceHelpers.generateHash({ method: updatedConfig.method, url: updatedConfig.url });
 
     if (globalCancelTokens[cancelTokensId]) {
       await globalCancelTokens[cancelTokensId].cancel(cancelledMessage);
