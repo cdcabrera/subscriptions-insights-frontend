@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
@@ -33,6 +33,7 @@ const useParseFiltersSettings = ({
   useProduct: useAliasProduct = useProduct,
   useProductGraphConfig: useAliasProductGraphConfig = useProductGraphConfig
 } = {}) => {
+  /*
   const [{ groupedFiltersSettings = {}, standaloneFiltersSettings = [] } = {}, setUpdatedSettings] = useState();
   const { productId } = useAliasProduct();
   const { filters = [], settings = {} } = useAliasProductGraphConfig();
@@ -48,6 +49,18 @@ const useParseFiltersSettings = ({
       setUpdatedSettings(updatedSettings);
     }
   }, [filters, settings, productId]);
+  */
+  const { productId } = useAliasProduct();
+  const { filters = [], settings = {} } = useAliasProductGraphConfig();
+  const { groupedFiltersSettings = {}, standaloneFiltersSettings = [] } = useMemo(
+    () =>
+      graphCardHelpers.generateChartSettings({
+        filters,
+        settings,
+        productId
+      }),
+    [filters, settings, productId]
+  );
 
   return {
     groupedFiltersSettings,

@@ -10,7 +10,7 @@ describe('GraphCardContext', () => {
     const { result: basicConfig } = await mountHook(() => useParseFiltersSettings());
     expect(basicConfig).toMatchSnapshot('configuration, basic');
 
-    const { result: groupedConfig } = await mountHook(() =>
+    const { unmount: groupedUnmount, result: groupedConfig } = await mountHook(() =>
       useParseFiltersSettings({
         useProduct: () => ({ productId: 'loremIpsum' }),
         useProductGraphConfig: () => ({
@@ -22,9 +22,11 @@ describe('GraphCardContext', () => {
         })
       })
     );
+
+    await groupedUnmount();
     expect(groupedConfig).toMatchSnapshot('configuration, grouped');
 
-    const { result: standaloneConfig } = await mountHook(() =>
+    const { unmount: standaloneUnmount, result: standaloneConfig } = await mountHook(() =>
       useParseFiltersSettings({
         useProduct: () => ({ productId: 'loremIpsum' }),
         useProductGraphConfig: () => ({
@@ -37,6 +39,8 @@ describe('GraphCardContext', () => {
         })
       })
     );
+
+    await standaloneUnmount();
     expect(standaloneConfig).toMatchSnapshot('configuration, standalone');
   });
 
