@@ -65,8 +65,8 @@ const generateHash = (anyValue, { method = cryptoSha1 } = {}) =>
       {
         value:
           (_isPlainObject(anyValue) && Object.entries(anyValue).sort(([a], [b]) => a.localeCompare(b))) ||
-          (typeof anyValue === 'function' && anyValue.toString()) ||
-          anyValue
+          (Array.isArray(anyValue) && anyValue) ||
+          `${typeof anyValue}${anyValue?.toString() || anyValue}`
       },
       (key, value) => {
         if (value !== anyValue && _isPlainObject(value)) {

@@ -146,6 +146,25 @@ exports[`Helpers should have specific functions: helpers 1`] = `
 }
 `;
 
-exports[`Helpers should support generated consistent hashes from objects: hash 1`] = `"216252ce5b9858560d4a8134f2106fc8b1141b70"`;
+exports[`Helpers should support generated consistent hashes from objects, primitive values: hash, object and primitive values 1`] = `
+{
+  "valueArray": "6abafa96eb7763c60585d01b00d26401af68852a",
+  "valueArrayConfirmSort": true,
+  "valueArraySort": "badcb2557a2648cf906797747ddab1c6c6c1fd4d",
+  "valueBoolFalse": "c26064a8031add38b1fa508928893fadccf1de8b",
+  "valueBoolTrue": "41a1d6ee98970161af1b75e2290afcd9f544d288",
+  "valueFloat": "1e70d0255351d4e191b010df44e8ffd1d980aa53",
+  "valueFunctionHelloWorld": "4c0c0018a209310592329c80554fe8f9cc38f309",
+  "valueFunctionLoremIpsum": "0a1bf10c4148e2a399eeb9b157fe12f68911267d",
+  "valueInt": "bbe5e4dce6f5f4b167e512d2f7aafbe4e1b23069",
+  "valueNull": "81bfa081af1e51ef617a195a05eef28d20f4710f",
+  "valueObject": "b5cd8abdd561b4ea4e71b8a8d0639e136f77a555",
+  "valueSet": "19165127a3bb30872b0bf5335dbaabf8c1b6a7bd",
+  "valueSetConfirmSort": true,
+  "valueSetSort": "19165127a3bb30872b0bf5335dbaabf8c1b6a7bd",
+  "valueSymbol": "6d3878e9be565e0df002d66e0f4350078289503e",
+  "valueUndefined": "c61131bd38b00b2b7e3fdd98493d2a3ada08de55",
+}
+`;
 
-exports[`Helpers should support generated consistent hashes from objects: method md5 1`] = `"a105a8ae3437698acca4ca9d5b2b4dde"`;
+exports[`Helpers should support generated consistent hashes from objects, primitive values: method md5 1`] = `"5ec8a033ea20082fe2b16b8a8c343492"`;
