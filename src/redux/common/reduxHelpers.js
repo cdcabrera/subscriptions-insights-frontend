@@ -269,13 +269,12 @@ const getStatusFromResults = results => {
  * @param {string} prop
  * @param {object} data
  * @param {object} options
- * @property {object} state
- * @property {object} initialState
- * @property {boolean} reset
+ * @param {object} options.state
+ * @param {object} options.initialState
+ * @param {boolean} options.reset
  * @returns {object}
  */
-const setStateProp = (prop, data, options) => {
-  const { state = {}, initialState = {}, reset = true } = options;
+const setStateProp = (prop, data, { state = {}, initialState = {}, reset = true } = {}) => {
   let obj = { ...state };
 
   if (helpers.DEV_MODE && prop && !state[prop]) {
