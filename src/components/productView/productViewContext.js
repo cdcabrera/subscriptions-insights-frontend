@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { reduxHelpers } from '../../redux/common';
 import { storeHooks } from '../../redux/hooks';
 import { rhsmConstants, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
@@ -224,7 +224,7 @@ const useProductContext = ({
     ...config
   } = useAliasProductViewContext();
 
-  const applyUomFilter = useCallback(() => {
+  return useMemo(() => {
     if (productContextFilterUom === true) {
       const filterFilters = ({ id, metric, isOptional }) => {
         if (!isOptional) {
@@ -255,8 +255,6 @@ const useProductContext = ({
     productContextFilterUom,
     uomFilter
   ]);
-
-  return applyUomFilter();
 };
 
 /**
