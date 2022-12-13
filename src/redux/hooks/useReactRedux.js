@@ -1,6 +1,9 @@
+import { useCallback, useMemo } from 'react'; // eslint-disable-line
+// import { createMemo } from 'react-use';
 import { useSelector as useReactReduxSelector, shallowEqual } from 'react-redux';
 import { createSelector } from 'reselect';
 import _cloneDeep from 'lodash/cloneDeep';
+import _memoize from 'lodash/memoize'; // eslint-disable-line
 import { store } from '../store';
 import { helpers } from '../../common';
 
@@ -28,7 +31,11 @@ const useSelector = (
   selector,
   value = null,
   { equality, useSelector: useAliasSelector = useReactReduxSelector } = {}
-) => useAliasSelector(selector, equality) ?? value;
+) => {
+  const response = useAliasSelector(selector, equality);
+  // return useCallback(() => response ?? value, [response, value])();
+  return useMemo(() => (() => response ?? value)(), [response, value]);
+};
 
 /**
  * Generate a selector from multiple selectors for use in "useSelector".
@@ -47,39 +54,48 @@ const useSelectors = (
   value,
   { equality = shallowEqual, useSelector: useAliasSelector = useReactReduxSelector } = {}
 ) => {
-  let updatedSelectors = Array.isArray(selectors) ? selectors : [selectors];
-  const selectorIds = new Set();
-
-  updatedSelectors = updatedSelectors.map(selector => {
-    if (selector.selector && selector.id) {
-      selectorIds.add(selector.id);
-      return selector.selector;
-    }
-    return selector;
-  });
-
-  const multiSelector = createSelector(updatedSelectors, (...results) => results);
-
-  let listMultiSelectorResponse = (useAliasSelector(multiSelector, equality) ?? value) || [];
-  const undefinedMultiSelectorResponse = listMultiSelectorResponse.filter(response => response === undefined);
-
-  if (undefinedMultiSelectorResponse.length === listMultiSelectorResponse.length) {
-    listMultiSelectorResponse = [];
-  } else {
-    listMultiSelectorResponse = _cloneDeep(listMultiSelectorResponse);
-  }
-
-  if (selectorIds.size && selectorIds.size === listMultiSelectorResponse.length) {
-    const idMultiSelectorResponse = {};
-
-    Array.from(selectorIds).forEach((id, index) => {
-      idMultiSelectorResponse[id] = listMultiSelectorResponse[index];
+  const { multiSelector, ids: selectorIds } = useMemo(() => {
+    let selectorsToArr = Array.isArray(selectors) ? selectors : [selectors];
+    const idSet = new Set();
+    selectorsToArr = selectorsToArr.map(selector => {
+      if (selector.selector && selector.id) {
+        idSet.add(selector.id);
+        return selector.selector;
+      }
+      return selector;
     });
 
-    return idMultiSelectorResponse;
-  }
+    return {
+      multiSelector: createSelector(selectorsToArr, (...results) => results),
+      ids: idSet
+    };
+  }, [selectors]);
 
-  return listMultiSelectorResponse;
+  const listMultiSelectorResponse = useAliasSelector(multiSelector, value, { equality });
+
+  return useMemo(() => {
+    const undefinedMultiSelectorResponse = listMultiSelectorResponse.filter(response => response === undefined);
+
+    if (!listMultiSelectorResponse || undefinedMultiSelectorResponse.length === listMultiSelectorResponse.length) {
+      return [];
+    }
+
+    Object.freeze(listMultiSelectorResponse);
+
+    if (selectorIds.size && selectorIds.size === listMultiSelectorResponse.length) {
+      const idMultiSelectorResponse = {};
+
+      Array.from(selectorIds).forEach((id, index) => {
+        idMultiSelectorResponse[id] = listMultiSelectorResponse[index];
+      });
+
+      Object.freeze(idMultiSelectorResponse);
+
+      return idMultiSelectorResponse;
+    }
+
+    return listMultiSelectorResponse;
+  }, [listMultiSelectorResponse, selectorIds]);
 };
 
 /**
@@ -94,180 +110,192 @@ const useSelectors = (
  * @returns {{data: ({}|*[]), pending: boolean, fulfilled: boolean, responses: {errorList: *[], errorId: {},
  *     id: {}, list: *[]}, cancelled: boolean, error: boolean, message: null}}
  */
-const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = useSelectors, customResponse } = {}) => {
-  const selectorResponse = useAliasSelectors(selectors, []);
-  const isSelectorResponseArray = Array.isArray(selectorResponse);
+const useSelectorsResponse = (
+  selectors,
+  { useSelectors: useAliasSelectors = useSelectors, customResponse: custResponse } = {}
+) => {
+  const selResponse = useAliasSelectors(selectors);
 
-  const cancelledById = {};
-  const cancelledByList = [];
-  const cancelledDataById = {};
-  const cancelledDataByList = [];
+  const setup = (selectorResponse, customResponse) => {
+    console.log('>>> use sel', selectorResponse);
+    // console.log('>>>>> USE SEL RESPONSE', helpers.generateHash({ selectors, selectorResponse }));
+    const isSelectorResponseArray = Array.isArray(selectorResponse);
 
-  const errorByList = [];
-  const errorById = {};
-  const errorDataById = {};
-  const errorDataByList = [];
+    const cancelledById = {};
+    const cancelledByList = [];
+    const cancelledDataById = {};
+    const cancelledDataByList = [];
 
-  const fulfilledByList = [];
-  const fulfilledById = {};
-  const fulfilledDataById = {};
-  const fulfilledDataByList = [];
+    const errorByList = [];
+    const errorById = {};
+    const errorDataById = {};
+    const errorDataByList = [];
 
-  const pendingByList = [];
+    const fulfilledByList = [];
+    const fulfilledById = {};
+    const fulfilledDataById = {};
+    const fulfilledDataByList = [];
 
-  const responsesById = {};
-  const responsesByList = [];
-  const dataById = {};
-  const dataByList = [];
+    const pendingByList = [];
 
-  const idList = [];
+    const responsesById = {};
+    const responsesByList = [];
+    const dataById = {};
+    const dataByList = [];
 
-  const updatedSelectorResponse = _cloneDeep(
-    (isSelectorResponseArray && selectorResponse) || Object.entries(selectorResponse)
-  );
+    const idList = [];
 
-  updatedSelectorResponse.forEach(response => {
-    const id = (!isSelectorResponseArray && response?.[0]) || null;
+    const updatedSelectorResponse = _cloneDeep(
+      (isSelectorResponseArray && selectorResponse) || Object.entries(selectorResponse)
+    );
 
-    const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response;
-    const isServiceResponse =
-      typeof updatedResponse.cancelled === 'boolean' ||
-      typeof updatedResponse.error === 'boolean' ||
-      typeof updatedResponse.fulfilled === 'boolean' ||
-      typeof updatedResponse.pending === 'boolean';
+    updatedSelectorResponse.forEach(response => {
+      const id = (!isSelectorResponseArray && response?.[0]) || null;
 
-    const { pending, fulfilled, error, cancelled, message } = (isServiceResponse && updatedResponse) || {};
+      const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response;
+      const isServiceResponse =
+        typeof updatedResponse.cancelled === 'boolean' ||
+        typeof updatedResponse.error === 'boolean' ||
+        typeof updatedResponse.fulfilled === 'boolean' ||
+        typeof updatedResponse.pending === 'boolean';
 
-    if (id !== null) {
-      idList.push(id);
-      updatedResponse.id = id;
-    }
-
-    if (cancelled) {
-      cancelledByList.push(updatedResponse);
-      cancelledDataByList.push(updatedResponse?.data || updatedResponse);
+      const { pending, fulfilled, error, cancelled, message } = (isServiceResponse && updatedResponse) || {};
 
       if (id !== null) {
-        cancelledById[id] = cancelledByList[cancelledByList.length - 1];
-        cancelledDataById[id] =
-          cancelledByList[cancelledByList.length - 1]?.data || cancelledByList[cancelledByList.length - 1];
+        idList.push(id);
+        updatedResponse.id = id;
       }
-    }
 
-    if (error) {
-      errorByList.push({
-        ...updatedResponse,
-        ...new Error(message || `Error: useSelectorsAllResponse${(id && `, ${id}`) || ''}`)
-      });
-      errorDataByList.push(updatedResponse?.data || updatedResponse);
+      if (cancelled) {
+        cancelledByList.push(updatedResponse);
+        cancelledDataByList.push(updatedResponse?.data || updatedResponse);
 
-      if (id !== null) {
-        errorById[id] = errorByList[errorByList.length - 1];
-        errorDataById[id] = errorByList[errorByList.length - 1]?.data || errorByList[errorByList.length - 1];
-      }
-    }
-
-    if (fulfilled) {
-      fulfilledByList.push(updatedResponse);
-      fulfilledDataByList.push(updatedResponse?.data || updatedResponse);
-
-      if (id !== null) {
-        fulfilledById[id] = fulfilledByList[fulfilledByList.length - 1];
-        fulfilledDataById[id] =
-          fulfilledByList[fulfilledByList.length - 1]?.data || fulfilledByList[fulfilledByList.length - 1];
-      }
-    }
-
-    if (pending) {
-      pendingByList.push(updatedResponse);
-    }
-
-    if (id !== null) {
-      responsesById[id] = updatedResponse;
-      dataById[id] = updatedResponse?.data || updatedResponse;
-    }
-
-    responsesByList.push(updatedResponse);
-    dataByList.push(updatedResponse?.data || updatedResponse);
-  });
-
-  const isById = idList.length !== 0 && idList.length === updatedSelectorResponse.length;
-
-  const response = {
-    responses: {
-      id: responsesById,
-      list: responsesByList
-    },
-    cancelled: false,
-    data: (isById && {}) || [],
-    error: false,
-    fulfilled: false,
-    message: null,
-    pending: false
-  };
-
-  if (typeof customResponse === 'function') {
-    Object.assign(response, {
-      ...customResponse(
-        { ...response, responses: { ...response.responses } },
-        {
-          cancelledById,
-          cancelledByList,
-          cancelledDataById,
-          cancelledDataByList,
-          dataById,
-          dataByList,
-          errorByList,
-          errorById,
-          errorDataById,
-          errorDataByList,
-          fulfilledByList,
-          fulfilledById,
-          fulfilledDataById,
-          fulfilledDataByList,
-          idList,
-          isById,
-          pendingByList,
-          responsesByList,
-          responsesById,
-          updatedSelectorResponse
+        if (id !== null) {
+          cancelledById[id] = cancelledByList[cancelledByList.length - 1];
+          cancelledDataById[id] =
+            cancelledByList[cancelledByList.length - 1]?.data || cancelledByList[cancelledByList.length - 1];
         }
-      )
+      }
+
+      if (error) {
+        errorByList.push({
+          ...updatedResponse,
+          ...new Error(message || `Error: useSelectorsAllResponse${(id && `, ${id}`) || ''}`)
+        });
+        errorDataByList.push(updatedResponse?.data || updatedResponse);
+
+        if (id !== null) {
+          errorById[id] = errorByList[errorByList.length - 1];
+          errorDataById[id] = errorByList[errorByList.length - 1]?.data || errorByList[errorByList.length - 1];
+        }
+      }
+
+      if (fulfilled) {
+        fulfilledByList.push(updatedResponse);
+        fulfilledDataByList.push(updatedResponse?.data || updatedResponse);
+
+        if (id !== null) {
+          fulfilledById[id] = fulfilledByList[fulfilledByList.length - 1];
+          fulfilledDataById[id] =
+            fulfilledByList[fulfilledByList.length - 1]?.data || fulfilledByList[fulfilledByList.length - 1];
+        }
+      }
+
+      if (pending) {
+        pendingByList.push(updatedResponse);
+      }
+
+      if (id !== null) {
+        responsesById[id] = updatedResponse;
+        dataById[id] = updatedResponse?.data || updatedResponse;
+      }
+
+      responsesByList.push(updatedResponse);
+      dataByList.push(updatedResponse?.data || updatedResponse);
     });
 
-    return response;
-  }
+    const isById = idList.length !== 0 && idList.length === updatedSelectorResponse.length;
 
-  if (errorByList.length) {
-    response.message = new Error(errorByList[0]?.message || `useSelectorsResponse, ${JSON.stringify(errorByList[0])}`);
-    response.error = true;
-    response.data = (isById && errorDataById) || errorDataByList;
-    return response;
-  }
+    const response = {
+      responses: {
+        id: responsesById,
+        list: responsesByList
+      },
+      cancelled: false,
+      data: (isById && {}) || [],
+      error: false,
+      fulfilled: false,
+      message: null,
+      pending: false
+    };
 
-  if (pendingByList.length) {
-    response.pending = true;
-    return response;
-  }
+    if (typeof customResponse === 'function') {
+      Object.assign(response, {
+        ...customResponse(
+          { ...response, responses: { ...response.responses } },
+          {
+            cancelledById,
+            cancelledByList,
+            cancelledDataById,
+            cancelledDataByList,
+            dataById,
+            dataByList,
+            errorByList,
+            errorById,
+            errorDataById,
+            errorDataByList,
+            fulfilledByList,
+            fulfilledById,
+            fulfilledDataById,
+            fulfilledDataByList,
+            idList,
+            isById,
+            pendingByList,
+            responsesByList,
+            responsesById,
+            updatedSelectorResponse
+          }
+        )
+      });
 
-  if (cancelledByList.length && cancelledByList.length === responsesByList.length) {
-    response.message = new Error('Cancelled useSelectorsResponse');
-    response.cancelled = true;
-    response.data = (isById && cancelledById) || cancelledByList;
-    return response;
-  }
+      return response;
+    }
 
-  if (
-    fulfilledByList.length &&
-    (fulfilledByList.length === responsesByList.length ||
-      cancelledByList.length + fulfilledByList.length === responsesByList.length)
-  ) {
-    response.fulfilled = true;
-    response.data = (isById && dataById) || dataByList;
-    return response;
-  }
+    if (errorByList.length) {
+      response.message = new Error(
+        errorByList[0]?.message || `useSelectorsResponse, ${JSON.stringify(errorByList[0])}`
+      );
+      response.error = true;
+      response.data = (isById && errorDataById) || errorDataByList;
+      return response;
+    }
 
-  return response;
+    if (pendingByList.length) {
+      response.pending = true;
+      return response;
+    }
+
+    if (cancelledByList.length && cancelledByList.length === responsesByList.length) {
+      response.message = new Error('Cancelled useSelectorsResponse');
+      response.cancelled = true;
+      response.data = (isById && cancelledById) || cancelledByList;
+      return response;
+    }
+
+    if (
+      fulfilledByList.length &&
+      (fulfilledByList.length === responsesByList.length ||
+        cancelledByList.length + fulfilledByList.length === responsesByList.length)
+    ) {
+      response.fulfilled = true;
+      response.data = (isById && dataById) || dataByList;
+      return response;
+    }
+
+    return response;
+  };
+
+  return useMemo(() => setup(selResponse, custResponse), [selResponse, custResponse]);
 };
 
 /**

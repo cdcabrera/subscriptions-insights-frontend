@@ -57,7 +57,8 @@ const getApiVersion = (options = {}) => {
     url: process.env.REACT_APP_SERVICES_RHSM_VERSION,
     cache,
     cancel,
-    cancelId
+    cancelId,
+    responseId: true
   });
 };
 
@@ -757,7 +758,8 @@ const getGraphReports = (id, params = {}, options = {}) => {
     params,
     cache,
     cancel,
-    cancelId
+    cancelId,
+    responseId: true
   });
 };
 
@@ -1896,6 +1898,7 @@ const getGraphTally = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    responseId: true,
     schema,
     transform
   });
@@ -2184,6 +2187,7 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    responseId: true,
     schema,
     transform,
     _isCapacity: true
@@ -2399,6 +2403,7 @@ const getHostsInventory = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    responseId: true,
     schema,
     transform
   });
@@ -2539,6 +2544,7 @@ const getHostsInventoryGuests = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    responseId: true,
     schema,
     transform
   });
@@ -2652,6 +2658,7 @@ const getInstancesInventory = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    responseId: true,
     schema,
     transform
   });
@@ -2772,6 +2779,7 @@ const getSubscriptionsInventory = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    responseId: true,
     schema,
     transform
   });

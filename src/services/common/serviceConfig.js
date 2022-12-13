@@ -202,6 +202,16 @@ const axiosServiceCall = async (
     }
   }
 
+  if (updatedConfig.responseId) {
+    axiosInstance.interceptors.response.use(
+      response => ({
+        ...response,
+        responseId: serviceHelpers.generateHash(response.data)
+      }),
+      response => Promise.reject(response)
+    );
+  }
+
   return axiosInstance(updatedConfig);
 };
 

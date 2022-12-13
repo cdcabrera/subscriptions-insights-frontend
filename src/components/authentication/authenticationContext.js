@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useMount, useUnmount } from 'react-use';
+import React, { useContext, useMemo, useState } from 'react';
+import { useDeepCompareEffect, useMount, useUnmount } from 'react-use'; // eslint-disable-line
 import { reduxActions, storeHooks } from '../../redux';
 import { routerHooks } from '../../hooks/useRouter';
 import { helpers } from '../../common';
@@ -19,7 +19,13 @@ const AuthenticationContext = React.createContext(DEFAULT_CONTEXT);
  *
  * @returns {React.Context<{}>}
  */
-const useAuthContext = () => useContext(AuthenticationContext);
+const useAuthContext = () => {
+  const results = useContext(AuthenticationContext);
+  return useMemo(() => {
+    console.log('>>> AUTH CONTEXT');
+    return results;
+  }, [results]);
+};
 
 /**
  * Initialize an app, and return a combined state store that includes authorization, locale, and API errors
@@ -47,10 +53,11 @@ const useGetAuthorization = ({
   useHistory: useAliasHistory = routerHooks.useHistory,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
+  // const [updatedResponse, setUpdatedResponse] = useState({});
   const [unregister, setUnregister] = useState(() => helpers.noop);
   const history = useAliasHistory();
   const dispatch = useAliasDispatch();
-  const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
+  const response = useAliasSelectorsResponse([
     { id: 'auth', selector: ({ user }) => user?.auth },
     { id: 'locale', selector: ({ user }) => user?.locale },
     {
@@ -69,6 +76,31 @@ const useGetAuthorization = ({
     unregister();
   });
 
+  /*
+  useDeepCompareEffect(() => {
+    console.log('>>> AUTH MEMO', response);
+    const { data, error, fulfilled, pending, responses } = response;
+    const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
+    const errorStatus = (error && responses?.id?.errors?.status) || null;
+
+    setUpdatedResponse(() => ({
+      data: {
+        ...user,
+        ...app,
+        locale: data.locale,
+        errorCodes: data.errors,
+        errorStatus
+      },
+      error,
+      fulfilled,
+      pending
+    }));
+  }, [response]);
+
+  return updatedResponse;
+  */
+  console.log('>>> AUTH RESPONSE', response);
+  const { data, error, fulfilled, pending, responses } = response;
   const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
   const errorStatus = (error && responses?.id?.errors?.status) || null;
 
@@ -92,12 +124,7 @@ const useGetAuthorization = ({
  * @param {Function} useAliasAuthContext
  * @returns {{errorCodes, errorStatus: *, locale}}
  */
-const useSession = ({ useAuthContext: useAliasAuthContext = useAuthContext } = {}) => {
-  const session = useAliasAuthContext();
-  return {
-    ...session
-  };
-};
+const useSession = ({ useAuthContext: useAliasAuthContext = useAuthContext } = {}) => useAliasAuthContext();
 
 const context = {
   AuthenticationContext,

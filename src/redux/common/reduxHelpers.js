@@ -2,6 +2,7 @@ import _get from 'lodash/get';
 import _isPlainObject from 'lodash/isPlainObject';
 import _camelCase from 'lodash/camelCase';
 import _snakeCase from 'lodash/snakeCase';
+import _memoize from 'lodash/memoize';
 import { helpers } from '../../common';
 
 /**
@@ -177,7 +178,7 @@ const setNormalizedResponse = (...responses) => {
  * @param {Array|object} results
  * @returns {object}
  */
-const getSingleResponseFromResultArray = results => {
+const getSingleResponseFromResultArray = _memoize(results => {
   const updatedResults =
     (results.payload && results.payload.response) || results.payload || results.response || results;
   const updatedResultsMessage =
@@ -195,7 +196,7 @@ const getSingleResponseFromResultArray = results => {
   }
 
   return { ...updatedResults, ...updatedResultsMessage };
-};
+});
 
 /**
  * Get a http status message from a service call.
@@ -245,6 +246,22 @@ const getDateFromResults = results => {
   }
 
   return _get(updatedResults, 'headers.date', null);
+};
+
+/**
+ * Get a generated response id from payload.
+ *
+ * @param {Array|object} results
+ * @returns {null|string|Date}
+ */
+const getResponseIdFromResults = results => {
+  const updatedResults = getSingleResponseFromResultArray(results);
+
+  if (helpers.isPromise(updatedResults)) {
+    return null;
+  }
+
+  return _get(updatedResults, 'responseId', null);
 };
 
 /**
@@ -318,7 +335,7 @@ const setStateProp = (prop, data, { state = {}, initialState = {}, reset = true 
  * @param {Array|object} results
  * @returns {Array|object}
  */
-const singlePromiseDataResponseFromArray = results => {
+const singlePromiseDataResponseFromArray = _memoize(results => {
   const updatedResults =
     (results.payload && results.payload.response) || results.payload || results.response || results;
 
@@ -326,7 +343,7 @@ const singlePromiseDataResponseFromArray = results => {
     return updatedResults.map(value => value.data || {});
   }
   return updatedResults.data || {};
-};
+});
 
 /**
  * Alias for singlePromiseDataResponseFromArray.
@@ -375,6 +392,7 @@ const generatedPromiseActionReducer = (types = [], state = {}, action = {}) => {
   };
 
   const baseState = {
+    responseId: getResponseIdFromResults(action),
     error: false,
     errorMessage: '',
     fulfilled: false,

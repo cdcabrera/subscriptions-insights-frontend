@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDeepCompareEffect } from 'react-use';
 import { TableVariant } from '@patternfly/react-table';
@@ -45,7 +45,6 @@ import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances 
  * @param {Function} props.useSession
  * @fires onColumnSort
  * @fires onPage
- * @fires onUpdateInventoryData
  * @returns {Node}
  */
 const InventoryCard = ({
@@ -70,6 +69,13 @@ const InventoryCard = ({
   const { filters: filterInventoryData, settings } = useAliasProductInventoryConfig();
   const { error, fulfilled, pending, data = {} } = useAliasGetInventory({ isDisabled });
   const { data: listData = [], meta = {} } = data;
+
+  const test = useMemo(() => {
+    console.log('>> MEMO UPDATE', sessionData);
+    return sessionData;
+  }, [sessionData]);
+
+  console.log('>> MEMO UPDATE TEST', test);
 
   useDeepCompareEffect(() => {
     let updatedColumnHeaders = [];
