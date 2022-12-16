@@ -74,6 +74,53 @@ const axiosServiceCall = async (
     updatedConfig.cacheId = cacheId;
   }
 
+  if (updatedConfig.cancel === true) {
+    /*
+    const cancelTokensId =
+      updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
+
+    if (globalCancelTokens[cancelTokensId]) {
+      await globalCancelTokens[cancelTokensId].abort(cancelledMessage);
+    }
+
+    globalCancelTokens[cancelTokensId] = new AbortController();
+    const { signal } = globalCancelTokens[cancelTokensId];
+    updatedConfig.signal = signal;
+
+    delete updatedConfig.cancel;
+    */
+    // try to avoid throwing an error on cancel initiated by the config
+    // awkward response
+    axiosInstance.interceptors.response.use(
+      response => {
+        const updatedResponse = { ...response };
+        const cancelTokensId =
+          updatedConfig.cancelId ||
+          serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
+
+        if (globalCancelTokens[cancelTokensId]) {
+          console.log('>>>> cancel', globalCancelTokens[cancelTokensId], updatedResponse);
+          globalCancelTokens[cancelTokensId].abort(cancelledMessage);
+        }
+
+        globalCancelTokens[cancelTokensId] = new AbortController();
+        const { signal } = globalCancelTokens[cancelTokensId];
+
+        if (updatedResponse.config) {
+          updatedResponse.config.signal = signal;
+        }
+
+        return {
+          ...updatedResponse,
+          signal
+        };
+      },
+      response => Promise.reject(response)
+    );
+
+    delete updatedConfig.cancel;
+  }
+
   if (updatedConfig.cacheResponse === true) {
     const cachedResponse = responseCache.get(cacheId);
 
@@ -88,21 +135,6 @@ const axiosServiceCall = async (
 
       return axiosInstance(updatedConfig);
     }
-  }
-
-  if (updatedConfig.cancel === true) {
-    const cancelTokensId =
-      updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
-
-    if (globalCancelTokens[cancelTokensId]) {
-      await globalCancelTokens[cancelTokensId].abort(cancelledMessage);
-    }
-
-    globalCancelTokens[cancelTokensId] = new AbortController();
-    const { signal } = globalCancelTokens[cancelTokensId];
-    updatedConfig.signal = signal;
-
-    delete updatedConfig.cancel;
   }
 
   if (updatedConfig.schema) {
