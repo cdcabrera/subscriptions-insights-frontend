@@ -1,4 +1,4 @@
-import axios, { CancelToken } from 'axios';
+import axios from 'axios';
 import LruCache from 'lru-cache';
 import { serviceHelpers } from './helpers';
 
@@ -79,11 +79,12 @@ const axiosServiceCall = async (
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
 
     if (globalCancelTokens[cancelTokensId]) {
-      await globalCancelTokens[cancelTokensId].cancel(cancelledMessage);
+      await globalCancelTokens[cancelTokensId].abort(cancelledMessage);
     }
 
-    globalCancelTokens[cancelTokensId] = CancelToken.source();
-    updatedConfig.cancelToken = globalCancelTokens[cancelTokensId].token;
+    globalCancelTokens[cancelTokensId] = new AbortController();
+    const { signal } = globalCancelTokens[cancelTokensId];
+    updatedConfig.signal = signal;
 
     delete updatedConfig.cancel;
   }
