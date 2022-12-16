@@ -75,7 +75,6 @@ const axiosServiceCall = async (
   }
 
   if (updatedConfig.cancel === true) {
-    /*
     const cancelTokensId =
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
 
@@ -88,9 +87,9 @@ const axiosServiceCall = async (
     updatedConfig.signal = signal;
 
     delete updatedConfig.cancel;
-    */
     // try to avoid throwing an error on cancel initiated by the config
     // awkward response
+    /*
     axiosInstance.interceptors.response.use(
       response => {
         const updatedResponse = { ...response };
@@ -119,6 +118,27 @@ const axiosServiceCall = async (
     );
 
     delete updatedConfig.cancel;
+    */
+    /*
+    // busted
+    const cancelTokensId = serviceHelpers.generateHash({ ...updatedConfig });
+
+    if (globalCancelTokens[cancelTokensId]) {
+      const ogtoken = globalCancelTokens[cancelTokensId];
+      globalCancelTokens[cancelTokensId] = new AbortController();
+
+      const { signal } = globalCancelTokens[cancelTokensId];
+      updatedConfig.signal = signal;
+
+      await ogtoken.abort(cancelledMessage);
+    } else {
+      globalCancelTokens[cancelTokensId] = new AbortController();
+      const { signal } = globalCancelTokens[cancelTokensId];
+      updatedConfig.signal = signal;
+    }
+
+    delete updatedConfig.cancel;
+     */
   }
 
   if (updatedConfig.cacheResponse === true) {
