@@ -74,21 +74,6 @@ const axiosServiceCall = async (
     updatedConfig.cacheId = cacheId;
   }
 
-  if (updatedConfig.cancel === true) {
-    const cancelTokensId =
-      updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
-
-    if (globalCancelTokens[cancelTokensId]) {
-      await globalCancelTokens[cancelTokensId].abort(cancelledMessage);
-    }
-
-    globalCancelTokens[cancelTokensId] = new AbortController();
-    const { signal } = globalCancelTokens[cancelTokensId];
-    updatedConfig.signal = signal;
-
-    delete updatedConfig.cancel;
-  }
-
   if (updatedConfig.cacheResponse === true) {
     const cachedResponse = responseCache.get(cacheId);
 
@@ -103,6 +88,21 @@ const axiosServiceCall = async (
 
       return axiosInstance(updatedConfig);
     }
+  }
+
+  if (updatedConfig.cancel === true) {
+    const cancelTokensId =
+      updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
+
+    if (globalCancelTokens[cancelTokensId]) {
+      await globalCancelTokens[cancelTokensId].abort(cancelledMessage);
+    }
+
+    globalCancelTokens[cancelTokensId] = new AbortController();
+    const { signal } = globalCancelTokens[cancelTokensId];
+    updatedConfig.signal = signal;
+
+    delete updatedConfig.cancel;
   }
 
   if (updatedConfig.schema) {
