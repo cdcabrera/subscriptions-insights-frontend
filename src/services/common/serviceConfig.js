@@ -79,12 +79,17 @@ const axiosServiceCall = async (
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
 
     if (globalCancelTokens[cancelTokensId]) {
-      await globalCancelTokens[cancelTokensId].abort(cancelledMessage);
+      await globalCancelTokens[cancelTokensId](cancelledMessage);
     }
 
-    globalCancelTokens[cancelTokensId] = new AbortController();
-    const { signal } = globalCancelTokens[cancelTokensId];
-    updatedConfig.signal = signal;
+    const controller = new AbortController();
+
+    globalCancelTokens[cancelTokensId] = async message => {
+      console.log('>>>>>> ABORT', cancelTokensId);
+      return controller.abort(message);
+    };
+    // const { signal } = globalCancelTokens[cancelTokensId];
+    updatedConfig.signal = controller.signal;
 
     delete updatedConfig.cancel;
     // try to avoid throwing an error on cancel initiated by the config
