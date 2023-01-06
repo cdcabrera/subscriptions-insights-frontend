@@ -82,12 +82,17 @@
     &__totals {
       background-color: var(--pf-global--BackgroundColor--100);
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       flex-wrap: wrap;
-      justify-content: start;
+      justify-content: center;
       margin-left: var(--pf-global--spacer--md);
       margin-right: var(--pf-global--spacer--md);
       margin-top: var(--pf-global--spacer--md);
+
+      @media (min-width: $pf-global--breakpoint--md) {
+        flex-direction: row;
+        justify-content: start;
+      }
 
       &:last-child {
         margin-bottom: var(--pf-global--spacer--md);
@@ -95,6 +100,17 @@
 
       > div {
         display: flex;
+        // width: 100%;
+        // flex: 1;
+
+        &:first-child {
+          @media (min-width: $pf-global--breakpoint--md) {
+            // flex: 0 1 auto;
+          }
+          @media (max-width: $pf-global--breakpoint--md) {
+            align-self: stretch;
+          }
+        }
 
         &:last-child {
           @media (min-width: $pf-global--breakpoint--md) {
@@ -108,6 +124,18 @@
         margin-right: var(--pf-global--spacer--sm);
         margin-top: var(--pf-global--spacer--lg);
         margin-bottom: var(--pf-global--spacer--lg);
+        width: 100%;
+
+        .ins-c-skeleton {
+          // width: 100%;
+          //200px
+          // min-width: calc(95%);
+
+          // @media (min-width: $pf-global--breakpoint--md) {
+            // min-width: 240px;
+          min-width: 240px;
+          // }
+        }
 
         .pf-c-card {
           height: calc(50%);
@@ -117,9 +145,9 @@
           &:first-child {
             padding-bottom: calc(var(--pf-global--spacer--lg) / 2);
 
-            @media (min-width: $pf-global--breakpoint--md) {
-              border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
-            }
+            // @media (min-width: $pf-global--breakpoint--md) {
+            border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+            // }
           }
 
           &:last-child {
@@ -157,10 +185,11 @@
         margin-bottom: var(--pf-global--spacer--lg);
         margin-right: var(--pf-global--spacer--sm);
         margin-top: var(--pf-global--spacer--lg);
-        padding-left: var(--pf-global--spacer--lg);
+        padding-left: var(--pf-global--spacer--sm);
         width: 100%;
 
         @media (min-width: $pf-global--breakpoint--md) {
+          padding-left: var(--pf-global--spacer--lg);
           border-left: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
         }
 
