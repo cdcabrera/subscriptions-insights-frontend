@@ -170,6 +170,16 @@
 
           &__body {
             padding: inherit;
+
+            strong {
+              display: block;
+              font-size: var(--pf-global--FontSize--3xl);
+            }
+          }
+
+          &__footer {
+            color: var(--pf-global--palette--black-500);
+            font-size: var(--pf-global--FontSize--xs);
           }
         }
       }
