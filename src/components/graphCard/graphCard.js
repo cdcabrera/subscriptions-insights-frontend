@@ -23,7 +23,10 @@ const GraphCard = ({ isDisabled, useParseFiltersSettings: useAliasParseFiltersSe
   return (
     <React.Fragment>
       {(groupedFiltersSettings && (
-        <GraphCardContext.Provider value={groupedFiltersSettings}>
+        <GraphCardContext.Provider
+          key={`graphCard_${groupedFiltersSettings?.settings?.metrics?.[0]?.id}`}
+          value={groupedFiltersSettings}
+        >
           <GraphCardChart />
         </GraphCardContext.Provider>
       )) ||

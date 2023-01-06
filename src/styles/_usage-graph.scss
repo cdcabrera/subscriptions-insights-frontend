@@ -3,6 +3,35 @@
    * Styling for graphCard component
    */
   &-usage-graph {
+    .pf-c-card {
+      &__header {
+        border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding-bottom: 1em;
+      }
+
+      &__title {
+        flex-grow: 1;
+        padding: 0;
+      }
+
+      &__actions {
+        display: flex;
+        margin: inherit;
+        margin-left: auto;
+        padding-left: 0;
+
+        @media (max-width: $pf-global--breakpoint--sm) {
+          margin-left: inherit;
+        }
+
+        & > .curiosity-select {
+          width: auto;
+        }
+      }
+    }
+
     &__tooltip {
       color: var(--pf-global--Color--light-100);
       font-size: 0.9em;
@@ -51,7 +80,122 @@
     }
 
     &__totals {
-      
+      background-color: var(--pf-global--BackgroundColor--100);
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-left: var(--pf-global--spacer--md);
+      margin-right: var(--pf-global--spacer--md);
+      margin-top: var(--pf-global--spacer--md);
+
+      @media (min-width: $pf-global--breakpoint--md) {
+        flex-direction: row;
+        justify-content: start;
+      }
+
+      &:last-child {
+        margin-bottom: var(--pf-global--spacer--md);
+      };
+
+      > div {
+        display: flex;
+
+        &:first-child {
+          @media (max-width: $pf-global--breakpoint--md) {
+            align-self: stretch;
+          }
+        }
+
+        &:last-child {
+          @media (min-width: $pf-global--breakpoint--md) {
+            flex: 3;
+          }
+        }
+      }
+
+      &-column {
+        margin-left: var(--pf-global--spacer--sm);
+        margin-right: var(--pf-global--spacer--sm);
+        margin-top: var(--pf-global--spacer--lg);
+        margin-bottom: var(--pf-global--spacer--lg);
+        width: 100%;
+
+        .ins-c-skeleton {
+          min-width: 240px;
+        }
+
+        .pf-c-card {
+          height: calc(50%);
+          text-align: center;
+          width: 100%;
+
+          &:first-child {
+            border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+            padding-bottom: calc(var(--pf-global--spacer--lg) / 2);
+          }
+
+          &:last-child {
+            padding-top: calc(var(--pf-global--spacer--lg) / 2);
+          }
+
+          &__header {
+            display: block;
+            padding: inherit;
+          }
+
+          &__title {
+            h2, h3 {
+              line-height: var(--pf-global--FontSize--3xl);
+            }
+          }
+
+          &__body {
+            padding: inherit;
+
+            strong {
+              display: block;
+              font-size: var(--pf-global--FontSize--3xl);
+            }
+          }
+
+          &__footer {
+            color: var(--pf-global--palette--black-500);
+            font-size: var(--pf-global--FontSize--xs);
+          }
+        }
+      }
+
+      &-graph-column {
+        margin-bottom: var(--pf-global--spacer--lg);
+        margin-right: var(--pf-global--spacer--sm);
+        margin-top: var(--pf-global--spacer--lg);
+        padding-left: var(--pf-global--spacer--sm);
+        width: 100%;
+
+        @media (min-width: $pf-global--breakpoint--md) {
+          padding-left: var(--pf-global--spacer--lg);
+          border-left: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+        }
+
+        .pf-c-card {
+          &__header {
+            align-items: flex-start;
+            border-bottom-width: 0;
+            padding: inherit;
+          }
+
+          &__title {
+          }
+
+          &__actions {
+          }
+
+          &__body {
+            padding: inherit;
+          }
+        }
+      }
     }
 
     .pf-c-toolbar {
@@ -63,35 +207,6 @@
         padding-right: inherit;
       }
     }
-
-    .pf-c-card {
-      &__header {
-        border-bottom: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
-        flex-wrap: wrap;
-        justify-content: space-between;
-        padding-bottom: 1em;
-      }
-
-      &__title {
-        flex-grow: 1;
-        padding: 0;
-      }
-
-      &__actions {
-        display: flex;
-        margin: inherit;
-        margin-left: auto;
-        padding-left: 0;
-
-        @media (max-width: $pf-global--breakpoint--sm) {
-          margin-left: inherit;
-        }
-
-        & > .curiosity-select {
-          width: auto;
-        }
-      }
-    }
   }
 
 
@@ -101,7 +216,7 @@
    */
   &-chartarea {
     &__legend {
-      background-color: var(--pf-global--BackgroundColor--100);;
+      background-color: var(--pf-global--BackgroundColor--100);
       margin-top: -35px;
       position: relative;
 

@@ -52,7 +52,7 @@ const GraphCardChart = ({
   const { pending, error, dataSets = [] } = useAliasGetMetrics();
 
   return (
-    <Card className="curiosity-usage-graph">
+    <Card isPlain={isStandalone} className="curiosity-usage-graph">
       <MinHeight key="headerMinHeight">
         <CardHeader>
           <CardTitle>
