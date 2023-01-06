@@ -113,7 +113,7 @@
       }
 
       &-column {
-        margin-left: var(--pf-global--spacer--lg);
+        margin-left: var(--pf-global--spacer--sm);
         margin-right: var(--pf-global--spacer--sm);
         &-card {
           // height: calc(50% - var(--pf-global--spacer--md) / 2);
@@ -130,7 +130,9 @@
 
       &-graph-column {
         margin-bottom: var(--pf-global--spacer--lg);
+        margin-right: var(--pf-global--spacer--sm);
         margin-top: var(--pf-global--spacer--lg);
+        padding-left: var(--pf-global--spacer--lg);
         width: 100%;
 
         @media (min-width: $pf-global--breakpoint--md) {
@@ -140,8 +142,10 @@
         .pf-c-card {
           &__header {
             border-bottom-width: 0;
-            padding-bottom: inherit;
-            padding-top: inherit;
+            padding: inherit;
+            // padding-bottom: inherit;
+            // padding-right: inherit;
+            // padding-top: inherit;
           }
 
           &__title {
@@ -151,8 +155,10 @@
           }
 
           &__body {
-            padding-top: inherit;
-            padding-bottom: inherit;
+            padding: inherit;
+            // padding-bottom: inherit;
+            // padding-right: inherit;
+            // padding-top: inherit;
           }
         }
       }
