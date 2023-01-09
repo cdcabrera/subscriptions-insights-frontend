@@ -71,7 +71,7 @@ const GraphCardMetricTotals = ({
             </CardHeader>
             <CardBody>
               <div>
-                {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
+                {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg, height: '60px' }} />}
                 {fulfilled &&
                   t(
                     'curiosity-graph.cardBodyMetric',
@@ -92,7 +92,8 @@ const GraphCardMetricTotals = ({
               </div>
             </CardBody>
             <CardFooter>
-              <div className={(!dailyHasData && 'hidden') || ''}>
+              <div>
+                {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
                 {fulfilled &&
                   dailyDate &&
                   t('curiosity-graph.cardFooterMetric', {
@@ -120,7 +121,7 @@ const GraphCardMetricTotals = ({
             </CardHeader>
             <CardBody>
               <div>
-                {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
+                {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg, height: '60px' }} />}
                 {fulfilled &&
                   t(
                     'curiosity-graph.cardBodyMetric',
@@ -136,7 +137,8 @@ const GraphCardMetricTotals = ({
               </div>
             </CardBody>
             <CardFooter>
-              <div className={(!monthlyHasData && 'hidden') || ''}>
+              <div>
+                {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
                 {fulfilled &&
                   monthlyDate &&
                   t('curiosity-graph.cardFooterMetric', {

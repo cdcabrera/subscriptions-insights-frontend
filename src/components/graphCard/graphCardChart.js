@@ -53,25 +53,23 @@ const GraphCardChart = ({
 
   return (
     <Card isPlain={isStandalone} className="curiosity-usage-graph">
-      <MinHeight key="headerMinHeight">
-        <CardHeader>
-          <CardTitle>
-            <Title headingLevel="h2" size="lg">
-              {t('curiosity-graph.cardHeading', { context: (isStandalone && metric?.id) || productId })}
-              <GraphCardChartTitleTooltip />
-            </Title>
-          </CardTitle>
-          {updatedActionDisplay && (
-            <CardActions className={(error && 'blur') || ''}>
-              <Toolbar collapseListedFiltersBreakpoint="sm">
-                <ToolbarContent>
-                  <ToolbarGroup alignment={{ default: 'alignRight' }}>{updatedActionDisplay}</ToolbarGroup>
-                </ToolbarContent>
-              </Toolbar>
-            </CardActions>
-          )}
-        </CardHeader>
-      </MinHeight>
+      <CardHeader>
+        <CardTitle>
+          <Title headingLevel="h2" size="lg">
+            {t('curiosity-graph.cardHeading', { context: (isStandalone && metric?.id) || productId })}
+            <GraphCardChartTitleTooltip />
+          </Title>
+        </CardTitle>
+        {updatedActionDisplay && (
+          <CardActions className={(error && 'blur') || ''}>
+            <Toolbar collapseListedFiltersBreakpoint="sm">
+              <ToolbarContent>
+                <ToolbarGroup alignment={{ default: 'alignRight' }}>{updatedActionDisplay}</ToolbarGroup>
+              </ToolbarContent>
+            </Toolbar>
+          </CardActions>
+        )}
+      </CardHeader>
       <MinHeight key="bodyMinHeight">
         <CardBody>
           <div className={(error && 'blur') || (pending && 'fadein') || ''}>
