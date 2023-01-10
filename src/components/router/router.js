@@ -1,44 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Navigate, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
 import { useMount } from 'react-use';
-import { RouterContext } from './routerContext';
+import { RouterElement } from './routerElement';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
-
-/**
- * Generate route with context
- *
- * @param {object} props
- * @param {*} props.activateOnErrorRoute
- * @param {object} props.item
- * @param {*} props.routes
- * @param {React.ReactNode} props.View
- * @returns {React.ReactNode}
- */
-const Element = ({ activateOnErrorRoute, item, routes, View }) => {
-  const routeConfig = item.id && routerHelpers.getRouteConfig({ id: item.id });
-  const routeDetail = {
-    baseName: routerHelpers.dynamicBaseName(),
-    errorRoute: activateOnErrorRoute,
-    routes,
-    routeItem: { ...item },
-    ...routeConfig
-  };
-
-  return (
-    <RouterContext.Provider value={{ routeDetail, useLocation, useNavigate, useParams }}>
-      <View routeDetail={routeDetail} />
-    </RouterContext.Provider>
-  );
-};
-
-Element.propTypes = {
-  activateOnErrorRoute: PropTypes.any.isRequired,
-  item: PropTypes.any.isRequired,
-  routes: PropTypes.any.isRequired,
-  View: PropTypes.any.isRequired
-};
 
 /**
  * Load routes.
@@ -68,7 +34,9 @@ const Router = ({ routes } = {}) => {
           <Route
             key={item.path}
             path={item.path}
-            element={<Element activateOnErrorRoute={activateOnErrorRoute} View={View} item={item} routes={routes} />}
+            element={
+              <RouterElement activateOnErrorRoute={activateOnErrorRoute} View={View} item={item} routes={routes} />
+            }
           />
         );
       })

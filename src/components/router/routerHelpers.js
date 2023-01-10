@@ -24,7 +24,7 @@ const platformLandingRedirect = `${helpers.UI_DEPLOY_PATH_PREFIX || ''}/`;
 const platformModalRedirect = `${helpers.UI_DEPLOY_PATH_PREFIX || ''}/?not_entitled=subscriptions`;
 
 /**
- * Return an assumed route baseName directory based on existing app name.
+ * The app baseName. Return an assumed route baseName directory based on existing app name.
  * App name is defined in dotenv and package.json/insights.appname
  * [environment]/[OPTIONAL]/[OPTIONAL]/[APP NAME]
  *
@@ -37,14 +37,7 @@ const dynamicBaseName = ({ pathName = window.location.pathname, appName: applica
   `${pathName.split(applicationName)[0]}${applicationName}`;
 
 /**
- * The app baseName.
- *
- * @type {string}
- */
-const baseName = (helpers.TEST_MODE && '/') || dynamicBaseName();
-
-/**
- * Return a base path.
+ * App basePath. Return a base path.
  *
  * @param {object} params
  * @param {string} params.pathName
@@ -53,13 +46,6 @@ const baseName = (helpers.TEST_MODE && '/') || dynamicBaseName();
  */
 const dynamicBasePath = ({ pathName = window.location.pathname, appName: applicationName = helpers.UI_NAME } = {}) =>
   pathName.split(applicationName)[0];
-
-/**
- * App basePath.
- *
- * @type {string}
- */
-const basePath = (helpers.TEST_MODE && '/') || dynamicBasePath();
 
 /**
  * Basic path join, minor emulation for path.join.
@@ -265,8 +251,6 @@ const importView = component => {
 
 const routerHelpers = {
   appName,
-  baseName,
-  basePath,
   dynamicBaseName,
   dynamicBasePath,
   generateProductGroups,
@@ -287,8 +271,6 @@ export {
   routerHelpers as default,
   routerHelpers,
   appName,
-  baseName,
-  basePath,
   dynamicBaseName,
   dynamicBasePath,
   generateProductGroups,
