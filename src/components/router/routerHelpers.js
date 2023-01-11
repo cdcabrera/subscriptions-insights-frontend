@@ -1,4 +1,5 @@
 import React from 'react';
+import _memoize from 'lodash/memoize';
 import { helpers } from '../../common/helpers';
 import { routesConfig } from '../../config';
 
@@ -75,7 +76,7 @@ const pathJoin = (...paths) => {
  * @param {Array} config
  * @returns {Array}
  */
-const generateProductGroups = (config = routesConfig) => {
+const generateProductGroups = _memoize((config = routesConfig) => {
   const productGroups = {};
 
   config.forEach(({ pathParameter, productParameter }) => {
@@ -97,7 +98,7 @@ const generateProductGroups = (config = routesConfig) => {
   });
 
   return productGroups;
-};
+});
 
 /**
  * Reference for products grouped by view.
@@ -110,7 +111,7 @@ const productGroups = generateProductGroups();
  * @param {Array} config
  * @returns {Array}
  */
-const generateRoutes = (config = routesConfig) =>
+const generateRoutes = _memoize((config = routesConfig) =>
   config.map(({ activateOnError, component, disabled, id, path: routePath, redirect }) => ({
     activateOnError,
     component,
@@ -119,7 +120,8 @@ const generateRoutes = (config = routesConfig) =>
     id,
     path: routePath,
     redirect
-  }));
+  }))
+);
 
 /**
  * Return array of objects that describes routing.
@@ -143,7 +145,7 @@ const getErrorRoute = routes.find(route => route.activateOnError === true) || {}
  * @param {Array} params.config
  * @returns {{configs: Array, configFirstMatch: object, configsById: object}}
  */
-const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesConfig } = {}) => {
+const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), config = routesConfig } = {}) => {
   const basePathDirs = pathName?.split('/').filter(str => str.length > 0);
   const configs = [];
   const allConfigs = [];
@@ -193,7 +195,7 @@ const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesCon
   }
 
   return { allConfigs, allConfigsById, configs, configsById, firstMatch: configs?.[0] };
-};
+});
 
 /**
  * Return a route config object.
@@ -205,7 +207,7 @@ const getRouteConfigByPath = ({ pathName = dynamicBasePath(), config = routesCon
  * @param {Array} params.config
  * @returns {object}
  */
-const getRouteConfig = ({ id = null, pathName, returnDefault = false, config = routesConfig } = {}) => {
+const getRouteConfig = _memoize(({ id = null, pathName, returnDefault = false, config = routesConfig } = {}) => {
   let navRouteItem;
 
   if (id) {
@@ -227,13 +229,10 @@ const getRouteConfig = ({ id = null, pathName, returnDefault = false, config = r
     const { pathParameter, productParameter } = navRouteItem;
     navRouteItem.pathParameter = (Array.isArray(pathParameter) && pathParameter[0]) || pathParameter;
     navRouteItem.productParameter = (Array.isArray(productParameter) && productParameter[0]) || productParameter;
-    navRouteItem.viewParameter =
-      (productParameter && `view${(Array.isArray(productParameter) && productParameter[0]) || productParameter}`) ||
-      productParameter;
   }
 
   return { ...(navRouteItem || {}) };
-};
+});
 
 /**
  * Import a route component.
