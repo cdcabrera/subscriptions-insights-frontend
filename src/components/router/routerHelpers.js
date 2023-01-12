@@ -112,13 +112,12 @@ const productGroups = generateProductGroups();
  * @returns {Array}
  */
 const generateRoutes = _memoize((config = routesConfig) =>
-  config.map(({ activateOnError, component, disabled, id, path: routePath, redirect }) => ({
+  config.map(({ activateOnError, component, disabled, id, path, redirect }) => ({
     activateOnError,
     component,
     disabled,
-    exact: true,
     id,
-    path: routePath,
+    path,
     redirect
   }))
 );
@@ -222,16 +221,7 @@ const getRouteConfig = _memoize(({ id = null, pathName, returnDefault = false, c
     navRouteItem = config.find(item => item.default === true);
   }
 
-  if (navRouteItem) {
-    const { search = '', hash = '' } = window.location;
-    navRouteItem.routeHref = `${navRouteItem.path}${search}${hash}`;
-
-    const { pathParameter, productParameter } = navRouteItem;
-    navRouteItem.pathParameter = (Array.isArray(pathParameter) && pathParameter[0]) || pathParameter;
-    navRouteItem.productParameter = (Array.isArray(productParameter) && productParameter[0]) || productParameter;
-  }
-
-  return { ...(navRouteItem || {}) };
+  return { ...navRouteItem };
 });
 
 /**
