@@ -3,6 +3,7 @@ import { reduxHelpers } from '../../redux/common';
 import { storeHooks } from '../../redux/hooks';
 import { rhsmConstants, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common/helpers';
+// import { useRouteDetail } from '../../hooks/useRouter';
 
 /**
  * Route context.
@@ -14,11 +15,27 @@ const DEFAULT_CONTEXT = [{}, helpers.noop];
 const ProductViewContext = React.createContext(DEFAULT_CONTEXT);
 
 /**
+ * Use route detail to return product configuration.
+ *
+ * @param {object} options
+ * @param {Function} options.useRouteDetail
+ * @returns {*|undefined}
+ */
+/*
+const useProductConfig = ({ useRouteDetail: useAliasRouteDetail = useRouteDetail } = {}) => {
+  const { id } = useAliasRouteDetail();
+  return (id && routerHelpers.getRouteConfig({ id })) || undefined;
+};
+*/
+
+/**
  * Get an updated product view context.
  *
  * @returns {React.Context<{}>}
  */
 const useProductViewContext = () => useContext(ProductViewContext);
+
+// const useProductConfig = () => {};
 
 /**
  * Return a query object from initial product config and Redux store.
@@ -368,6 +385,7 @@ const context = {
   useInventoryHostsQuery: useProductInventoryHostsQuery,
   useInventorySubscriptionsQuery: useProductInventorySubscriptionsQuery,
   useProduct,
+  // useProductConfig,
   useGraphConfig: useProductGraphConfig,
   useInventoryGuestsConfig: useProductInventoryGuestsConfig,
   useInventoryHostsConfig: useProductInventoryHostsConfig,
@@ -389,6 +407,7 @@ export {
   useProductInventoryHostsQuery,
   useProductInventorySubscriptionsQuery,
   useProduct,
+  // useProductConfig,
   useProductGraphConfig,
   useProductInventoryGuestsConfig,
   useProductInventoryHostsConfig,

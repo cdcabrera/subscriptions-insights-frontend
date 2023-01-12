@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Navigate, Routes, Route } from 'react-router-dom';
+import { Navigate, Routes, Route, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useMount } from 'react-use';
+import { RouterContext } from './routerContext';
 import { RouterElement } from './routerElement';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
@@ -11,9 +12,25 @@ import { Loader } from '../loader/loader';
  *
  * @param {object} props
  * @param {Array} props.routes
- * @returns {Node}
+ * @param {Function} props.useLocation
+ * @param {Function} props.useNavigate
+ * @param {Function} props.useParams
+ * @param {Function} props.useSearchParams
+ * @returns {React.ReactNode}
  */
-const Router = ({ routes } = {}) => {
+const Router = ({
+  routes,
+  useLocation: useAliasLocation,
+  useNavigate: useAliasNavigate,
+  useParams: useAliasParams,
+  useSearchParams: useAliasSearchParams
+} = {}) => {
+  const [context] = useState({
+    useLocation: useAliasLocation,
+    useNavigate: useAliasNavigate,
+    useParams: useAliasParams,
+    useSearchParams: useAliasSearchParams
+  });
   const [updatedRoutes, setUpdatedRoutes] = useState([]);
   const [redirectDefault, setRedirectDefault] = useState(null);
 
@@ -21,8 +38,6 @@ const Router = ({ routes } = {}) => {
    * Initialize routes.
    */
   useMount(async () => {
-    const activateOnErrorRoute = routes.find(route => route.activateOnError === true);
-
     const results = await Promise.all(
       routes.map(async item => {
         if (item.disabled) {
@@ -31,13 +46,7 @@ const Router = ({ routes } = {}) => {
 
         const View = await routerHelpers.importView(item.component);
         return (
-          <Route
-            key={item.path}
-            path={item.path}
-            element={
-              <RouterElement activateOnErrorRoute={activateOnErrorRoute} View={View} item={item} routes={routes} />
-            }
-          />
+          <Route key={item.path} path={item.path} element={<RouterElement View={View} item={item} routes={routes} />} />
         );
       })
     );
@@ -47,14 +56,16 @@ const Router = ({ routes } = {}) => {
   });
 
   return (
-    <React.Suspense fallback={<Loader variant="title" />}>
-      <Routes>
-        {updatedRoutes}
-        {redirectDefault && (
-          <Route key="redirect" path="*" element={<Navigate replace to={redirectDefault.redirect} />} />
-        )}
-      </Routes>
-    </React.Suspense>
+    <RouterContext.Provider value={context}>
+      <React.Suspense fallback={<Loader variant="title" />}>
+        <Routes>
+          {updatedRoutes}
+          {redirectDefault && (
+            <Route key="redirect" path="*" element={<Navigate replace to={redirectDefault.redirect} />} />
+          )}
+        </Routes>
+      </React.Suspense>
+    </RouterContext.Provider>
   );
 };
 
@@ -76,7 +87,11 @@ Router.propTypes = {
       render: PropTypes.bool,
       strict: PropTypes.bool
     })
-  )
+  ),
+  useLocation: PropTypes.func,
+  useNavigate: PropTypes.func,
+  useParams: PropTypes.func,
+  useSearchParams: PropTypes.func
 };
 
 /**
@@ -85,7 +100,11 @@ Router.propTypes = {
  * @type {{routes: Array}}
  */
 Router.defaultProps = {
-  routes: routerHelpers.routes
+  routes: routerHelpers.routes,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams
 };
 
 export { Router as default, Router };

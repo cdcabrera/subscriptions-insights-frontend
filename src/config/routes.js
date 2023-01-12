@@ -9,6 +9,21 @@ import { config as satelliteProductConfig } from './product.satellite';
 import { RHSM_API_PATH_PRODUCT_TYPES } from '../services/rhsm/rhsmConstants';
 import { helpers } from '../common';
 
+/*
+const generate = () => {
+  const requireAll = r => r.keys().forEach(r);
+  requireAll(require.context('./', true, /\.js$/));
+};
+*/
+const productConfigs = () => {
+  const path = require.context('./', false, /product[\d\D]+\.js$/i);
+  console.log('>>> testing', path);
+  return path.keys().map(path);
+};
+
+// console.log('>>>', );
+productConfigs().map((value, index) => console.log(`>>> ${index}`, JSON.stringify(value)));
+
 const routes = [
   {
     id: 'rhel',
@@ -16,6 +31,7 @@ const routes = [
     pathParameter: [RHSM_API_PATH_PRODUCT_TYPES.RHEL],
     productParameter: [rhelConfig.productGroup],
     productConfig: [{ ...rhelConfig, productId: RHSM_API_PATH_PRODUCT_TYPES.RHEL }],
+    routeProductLabel: rhelConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: ['insights'],
@@ -30,6 +46,7 @@ const routes = [
     pathParameter: [openshiftContainerConfig.productId, openshiftMetricsConfig.productId],
     productParameter: [openshiftContainerConfig.productGroup, openshiftMetricsConfig.productGroup],
     productConfig: [openshiftContainerConfig, openshiftMetricsConfig],
+    routeProductLabel: openshiftContainerConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: [],
@@ -44,6 +61,7 @@ const routes = [
     pathParameter: [openshiftDedicatedConfig.productId],
     productParameter: [openshiftDedicatedConfig.productGroup],
     productConfig: [openshiftDedicatedConfig],
+    routeProductLabel: openshiftDedicatedConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: [],
@@ -58,6 +76,7 @@ const routes = [
     pathParameter: [rhacsConfig.productId],
     productParameter: [rhacsConfig.productGroup],
     productConfig: [rhacsConfig],
+    routeProductLabel: rhacsConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: ['rhacs'],
@@ -72,6 +91,7 @@ const routes = [
     pathParameter: [rhodsConfig.productId],
     productParameter: [rhodsConfig.productGroup],
     productConfig: [rhodsConfig],
+    routeProductLabel: rhodsConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: ['rhods'],
@@ -86,6 +106,7 @@ const routes = [
     pathParameter: [rhosakConfig.productId],
     productParameter: [rhosakConfig.productGroup],
     productConfig: [rhosakConfig],
+    routeProductLabel: rhosakConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: ['application-services', 'streams', 'rhosak'],
@@ -100,6 +121,7 @@ const routes = [
     pathParameter: [RHSM_API_PATH_PRODUCT_TYPES.SATELLITE],
     productParameter: [satelliteProductConfig.productGroup],
     productConfig: [{ ...satelliteProductConfig, productId: RHSM_API_PATH_PRODUCT_TYPES.SATELLITE }],
+    routeProductLabel: satelliteProductConfig.productGroup,
     redirect: null,
     isSearchable: true,
     aliases: [],
@@ -114,6 +136,7 @@ const routes = [
     pathParameter: null,
     productParameter: null,
     productConfig: null,
+    routeProductLabel: null,
     redirect: null,
     isSearchable: false,
     aliases: [],
@@ -128,6 +151,7 @@ const routes = [
     pathParameter: null,
     productParameter: null,
     productConfig: null,
+    routeProductLabel: null,
     redirect: '/',
     isSearchable: false,
     aliases: [],
