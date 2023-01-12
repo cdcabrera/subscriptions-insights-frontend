@@ -12,8 +12,6 @@ const DEFAULT_CONTEXT = [{}, helpers.noop];
 
 const RouterContext = React.createContext(DEFAULT_CONTEXT);
 
-const RouteContext = React.createContext(DEFAULT_CONTEXT);
-
 /**
  * Get an updated router context.
  *
@@ -22,24 +20,21 @@ const RouteContext = React.createContext(DEFAULT_CONTEXT);
 const useRouterContext = () => useContext(RouterContext);
 
 /**
- * Get an updated route context.
- *
- * @returns {React.Context<{}>}
- */
-const useRouteContext = () => useContext(RouteContext);
-
-/**
  * Get a route detail from router context.
  *
  * @param {object} options
- * @param {Function} options.useRouteContext
- * @returns {{routes: Array, routeItem: object, baseName: string, errorRoute: object}}
+ * @param {Function} options.useRouterContext
+ * @returns {{baseName: string, errorRoute: object}}
  */
-const useRouteDetail = ({ useRouteContext: useAliasRouteContext = useRouteContext } = {}) => {
-  const { routeDetail } = useAliasRouteContext();
+const useRouteDetail = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
+  const { useParams: useAliasParams = helpers.noop } = useAliasRouterContext();
+  const { productPath } = useAliasParams();
+  const config = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+
   return {
-    ...routeDetail,
-    ...(routeDetail?.id && routerHelpers.getRouteConfig({ id: routeDetail.id }))
+    baseName: routerHelpers.dynamicBaseName(),
+    errorRoute: routerHelpers.getErrorRoute,
+    ...config.firstMatch
   };
 };
 
@@ -176,10 +171,8 @@ const useSearchParams = ({ useRouterContext: useAliasRouterContext = useRouterCo
 
 const context = {
   RouterContext,
-  RouteContext,
   DEFAULT_CONTEXT,
   useRouterContext,
-  useRouteContext,
   useRouteDetail,
   useHistory,
   useLocation,
@@ -192,10 +185,8 @@ export {
   context as default,
   context,
   RouterContext,
-  RouteContext,
   DEFAULT_CONTEXT,
   useRouterContext,
-  useRouteContext,
   useRouteDetail,
   useHistory,
   useLocation,

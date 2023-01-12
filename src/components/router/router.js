@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Navigate, Routes, Route, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useMount } from 'react-use';
+// import { useMount } from 'react-use';
 import { RouterContext } from './routerContext';
-import { RouterElement } from './routerElement';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
@@ -31,12 +30,14 @@ const Router = ({
     useParams: useAliasParams,
     useSearchParams: useAliasSearchParams
   });
-  const [updatedRoutes, setUpdatedRoutes] = useState([]);
-  const [redirectDefault, setRedirectDefault] = useState(null);
-
+  // const [updatedRoutes, setUpdatedRoutes] = useState([]);
+  // const [redirectDefault, setRedirectDefault] = useState(null);
+  const [redirectDefault] = useState(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
+  const View = routerHelpers.importView('productView/productView');
   /**
    * Initialize routes.
    */
+  /*
   useMount(async () => {
     const results = await Promise.all(
       routes.map(async item => {
@@ -54,12 +55,13 @@ const Router = ({
     setUpdatedRoutes(results);
     setRedirectDefault(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
   });
+  */
 
   return (
     <RouterContext.Provider value={context}>
       <React.Suspense fallback={<Loader variant="title" />}>
         <Routes>
-          {updatedRoutes}
+          <Route key="products" path=":productPath" element={<View />} />
           {redirectDefault && (
             <Route key="redirect" path="*" element={<Navigate replace to={redirectDefault.redirect} />} />
           )}

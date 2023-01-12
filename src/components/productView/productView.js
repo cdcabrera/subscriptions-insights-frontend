@@ -26,6 +26,9 @@ import { translate } from '../i18n/i18n';
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
   const { routeProductLabel, productConfig } = useAliasRouteDetail();
+  // const again = useAliasRouteDetail();
+  // console.log('>>>> testing config', again);
+  // const { routeProductLabel, productConfig } = {};
   const [testo, setTesto] = useSearchParams();
   const test2 = useLocation();
 
