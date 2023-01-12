@@ -5,7 +5,7 @@ import { ArrowRightIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
 import { routerHelpers } from '../router';
-import { routerHooks } from '../../hooks/useRouter';
+import { useHistory } from '../router/routerContext';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
@@ -110,7 +110,7 @@ ProductViewMissing.propTypes = {
 ProductViewMissing.defaultProps = {
   availableProductsRedirect: 4,
   t: translate,
-  useHistory: routerHooks.useHistory
+  useHistory
 };
 
 export { ProductViewMissing as default, ProductViewMissing };
