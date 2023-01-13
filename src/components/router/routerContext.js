@@ -90,14 +90,14 @@ const useRouteDetail = ({
     console.log('>>> use route detail ERROR');
     // navigate('./');
     // document.location.href = './';
-    redirect('./');
+    redirect(routerHelpers.redirectRoute.redirect);
     // return {};
   }
 
   return {
     ...configs,
     baseName: routerHelpers.dynamicBaseName(),
-    errorRoute: routerHelpers.getErrorRoute,
+    errorRoute: routerHelpers.errorRoute,
     productGroup: firstMatch?.productGroup,
     productConfig: (firstMatch && [firstMatch]) || []
   };

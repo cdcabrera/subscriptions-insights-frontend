@@ -117,7 +117,14 @@ const routes = routesConfig;
  *
  * @type {object}
  */
-const getErrorRoute = routes.find(route => route.activateOnError === true) || {};
+const errorRoute = routes.find(route => route.activateOnError === true) || {};
+
+/**
+ * The first redirect route.
+ *
+ * @type {object}
+ */
+const redirectRoute = routes.find(({ disabled, redirect }) => !disabled && redirect);
 
 /**
  * Match route config entries by path.
@@ -231,6 +238,13 @@ const getProductConfig = _memoize(
   }
 );
 
+const getAvailableRoutes = _memoize(
+  ({ configs = productConfig.configs, availableProducts = productConfig.availableProducts } = {}) => [
+    ...configs.filter(config => config.activateOnError === true).map(({ path }) => path),
+    ...availableProducts
+  ]
+);
+
 /**
  * Import a route component.
  *
@@ -250,7 +264,9 @@ const routerHelpers = {
   dynamicBaseName,
   dynamicBasePath,
   generateProductGroups,
-  getErrorRoute,
+  getAvailableRoutes,
+  redirectRoute,
+  errorRoute,
   // getRouteConfig,
   getProductConfig,
   getRouteConfigByPath,
@@ -270,7 +286,9 @@ export {
   dynamicBaseName,
   dynamicBasePath,
   generateProductGroups,
-  getErrorRoute,
+  getAvailableRoutes,
+  redirectRoute,
+  errorRoute,
   // getRouteConfig,
   getProductConfig,
   getRouteConfigByPath,

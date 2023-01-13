@@ -19,6 +19,7 @@ import { Loader } from '../loader/loader';
  * @returns {React.ReactNode}
  */
 const Router = ({
+  redirectRoute,
   routes,
   useLocation: useAliasLocation,
   useNavigate: useAliasNavigate,
@@ -33,7 +34,7 @@ const Router = ({
   });
   // const [updatedRoutes, setUpdatedRoutes] = useState([]);
   // const [redirectDefault, setRedirectDefault] = useState(null);
-  const [redirectDefault] = useState(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
+  // const [redirectDefault] = useState(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
   // const View = routerHelpers.importView('productView/productView');
   /**
    * Initialize routes.
@@ -55,6 +56,7 @@ const Router = ({
     // setRedirectDefault(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
   });
   */
+  // const redirectDefault = routerHelpers.redirectRoute;
   const updatedRoutes = routes
     .filter(item => !item.disabled)
     .map(item => {
@@ -68,11 +70,11 @@ const Router = ({
       <React.Suspense fallback={<Loader variant="title" />}>
         <Routes>
           {updatedRoutes}
-          {redirectDefault && (
+          {redirectRoute && (
             <Route
               key="redirect"
-              path={redirectDefault.path}
-              element={<Navigate replace to={redirectDefault.redirect} />}
+              path={redirectRoute.path}
+              element={<Navigate replace to={redirectRoute.redirect} />}
             />
           )}
         </Routes>
@@ -87,6 +89,7 @@ const Router = ({
  * @type {{routes: Array}}
  */
 Router.propTypes = {
+  redirectRoute: PropTypes.string,
   routes: PropTypes.arrayOf(
     PropTypes.shape({
       activateOnError: PropTypes.bool,
@@ -112,6 +115,7 @@ Router.propTypes = {
  * @type {{routes: Array}}
  */
 Router.defaultProps = {
+  redirectRoute: routerHelpers.redirectRoute,
   routes: routerHelpers.routes,
   useLocation,
   useNavigate,

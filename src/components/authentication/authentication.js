@@ -56,7 +56,7 @@ const Authentication = ({
       (errorCodes && errorCodes.includes(rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN)) ||
       errorStatus === 418
     ) {
-      return redirect(routerHelpers.getErrorRoute.path);
+      return redirect(routerHelpers.errorRoute.path);
     }
 
     return (

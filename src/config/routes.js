@@ -64,7 +64,7 @@ const routes = [
   {
     id: 'missing',
     path: '*',
-    redirect: '',
+    redirect: './',
     activateOnError: false,
     disabled: helpers.UI_DISABLED,
     default: true,

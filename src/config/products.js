@@ -20,11 +20,11 @@ const productConfigs = (() => {
 const availableProducts = (() => {
   const products = new Set();
   productConfigs.forEach(({ productId, aliases }) => {
-    products.add(productId);
+    products.add(productId.toLowerCase());
 
     if (Array.isArray(aliases) && aliases.length) {
       aliases.forEach(alias => {
-        products.add(alias);
+        products.add(alias.toLowerCase());
       });
     }
   });
