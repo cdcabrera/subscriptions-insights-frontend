@@ -1,3 +1,4 @@
+/*
 import { config as rhelConfig } from './product.rhel';
 import { config as openshiftContainerConfig } from './product.openshiftContainer';
 import { config as openshiftMetricsConfig } from './product.openshiftMetrics';
@@ -7,6 +8,8 @@ import { config as rhodsConfig } from './product.rhods';
 import { config as rhosakConfig } from './product.rhosak';
 import { config as satelliteProductConfig } from './product.satellite';
 import { RHSM_API_PATH_PRODUCT_TYPES } from '../services/rhsm/rhsmConstants';
+*/
+// import { productConfigs } from './products';
 import { helpers } from '../common';
 
 /*
@@ -15,15 +18,61 @@ const generate = () => {
   requireAll(require.context('./', true, /\.js$/));
 };
 */
-const productConfigs = () => {
+/*
+const productConfigs = (() => {
   const path = require.context('./', false, /product[\d\D]+\.js$/i);
-  console.log('>>> testing', path);
+  // console.log('>>> testing', path);
   return path.keys().map(path);
-};
+})()?.map(value => value.config);
+*/
+
+// console.log('product configs >>> testing', productConfigs);
 
 // console.log('>>>', );
-productConfigs().map((value, index) => console.log(`>>> ${index}`, JSON.stringify(value)));
+// productConfigs().map((value, index) => value.config);
+/*
+productConfigs.map(({ productId }) => ({
+  path: productId.toLowerCase(),
+  redirect: null,
+  activateOnError: false,
+  disabled: helpers.UI_DISABLED,
+  default: false,
+  component: 'productView/productView'
+}));
+*/
 
+const routes = [
+  {
+    id: 'any',
+    path: ':productPath',
+    // configs: productConfigs,
+    redirect: null,
+    activateOnError: false,
+    disabled: helpers.UI_DISABLED,
+    default: false,
+    component: 'productView/productView'
+  },
+  {
+    id: 'optin',
+    path: 'optin',
+    redirect: null,
+    activateOnError: true,
+    disabled: helpers.UI_DISABLED,
+    default: false,
+    component: 'optinView/optinView'
+  },
+  {
+    id: 'missing',
+    path: '*',
+    redirect: '',
+    activateOnError: false,
+    disabled: helpers.UI_DISABLED,
+    default: true,
+    component: 'productView/productViewMissing'
+  }
+];
+
+/*
 const routes = [
   {
     id: 'rhel',
@@ -161,5 +210,6 @@ const routes = [
     component: 'productView/productViewMissing'
   }
 ];
+*/
 
 export { routes as default, routes };
