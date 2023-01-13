@@ -94,22 +94,24 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
   };
 
   return (
-    <PageLayout>
-      <PageHeader productLabel={productGroup}>
-        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
-      </PageHeader>
-      {(productConfig?.length && <PageColumns>{productConfig?.map(config => renderProduct(config))}</PageColumns>) ||
-        undefined}
-      <a
-        href="#"
-        onClick={event => {
-          event.preventDefault();
-          setTesto({ fred: 'do it' });
-        }}
-      >
-        do it
-      </a>
-    </PageLayout>
+    (productGroup && (
+      <PageLayout>
+        <PageHeader productLabel={productGroup}>
+          {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
+        </PageHeader>
+        <PageColumns>{productConfig?.map(config => renderProduct(config))}</PageColumns>
+        <a
+          href="#"
+          onClick={event => {
+            event.preventDefault();
+            setTesto({ fred: 'do it' });
+          }}
+        >
+          do it
+        </a>
+      </PageLayout>
+    )) ||
+    null
   );
 };
 
