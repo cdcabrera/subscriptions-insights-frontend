@@ -30,10 +30,10 @@ const Authentication = ({
   useGetAuthorization: useAliasGetAuthorization,
   useRedirect: useAliasRedirect
 }) => {
+  const redirect = useAliasRedirect();
   const { pending, data = {} } = useAliasGetAuthorization();
   const { authorized = {}, errorCodes, errorStatus } = data;
   const { [appName]: isAuthorized } = authorized;
-  const redirect = useAliasRedirect();
 
   const renderContent = () => {
     if (isDisabled) {
