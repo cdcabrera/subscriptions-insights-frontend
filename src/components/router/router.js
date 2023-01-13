@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+// import { useMount } from 'react-use';
 import { Navigate, Routes, Route, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 // import { useMount } from 'react-use';
 import { RouterContext } from './routerContext';
@@ -33,7 +34,7 @@ const Router = ({
   // const [updatedRoutes, setUpdatedRoutes] = useState([]);
   // const [redirectDefault, setRedirectDefault] = useState(null);
   const [redirectDefault] = useState(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
-  const View = routerHelpers.importView('productView/productView');
+  // const View = routerHelpers.importView('productView/productView');
   /**
    * Initialize routes.
    */
@@ -46,24 +47,33 @@ const Router = ({
         }
 
         const View = await routerHelpers.importView(item.component);
-        return (
-          <Route key={item.path} path={item.path} element={<RouterElement View={View} item={item} routes={routes} />} />
-        );
+        return <Route key={item.path} path={item.path} element={<View />} />;
       })
     );
 
     setUpdatedRoutes(results);
-    setRedirectDefault(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
+    // setRedirectDefault(routes.find(({ disabled, redirect }) => !disabled && redirect) ?? null);
   });
   */
+  const updatedRoutes = routes
+    .filter(item => !item.disabled)
+    .map(item => {
+      // console.log('CONFIGS >>> testing', item.configs);
+      const View = routerHelpers.importView(item.component);
+      return <Route key={item.path} path={item.path} element={<View />} />;
+    });
 
   return (
     <RouterContext.Provider value={context}>
       <React.Suspense fallback={<Loader variant="title" />}>
         <Routes>
-          <Route key="products" path=":productPath" element={<View />} />
+          {updatedRoutes}
           {redirectDefault && (
-            <Route key="redirect" path="*" element={<Navigate replace to={redirectDefault.redirect} />} />
+            <Route
+              key="redirect"
+              path={redirectDefault.path}
+              element={<Navigate replace to={redirectDefault.redirect} />}
+            />
           )}
         </Routes>
       </React.Suspense>

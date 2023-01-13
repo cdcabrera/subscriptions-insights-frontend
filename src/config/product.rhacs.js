@@ -36,6 +36,9 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.RHACS;
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHACS;
 
 const config = {
+  aliases: [],
+  // pathParameter: productId,
+  // productParameter: productGroup,
   productGroup,
   productId,
   productLabel,

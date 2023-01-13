@@ -25,7 +25,7 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
-  const { routeProductLabel, productConfig } = useAliasRouteDetail();
+  const { productGroup, productConfig } = useAliasRouteDetail() || {};
   // const again = useAliasRouteDetail();
   // console.log('>>>> testing config', again);
   // const { routeProductLabel, productConfig } = {};
@@ -95,10 +95,11 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
 
   return (
     <PageLayout>
-      <PageHeader productLabel={routeProductLabel}>
-        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: routeProductLabel })}
+      <PageHeader productLabel={productGroup}>
+        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
       </PageHeader>
-      {productConfig?.length && <PageColumns>{productConfig?.map(config => renderProduct(config))}</PageColumns>}
+      {(productConfig?.length && <PageColumns>{productConfig?.map(config => renderProduct(config))}</PageColumns>) ||
+        undefined}
       <a
         href="#"
         onClick={event => {

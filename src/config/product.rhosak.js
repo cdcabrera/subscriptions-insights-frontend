@@ -40,6 +40,9 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.RHOSAK;
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHOSAK;
 
 const config = {
+  aliases: ['streams'],
+  // pathParameter: productId,
+  // productParameter: productGroup,
   productGroup,
   productId,
   productLabel,

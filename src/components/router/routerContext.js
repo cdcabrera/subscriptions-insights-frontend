@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { reduxActions, storeHooks } from '../../redux';
+// import { reduxActions, storeHooks } from '../../redux';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 
@@ -27,14 +27,24 @@ const useRouterContext = () => useContext(RouterContext);
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
-  const { useParams: useAliasParams = helpers.noop } = useAliasRouterContext();
+  const { useParams: useAliasParams = helpers.noop, useNavigate: useAliasNavigate = helpers.noop } =
+    useAliasRouterContext();
+  const navigate = useAliasNavigate();
   const { productPath } = useAliasParams();
-  const config = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+  const { firstMatch, ...configs } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+  // const productConfig = ;
+  console.log('>>> testing USE ROUTE DETAIL', firstMatch);
+
+  if (!firstMatch) {
+    navigate(routerHelpers.getErrorRoute);
+  }
 
   return {
+    ...configs,
     baseName: routerHelpers.dynamicBaseName(),
     errorRoute: routerHelpers.getErrorRoute,
-    ...config.firstMatch
+    productGroup: firstMatch?.productGroup,
+    productConfig: (firstMatch && [firstMatch]) || []
   };
 };
 
@@ -48,29 +58,39 @@ const useRouteDetail = ({ useRouterContext: useAliasRouterContext = useRouterCon
  * @returns {object}
  */
 const useHistory = ({
-  isSetAppNav = false,
-  useRouterContext: useAliasRouterContext = useRouterContext,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
+  // isSetAppNav = false,
+  useRouterContext: useAliasRouterContext = useRouterContext
+  // useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const { useNavigate: useAliasNavigate = helpers.noop } = useAliasRouterContext();
   const navigate = useAliasNavigate();
-  const dispatch = useAliasDispatch();
+  // const dispatch = useAliasDispatch();
 
   return {
+    push: pathLocation => navigate(pathLocation)
+    /*
     push: (pathLocation, historyState) => {
       const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
-      const { path, id } = routerHelpers.getRouteConfig({ pathName, id: pathName });
+      const { productId } = routerHelpers.getRouteConfig({ pathName, id: pathName });
+      const path = productId?.toLowerCase();
       const { hash = '', search = '' } = window.location;
 
-      if (isSetAppNav && id) {
-        return dispatch(reduxActions.platform.setAppNav(id));
+      if (isSetAppNav && path) {
+        return dispatch(reduxActions.platform.setAppNav(path));
       }
 
+      const temp = (path && `${path}${search}${hash}`) || (pathName && `${pathName}${search}${hash}`) || pathLocation;
+      console.log('>>> testing', temp);
+
+      navigate(temp, historyState);
+      // return;
+      /*
       return navigate(
         (path && `${path}${search}${hash}`) || (pathName && `${pathName}${search}${hash}`) || pathLocation,
         historyState
       );
     }
+    */
   };
 };
 

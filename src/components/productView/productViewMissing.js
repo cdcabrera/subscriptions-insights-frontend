@@ -16,7 +16,8 @@ import { translate } from '../i18n/i18n';
  */
 const filterAvailableProducts = () => {
   const { configs, allConfigs } = routerHelpers.getRouteConfigByPath();
-  return (configs.length && configs) || allConfigs.filter(({ isSearchable }) => isSearchable === true);
+  // console.log('>>> testing', configs, allConfigs.filter(({ isSearchable }) => isSearchable === true);
+  return (configs.length && configs) || allConfigs;
 };
 
 /**
@@ -53,30 +54,30 @@ const ProductViewMissing = ({ availableProductsRedirect, t, useHistory: useAlias
       <PageHeader productLabel="missing">{t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME })}</PageHeader>
       <PageSection isFilled>
         <Gallery hasGutter>
-          {availableProducts.map(product => (
-            <Card key={`missingViewCard-${product.id}`} isHoverable onClick={() => onNavigate(product.id)}>
+          {availableProducts.map(({ productGroup, productId }) => (
+            <Card key={`missingViewCard-${productId}`} isHoverable onClick={() => onNavigate(productId)}>
               <CardTitle>
                 <Title headingLevel="h2" size="lg">
                   {t('curiosity-view.title', {
                     appName: helpers.UI_DISPLAY_NAME,
-                    context:
-                      (Array.isArray(product.pathParameter) && product.pathParameter?.[0]) || product.pathParameter
+                    context: (Array.isArray(productId) && productId?.[0]) || productId
                   })}
                 </Title>
               </CardTitle>
               <CardBody className="curiosity-missing-view__card-description">
                 {t('curiosity-view.description', {
                   appName: helpers.UI_DISPLAY_NAME,
-                  context:
-                    (Array.isArray(product.productParameter) && product.productParameter?.[0]) ||
-                    product.productParameter
+                  context: (Array.isArray(productGroup) && productGroup?.[0]) || productGroup
                 })}
               </CardBody>
               <CardFooter>
                 <Button
                   variant="link"
                   isInline
-                  onClick={() => onNavigate(product.id)}
+                  onClick={event => {
+                    event.preventDefault();
+                    onNavigate(productId);
+                  }}
                   icon={<ArrowRightIcon />}
                   iconPosition="right"
                 >

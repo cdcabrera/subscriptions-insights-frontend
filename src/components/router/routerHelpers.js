@@ -1,7 +1,7 @@
 import React from 'react';
 import _memoize from 'lodash/memoize';
 import { helpers } from '../../common/helpers';
-import { routesConfig } from '../../config';
+import { routesConfig, productConfig } from '../../config';
 
 /**
  * Platform name/id.
@@ -73,14 +73,14 @@ const pathJoin = (...paths) => {
 /**
  * Generate product groups for applying query filter resets.
  *
- * @param {Array} config
+ * @param {Array} configs
  * @returns {Array}
  */
-const generateProductGroups = _memoize((config = routesConfig) => {
+const generateProductGroups = _memoize((configs = productConfig.configs) => {
   const productGroups = {};
 
-  config.forEach(({ pathParameter, productParameter }) => {
-    const viewIds = ((Array.isArray(productParameter) && productParameter) || [productParameter]).map(
+  configs.forEach(({ productId, productGroup }) => {
+    const viewIds = ((Array.isArray(productGroup) && productGroup) || [productGroup]).map(
       id => (id && `view${id}`) || id
     );
 
@@ -90,8 +90,8 @@ const generateProductGroups = _memoize((config = routesConfig) => {
           productGroups[id] = [];
         }
 
-        if (pathParameter) {
-          productGroups[id].push((Array.isArray(pathParameter) && pathParameter?.[index]) || pathParameter);
+        if (productId) {
+          productGroups[id].push((Array.isArray(productId) && productId?.[index]) || productId);
         }
       }
     });
@@ -106,28 +106,11 @@ const generateProductGroups = _memoize((config = routesConfig) => {
 const productGroups = generateProductGroups();
 
 /**
- * Generate routes to be consumed by router.
- *
- * @param {Array} config
- * @returns {Array}
- */
-const generateRoutes = _memoize((config = routesConfig) =>
-  config.map(({ activateOnError, component, disabled, id, path, redirect }) => ({
-    activateOnError,
-    component,
-    disabled,
-    id,
-    path,
-    redirect
-  }))
-);
-
-/**
  * Return array of objects that describes routing.
  *
  * @returns {Array}
  */
-const routes = generateRoutes();
+const routes = routesConfig;
 
 /**
  * The first error route.
@@ -144,39 +127,36 @@ const getErrorRoute = routes.find(route => route.activateOnError === true) || {}
  * @param {Array} params.config
  * @returns {{configs: Array, configFirstMatch: object, configsById: object}}
  */
-const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), config = routesConfig } = {}) => {
+const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), configs = productConfig.configs } = {}) => {
   const basePathDirs = pathName?.split('/').filter(str => str.length > 0);
-  const configs = [];
+  const filteredConfigs = [];
   const allConfigs = [];
   const configsById = {};
   const allConfigsById = {};
 
   const findConfig = dir => {
-    config.forEach(({ id, path: configPath, pathParameter, productParameter, aliases, ...configItem }) => {
+    configs.forEach(({ productId, productGroup, aliases, ...configItem }) => {
       const updatedConfigItem = {
         aliases,
-        id,
-        path: configPath,
-        pathParameter,
-        productParameter,
+        productId,
+        productGroup,
         ...configItem
       };
 
       if (
         dir &&
-        (new RegExp(dir, 'i').test(configPath) ||
-          new RegExp(dir, 'i').test(productParameter?.toString()) ||
-          new RegExp(dir, 'i').test(pathParameter?.toString()) ||
+        (new RegExp(dir, 'i').test(productGroup?.toString()) ||
+          new RegExp(dir, 'i').test(productId?.toString()) ||
           new RegExp(dir, 'i').test(aliases?.toString()))
       ) {
-        if (!configsById[id]) {
-          configsById[id] = { ...updatedConfigItem };
-          configs.push({ ...updatedConfigItem });
+        if (!configsById[productId]) {
+          configsById[productId] = { ...updatedConfigItem };
+          filteredConfigs.push({ ...updatedConfigItem });
         }
       }
 
-      if (!allConfigsById[id]) {
-        allConfigsById[id] = { ...updatedConfigItem };
+      if (!allConfigsById[productId]) {
+        allConfigsById[productId] = { ...updatedConfigItem };
         allConfigs.push({ ...updatedConfigItem });
       }
     });
@@ -193,7 +173,7 @@ const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), config = 
     findConfig();
   }
 
-  return { allConfigs, allConfigsById, configs, configsById, firstMatch: configs?.[0] };
+  return { allConfigs, allConfigsById, configs: filteredConfigs, configsById, firstMatch: filteredConfigs?.[0] };
 });
 
 /**
@@ -206,23 +186,50 @@ const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), config = 
  * @param {Array} params.config
  * @returns {object}
  */
-const getRouteConfig = _memoize(({ id = null, pathName, returnDefault = false, config = routesConfig } = {}) => {
+/*
+const getRouteConfig = _memoize(({ id = null, pathName, returnDefault = false, configs = productConfigs } = {}) => {
   let navRouteItem;
 
   if (id) {
-    navRouteItem = config.find(item => item.id === id);
+    navRouteItem = configs.find(item => new RegExp(item.productId, 'i').test(id));
   }
 
   if ((!navRouteItem && pathName) || (!navRouteItem && !pathName && !returnDefault)) {
-    navRouteItem = getRouteConfigByPath({ pathName, config }).firstMatch;
+    navRouteItem = getRouteConfigByPath({ pathName, configs }).firstMatch;
   }
 
-  if (!navRouteItem && returnDefault) {
-    navRouteItem = config.find(item => item.default === true);
-  }
+  // if (!navRouteItem && returnDefault) {
+  //   navRouteItem = config.find(item => item.default === true);
+  // }
 
   return { ...navRouteItem };
 });
+ */
+/**
+ * Return a product config object.
+ *
+ * @param {object} params
+ * @param {string} params.id
+ * @param {string} params.pathName
+ * @param {boolean} params.returnDefault
+ * @param {Array} params.config
+ * @returns {object}
+ */
+const getProductConfig = _memoize(
+  ({ id = null, pathName, returnDefault = false, configs = productConfig.configs } = {}) => {
+    let configItem;
+
+    if (id) {
+      configItem = configs.find(item => new RegExp(item.productId, 'i').test(id));
+    }
+
+    if ((!configItem && pathName) || (!configItem && !pathName && !returnDefault)) {
+      configItem = getRouteConfigByPath({ pathName, configs }).firstMatch;
+    }
+
+    return { ...configItem };
+  }
+);
 
 /**
  * Import a route component.
@@ -243,9 +250,9 @@ const routerHelpers = {
   dynamicBaseName,
   dynamicBasePath,
   generateProductGroups,
-  generateRoutes,
   getErrorRoute,
-  getRouteConfig,
+  // getRouteConfig,
+  getProductConfig,
   getRouteConfigByPath,
   importView,
   pathJoin,
@@ -263,9 +270,9 @@ export {
   dynamicBaseName,
   dynamicBasePath,
   generateProductGroups,
-  generateRoutes,
   getErrorRoute,
-  getRouteConfig,
+  // getRouteConfig,
+  getProductConfig,
   getRouteConfigByPath,
   importView,
   pathJoin,

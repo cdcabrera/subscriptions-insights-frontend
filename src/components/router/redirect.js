@@ -26,7 +26,7 @@ const Redirect = ({ isForced, route, routes, url }) => {
     window.location.replace(forcePath);
   };
 
-  const { path: matchedRoutePath, ...matchedRoute } = routerHelpers.getRouteConfig({ pathName: route, id: route });
+  const { path: matchedRoutePath, ...matchedRoute } = routerHelpers.getProductConfig({ pathName: route, id: route });
 
   if (!isForced && matchedRoutePath) {
     return <Router routes={[{ ...matchedRoute, path: '*' }, ...routes]} />;
