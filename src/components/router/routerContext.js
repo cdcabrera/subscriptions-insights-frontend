@@ -99,7 +99,8 @@ const useRouteDetail = ({
     baseName: routerHelpers.dynamicBaseName(),
     errorRoute: routerHelpers.errorRoute,
     productGroup: firstMatch?.productGroup,
-    productConfig: (firstMatch && [firstMatch]) || []
+    productConfig: (firstMatch && [firstMatch]) || [],
+    configsByGroup: (firstMatch && configs.allConfigsByGroup?.[firstMatch?.productGroup]) || {}
   };
 };
 

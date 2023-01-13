@@ -86,9 +86,7 @@ const generateProductGroups = _memoize((configs = productConfig.configs) => {
 
     viewIds.forEach((id, index) => {
       if (id) {
-        if (!productGroups[id]) {
-          productGroups[id] = [];
-        }
+        productGroups[id] ??= [];
 
         if (productId) {
           productGroups[id].push((Array.isArray(productId) && productId?.[index]) || productId);
@@ -139,6 +137,7 @@ const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), configs =
   const filteredConfigs = [];
   const allConfigs = [];
   const configsById = {};
+  const allConfigsByGroup = {};
   const allConfigsById = {};
 
   const findConfig = dir => {
@@ -166,6 +165,11 @@ const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), configs =
         allConfigsById[productId] = { ...updatedConfigItem };
         allConfigs.push({ ...updatedConfigItem });
       }
+
+      if (productGroup) {
+        allConfigsByGroup[productGroup] ??= [];
+        allConfigsByGroup[productGroup].push({ ...updatedConfigItem });
+      }
     });
   };
 
@@ -180,7 +184,14 @@ const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), configs =
     findConfig();
   }
 
-  return { allConfigs, allConfigsById, configs: filteredConfigs, configsById, firstMatch: filteredConfigs?.[0] };
+  return {
+    allConfigs,
+    allConfigsById,
+    allConfigsByGroup,
+    configs: filteredConfigs,
+    configsById,
+    firstMatch: filteredConfigs?.[0]
+  };
 });
 
 /**

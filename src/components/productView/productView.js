@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // import { useRouteDetail } from '../../hooks/useRouter';
 import { useRouteDetail, useSearchParams, useLocation } from '../router/routerContext';
@@ -14,6 +14,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { InventoryCardSubscriptions } from '../inventoryCardSubscriptions/inventoryCardSubscriptions';
 import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
+import { Select } from '../form/select';
 // import { routerHelpers } from '../router/routerHelpers';
 
 /**
@@ -25,7 +26,9 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
-  const { productGroup, productConfig } = useAliasRouteDetail() || {};
+  const { configsByGroup, productGroup, productConfig } = useAliasRouteDetail() || {};
+  const [updatedContext, setUpdatedContext] = useState(productConfig);
+  console.log('>>> configsByGroup', configsByGroup);
   // const again = useAliasRouteDetail();
   // console.log('>>>> testing config', again);
   // const { routeProductLabel, productConfig } = {};
@@ -93,13 +96,24 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
     );
   };
 
+  const doit = ({ value }) => {
+    console.log('>>> DO IT', value);
+    setUpdatedContext([value]);
+  };
+
   return (
     (productGroup && (
       <PageLayout>
         <PageHeader productLabel={productGroup}>
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
+          <br />
+          <Select
+            placeholder="testing"
+            onSelect={doit}
+            options={configsByGroup.map(obj => ({ title: obj.productId, value: obj }))}
+          />
         </PageHeader>
-        <PageColumns>{productConfig?.map(config => renderProduct(config))}</PageColumns>
+        <PageColumns>{updatedContext?.map(config => renderProduct(config))}</PageColumns>
         <a
           href="#"
           onClick={event => {

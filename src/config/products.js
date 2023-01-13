@@ -17,9 +17,9 @@ const productConfigs = (() => {
 /**
  * Generate a unique list of available product routing "path parameter" identifiers.
  */
-const availableProducts = (() => {
+const availableProducts = (configs => {
   const products = new Set();
-  productConfigs.forEach(({ productId, aliases }) => {
+  configs.forEach(({ productId, aliases }) => {
     products.add(productId.toLowerCase());
 
     if (Array.isArray(aliases) && aliases.length) {
@@ -29,7 +29,20 @@ const availableProducts = (() => {
     }
   });
   return Array.from(products);
-})();
+})(productConfigs);
+
+/**
+ * Generate a grouped product configs.
+ */
+const groupedProductConfigs = (configs => {
+  const products = {};
+  configs.forEach(config => {
+    const { productGroup } = config;
+    products[productGroup] ??= [];
+    products[productGroup].push(config);
+  });
+  return products;
+})(productConfigs);
 
 /**
  * Return a product config object.
@@ -59,7 +72,8 @@ const getProductConfig = _memoize(({ id = null, pathName, returnDefault = false,
 
 const products = {
   availableProducts,
-  configs: productConfigs
+  configs: productConfigs,
+  groupedConfigs: groupedProductConfigs
 };
 
-export { products as default, products, availableProducts, productConfigs };
+export { products as default, products, availableProducts, groupedProductConfigs, productConfigs };
