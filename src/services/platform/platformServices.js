@@ -149,6 +149,7 @@ const setAppName = (name = null) => {
   });
 };
 
+// ToDo: deprecated, remove func
 /**
  * Set app routes via the platform left-nav navigation.
  *

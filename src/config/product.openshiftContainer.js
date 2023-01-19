@@ -35,9 +35,11 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT;
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT;
 
 const config = {
+  aliases: ['openshift-container'],
   productGroup,
   productId,
   productLabel,
+  productPath: productGroup.toLowerCase(),
   productDisplay: DISPLAY_TYPES.PARTIAL,
   viewId: `view${productGroup}`,
   productContextFilterUom: true,

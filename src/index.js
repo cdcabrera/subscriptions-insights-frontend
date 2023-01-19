@@ -3,7 +3,8 @@
  */
 import './styles/standalone.scss';
 import '@patternfly/react-core/dist/styles/base.css';
-import('./bootstrap');
+import('./index.bootstrap');
+import { productConfig } from './config';
 import { routerHelpers } from './components/router';
 
 window.insights = {
@@ -12,7 +13,7 @@ window.insights = {
       console.log(`Emulated appNavClick: ${JSON.stringify({ id, ...rest })}`);
       document.location.href = routerHelpers.pathJoin(
         document.location.pathname,
-        routerHelpers.getRouteConfig({ id }).path
+        productConfig.getConfig({ id }).productId.toLowerCase()
       );
     },
     auth: {
