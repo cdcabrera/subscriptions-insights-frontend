@@ -41,11 +41,22 @@ import { translate } from '../components/i18n/i18n';
 
 const productGroup = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
 
-const productId = null;
+const productId = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
 
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
 
+/**
+ * RHEL product config
+ *
+ * @type {{aliases: string[], productGroup: string, productId: string, productLabel: string, productDisplay: string, viewId: string,
+ *     productArchitectures: string[], query: object, graphTallyQuery: object, inventoryHostQuery: object, inventorySubscriptionsQuery: object,
+ *     initialGraphFilters: {}[], initialGraphSettings: object, initialGuestsFilters: {}[], initialInventoryFilters: {}[],
+ *     initialSubscriptionsInventoryFilters: {}[], initialToolbarFilters: {}[], }}
+ */
 const config = {
+  aliases: [],
+  // pathParameter: productId,
+  // productParameter: productGroup,
   productGroup,
   productId,
   productLabel,

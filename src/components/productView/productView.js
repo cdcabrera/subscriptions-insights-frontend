@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useRouteDetail } from '../../hooks/useRouter';
+import { useRouteDetail } from '../router/routerContext';
 import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { GraphCard } from '../graphCard/graphCard';
@@ -13,6 +13,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { InventoryCardSubscriptions } from '../inventoryCardSubscriptions/inventoryCardSubscriptions';
 import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
+import { Select } from '../form/select';
 
 /**
  * Display product columns.
@@ -23,7 +24,8 @@ import { translate } from '../i18n/i18n';
  * @returns {Node}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
-  const { productParameter: routeProductLabel, productConfig } = useAliasRouteDetail();
+  const { productGroup, productConfig } = useAliasRouteDetail() || {};
+  const [updatedContext, setUpdatedContext] = useState(productConfig);
 
   const renderProduct = config => {
     const { initialInventoryFilters, initialSubscriptionsInventoryFilters, productDisplay, productId, viewId } = config;
@@ -82,12 +84,15 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
   };
 
   return (
-    <PageLayout>
-      <PageHeader productLabel={routeProductLabel}>
-        {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: routeProductLabel })}
-      </PageHeader>
-      <PageColumns>{productConfig.map(config => renderProduct(config))}</PageColumns>
-    </PageLayout>
+    (productGroup && (
+      <PageLayout>
+        <PageHeader productLabel={productGroup}>
+          {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
+        </PageHeader>
+        <PageColumns>{updatedContext?.map(config => renderProduct(config))}</PageColumns>
+      </PageLayout>
+    )) ||
+    null
   );
 };
 

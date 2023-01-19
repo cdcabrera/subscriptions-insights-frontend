@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useMount, useUnmount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
-import { routerHooks } from '../../hooks/useRouter';
+import { useHistory } from '../router/routerContext';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router';
 
@@ -44,7 +44,7 @@ const useGetAuthorization = ({
   onNavigation = reduxActions.platform.onNavigation,
   setAppName = reduxActions.platform.setAppName,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useHistory: useAliasHistory = routerHooks.useHistory,
+  useHistory: useAliasHistory = useHistory,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
   const [unregister, setUnregister] = useState(() => helpers.noop);
