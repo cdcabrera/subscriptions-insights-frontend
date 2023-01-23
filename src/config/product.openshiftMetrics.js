@@ -21,7 +21,7 @@ import { translate } from '../components/i18n/i18n';
 
 // ToDo: evaluate the need for "productLabel" or using productId
 
-const productGroup = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS;
+const productGroup = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT;
 
 const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS;
 

@@ -79,19 +79,21 @@ const useRouteDetail = ({
   const { useParams: useAliasParams } = useAliasRouterContext();
   const redirect = useAliasRedirect();
   const { productPath } = useAliasParams();
-  const { firstMatch, ...configs } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+  const { firstMatch, configs } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
 
   if (!firstMatch) {
     redirect(routerHelpers.redirectRoute.redirect);
   }
 
   return {
-    ...configs,
+    // ...configsByPath,
+    // firstMatch,
+    // configs,
     baseName: routerHelpers.dynamicBaseName(),
     errorRoute: routerHelpers.errorRoute,
     productGroup: firstMatch?.productGroup,
-    productConfig: (firstMatch && [firstMatch]) || [],
-    configsByGroup: (firstMatch && configs.allConfigsByGroup?.[firstMatch?.productGroup]) || {}
+    productConfig: (configs?.length && configs) || []
+    // configsByGroup: (firstMatch && configsByPath.allConfigsByGroup?.[firstMatch?.productGroup]) || {}
   };
 };
 
