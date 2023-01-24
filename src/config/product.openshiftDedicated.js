@@ -33,6 +33,7 @@ const config = {
   productGroup,
   productId,
   productLabel,
+  productPath: productGroup.toLowerCase(),
   productDisplay: DISPLAY_TYPES.DUAL_AXES,
   viewId: `view${productGroup}`,
   query: {

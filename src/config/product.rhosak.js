@@ -44,6 +44,7 @@ const config = {
   productGroup,
   productId,
   productLabel,
+  productPath: productGroup.toLowerCase(),
   productDisplay: DISPLAY_TYPES.HOURLY,
   viewId: `view${productGroup}`,
   query: {

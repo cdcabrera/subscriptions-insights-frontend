@@ -39,6 +39,7 @@ const config = {
   productGroup,
   productId,
   productLabel,
+  productPath: productGroup.toLowerCase(),
   productDisplay: DISPLAY_TYPES.PARTIAL,
   viewId: `view${productGroup}`,
   productContextFilterUom: true,

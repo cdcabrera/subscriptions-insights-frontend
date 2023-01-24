@@ -55,11 +55,10 @@ const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
  */
 const config = {
   aliases: ['insights'],
-  // pathParameter: productId,
-  // productParameter: productGroup,
   productGroup,
   productId,
   productLabel,
+  productPath: productGroup.toLowerCase(),
   productDisplay: DISPLAY_TYPES.CAPACITY,
   viewId: `view${productGroup}`,
   productArchitectures: [...Object.values(RHSM_API_PATH_PRODUCT_ARCHITECTURE_RHEL_TYPES)],
