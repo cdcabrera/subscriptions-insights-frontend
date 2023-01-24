@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Navigate, Routes, Route, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { RouterContext } from './routerContext';
+import { Navigate, Routes, Route, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { RouterContext, useNavigate } from './routerContext';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react';
-import { reduxActions, storeHooks } from '../../redux';
+import { useNavigate } from 'react-router-dom';
 import { pathJoin, routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 
@@ -99,65 +99,6 @@ const useRouteDetail = ({
 };
 
 /**
- * Pass useHistory methods. Proxy useHistory push with Platform specific navigation update.
- *
- * @param {object} options
- * @param {boolean} options.isSetAppNav Allow setting the Platform's left navigation if conditions are met or fallback to history.push.
- * @param {Function} options.useRouterContext
- * @param {Function} options.useDispatch
- * @returns {object}
- */
-const useHistory = ({
-  isSetAppNav = false,
-  useRouterContext: useAliasRouterContext = useRouterContext,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
-} = {}) => {
-  const { useNavigate: useAliasNavigate = helpers.noop } = useAliasRouterContext();
-  const navigate = useAliasNavigate();
-  const dispatch = useAliasDispatch();
-  console.log(navigate);
-
-  return {
-    push: pathLocation => {
-      const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
-      const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName });
-      const path = firstMatch?.productId?.toLowerCase();
-      // const { hash = '', search = '' } = window.location;
-
-      if (isSetAppNav && path) {
-        console.log('>>>>', path);
-        return dispatch(reduxActions.platform.setAppNav(path));
-      }
-
-      // return navigate(pathLocation);
-    }
-    /*
-    push: (pathLocation, historyState) => {
-      const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
-      const { productId } = routerHelpers.getRouteConfig({ pathName, id: pathName });
-      const path = productId?.toLowerCase();
-      const { hash = '', search = '' } = window.location;
-
-      if (isSetAppNav && path) {
-        return dispatch(reduxActions.platform.setAppNav(path));
-      }
-
-      const temp = (path && `${path}${search}${hash}`) || (pathName && `${pathName}${search}${hash}`) || pathLocation;
-      console.log('>>> testing', temp);
-
-      navigate(temp, historyState);
-      // return;
-      /*
-      return navigate(
-        (path && `${path}${search}${hash}`) || (pathName && `${pathName}${search}${hash}`) || pathLocation,
-        historyState
-      );
-    }
-    */
-  };
-};
-
-/**
  * Route context wrapper for useLocation
  *
  * @param {object} options
@@ -176,10 +117,12 @@ const useLocation = ({ useRouterContext: useAliasRouterContext = useRouterContex
  * @param {Function} options.useRouterContext
  * @returns {*}
  */
+/*
 const useNavigate = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
-  const { useNavigate: useAliasNavigate } = useAliasRouterContext();
+  const { useNavigate: useAliasNavigate = helpers.noop } = useAliasRouterContext();
   return useAliasNavigate();
 };
+*/
 
 /**
  * Route context wrapper for useParams
@@ -254,7 +197,6 @@ const useSearchParams = ({ useRouterContext: useAliasRouterContext = useRouterCo
 const context = {
   RouterContext,
   DEFAULT_CONTEXT,
-  useHistory,
   useLocation,
   useNavigate,
   useParams,
@@ -269,7 +211,6 @@ export {
   context,
   RouterContext,
   DEFAULT_CONTEXT,
-  useHistory,
   useLocation,
   useNavigate,
   useParams,
