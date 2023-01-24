@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import { useNavigate } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
@@ -35,7 +36,8 @@ const ProductViewMissing = ({ availableProductsRedirect, t, useHistory: useAlias
 
   useMount(() => {
     if (availableProducts.length <= availableProductsRedirect) {
-      history.push(availableProducts[0].path);
+      console.log('>>>>', availableProducts[0].productGroup);
+      history.push(availableProducts[0].productGroup);
     }
   });
 

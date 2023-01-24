@@ -1,4 +1,5 @@
 import React, { useCallback, useContext } from 'react';
+import { reduxActions, storeHooks } from '../../redux';
 import { pathJoin, routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 
@@ -107,16 +108,29 @@ const useRouteDetail = ({
  * @returns {object}
  */
 const useHistory = ({
-  // isSetAppNav = false,
-  useRouterContext: useAliasRouterContext = useRouterContext
-  // useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
+  isSetAppNav = false,
+  useRouterContext: useAliasRouterContext = useRouterContext,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const { useNavigate: useAliasNavigate = helpers.noop } = useAliasRouterContext();
   const navigate = useAliasNavigate();
-  // const dispatch = useAliasDispatch();
+  const dispatch = useAliasDispatch();
+  console.log(navigate);
 
   return {
-    push: pathLocation => navigate(pathLocation)
+    push: pathLocation => {
+      const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
+      const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName });
+      const path = firstMatch?.productId?.toLowerCase();
+      // const { hash = '', search = '' } = window.location;
+
+      if (isSetAppNav && path) {
+        console.log('>>>>', path);
+        return dispatch(reduxActions.platform.setAppNav(path));
+      }
+
+      // return navigate(pathLocation);
+    }
     /*
     push: (pathLocation, historyState) => {
       const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
