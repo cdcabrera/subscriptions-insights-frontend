@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { useNavigate } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
 import { routerHelpers } from '../router';
-import { useHistory } from '../router/routerContext';
+import { useNavigate } from '../router/routerContext';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
@@ -27,17 +26,16 @@ const filterAvailableProducts = () => {
  * @param {object} props
  * @param {number} props.availableProductsRedirect
  * @param {Function} props.t
- * @param {Function} props.useHistory
+ * @param {Function} props.useNavigate
  * @returns {Node}
  */
-const ProductViewMissing = ({ availableProductsRedirect, t, useHistory: useAliasHistory }) => {
-  const history = useAliasHistory({ isSetAppNav: true });
+const ProductViewMissing = ({ availableProductsRedirect, t, useNavigate: useAliasNavigate }) => {
+  const navigate = useAliasNavigate();
   const availableProducts = filterAvailableProducts();
 
   useMount(() => {
     if (availableProducts.length <= availableProductsRedirect) {
-      console.log('>>>>', availableProducts[0].productGroup);
-      history.push(availableProducts[0].productGroup);
+      navigate(availableProducts[0].productPath);
     }
   });
 
@@ -48,7 +46,7 @@ const ProductViewMissing = ({ availableProductsRedirect, t, useHistory: useAlias
    * @param {string} id
    * @returns {void}
    */
-  const onNavigate = id => history.push(id);
+  const onNavigate = id => navigate(id);
 
   return (
     <PageLayout className="curiosity-missing-view">
@@ -96,23 +94,23 @@ const ProductViewMissing = ({ availableProductsRedirect, t, useHistory: useAlias
 /**
  * Prop types.
  *
- * @type {{useHistory: Function, availableProductsRedirect: number, t: Function}}
+ * @type {{useNavigate: Function, availableProductsRedirect: number, t: Function}}
  */
 ProductViewMissing.propTypes = {
   availableProductsRedirect: PropTypes.number,
   t: PropTypes.func,
-  useHistory: PropTypes.func
+  useNavigate: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{useHistory: Function, availableProductsRedirect: number, t: translate}}
+ * @type {{useNavigate: Function, availableProductsRedirect: number, t: translate}}
  */
 ProductViewMissing.defaultProps = {
   availableProductsRedirect: 4,
   t: translate,
-  useHistory
+  useNavigate
 };
 
 export { ProductViewMissing as default, ProductViewMissing };
