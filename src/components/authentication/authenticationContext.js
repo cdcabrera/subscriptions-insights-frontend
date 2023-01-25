@@ -62,7 +62,7 @@ const useGetAuthorization = ({
   useMount(async () => {
     await dispatch(authorizeUser());
     dispatch([initializeChrome(), setAppName(appName), hideGlobalFilter()]);
-    setUnregister(() => dispatch(onNavigation(event => navigate(event.navId))));
+    setUnregister(() => dispatch(onNavigation(event => navigate(event.navId, { isLeftNav: true }))));
   });
 
   useUnmount(() => {

@@ -143,7 +143,7 @@ const useNavigate = ({
   useResolvedPath: useAliasResolvedPath = useResolvedPath
 } = {}) => {
   const { search, hash } = useAliasLocation();
-  const isSearch = Object.keys(search).length > 0;
+  // const isSearch = Object.keys(search).length > 0;
   const navigate = useAliasNavigate();
   // const redirect = useAliasRedirect();
   const { pathname } = useAliasResolvedPath();
@@ -152,8 +152,8 @@ const useNavigate = ({
   // return useCallback(() => {});
   // return path => console.log('>>> usenavigate', path, pathname, navigate);
   return useCallback(
-    (path, { isPassSearchHash = true, ...options } = {}) => {
-      console.log('>>> navigate', path);
+    (path, { isLeftNav = false, isPassSearchHash = true, ...options } = {}) => {
+      console.log('>>> navigate && isLeftNav', isLeftNav, path);
       const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: path });
 
       if (firstMatch) {
@@ -164,15 +164,22 @@ const useNavigate = ({
         // } else {
         const dynamicBaseName = routerHelpers.dynamicBaseName({ pathName: pathname });
         const updatedPath = `${dynamicBaseName}/${firstMatch.productPath}`;
-        console.log('>>> test: navigate product', search, hash);
-        // return navigate((isPassSearchHash && `${updatedPath}${search || '?frank=test'}${hash}`) || updatedPath, options);
-        return navigate((isPassSearchHash && `${updatedPath}${search}`) || updatedPath, options);
+        console.log('>>> test: navigate product', isLeftNav, search, hash);
+
+        if (isLeftNav) {
+          // document.location.replace(`${routerHelpers.dynamicBaseName()}/${firstMatch.productPath}${search}${hash}`);
+          return;
+        }
+
+        return navigate((isPassSearchHash && `${updatedPath}${search}${hash}`) || updatedPath, options);
+        // return navigate((isPassSearchHash && `${updatedPath}${search}`) || updatedPath, options);
+        // return navigate(updatedPath, options);
         // }
         // return;
       }
 
       console.log('>>> test: navigate passthrou');
-      return navigate((isPassSearchHash && `${path}${(isSearch && search) || ''}${hash}`) || path, options);
+      return navigate((isPassSearchHash && `${path}${search}${hash}`) || path, options);
       /*
       if (isPassSearch && isSearch) {
         // redirect(path);
@@ -181,7 +188,7 @@ const useNavigate = ({
       }
       */
     },
-    [hash, isSearch, navigate, pathname, search] // redirect]
+    [hash, navigate, pathname, search] // redirect]
   );
 };
 
