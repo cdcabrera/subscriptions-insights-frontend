@@ -128,7 +128,10 @@ const getRouteConfigByPath = _memoize(
     configs = productConfig.configs
     // sortedConfigs = productConfig.sortedConfigs
   } = {}) => {
-    const basePathDirs = pathName?.split('/').filter(str => str.length > 0);
+    const basePathDirs = pathName
+      ?.split('/')
+      .filter(str => str.length > 0)
+      ?.reverse();
     const filteredConfigs = [];
     const filteredConfigsById = {};
     const filteredConfigsByGroup = {};
@@ -215,6 +218,28 @@ const importView = component => {
   return p => <React.Fragment>{JSON.stringify({ ...p, component }, null, 2)}</React.Fragment>;
 };
 
+/**
+ * Parse search parameters from a string
+ *
+ * @param {string} currentPathAndOrSearch
+ * @returns {{}}
+ */
+const parseSearchParams = _memoize(currentPathAndOrSearch => {
+  const { decodeURIComponent, URLSearchParams } = window;
+  const parsedSearch = {};
+
+  [
+    ...new Set(
+      [...new URLSearchParams(decodeURIComponent(currentPathAndOrSearch))].map(([param, value]) => `${param}~${value}`)
+    )
+  ].forEach(v => {
+    const [param, value] = v.split('~');
+    parsedSearch[param] = value;
+  });
+
+  return parsedSearch;
+});
+
 const routerHelpers = {
   appName,
   dynamicBaseName,
@@ -222,6 +247,7 @@ const routerHelpers = {
   errorRoute,
   getRouteConfigByPath,
   importView,
+  parseSearchParams,
   pathJoin,
   // productGroups,
   routes
@@ -237,6 +263,7 @@ export {
   errorRoute,
   getRouteConfigByPath,
   importView,
+  parseSearchParams,
   pathJoin,
   // productGroups,
   routes

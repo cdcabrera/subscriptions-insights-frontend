@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Navigate, Routes, Route, useLocation, useParams, useSearchParams } from 'react-router-dom';
-import { RouterContext, useNavigate } from './routerContext';
+// import { Navigate, Routes, Route, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
+// import { useNavigate } from './routerContext';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
@@ -19,18 +21,25 @@ import { Loader } from '../loader/loader';
  */
 const Router = ({
   redirectRoute,
-  routes,
-  useLocation: useAliasLocation,
-  useNavigate: useAliasNavigate,
-  useParams: useAliasParams,
-  useSearchParams: useAliasSearchParams
+  routes
+  // useLocation: useAliasLocation,
+  // useNavigate: useAliasNavigate
+  // useParams: useAliasParams,
+  // useSearchParams: useAliasSearchParams
 } = {}) => {
+  /*
   const [context] = useState({
     useLocation: useAliasLocation,
     useNavigate: useAliasNavigate,
     useParams: useAliasParams,
     useSearchParams: useAliasSearchParams
   });
+  */
+  /*
+  const [context] = useState({
+    useNavigate: useAliasNavigate
+  });
+   */
 
   /**
    * Create routes.
@@ -43,20 +52,16 @@ const Router = ({
     });
 
   return (
-    <RouterContext.Provider value={context}>
-      <React.Suspense fallback={<Loader variant="title" />}>
-        <Routes>
-          {updatedRoutes}
-          {redirectRoute && (
-            <Route
-              key="redirect"
-              path={redirectRoute.path}
-              element={<Navigate replace to={redirectRoute.redirect} />}
-            />
-          )}
-        </Routes>
-      </React.Suspense>
-    </RouterContext.Provider>
+    // <RouterContext.Provider value={context}>
+    <React.Suspense fallback={<Loader variant="title" />}>
+      <Routes>
+        {updatedRoutes}
+        {redirectRoute && (
+          <Route key="redirect" path={redirectRoute.path} element={<Navigate replace to={redirectRoute.redirect} />} />
+        )}
+      </Routes>
+    </React.Suspense>
+    // </RouterContext.Provider>
   );
 };
 
@@ -83,11 +88,11 @@ Router.propTypes = {
       render: PropTypes.bool,
       strict: PropTypes.bool
     })
-  ),
-  useLocation: PropTypes.func,
-  useNavigate: PropTypes.func,
-  useParams: PropTypes.func,
-  useSearchParams: PropTypes.func
+  )
+  // useLocation: PropTypes.func,
+  // useNavigate: PropTypes.func
+  // useParams: PropTypes.func,
+  // useSearchParams: PropTypes.func
 };
 
 /**
@@ -98,11 +103,11 @@ Router.propTypes = {
  */
 Router.defaultProps = {
   redirectRoute: routerHelpers.redirectRoute,
-  routes: routerHelpers.routes,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams
+  routes: routerHelpers.routes
+  // useLocation,
+  // useNavigate
+  // useParams,
+  // useSearchParams
 };
 
 export { Router as default, Router };

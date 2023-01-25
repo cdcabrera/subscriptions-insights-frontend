@@ -35,6 +35,7 @@ const ProductViewMissing = ({ availableProductsRedirect, t, useNavigate: useAlia
 
   useMount(() => {
     if (availableProducts.length <= availableProductsRedirect) {
+      console.log('>>> test: mount navigate missing');
       navigate(availableProducts[0].productPath);
     }
   });
