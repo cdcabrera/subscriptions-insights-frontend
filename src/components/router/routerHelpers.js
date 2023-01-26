@@ -219,7 +219,7 @@ const importView = component => {
 };
 
 /**
- * Parse search parameters from a string
+ * Parse search parameters from a string, using a set
  *
  * @param {string} currentPathAndOrSearch
  * @returns {{}}

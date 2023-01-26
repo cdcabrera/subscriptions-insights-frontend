@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import {
   useLocation,
   useNavigate as useRRDNavigate,
@@ -9,57 +9,20 @@ import {
 import { pathJoin, routerHelpers } from './routerHelpers';
 
 /**
- * Route context.
- *
- * @type {React.Context<{}>}
- */
-/*
-const DEFAULT_CONTEXT = [
-  {
-    redirect: helpers.noop,
-    // useLocation: helpers.noop,
-    // useLocation,
-    useNavigate: helpers.noop
-    // useParams,
-    // useSearchParams: useRRDSearchParams
-    // useNavigate: helpers.noop,
-    // useParams: helpers.noop,
-    // useSearchParams: helpers.noop
-  },
-  helpers.noop
-];
- */
-
-// const RouterContext = React.createContext(DEFAULT_CONTEXT);
-
-/**
- * Get an updated router context.
- *
- * @returns {React.Context<{}>}
- */
-// const useRouterContext = () => useContext(RouterContext);
-
-/**
  * Return a callback for redirecting, and replacing, towards a new path, or url.
  *
  * @callback redirect
  * @param {object} options
- * @param options.useLocation
- * @param options.useResolvedPath
- * @param {Function} options.useRouterContext
+ * @param {Function} options.useLocation
+ * @param {Function} options.useResolvedPath
  * @returns {(function(*): void)|*}
  */
-// const useRedirect = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
 const useRedirect = ({
   useLocation: useAliasLocation = useLocation,
   useResolvedPath: useAliasResolvedPath = useResolvedPath
 } = {}) => {
-  // const { useLocation: useAliasLocation = helpers.noop } = useAliasRouterContext();
-  // const { useLocation: useAliasLocation } = useAliasRouterContext();
   const { pathname } = useAliasResolvedPath();
   const { hash = '', search = '' } = useAliasLocation() || {};
-
-  console.log('>>> useredirect', hash, search);
 
   /**
    * redirect
@@ -70,7 +33,6 @@ const useRedirect = ({
   return useCallback(
     route => {
       const baseName = routerHelpers.dynamicBaseName({ pathName: pathname });
-      // const { hash = '', search = '' } = window.location;
       let isUrl;
 
       try {
@@ -79,7 +41,6 @@ const useRedirect = ({
         isUrl = false;
       }
 
-      console.log('>>> test: redirect');
       window.location.replace((isUrl && route) || `${pathJoin(baseName, route)}${search}${hash}`);
       return undefined;
     },
@@ -92,161 +53,83 @@ const useRedirect = ({
  *
  * @param {object} options
  * @param {Function} options.useRedirect
- * @param {Function} options.useRouterContext
- * @param options.useParams
+ * @param {Function} options.useParams
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({
   useRedirect: useAliasRedirect = useRedirect,
-  // useRouterContext: useAliasRouterContext = useRouterContext
   useParams: useAliasParams = useParams
 } = {}) => {
-  // const { useParams: useAliasParams } = useAliasRouterContext();
   const redirect = useAliasRedirect();
   const { productPath } = useAliasParams();
-  const { firstMatch, configs } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+  const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
 
   if (!firstMatch) {
     redirect(routerHelpers.redirectRoute.redirect);
   }
 
   return {
-    // ...configsByPath,
-    // firstMatch,
-    // configs,
-    baseName: routerHelpers.dynamicBaseName(),
+    allProductConfigs: allConfigs,
+    firstMatch,
     errorRoute: routerHelpers.errorRoute,
     productGroup: firstMatch?.productGroup,
     productConfig: (configs?.length && configs) || []
-    // configsByGroup: (firstMatch && configsByPath.allConfigsByGroup?.[firstMatch?.productGroup]) || {}
   };
 };
 
 /**
- * Route context wrapper for useLocation
+ * useNavigate wrapper, apply application config context routing
  *
  * @param {object} options
- * @param {Function} options.useRouterContext
- * @returns {*}
+ * @param {Function} options.useLocation
+ * @param {Function} options.useNavigate
+ * @param {Function} options.useResolvedPath
+ * @returns {Function}
  */
-/*
-const useLocation = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
-  const { useLocation: useAliasLocation } = useAliasRouterContext();
-  return useAliasLocation();
-};
-*/
-
 const useNavigate = ({
   useLocation: useAliasLocation = useLocation,
   useNavigate: useAliasNavigate = useRRDNavigate,
-  // useRedirect: useAliasRedirect = useRedirect,
   useResolvedPath: useAliasResolvedPath = useResolvedPath
 } = {}) => {
   const { search, hash } = useAliasLocation();
-  // const isSearch = Object.keys(search).length > 0;
   const navigate = useAliasNavigate();
-  // const redirect = useAliasRedirect();
   const { pathname } = useAliasResolvedPath();
-  console.log('>>> resolved path', pathname);
 
-  // return useCallback(() => {});
-  // return path => console.log('>>> usenavigate', path, pathname, navigate);
   return useCallback(
     (path, { isLeftNav = false, isPassSearchHash = true, ...options } = {}) => {
-      console.log('>>> navigate && isLeftNav', isLeftNav, path);
+      if (isLeftNav) {
+        return undefined;
+      }
+
       const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: path });
 
       if (firstMatch) {
-        console.log('>>> firstMatch', firstMatch.productPath);
-
-        // if (isPassSearch && isSearch) {
-        // redirect(firstMatch.productPath);
-        // } else {
         const dynamicBaseName = routerHelpers.dynamicBaseName({ pathName: pathname });
         const updatedPath = `${dynamicBaseName}/${firstMatch.productPath}`;
-        console.log('>>> test: navigate product', isLeftNav, search, hash);
-
-        if (isLeftNav) {
-          // document.location.replace(`${routerHelpers.dynamicBaseName()}/${firstMatch.productPath}${search}${hash}`);
-          return;
-        }
 
         return navigate((isPassSearchHash && `${updatedPath}${search}${hash}`) || updatedPath, options);
-        // return navigate((isPassSearchHash && `${updatedPath}${search}`) || updatedPath, options);
-        // return navigate(updatedPath, options);
-        // }
-        // return;
       }
 
-      console.log('>>> test: navigate passthrou');
       return navigate((isPassSearchHash && `${path}${search}${hash}`) || path, options);
-      /*
-      if (isPassSearch && isSearch) {
-        // redirect(path);
-      } else {
-        navigate(path, options);
-      }
-      */
     },
-    [hash, navigate, pathname, search] // redirect]
+    [hash, navigate, pathname, search]
   );
 };
-
-/**
- * Route context wrapper for useParams
- *
- * @param {object} options
- * @param {Function} options.useRouterContext
- * @returns {*}
- */
-/*
-const useParams = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
-  const { useParams: useAliasParams } = useAliasRouterContext();
-  return useAliasParams();
-};
-*/
 
 /**
  * Search parameter, return
  *
  * @param {object} options
- * @param {Function} options.useRouterContext
- * @param options.useSearchParams
- * @param options.useLocation
+ * @param {Function} options.useLocation
+ * @param {Function} options.useSearchParams
  * @returns {Array}
  */
-// const useSearchParams = ({ useRouterContext: useAliasRouterContext = useRouterContext } = {}) => {
 const useSearchParams = ({
   useSearchParams: useAliasSearchParams = useRRDSearchParams,
   useLocation: useAliasLocation = useLocation
 } = {}) => {
-  // const { useSearchParams: useAliasSearchParams, useLocation: useAliasLocation } = useAliasRouterContext();
   const { search } = useAliasLocation();
   const [, setAliasSearchParams] = useAliasSearchParams();
-  // const { decodeURIComponent, URLSearchParams } = window;
-
-  /**
-   * Parse a location search, using a set
-   *
-   * @param {string|*} currentSearch
-   * @returns {{}}
-   */
-  /*
-  const parseSearch = currentSearch => {
-    const parsedSearch = {};
-
-    [
-      ...new Set(
-        [...new URLSearchParams(decodeURIComponent(currentSearch))].map(([param, value]) => `${param}~${value}`)
-      )
-    ].forEach(v => {
-      const [param, value] = v.split('~');
-      parsedSearch[param] = value;
-    });
-
-    return parsedSearch;
-  };
-  */
 
   /**
    * Alias returned React Router Dom useSearchParams hook to something expected.
@@ -273,14 +156,10 @@ const useSearchParams = ({
 };
 
 const context = {
-  // RouterContext,
-  // DEFAULT_CONTEXT,
   useLocation,
   useNavigate,
   useParams,
   useRedirect,
-  // useResolvedPath,
-  // useRouterContext,
   useRouteDetail,
   useSearchParams
 };
@@ -288,14 +167,10 @@ const context = {
 export {
   context as default,
   context,
-  // RouterContext,
-  // DEFAULT_CONTEXT,
   useLocation,
   useNavigate,
   useParams,
   useRedirect,
-  // useResolvedPath,
-  // useRouterContext,
   useRouteDetail,
   useSearchParams
 };

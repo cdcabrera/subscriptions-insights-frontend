@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate, useRouteDetail, useSearchParams } from '../router/routerContext';
-import { routerHelpers } from '../router/routerHelpers';
+import { useRouteDetail } from '../router/routerContext';
 import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { GraphCard } from '../graphCard/graphCard';
@@ -25,12 +24,14 @@ import { translate } from '../i18n/i18n';
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
   const { productGroup, productConfig } = useAliasRouteDetail() || {};
-  const [params] = useSearchParams();
-  const navigate = useNavigate();
   const [updatedContext] = useState(productConfig);
 
-  console.log('>>>> search params', params);
-
+  /**
+   * Render a product with a context provider
+   *
+   * @param {object} config
+   * @returns {React.ReactNode|null}
+   */
   const renderProduct = config => {
     const { initialInventoryFilters, initialSubscriptionsInventoryFilters, productDisplay, productId, viewId } = config;
 
@@ -95,54 +96,6 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
       <PageLayout>
         <PageHeader productLabel={productGroup}>
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
-          <ul>
-            <li>
-              <a
-                href="#"
-                onClick={e => {
-                  e.preventDefault();
-                  navigate('rhel');
-                }}
-              >
-                rhel OG
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                onClick={e => {
-                  e.preventDefault();
-                  navigate('satellite');
-                }}
-              >
-                satellite OG
-              </a>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <a
-                href="#"
-                onClick={e => {
-                  e.preventDefault();
-                  navigate(`${routerHelpers.dynamicBaseName()}/rhel?alias=hey`);
-                }}
-              >
-                rhel alias
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                onClick={e => {
-                  e.preventDefault();
-                  navigate(`${routerHelpers.dynamicBaseName()}/satellite`);
-                }}
-              >
-                satellite alias
-              </a>
-            </li>
-          </ul>
         </PageHeader>
         <PageColumns>{updatedContext?.map(config => renderProduct(config))}</PageColumns>
       </PageLayout>

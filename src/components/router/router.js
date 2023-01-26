@@ -1,49 +1,18 @@
-// import React, { useState } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Navigate, Routes, Route, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { Navigate, Routes, Route } from 'react-router-dom';
-// import { useNavigate } from './routerContext';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
 /**
- * Load routes.
+ * Create and load routes.
  *
  * @param {object} props
  * @param {object} props.redirectRoute
  * @param {Array} props.routes
- * @param {Function} props.useLocation
- * @param {Function} props.useNavigate
- * @param {Function} props.useParams
- * @param {Function} props.useSearchParams
  * @returns {React.ReactNode}
  */
-const Router = ({
-  redirectRoute,
-  routes
-  // useLocation: useAliasLocation,
-  // useNavigate: useAliasNavigate
-  // useParams: useAliasParams,
-  // useSearchParams: useAliasSearchParams
-} = {}) => {
-  /*
-  const [context] = useState({
-    useLocation: useAliasLocation,
-    useNavigate: useAliasNavigate,
-    useParams: useAliasParams,
-    useSearchParams: useAliasSearchParams
-  });
-  */
-  /*
-  const [context] = useState({
-    useNavigate: useAliasNavigate
-  });
-   */
-
-  /**
-   * Create routes.
-   */
+const Router = ({ redirectRoute, routes } = {}) => {
   const updatedRoutes = routes
     .filter(item => !item.disabled)
     .map(item => {
@@ -52,7 +21,6 @@ const Router = ({
     });
 
   return (
-    // <RouterContext.Provider value={context}>
     <React.Suspense fallback={<Loader variant="title" />}>
       <Routes>
         {updatedRoutes}
@@ -61,15 +29,13 @@ const Router = ({
         )}
       </Routes>
     </React.Suspense>
-    // </RouterContext.Provider>
   );
 };
 
 /**
  * Prop types.
  *
- * @type {{routes: Array, useLocation: Function, useSearchParams: Function, useNavigate: Function,
- *     redirectRoute: object, useParams: Function}}
+ * @type {{routes: Array, redirectRoute: object}}
  */
 Router.propTypes = {
   redirectRoute: PropTypes.shape({
@@ -78,36 +44,21 @@ Router.propTypes = {
   }),
   routes: PropTypes.arrayOf(
     PropTypes.shape({
-      activateOnError: PropTypes.bool,
       component: PropTypes.string.isRequired,
       disabled: PropTypes.bool,
-      exact: PropTypes.bool,
-      id: PropTypes.string,
-      path: PropTypes.string.isRequired,
-      redirect: PropTypes.string,
-      render: PropTypes.bool,
-      strict: PropTypes.bool
+      path: PropTypes.string.isRequired
     })
   )
-  // useLocation: PropTypes.func,
-  // useNavigate: PropTypes.func
-  // useParams: PropTypes.func,
-  // useSearchParams: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{routes: Array, useLocation: Function, useSearchParams: Function, useNavigate: Function,
- *     redirectRoute: object, useParams: Function}}
+ * @type {{routes: Array, redirectRoute: object}}
  */
 Router.defaultProps = {
   redirectRoute: routerHelpers.redirectRoute,
   routes: routerHelpers.routes
-  // useLocation,
-  // useNavigate
-  // useParams,
-  // useSearchParams
 };
 
 export { Router as default, Router };
