@@ -2,12 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
-import { useMount } from 'react-use';
+// import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
+// import { routerHelpers } from '../router';
 import { useRouteDetail, useNavigate } from '../router/routerContext';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
+/**
+ * Return a list of available products.
+ *
+ * @returns {Array}
+ */
+/*
+const filterAvailableProducts = () => {
+  const { configs, allConfigs } = routerHelpers.getRouteConfigByPath();
+  return (configs.length && configs) || allConfigs;
+};
+*/
 /**
  * Render a missing product view.
  *
@@ -27,13 +39,22 @@ const ProductViewMissing = ({
 }) => {
   const navigate = useAliasNavigate();
   const { productConfig, allProductConfigs } = useAliasRouteDetail();
-  const availableProducts = (productConfig?.length && productConfig) || allProductConfigs;
+  const availableProducts = (productConfig?.length && productConfig) || allProductConfigs || [];
+  // const availableProductsOLD = filterAvailableProducts();
 
-  useMount(() => {
+  if (availableProducts.length && availableProducts.length <= availableProductsRedirect) {
+    navigate(availableProducts?.[0]?.productPath);
+    return null;
+  }
+
+  /*
+  useEffect(() => {
+    console.log('>>> missing mount', availableProducts, availableProductsOLD);
     if (availableProducts.length <= availableProductsRedirect) {
-      navigate(availableProducts[0].productPath);
+      navigate(availableProducts?.[0]?.productPath);
     }
-  });
+  }, []);
+  */
 
   /**
    * On click, update history.
