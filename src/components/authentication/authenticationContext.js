@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { useMount, useUnmount } from 'react-use';
+import React, { useContext } from 'react';
+import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { helpers } from '../../common';
-import { routerContext, routerHelpers } from '../router';
+import { routerHelpers } from '../router';
 
 /**
  * Base context.
@@ -33,6 +33,7 @@ const useAuthContext = () => useContext(AuthenticationContext);
  * @param {Function} options.useDispatch
  * @param {Function} options.useRedirect
  * @param {Function} options.useSelectorsResponse
+ * @param options.useNavigate
  * @returns {{data: {errorCodes, errorStatus: *, locale}, pending: boolean, fulfilled: boolean, error: boolean}}
  */
 const useGetAuthorization = ({
@@ -40,14 +41,16 @@ const useGetAuthorization = ({
   authorizeUser = reduxActions.platform.authorizeUser,
   hideGlobalFilter = reduxActions.platform.hideGlobalFilter,
   initializeChrome = reduxActions.platform.initializeChrome,
-  onNavigation = reduxActions.platform.onNavigation,
+  // onNavigation = reduxActions.platform.onNavigation,
   setAppName = reduxActions.platform.setAppName,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useNavigate: useAliasNavigate = routerContext.useNavigate,
+  // useNavigate: useAliasNavigate = routerContext.useNavigate
+  // useNavigate: useAliasNavigate = routerContext.useRedirect,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  // useRedirect: useAliasRedirect = routerContext.useRedirect,
 } = {}) => {
-  const [unregister, setUnregister] = useState(() => helpers.noop);
-  const navigate = useAliasNavigate();
+  // const [unregister, setUnregister] = useState(() => helpers.noop);
+  // const navigate = useAliasNavigate();
   // const redirect = useAliasRedirect();
   const dispatch = useAliasDispatch();
   const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
@@ -62,14 +65,22 @@ const useGetAuthorization = ({
   useMount(async () => {
     await dispatch(authorizeUser());
     dispatch([initializeChrome(), setAppName(appName), hideGlobalFilter()]);
-    // setUnregister(() => dispatch(onNavigation(event => navigate(event.navId, { isLeftNav: true }))));
-    setUnregister(() => dispatch(onNavigation(event => console.log('>>> auth nav', event, navigate))));
-    // setUnregister(() => dispatch(onNavigation(event => redirect(event.navId))));
+    /*
+    setUnregister(() =>
+      dispatch(
+        onNavigation(event => {
+          navigate(event.navId, { isLeftNav: true });
+        })
+      )
+    );
+    */
+    // setUnregister(() => dispatch(onNavigation(event => console.log('>>> auth nav', event, navigate))));
+    // setUnregister(() => dispatch(onNavigation(event => navigate(event.navId))));
   });
 
-  useUnmount(() => {
-    unregister();
-  });
+  // useUnmount(() => {
+  // unregister();
+  // });
 
   const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
   const errorStatus = (error && responses?.id?.errors?.status) || null;
