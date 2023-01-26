@@ -61,7 +61,10 @@ const useRedirect = ({
         isUrl = false;
       }
 
-      window.location.replace((isUrl && route) || `${pathJoin(baseName, route)}${search}${hash}`);
+      console.log('>>>> redirect', baseName, hash, search);
+      // window.location.replace((isUrl && route) || `${pathJoin(baseName, route)}${search}${hash}`);
+      // window.location.href = (isUrl && route) || `${pathJoin(baseName, route)}${search}${hash}`;
+      window.location.href = (isUrl && route) || `${pathJoin(baseName, route)}`;
       return undefined;
     },
     [hash, search]
@@ -184,7 +187,7 @@ const useNavigate = ({
   return useCallback(
     (path, { isLeftNav = false, isPassSearchHash = true, ...options } = {}) => {
       if (isLeftNav) {
-        return undefined;
+        // return undefined;
       }
 
       const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: path });
