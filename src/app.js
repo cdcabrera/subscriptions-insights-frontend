@@ -34,6 +34,8 @@ const App = ({ getLocale, useDispatch: useAliasDispatch, useSelector: useAliasSe
     platformNotifications = <NotificationsPortal />;
   }
 
+  console.log('>>> app render', locale);
+
   return (
     <I18n locale={locale || null}>
       {platformNotifications}

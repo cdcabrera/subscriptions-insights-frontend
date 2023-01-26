@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
@@ -35,7 +35,7 @@ const Authentication = ({
   const { authorized = {}, errorCodes, errorStatus } = data;
   const { [appName]: isAuthorized } = authorized;
 
-  const renderContent = () => {
+  const renderContent = useCallback(() => {
     if (isDisabled) {
       return (
         <MessageView>
@@ -45,6 +45,7 @@ const Authentication = ({
     }
 
     if (isAuthorized) {
+      console.log('>>> auth RENDER');
       return children;
     }
 
@@ -64,7 +65,7 @@ const Authentication = ({
         <NotAuthorized serviceName={helpers.UI_DISPLAY_NAME} />
       </MessageView>
     );
-  };
+  }, [children, errorCodes, errorStatus, isAuthorized, isDisabled, pending, redirect, t]);
 
   return <AuthenticationContext.Provider value={data}>{renderContent()}</AuthenticationContext.Provider>;
 };

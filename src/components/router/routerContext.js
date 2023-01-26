@@ -1,12 +1,31 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
+// import { useMount } from 'react-use';
+import _isEqual from 'lodash/isEqual';
 import {
   useLocation,
   useNavigate as useRRDNavigate,
-  useParams,
+  useParams as useRRDParams,
   useResolvedPath,
   useSearchParams as useRRDSearchParams
 } from 'react-router-dom';
 import { pathJoin, routerHelpers } from './routerHelpers';
+import { helpers } from '../../common/helpers';
+
+const useParams = ({ useParams: useAliasParams = useRRDParams } = {}) => {
+  const params = useAliasParams();
+  const [updatedParams, setUpdatedParams] = useState(params);
+
+  useEffect(() => {
+    // useShallowCompare
+    // useDeepCompare
+    if (!_isEqual(updatedParams, params)) {
+      console.log('>>>> set params', params);
+      setUpdatedParams(params);
+    }
+  }, [params, updatedParams]);
+
+  return updatedParams;
+};
 
 /**
  * Return a callback for redirecting, and replacing, towards a new path, or url.
@@ -18,10 +37,10 @@ import { pathJoin, routerHelpers } from './routerHelpers';
  * @returns {(function(*): void)|*}
  */
 const useRedirect = ({
-  useLocation: useAliasLocation = useLocation,
-  useResolvedPath: useAliasResolvedPath = useResolvedPath
+  useLocation: useAliasLocation = useLocation
+  // useResolvedPath: useAliasResolvedPath = useResolvedPath
 } = {}) => {
-  const { pathname } = useAliasResolvedPath();
+  // const { pathname } = useAliasResolvedPath();
   const { hash = '', search = '' } = useAliasLocation() || {};
 
   /**
@@ -32,7 +51,8 @@ const useRedirect = ({
    */
   return useCallback(
     route => {
-      const baseName = routerHelpers.dynamicBaseName({ pathName: pathname });
+      // const baseName = routerHelpers.dynamicBaseName({ pathName: pathname });
+      const baseName = routerHelpers.dynamicBaseName();
       let isUrl;
 
       try {
@@ -44,7 +64,7 @@ const useRedirect = ({
       window.location.replace((isUrl && route) || `${pathJoin(baseName, route)}${search}${hash}`);
       return undefined;
     },
-    [hash, pathname, search]
+    [hash, search]
   );
 };
 
@@ -56,25 +76,90 @@ const useRedirect = ({
  * @param {Function} options.useParams
  * @returns {{baseName: string, errorRoute: object}}
  */
-const useRouteDetail = ({
-  useRedirect: useAliasRedirect = useRedirect,
+/*
+const useRouteDetailBORKEDKEEPSFIRING = ({
+  // useRedirect: useAliasRedirect = useRedirect,
   useParams: useAliasParams = useParams
 } = {}) => {
-  const redirect = useAliasRedirect();
+  // const redirect = useAliasRedirect();
+  // const [detail, setDetail] = useState({});
+  const { productPath } = useAliasParams();
+  // const updatedProductPath =
+  // if (!firstMatch) {
+  // redirect(routerHelpers.redirectRoute.redirect);
+  // }
+  // const productPath = 'satellite';
+
+  console.log('>>> useRouteDetail', productPath);
+
+  return useMemo(() => {
+    const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+
+    console.log('>>> firing useRouteDetail', firstMatch, productPath);
+
+    return {
+      allProductConfigs: allConfigs,
+      firstMatch,
+      errorRoute: routerHelpers.errorRoute,
+      productGroup: firstMatch?.productGroup,
+      productConfig: (configs?.length && configs) || []
+    };
+  }, [productPath]);
+};
+*/
+/*
+const useRouteDetailCLOSE = ({
+  // useRedirect: useAliasRedirect = useRedirect,
+  useParams: useAliasParams = useParams
+} = {}) => {
+  // const redirect = useAliasRedirect();
+  // const [detail, setDetail] = useState({});
+  const [routeDetail, setRouteDetail] = useState({});
+  const { productPath } = useAliasParams();
+
+  // if (!productPath) {
+  // }
+
+  // const updatedProductPath =
+  // if (!firstMatch) {
+  // redirect(routerHelpers.redirectRoute.redirect);
+  // }
+  // const productPath = 'satellite';
+  useEffect(() => {
+    // if (productPath) {
+    const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+    console.log('>>> firing useRouteDetail', firstMatch, productPath);
+
+    setRouteDetail({
+      allProductConfigs: allConfigs,
+      firstMatch,
+      errorRoute: routerHelpers.errorRoute,
+      productGroup: firstMatch?.productGroup,
+      productConfig: (configs?.length && configs) || []
+    });
+    // }
+  }, [productPath]);
+
+  console.log('>>> useRouteDetail', productPath);
+  return routeDetail;
+};
+*/
+const useRouteDetail = ({ useParams: useAliasParams = useParams } = {}) => {
   const { productPath } = useAliasParams();
   const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
 
-  if (!firstMatch) {
-    redirect(routerHelpers.redirectRoute.redirect);
-  }
+  console.log('>>> useRouteDetail', productPath);
 
-  return {
-    allProductConfigs: allConfigs,
-    firstMatch,
-    errorRoute: routerHelpers.errorRoute,
-    productGroup: firstMatch?.productGroup,
-    productConfig: (configs?.length && configs) || []
-  };
+  return useMemo(
+    () => ({
+      allProductConfigs: allConfigs,
+      firstMatch,
+      errorRoute: routerHelpers.errorRoute,
+      productGroup: firstMatch?.productGroup,
+      productConfig: (configs?.length && configs) || []
+    }),
+    [allConfigs, firstMatch, configs]
+  );
 };
 
 // ToDo: align useNavigate with updates from the useHistory proxy
@@ -106,7 +191,7 @@ const useNavigate = ({
 
       if (firstMatch) {
         const dynamicBaseName = routerHelpers.dynamicBaseName({ pathName: pathname });
-        const updatedPath = `${dynamicBaseName}/${firstMatch.productPath}`;
+        const updatedPath = `${(helpers.DEV_MODE && '..') || dynamicBaseName}/${firstMatch.productPath}`;
 
         return navigate((isPassSearchHash && `${updatedPath}${search}${hash}`) || updatedPath, options);
       }
