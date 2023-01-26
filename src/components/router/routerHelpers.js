@@ -35,63 +35,18 @@ const dynamicBasePath = ({ pathName = window.location.pathname, appName: applica
   pathName.split(applicationName)[0];
 
 /**
- * Basic path join, minor emulation for path.join.
+ * The first error route.
  *
- * @param {object} paths
- * @returns {string}
+ * @type {object}
  */
-const pathJoin = (...paths) => {
-  let updatedPath = Array.from(paths);
-  const hasLead = /^\/\//.test(updatedPath[0]);
-  updatedPath = updatedPath
-    .join('/')
-    .replace(/(\/\/)+/g, '~')
-    .replace(/~/g, '/')
-    .replace(/\/\//g, '/');
-
-  if (hasLead) {
-    updatedPath = `/${updatedPath}`;
-  }
-
-  return updatedPath;
-};
+const errorRoute = routesConfig.find(route => route.activateOnError === true) || {};
 
 /**
- * Generate product groups for applying query filter resets.
+ * The first redirect route.
  *
- * @param {Array} configs
- * @returns {Array}
+ * @type {object}
  */
-/*
-const generateProductGroups = _memoize((configs = productConfig.configs) => {
-  const productGroups = {};
-
-  configs.forEach(({ productId, productGroup }) => {
-    const viewIds = ((Array.isArray(productGroup) && productGroup) || [productGroup]).map(
-      id => (id && `view${id}`) || id
-    );
-
-    viewIds.forEach((id, index) => {
-      if (id) {
-        productGroups[id] ??= [];
-
-        if (productId) {
-          productGroups[id].push((Array.isArray(productId) && productId?.[index]) || productId);
-        }
-      }
-    });
-  });
-
-  return productGroups;
-});
-*/
-
-/**
- * Reference for products grouped by view.
- */
-// const productGroups = productConfig.sortedConfigs.byViewIds; // generateProductGroups();
-
-// const sortedConfigs = productConfig.sortedConfigs;
+const redirectRoute = routesConfig.find(({ disabled, redirect }) => !disabled && redirect);
 
 /**
  * Return array of objects that describes routing.
@@ -101,20 +56,6 @@ const generateProductGroups = _memoize((configs = productConfig.configs) => {
 const routes = routesConfig;
 
 /**
- * The first error route.
- *
- * @type {object}
- */
-const errorRoute = routes.find(route => route.activateOnError === true) || {};
-
-/**
- * The first redirect route.
- *
- * @type {object}
- */
-const redirectRoute = routes.find(({ disabled, redirect }) => !disabled && redirect);
-
-/**
  * Match route config entries by path.
  *
  * @param {object} params
@@ -122,87 +63,54 @@ const redirectRoute = routes.find(({ disabled, redirect }) => !disabled && redir
  * @param {Array} params.config
  * @returns {{configs: Array, configFirstMatch: object, configsById: object}}
  */
-const getRouteConfigByPath = _memoize(
-  ({
-    pathName = dynamicBasePath(),
-    configs = productConfig.configs
-    // sortedConfigs = productConfig.sortedConfigs
-  } = {}) => {
-    const basePathDirs = pathName
-      ?.split('/')
-      .filter(str => str.length > 0)
-      ?.reverse();
-    const filteredConfigs = [];
-    const filteredConfigsById = {};
-    const filteredConfigsByGroup = {};
-    const allConfigs = configs;
-    // const allConfigsByGroup = sortedConfigs.byGroupIdConfigs;
-    // const allConfigsById = sortedConfigs.byProductIdConfigs;
+const getRouteConfigByPath = _memoize(({ pathName = dynamicBasePath(), configs = productConfig.configs } = {}) => {
+  const basePathDirs = pathName
+    ?.split('/')
+    .filter(str => str.length > 0)
+    ?.reverse();
+  const filteredConfigs = [];
+  const filteredConfigsById = {};
+  const filteredConfigsByGroup = {};
+  const allConfigs = configs;
 
-    const findConfig = dir => {
-      configs.forEach(configItem => {
-        const { productId, productGroup, aliases } = configItem;
-        /*
-        const updatedConfigItem = {
-          aliases,
-          productId,
-          productGroup,
-          ...configItem
-        };
-        */
+  const findConfig = dir => {
+    configs.forEach(configItem => {
+      const { productId, productGroup, aliases } = configItem;
 
-        if (
-          dir &&
-          (new RegExp(dir, 'i').test(productGroup?.toString()) ||
-            new RegExp(dir, 'i').test(productId?.toString()) ||
-            new RegExp(dir, 'i').test(aliases?.toString()))
-        ) {
-          // productIds should be unique, but this covers
-          // if (!configsById[productId]) {
-          filteredConfigsByGroup[productGroup] ??= [];
-          filteredConfigsByGroup[productGroup].push(configItem);
+      if (
+        dir &&
+        (new RegExp(dir, 'i').test(productGroup?.toString()) ||
+          new RegExp(dir, 'i').test(productId?.toString()) ||
+          new RegExp(dir, 'i').test(aliases?.toString()))
+      ) {
+        filteredConfigsByGroup[productGroup] ??= [];
+        filteredConfigsByGroup[productGroup].push(configItem);
 
-          filteredConfigsById[productId] = configItem;
-          filteredConfigs.push(configItem);
-          // }
-        }
+        filteredConfigsById[productId] = configItem;
+        filteredConfigs.push(configItem);
+      }
+    });
+  };
 
-        /*
-        if (!allConfigsById[productId]) {
-          allConfigsById[productId] = { ...updatedConfigItem };
-          allConfigs.push({ ...updatedConfigItem });
-        }
-
-        if (productGroup) {
-          allConfigsByGroup[productGroup] ??= [];
-          allConfigsByGroup[productGroup].push({ ...updatedConfigItem });
-        }
-        */
-      });
-    };
-
-    if (basePathDirs?.length) {
-      basePathDirs.forEach(dir => {
-        if (dir) {
-          const decodedDir = window.decodeURI(dir);
-          findConfig(decodedDir);
-        }
-      });
-    } else {
-      findConfig();
-    }
-
-    return {
-      allConfigs,
-      // allConfigsById,
-      // allConfigsByGroup,
-      configs: filteredConfigs,
-      configsById: filteredConfigsById,
-      configsByGroup: filteredConfigsByGroup,
-      firstMatch: filteredConfigs?.[0]
-    };
+  if (basePathDirs?.length) {
+    basePathDirs.forEach(dir => {
+      if (dir) {
+        const decodedDir = window.decodeURI(dir);
+        findConfig(decodedDir);
+      }
+    });
+  } else {
+    findConfig();
   }
-);
+
+  return {
+    allConfigs,
+    configs: filteredConfigs,
+    configsById: filteredConfigsById,
+    configsByGroup: filteredConfigsByGroup,
+    firstMatch: filteredConfigs?.[0]
+  };
+});
 
 /**
  * Import a route component.
@@ -240,6 +148,28 @@ const parseSearchParams = _memoize(currentPathAndOrSearch => {
   return parsedSearch;
 });
 
+/**
+ * Basic path join, minor emulation for path.join.
+ *
+ * @param {object} paths
+ * @returns {string}
+ */
+const pathJoin = (...paths) => {
+  let updatedPath = Array.from(paths);
+  const hasLead = /^\/\//.test(updatedPath[0]);
+  updatedPath = updatedPath
+    .join('/')
+    .replace(/(\/\/)+/g, '~')
+    .replace(/~/g, '/')
+    .replace(/\/\//g, '/');
+
+  if (hasLead) {
+    updatedPath = `/${updatedPath}`;
+  }
+
+  return updatedPath;
+};
+
 const routerHelpers = {
   appName,
   dynamicBaseName,
@@ -249,9 +179,7 @@ const routerHelpers = {
   importView,
   parseSearchParams,
   pathJoin,
-  // productGroups,
   routes
-  // sortedConfigs
 };
 
 export {
@@ -265,7 +193,5 @@ export {
   importView,
   parseSearchParams,
   pathJoin,
-  // productGroups,
   routes
-  // sortedConfigs
 };
