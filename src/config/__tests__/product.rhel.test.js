@@ -16,12 +16,12 @@ describe('Product RHEL config', () => {
     expect(initialGraphSettings).toMatchSnapshot('settings');
   });
 
-  it('should apply hosts inventory configuration', () => {
+  it('should apply an inventory configuration', () => {
     const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery, productId } = config;
 
     const inventoryData = {
       [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem',
-      [INVENTORY_TYPES.INVENTORY_ID]: 'lorem inventory id',
+      [INVENTORY_TYPES.INVENTORY_ID]: undefined,
       [INVENTORY_TYPES.HARDWARE_TYPE]: 'ipsum',
       [INVENTORY_TYPES.MEASUREMENT_TYPE]: null,
       [INVENTORY_TYPES.NUMBER_OF_GUESTS]: 3,
@@ -53,6 +53,17 @@ describe('Product RHEL config', () => {
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
+
+    const filteredInventoryDataAuthorized = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: {
+        ...inventoryData,
+        [INVENTORY_TYPES.INVENTORY_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
+      },
+      session: { authorized: { inventory: true } }
+    });
+
+    expect(filteredInventoryDataAuthorized).toMatchSnapshot('filtered, authorized');
 
     expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
@@ -89,6 +100,16 @@ describe('Product RHEL config', () => {
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
 
+    const filteredInventoryDataInfinite = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: {
+        ...inventoryData,
+        [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: false
+      }
+    });
+
+    expect(filteredInventoryDataInfinite).toMatchSnapshot('filtered, infinite');
+
     expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
 
@@ -109,6 +130,16 @@ describe('Product RHEL config', () => {
     });
 
     expect(filteredGuestsData).toMatchSnapshot('filtered');
+
+    const filteredGuestsDataMissing = parseRowCellsListData({
+      filters: initialFilters,
+      cellData: {
+        ...guestsData,
+        inventoryId: undefined
+      }
+    });
+
+    expect(filteredGuestsDataMissing).toMatchSnapshot('filtered, missing inventory id');
 
     const filteredGuestsDataAuthorized = parseRowCellsListData({
       filters: initialFilters,
