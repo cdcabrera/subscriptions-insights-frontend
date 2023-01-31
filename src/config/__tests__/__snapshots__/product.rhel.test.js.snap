@@ -257,29 +257,29 @@ exports[`Product RHEL config should apply hosts inventory configuration: filtere
   ],
   "columnHeaders": [
     {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"RHEL"})",
       "transforms": [],
     },
     {
-      "title": "t(curiosity-inventory.header_number_of, {"context":"guests"})",
+      "title": "t(curiosity-inventory.header_number_of_guests, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header, {"context":"category"})",
+      "title": "t(curiosity-inventory.header_category, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header, {"context":"Sockets"})",
+      "title": "t(curiosity-inventory.header_Sockets, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
@@ -287,39 +287,39 @@ exports[`Product RHEL config should apply hosts inventory configuration: filtere
   ],
   "data": {
     "cores": {
-      "title": "t(curiosity-inventory.header, {"context":"cores"})",
+      "title": "t(curiosity-inventory.header_cores, {"context":"RHEL"})",
       "value": 12,
     },
     "display_name": {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"RHEL"})",
       "value": "lorem",
     },
     "hardware_type": {
-      "title": "t(curiosity-inventory.header_hardware, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_hardware_type, {"context":"RHEL"})",
       "value": "ipsum",
     },
     "inventory_id": {
-      "title": "t(curiosity-inventory.header_inventory, {"context":"id"})",
+      "title": "t(curiosity-inventory.header_inventory_id, {"context":"RHEL"})",
       "value": "lorem inventory id",
     },
     "last_seen": {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"RHEL"})",
       "value": "2022-01-01T00:00:00.000Z",
     },
     "loremIpsum": {
-      "title": "t(curiosity-inventory.header, {"context":"loremIpsum"})",
+      "title": "t(curiosity-inventory.header_loremIpsum, {"context":"RHEL"})",
       "value": "hello world",
     },
     "measurement_type": {
-      "title": "t(curiosity-inventory.header_measurement, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_measurement_type, {"context":"RHEL"})",
       "value": null,
     },
     "number_of_guests": {
-      "title": "t(curiosity-inventory.header_number_of, {"context":"guests"})",
+      "title": "t(curiosity-inventory.header_number_of_guests, {"context":"RHEL"})",
       "value": 3,
     },
     "sockets": {
-      "title": "t(curiosity-inventory.header, {"context":"sockets"})",
+      "title": "t(curiosity-inventory.header_sockets, {"context":"RHEL"})",
       "value": 10,
     },
   },
@@ -351,29 +351,29 @@ exports[`Product RHEL config should apply hosts inventory configuration: filtere
   ],
   "columnHeaders": [
     {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"RHEL"})",
       "transforms": [],
     },
     {
-      "title": "t(curiosity-inventory.header_number_of, {"context":"guests"})",
+      "title": "t(curiosity-inventory.header_number_of_guests, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header, {"context":"category"})",
+      "title": "t(curiosity-inventory.header_category, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header, {"context":"Sockets"})",
+      "title": "t(curiosity-inventory.header_Sockets, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"RHEL"})",
       "transforms": [
         [Function],
       ],
@@ -381,43 +381,43 @@ exports[`Product RHEL config should apply hosts inventory configuration: filtere
   ],
   "data": {
     "cloud_provider": {
-      "title": "t(curiosity-inventory.header_cloud, {"context":"provider"})",
+      "title": "t(curiosity-inventory.header_cloud_provider, {"context":"RHEL"})",
       "value": "dolor sit",
     },
     "cores": {
-      "title": "t(curiosity-inventory.header, {"context":"cores"})",
+      "title": "t(curiosity-inventory.header_cores, {"context":"RHEL"})",
       "value": 12,
     },
     "display_name": {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"RHEL"})",
       "value": "lorem",
     },
     "hardware_type": {
-      "title": "t(curiosity-inventory.header_hardware, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_hardware_type, {"context":"RHEL"})",
       "value": "ipsum",
     },
     "inventory_id": {
-      "title": "t(curiosity-inventory.header_inventory, {"context":"id"})",
+      "title": "t(curiosity-inventory.header_inventory_id, {"context":"RHEL"})",
       "value": null,
     },
     "last_seen": {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"RHEL"})",
       "value": null,
     },
     "loremIpsum": {
-      "title": "t(curiosity-inventory.header, {"context":"loremIpsum"})",
+      "title": "t(curiosity-inventory.header_loremIpsum, {"context":"RHEL"})",
       "value": "hello world",
     },
     "measurement_type": {
-      "title": "t(curiosity-inventory.header_measurement, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_measurement_type, {"context":"RHEL"})",
       "value": null,
     },
     "number_of_guests": {
-      "title": "t(curiosity-inventory.header_number_of, {"context":"guests"})",
+      "title": "t(curiosity-inventory.header_number_of_guests, {"context":"RHEL"})",
       "value": 3,
     },
     "sockets": {
-      "title": "t(curiosity-inventory.header, {"context":"sockets"})",
+      "title": "t(curiosity-inventory.header_sockets, {"context":"RHEL"})",
       "value": 10,
     },
   },

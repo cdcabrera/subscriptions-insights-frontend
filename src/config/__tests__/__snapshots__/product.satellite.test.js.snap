@@ -228,23 +228,23 @@ exports[`Product Satellite config should apply hosts inventory configuration: fi
   ],
   "columnHeaders": [
     {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"Satellite"})",
       "transforms": [],
     },
     {
-      "title": "t(curiosity-inventory.header_measurement, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_measurement_type, {"context":"Satellite"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header, {"context":"sockets"})",
+      "title": "t(curiosity-inventory.header_sockets, {"context":"Satellite"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"Satellite"})",
       "transforms": [
         [Function],
       ],
@@ -252,39 +252,39 @@ exports[`Product Satellite config should apply hosts inventory configuration: fi
   ],
   "data": {
     "cores": {
-      "title": "t(curiosity-inventory.header, {"context":"cores"})",
+      "title": "t(curiosity-inventory.header_cores, {"context":"Satellite"})",
       "value": 12,
     },
     "display_name": {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"Satellite"})",
       "value": "lorem",
     },
     "hardware_type": {
-      "title": "t(curiosity-inventory.header_hardware, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_hardware_type, {"context":"Satellite"})",
       "value": "ipsum",
     },
     "inventory_id": {
-      "title": "t(curiosity-inventory.header_inventory, {"context":"id"})",
+      "title": "t(curiosity-inventory.header_inventory_id, {"context":"Satellite"})",
       "value": "lorem inventory id",
     },
     "last_seen": {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"Satellite"})",
       "value": "2022-01-01T00:00:00.000Z",
     },
     "loremIpsum": {
-      "title": "t(curiosity-inventory.header, {"context":"loremIpsum"})",
+      "title": "t(curiosity-inventory.header_loremIpsum, {"context":"Satellite"})",
       "value": "hello world",
     },
     "measurement_type": {
-      "title": "t(curiosity-inventory.header_measurement, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_measurement_type, {"context":"Satellite"})",
       "value": null,
     },
     "number_of_guests": {
-      "title": "t(curiosity-inventory.header_number_of, {"context":"guests"})",
+      "title": "t(curiosity-inventory.header_number_of_guests, {"context":"Satellite"})",
       "value": 3,
     },
     "sockets": {
-      "title": "t(curiosity-inventory.header, {"context":"sockets"})",
+      "title": "t(curiosity-inventory.header_sockets, {"context":"Satellite"})",
       "value": 10,
     },
   },
@@ -317,23 +317,23 @@ exports[`Product Satellite config should apply hosts inventory configuration: fi
   ],
   "columnHeaders": [
     {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"Satellite"})",
       "transforms": [],
     },
     {
-      "title": "t(curiosity-inventory.header_measurement, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_measurement_type, {"context":"Satellite"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header, {"context":"sockets"})",
+      "title": "t(curiosity-inventory.header_sockets, {"context":"Satellite"})",
       "transforms": [
         [Function],
       ],
     },
     {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"Satellite"})",
       "transforms": [
         [Function],
       ],
@@ -341,43 +341,43 @@ exports[`Product Satellite config should apply hosts inventory configuration: fi
   ],
   "data": {
     "cloud_provider": {
-      "title": "t(curiosity-inventory.header_cloud, {"context":"provider"})",
+      "title": "t(curiosity-inventory.header_cloud_provider, {"context":"Satellite"})",
       "value": "dolor sit",
     },
     "cores": {
-      "title": "t(curiosity-inventory.header, {"context":"cores"})",
+      "title": "t(curiosity-inventory.header_cores, {"context":"Satellite"})",
       "value": 12,
     },
     "display_name": {
-      "title": "t(curiosity-inventory.header_display, {"context":"name"})",
+      "title": "t(curiosity-inventory.header_display_name, {"context":"Satellite"})",
       "value": "lorem",
     },
     "hardware_type": {
-      "title": "t(curiosity-inventory.header_hardware, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_hardware_type, {"context":"Satellite"})",
       "value": "ipsum",
     },
     "inventory_id": {
-      "title": "t(curiosity-inventory.header_inventory, {"context":"id"})",
+      "title": "t(curiosity-inventory.header_inventory_id, {"context":"Satellite"})",
       "value": null,
     },
     "last_seen": {
-      "title": "t(curiosity-inventory.header_last, {"context":"seen"})",
+      "title": "t(curiosity-inventory.header_last_seen, {"context":"Satellite"})",
       "value": null,
     },
     "loremIpsum": {
-      "title": "t(curiosity-inventory.header, {"context":"loremIpsum"})",
+      "title": "t(curiosity-inventory.header_loremIpsum, {"context":"Satellite"})",
       "value": "hello world",
     },
     "measurement_type": {
-      "title": "t(curiosity-inventory.header_measurement, {"context":"type"})",
+      "title": "t(curiosity-inventory.header_measurement_type, {"context":"Satellite"})",
       "value": null,
     },
     "number_of_guests": {
-      "title": "t(curiosity-inventory.header_number_of, {"context":"guests"})",
+      "title": "t(curiosity-inventory.header_number_of_guests, {"context":"Satellite"})",
       "value": 3,
     },
     "sockets": {
-      "title": "t(curiosity-inventory.header, {"context":"sockets"})",
+      "title": "t(curiosity-inventory.header_sockets, {"context":"Satellite"})",
       "value": 10,
     },
   },
