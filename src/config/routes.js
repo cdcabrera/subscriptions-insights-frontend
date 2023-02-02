@@ -2,39 +2,26 @@ import { products } from './products';
 import { helpers } from '../common';
 
 const routes = [
-  ...Object.entries(products.sortedConfigs().byGroupIdConfigs)
-    .map(([, value]) => {
-      const generatedRouteFromConfig = groupedConfigs => {
-        const updatedConfigs = [
-          {
-            path: `/${groupedConfigs?.[0]?.productPath}`,
-            pathParameter: [...groupedConfigs.map(({ productId }) => productId)],
-            productParameter: [...groupedConfigs.map(({ productId }) => productId)],
-            productConfig: [...groupedConfigs],
-            redirect: null,
-            activateOnError: false,
-            disabled: helpers.UI_DISABLED,
-            default: false,
-            component: 'productView/productView'
-          }
-        ];
+  ...Object.entries(products.sortedConfigs().byGroupIdConfigs).reduce((acc, [, groupedConfigs]) => {
+    const updatedConfig = [
+      {
+        path: `/${groupedConfigs?.[0]?.productPath}`,
+        pathParameter: [...groupedConfigs.map(({ productId }) => productId)],
+        productParameter: [...groupedConfigs.map(({ productId }) => productId)],
+        productConfig: [...groupedConfigs],
+        redirect: null,
+        activateOnError: false,
+        disabled: helpers.UI_DISABLED,
+        default: false,
+        component: 'productView/productView'
+      }
+    ];
 
-        groupedConfigs.forEach(({ aliases }) => {
-          if (aliases.length) {
-            aliases.forEach(alias => {
-              const aliasedConfig = { ...updatedConfigs[0] };
-              aliasedConfig.path = `/${alias}`;
-              updatedConfigs.push(aliasedConfig);
-            });
-          }
-        });
+    const flatAliases = groupedConfigs.map(({ aliases }) => [...aliases]).flat(1);
+    const aliasedConfigs = [...[...new Set(flatAliases)].map(alias => ({ ...updatedConfig[0], path: `/${alias}` }))];
 
-        return updatedConfigs;
-      };
-
-      return generatedRouteFromConfig(value);
-    })
-    .flat(2),
+    return [...acc, ...updatedConfig, ...aliasedConfigs];
+  }, []),
   {
     id: 'optin',
     path: '/optin',
