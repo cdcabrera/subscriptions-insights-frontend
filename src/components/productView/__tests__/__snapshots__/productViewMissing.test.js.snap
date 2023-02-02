@@ -98,6 +98,42 @@ exports[`ProductViewMissing Component should render a basic component: basic 1`]
       </Card>
       <Card
         isHoverable={true}
+        key="missingViewCard-OpenShift-metrics-generatedid-"
+        onClick={[Function]}
+      >
+        <CardTitle>
+          <Title
+            headingLevel="h2"
+            size="lg"
+          >
+            t(curiosity-view.title, {"appName":"Subscriptions","context":"OpenShift-metrics"})
+          </Title>
+        </CardTitle>
+        <CardBody
+          className="curiosity-missing-view__card-description"
+        >
+          t(curiosity-view.description, {"appName":"Subscriptions","context":"OpenShift-metrics"})
+        </CardBody>
+        <CardFooter>
+          <Button
+            icon={
+              <ArrowRightIcon
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
+              />
+            }
+            iconPosition="right"
+            isInline={true}
+            onClick={[Function]}
+            variant="link"
+          >
+            Open
+          </Button>
+        </CardFooter>
+      </Card>
+      <Card
+        isHoverable={true}
         key="missingViewCard-rhacs-generatedid-"
         onClick={[Function]}
       >
@@ -185,6 +221,78 @@ exports[`ProductViewMissing Component should render a basic component: basic 1`]
           className="curiosity-missing-view__card-description"
         >
           t(curiosity-view.description, {"appName":"Subscriptions","context":"rhods"})
+        </CardBody>
+        <CardFooter>
+          <Button
+            icon={
+              <ArrowRightIcon
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
+              />
+            }
+            iconPosition="right"
+            isInline={true}
+            onClick={[Function]}
+            variant="link"
+          >
+            Open
+          </Button>
+        </CardFooter>
+      </Card>
+      <Card
+        isHoverable={true}
+        key="missingViewCard-rhosak-generatedid-"
+        onClick={[Function]}
+      >
+        <CardTitle>
+          <Title
+            headingLevel="h2"
+            size="lg"
+          >
+            t(curiosity-view.title, {"appName":"Subscriptions","context":"rhosak"})
+          </Title>
+        </CardTitle>
+        <CardBody
+          className="curiosity-missing-view__card-description"
+        >
+          t(curiosity-view.description, {"appName":"Subscriptions","context":"rhosak"})
+        </CardBody>
+        <CardFooter>
+          <Button
+            icon={
+              <ArrowRightIcon
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
+              />
+            }
+            iconPosition="right"
+            isInline={true}
+            onClick={[Function]}
+            variant="link"
+          >
+            Open
+          </Button>
+        </CardFooter>
+      </Card>
+      <Card
+        isHoverable={true}
+        key="missingViewCard-Satellite-generatedid-"
+        onClick={[Function]}
+      >
+        <CardTitle>
+          <Title
+            headingLevel="h2"
+            size="lg"
+          >
+            t(curiosity-view.title, {"appName":"Subscriptions","context":"Satellite"})
+          </Title>
+        </CardTitle>
+        <CardBody
+          className="curiosity-missing-view__card-description"
+        >
+          t(curiosity-view.description, {"appName":"Subscriptions","context":"Satellite"})
         </CardBody>
         <CardFooter>
           <Button

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect as ReactRouterDomRedirect, Route, Switch } from 'react-router-dom';

@@ -16,13 +16,12 @@ const productConfigs = (() => {
     /**
      * Basic configuration for testing only.
      */
-    if (process.env.REACT_APP_ENV === 'test') {
+    if (process.env.REACT_APP_ENV === 'test' && require) {
       return [
-        require('./product.openshiftContainer'), // eslint-disable-line
-        require('./product.openshiftDedicated'),// eslint-disable-line
-        require('./product.rhacs'),// eslint-disable-line
-        require('./product.rhel'),// eslint-disable-line
-        require('./product.rhods')// eslint-disable-line
+        ...require('fs') // eslint-disable-line
+          ?.readdirSync('./src/config') // eslint-disable-line
+          ?.filter(file => /product\.[a-z]+\.js/i.test(file)) // eslint-disable-line
+          ?.map(file => require(`./${file}`)) // eslint-disable-line
       ];
     }
 
