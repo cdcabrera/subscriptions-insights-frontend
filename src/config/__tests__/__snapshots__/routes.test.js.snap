@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Routes configuration should return limited generated routes for testing: expected paths 1`] = `
+[
+  "/openshift-container",
+  "/OpenShift Container Platform",
+  "/openshift",
+  "/openshift-dedicated-metrics",
+  "/openshift-dedicated",
+  "/rhacs",
+  "/rhel",
+  "/insights",
+  "/rhods",
+  "/optin",
+  "/",
+]
+`;
