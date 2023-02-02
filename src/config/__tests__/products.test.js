@@ -34,17 +34,4 @@ describe('Product configurations', () => {
       ])
     ).toMatchSnapshot('sorted');
   });
-
-  /*
-  it('should return default sorted product configs', () => {
-    const defaults = products.sortedConfigs();
-    const results = {};
-
-    Object.entries(defaults).forEach(([key, value]) => {
-      results[key] = (Array.isArray(value) && 'Array') || typeof value;
-    });
-
-    expect(results).toMatchSnapshot('defaults');
-  });
-  */
 });
