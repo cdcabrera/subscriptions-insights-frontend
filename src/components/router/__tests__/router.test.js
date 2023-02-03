@@ -16,7 +16,7 @@ describe('Router Component', () => {
     expect(component).toMatchSnapshot('basic');
   });
 
-  it('should handle unique route settings', () => {
+  it('should handle unique route settings', async () => {
     const props = {
       routes: [
         {
@@ -30,6 +30,20 @@ describe('Router Component', () => {
           path: '/ipsum',
           component: 'ipsumComponent',
           activateOnError: true,
+          exact: false,
+          disabled: false
+        },
+        {
+          path: '/hello',
+          component: 'helloWorld',
+          activateOnError: false,
+          exact: false,
+          disabled: true
+        },
+        {
+          path: '/loremDolorHello',
+          component: 'loremDolorHello',
+          activateOnError: false,
           exact: false,
           disabled: false
         }

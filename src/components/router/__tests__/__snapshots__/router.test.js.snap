@@ -29,6 +29,20 @@ exports[`Router Component should handle unique route settings: settings 1`] = `
         "exact": false,
         "path": "/ipsum",
       },
+      {
+        "activateOnError": false,
+        "component": "helloWorld",
+        "disabled": true,
+        "exact": false,
+        "path": "/hello",
+      },
+      {
+        "activateOnError": false,
+        "component": "loremDolorHello",
+        "disabled": false,
+        "exact": false,
+        "path": "/loremDolorHello",
+      },
     ]
   }
 >
