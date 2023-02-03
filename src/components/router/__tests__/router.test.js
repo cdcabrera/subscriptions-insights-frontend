@@ -16,7 +16,7 @@ describe('Router Component', () => {
     expect(component).toMatchSnapshot('basic');
   });
 
-  it('should handle unique route settings', async () => {
+  it('should handle unique route settings', () => {
     const props = {
       routes: [
         {
