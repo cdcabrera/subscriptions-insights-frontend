@@ -1,4 +1,5 @@
 import cryptoMd5 from 'crypto-js/md5';
+import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../helpers';
 
 describe('Helpers', () => {
@@ -101,6 +102,44 @@ describe('Helpers', () => {
     expect(helpers.numberDisplay(undefined)).toBe(undefined);
     expect(helpers.numberDisplay(NaN)).toBe(NaN);
     expect(helpers.numberDisplay(11)).toMatchSnapshot('number display function result');
+  });
+
+  it('should produce an immutable like object', () => {
+    const mockObj = {};
+
+    mockObj.lorem = 'ipsum';
+    mockObj.dolor = {
+      sit: {
+        lorem: 'ipsum'
+      },
+      hello: ['world']
+    };
+
+    helpers.objFreeze(mockObj);
+
+    expect(() => delete mockObj.dolor.sit).toThrowErrorMatchingSnapshot('delete property');
+    expect(() => {
+      mockObj.lorem = 'hello world';
+    }).toThrowErrorMatchingSnapshot('set property');
+    expect(() => {
+      mockObj.dolor.sit.lorem = 'hello world';
+    }).toThrowErrorMatchingSnapshot('set nested property');
+    expect(() => {
+      mockObj.dolor.hello.push('hello');
+    }).toThrowErrorMatchingSnapshot('update nested property list');
+    expect(() => {
+      mockObj.dolor.hello.pop();
+    }).toThrowErrorMatchingSnapshot('update nested property list values');
+    expect(() => {
+      mockObj.dolor.hello.length = 0;
+    }).toThrowErrorMatchingSnapshot('update nested property list length');
+    expect(() => {
+      ({ ...mockObj }).dolor.hello.push('shallow clone');
+    }).toThrowErrorMatchingSnapshot('shallow clone');
+
+    const clone = _cloneDeep(mockObj);
+    clone.dolor.hello.push('clone');
+    expect(clone).toMatchSnapshot('clone');
   });
 
   it('should expose a window object', () => {
