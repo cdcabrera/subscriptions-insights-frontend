@@ -1,4 +1,4 @@
-import { context, useHistory, useRouteDetail } from '../routerContext';
+import { context, useHistory, useLocation, useRouteDetail } from '../routerContext';
 
 describe('RouterContext', () => {
   it('should return specific properties', () => {
@@ -30,5 +30,14 @@ describe('RouterContext', () => {
     mockUseHistory.push('insights');
 
     expect(mockHistoryPush.mock.calls).toMatchSnapshot('history push');
+  });
+
+  it('should apply a hook for useLocation', async () => {
+    const mockLocation = {
+      search: '?lorem=ipsum'
+    };
+
+    const { result: mockUseLocation } = await shallowHook(() => useLocation({ useLocation: () => mockLocation }));
+    expect(mockUseLocation).toMatchSnapshot('location');
   });
 });

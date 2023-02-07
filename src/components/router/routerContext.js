@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { useHistory as useHistoryRRD, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import React, { useContext, useMemo } from 'react';
+import { useHistory as useHistoryRRD, useLocation as useLocationRRD, useParams, useRouteMatch } from 'react-router-dom';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 
@@ -59,6 +59,32 @@ const useHistory = ({ useHistory: useAliasHistory = useHistoryRRD } = {}) => {
       );
     }
   };
+};
+
+/**
+ * Combine react-router-dom useLocation with actual window location.
+ * Focused on exposing replace and href.
+ *
+ * @param {Function} useLocation
+ * @returns {{search, replace: Function, href, hash}}
+ */
+const useLocation = ({ useLocation: useAliasLocation = useLocationRRD } = {}) => {
+  const location = useAliasLocation();
+  const { location: windowLocation } = window;
+
+  return useMemo(
+    () => ({
+      ...location,
+      ...windowLocation,
+      replace: path => windowLocation.replace(path),
+      hash: location?.hash || '',
+      set href(path) {
+        windowLocation.href = path;
+      },
+      search: location?.search || ''
+    }),
+    [location, windowLocation]
+  );
 };
 
 const context = {
