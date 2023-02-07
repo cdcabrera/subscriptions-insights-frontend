@@ -1,4 +1,3 @@
-import moment from 'moment';
 import {
   graphCardHelpers,
   generateChartIds,
@@ -44,13 +43,19 @@ describe('GraphCardHelpers', () => {
    * Now we emulate an API like response with "generateTicks".
    */
   it('xAxisTickFormat should produce consistent x axis tick values', () => {
-    const generateTicks = ({ startDate, endDate, granularity, momentGranularity }) => {
-      const endDateStartDateDiff = moment(endDate).diff(startDate, momentGranularity);
+    const generateTicks = ({ startDate, endDate, granularity, dateTimeGranularity }) => {
+      const endDateStartDateDiff = dateHelpers.manipulateDateTime(endDate).diff(startDate, dateTimeGranularity);
       const generatedTicks = [];
 
       for (let i = 0; i <= endDateStartDateDiff; i++) {
-        const date = moment.utc(startDate).add(i, momentGranularity).startOf(momentGranularity);
-        const previousDate = moment(date).subtract(1, momentGranularity).startOf(momentGranularity);
+        const date = dateHelpers.manipulateDateTime
+          .utc(startDate)
+          .add(i, dateTimeGranularity)
+          .startOf(dateTimeGranularity);
+        const previousDate = dateHelpers
+          .manipulateDateTime(date)
+          .subtract(1, dateTimeGranularity)
+          .startOf(dateTimeGranularity);
 
         generatedTicks.push(
           xAxisTickFormat({ date: date.toISOString(), granularity, tick: i, previousDate: previousDate.toISOString() })
@@ -63,22 +68,22 @@ describe('GraphCardHelpers', () => {
     const daily = generateTicks({
       ...dateHelpers.defaultDateTime,
       granularity: GRANULARITY_TYPES.DAILY,
-      momentGranularity: 'days'
+      dateTimeGranularity: 'days'
     });
     const weekly = generateTicks({
       ...dateHelpers.weeklyDateTime,
       granularity: GRANULARITY_TYPES.WEEKLY,
-      momentGranularity: 'weeks'
+      dateTimeGranularity: 'weeks'
     });
     const monthly = generateTicks({
       ...dateHelpers.monthlyDateTime,
       granularity: GRANULARITY_TYPES.MONTHLY,
-      momentGranularity: 'months'
+      dateTimeGranularity: 'months'
     });
     const quarterly = generateTicks({
       ...dateHelpers.quarterlyDateTime,
       granularity: GRANULARITY_TYPES.QUARTERLY,
-      momentGranularity: 'quarters'
+      dateTimeGranularity: 'quarters'
     });
 
     expect({ daily, weekly, monthly, quarterly }).toMatchSnapshot('x axis tick values');

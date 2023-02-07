@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { chart_color_green_300 as chartColorGreenDark } from '@patternfly/react-tokens';
 import { ChartTypeVariant } from '../chart/chart';
 import {
@@ -147,25 +146,25 @@ const getChartXAxisLabelIncrement = granularity => {
  * @returns {string}
  */
 const getTooltipDate = ({ date, granularity } = {}) => {
-  const momentDate = moment.utc(date);
+  const updatedDate = dateHelpers.manipulateDateTime.utc(date);
 
   switch (granularity) {
     case GRANULARITY_TYPES.QUARTERLY:
-      return `${momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)} - ${momentDate
+      return `${updatedDate.format(dateHelpers.timestampQuarterFormats.yearShort)} - ${updatedDate
         .add(1, 'quarter')
         .format(dateHelpers.timestampQuarterFormats.yearShort)}`;
 
     case GRANULARITY_TYPES.MONTHLY:
-      return momentDate.format(dateHelpers.timestampMonthFormats.yearLong);
+      return updatedDate.format(dateHelpers.timestampMonthFormats.yearLong);
 
     case GRANULARITY_TYPES.WEEKLY:
-      return `${momentDate.format(dateHelpers.timestampDayFormats.short)} - ${momentDate
+      return `${updatedDate.format(dateHelpers.timestampDayFormats.short)} - ${updatedDate
         .add(1, 'week')
         .format(dateHelpers.timestampDayFormats.yearShort)}`;
 
     case GRANULARITY_TYPES.DAILY:
     default:
-      return momentDate.format(dateHelpers.timestampDayFormats.long);
+      return updatedDate.format(dateHelpers.timestampDayFormats.long);
   }
 };
 
@@ -189,23 +188,25 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {
     return callback({ callback, date, granularity, tick, previousDate });
   }
 
-  const momentDate = moment.utc(date);
+  const updatedDate = dateHelpers.manipulateDateTime.utc(date);
   const isNewYear =
-    tick !== 0 && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(previousDate).year(), 10);
+    tick !== 0 &&
+    Number.parseInt(updatedDate.year(), 10) !==
+      Number.parseInt(dateHelpers.manipulateDateTime.utc(previousDate).year(), 10);
   let formattedDate;
 
   switch (granularity) {
     case GRANULARITY_TYPES.QUARTERLY:
       formattedDate = isNewYear
-        ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
-        : momentDate.format(dateHelpers.timestampQuarterFormats.short);
+        ? updatedDate.format(dateHelpers.timestampQuarterFormats.yearShort)
+        : updatedDate.format(dateHelpers.timestampQuarterFormats.short);
 
       formattedDate = formattedDate.replace(/\s/, '\n');
       break;
     case GRANULARITY_TYPES.MONTHLY:
       formattedDate = isNewYear
-        ? momentDate.format(dateHelpers.timestampMonthFormats.yearShort)
-        : momentDate.format(dateHelpers.timestampMonthFormats.short);
+        ? updatedDate.format(dateHelpers.timestampMonthFormats.yearShort)
+        : updatedDate.format(dateHelpers.timestampMonthFormats.short);
 
       formattedDate = formattedDate.replace(/\s/, '\n');
       break;
@@ -213,8 +214,8 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {
     case GRANULARITY_TYPES.DAILY:
     default:
       formattedDate = isNewYear
-        ? momentDate.format(dateHelpers.timestampDayFormats.yearShort)
-        : momentDate.format(dateHelpers.timestampDayFormats.short);
+        ? updatedDate.format(dateHelpers.timestampDayFormats.yearShort)
+        : updatedDate.format(dateHelpers.timestampDayFormats.short);
 
       formattedDate = formattedDate.replace(/\s(\d{4})$/, '\n$1');
       break;
@@ -224,7 +225,7 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {
 };
 
 /**
- * Format y axis ticks.
+ * Format y axis ticks.//
  *
  * @param {object} params
  * @param {Function} params.callback

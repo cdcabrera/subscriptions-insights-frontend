@@ -53,6 +53,27 @@ jest.mock('react-redux', () => ({
   useSelector: jest.fn()
 }));
 
+
+
+jest.mock('dayjs', () => {
+  const dayjs = jest.requireActual('dayjs');
+  const utc = jest.requireActual('dayjs/plugin/utc');
+  dayjs.extend(utc);
+  return dayjs;
+  /*
+    return {
+      ...dayjs
+      // extend: dayjs.extend,
+      // utc: (...args) => dayjs.utc(...args)
+      // utc: jest.fn().mockReturnValue(dayjs.utc())
+    };
+   */
+});
+
+// jest.mock('dayjs/plugin/utc', () => ({
+//  ...jest.requireActual('dayjs/plugin/utc')
+// }));
+
 /**
  * Add the displayName property to function based components. Makes sure that snapshot tests have named components
  * instead of displaying a generic "<Component.../>".

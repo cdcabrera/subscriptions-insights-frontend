@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, CardFooter, CardTitle, Flex, FlexItem } from '@patternfly/react-core';
-import moment from 'moment';
 import _camelCase from 'lodash/camelCase';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
 import { useMetricsSelector } from './graphCardContext';
@@ -93,7 +92,9 @@ const GraphCardMetricTotals = ({
                   {fulfilled &&
                     dailyDate &&
                     t('curiosity-graph.cardFooterMetric', {
-                      date: moment.utc(dailyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort)
+                      date: dateHelpers.manipulateDateTime
+                        .utc(dailyDate)
+                        .format(dateHelpers.timestampUTCTimeFormats.yearTimeShort)
                     })}
                 </div>
               </CardFooter>
@@ -134,7 +135,9 @@ const GraphCardMetricTotals = ({
                   {fulfilled &&
                     monthlyDate &&
                     t('curiosity-graph.cardFooterMetric', {
-                      date: moment.utc(monthlyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort)
+                      date: dateHelpers.manipulateDateTime
+                        .utc(monthlyDate)
+                        .format(dateHelpers.timestampUTCTimeFormats.yearTimeShort)
                     })}
                 </div>
               </CardFooter>

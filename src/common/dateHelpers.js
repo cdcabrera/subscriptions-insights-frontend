@@ -1,7 +1,13 @@
-import moment from 'moment/moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { helpers } from './helpers';
 import { RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES } from '../services/rhsm/rhsmConstants';
 import { translate } from '../components/i18n/i18n';
+
+/**
+ * @type {dayjs}
+ */
+const manipulateDateTime = dayjs.extend(utc);
 
 /**
  * Return a date.
@@ -9,11 +15,11 @@ import { translate } from '../components/i18n/i18n';
  * @returns {string|Date}
  */
 const getCurrentDate = () =>
-  (helpers.TEST_MODE && moment.utc('20190720').toDate()) ||
+  (helpers.TEST_MODE && manipulateDateTime.utc('20190720').toDate()) ||
   (helpers.DEV_MODE &&
     process.env.REACT_APP_DEBUG_DEFAULT_DATETIME &&
-    moment.utc(process.env.REACT_APP_DEBUG_DEFAULT_DATETIME).toDate()) ||
-  moment.utc().toDate();
+    manipulateDateTime.utc(process.env.REACT_APP_DEBUG_DEFAULT_DATETIME).toDate()) ||
+  manipulateDateTime.utc().toDate();
 
 /**
  * Set a date range based on a granularity type.
@@ -26,8 +32,8 @@ const getCurrentDate = () =>
  * @returns {{endDate: Date, startDate: Date}}
  */
 const setRangedDateTime = ({ date, subtract, measurement, endOfMeasurement = 'days' }) => ({
-  startDate: moment.utc(date).startOf(measurement).subtract(subtract, measurement).toDate(),
-  endDate: moment.utc(date).startOf(measurement).endOf(endOfMeasurement).toDate()
+  startDate: manipulateDateTime.utc(date).startOf(measurement).subtract(subtract, measurement).toDate(),
+  endDate: manipulateDateTime.utc(date).startOf(measurement).endOf(endOfMeasurement).toDate()
 });
 
 const currentDateTime = setRangedDateTime({ date: getCurrentDate(), subtract: 1, measurement: 'days' });
@@ -71,13 +77,13 @@ const getRangedDateTime = granularity => {
  * @returns {{keyDateTimeRanges: {}, listDateTimeRanges: *[]}|*}
  */
 const getRangedMonthDateTime = month => {
-  const currentYear = Number.parseInt(moment.utc(getCurrentDate()).year(), 10);
+  const currentYear = Number.parseInt(manipulateDateTime.utc(getCurrentDate()).year(), 10);
   const { startDate, endDate } = { ...rangedYearDateTime };
   const keyDateTimeRanges = {};
   let listDateTimeRanges = [];
 
-  const startDateUpdated = moment.utc(startDate);
-  const endDateUpdated = moment.utc(endDate);
+  const startDateUpdated = manipulateDateTime.utc(startDate);
+  const endDateUpdated = manipulateDateTime.utc(endDate);
 
   while (endDateUpdated > startDateUpdated || startDateUpdated.format('M') === endDateUpdated.format('M')) {
     const dateTime = {
@@ -93,7 +99,7 @@ const getRangedMonthDateTime = month => {
 
     dateTime.title = (isNextYear && titleYear) || title;
     dateTime._title = title.toLowerCase();
-    dateTime.value.endDate = moment.utc(startDateUpdated).endOf('month').toDate();
+    dateTime.value.endDate = manipulateDateTime.utc(startDateUpdated).endOf('month').toDate();
 
     startDateUpdated.add(1, 'month');
 
@@ -178,6 +184,7 @@ const timestampUTCTimeFormats = {
 };
 
 const dateHelpers = {
+  manipulateDateTime,
   getCurrentDate,
   getRangedMonthDateTime,
   getRangedDateTime,
@@ -197,6 +204,7 @@ const dateHelpers = {
 
 export {
   dateHelpers as default,
+  manipulateDateTime,
   getCurrentDate,
   getRangedMonthDateTime,
   getRangedDateTime,

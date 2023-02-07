@@ -11,7 +11,6 @@ import {
 } from '@patternfly/react-tokens';
 import { Button, Label as PfLabel } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import moment from 'moment';
 import {
   RHSM_API_PATH_PRODUCT_ARCHITECTURE_RHEL_TYPES,
   RHSM_API_PATH_METRIC_TYPES,
@@ -284,7 +283,7 @@ const config = {
     {
       id: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
       cell: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE]: nextEventDate } = {}) =>
-        (nextEventDate?.value && moment.utc(nextEventDate?.value).format('YYYY-MM-DD')) || '',
+        (nextEventDate?.value && dateHelpers.manipulateDateTime.utc(nextEventDate?.value).format('YYYY-MM-DD')) || '',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15

@@ -9,7 +9,6 @@ import {
 } from '@patternfly/react-tokens';
 import { Button } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import moment from 'moment';
 import {
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES,
@@ -251,7 +250,7 @@ const config = {
       cell: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE]: nextEventDate } = {}) =>
         (nextEventDate?.value &&
           helpers.isDate(nextEventDate?.value) &&
-          moment.utc(nextEventDate?.value).format('YYYY-MM-DD')) ||
+          dateHelpers.manipulateDateTime.utc(nextEventDate?.value).format('YYYY-MM-DD')) ||
         '',
       isSortable: true,
       isWrappable: true,
