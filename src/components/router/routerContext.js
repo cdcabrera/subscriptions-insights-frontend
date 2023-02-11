@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-// import _memoize from 'lodash/memoize';
-// import { useShallowCompareEffect } from 'react-use';
 import {
   useLocation as useLocationRRD,
   useNavigate as useRRDNavigate,
-  // useParams,
-  // useParams as useRRDParams,
   useSearchParams as useRRDSearchParams
 } from 'react-router-dom';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
@@ -13,111 +9,6 @@ import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 import { storeHooks, reduxTypes } from '../../redux';
 import { translate } from '../i18n/i18n';
-
-/**
- * ToDo: Review react-router-dom useParams once v6 updates are in env
- * During implementation testing react-router-dom "useParams" was helping spawn multiple
- * component refreshes so we rolled our own.
- *
- * We were unable to tell if this was a combination of
- * using the proxy combined with v5 of router. The most noticeable double (to sometimes triple)
- * refresh is jumping between OpenShift Subs and RHEL Subs, unclear if there's some
- * special left navigation at play here, or simply the lazy load of the component associated with
- * the path.
- *
- * On a personal note...
- * react-router has always been between the category of "close enough" and "[roll your own router or ... not]"...
- * this new version doesn't do itself any favors, it tries to do more and ends up just
- * offsetting some of the odd original loading issues we had. The current goal is to just
- * get something working close enough.
- */
-/**
- * We ignore react router doms useParams.
- *
- * @returns {{productPath: string}}
- */
-/*
-const useParams = () => {
-  const productPath = routerHelpers.dynamicProductParameter();
-  console.log('>>>> run set params', productPath);
-  return { productPath };
-};
-*/
-/* using the outside cache busts the reload...
-const testParamsCache = {};
-const useParams = () => {
-  // const productPath = routerHelpers.dynamicProductParameter();
-  // console.log('>>>> run set params', productPath);
-  // return { productPath };
-  const [params, setParams] = useState({});
-  const productPath = routerHelpers.dynamicProductParameter();
-
-  useEffect(() => {
-    if (testParamsCache.productPath !== productPath) {
-      console.log('>>>> run set params', testParamsCache.productPath, productPath);
-      setParams({ productPath });
-      testParamsCache.productPath = productPath;
-    }
-  }, [productPath]);
-
-  return params;
-};
-*/
-const useParams = () => {
-  // const productPath = routerHelpers.dynamicProductParameter();
-  // console.log('>>>> run set params', productPath);
-  // return { productPath };
-  const [params, setParams] = useState({});
-  const productPath = routerHelpers.dynamicProductParameter();
-
-  useEffect(() => {
-    if (productPath && params.productPath !== productPath) {
-      console.log('>>>> run set params', params.productPath, productPath);
-      setParams({ productPath });
-    }
-  }, [params.productPath, productPath]);
-
-  return params;
-};
-
-/*
-const useParams = ({ useParams: useAliasParams = useRRDParams } = {}) => {
-  const { productPath } = useAliasParams();
-  // return { productPath };
-  /*
-  const { productPath } = useAliasParams();
-  const [updatedProductPath, setUpdatedProductPath] = useState(productPath);
-  console.log('>>>> run set params', productPath);
-
-  useEffect(() => {
-    if (productPath !== updatedProductPath) {
-      console.log('>>>> UPDATE SET PARAMS', productPath);
-      setUpdatedProductPath(productPath);
-    }
-  }, [productPath, updatedProductPath]);
-
-  return { productPath: updatedProductPath };
-  * /
-
-  console.log('>>>> run params', productPath);
-
-  return useMemo(() => {
-    console.log('>>>> SET PARAMS', productPath);
-    return { productPath };
-  }, [productPath]);
-
-  /*
-  useShallowCompareEffect(() => {
-    // useShallowCompare
-    // useDeepCompare
-    // if (!_isEqual(updatedParams, params)) {
-    console.log('>>>> UPDATE SET PARAMS', params);
-    setUpdatedParams(params);
-    // }
-  }, [params]);
-  * /
-};
- */
 
 /**
  * Combine react-router-dom useLocation with actual window location.
@@ -134,7 +25,6 @@ const useLocation = ({ useLocation: useAliasLocation = useLocationRRD } = {}) =>
   useEffect(() => {
     const _id = helpers.generateHash(windowLocation);
     if (updatedLocation?._id !== _id) {
-      console.log('>>>> set use location', _id);
       setUpdatedLocation({
         ...location,
         ...windowLocation,
@@ -150,36 +40,6 @@ const useLocation = ({ useLocation: useAliasLocation = useLocationRRD } = {}) =>
   }, [location, updatedLocation?._id, windowLocation]);
 
   return updatedLocation;
-
-  /*
-  const { location: windowLocation } = window;
-  console.log('>>>> set use location', useAliasLocation.toString());
-  return useMemo(
-    () => ({
-      ...windowLocation,
-      replace: path => windowLocation.replace(path),
-      set href(path) {
-        windowLocation.href = path;
-      }
-    }),
-    [windowLocation]
-  );
-  */
-  /*
-  return useMemo(
-    () => ({
-      ...location,
-      ...windowLocation,
-      replace: path => windowLocation.replace(path),
-      hash: location?.hash || '',
-      set href(path) {
-        windowLocation.href = path;
-      },
-      search: location?.search || ''
-    }),
-    [location, windowLocation]
-  );
-  */
 };
 
 /**
@@ -201,7 +61,6 @@ const useRedirect = ({ useLocation: useAliasLocation = useLocation } = {}) => {
    */
   return useCallback(
     (route, { isReplace = true } = {}) => {
-      console.log('>>> use redirect fired', route);
       const baseName = routerHelpers.dynamicBaseName();
       let isUrl;
 
@@ -224,14 +83,21 @@ const useRedirect = ({ useLocation: useAliasLocation = useLocation } = {}) => {
   );
 };
 
+/**
+ * Store product path, parameter, in state.
+ *
+ * @param {object} options
+ * @param {Function} options.useSelector
+ * @param {Function} options.useDispatch
+ * @returns {*|string}
+ */
 const useSetRouteDetail = ({
-  useParams: useAliasParams = useParams,
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
-  const { productPath } = useAliasParams();
   const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  const productPath = window.location.pathname;
 
   useEffect(() => {
     if (productPath && updatedPath !== productPath) {
@@ -246,7 +112,7 @@ const useSetRouteDetail = ({
 };
 
 /**
- * Get a route detail from router context.
+ * Get a route detail configuration from state.
  *
  * @param {object} options
  * @param {Function} options.t
@@ -259,7 +125,7 @@ const useRouteDetail = ({
   useChrome: useAliasChrome = useChrome,
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors
 } = {}) => {
-  const { updateDocumentTitle } = useAliasChrome();
+  const { updateDocumentTitle = helpers.noop } = useAliasChrome();
   const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
   const [detail, setDetail] = useState({});
   console.log('>>> use route detail', productPath);
@@ -267,202 +133,33 @@ const useRouteDetail = ({
   useEffect(() => {
     console.log('>>> ATTEMPT TO SET ROUTE DETAIL', detail?._passed !== productPath, detail?._passed, productPath);
     if (productPath && detail?._passed !== productPath) {
-      const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
+      const { allConfigs, configs, firstMatch, isClosest } = routerHelpers.getRouteConfigByPath({
+        pathName: productPath
+      });
       console.log('>>> SET ROUTE DETAIL', firstMatch?.productGroup, detail?._passed, productPath);
-      const updateDetail = {
-        _passed: productPath,
-        allProductConfigs: allConfigs,
-        firstMatch,
-        errorRoute: routerHelpers.errorRoute,
-        productGroup: firstMatch?.productGroup,
-        productConfig: (configs?.length && configs) || [],
-        productPath
-      };
+
+      // Set document title
       updateDocumentTitle(
         `${helpers.UI_DISPLAY_NAME}: ${t(`curiosity-view.title`, {
           appName: helpers.UI_DISPLAY_NAME,
           context: firstMatch?.productGroup
         })}`
       );
-      setDetail(updateDetail);
+      // Set route detail
+      setDetail({
+        _passed: productPath,
+        allConfigs,
+        firstMatch,
+        errorRoute: routerHelpers.errorRoute,
+        isClosest,
+        productGroup: firstMatch?.productGroup,
+        productConfig: (configs?.length && configs) || [],
+        productPath
+      });
     }
   }, [detail?._passed, productPath, t, updateDocumentTitle]);
 
   return detail;
-
-  /* 3x same
-  const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
-
-  return useMemo(() => {
-    const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-    console.log('>>> SET ROUTE DETAIL', firstMatch?.productGroup, firstMatch?.productId);
-    return {
-      allProductConfigs: allConfigs,
-      firstMatch,
-      errorRoute: routerHelpers.errorRoute,
-      productGroup: firstMatch?.productGroup,
-      productConfig: (configs?.length && configs) || [],
-      productPath
-    };
-  }, [productPath]);
-   */
-
-  /* 3x, possibly more due to set state
-  const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const [detail, setDetail] = useState({});
-  console.log('>>> use route detail', productPath);
-
-  useEffect(() => {
-    if (productPath && detail?._passed !== productPath) {
-      const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-      console.log('>>> SET ROUTE DETAIL', firstMatch?.productGroup, detail?._passed, productPath);
-      const updateDetail = {
-        _passed: productPath,
-        allProductConfigs: allConfigs,
-        firstMatch,
-        errorRoute: routerHelpers.errorRoute,
-        productGroup: firstMatch?.productGroup,
-        productConfig: (configs?.length && configs) || [],
-        productPath
-      };
-      setDetail(updateDetail);
-    }
-  }, [detail?._passed, productPath]);
-
-  return detail;
-  */
-  /* same 3x redraw
-  const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-  console.log('>>> SET ROUTE DETAIL', firstMatch?.productGroup, firstMatch?.productId);
-  const [detail] = useState({
-    allProductConfigs: allConfigs,
-    firstMatch,
-    errorRoute: routerHelpers.errorRoute,
-    productGroup: firstMatch?.productGroup,
-    productConfig: (configs?.length && configs) || [],
-    productPath
-  });
-
-  return detail;
-  */
-  /* same 3x redraw
-  const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-  console.log('>>> SET ROUTE DETAIL', firstMatch?.productGroup, firstMatch?.productId);
-  const detail = {
-    allProductConfigs: allConfigs,
-    firstMatch,
-    errorRoute: routerHelpers.errorRoute,
-    productGroup: firstMatch?.productGroup,
-    productConfig: (configs?.length && configs) || [],
-    productPath
-  };
-
-  return { ...detail };
-  */
-  /*
-  const [detail, setDetail] = useState({});
-  console.log('>>> use route detail', productPath);
-
-  useEffect(() => {
-    if (productPath && detail?.productPath !== productPath) {
-      const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-      console.log('>>> SET ROUTE DETAIL', firstMatch?.productGroup, firstMatch?.productId);
-      const updateDetail = {
-        allProductConfigs: allConfigs,
-        firstMatch,
-        errorRoute: routerHelpers.errorRoute,
-        productGroup: firstMatch?.productGroup,
-        productConfig: (configs?.length && configs) || [],
-        productPath
-      };
-      setDetail(updateDetail);
-    }
-  }, [detail?.productPath, productPath]);
-  */
-};
-
-const useRouteDetailWorkingish = ({
-  useParams: useAliasParams = useParams,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
-} = {}) => {
-  const dispatch = useAliasDispatch();
-  const { productPath } = useAliasParams();
-  const [detail = {}] = useAliasSelector([({ view }) => view?.product?.config]);
-  // const [detail, setDetail] = useState();
-  console.log('>>> use route detail', productPath);
-
-  useEffect(() => {
-    if (productPath && detail?.productPath !== productPath) {
-      const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-      console.log(
-        '>>> SET ROUTE DETAIL',
-        `det.prodPath=${detail?.productPath}`,
-        `prodPath=${productPath}`,
-        configs.length,
-        firstMatch?.productGroup
-      );
-      const updateDetail = {
-        allProductConfigs: allConfigs,
-        firstMatch,
-        errorRoute: routerHelpers.errorRoute,
-        productGroup: firstMatch?.productGroup,
-        productConfig: (configs?.length && configs) || [],
-        productPath
-      };
-      // setDetail(updateDetail);
-      dispatch({
-        type: reduxTypes.app.SET_PRODUCT,
-        config: updateDetail
-      });
-    }
-  }, [detail?.productPath, dispatch, productPath]);
-
-  return detail;
-
-  /*
-  const doIt = _memoize(pp => {
-    const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: pp });
-    console.log('>>> SET ROUTE DETAIL', pp, configs.length, firstMatch?.productGroup);
-    return {
-      allProductConfigs: allConfigs,
-      firstMatch,
-      errorRoute: routerHelpers.errorRoute,
-      productGroup: firstMatch?.productGroup,
-      productConfig: (configs?.length && configs) || []
-    };
-  });
-
-  return doIt(productPath);
-  */
-  /*
-  return useMemo(() => {
-    const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-    console.log('>>> SET ROUTE DETAIL', productPath, configs.length, firstMatch?.productGroup);
-    return {
-      allProductConfigs: allConfigs,
-      firstMatch,
-      errorRoute: routerHelpers.errorRoute,
-      productGroup: firstMatch?.productGroup,
-      productConfig: (configs?.length && configs) || []
-    };
-  }, [productPath]);
-  */
-  /*
-  const { productPath } = useAliasParams();
-  const { allConfigs, configs, firstMatch } = routerHelpers.getRouteConfigByPath({ pathName: productPath });
-  console.log('>>> USE ROUTE DETAIL', productPath, configs.length, firstMatch?.productGroup);
-
-  return {
-    allProductConfigs: allConfigs,
-    firstMatch,
-    errorRoute: routerHelpers.errorRoute,
-    productGroup: firstMatch?.productGroup,
-    productConfig: (configs?.length && configs) || []
-  };
-  */
 };
 
 /**
@@ -541,10 +238,8 @@ const useSearchParams = ({
 const context = {
   useLocation,
   useNavigate,
-  useParams,
   useRedirect,
   useSetRouteDetail,
-  useRouteDetailWorkingish,
   useRouteDetail,
   useSearchParams
 };
@@ -554,7 +249,6 @@ export {
   context,
   useLocation,
   useNavigate,
-  useParams,
   useRedirect,
   useSetRouteDetail,
   useRouteDetail,

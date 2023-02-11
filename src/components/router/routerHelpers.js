@@ -1,5 +1,6 @@
 import React from 'react';
 import _memoize from 'lodash/memoize';
+import { closest } from 'fastest-levenshtein';
 import { helpers } from '../../common/helpers';
 import { routesConfig, productConfig } from '../../config';
 
@@ -34,11 +35,6 @@ const dynamicBaseName = ({ pathName = window.location.pathname, appName: applica
 const dynamicBasePath = ({ pathName = window.location.pathname, appName: applicationName = helpers.UI_NAME } = {}) =>
   pathName.split(applicationName)[0];
 
-const dynamicProductParameter = ({
-  pathName = window.location.pathname,
-  appName: applicationName = helpers.UI_NAME
-} = {}) => pathName.split(applicationName)[1];
-
 /**
  * The first error route.
  *
@@ -58,10 +54,10 @@ const redirectRoute = routesConfig.find(({ disabled, redirect }) => !disabled &&
  *
  * @returns {Array}
  */
-const routes = routesConfig;
+const routes = routesConfig.filter(item => !item.disabled);
 
 /**
- * Match route config entries by path.
+ * Match pre-sorted route config entries with last path parameter, or fallback to full path.
  *
  * @param {object} params
  * @param {string} params.pathName
@@ -69,65 +65,21 @@ const routes = routesConfig;
  * @param {boolean} params.isFailureAcceptable
  * @returns {{configs: Array, configFirstMatch: object, configsById: object}}
  */
-const getRouteConfigByPath = _memoize(
-  ({ pathName, configs = productConfig.configs, isFailureAcceptable = false } = {}) => {
-    const updatedPathName =
-      (/^http/i.test(pathName) && new URL(pathName).pathname) ||
-      pathName ||
-      (!isFailureAcceptable && window.location.pathname) ||
-      '';
+const getRouteConfigByPath = _memoize(({ pathName, configs = productConfig.sortedConfigs } = {}) => {
+  const { byGroup, byAliasGroupProductPathIds, byProductIdConfigs } = configs();
+  const focusedStr = byAliasGroupProductPathIds.find(
+    value => value.toLowerCase() === pathName.split('/').reverse()[0].toLowerCase()
+  );
+  const closestStr = closest(pathName, byAliasGroupProductPathIds);
+  const configsByGroup = byGroup[focusedStr || closestStr];
 
-    const basePathDirs = updatedPathName
-      ?.split('#')?.[0]
-      ?.split('?')?.[0]
-      ?.split('/')
-      .filter(str => str.length > 0)
-      ?.reverse();
-    const filteredConfigs = [];
-    const filteredConfigsById = {};
-    const filteredConfigsByGroup = {};
-    const allConfigs = configs;
-
-    const findConfig = dir => {
-      configs.forEach(configItem => {
-        const { productId, productGroup, aliases } = configItem;
-
-        if (
-          !(productId in filteredConfigsById) &&
-          dir &&
-          (new RegExp(dir, 'i').test(aliases?.toString()) ||
-            new RegExp(dir, 'i').test(productGroup?.toString()) ||
-            new RegExp(dir, 'i').test(productId?.toString()))
-        ) {
-          filteredConfigsByGroup[productGroup] ??= [];
-          filteredConfigsByGroup[productGroup].push(configItem);
-
-          filteredConfigsById[productId] = configItem;
-          filteredConfigs.push(configItem);
-        }
-      });
-    };
-
-    if (basePathDirs?.length) {
-      basePathDirs.forEach(dir => {
-        if (dir) {
-          const decodedDir = window.decodeURI(dir);
-          findConfig(decodedDir);
-        }
-      });
-    } else {
-      findConfig();
-    }
-
-    return {
-      allConfigs,
-      configs: filteredConfigs,
-      configsById: filteredConfigsById,
-      configsByGroup: filteredConfigsByGroup,
-      firstMatch: filteredConfigs?.[0]
-    };
-  }
-);
+  return {
+    isClosest: !focusedStr,
+    allConfigs: Object.values(byProductIdConfigs),
+    configs: configsByGroup,
+    firstMatch: configsByGroup?.[0]
+  };
+});
 
 /**
  * Import a route component.
@@ -191,7 +143,6 @@ const routerHelpers = {
   appName,
   dynamicBaseName,
   dynamicBasePath,
-  dynamicProductParameter,
   redirectRoute,
   errorRoute,
   getRouteConfigByPath,
@@ -207,7 +158,6 @@ export {
   appName,
   dynamicBaseName,
   dynamicBasePath,
-  dynamicProductParameter,
   redirectRoute,
   errorRoute,
   getRouteConfigByPath,

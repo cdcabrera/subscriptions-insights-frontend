@@ -5,9 +5,8 @@ import { useSetRouteDetail } from './routerContext';
 import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
-// ToDo: consider moving the filter for disabled routes towards routerHelpers
 /**
- * Create and load routes.
+ * Create and load routes. Start cycle for loading product configuration via hook by setting route details.
  *
  * @param {object} props
  * @param {object} props.redirectRoute
@@ -15,18 +14,12 @@ import { Loader } from '../loader/loader';
  * @returns {React.ReactNode}
  */
 const Router = ({ redirectRoute, routes } = {}) => {
-  // this bypasses react router all together, its like we don't even need a router
   useSetRouteDetail();
-  // const params = useParams();
-  // const location = useLocation();
-  // console.log('>>>>> ROUTER PARAMS', params);
 
-  const updatedRoutes = routes
-    .filter(item => !item.disabled)
-    .map(item => {
-      const View = routerHelpers.importView(item.component);
-      return <Route key={item.path} path={item.path} element={<View />} />;
-    });
+  const updatedRoutes = routes.map(item => {
+    const View = routerHelpers.importView(item.component);
+    return <Route key={item.path} path={item.path} element={<View />} />;
+  });
 
   return (
     <React.Suspense fallback={<Loader variant="title" />}>

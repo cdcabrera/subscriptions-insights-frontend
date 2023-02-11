@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardFooter, CardTitle, Gallery, Title, PageSection } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons';
-import { useMount } from 'react-use';
 import { PageLayout, PageHeader } from '../pageLayout/pageLayout';
 import { routerContext } from '../router';
 import { helpers } from '../../common';
@@ -26,16 +25,13 @@ const ProductViewMissing = ({
   useRouteDetail: useAliasRouteDetail
 }) => {
   const navigate = useAliasNavigate();
-  const { productConfig, allProductConfigs } = useAliasRouteDetail();
-  const availableProducts = (productConfig?.length && productConfig) || allProductConfigs;
+  const { firstMatch, allConfigs } = useAliasRouteDetail();
+  const availableProducts = (firstMatch && [firstMatch]) || allConfigs;
 
-  useMount(() => {
-    console.log('>>>> missing view mounted', availableProducts);
-    if (availableProducts?.length <= availableProductsRedirect) {
-      console.log('>>>> MISSING VIEW NAVIGATE', availableProducts[0].productPath);
-      navigate(availableProducts[0].productPath);
-    }
-  });
+  if (availableProducts?.length <= availableProductsRedirect) {
+    navigate(availableProducts[0].productPath);
+    return null;
+  }
 
   /**
    * On click, update history.
