@@ -40,7 +40,7 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.RHOSAK;
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHOSAK;
 
 const config = {
-  aliases: ['streams', 'apache', 'kafka'],
+  aliases: ['streams', 'apache', 'kafka', 'sak', 'ak'],
   productGroup,
   productId,
   productLabel,

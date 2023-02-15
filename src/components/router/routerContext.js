@@ -97,7 +97,7 @@ const useSetRouteDetail = ({
 } = {}) => {
   const dispatch = useAliasDispatch();
   const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const productPath = window.location.pathname;
+  const productPath = window.location.pathname; // useParam works in a similar manner
 
   useEffect(() => {
     if (productPath && updatedPath !== productPath) {
