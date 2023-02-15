@@ -36,14 +36,14 @@ const dynamicBasePath = ({ pathName = window.location.pathname, appName: applica
   pathName.split(applicationName)[0];
 
 /**
- * The first error route.
+ * The first error route found.
  *
  * @type {object}
  */
 const errorRoute = routesConfig.find(route => route.activateOnError === true) || {};
 
 /**
- * The first redirect route.
+ * The first redirect route found.
  *
  * @type {object}
  */
@@ -57,7 +57,9 @@ const redirectRoute = routesConfig.find(({ disabled, redirect }) => !disabled &&
 const routes = routesConfig.filter(item => !item.disabled);
 
 /**
- * Match pre-sorted route config entries with last path parameter, or fallback to full path.
+ * Match pre-sorted route config entries with a path, or match with a fallback.
+ * This is the primary engine for curiosity routing. It can account for a full window.location.pathname
+ * given the appropriate alias, group, product, and/or path identifiers provided with product configuration.
  *
  * @param {object} params
  * @param {string} params.pathName
@@ -67,11 +69,18 @@ const routes = routesConfig.filter(item => !item.disabled);
  */
 const getRouteConfigByPath = _memoize(({ pathName, configs = productConfig.sortedConfigs } = {}) => {
   const { byGroup, byAliasGroupProductPathIds, byProductIdConfigs } = configs();
-  const focusedStr = byAliasGroupProductPathIds.find(
-    value => value.toLowerCase() === pathName.split('/').reverse()[0].toLowerCase()
-  );
-  const closestStr = closest(pathName, byAliasGroupProductPathIds);
-  const configsByGroup = byGroup[focusedStr || closestStr];
+  const updatedPathName = pathName
+    .toLowerCase()
+    .replace(/^\/*|\/*$/g, '')
+    .replace(new RegExp(helpers.UI_DISPLAY_NAME, 'i'), '')
+    .replace(/\/\//g, '/');
+
+  // Do a known comparison against alias, group, product, path identifiers
+  const focusedStr = byAliasGroupProductPathIds.find(value => value.toLowerCase() === updatedPathName.split('/').pop());
+
+  // Fallback attempt, match pathName with the closest string
+  const closestStr = closest(updatedPathName, byAliasGroupProductPathIds);
+  const configsByGroup = byGroup?.[focusedStr || closestStr];
 
   return {
     isClosest: !focusedStr,
@@ -96,7 +105,7 @@ const importView = component => {
 };
 
 /**
- * Parse search parameters from a string, using a set
+ * Parse search parameters from a string, using a set for "uniqueness"
  *
  * @param {string} currentPathAndOrSearch
  * @returns {{}}
@@ -118,7 +127,7 @@ const parseSearchParams = _memoize((currentPathAndOrSearch = window.location.sea
 });
 
 /**
- * Basic path join, minor emulation for path.join.
+ * Basic path join, minor emulation for path.join. Related to the webpack 5 migration.
  *
  * @param {object} paths
  * @returns {string}
