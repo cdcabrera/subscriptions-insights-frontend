@@ -54,7 +54,7 @@ const productLabel = RHSM_API_PATH_PRODUCT_TYPES.RHEL;
  *     initialSubscriptionsInventoryFilters: {}[], initialToolbarFilters: {}[], }}
  */
 const config = {
-  aliases: ['insights', 'enterprise', 'linux'],
+  aliases: ['insights', 'enterprise', 'linux', 'el'],
   productGroup,
   productId,
   productLabel,
@@ -85,6 +85,10 @@ const config = {
     [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
   },
   initialGraphFilters: [
+    {
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      chartType: ChartTypeVariant.threshold
+    },
     {
       metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       fill: chartColorBlueLight.value,
@@ -120,10 +124,6 @@ const config = {
       query: {
         [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.HYPERVISOR
       }
-    },
-    {
-      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
-      chartType: ChartTypeVariant.threshold
     }
   ],
   initialGraphSettings: {
