@@ -24,6 +24,11 @@ import { Loader } from '../loader/loader';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof GraphCard
+ * @module GraphCardChart
+ */
+
+/**
  * A chart/graph card.
  *
  * @param {object} props

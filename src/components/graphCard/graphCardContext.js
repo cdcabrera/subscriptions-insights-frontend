@@ -8,6 +8,11 @@ import { helpers } from '../../common/helpers';
 import { graphCardHelpers } from './graphCardHelpers';
 
 /**
+ * @memberof GraphCard
+ * @module GraphCardContext
+ */
+
+/**
  * Chart context.
  *
  * @type {React.Context<{}>}

@@ -10,6 +10,12 @@ import { Table } from '../table/table';
 import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
 
 /**
+ * @memberof Components
+ * @module InventoryGuests
+ * @property {module} InventoryGuestsContext
+ */
+
+/**
  * A system inventory guests component.
  *
  * @param {object} props

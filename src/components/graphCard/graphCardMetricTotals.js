@@ -13,6 +13,11 @@ import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof GraphCard
+ * @module GraphCardMetricTotals
+ */
+
+/**
  * Display totals for a single metric.
  *
  * @param {object} props

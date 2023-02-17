@@ -25,6 +25,11 @@ import graphPng2x from '../../images/graph2x.png';
 import graphPng4x from '../../images/graph4x.png';
 
 /**
+ * @memberof Components
+ * @module OptinView
+ */
+
+/**
  * An account opt-in view.
  *
  * @param {object} props

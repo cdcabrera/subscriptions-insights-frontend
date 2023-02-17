@@ -2,6 +2,11 @@ import React from 'react';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Chart
+ * @module ChartTooltip
+ */
+
+/**
  * Note: Victory Charts components require a form of extended "something" applied by the consuming component.
  * This leads to odd implementations, like returning a function component.
  */

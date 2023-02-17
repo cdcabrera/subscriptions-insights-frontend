@@ -3,6 +3,11 @@ import cryptoSha1 from 'crypto-js/sha1';
 import _isPlainObject from 'lodash/isPlainObject';
 
 /**
+ * @memberof Helpers
+ * @module General
+ */
+
+/**
  * Fill for AggregatedError
  *
  * @param {Array|*} errors An array of errors

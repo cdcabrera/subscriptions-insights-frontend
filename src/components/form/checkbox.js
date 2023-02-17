@@ -5,6 +5,11 @@ import { createMockEvent } from './formHelpers';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Form
+ * @module Checkbox
+ */
+
+/**
  * Render a checkbox form element. Provides restructured event data.
  *
  * @fires onCheckboxChange

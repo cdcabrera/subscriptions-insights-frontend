@@ -9,6 +9,12 @@ import { translate } from '../i18n/i18n';
 import { InventoryTab } from './inventoryTab';
 
 /**
+ * @memberof Components
+ * @module InventoryTabs
+ * @property {module} InventoryTab
+ */
+
+/**
  * Update tab state.
  *
  * @param {object} options

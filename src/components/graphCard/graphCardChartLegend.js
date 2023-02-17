@@ -10,6 +10,11 @@ import { translate } from '../i18n/i18n';
 import { ChartIcon } from '../chart/chartIcon';
 
 /**
+ * @memberof GraphCard
+ * @module GraphCardChartLegend
+ */
+
+/**
  * FixMe: PF button disabled borks events on immediate parent nodes, such as tooltip wrappers
  * PF is using "pointer-events: none" styling when disabled is activated. This
  * currently affects events on immediate parent nodes.

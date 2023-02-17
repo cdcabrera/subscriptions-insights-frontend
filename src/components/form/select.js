@@ -22,6 +22,11 @@ import { createMockEvent } from './formHelpers';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Form
+ * @module Select
+ */
+
+/**
  * Dropdown split button variants
  *
  * @type {{action: string, checkbox: string}}

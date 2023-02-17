@@ -8,6 +8,18 @@ import { chartHelpers, ChartTypeVariant } from './chartHelpers';
 import { useResizeObserver } from '../../hooks/useWindow';
 
 /**
+ * @memberof Components
+ * @module Chart
+ * @property {module} ChartAxisLabel
+ * @property {module} ChartContext
+ * @property {module} ChartElements
+ * @property {module} ChartHelpers
+ * @property {module} ChartIcon
+ * @property {module} ChartLegend
+ * @property {module} ChartTooltip
+ */
+
+/**
  * Return a chart and elements with a context provider.
  *
  * @param {object} props

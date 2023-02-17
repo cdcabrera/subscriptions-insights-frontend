@@ -9,6 +9,11 @@ import { chartAxisLabel } from './chartAxisLabel';
 import { ChartTypeVariant } from './chartHelpers';
 
 /**
+ * @memberof Chart
+ * @module ChartElements
+ */
+
+/**
  * Generate a compatible Victory chart element/facet component.
  *
  * @param {object} props

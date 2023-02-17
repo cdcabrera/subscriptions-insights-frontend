@@ -11,6 +11,11 @@ import {
 import { helpers } from '../../common';
 
 /**
+ * @memberof InventoryCard
+ * @module InventoryCardHelpers
+ */
+
+/**
  * ToDo: review setting up a transformed cell cache for already transformed cells.
  * - review using a simple state and key memoized component
  * - review using lru cache in a inventoryCardContext custom hook

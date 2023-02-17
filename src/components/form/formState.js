@@ -5,6 +5,11 @@ import _isEqual from 'lodash/isEqual';
 import helpers from '../../common/helpers';
 
 /**
+ * @memberof Form
+ * @module FormState
+ */
+
+/**
  * Initial component state values.
  *
  * @type {{submitCount: number, isValid: null, isUpdating: boolean, isSubmitting: boolean, isValidating: boolean}}

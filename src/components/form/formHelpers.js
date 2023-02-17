@@ -1,6 +1,11 @@
 import { helpers } from '../../common/helpers';
 
 /**
+ * @memberof Form
+ * @module FormHelpers
+ */
+
+/**
  * Create a consistent mock event object.
  *
  * @param {object} event

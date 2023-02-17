@@ -3,6 +3,11 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { useChartContext, useToggleData } from './chartContext';
 
 /**
+ * @memberof Chart
+ * @module ChartLegend
+ */
+
+/**
  * Wrapper for rendering an HTML based legend.
  *
  * @returns {Node}

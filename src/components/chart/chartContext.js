@@ -2,6 +2,11 @@ import React, { useCallback, useContext } from 'react';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Chart
+ * @module ChartContext
+ */
+
+/**
  * Chart context.
  *
  * @type {React.Context<{}>}
@@ -26,6 +31,9 @@ const useChartContext = () => useContext(ChartContext);
 /**
  * Track, show, and hide chart data layers.
  *
+ * @fires onHide
+ * @fires onRevert
+ * @fires onToggle
  * @param {object} options
  * @param {Function} options.useChartContext
  * @returns {{onRevert: Function, onToggle: Function, getIsToggled: Function, dataSetsToggle: object,
@@ -38,7 +46,8 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
   /**
    * Hide a graph layer.
    *
-   * @type {(function(*): void)|*}
+   * @event onHide
+   * @callback onHide
    */
   const onHide = useCallback(
     id => {
@@ -47,11 +56,11 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
     [setDataSetsToggle]
   );
 
-  // ToDo: re-evaluate useCallback here.
   /**
    * Reset graph layers.
    *
-   * @type {(function(): void)|*}
+   * @event onRevert
+   * @callback onRevert
    */
   const onRevert = useCallback(() => {
     setDataSetsToggle(() => ({}));
@@ -60,7 +69,9 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
   /**
    * Hide/show graph layers.
    *
-   * @type {function(*): boolean}
+   * @event onToggle
+   * @callback onToggle
+   * @returns boolean;
    */
   const onToggle = useCallback(
     id => {
@@ -71,11 +82,11 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
     [dataSetsToggle, setDataSetsToggle]
   );
 
-  // ToDo: review return undefined if doesn't exist
   /**
    * Graph layer status.
    *
-   * @type {function(*): boolean}
+   * @callback getIsToggled
+   * @returns boolean|*
    */
   const getIsToggled = useCallback(id => dataSetsToggle?.[id] || false, [dataSetsToggle]);
 

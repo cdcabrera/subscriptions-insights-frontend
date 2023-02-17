@@ -13,6 +13,12 @@ import InventoryCard from '../inventoryCard/inventoryCard';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Components
+ * @module InventoryCardSubscriptions
+ * @property {module} InventoryCardSubscriptionsContext
+ */
+
+/**
  * A subscriptions' system inventory component.
  *
  * @param {object} props

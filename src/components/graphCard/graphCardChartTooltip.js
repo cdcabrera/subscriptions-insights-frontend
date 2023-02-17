@@ -9,6 +9,11 @@ import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
 
 /**
+ * @memberof GraphCard
+ * @module GraphCardChartTooltip
+ */
+
+/**
  * A custom chart tooltip.
  *
  * @param {object} props

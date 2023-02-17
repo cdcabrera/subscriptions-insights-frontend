@@ -24,6 +24,14 @@ import { translate } from '../i18n/i18n';
 import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances } from './inventoryCardContext';
 
 /**
+ * @memberof Components
+ * @module InventoryCard
+ * @property {module} InventoryCardContext
+ * @property {module} InventoryCardHelpers
+ * @property {module} InventoryCardHosts
+ */
+
+/**
  * ToDo: Update table component and review the deep comparison use on data
  * The newer table wrapper should remove the need to use the deep comparison,
  * temporarily using to allow the move from the deprecated inventory.

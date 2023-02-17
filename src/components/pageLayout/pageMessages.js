@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { Section } from '@redhat-cloud-services/frontend-components/Section';
 
 /**
+ * @memberof PageLayout
+ * @module PageMessages
+ */
+
+/**
  * Render a platform toolbar section.
  *
  * @param {object} props

@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Components
+ * @module MinHeight
+ */
+
+/**
  * Set a min-height to prevent page jump component.
  *
  * @augments React.Component

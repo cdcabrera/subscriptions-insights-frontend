@@ -8,6 +8,16 @@ import { PageSection } from './pageSection';
 import { PageToolbar } from './pageToolbar';
 
 /**
+ * @memberof Components
+ * @module PageLayout
+ * @property {module} PageColumns
+ * @property {module} PageHeader
+ * @property {module} PageMessages
+ * @property {module} PageSection
+ * @property {module} PageToolbar
+ */
+
+/**
  * ToDo: Reevaluate, import for Main component from @redhat-cloud-services/frontend-components
  * Fallback towards PF PageSection. Named export for Main is overridden by default connected export.
  */

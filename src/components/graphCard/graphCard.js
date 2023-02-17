@@ -6,6 +6,18 @@ import { GraphCardChart } from './graphCardChart';
 import { GraphCardContext, useParseFiltersSettings } from './graphCardContext';
 
 /**
+ * @memberof Components
+ * @module GraphCard
+ * @property {module} GraphCardChart
+ * @property {module} GraphCardChartLegend
+ * @property {module} GraphCardChartTitleTooltip
+ * @property {module} GraphCardChartTooltip
+ * @property {module} GraphCardContext
+ * @property {module} GraphCardHelpers
+ * @property {module} GraphCardMetricTotals
+ */
+
+/**
  * Set up graph cards. Expand filters with base graph settings.
  *
  * @param {object} props

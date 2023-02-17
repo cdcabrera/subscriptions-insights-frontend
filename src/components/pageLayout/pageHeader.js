@@ -7,6 +7,11 @@ import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof PageLayout
+ * @module PageHeader
+ */
+
+/**
  * Render a platform page header.
  *
  * @param {object} props

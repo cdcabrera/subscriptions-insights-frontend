@@ -4,6 +4,11 @@ import { Flex, FlexItem } from '@patternfly/react-core';
 import { helpers } from '../../common';
 
 /**
+ * @memberof PageLayout
+ * @module PageColumns
+ */
+
+/**
  * Render page columns based on children.
  *
  * @param {object} props

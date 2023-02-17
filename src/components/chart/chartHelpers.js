@@ -3,6 +3,11 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Chart
+ * @module ChartHelpers
+ */
+
+/**
  * Available chart types
  *
  * @type {{area: string, line: string, threshold: string}}

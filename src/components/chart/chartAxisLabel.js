@@ -1,6 +1,11 @@
 import React from 'react';
 
 /**
+ * @memberof Chart
+ * @module ChartAxisLabel
+ */
+
+/**
  * Note: Victory Charts components require a form of extended "something" applied by the consuming component.
  * This leads to odd implementations, like returning a function component.
  */

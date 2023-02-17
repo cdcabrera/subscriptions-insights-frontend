@@ -8,6 +8,12 @@ import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof Components
+ * @module BannerMessages
+ * @property {module} BannerMessagesContext
+ */
+
+/**
  * Render banner messages.
  *
  * @param {object} props

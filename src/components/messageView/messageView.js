@@ -5,6 +5,11 @@ import { PageLayout, PageHeader, PageSection } from '../pageLayout/pageLayout';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Components
+ * @module MessageView
+ */
+
+/**
  * FixMe: Patternfly EmptyStateIcon PropType registers as function?
  */
 /**
