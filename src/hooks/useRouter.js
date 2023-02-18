@@ -4,6 +4,13 @@ import { routerHelpers } from '../components/router/routerHelpers';
 import { reduxActions, storeHooks } from '../redux';
 
 /**
+ * Global routing hooks.
+ *
+ * @memberof Hooks
+ * @module UseRouter
+ */
+
+/**
  * Pass useHistory methods. Proxy useHistory push with Platform specific navigation update.
  *
  * @param {object} options
