@@ -40,7 +40,7 @@ import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances 
  * Set up inventory cards. Expand filters with base settings.
  *
  * @param {object} props
- * @param {Node} props.cardActions
+ * @param {React.ReactNode} props.cardActions
  * @param {boolean} props.isDisabled
  * @param {number} props.perPageDefault
  * @param {Function} props.t
@@ -53,8 +53,7 @@ import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances 
  * @param {Function} props.useSession
  * @fires onColumnSort
  * @fires onPage
- * @fires onUpdateInventoryData
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const InventoryCard = ({
   cardActions,

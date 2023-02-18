@@ -11,9 +11,14 @@ import { dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof Toolbar
+ * @module ToolbarFieldRangedMonthly
+ */
+
+/**
  * Select field options.
  *
- * @type {{title: (string|Node), value: string, selected: boolean}[]}
+ * @type {{title: React.ReactNode, value: string, selected: boolean}[]}
  */
 const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRanges.map(dateTime => ({
   ...dateTime,
@@ -72,7 +77,7 @@ const useOnSelect = ({
  * @param {Function} props.t
  * @param {Function} props.useOnSelect
  * @param {Function} props.useProductGraphTallyQuery
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const ToolbarFieldRangedMonthly = ({
   isFilter,

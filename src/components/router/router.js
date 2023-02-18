@@ -8,11 +8,16 @@ import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
 /**
+ * @memberof Router
+ * @module Router
+ */
+
+/**
  * Load routes.
  *
  * @param {object} props
  * @param {Array} props.routes
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const Router = ({ routes } = {}) => {
   const [updatedRoutes, setUpdatedRoutes] = useState([]);

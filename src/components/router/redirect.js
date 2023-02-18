@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import { Router } from './router';
 import { pathJoin, routerHelpers } from './routerHelpers';
 import { helpers } from '../../common';
+
+/**
+ * @memberof Router
+ * @module Redirect
+ */
+
 /**
  * A routing redirect.
  *
@@ -11,7 +17,7 @@ import { helpers } from '../../common';
  * @param {string} props.route
  * @param {string} props.routes
  * @param {string} props.url
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const Redirect = ({ isForced, route, routes, url }) => {
   const baseName = routerHelpers.dynamicBaseName();

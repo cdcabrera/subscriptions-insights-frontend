@@ -23,7 +23,7 @@ import { GraphCardContext, useParseFiltersSettings } from './graphCardContext';
  * @param {object} props
  * @param {boolean} props.isDisabled
  * @param {Function} props.useParseFiltersSettings
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const GraphCard = ({ isDisabled, useParseFiltersSettings: useAliasParseFiltersSettings }) => {
   const { groupedFiltersSettings, standaloneFiltersSettings } = useAliasParseFiltersSettings();

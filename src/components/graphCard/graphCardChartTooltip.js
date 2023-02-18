@@ -20,7 +20,7 @@ import { helpers } from '../../common';
  * @param {object} props.datum
  * @param {Function} props.t
  * @param {Function} props.useProduct
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const GraphCardChartTooltip = ({
   datum,

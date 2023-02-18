@@ -23,20 +23,20 @@ import { useResizeObserver } from '../../hooks/useWindow';
  * Return a chart and elements with a context provider.
  *
  * @param {object} props
- * @param {Node|Function} props.chartLegend
- * @param {Node|Function} props.chartTooltip
+ * @param {React.ReactNode|Function} props.chartLegend
+ * @param {React.ReactNode|Function} props.chartTooltip
  * @param {Array} props.dataSets
  * @param {object} props.padding
  * @param {string} props.themeColor
- * @param {Node|Function} props.xAxisChartLabel
- * @param {Node|Function} props.yAxisChartLabel
+ * @param {React.ReactNode|Function} props.xAxisChartLabel
+ * @param {React.ReactNode|Function} props.yAxisChartLabel
  * @param {boolean} props.xAxisFixLabelOverlap
  * @param {number} props.xAxisLabelIncrement
  * @param {Function} props.xAxisTickFormat
  * @param {Function} props.yAxisTickFormat
  * @param {Function} props.xValueFormat
  * @param {Function} props.yValueFormat
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const Chart = ({
   chartLegend,
@@ -170,8 +170,8 @@ const Chart = ({
 /**
  * Prop types.
  *
- * @type {{chartTooltip: Node|Function, xValueFormat: Function, padding: {top: number, left: number, bottom: number,
- *     right: number}, xAxisTickFormat: Function, themeColor: string, chartLegend: Node|Function,
+ * @type {{chartTooltip: React.ReactNode|Function, xValueFormat: Function, padding: {top: number, left: number, bottom: number,
+ *     right: number}, xAxisTickFormat: Function, themeColor: string, chartLegend: React.ReactNode|Function,
  *     yAxisTickFormat: Function, dataSets: Array, xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number,
  *     yValueFormat: Function}}
  */
@@ -225,8 +225,8 @@ Chart.propTypes = {
 /**
  * Default props.
  *
- * @type {{chartTooltip: Node|Function, xValueFormat: Function, padding: {top: number, left: number, bottom: number,
- *     right: number}, xAxisTickFormat: Function, themeColor: string, chartLegend: Node|Function,
+ * @type {{chartTooltip: React.ReactNode|Function, xValueFormat: Function, padding: {top: number, left: number, bottom: number,
+ *     right: number}, xAxisTickFormat: Function, themeColor: string, chartLegend: React.ReactNode|Function,
  *     yAxisTickFormat: Function, dataSets: Array, xAxisFixLabelOverlap: boolean, xAxisLabelIncrement: number,
  *     yValueFormat: Function}}
  */

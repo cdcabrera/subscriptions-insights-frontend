@@ -18,7 +18,7 @@ import { ChartTypeVariant } from './chartHelpers';
  *
  * @param {object} props
  * @param {object} props.chartTypeDefaults
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const ChartElements = ({ chartTypeDefaults }) => {
   const { chartSettings = {}, chartContainerRef, chartTooltipRef } = useChartContext();

@@ -15,12 +15,19 @@ import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../serv
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof Components
+ * @module ProductView
+ * @property {module} ProductViewContext
+ * @property {module} ProductViewMissing
+ */
+
+/**
  * Display product columns.
  *
  * @param {object} props
  * @param {Function} props.t
  * @param {Function} props.useRouteDetail
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
   const { productParameter: routeProductLabel, productConfig } = useAliasRouteDetail();

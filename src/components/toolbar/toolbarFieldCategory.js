@@ -8,6 +8,11 @@ import { graphCardHelpers } from '../graphCard/graphCardHelpers';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof Toolbar
+ * @module ToolbarFieldCategory
+ */
+
+/**
  * Generate select field options from config
  *
  * @param {object} options
@@ -106,7 +111,7 @@ const useOnSelect = ({
  * @param {Function} props.useOnSelect
  * @param {Function} props.useProductToolbarQuery
  * @param {Function} props.useToolbarFieldOptions
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const ToolbarFieldCategory = ({
   isFilter,

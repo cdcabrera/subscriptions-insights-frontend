@@ -16,12 +16,12 @@ import { helpers } from '../../common';
  * Render a message view.
  *
  * @param {object} props
- * @param {Node} props.children
- * @param {Node|Function} props.icon
+ * @param {React.ReactNode} props.children
+ * @param {React.ReactNode|Function} props.icon
  * @param {string} props.message
  * @param {string} props.pageTitle
  * @param {string} props.title
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const MessageView = ({ children, icon, message, pageTitle, title }) => (
   <PageLayout>
@@ -45,7 +45,7 @@ const MessageView = ({ children, icon, message, pageTitle, title }) => (
 /**
  * Prop types.
  *
- * @type {{children: Node, icon: Node|Function, message: string, pageTitle: string, title: string}}
+ * @type {{children: React.ReactNode, icon: React.ReactNode|Function, message: string, pageTitle: string, title: string}}
  */
 MessageView.propTypes = {
   children: PropTypes.node,

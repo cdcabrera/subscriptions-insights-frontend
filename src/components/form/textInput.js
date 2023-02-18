@@ -92,7 +92,7 @@ class TextInput extends React.Component {
   /**
    * Render a text input.
    *
-   * @returns {Node}
+   * @returns {React.ReactNode}
    */
   render() {
     const { updatedValue } = this.state;

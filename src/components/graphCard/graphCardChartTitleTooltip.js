@@ -18,7 +18,7 @@ import { translate } from '../i18n/i18n';
  * @param {Function} props.t
  * @param {Function} props.useGraphCardContext
  * @param {Function} props.useProduct
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const GraphCardChartTitleTooltip = ({
   t,

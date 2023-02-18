@@ -5,6 +5,12 @@ import { helpers } from '../../common';
 import { paginationHelpers } from './paginationHelpers';
 
 /**
+ * @memberof Components
+ * @module Pagination
+ * @property {module} PaginationHelpers
+ */
+
+/**
  * ToDo: Apply locale/translation to the PF Pagination "titles" prop.
  */
 /**
@@ -27,7 +33,7 @@ import { paginationHelpers } from './paginationHelpers';
  * @param {Function} props.onPerPage
  * @param {number} props.perPage
  * @param {string} props.variant
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const Pagination = ({
   dropDirection,

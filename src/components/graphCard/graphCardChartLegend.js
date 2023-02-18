@@ -31,7 +31,7 @@ import { ChartIcon } from '../chart/chartIcon';
  * @param {Function} props.useGraphCardContext
  * @param {Function} props.useProduct
  * @param {Function} props.useSelectors
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const GraphCardChartLegend = ({
   chart,

@@ -11,9 +11,9 @@ import { Section } from '@redhat-cloud-services/frontend-components/Section';
  * Render a platform toolbar section.
  *
  * @param {object} props
- * @param {Node} props.children
+ * @param {React.ReactNode} props.children
  * @param {string} props.className
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const PageToolbar = ({ children, className, ...props }) => (
   <Section className={`curiosity-page-toolbar ${className}`} {...props}>
@@ -24,7 +24,7 @@ const PageToolbar = ({ children, className, ...props }) => (
 /**
  * Prop types.
  *
- * @type {{children: Node, className: string}}
+ * @type {{children: React.ReactNode, className: string}}
  */
 PageToolbar.propTypes = {
   children: PropTypes.node.isRequired,

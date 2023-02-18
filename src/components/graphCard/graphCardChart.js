@@ -38,7 +38,7 @@ import { translate } from '../i18n/i18n';
  * @param {Function} props.useGraphCardContext
  * @param {Function} props.useProduct
  * @param {Function} props.useProductGraphTallyQuery
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const GraphCardChart = ({
   t,

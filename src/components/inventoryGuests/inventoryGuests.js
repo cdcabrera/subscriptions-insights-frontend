@@ -28,7 +28,7 @@ import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
  * @param {Function} props.useProductInventoryGuestsConfig
  * @param {Function} props.useSession
  * @fires onScroll
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const InventoryGuests = ({
   defaultPerPage,
@@ -51,7 +51,7 @@ const InventoryGuests = ({
    * Render a scroll table loader.
    *
    * @param {boolean} isFirstPage
-   * @returns {Node}
+   * @returns {React.ReactNode}
    */
   const renderLoader = isFirstPage => {
     if (pending) {

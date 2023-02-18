@@ -350,7 +350,7 @@ class FormState extends React.Component {
   /**
    * Pass child components, integrate and apply form context.
    *
-   * @returns {Node}
+   * @returns {React.ReactNode}
    */
   render() {
     const { checked, errors, values, touched } = this;

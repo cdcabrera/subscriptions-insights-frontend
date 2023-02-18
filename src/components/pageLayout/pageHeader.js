@@ -15,10 +15,10 @@ import { translate } from '../i18n/i18n';
  * Render a platform page header.
  *
  * @param {object} props
- * @param {Node} props.children
+ * @param {React.ReactNode} props.children
  * @param {string} props.productLabel
  * @param {Function} props.t
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const PageHeader = ({ children, productLabel, t }) => (
   <RcsPageHeader>

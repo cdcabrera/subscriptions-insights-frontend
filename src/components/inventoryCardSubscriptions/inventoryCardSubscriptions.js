@@ -30,8 +30,7 @@ import { helpers } from '../../common';
  * @param {Function} props.useProductInventoryQuery
  * @fires onColumnSort
  * @fires onPage
- * @fires onUpdateInventoryData
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const InventoryCardSubscriptions = ({ ...props }) => <InventoryCard cardActions={null} {...props} />;
 

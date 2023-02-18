@@ -3,6 +3,11 @@ import { helpers } from '../../common/helpers';
 import { routesConfig } from '../../config';
 
 /**
+ * @memberof Router
+ * @module RouterHelpers
+ */
+
+/**
  * Platform name/id.
  *
  * @type {string}
@@ -252,8 +257,8 @@ const getRouteConfig = ({ id = null, pathName, returnDefault = false, config = r
 /**
  * Import a route component.
  *
- * @param {Node} component
- * @returns {Node}
+ * @param {React.ReactNode} component
+ * @returns {React.ReactNode}
  */
 const importView = component => {
   if (!helpers.TEST_MODE) {

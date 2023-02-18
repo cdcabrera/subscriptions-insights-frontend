@@ -10,6 +10,11 @@ import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * @memberof ProductView
+ * @module ProductViewMissing
+ */
+
+/**
  * Return a list of available products.
  *
  * @returns {Array}
@@ -27,7 +32,7 @@ const filterAvailableProducts = () => {
  * @param {number} props.availableProductsRedirect
  * @param {Function} props.t
  * @param {Function} props.useHistory
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const ProductViewMissing = ({ availableProductsRedirect, t, useHistory: useAliasHistory }) => {
   const history = useAliasHistory({ isSetAppNav: true });

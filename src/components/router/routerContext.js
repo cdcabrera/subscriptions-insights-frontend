@@ -2,6 +2,11 @@ import React, { useContext } from 'react';
 import { helpers } from '../../common/helpers';
 
 /**
+ * @memberof Router
+ * @module RouterContext
+ */
+
+/**
  * Route context.
  *
  * @type {React.Context<{}>}
