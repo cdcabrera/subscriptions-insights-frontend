@@ -10,6 +10,8 @@ import {
 } from './platformConstants';
 
 /**
+ * Emulated service calls for platform globals.
+ *
  * @memberof Platform
  * @module PlatformServices
  */

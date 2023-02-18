@@ -3,6 +3,8 @@ import LruCache from 'lru-cache';
 import { serviceHelpers } from './helpers';
 
 /**
+ * Axios config for cancelling, caching, and emulated service calls.
+ *
  * @memberof Helpers
  * @module ServiceConfig
  */

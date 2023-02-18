@@ -7,6 +7,8 @@ import {
 import { helpers } from '../../common';
 
 /**
+ * Transform platform responses. Replaces selector usage.
+ *
  * @memberof Platform
  * @module PlatformTransformers
  */

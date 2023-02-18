@@ -4,6 +4,8 @@ import { serviceCall } from '../config';
 import { helpers } from '../../common';
 
 /**
+ * User, and RHSM, calls for locale and Opt-In.
+ *
  * @memberof User
  * @module UserServices
  */

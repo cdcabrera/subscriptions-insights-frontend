@@ -5,6 +5,8 @@ import { rhsmTransformers } from './rhsmTransformers';
 import { rhsmHelpers } from './rhsmHelpers';
 
 /**
+ * RHSM API service calls.
+ *
  * @memberof Rhsm
  * @module RhsmServices
  */
