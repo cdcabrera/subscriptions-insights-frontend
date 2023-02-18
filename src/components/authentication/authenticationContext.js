@@ -5,7 +5,12 @@ import { helpers } from '../../common';
 import { routerContext, routerHelpers } from '../router';
 
 /**
- * Base context.
+ * @memberof Authentication
+ * @module AuthenticationContext
+ */
+
+/**
+ * Authentication context.
  *
  * @type {React.Context<{}>}
  */

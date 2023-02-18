@@ -2,6 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pathJoin, routerHelpers } from './routerHelpers';
 import { helpers } from '../../common';
+
+/**
+ * @memberof Router
+ * @module Redirect
+ */
+
 /**
  * A routing redirect.
  *
@@ -9,7 +15,7 @@ import { helpers } from '../../common';
  * @param {boolean} props.isReplace
  * @param {string} props.route
  * @param {string} props.url
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const Redirect = ({ isReplace, route, url }) => {
   const baseName = routerHelpers.dynamicBaseName();

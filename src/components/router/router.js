@@ -7,11 +7,21 @@ import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
 /**
+ * Route component loader.
+ *
+ * @memberof Components
+ * @module Router
+ * @property {module} Redirect
+ * @property {module} RouterContext
+ * @property {module} RouterHelpers
+ */
+
+/**
  * Load routes.
  *
  * @param {object} props
  * @param {Array} props.routes
- * @returns {Node}
+ * @returns {React.ReactNode}
  */
 const Router = ({ routes } = {}) => {
   const [updatedRoutes, setUpdatedRoutes] = useState([]);
