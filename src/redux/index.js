@@ -8,14 +8,7 @@ import { reduxReducers } from './reducers';
 import { reduxTypes } from './types';
 
 /**
- * @namespace Redux State
- * @property {module} Store
- * @property {module} Actions
- * @property {module} Helpers
- * @property {module} Hooks
- * @property {module} Middleware
- * @property {module} Reducers
- * @property {module} Types
+ * @memberof Redux State
  */
 
 /**
