@@ -2,6 +2,11 @@ import { rhsmTypes, graphTypes } from '../types';
 import { reduxHelpers } from '../common/reduxHelpers';
 
 /**
+ * @memberof Reducers
+ * @module GraphReducer
+ */
+
+/**
  * Initial state.
  *
  * @private

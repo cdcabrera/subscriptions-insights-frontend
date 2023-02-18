@@ -5,6 +5,11 @@ import { store } from '../store';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Hooks
+ * @module UseReactRedux
+ */
+
+/**
  * FixMe: Appears to be an issue in trying to use Redux Promise with the default "useDispatch"
  */
 /**

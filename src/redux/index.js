@@ -8,6 +8,18 @@ import { reduxReducers } from './reducers';
 import { reduxTypes } from './types';
 
 /**
+ * @namespace Redux State
+ * @memberof AppEntry
+ * @property {module} Store
+ * @property {module} Actions
+ * @property {module} Helpers
+ * @property {module} Hooks
+ * @property {module} Middleware
+ * @property {module} Reducers
+ * @property {module} Types
+ */
+
+/**
  * Wrapper for applying Router Dom withRouter and Redux connect.
  *
  * @param {Function} mapStateToProps

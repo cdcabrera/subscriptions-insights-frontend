@@ -3,7 +3,15 @@ import { reduxMiddleware } from './middleware';
 import { reduxReducers } from './reducers';
 
 /**
+ * @memberof Redux State
+ * @module Store
+ */
+
+/**
  * Create a Redux store.
+ *
+ * @type {{graph: object, notifications: Array, toolbar: object, inventory: object, user: object, view: object,
+ *     messages: object}}
  */
 const store = createStore(reduxReducers, applyMiddleware(...reduxMiddleware));
 

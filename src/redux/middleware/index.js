@@ -8,6 +8,14 @@ import { actionRecordMiddleware } from './actionRecordMiddleware';
 import { reduxHelpers } from '../common/reduxHelpers';
 
 /**
+ * @memberof Redux State
+ * @module Middleware
+ * @property {module} ActionRecordMiddleware
+ * @property {module} MultiActionMiddleware
+ * @property {module} StatusMiddleware
+ */
+
+/**
  * Platform notifications settings.
  *
  * @private

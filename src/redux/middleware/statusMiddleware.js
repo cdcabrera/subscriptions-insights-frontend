@@ -1,6 +1,11 @@
 import { reduxHelpers } from '../common/reduxHelpers';
 
 /**
+ * @memberof Middleware
+ * @module StatusMiddleware
+ */
+
+/**
  * Apply a status type based on actions, such as those generated from redux-promise-middleware.
  *
  * @param {object} config

@@ -3,6 +3,11 @@ import { reduxHelpers } from '../common/reduxHelpers';
 import { inventoryTypes } from '../types';
 
 /**
+ * @memberof Reducers
+ * @module InventoryReducer
+ */
+
+/**
  * Initial state.
  *
  * @private

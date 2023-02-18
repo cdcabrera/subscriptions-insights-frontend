@@ -2,6 +2,11 @@ import { rhsmTypes } from '../types';
 import { reduxHelpers } from '../common/reduxHelpers';
 
 /**
+ * @memberof Reducers
+ * @module MessagesReducer
+ */
+
+/**
  * Initial state.
  *
  * @private

@@ -2,6 +2,11 @@ import { reduxTypes } from '../types';
 import { reduxHelpers } from '../common/reduxHelpers';
 
 /**
+ * @memberof Reducers
+ * @module ToolbarReducer
+ */
+
+/**
  * Initial state.
  *
  * @private

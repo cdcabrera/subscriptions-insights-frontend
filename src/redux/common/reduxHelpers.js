@@ -5,6 +5,11 @@ import _snakeCase from 'lodash/snakeCase';
 import { helpers } from '../../common';
 
 /**
+ * @memberof Helpers
+ * @module ReduxHelpers
+ */
+
+/**
  * Apply a "fulfilled" suffix for Redux Promise Middleware action responses.
  *
  * @param {string} base

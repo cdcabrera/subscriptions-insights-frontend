@@ -4,6 +4,11 @@ import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { reduxHelpers } from '../common';
 
 /**
+ * @memberof Reducers
+ * @module UserReducer
+ */
+
+/**
  * Initial state.
  *
  * @private
