@@ -26,7 +26,7 @@ import { helpers } from '../../common';
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelectorsResponse
- * @returns {{data: (*|{}|*[]|{}), pending: boolean, fulfilled: boolean, error: boolean}}
+ * @returns {{data: (*|{}|Array|{}), pending: boolean, fulfilled: boolean, error: boolean}}
  */
 const useGetHostsInventory = ({
   isDisabled = false,
@@ -66,7 +66,7 @@ const useGetHostsInventory = ({
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelectorsResponse
- * @returns {{data: (*|{}|*[]|{}), pending: boolean, fulfilled: boolean, error: boolean}}
+ * @returns {{data: (*|{}|Array|{}), pending: boolean, fulfilled: boolean, error: boolean}}
  */
 const useGetInstancesInventory = ({
   isDisabled = false,

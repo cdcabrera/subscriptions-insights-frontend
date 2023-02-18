@@ -29,7 +29,7 @@ import { ToolbarFieldVariant } from './toolbarFieldVariant';
  * Select field options. Use function instead of arrow func to help with component
  * display name during testing.
  *
- * @type {{title: React.ReactNode, value: string, selected: boolean}[]}
+ * @type {Array<{title: React.ReactNode, value: string, selected: boolean}>}
  */
 const toolbarFieldOptions = [
   {
