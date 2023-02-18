@@ -10,6 +10,11 @@ import {
 } from './platformConstants';
 
 /**
+ * @memberof Platform
+ * @module {module} PlatformServices
+ */
+
+/**
  * Basic user authentication.
  *
  * @param {object} options

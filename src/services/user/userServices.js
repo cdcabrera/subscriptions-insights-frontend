@@ -4,6 +4,11 @@ import { serviceCall } from '../config';
 import { helpers } from '../../common';
 
 /**
+ * @memberof User
+ * @module {module} UserServices
+ */
+
+/**
  * ToDo: Review moving the getLocale function under platformServices.
  * Also review using window.navigator.language as the primary pull for language.
  */

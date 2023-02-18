@@ -12,6 +12,11 @@ import {
 import { dateHelpers } from '../../common';
 
 /**
+ * @memberof Rhsm
+ * @module {module} RhsmTransformers
+ */
+
+/**
  * Parse RHSM hosts response for caching.
  *
  * @param {object} response

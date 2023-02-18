@@ -1,4 +1,9 @@
 /**
+ * @memberof Platform
+ * @module {module} PlatformConstants
+ */
+
+/**
  * Platform response entitlements type.
  *
  * @type {string}

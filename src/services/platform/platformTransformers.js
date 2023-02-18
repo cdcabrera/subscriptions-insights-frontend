@@ -7,6 +7,11 @@ import {
 import { helpers } from '../../common';
 
 /**
+ * @memberof Platform
+ * @module {module} PlatformTransformers
+ */
+
+/**
  * Parse platform getUser response.
  *
  * @param {object} response

@@ -3,6 +3,11 @@ import LruCache from 'lru-cache';
 import { serviceHelpers } from './helpers';
 
 /**
+ * @memberof Helpers
+ * @module {module} ServiceConfig
+ */
+
+/**
  * Set Axios XHR default timeout.
  */
 const globalXhrTimeout = Number.parseInt(process.env.REACT_APP_AJAX_TIMEOUT, 10) || 60000;

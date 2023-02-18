@@ -9,7 +9,6 @@ import { reduxTypes } from './types';
 
 /**
  * @namespace Redux State
- * @memberof AppEntry
  * @property {module} Store
  * @property {module} Actions
  * @property {module} Helpers
