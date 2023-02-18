@@ -9,13 +9,6 @@
 <dd></dd>
 </dl>
 
-## Objects
-
-<dl>
-<dt><a href="#Base GUI">Base GUI</a> : <code>object</code></dt>
-<dd></dd>
-</dl>
-
 <a name="Base GUI.module_App"></a>
 
 ## App
@@ -88,15 +81,3 @@ Root element within HTML template.
 Attach application to the root element, html
 
 **Kind**: inner typedef of [<code>Bootstrap</code>](#Base GUI.module_Bootstrap)  
-<a name="Base GUI"></a>
-
-## Base GUI : <code>object</code>
-**Kind**: global namespace  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| App | <code>module</code> | 
-| AppEntry | <code>module</code> | 
-| Bootstrap | <code>module</code> | 
-

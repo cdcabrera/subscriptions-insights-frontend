@@ -1,51 +1,50 @@
 ## Modules
 
 <dl>
-<dt><a href="#Redux State.module_Actions">Actions</a></dt>
-<dd></dd>
 <dt><a href="#Actions.module_PlatformActions">PlatformActions</a></dt>
-<dd></dd>
+<dd><p>Platform service wrappers for dispatch, state update.</p>
+</dd>
 <dt><a href="#Actions.module_RhsmActions">RhsmActions</a></dt>
-<dd></dd>
+<dd><p>RHSM service wrappers for dispatch, state update.</p>
+</dd>
 <dt><a href="#Actions.module_UserActions">UserActions</a></dt>
-<dd></dd>
-<dt><a href="#Redux State.module_Helpers">Helpers</a></dt>
-<dd></dd>
+<dd><p>User, and RHSM, service wrappers for dispatch, state update.</p>
+</dd>
 <dt><a href="#Helpers.module_ReduxHelpers">ReduxHelpers</a></dt>
 <dd></dd>
-<dt><a href="#Redux State.module_Hooks">Hooks</a></dt>
-<dd></dd>
 <dt><a href="#Hooks.module_UseReactRedux">UseReactRedux</a></dt>
-<dd></dd>
+<dd><p>State hooks for dispatch and selectors.</p>
+</dd>
 <dt><a href="#Middleware.module_ActionRecordMiddleware">ActionRecordMiddleware</a></dt>
-<dd></dd>
-<dt><a href="#Redux State.module_Middleware">Middleware</a></dt>
 <dd></dd>
 <dt><a href="#Middleware.module_MultiActionMiddleware">MultiActionMiddleware</a></dt>
 <dd></dd>
 <dt><a href="#Middleware.module_StatusMiddleware">StatusMiddleware</a></dt>
 <dd></dd>
 <dt><a href="#Reducers.module_GraphReducer">GraphReducer</a></dt>
-<dd></dd>
-<dt><a href="#Redux State.module_Reducers">Reducers</a></dt>
-<dd></dd>
+<dd><p>Graph/Chart related API and user state reducer.</p>
+</dd>
 <dt><a href="#Reducers.module_InventoryReducer">InventoryReducer</a></dt>
-<dd></dd>
+<dd><p>Inventory, and tabs, related API and user state reducer.</p>
+</dd>
 <dt><a href="#Reducers.module_MessagesReducer">MessagesReducer</a></dt>
-<dd></dd>
+<dd><p>Banner messages related API state reducer.</p>
+</dd>
 <dt><a href="#Reducers.module_ToolbarReducer">ToolbarReducer</a></dt>
-<dd></dd>
+<dd><p>Toolbar related user state reducer.</p>
+</dd>
 <dt><a href="#Reducers.module_UserReducer">UserReducer</a></dt>
-<dd></dd>
+<dd><p>User related API, platform and user state reducer.</p>
+</dd>
 <dt><a href="#Reducers.module_ViewReducer">ViewReducer</a></dt>
-<dd></dd>
+<dd><p>View query related user state reducer.</p>
+</dd>
 <dt><a href="#Redux State.module_Store">Store</a></dt>
-<dd></dd>
+<dd><p>Redux store setup.</p>
+</dd>
 <dt><a href="#Types.module_AppTypes">AppTypes</a></dt>
 <dd></dd>
 <dt><a href="#Types.module_GraphTypes">GraphTypes</a></dt>
-<dd></dd>
-<dt><a href="#Redux State.module_Types">Types</a></dt>
 <dd></dd>
 <dt><a href="#Types.module_InventoryTypes">InventoryTypes</a></dt>
 <dd></dd>
@@ -61,11 +60,12 @@
 <dd></dd>
 </dl>
 
-## Objects
+## Constants
 
 <dl>
-<dt><a href="#Redux State">Redux State</a> : <code>object</code></dt>
-<dd></dd>
+<dt><a href="#reduxMiddleware">reduxMiddleware</a> : <code>Array</code></dt>
+<dd><p>Redux middleware.</p>
+</dd>
 </dl>
 
 ## Functions
@@ -76,26 +76,11 @@
 </dd>
 </dl>
 
-<a name="Redux State.module_Actions"></a>
-
-## Actions
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| PlatformActions | <code>module</code> | 
-| RhsmActions | <code>module</code> | 
-| UserActions | <code>module</code> | 
-
-<a name="Redux State.module_Actions..actions"></a>
-
-### Actions~actions : <code>Object</code>
-Redux actions
-
-**Kind**: inner constant of [<code>Actions</code>](#Redux State.module_Actions)  
 <a name="Actions.module_PlatformActions"></a>
 
 ## PlatformActions
+Platform service wrappers for dispatch, state update.
+
 
 * [PlatformActions](#Actions.module_PlatformActions)
     * [~addNotification(data)](#Actions.module_PlatformActions..addNotification) ⇒ <code>\*</code>
@@ -203,6 +188,8 @@ Apply platform method for changing routes via the left-nav navigation.
 <a name="Actions.module_RhsmActions"></a>
 
 ## RhsmActions
+RHSM service wrappers for dispatch, state update.
+
 
 * [RhsmActions](#Actions.module_RhsmActions)
     * [~getGraphMetrics(idMetric, query, options)](#Actions.module_RhsmActions..getGraphMetrics) ⇒ <code>function</code>
@@ -289,6 +276,8 @@ Get a subscriptions response from RHSM subscriptions.
 <a name="Actions.module_UserActions"></a>
 
 ## UserActions
+User, and RHSM, service wrappers for dispatch, state update.
+
 
 * [UserActions](#Actions.module_UserActions)
     * [~getLocale()](#Actions.module_UserActions..getLocale) ⇒ <code>Object</code>
@@ -324,15 +313,6 @@ Update a user's opt-in.
 | Param | Type |
 | --- | --- |
 | query | <code>object</code> | 
-
-<a name="Redux State.module_Helpers"></a>
-
-## Helpers
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| ReduxHelpers | <code>module</code> | 
 
 <a name="Helpers.module_ReduxHelpers"></a>
 
@@ -551,24 +531,11 @@ Automatically apply reducer logic to state by handling promise responses from re
 | --- | --- |
 | type | <code>string</code> | 
 
-<a name="Redux State.module_Hooks"></a>
-
-## Hooks
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| UseReactRedux | <code>module</code> | 
-
-<a name="Redux State.module_Hooks..storeHooks"></a>
-
-### Hooks~storeHooks : <code>Object</code>
-Store hooks
-
-**Kind**: inner constant of [<code>Hooks</code>](#Redux State.module_Hooks)  
 <a name="Hooks.module_UseReactRedux"></a>
 
 ## UseReactRedux
+State hooks for dispatch and selectors.
+
 
 * [UseReactRedux](#Hooks.module_UseReactRedux)
     * [~useDispatch()](#Hooks.module_UseReactRedux..useDispatch) ⇒ <code>function</code>
@@ -741,23 +708,6 @@ Expose settings and record middleware.
 | --- | --- |
 | config | <code>object</code> | 
 
-<a name="Redux State.module_Middleware"></a>
-
-## Middleware
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| ActionRecordMiddleware | <code>module</code> | 
-| MultiActionMiddleware | <code>module</code> | 
-| StatusMiddleware | <code>module</code> | 
-
-<a name="Redux State.module_Middleware..reduxMiddleware"></a>
-
-### Middleware~reduxMiddleware : <code>Array</code>
-Redux middleware.
-
-**Kind**: inner constant of [<code>Middleware</code>](#Redux State.module_Middleware)  
 <a name="Middleware.module_MultiActionMiddleware"></a>
 
 ## MultiActionMiddleware
@@ -800,6 +750,8 @@ Apply a status type based on actions, such as those generated from redux-promise
 <a name="Reducers.module_GraphReducer"></a>
 
 ## GraphReducer
+Graph/Chart related API and user state reducer.
+
 <a name="Reducers.module_GraphReducer..graphReducer"></a>
 
 ### GraphReducer~graphReducer(state, action) ⇒ <code>object</code> \| <code>Object</code>
@@ -813,29 +765,11 @@ against actions.
 | state | <code>object</code> | 
 | action | <code>object</code> | 
 
-<a name="Redux State.module_Reducers"></a>
-
-## Reducers
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| GraphReducer | <code>module</code> | 
-| InventoryReducer | <code>module</code> | 
-| MessagesReducer | <code>module</code> | 
-| ToolbarReducer | <code>module</code> | 
-| UserReducer | <code>module</code> | 
-| ViewReducer | <code>module</code> | 
-
-<a name="Redux State.module_Reducers..reducers"></a>
-
-### Reducers~reducers : <code>Object</code>
-Redux reducers
-
-**Kind**: inner constant of [<code>Reducers</code>](#Redux State.module_Reducers)  
 <a name="Reducers.module_InventoryReducer"></a>
 
 ## InventoryReducer
+Inventory, and tabs, related API and user state reducer.
+
 <a name="Reducers.module_InventoryReducer..inventoryReducer"></a>
 
 ### InventoryReducer~inventoryReducer(state, action) ⇒ <code>object</code> \| <code>Object</code>
@@ -852,6 +786,8 @@ against actions.
 <a name="Reducers.module_MessagesReducer"></a>
 
 ## MessagesReducer
+Banner messages related API state reducer.
+
 <a name="Reducers.module_MessagesReducer..messagesReducer"></a>
 
 ### MessagesReducer~messagesReducer(state, action) ⇒ <code>object</code> \| <code>Object</code>
@@ -868,6 +804,8 @@ against actions.
 <a name="Reducers.module_ToolbarReducer"></a>
 
 ## ToolbarReducer
+Toolbar related user state reducer.
+
 <a name="Reducers.module_ToolbarReducer..toolbarReducer"></a>
 
 ### ToolbarReducer~toolbarReducer(state, action) ⇒ <code>object</code> \| <code>Object</code>
@@ -883,6 +821,8 @@ Apply user observer/reducer logic for toolbar to state, against actions.
 <a name="Reducers.module_UserReducer"></a>
 
 ## UserReducer
+User related API, platform and user state reducer.
+
 <a name="Reducers.module_UserReducer..userReducer"></a>
 
 ### UserReducer~userReducer(state, action) ⇒ <code>object</code> \| <code>Object</code>
@@ -898,6 +838,8 @@ Apply user observer/reducer logic for session to state, against actions.
 <a name="Reducers.module_ViewReducer"></a>
 
 ## ViewReducer
+View query related user state reducer.
+
 <a name="Reducers.module_ViewReducer..viewReducer"></a>
 
 ### ViewReducer~viewReducer(state, action) ⇒ <code>object</code> \| <code>Object</code>
@@ -913,6 +855,8 @@ Apply user observer/reducer logic for views to state, against actions.
 <a name="Redux State.module_Store"></a>
 
 ## Store
+Redux store setup.
+
 <a name="Redux State.module_Store..store"></a>
 
 ### Store~store : <code>Object</code>
@@ -937,28 +881,6 @@ Application action, reducer types.
 Graph action, reducer types.
 
 **Kind**: inner constant of [<code>GraphTypes</code>](#Types.module_GraphTypes)  
-<a name="Redux State.module_Types"></a>
-
-## Types
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| AppTypes | <code>module</code> | 
-| GraphTypes | <code>module</code> | 
-| InventoryTypes | <code>module</code> | 
-| PlatformTypes | <code>module</code> | 
-| QueryTypes | <code>module</code> | 
-| RhsmTypes | <code>module</code> | 
-| ToolbarTypes | <code>module</code> | 
-| UserTypes | <code>module</code> | 
-
-<a name="Redux State.module_Types..reduxTypes"></a>
-
-### Types~reduxTypes : <code>Object</code>
-Redux types
-
-**Kind**: inner constant of [<code>Types</code>](#Redux State.module_Types)  
 <a name="Types.module_InventoryTypes"></a>
 
 ## InventoryTypes
@@ -1045,22 +967,12 @@ Filter, toolbar reducer types.
 User action, reducer types.
 
 **Kind**: inner constant of [<code>UserTypes</code>](#Types.module_UserTypes)  
-<a name="Redux State"></a>
+<a name="reduxMiddleware"></a>
 
-## Redux State : <code>object</code>
-**Kind**: global namespace  
-**Properties**
+## reduxMiddleware : <code>Array</code>
+Redux middleware.
 
-| Name | Type |
-| --- | --- |
-| Store | <code>module</code> | 
-| Actions | <code>module</code> | 
-| Helpers | <code>module</code> | 
-| Hooks | <code>module</code> | 
-| Middleware | <code>module</code> | 
-| Reducers | <code>module</code> | 
-| Types | <code>module</code> | 
-
+**Kind**: global constant  
 <a name="connectRouter"></a>
 
 ## connectRouter(mapStateToProps, mapDispatchToProps) ⇒ <code>function</code>

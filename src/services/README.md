@@ -1,41 +1,35 @@
 ## Modules
 
 <dl>
-<dt><a href="#Helpers.module_General">General</a> : <code>module</code></dt>
-<dd><p>General</p>
+<dt><a href="#Helpers.module_ServiceHelpers">ServiceHelpers</a></dt>
+<dd></dd>
+<dt><a href="#Helpers.module_ServiceConfig">ServiceConfig</a></dt>
+<dd><p>Axios config for cancelling, caching, and emulated service calls.</p>
 </dd>
-<dt><a href="#Helpers.module_ServiceConfig">ServiceConfig</a> : <code>module</code></dt>
-<dd><p>ServiceConfig</p>
+<dt><a href="#Platform.module_PlatformConstants">PlatformConstants</a></dt>
+<dd></dd>
+<dt><a href="#Platform.module_PlatformSchemas">PlatformSchemas</a></dt>
+<dd></dd>
+<dt><a href="#Platform.module_PlatformServices">PlatformServices</a></dt>
+<dd><p>Emulated service calls for platform globals.</p>
 </dd>
-<dt><a href="#Platform.module_PlatformConstants">PlatformConstants</a> : <code>module</code></dt>
-<dd><p>PlatformConstants</p>
+<dt><a href="#Platform.module_PlatformTransformers">PlatformTransformers</a></dt>
+<dd><p>Transform platform responses. Replaces selector usage.</p>
 </dd>
-<dt><a href="#Platform.module_PlatformSchemas">PlatformSchemas</a> : <code>module</code></dt>
-<dd><p>PlatformSchemas</p>
+<dt><a href="#Rhsm.module_RhsmConstants">RhsmConstants</a></dt>
+<dd></dd>
+<dt><a href="#Rhsm.module_RhsmHelpers">RhsmHelpers</a></dt>
+<dd></dd>
+<dt><a href="#Rhsm.module_RhsmSchemas">RhsmSchemas</a></dt>
+<dd></dd>
+<dt><a href="#Rhsm.module_RhsmServices">RhsmServices</a></dt>
+<dd><p>RHSM API service calls.</p>
 </dd>
-<dt><a href="#Platform.module_PlatformServices">PlatformServices</a> : <code>module</code></dt>
-<dd><p>PlatformServices</p>
+<dt><a href="#Rhsm.module_RhsmTransformers">RhsmTransformers</a></dt>
+<dd><p>Transform RHSM responses. Replaces selector usage.</p>
 </dd>
-<dt><a href="#Platform.module_PlatformTransformers">PlatformTransformers</a> : <code>module</code></dt>
-<dd><p>PlatformTransformers</p>
-</dd>
-<dt><a href="#Rhsm.module_RhsmConstants">RhsmConstants</a> : <code>module</code></dt>
-<dd><p>RhsmConstants</p>
-</dd>
-<dt><a href="#Rhsm.module_RhsmHelpers">RhsmHelpers</a> : <code>module</code></dt>
-<dd><p>RhsmHelpers</p>
-</dd>
-<dt><a href="#Rhsm.module_RhsmSchemas">RhsmSchemas</a> : <code>module</code></dt>
-<dd><p>RhsmSchemas</p>
-</dd>
-<dt><a href="#Rhsm.module_RhsmServices">RhsmServices</a> : <code>module</code></dt>
-<dd><p>RhsmServices</p>
-</dd>
-<dt><a href="#Rhsm.module_RhsmTransformers">RhsmTransformers</a> : <code>module</code></dt>
-<dd><p>RhsmTransformers</p>
-</dd>
-<dt><a href="#User.module_UserServices">UserServices</a> : <code>module</code></dt>
-<dd><p>UserServices</p>
+<dt><a href="#User.module_UserServices">UserServices</a></dt>
+<dd><p>User, and RHSM, calls for locale and Opt-In.</p>
 </dd>
 </dl>
 
@@ -57,24 +51,22 @@
 </dd>
 </dl>
 
-<a name="Helpers.module_General"></a>
+<a name="Helpers.module_ServiceHelpers"></a>
 
-## General : <code>module</code>
-General
+## ServiceHelpers
 
+* [ServiceHelpers](#Helpers.module_ServiceHelpers)
+    * [~timeoutFunctionCancel(func, options)](#Helpers.module_ServiceHelpers..timeoutFunctionCancel) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [~camelCase(obj)](#Helpers.module_ServiceHelpers..camelCase) ⇒ <code>object</code> \| <code>Array</code> \| <code>\*</code>
+    * [~passDataToCallback(callback, ...data)](#Helpers.module_ServiceHelpers..passDataToCallback) ⇒ <code>Object</code>
+    * [~schemaResponse(options)](#Helpers.module_ServiceHelpers..schemaResponse) ⇒ <code>\*</code> \| <code>Object</code>
 
-* [General](#Helpers.module_General) : <code>module</code>
-    * [~timeoutFunctionCancel(func, options)](#Helpers.module_General..timeoutFunctionCancel) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [~camelCase(obj)](#Helpers.module_General..camelCase) ⇒ <code>object</code> \| <code>Array</code> \| <code>\*</code>
-    * [~passDataToCallback(callback, ...data)](#Helpers.module_General..passDataToCallback) ⇒ <code>Object</code>
-    * [~schemaResponse(options)](#Helpers.module_General..schemaResponse) ⇒ <code>\*</code> \| <code>Object</code>
+<a name="Helpers.module_ServiceHelpers..timeoutFunctionCancel"></a>
 
-<a name="Helpers.module_General..timeoutFunctionCancel"></a>
-
-### General~timeoutFunctionCancel(func, options) ⇒ <code>Promise.&lt;\*&gt;</code>
+### ServiceHelpers~timeoutFunctionCancel(func, options) ⇒ <code>Promise.&lt;\*&gt;</code>
 A timeout cancel for function calls.
 
-**Kind**: inner method of [<code>General</code>](#Helpers.module_General)  
+**Kind**: inner method of [<code>ServiceHelpers</code>](#Helpers.module_ServiceHelpers)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -83,35 +75,35 @@ A timeout cancel for function calls.
 | options.timeout | <code>number</code> | Function timeout in milliseconds |
 | options.errorMessage | <code>string</code> | What the error message will read |
 
-<a name="Helpers.module_General..camelCase"></a>
+<a name="Helpers.module_ServiceHelpers..camelCase"></a>
 
-### General~camelCase(obj) ⇒ <code>object</code> \| <code>Array</code> \| <code>\*</code>
+### ServiceHelpers~camelCase(obj) ⇒ <code>object</code> \| <code>Array</code> \| <code>\*</code>
 Return objects with the keys camelCased. Normally applied to an array of objects.
 
-**Kind**: inner method of [<code>General</code>](#Helpers.module_General)  
+**Kind**: inner method of [<code>ServiceHelpers</code>](#Helpers.module_ServiceHelpers)  
 
 | Param | Type |
 | --- | --- |
 | obj | <code>object</code> \| <code>Array</code> \| <code>\*</code> | 
 
-<a name="Helpers.module_General..passDataToCallback"></a>
+<a name="Helpers.module_ServiceHelpers..passDataToCallback"></a>
 
-### General~passDataToCallback(callback, ...data) ⇒ <code>Object</code>
+### ServiceHelpers~passDataToCallback(callback, ...data) ⇒ <code>Object</code>
 Apply data to a callback, pass original data on error.
 
-**Kind**: inner method of [<code>General</code>](#Helpers.module_General)  
+**Kind**: inner method of [<code>ServiceHelpers</code>](#Helpers.module_ServiceHelpers)  
 
 | Param | Type |
 | --- | --- |
 | callback | <code>function</code> | 
 | ...data | <code>Array</code> | 
 
-<a name="Helpers.module_General..schemaResponse"></a>
+<a name="Helpers.module_ServiceHelpers..schemaResponse"></a>
 
-### General~schemaResponse(options) ⇒ <code>\*</code> \| <code>Object</code>
+### ServiceHelpers~schemaResponse(options) ⇒ <code>\*</code> \| <code>Object</code>
 A callback for schema validation, and after-the-fact casing adjustments.
 
-**Kind**: inner method of [<code>General</code>](#Helpers.module_General)  
+**Kind**: inner method of [<code>ServiceHelpers</code>](#Helpers.module_ServiceHelpers)  
 
 | Param | Type |
 | --- | --- |
@@ -124,19 +116,26 @@ A callback for schema validation, and after-the-fact casing adjustments.
 
 <a name="Helpers.module_ServiceConfig"></a>
 
-## ServiceConfig : <code>module</code>
-ServiceConfig
+## ServiceConfig
+Axios config for cancelling, caching, and emulated service calls.
 
 
-* [ServiceConfig](#Helpers.module_ServiceConfig) : <code>module</code>
-    * [~globalXhrTimeout](#Helpers.module_ServiceConfig..globalXhrTimeout)
+* [ServiceConfig](#Helpers.module_ServiceConfig)
+    * [~globalXhrTimeout](#Helpers.module_ServiceConfig..globalXhrTimeout) : <code>number</code>
+    * [~globalCancelTokens](#Helpers.module_ServiceConfig..globalCancelTokens) : <code>object</code>
     * [~globalResponseCache](#Helpers.module_ServiceConfig..globalResponseCache) : <code>object</code>
     * [~axiosServiceCall(config, options)](#Helpers.module_ServiceConfig..axiosServiceCall) ⇒ <code>Promise.&lt;\*&gt;</code>
 
 <a name="Helpers.module_ServiceConfig..globalXhrTimeout"></a>
 
-### ServiceConfig~globalXhrTimeout
+### ServiceConfig~globalXhrTimeout : <code>number</code>
 Set Axios XHR default timeout.
+
+**Kind**: inner constant of [<code>ServiceConfig</code>](#Helpers.module_ServiceConfig)  
+<a name="Helpers.module_ServiceConfig..globalCancelTokens"></a>
+
+### ServiceConfig~globalCancelTokens : <code>object</code>
+Cache Axios service call cancel tokens.
 
 **Kind**: inner constant of [<code>ServiceConfig</code>](#Helpers.module_ServiceConfig)  
 <a name="Helpers.module_ServiceConfig..globalResponseCache"></a>
@@ -174,11 +173,9 @@ page or wait the "maxAge".
 
 <a name="Platform.module_PlatformConstants"></a>
 
-## PlatformConstants : <code>module</code>
-PlatformConstants
+## PlatformConstants
 
-
-* [PlatformConstants](#Platform.module_PlatformConstants) : <code>module</code>
+* [PlatformConstants](#Platform.module_PlatformConstants)
     * [~PLATFORM_API_RESPONSE_USER_ENTITLEMENTS](#Platform.module_PlatformConstants..PLATFORM_API_RESPONSE_USER_ENTITLEMENTS) : <code>string</code>
     * [~PLATFORM_API_RESPONSE_USER_ENTITLEMENTS_APP_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_RESPONSE_USER_ENTITLEMENTS_APP_TYPES) : <code>Object</code>
     * [~PLATFORM_API_RESPONSE_USER_IDENTITY](#Platform.module_PlatformConstants..PLATFORM_API_RESPONSE_USER_IDENTITY) : <code>string</code>
@@ -228,11 +225,9 @@ Schema/map of expected response identity user permission types.
 **Kind**: inner constant of [<code>PlatformConstants</code>](#Platform.module_PlatformConstants)  
 <a name="Platform.module_PlatformSchemas"></a>
 
-## PlatformSchemas : <code>module</code>
-PlatformSchemas
+## PlatformSchemas
 
-
-* [PlatformSchemas](#Platform.module_PlatformSchemas) : <code>module</code>
+* [PlatformSchemas](#Platform.module_PlatformSchemas)
     * [~Joi](#Platform.module_PlatformSchemas..Joi) : <code>\*</code>
     * [~userResponseSchema](#Platform.module_PlatformSchemas..userResponseSchema) : <code>\*</code>
     * [~permissionsItem](#Platform.module_PlatformSchemas..permissionsItem) : <code>\*</code>
@@ -264,11 +259,11 @@ Authorize response.
 **Kind**: inner constant of [<code>PlatformSchemas</code>](#Platform.module_PlatformSchemas)  
 <a name="Platform.module_PlatformServices"></a>
 
-## PlatformServices : <code>module</code>
-PlatformServices
+## PlatformServices
+Emulated service calls for platform globals.
 
 
-* [PlatformServices](#Platform.module_PlatformServices) : <code>module</code>
+* [PlatformServices](#Platform.module_PlatformServices)
     * [~getUser(options)](#Platform.module_PlatformServices..getUser) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getUserPermissions(appName, options)](#Platform.module_PlatformServices..getUserPermissions) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~hideGlobalFilter(isHidden)](#Platform.module_PlatformServices..hideGlobalFilter) ⇒ <code>Promise.&lt;\*&gt;</code>
@@ -355,11 +350,11 @@ Set app routes via the platform left-nav navigation.
 
 <a name="Platform.module_PlatformTransformers"></a>
 
-## PlatformTransformers : <code>module</code>
-PlatformTransformers
+## PlatformTransformers
+Transform platform responses. Replaces selector usage.
 
 
-* [PlatformTransformers](#Platform.module_PlatformTransformers) : <code>module</code>
+* [PlatformTransformers](#Platform.module_PlatformTransformers)
     * [~user(response)](#Platform.module_PlatformTransformers..user) ⇒ <code>object</code>
     * [~userPermissions(response, options)](#Platform.module_PlatformTransformers..userPermissions) ⇒ <code>object</code>
 
@@ -389,11 +384,9 @@ Parse platform getUserPermissions response.
 
 <a name="Rhsm.module_RhsmConstants"></a>
 
-## RhsmConstants : <code>module</code>
-RhsmConstants
+## RhsmConstants
 
-
-* [RhsmConstants](#Rhsm.module_RhsmConstants) : <code>module</code>
+* [RhsmConstants](#Rhsm.module_RhsmConstants)
     * [~RHSM_API_PATH_PRODUCT_ARCHITECTURE_RHEL_TYPES](#Rhsm.module_RhsmConstants..RHSM_API_PATH_PRODUCT_ARCHITECTURE_RHEL_TYPES) : <code>Object</code>
     * [~RHSM_API_PATH_PRODUCT_VARIANT_SATELLITE_TYPES](#Rhsm.module_RhsmConstants..RHSM_API_PATH_PRODUCT_VARIANT_SATELLITE_TYPES) : <code>Object</code>
     * [~RHSM_API_PATH_PRODUCT_TYPES](#Rhsm.module_RhsmConstants..RHSM_API_PATH_PRODUCT_TYPES) : <code>Object</code>
@@ -635,9 +628,7 @@ RHSM constants.
 **Kind**: inner constant of [<code>RhsmConstants</code>](#Rhsm.module_RhsmConstants)  
 <a name="Rhsm.module_RhsmHelpers"></a>
 
-## RhsmHelpers : <code>module</code>
-RhsmHelpers
-
+## RhsmHelpers
 <a name="Rhsm.module_RhsmHelpers..filterArchitectureVariant"></a>
 
 ### RhsmHelpers~filterArchitectureVariant(id, params) ⇒ <code>string</code>
@@ -652,11 +643,9 @@ Patch for returning a made up API architecture, variant param as a product ID
 
 <a name="Rhsm.module_RhsmSchemas"></a>
 
-## RhsmSchemas : <code>module</code>
-RhsmSchemas
+## RhsmSchemas
 
-
-* [RhsmSchemas](#Rhsm.module_RhsmSchemas) : <code>module</code>
+* [RhsmSchemas](#Rhsm.module_RhsmSchemas)
     * [~Joi](#Rhsm.module_RhsmSchemas..Joi) : <code>\*</code>
     * [~errorItem](#Rhsm.module_RhsmSchemas..errorItem) : <code>\*</code>
     * [~errorResponseSchema](#Rhsm.module_RhsmSchemas..errorResponseSchema) : <code>\*</code>
@@ -814,11 +803,11 @@ Tally response.
 **Kind**: inner constant of [<code>RhsmSchemas</code>](#Rhsm.module_RhsmSchemas)  
 <a name="Rhsm.module_RhsmServices"></a>
 
-## RhsmServices : <code>module</code>
-RhsmServices
+## RhsmServices
+RHSM API service calls.
 
 
-* [RhsmServices](#Rhsm.module_RhsmServices) : <code>module</code>
+* [RhsmServices](#Rhsm.module_RhsmServices)
     * [~getApiVersion(options)](#Rhsm.module_RhsmServices..getApiVersion) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getGraphReports(id, params, options)](#Rhsm.module_RhsmServices..getGraphReports) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getGraphCapacity(id, params, options)](#Rhsm.module_RhsmServices..getGraphCapacity) ⇒ <code>Promise.&lt;\*&gt;</code>
@@ -941,11 +930,11 @@ Get RHSM API subscriptions data.
 
 <a name="Rhsm.module_RhsmTransformers"></a>
 
-## RhsmTransformers : <code>module</code>
-RhsmTransformers
+## RhsmTransformers
+Transform RHSM responses. Replaces selector usage.
 
 
-* [RhsmTransformers](#Rhsm.module_RhsmTransformers) : <code>module</code>
+* [RhsmTransformers](#Rhsm.module_RhsmTransformers)
     * [~rhsmHosts(response)](#Rhsm.module_RhsmTransformers..rhsmHosts) ⇒ <code>object</code>
     * [~rhsmInstances(response)](#Rhsm.module_RhsmTransformers..rhsmInstances) ⇒ <code>object</code>
     * [~rhsmTallyCapacity(response, config)](#Rhsm.module_RhsmTransformers..rhsmTallyCapacity) ⇒ <code>object</code>
@@ -988,11 +977,11 @@ Parse RHSM tally response for caching.
 
 <a name="User.module_UserServices"></a>
 
-## UserServices : <code>module</code>
-UserServices
+## UserServices
+User, and RHSM, calls for locale and Opt-In.
 
 
-* [UserServices](#User.module_UserServices) : <code>module</code>
+* [UserServices](#User.module_UserServices)
     * [~getLocale()](#User.module_UserServices..getLocale) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~deleteAccountOptIn()](#User.module_UserServices..deleteAccountOptIn) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getAccountOptIn(options)](#User.module_UserServices..getAccountOptIn) ⇒ <code>Promise.&lt;\*&gt;</code>

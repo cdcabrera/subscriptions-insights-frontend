@@ -9,13 +9,6 @@
 <dd></dd>
 </dl>
 
-## Objects
-
-<dl>
-<dt><a href="#Helpers">Helpers</a> : <code>object</code></dt>
-<dd></dd>
-</dl>
-
 <a name="Helpers.module_Dates"></a>
 
 ## Dates
@@ -478,16 +471,4 @@ test and non-production environments only. Exposes helpers across all environmen
 | --- | --- |
 | limit | <code>boolean</code> | 
 | id | <code>string</code> | 
-
-<a name="Helpers"></a>
-
-## Helpers : <code>object</code>
-**Kind**: global namespace  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| General | <code>module</code> | 
-| Dates | <code>module</code> | 
-| Downloads | <code>module</code> | 
 
