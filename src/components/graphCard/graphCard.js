@@ -6,6 +6,9 @@ import { GraphCardChart } from './graphCardChart';
 import { GraphCardContext, useParseFiltersSettings } from './graphCardContext';
 
 /**
+ * Configurable graph, chart, cards. Consumes Charts.
+ *
+ * @see Charts
  * @memberof Components
  * @module GraphCard
  * @property {module} GraphCardChart

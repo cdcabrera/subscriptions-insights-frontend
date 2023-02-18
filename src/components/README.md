@@ -2,41 +2,59 @@
 
 <dl>
 <dt><a href="#Components.module_Authentication">Authentication</a></dt>
-<dd></dd>
+<dd><p>Authentication component wrapper.</p>
+</dd>
 <dt><a href="#Authentication.module_AuthenticationContext">AuthenticationContext</a></dt>
-<dd></dd>
+<dd><p>Context and hooks for Authentication.</p>
+</dd>
 <dt><a href="#Components.module_BannerMessages">BannerMessages</a></dt>
-<dd></dd>
+<dd><p>Banner alert messages for a product view.</p>
+</dd>
 <dt><a href="#BannerMessages.module_BannerMessagesContext">BannerMessagesContext</a></dt>
-<dd></dd>
+<dd><p>Context and hooks for BannerMessages.</p>
+</dd>
 <dt><a href="#Components.module_Chart">Chart</a></dt>
-<dd></dd>
+<dd><p>PF Charts/Victory area, and line, charts generator.</p>
+</dd>
 <dt><a href="#Chart.module_ChartAxisLabel">ChartAxisLabel</a></dt>
-<dd></dd>
+<dd><p>SVG compatible HTML for axis labels.</p>
+</dd>
 <dt><a href="#Chart.module_ChartContext">ChartContext</a></dt>
-<dd></dd>
+<dd><p>Context and hooks for Charts.</p>
+</dd>
 <dt><a href="#Chart.module_ChartElements">ChartElements</a></dt>
-<dd></dd>
+<dd><p>Aggregate PF Charts, Victory, components into a chart.</p>
+</dd>
 <dt><a href="#Chart.module_ChartHelpers">ChartHelpers</a></dt>
-<dd></dd>
+<dd><p>Configuration and data &quot;adjustment&quot; for PF Charts, Victory.</p>
+</dd>
 <dt><a href="#Chart.module_ChartIcon">ChartIcon</a></dt>
-<dd></dd>
+<dd><p>Consistent icon, and sizes, for PF Charts, Victory.</p>
+</dd>
 <dt><a href="#Chart.module_ChartLegend">ChartLegend</a></dt>
-<dd></dd>
+<dd><p>HTML legend for PF Charts, Victory.</p>
+</dd>
 <dt><a href="#Chart.module_ChartTooltip">ChartTooltip</a></dt>
-<dd></dd>
+<dd><p>SVG compatible HTML for tooltips.</p>
+</dd>
 <dt><a href="#Form.module_Checkbox">Checkbox</a></dt>
-<dd></dd>
+<dd><p>A checkbox with state.</p>
+</dd>
 <dt><a href="#Form.module_FormHelpers">FormHelpers</a></dt>
-<dd></dd>
+<dd><p>A consistent mock event object to &quot;help&quot; PF.</p>
+</dd>
 <dt><a href="#Form.module_FormState">FormState</a></dt>
-<dd></dd>
+<dd><p>Internal form state tracking for submitting forms.</p>
+</dd>
 <dt><a href="#Form.module_Select">Select</a></dt>
-<dd></dd>
+<dd><p>A bundled wrapper for PF Select, Dropdown.</p>
+</dd>
 <dt><a href="#Form.module_TextInput">TextInput</a></dt>
-<dd></dd>
+<dd><p>Text input with state.</p>
+</dd>
 <dt><a href="#Components.module_GraphCard">GraphCard</a></dt>
-<dd></dd>
+<dd><p>Configurable graph, chart, cards. Consumes Charts.</p>
+</dd>
 <dt><a href="#GraphCard.module_GraphCardChart">GraphCardChart</a></dt>
 <dd></dd>
 <dt><a href="#GraphCard.module_GraphCardChartLegend">GraphCardChartLegend</a></dt>
@@ -156,6 +174,8 @@
 <a name="Components.module_Authentication"></a>
 
 ## Authentication
+Authentication component wrapper.
+
 **Properties**
 
 | Name | Type |
@@ -204,6 +224,8 @@ Default props.
 <a name="Authentication.module_AuthenticationContext"></a>
 
 ## AuthenticationContext
+Context and hooks for Authentication.
+
 
 * [AuthenticationContext](#Authentication.module_AuthenticationContext)
     * [~DEFAULT_CONTEXT](#Authentication.module_AuthenticationContext..DEFAULT_CONTEXT) : <code>React.Context.&lt;{}&gt;</code>
@@ -257,6 +279,8 @@ Return session data from authentication context.
 <a name="Components.module_BannerMessages"></a>
 
 ## BannerMessages
+Banner alert messages for a product view.
+
 **Properties**
 
 | Name | Type |
@@ -302,6 +326,8 @@ Default props.
 <a name="BannerMessages.module_BannerMessagesContext"></a>
 
 ## BannerMessagesContext
+Context and hooks for BannerMessages.
+
 <a name="BannerMessages.module_BannerMessagesContext..useGetAppMessages"></a>
 
 ### BannerMessagesContext~useGetAppMessages(options) ⇒ <code>Object</code>
@@ -321,6 +347,8 @@ Get app messages.
 <a name="Components.module_Chart"></a>
 
 ## Chart
+PF Charts/Victory area, and line, charts generator.
+
 **Properties**
 
 | Name | Type |
@@ -383,10 +411,12 @@ Default props.
 <a name="Chart.module_ChartAxisLabel"></a>
 
 ## ChartAxisLabel
+SVG compatible HTML for axis labels.
+
 <a name="Chart.module_ChartAxisLabel..chartAxisLabel"></a>
 
 ### ChartAxisLabel~chartAxisLabel(params) ⇒ <code>function</code>
-Return a compatible Victory tooltip component.
+Allow, and return, SVG compatible HTML for axis labels.
 
 **Kind**: inner method of [<code>ChartAxisLabel</code>](#Chart.module_ChartAxisLabel)  
 
@@ -399,14 +429,16 @@ Return a compatible Victory tooltip component.
 <a name="Chart.module_ChartContext"></a>
 
 ## ChartContext
+Context and hooks for Charts.
+
 
 * [ChartContext](#Chart.module_ChartContext)
     * [~DEFAULT_CONTEXT](#Chart.module_ChartContext..DEFAULT_CONTEXT) : <code>React.Context.&lt;{}&gt;</code>
     * [~useChartContext()](#Chart.module_ChartContext..useChartContext) ⇒ <code>React.Context.&lt;{}&gt;</code>
     * [~useToggleData(options)](#Chart.module_ChartContext..useToggleData) ⇒ <code>Object</code>
-    * [~onHide](#Chart.module_ChartContext..onHide) : <code>function</code>
-    * [~onRevert](#Chart.module_ChartContext..onRevert) : <code>function</code>
-    * [~onToggle](#Chart.module_ChartContext..onToggle) ⇒
+    * ["onHide"](#event_onHide)
+    * ["onRevert"](#event_onRevert)
+    * ["onToggle"](#event_onToggle) ⇒
     * [~getIsToggled](#Chart.module_ChartContext..getIsToggled) ⇒
 
 <a name="Chart.module_ChartContext..DEFAULT_CONTEXT"></a>
@@ -427,31 +459,31 @@ Get an updated chart context.
 Track, show, and hide chart data layers.
 
 **Kind**: inner method of [<code>ChartContext</code>](#Chart.module_ChartContext)  
-**Emits**: <code>event:onHide</code>, <code>event:onRevert</code>, [<code>onToggle</code>](#event_onToggle)  
+**Emits**: [<code>onHide</code>](#event_onHide), [<code>onRevert</code>](#event_onRevert), [<code>onToggle</code>](#event_onToggle)  
 
 | Param | Type |
 | --- | --- |
 | options | <code>object</code> | 
 | options.useChartContext | <code>function</code> | 
 
-<a name="Chart.module_ChartContext..onHide"></a>
+<a name="event_onHide"></a>
 
-### ChartContext~onHide : <code>function</code>
+### "onHide"
 Hide a graph layer.
 
-**Kind**: inner typedef of [<code>ChartContext</code>](#Chart.module_ChartContext)  
-<a name="Chart.module_ChartContext..onRevert"></a>
+**Kind**: event emitted by [<code>ChartContext</code>](#Chart.module_ChartContext)  
+<a name="event_onRevert"></a>
 
-### ChartContext~onRevert : <code>function</code>
+### "onRevert"
 Reset graph layers.
 
-**Kind**: inner typedef of [<code>ChartContext</code>](#Chart.module_ChartContext)  
-<a name="Chart.module_ChartContext..onToggle"></a>
+**Kind**: event emitted by [<code>ChartContext</code>](#Chart.module_ChartContext)  
+<a name="event_onToggle"></a>
 
-### ChartContext~onToggle ⇒
+### "onToggle" ⇒
 Hide/show graph layers.
 
-**Kind**: inner typedef of [<code>ChartContext</code>](#Chart.module_ChartContext)  
+**Kind**: event emitted by [<code>ChartContext</code>](#Chart.module_ChartContext)  
 **Returns**: boolean;  
 <a name="Chart.module_ChartContext..getIsToggled"></a>
 
@@ -463,15 +495,21 @@ Graph layer status.
 <a name="Chart.module_ChartElements"></a>
 
 ## ChartElements
+Aggregate PF Charts, Victory, components into a chart.
+
 
 * [ChartElements](#Chart.module_ChartElements)
     * [~ChartElements(props)](#Chart.module_ChartElements..ChartElements) ⇒ <code>React.ReactNode</code>
-        * [~VictoryVoronoiCursorContainer](#Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer)
+        * _static_
+            * [.propTypes](#Chart.module_ChartElements..ChartElements.propTypes) : <code>Object</code>
+            * [.defaultProps](#Chart.module_ChartElements..ChartElements.defaultProps) : <code>Object</code>
+        * _inner_
+            * [~VictoryVoronoiCursorContainer](#Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer)
 
 <a name="Chart.module_ChartElements..ChartElements"></a>
 
 ### ChartElements~ChartElements(props) ⇒ <code>React.ReactNode</code>
-Generate a compatible Victory chart element/facet component.
+Aggregate, generate, a compatible Victory chart element/facet component.
 
 **Kind**: inner method of [<code>ChartElements</code>](#Chart.module_ChartElements)  
 
@@ -480,6 +518,26 @@ Generate a compatible Victory chart element/facet component.
 | props | <code>object</code> | 
 | props.chartTypeDefaults | <code>object</code> | 
 
+
+* [~ChartElements(props)](#Chart.module_ChartElements..ChartElements) ⇒ <code>React.ReactNode</code>
+    * _static_
+        * [.propTypes](#Chart.module_ChartElements..ChartElements.propTypes) : <code>Object</code>
+        * [.defaultProps](#Chart.module_ChartElements..ChartElements.defaultProps) : <code>Object</code>
+    * _inner_
+        * [~VictoryVoronoiCursorContainer](#Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer)
+
+<a name="Chart.module_ChartElements..ChartElements.propTypes"></a>
+
+#### ChartElements.propTypes : <code>Object</code>
+Prop types
+
+**Kind**: static property of [<code>ChartElements</code>](#Chart.module_ChartElements..ChartElements)  
+<a name="Chart.module_ChartElements..ChartElements.defaultProps"></a>
+
+#### ChartElements.defaultProps : <code>Object</code>
+Default props
+
+**Kind**: static property of [<code>ChartElements</code>](#Chart.module_ChartElements..ChartElements)  
 <a name="Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer"></a>
 
 #### ChartElements~VictoryVoronoiCursorContainer
@@ -490,6 +548,8 @@ the tooltip populate consistently without being "near" a chart element y axis po
 <a name="Chart.module_ChartHelpers"></a>
 
 ## ChartHelpers
+Configuration and data "adjustment" for PF Charts, Victory.
+
 
 * [ChartHelpers](#Chart.module_ChartHelpers)
     * [~ChartTypeVariant](#Chart.module_ChartHelpers..ChartTypeVariant) : <code>Object</code>
@@ -618,6 +678,8 @@ Generate x,y props.
 <a name="Chart.module_ChartIcon"></a>
 
 ## ChartIcon
+Consistent icon, and sizes, for PF Charts, Victory.
+
 
 * [ChartIcon](#Chart.module_ChartIcon)
     * [~getSize(size)](#Chart.module_ChartIcon..getSize) ⇒ <code>string</code>
@@ -672,6 +734,8 @@ Default props.
 <a name="Chart.module_ChartLegend"></a>
 
 ## ChartLegend
+HTML legend for PF Charts, Victory.
+
 
 * [ChartLegend](#Chart.module_ChartLegend)
     * [~ChartLegend()](#Chart.module_ChartLegend..ChartLegend) ⇒ <code>React.ReactNode</code>
@@ -704,6 +768,8 @@ Default props.
 <a name="Chart.module_ChartTooltip"></a>
 
 ## ChartTooltip
+SVG compatible HTML for tooltips.
+
 
 * [ChartTooltip](#Chart.module_ChartTooltip)
     * [~chartTooltip(params)](#Chart.module_ChartTooltip..chartTooltip) ⇒ <code>function</code>
@@ -714,7 +780,7 @@ Default props.
 <a name="Chart.module_ChartTooltip..chartTooltip"></a>
 
 ### ChartTooltip~chartTooltip(params) ⇒ <code>function</code>
-Return a compatible Victory tooltip component.
+Allow, and return, SVG compatible HTML for in graph tooltip.
 
 **Kind**: inner method of [<code>ChartTooltip</code>](#Chart.module_ChartTooltip)  
 
@@ -784,6 +850,8 @@ Return a tooltip tail position CSS class.
 <a name="Form.module_Checkbox"></a>
 
 ## Checkbox
+A checkbox with state.
+
 
 * [Checkbox](#Form.module_Checkbox)
     * [~Checkbox(props)](#Form.module_Checkbox..Checkbox) ⇒ <code>React.ReactNode</code>
@@ -845,6 +913,8 @@ onChange event, provide restructured event.
 <a name="Form.module_FormHelpers"></a>
 
 ## FormHelpers
+A consistent mock event object to "help" PF.
+
 
 * [FormHelpers](#Form.module_FormHelpers)
     * [~createMockEvent(event, persistEvent)](#Form.module_FormHelpers..createMockEvent) ⇒ <code>Object</code>
@@ -853,7 +923,7 @@ onChange event, provide restructured event.
 <a name="Form.module_FormHelpers..createMockEvent"></a>
 
 ### FormHelpers~createMockEvent(event, persistEvent) ⇒ <code>Object</code>
-Create a consistent mock event object.
+Create a consistent mock event object modeled on JS behavior.
 
 **Kind**: inner method of [<code>FormHelpers</code>](#Form.module_FormHelpers)  
 
@@ -877,6 +947,8 @@ Confirm a string has minimum length.
 <a name="Form.module_FormState"></a>
 
 ## FormState
+Internal form state tracking for submitting forms.
+
 
 * [FormState](#Form.module_FormState)
     * [~FormState](#Form.module_FormState..FormState) ⇐ <code>React.Component</code>
@@ -1066,6 +1138,8 @@ Validate form, then submit.
 <a name="Form.module_Select"></a>
 
 ## Select
+A bundled wrapper for PF Select, Dropdown.
+
 
 * [Select](#Form.module_Select)
     * [~SplitButtonVariant](#Form.module_Select..SplitButtonVariant) : <code>Object</code>
@@ -1284,6 +1358,8 @@ Emulate select event object, apply to provided onSelect prop.
 <a name="Form.module_TextInput"></a>
 
 ## TextInput
+Text input with state.
+
 
 * [TextInput](#Form.module_TextInput)
     * [~TextInput](#Form.module_TextInput..TextInput) ⇐ <code>React.Component</code>
@@ -1368,6 +1444,9 @@ onChange event, provide restructured event.
 <a name="Components.module_GraphCard"></a>
 
 ## GraphCard
+Configurable graph, chart, cards. Consumes Charts.
+
+**See**: Charts  
 **Properties**
 
 | Name | Type |

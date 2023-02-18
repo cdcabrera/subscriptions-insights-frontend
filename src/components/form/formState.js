@@ -5,6 +5,8 @@ import _isEqual from 'lodash/isEqual';
 import helpers from '../../common/helpers';
 
 /**
+ * Internal form state tracking for submitting forms.
+ *
  * @memberof Form
  * @module FormState
  */

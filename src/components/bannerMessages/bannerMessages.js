@@ -8,6 +8,8 @@ import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * Banner alert messages for a product view.
+ *
  * @memberof Components
  * @module BannerMessages
  * @property {module} BannerMessagesContext

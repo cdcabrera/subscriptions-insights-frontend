@@ -2,6 +2,8 @@ import React from 'react';
 import { helpers } from '../../common';
 
 /**
+ * SVG compatible HTML for tooltips.
+ *
  * @memberof Chart
  * @module ChartTooltip
  */
@@ -18,7 +20,7 @@ import { helpers } from '../../common';
  * bottom, left.
  */
 /**
- * Return a compatible Victory tooltip component.
+ * Allow, and return, SVG compatible HTML for in graph tooltip.
  *
  * @param {object} params
  * @param {object} params.chartSettings

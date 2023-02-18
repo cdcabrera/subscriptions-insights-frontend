@@ -22,6 +22,8 @@ import { createMockEvent } from './formHelpers';
 import { helpers } from '../../common';
 
 /**
+ * A bundled wrapper for PF Select, Dropdown.
+ *
  * @memberof Form
  * @module Select
  */

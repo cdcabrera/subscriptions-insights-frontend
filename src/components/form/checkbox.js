@@ -5,6 +5,8 @@ import { createMockEvent } from './formHelpers';
 import { helpers } from '../../common';
 
 /**
+ * A checkbox with state.
+ *
  * @memberof Form
  * @module Checkbox
  */

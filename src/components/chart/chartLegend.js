@@ -3,6 +3,8 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { useChartContext, useToggleData } from './chartContext';
 
 /**
+ * HTML legend for PF Charts, Victory.
+ *
  * @memberof Chart
  * @module ChartLegend
  */

@@ -1,6 +1,8 @@
 import React from 'react';
 
 /**
+ * SVG compatible HTML for axis labels.
+ *
  * @memberof Chart
  * @module ChartAxisLabel
  */
@@ -10,7 +12,7 @@ import React from 'react';
  * This leads to odd implementations, like returning a function component.
  */
 /**
- * Return a compatible Victory tooltip component.
+ * Allow, and return, SVG compatible HTML for axis labels.
  *
  * @param {object} params
  * @param {string} params.axis

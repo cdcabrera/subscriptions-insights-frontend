@@ -8,6 +8,8 @@ import { chartHelpers, ChartTypeVariant } from './chartHelpers';
 import { useResizeObserver } from '../../hooks/useWindow';
 
 /**
+ * PF Charts/Victory area, and line, charts generator.
+ *
  * @memberof Components
  * @module Chart
  * @property {module} ChartAxisLabel

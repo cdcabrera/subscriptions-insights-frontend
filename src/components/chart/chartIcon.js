@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { EyeIcon, EyeSlashIcon, SquareIcon, IconSize } from '@patternfly/react-icons';
 
 /**
+ * Consistent icon, and sizes, for PF Charts, Victory.
+ *
  * @memberof Chart
  * @module ChartIcon
  */

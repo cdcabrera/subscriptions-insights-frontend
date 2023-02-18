@@ -9,12 +9,14 @@ import { chartAxisLabel } from './chartAxisLabel';
 import { ChartTypeVariant } from './chartHelpers';
 
 /**
+ * Aggregate PF Charts, Victory, components into a chart.
+ *
  * @memberof Chart
  * @module ChartElements
  */
 
 /**
- * Generate a compatible Victory chart element/facet component.
+ * Aggregate, generate, a compatible Victory chart element/facet component.
  *
  * @param {object} props
  * @param {object} props.chartTypeDefaults
@@ -125,6 +127,11 @@ const ChartElements = ({ chartTypeDefaults }) => {
   );
 };
 
+/**
+ * Prop types
+ *
+ * @type {{chartTypeDefaults:{}}}
+ */
 ChartElements.propTypes = {
   chartTypeDefaults: PropTypes.objectOf(
     PropTypes.shape({
@@ -135,6 +142,11 @@ ChartElements.propTypes = {
   )
 };
 
+/**
+ * Default props
+ *
+ * @type {{chartTypeDefaults:{}}}
+ */
 ChartElements.defaultProps = {
   chartTypeDefaults: {
     [ChartTypeVariant.area]: {

@@ -9,6 +9,8 @@ import {
 } from '../../services/rhsm/rhsmConstants';
 
 /**
+ * Context and hooks for BannerMessages.
+ *
  * @memberof BannerMessages
  * @module BannerMessagesContext
  */

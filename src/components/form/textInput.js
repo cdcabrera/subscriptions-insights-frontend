@@ -5,6 +5,8 @@ import { createMockEvent } from './formHelpers';
 import { helpers } from '../../common';
 
 /**
+ * Text input with state.
+ *
  * @memberof Form
  * @module TextInput
  */

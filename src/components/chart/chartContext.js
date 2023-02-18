@@ -2,6 +2,8 @@ import React, { useCallback, useContext } from 'react';
 import { helpers } from '../../common';
 
 /**
+ * Context and hooks for Charts.
+ *
  * @memberof Chart
  * @module ChartContext
  */
@@ -47,7 +49,6 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
    * Hide a graph layer.
    *
    * @event onHide
-   * @callback onHide
    */
   const onHide = useCallback(
     id => {
@@ -60,7 +61,6 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
    * Reset graph layers.
    *
    * @event onRevert
-   * @callback onRevert
    */
   const onRevert = useCallback(() => {
     setDataSetsToggle(() => ({}));
@@ -70,7 +70,6 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
    * Hide/show graph layers.
    *
    * @event onToggle
-   * @callback onToggle
    * @returns boolean;
    */
   const onToggle = useCallback(
