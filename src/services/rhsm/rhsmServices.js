@@ -6,7 +6,7 @@ import { rhsmHelpers } from './rhsmHelpers';
 
 /**
  * @memberof Rhsm
- * @module {module} RhsmServices
+ * @module RhsmServices
  */
 
 /**

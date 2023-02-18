@@ -4,7 +4,7 @@ import { schemaResponse } from '../common/helpers';
 
 /**
  * @memberof Platform
- * @module {module} PlatformSchemas
+ * @module PlatformSchemas
  */
 
 /**

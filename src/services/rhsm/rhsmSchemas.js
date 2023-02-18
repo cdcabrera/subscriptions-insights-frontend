@@ -5,7 +5,7 @@ import { rhsmConstants } from './rhsmConstants';
 
 /**
  * @memberof Rhsm
- * @module {module} RhsmSchemas
+ * @module RhsmSchemas
  */
 
 /**

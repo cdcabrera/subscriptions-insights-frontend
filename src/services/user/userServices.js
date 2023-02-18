@@ -5,7 +5,7 @@ import { helpers } from '../../common';
 
 /**
  * @memberof User
- * @module {module} UserServices
+ * @module UserServices
  */
 
 /**

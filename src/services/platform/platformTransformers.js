@@ -8,7 +8,7 @@ import { helpers } from '../../common';
 
 /**
  * @memberof Platform
- * @module {module} PlatformTransformers
+ * @module PlatformTransformers
  */
 
 /**

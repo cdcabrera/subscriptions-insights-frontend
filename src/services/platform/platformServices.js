@@ -11,7 +11,7 @@ import {
 
 /**
  * @memberof Platform
- * @module {module} PlatformServices
+ * @module PlatformServices
  */
 
 /**

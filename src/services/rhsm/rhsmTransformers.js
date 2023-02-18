@@ -13,7 +13,7 @@ import { dateHelpers } from '../../common';
 
 /**
  * @memberof Rhsm
- * @module {module} RhsmTransformers
+ * @module RhsmTransformers
  */
 
 /**

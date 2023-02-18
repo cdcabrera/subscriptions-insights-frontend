@@ -4,7 +4,7 @@ import { helpers } from '../../common';
 
 /**
  * @memberof Helpers
- * @module {module} General
+ * @module ServiceHelpers
  */
 
 /**

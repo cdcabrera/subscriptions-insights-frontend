@@ -4,19 +4,20 @@ import { serviceHelpers } from './helpers';
 
 /**
  * @memberof Helpers
- * @module {module} ServiceConfig
+ * @module ServiceConfig
  */
 
 /**
  * Set Axios XHR default timeout.
+ *
+ * @type {number}
  */
 const globalXhrTimeout = Number.parseInt(process.env.REACT_APP_AJAX_TIMEOUT, 10) || 60000;
 
 /**
  * Cache Axios service call cancel tokens.
  *
- * @private
- * @type {{}}
+ * @type {object}
  */
 const globalCancelTokens = {};
 

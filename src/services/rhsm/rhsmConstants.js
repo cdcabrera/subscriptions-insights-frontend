@@ -1,6 +1,6 @@
 /**
  * @memberof Rhsm
- * @module {module} RhsmConstants
+ * @module RhsmConstants
  */
 
 /**

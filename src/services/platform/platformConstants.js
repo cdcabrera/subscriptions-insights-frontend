@@ -1,6 +1,6 @@
 /**
  * @memberof Platform
- * @module {module} PlatformConstants
+ * @module PlatformConstants
  */
 
 /**
