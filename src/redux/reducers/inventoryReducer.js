@@ -3,6 +3,8 @@ import { reduxHelpers } from '../common/reduxHelpers';
 import { inventoryTypes } from '../types';
 
 /**
+ * Inventory, and tabs, related API and user state reducer.
+ *
  * @memberof Reducers
  * @module InventoryReducer
  */

@@ -5,6 +5,8 @@ import { store } from '../store';
 import { helpers } from '../../common';
 
 /**
+ * State hooks for dispatch and selectors.
+ *
  * @memberof Hooks
  * @module UseReactRedux
  */

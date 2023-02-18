@@ -3,6 +3,8 @@ import { reduxMiddleware } from './middleware';
 import { reduxReducers } from './reducers';
 
 /**
+ * Redux store setup.
+ *
  * @memberof Redux State
  * @module Store
  */

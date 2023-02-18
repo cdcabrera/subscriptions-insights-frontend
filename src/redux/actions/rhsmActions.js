@@ -3,6 +3,8 @@ import { rhsmServices } from '../../services/rhsm/rhsmServices';
 import { generateChartIds } from '../../components/graphCard/graphCardHelpers';
 
 /**
+ * RHSM service wrappers for dispatch, state update.
+ *
  * @memberof Actions
  * @module RhsmActions
  */
