@@ -10,6 +10,8 @@ import { Table } from '../table/table';
 import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
 
 /**
+ * Guests inventory table wrapper.
+ *
  * @memberof Components
  * @module InventoryGuests
  * @property {module} InventoryGuestsContext

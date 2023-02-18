@@ -15,6 +15,8 @@ import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../serv
 import { translate } from '../i18n/i18n';
 
 /**
+ * Primary product display component, and config context provider.
+ *
  * @memberof Components
  * @module ProductView
  * @property {module} ProductViewContext

@@ -25,6 +25,8 @@ import graphPng2x from '../../images/graph2x.png';
 import graphPng4x from '../../images/graph4x.png';
 
 /**
+ * Opt-in view
+ *
  * @memberof Components
  * @module OptinView
  */

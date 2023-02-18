@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { helpers } from '../../common';
 
 /**
+ * Normalize component height on page loads and updates.
+ *
  * @memberof Components
  * @module MinHeight
  */

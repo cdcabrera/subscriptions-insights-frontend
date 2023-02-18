@@ -7,6 +7,8 @@ import { Select, SelectPosition } from '../form/select';
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone Architecture select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldArchitecture
  */

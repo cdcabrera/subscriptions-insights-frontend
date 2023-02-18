@@ -8,8 +8,13 @@ import { routerHelpers } from './routerHelpers';
 import { Loader } from '../loader/loader';
 
 /**
- * @memberof Router
+ * Route component loader.
+ *
+ * @memberof Components
  * @module Router
+ * @property {module} Redirect
+ * @property {module} RouterContext
+ * @property {module} RouterHelpers
  */
 
 /**

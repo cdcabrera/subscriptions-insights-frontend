@@ -3,8 +3,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { helpers } from '../../common';
 
 /**
- * Configuration and data "adjustment" for PF Charts, Victory.
- *
  * @memberof Chart
  * @module ChartHelpers
  */

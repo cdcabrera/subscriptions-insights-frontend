@@ -8,6 +8,8 @@ import { PageSection } from './pageSection';
 import { PageToolbar } from './pageToolbar';
 
 /**
+ * Page layout, organize header, columns, messages, sections, and toolbar.
+ *
  * @memberof Components
  * @module PageLayout
  * @property {module} PageColumns

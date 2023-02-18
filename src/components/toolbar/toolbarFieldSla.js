@@ -7,6 +7,8 @@ import { RHSM_API_QUERY_SLA_TYPES as FIELD_TYPES, RHSM_API_QUERY_SET_TYPES } fro
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone SLA select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldSla
  */

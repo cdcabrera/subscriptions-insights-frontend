@@ -7,6 +7,8 @@ import { PageHeader, PageLayout } from '../pageLayout/pageLayout';
 import { TableSkeleton } from '../table/tableSkeleton';
 
 /**
+ * Loading display for charts, copy, tables, etc.
+ *
  * @memberof Components
  * @module Loader
  */

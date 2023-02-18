@@ -1,8 +1,6 @@
 import React from 'react';
 
 /**
- * SVG compatible HTML for axis labels.
- *
  * @memberof Chart
  * @module ChartAxisLabel
  */

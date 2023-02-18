@@ -10,6 +10,8 @@ import {
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone Billing Provider select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldBillingProvider
  */

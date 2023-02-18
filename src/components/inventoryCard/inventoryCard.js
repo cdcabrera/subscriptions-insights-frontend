@@ -24,6 +24,8 @@ import { translate } from '../i18n/i18n';
 import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances } from './inventoryCardContext';
 
 /**
+ * Instances, Hosts, and Subscriptions base inventory card.
+ *
  * @memberof Components
  * @module InventoryCard
  * @property {module} InventoryCardContext

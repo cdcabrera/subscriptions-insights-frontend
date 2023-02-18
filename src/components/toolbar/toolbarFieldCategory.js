@@ -8,6 +8,8 @@ import { graphCardHelpers } from '../graphCard/graphCardHelpers';
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone Category select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldCategory
  */

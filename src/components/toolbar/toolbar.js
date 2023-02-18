@@ -16,6 +16,8 @@ import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * Primary view toolbar.
+ *
  * @memberof Components
  * @module Toolbar
  * @property {module} ToolbarContext

@@ -7,6 +7,8 @@ import { RHSM_API_QUERY_USAGE_TYPES as FIELD_TYPES, RHSM_API_QUERY_SET_TYPES } f
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone Usage select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldUsage
  */

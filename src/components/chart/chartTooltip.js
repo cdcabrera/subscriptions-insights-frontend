@@ -2,8 +2,6 @@ import React from 'react';
 import { helpers } from '../../common';
 
 /**
- * SVG compatible HTML for tooltips.
- *
  * @memberof Chart
  * @module ChartTooltip
  */

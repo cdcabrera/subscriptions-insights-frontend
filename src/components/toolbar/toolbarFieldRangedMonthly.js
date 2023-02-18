@@ -11,6 +11,8 @@ import { dateHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone Ranged Monthly Granularity select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldRangedMonthly
  */

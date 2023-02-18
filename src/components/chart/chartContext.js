@@ -2,8 +2,6 @@ import React, { useCallback, useContext } from 'react';
 import { helpers } from '../../common';
 
 /**
- * Context and hooks for Charts.
- *
  * @memberof Chart
  * @module ChartContext
  */

@@ -6,8 +6,6 @@ import { helpers } from '../../common';
 import { routerHelpers } from '../router';
 
 /**
- * Context and hooks for Authentication.
- *
  * @memberof Authentication
  * @module AuthenticationContext
  */

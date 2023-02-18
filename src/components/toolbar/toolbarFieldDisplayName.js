@@ -9,6 +9,8 @@ import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone Display Name input filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldDisplayName
  */

@@ -7,6 +7,8 @@ import { RHSM_API_QUERY_UOM_TYPES as FIELD_TYPES, RHSM_API_QUERY_SET_TYPES } fro
 import { translate } from '../i18n/i18n';
 
 /**
+ * A standalone UOM select filter.
+ *
  * @memberof Toolbar
  * @module ToolbarFieldUom
  */

@@ -5,38 +5,29 @@
 <dd><p>Authentication component wrapper.</p>
 </dd>
 <dt><a href="#Authentication.module_AuthenticationContext">AuthenticationContext</a></dt>
-<dd><p>Context and hooks for Authentication.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Components.module_BannerMessages">BannerMessages</a></dt>
 <dd><p>Banner alert messages for a product view.</p>
 </dd>
 <dt><a href="#BannerMessages.module_BannerMessagesContext">BannerMessagesContext</a></dt>
-<dd><p>Context and hooks for BannerMessages.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Components.module_Chart">Chart</a></dt>
 <dd><p>PF Charts/Victory area, and line, charts generator.</p>
 </dd>
 <dt><a href="#Chart.module_ChartAxisLabel">ChartAxisLabel</a></dt>
-<dd><p>SVG compatible HTML for axis labels.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Chart.module_ChartContext">ChartContext</a></dt>
-<dd><p>Context and hooks for Charts.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Chart.module_ChartElements">ChartElements</a></dt>
-<dd><p>Aggregate PF Charts, Victory, components into a chart.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Chart.module_ChartHelpers">ChartHelpers</a></dt>
-<dd><p>Configuration and data &quot;adjustment&quot; for PF Charts, Victory.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Chart.module_ChartIcon">ChartIcon</a></dt>
-<dd><p>Consistent icon, and sizes, for PF Charts, Victory.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Chart.module_ChartLegend">ChartLegend</a></dt>
-<dd><p>HTML legend for PF Charts, Victory.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Chart.module_ChartTooltip">ChartTooltip</a></dt>
-<dd><p>SVG compatible HTML for tooltips.</p>
-</dd>
+<dd></dd>
 <dt><a href="#Form.module_Checkbox">Checkbox</a></dt>
 <dd><p>A checkbox with state.</p>
 </dd>
@@ -70,11 +61,13 @@
 <dt><a href="#GraphCard.module_GraphCardMetricTotals">GraphCardMetricTotals</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_i18n">i18n</a></dt>
-<dd></dd>
+<dd><p>Populate, load, remote locale strings.</p>
+</dd>
 <dt><a href="#i18n.module_i18nHelpers">i18nHelpers</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_InventoryCard">InventoryCard</a></dt>
-<dd></dd>
+<dd><p>Instances, Hosts, and Subscriptions base inventory card.</p>
+</dd>
 <dt><a href="#InventoryCard.module_InventoryCardContext">InventoryCardContext</a></dt>
 <dd></dd>
 <dt><a href="#InventoryCard.module_InventoryCardHelpers">InventoryCardHelpers</a></dt>
@@ -86,27 +79,34 @@
 <dt><a href="#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext">InventoryCardSubscriptionsContext</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_InventoryGuests">InventoryGuests</a></dt>
-<dd></dd>
+<dd><p>Guests inventory table wrapper.</p>
+</dd>
 <dt><a href="#InventoryGuests.module_InventoryGuestsContext">InventoryGuestsContext</a></dt>
 <dd></dd>
 <dt><a href="#InventoryTabs.module_InventoryTab">InventoryTab</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_InventoryTabs">InventoryTabs</a></dt>
-<dd></dd>
+<dd><p>An inventory tabs display with state. Consume Tabs.</p>
+</dd>
 <dt><a href="#Components.module_Loader">Loader</a></dt>
-<dd></dd>
+<dd><p>Loading display for charts, copy, tables, etc.</p>
+</dd>
 <dt><a href="#Components.module_MessageView">MessageView</a></dt>
-<dd></dd>
+<dd><p>Page empty state message display.</p>
+</dd>
 <dt><a href="#Components.module_MinHeight">MinHeight</a></dt>
-<dd></dd>
+<dd><p>Normalize component height on page loads and updates.</p>
+</dd>
 <dt><a href="#Components.module_OptinView">OptinView</a></dt>
-<dd></dd>
+<dd><p>Opt-in view</p>
+</dd>
 <dt><a href="#PageLayout.module_PageColumns">PageColumns</a></dt>
 <dd></dd>
 <dt><a href="#PageLayout.module_PageHeader">PageHeader</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_PageLayout">PageLayout</a></dt>
-<dd></dd>
+<dd><p>Page layout, organize header, columns, messages, sections, and toolbar.</p>
+</dd>
 <dt><a href="#PageLayout.module_PageMessages">PageMessages</a></dt>
 <dd></dd>
 <dt><a href="#PageLayout.module_PageSection">PageSection</a></dt>
@@ -114,61 +114,76 @@
 <dt><a href="#PageLayout.module_PageToolbar">PageToolbar</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_Pagination">Pagination</a></dt>
-<dd></dd>
+<dd><p>Inventory paging.</p>
+</dd>
 <dt><a href="#Pagination.module_PaginationHelpers">PaginationHelpers</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_ProductView">ProductView</a></dt>
-<dd></dd>
+<dd><p>Primary product display component, and config context provider.</p>
+</dd>
 <dt><a href="#ProductView.module_ProductViewContext">ProductViewContext</a></dt>
 <dd></dd>
 <dt><a href="#ProductView.module_ProductViewMissing">ProductViewMissing</a></dt>
 <dd></dd>
-<dt><a href="#Components.module_Router">Router</a></dt>
-<dd></dd>
 <dt><a href="#Router.module_Redirect">Redirect</a></dt>
 <dd></dd>
-<dt><a href="#Router.module_Router">Router</a></dt>
-<dd></dd>
+<dt><a href="#Components.module_Router">Router</a></dt>
+<dd><p>Route component loader.</p>
+</dd>
 <dt><a href="#Router.module_RouterContext">RouterContext</a></dt>
 <dd></dd>
 <dt><a href="#Router.module_RouterHelpers">RouterHelpers</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_Table">Table</a></dt>
-<dd></dd>
+<dd><p>PF table wrapper, normalize table use.</p>
+</dd>
 <dt><a href="#Table.module_TableEmpty">TableEmpty</a></dt>
 <dd></dd>
 <dt><a href="#Table.module_TableSkeleton">TableSkeleton</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_Tabs">Tabs</a></dt>
-<dd></dd>
+<dd><p>PF tabs with state.</p>
+</dd>
 <dt><a href="#Components.module_Toolbar">Toolbar</a></dt>
-<dd></dd>
+<dd><p>Primary view toolbar.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarContext">ToolbarContext</a></dt>
 <dd></dd>
 <dt><a href="#Toolbar.module_ToolbarFieldArchitecture">ToolbarFieldArchitecture</a></dt>
-<dd></dd>
+<dd><p>A standalone Architecture select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldBillingProvider">ToolbarFieldBillingProvider</a></dt>
-<dd></dd>
+<dd><p>A standalone Billing Provider select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldCategory">ToolbarFieldCategory</a></dt>
-<dd></dd>
+<dd><p>A standalone Category select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldDisplayName">ToolbarFieldDisplayName</a></dt>
-<dd></dd>
+<dd><p>A standalone Display Name input filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldGranularity">ToolbarFieldGranularity</a></dt>
-<dd></dd>
+<dd><p>A standalone Granularity select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldRangedMonthly">ToolbarFieldRangedMonthly</a></dt>
-<dd></dd>
+<dd><p>A standalone Ranged Monthly Granularity select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldSelectCategory">ToolbarFieldSelectCategory</a></dt>
 <dd></dd>
 <dt><a href="#Toolbar.module_ToolbarFieldSla">ToolbarFieldSla</a></dt>
-<dd></dd>
+<dd><p>A standalone SLA select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldUom">ToolbarFieldUom</a></dt>
-<dd></dd>
+<dd><p>A standalone UOM select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldUsage">ToolbarFieldUsage</a></dt>
-<dd></dd>
+<dd><p>A standalone Usage select filter.</p>
+</dd>
 <dt><a href="#Toolbar.module_ToolbarFieldVariant">ToolbarFieldVariant</a></dt>
-<dd></dd>
+<dd><p>A standalone Variant select filter.</p>
+</dd>
 <dt><a href="#Components.module_Tooltip">Tooltip</a></dt>
-<dd></dd>
+<dd><p>PF tooltip wrapper.</p>
+</dd>
 </dl>
 
 <a name="Components.module_Authentication"></a>
@@ -224,8 +239,6 @@ Default props.
 <a name="Authentication.module_AuthenticationContext"></a>
 
 ## AuthenticationContext
-Context and hooks for Authentication.
-
 
 * [AuthenticationContext](#Authentication.module_AuthenticationContext)
     * [~DEFAULT_CONTEXT](#Authentication.module_AuthenticationContext..DEFAULT_CONTEXT) : <code>React.Context.&lt;{}&gt;</code>
@@ -326,8 +339,6 @@ Default props.
 <a name="BannerMessages.module_BannerMessagesContext"></a>
 
 ## BannerMessagesContext
-Context and hooks for BannerMessages.
-
 <a name="BannerMessages.module_BannerMessagesContext..useGetAppMessages"></a>
 
 ### BannerMessagesContext~useGetAppMessages(options) ⇒ <code>Object</code>
@@ -411,8 +422,6 @@ Default props.
 <a name="Chart.module_ChartAxisLabel"></a>
 
 ## ChartAxisLabel
-SVG compatible HTML for axis labels.
-
 <a name="Chart.module_ChartAxisLabel..chartAxisLabel"></a>
 
 ### ChartAxisLabel~chartAxisLabel(params) ⇒ <code>function</code>
@@ -429,8 +438,6 @@ Allow, and return, SVG compatible HTML for axis labels.
 <a name="Chart.module_ChartContext"></a>
 
 ## ChartContext
-Context and hooks for Charts.
-
 
 * [ChartContext](#Chart.module_ChartContext)
     * [~DEFAULT_CONTEXT](#Chart.module_ChartContext..DEFAULT_CONTEXT) : <code>React.Context.&lt;{}&gt;</code>
@@ -495,8 +502,6 @@ Graph layer status.
 <a name="Chart.module_ChartElements"></a>
 
 ## ChartElements
-Aggregate PF Charts, Victory, components into a chart.
-
 
 * [ChartElements](#Chart.module_ChartElements)
     * [~ChartElements(props)](#Chart.module_ChartElements..ChartElements) ⇒ <code>React.ReactNode</code>
@@ -548,8 +553,6 @@ the tooltip populate consistently without being "near" a chart element y axis po
 <a name="Chart.module_ChartHelpers"></a>
 
 ## ChartHelpers
-Configuration and data "adjustment" for PF Charts, Victory.
-
 
 * [ChartHelpers](#Chart.module_ChartHelpers)
     * [~ChartTypeVariant](#Chart.module_ChartHelpers..ChartTypeVariant) : <code>Object</code>
@@ -678,8 +681,6 @@ Generate x,y props.
 <a name="Chart.module_ChartIcon"></a>
 
 ## ChartIcon
-Consistent icon, and sizes, for PF Charts, Victory.
-
 
 * [ChartIcon](#Chart.module_ChartIcon)
     * [~getSize(size)](#Chart.module_ChartIcon..getSize) ⇒ <code>string</code>
@@ -734,8 +735,6 @@ Default props.
 <a name="Chart.module_ChartLegend"></a>
 
 ## ChartLegend
-HTML legend for PF Charts, Victory.
-
 
 * [ChartLegend](#Chart.module_ChartLegend)
     * [~ChartLegend()](#Chart.module_ChartLegend..ChartLegend) ⇒ <code>React.ReactNode</code>
@@ -768,8 +767,6 @@ Default props.
 <a name="Chart.module_ChartTooltip"></a>
 
 ## ChartTooltip
-SVG compatible HTML for tooltips.
-
 
 * [ChartTooltip](#Chart.module_ChartTooltip)
     * [~chartTooltip(params)](#Chart.module_ChartTooltip..chartTooltip) ⇒ <code>function</code>
@@ -1929,6 +1926,8 @@ Default props.
 <a name="Components.module_i18n"></a>
 
 ## i18n
+Populate, load, remote locale strings.
+
 **Properties**
 
 | Name | Type |
@@ -2018,6 +2017,8 @@ Apply string replacements against a component, HOC.
 <a name="Components.module_InventoryCard"></a>
 
 ## InventoryCard
+Instances, Hosts, and Subscriptions base inventory card.
+
 **Properties**
 
 | Name | Type |
@@ -2474,6 +2475,8 @@ On event update state for subscriptions inventory.
 <a name="Components.module_InventoryGuests"></a>
 
 ## InventoryGuests
+Guests inventory table wrapper.
+
 **Properties**
 
 | Name | Type |
@@ -2648,6 +2651,9 @@ Default props.
 <a name="Components.module_InventoryTabs"></a>
 
 ## InventoryTabs
+An inventory tabs display with state. Consume Tabs.
+
+**See**: Tabs  
 **Properties**
 
 | Name | Type |
@@ -2715,6 +2721,8 @@ Default props.
 <a name="Components.module_Loader"></a>
 
 ## Loader
+Loading display for charts, copy, tables, etc.
+
 
 * [Loader](#Components.module_Loader)
     * [~Loader(props)](#Components.module_Loader..Loader) ⇒ <code>React.ReactNode</code>
@@ -2755,6 +2763,8 @@ Default props.
 <a name="Components.module_MessageView"></a>
 
 ## MessageView
+Page empty state message display.
+
 
 * [MessageView](#Components.module_MessageView)
     * [~MessageView(props)](#Components.module_MessageView..MessageView) ⇒ <code>React.ReactNode</code>
@@ -2764,7 +2774,7 @@ Default props.
 <a name="Components.module_MessageView..MessageView"></a>
 
 ### MessageView~MessageView(props) ⇒ <code>React.ReactNode</code>
-Render a message view.
+Render a message view, page empty state.
 
 **Kind**: inner method of [<code>MessageView</code>](#Components.module_MessageView)  
 
@@ -2797,6 +2807,8 @@ Default props.
 <a name="Components.module_MinHeight"></a>
 
 ## MinHeight
+Normalize component height on page loads and updates.
+
 
 * [MinHeight](#Components.module_MinHeight)
     * [~MinHeight](#Components.module_MinHeight..MinHeight) ⇐ <code>React.Component</code>
@@ -2871,6 +2883,8 @@ On resize adjust graph display.
 <a name="Components.module_OptinView"></a>
 
 ## OptinView
+Opt-in view
+
 
 * [OptinView](#Components.module_OptinView)
     * [~OptinView(props)](#Components.module_OptinView..OptinView) ⇒ <code>React.ReactNode</code>
@@ -3020,6 +3034,8 @@ Default props.
 <a name="Components.module_PageLayout"></a>
 
 ## PageLayout
+Page layout, organize header, columns, messages, sections, and toolbar.
+
 **Properties**
 
 | Name | Type |
@@ -3186,6 +3202,8 @@ Default props.
 <a name="Components.module_Pagination"></a>
 
 ## Pagination
+Inventory paging.
+
 **Properties**
 
 | Name | Type |
@@ -3284,6 +3302,8 @@ Determine if paging is on the last page.
 <a name="Components.module_ProductView"></a>
 
 ## ProductView
+Primary product display component, and config context provider.
+
 **Properties**
 
 | Name | Type |
@@ -3617,18 +3637,6 @@ On click, update history.
 | --- | --- |
 | id | <code>string</code> | 
 
-<a name="Components.module_Router"></a>
-
-## Router
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| Redirect | <code>module</code> | 
-| Router | <code>module</code> | 
-| RouterContext | <code>module</code> | 
-| RouterHelpers | <code>module</code> | 
-
 <a name="Router.module_Redirect"></a>
 
 ## Redirect
@@ -3682,21 +3690,31 @@ Default props.
 Bypass router, force the location.
 
 **Kind**: inner method of [<code>Redirect</code>](#Router.module_Redirect..Redirect)  
-<a name="Router.module_Router"></a>
+<a name="Components.module_Router"></a>
 
 ## Router
+Route component loader.
 
-* [Router](#Router.module_Router)
-    * [~Router(props)](#Router.module_Router..Router) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Router.module_Router..Router.propTypes) : <code>Object</code>
-        * [.defaultProps](#Router.module_Router..Router.defaultProps) : <code>Object</code>
+**Properties**
 
-<a name="Router.module_Router..Router"></a>
+| Name | Type |
+| --- | --- |
+| Redirect | <code>module</code> | 
+| RouterContext | <code>module</code> | 
+| RouterHelpers | <code>module</code> | 
+
+
+* [Router](#Components.module_Router)
+    * [~Router(props)](#Components.module_Router..Router) ⇒ <code>React.ReactNode</code>
+        * [.propTypes](#Components.module_Router..Router.propTypes) : <code>Object</code>
+        * [.defaultProps](#Components.module_Router..Router.defaultProps) : <code>Object</code>
+
+<a name="Components.module_Router..Router"></a>
 
 ### Router~Router(props) ⇒ <code>React.ReactNode</code>
 Load routes.
 
-**Kind**: inner method of [<code>Router</code>](#Router.module_Router)  
+**Kind**: inner method of [<code>Router</code>](#Components.module_Router)  
 
 | Param | Type |
 | --- | --- |
@@ -3704,22 +3722,22 @@ Load routes.
 | props.routes | <code>Array</code> | 
 
 
-* [~Router(props)](#Router.module_Router..Router) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Router.module_Router..Router.propTypes) : <code>Object</code>
-    * [.defaultProps](#Router.module_Router..Router.defaultProps) : <code>Object</code>
+* [~Router(props)](#Components.module_Router..Router) ⇒ <code>React.ReactNode</code>
+    * [.propTypes](#Components.module_Router..Router.propTypes) : <code>Object</code>
+    * [.defaultProps](#Components.module_Router..Router.defaultProps) : <code>Object</code>
 
-<a name="Router.module_Router..Router.propTypes"></a>
+<a name="Components.module_Router..Router.propTypes"></a>
 
 #### Router.propTypes : <code>Object</code>
 Prop types.
 
-**Kind**: static property of [<code>Router</code>](#Router.module_Router..Router)  
-<a name="Router.module_Router..Router.defaultProps"></a>
+**Kind**: static property of [<code>Router</code>](#Components.module_Router..Router)  
+<a name="Components.module_Router..Router.defaultProps"></a>
 
 #### Router.defaultProps : <code>Object</code>
 Default props.
 
-**Kind**: static property of [<code>Router</code>](#Router.module_Router..Router)  
+**Kind**: static property of [<code>Router</code>](#Components.module_Router..Router)  
 <a name="Router.module_RouterContext"></a>
 
 ## RouterContext
@@ -3926,6 +3944,8 @@ Import a route component.
 <a name="Components.module_Table"></a>
 
 ## Table
+PF table wrapper, normalize table use.
+
 **Properties**
 
 | Name | Type |
@@ -4111,6 +4131,8 @@ Default props.
 <a name="Components.module_Tabs"></a>
 
 ## Tabs
+PF tabs with state.
+
 
 * [Tabs](#Components.module_Tabs)
     * [~Tabs](#Components.module_Tabs..Tabs) ⇐ <code>React.Component</code>
@@ -4186,6 +4208,8 @@ On tab selected
 <a name="Components.module_Toolbar"></a>
 
 ## Toolbar
+Primary view toolbar.
+
 **Properties**
 
 | Name | Type |
@@ -4345,6 +4369,8 @@ Return lists of item and secondary toolbar fields for display.
 <a name="Toolbar.module_ToolbarFieldArchitecture"></a>
 
 ## ToolbarFieldArchitecture
+A standalone Architecture select filter.
+
 
 * [ToolbarFieldArchitecture](#Toolbar.module_ToolbarFieldArchitecture)
     * [~useToolbarFieldOptions(options)](#Toolbar.module_ToolbarFieldArchitecture..useToolbarFieldOptions) ⇒ <code>function</code>
@@ -4416,6 +4442,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldBillingProvider"></a>
 
 ## ToolbarFieldBillingProvider
+A standalone Billing Provider select filter.
+
 
 * [ToolbarFieldBillingProvider](#Toolbar.module_ToolbarFieldBillingProvider)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldBillingProvider..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
@@ -4481,6 +4509,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldCategory"></a>
 
 ## ToolbarFieldCategory
+A standalone Category select filter.
+
 
 * [ToolbarFieldCategory](#Toolbar.module_ToolbarFieldCategory)
     * [~useToolbarFieldOptions(options)](#Toolbar.module_ToolbarFieldCategory..useToolbarFieldOptions) ⇒ <code>function</code>
@@ -4552,6 +4582,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldDisplayName"></a>
 
 ## ToolbarFieldDisplayName
+A standalone Display Name input filter.
+
 
 * [ToolbarFieldDisplayName](#Toolbar.module_ToolbarFieldDisplayName)
     * [~ToolbarFieldDisplayName(props)](#Toolbar.module_ToolbarFieldDisplayName..ToolbarFieldDisplayName) ⇒ <code>React.ReactNode</code>
@@ -4637,6 +4669,8 @@ On enter submit value, on type submit value, and on esc ignore (clear value at c
 <a name="Toolbar.module_ToolbarFieldGranularity"></a>
 
 ## ToolbarFieldGranularity
+A standalone Granularity select filter.
+
 
 * [ToolbarFieldGranularity](#Toolbar.module_ToolbarFieldGranularity)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldGranularity..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
@@ -4702,6 +4736,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldRangedMonthly"></a>
 
 ## ToolbarFieldRangedMonthly
+A standalone Ranged Monthly Granularity select filter.
+
 
 * [ToolbarFieldRangedMonthly](#Toolbar.module_ToolbarFieldRangedMonthly)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldRangedMonthly..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
@@ -4846,6 +4882,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldSla"></a>
 
 ## ToolbarFieldSla
+A standalone SLA select filter.
+
 
 * [ToolbarFieldSla](#Toolbar.module_ToolbarFieldSla)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldSla..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
@@ -4911,6 +4949,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldUom"></a>
 
 ## ToolbarFieldUom
+A standalone UOM select filter.
+
 
 * [ToolbarFieldUom](#Toolbar.module_ToolbarFieldUom)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldUom..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
@@ -4976,6 +5016,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldUsage"></a>
 
 ## ToolbarFieldUsage
+A standalone Usage select filter.
+
 
 * [ToolbarFieldUsage](#Toolbar.module_ToolbarFieldUsage)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldUsage..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
@@ -5041,6 +5083,8 @@ Default props.
 <a name="Toolbar.module_ToolbarFieldVariant"></a>
 
 ## ToolbarFieldVariant
+A standalone Variant select filter.
+
 
 * [ToolbarFieldVariant](#Toolbar.module_ToolbarFieldVariant)
     * [~useToolbarFieldOptions(options)](#Toolbar.module_ToolbarFieldVariant..useToolbarFieldOptions) ⇒ <code>function</code>
@@ -5112,6 +5156,8 @@ Default props.
 <a name="Components.module_Tooltip"></a>
 
 ## Tooltip
+PF tooltip wrapper.
+
 
 * [Tooltip](#Components.module_Tooltip)
     * [~Tooltip(props)](#Components.module_Tooltip..Tooltip) ⇒ <code>React.ReactNode</code>

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Tooltip as PfTooltip, TooltipProps, TooltipPosition } from '@patternfly/react-core';
 
 /**
+ * PF tooltip wrapper.
+ *
  * @memberof Components
  * @module Tooltip
  */

@@ -9,6 +9,9 @@ import { translate } from '../i18n/i18n';
 import { InventoryTab } from './inventoryTab';
 
 /**
+ * An inventory tabs display with state. Consume Tabs.
+ *
+ * @see Tabs
  * @memberof Components
  * @module InventoryTabs
  * @property {module} InventoryTab

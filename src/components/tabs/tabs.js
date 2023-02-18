@@ -5,6 +5,8 @@ import _isEqualWith from 'lodash/isEqualWith';
 import { helpers } from '../../common';
 
 /**
+ * PF tabs with state.
+ *
  * @memberof Components
  * @module Tabs
  */

@@ -5,6 +5,8 @@ import { helpers } from '../../common';
 import { paginationHelpers } from './paginationHelpers';
 
 /**
+ * Inventory paging.
+ *
  * @memberof Components
  * @module Pagination
  * @property {module} PaginationHelpers

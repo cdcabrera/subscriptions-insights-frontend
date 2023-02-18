@@ -16,6 +16,8 @@ import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
+ * PF table wrapper, normalize table use.
+ *
  * @memberof Components
  * @module Table
  * @property {module} TableEmpty

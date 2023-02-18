@@ -9,8 +9,6 @@ import { chartAxisLabel } from './chartAxisLabel';
 import { ChartTypeVariant } from './chartHelpers';
 
 /**
- * Aggregate PF Charts, Victory, components into a chart.
- *
  * @memberof Chart
  * @module ChartElements
  */
