@@ -68,14 +68,6 @@
 </dd>
 </dl>
 
-## Functions
-
-<dl>
-<dt><a href="#connectRouter">connectRouter(mapStateToProps, mapDispatchToProps)</a> ⇒ <code>function</code></dt>
-<dd><p>Wrapper for applying Router Dom withRouter and Redux connect.</p>
-</dd>
-</dl>
-
 <a name="Actions.module_PlatformActions"></a>
 
 ## PlatformActions
@@ -1380,23 +1372,3 @@ User action, reducer types.
 Redux middleware.
 
 **Kind**: global constant  
-<a name="connectRouter"></a>
-
-## connectRouter(mapStateToProps, mapDispatchToProps) ⇒ <code>function</code>
-Wrapper for applying Router Dom withRouter and Redux connect.
-
-**Kind**: global function  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>mapStateToProps</td><td><code>function</code></td>
-    </tr><tr>
-    <td>mapDispatchToProps</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-

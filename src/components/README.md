@@ -5022,7 +5022,7 @@ Return primary toolbar configuration.
     * [~ProductViewMissing(props)](#ProductView.module_ProductViewMissing..ProductViewMissing) ⇒ <code>React.ReactNode</code>
         * [.propTypes](#ProductView.module_ProductViewMissing..ProductViewMissing.propTypes) : <code>Object</code>
         * [.defaultProps](#ProductView.module_ProductViewMissing..ProductViewMissing.defaultProps) : <code>Object</code>
-    * ["onNavigate" (id)](#event_onNavigate) ⇒ <code>void</code>
+    * ["onNavigate" (path)](#event_onNavigate) ⇒ <code>void</code>
 
 <a name="ProductView.module_ProductViewMissing..filterAvailableProducts"></a>
 
@@ -5074,7 +5074,7 @@ Default props.
 **Kind**: static property of [<code>ProductViewMissing</code>](#ProductView.module_ProductViewMissing..ProductViewMissing)  
 <a name="event_onNavigate"></a>
 
-### "onNavigate" (id) ⇒ <code>void</code>
+### "onNavigate" (path) ⇒ <code>void</code>
 On click, update history.
 
 **Kind**: event emitted by [<code>ProductViewMissing</code>](#ProductView.module_ProductViewMissing)  
@@ -5086,7 +5086,7 @@ On click, update history.
   </thead>
   <tbody>
 <tr>
-    <td>id</td><td><code>string</code></td>
+    <td>path</td><td><code>string</code></td>
     </tr>  </tbody>
 </table>
 
@@ -5118,11 +5118,9 @@ A routing redirect.
 <tr>
     <td>props</td><td><code>object</code></td>
     </tr><tr>
-    <td>props.isForced</td><td><code>boolean</code></td>
+    <td>props.isReplace</td><td><code>boolean</code></td>
     </tr><tr>
     <td>props.route</td><td><code>string</code></td>
-    </tr><tr>
-    <td>props.routes</td><td><code>string</code></td>
     </tr><tr>
     <td>props.url</td><td><code>string</code></td>
     </tr>  </tbody>
@@ -5228,6 +5226,7 @@ Default props.
     * [~DEFAULT_CONTEXT](#Router.module_RouterContext..DEFAULT_CONTEXT) : <code>React.Context.&lt;{}&gt;</code>
     * [~useRouterContext()](#Router.module_RouterContext..useRouterContext) ⇒ <code>React.Context.&lt;{}&gt;</code>
     * [~useRouteDetail(options)](#Router.module_RouterContext..useRouteDetail) ⇒ <code>Object</code>
+    * [~useHistory(options)](#Router.module_RouterContext..useHistory) ⇒ <code>object</code>
 
 <a name="Router.module_RouterContext..DEFAULT_CONTEXT"></a>
 
@@ -5261,27 +5260,41 @@ Get a route detail from router context.
     </tr>  </tbody>
 </table>
 
+<a name="Router.module_RouterContext..useHistory"></a>
+
+### RouterContext~useHistory(options) ⇒ <code>object</code>
+Pass useHistory methods. Proxy useHistory push with Platform specific navigation update.
+
+**Kind**: inner method of [<code>RouterContext</code>](#Router.module_RouterContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.useHistory</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Router.module_RouterHelpers"></a>
 
 ## RouterHelpers
 
 * [RouterHelpers](#Router.module_RouterHelpers)
     * [~appName](#Router.module_RouterHelpers..appName) : <code>string</code>
-    * [~platformLandingRedirect](#Router.module_RouterHelpers..platformLandingRedirect) ⇒ <code>Array</code>
-    * [~platformModalRedirect](#Router.module_RouterHelpers..platformModalRedirect) ⇒ <code>Array</code>
-    * [~baseName](#Router.module_RouterHelpers..baseName) : <code>string</code>
-    * [~basePath](#Router.module_RouterHelpers..basePath) : <code>string</code>
-    * [~productGroups](#Router.module_RouterHelpers..productGroups)
+    * [~errorRoute](#Router.module_RouterHelpers..errorRoute) : <code>object</code>
+    * [~redirectRoute](#Router.module_RouterHelpers..redirectRoute) : <code>object</code>
     * [~routes](#Router.module_RouterHelpers..routes) ⇒ <code>Array</code>
-    * [~getErrorRoute](#Router.module_RouterHelpers..getErrorRoute) : <code>object</code>
+    * [~getRouteConfigByPath](#Router.module_RouterHelpers..getRouteConfigByPath) ⇒ <code>Object</code>
+    * [~parseSearchParams](#Router.module_RouterHelpers..parseSearchParams) ⇒ <code>Object</code>
     * [~dynamicBaseName(params)](#Router.module_RouterHelpers..dynamicBaseName) ⇒ <code>string</code>
     * [~dynamicBasePath(params)](#Router.module_RouterHelpers..dynamicBasePath) ⇒ <code>string</code>
+    * [~importView(component)](#Router.module_RouterHelpers..importView) ⇒ <code>Node</code>
     * [~pathJoin(...paths)](#Router.module_RouterHelpers..pathJoin) ⇒ <code>string</code>
-    * [~generateProductGroups(config)](#Router.module_RouterHelpers..generateProductGroups) ⇒ <code>Array</code>
-    * [~generateRoutes(config)](#Router.module_RouterHelpers..generateRoutes) ⇒ <code>Array</code>
-    * [~getRouteConfigByPath(params)](#Router.module_RouterHelpers..getRouteConfigByPath) ⇒ <code>Object</code>
-    * [~getRouteConfig(params)](#Router.module_RouterHelpers..getRouteConfig) ⇒ <code>object</code>
-    * [~importView(component)](#Router.module_RouterHelpers..importView) ⇒ <code>React.ReactNode</code>
 
 <a name="Router.module_RouterHelpers..appName"></a>
 
@@ -5289,34 +5302,16 @@ Get a route detail from router context.
 Platform name/id.
 
 **Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<a name="Router.module_RouterHelpers..platformLandingRedirect"></a>
+<a name="Router.module_RouterHelpers..errorRoute"></a>
 
-### RouterHelpers~platformLandingRedirect ⇒ <code>Array</code>
-Return a string that describes a platform redirect.
-
-**Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<a name="Router.module_RouterHelpers..platformModalRedirect"></a>
-
-### RouterHelpers~platformModalRedirect ⇒ <code>Array</code>
-Return a string that describes a platform redirect.
+### RouterHelpers~errorRoute : <code>object</code>
+The first error route.
 
 **Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<a name="Router.module_RouterHelpers..baseName"></a>
+<a name="Router.module_RouterHelpers..redirectRoute"></a>
 
-### RouterHelpers~baseName : <code>string</code>
-The app baseName.
-
-**Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<a name="Router.module_RouterHelpers..basePath"></a>
-
-### RouterHelpers~basePath : <code>string</code>
-App basePath.
-
-**Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<a name="Router.module_RouterHelpers..productGroups"></a>
-
-### RouterHelpers~productGroups
-Reference for products grouped by view.
+### RouterHelpers~redirectRoute : <code>object</code>
+The first redirect route.
 
 **Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
 <a name="Router.module_RouterHelpers..routes"></a>
@@ -5325,16 +5320,50 @@ Reference for products grouped by view.
 Return array of objects that describes routing.
 
 **Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<a name="Router.module_RouterHelpers..getErrorRoute"></a>
+<a name="Router.module_RouterHelpers..getRouteConfigByPath"></a>
 
-### RouterHelpers~getErrorRoute : <code>object</code>
-The first error route.
+### RouterHelpers~getRouteConfigByPath ⇒ <code>Object</code>
+Match route config entries by path.
 
 **Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.pathName</td><td><code>string</code></td>
+    </tr><tr>
+    <td>params.config</td><td><code>Array</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Router.module_RouterHelpers..parseSearchParams"></a>
+
+### RouterHelpers~parseSearchParams ⇒ <code>Object</code>
+Parse search parameters from a string, using a set
+
+**Kind**: inner constant of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>currentPathAndOrSearch</td><td><code>string</code></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Router.module_RouterHelpers..dynamicBaseName"></a>
 
 ### RouterHelpers~dynamicBaseName(params) ⇒ <code>string</code>
-Return an assumed route baseName directory based on existing app name.
+The app baseName. Return an assumed route baseName directory based on existing app name.
 App name is defined in dotenv and package.json/insights.appname
 [environment]/[OPTIONAL]/[OPTIONAL]/[APP NAME]
 
@@ -5358,7 +5387,7 @@ App name is defined in dotenv and package.json/insights.appname
 <a name="Router.module_RouterHelpers..dynamicBasePath"></a>
 
 ### RouterHelpers~dynamicBasePath(params) ⇒ <code>string</code>
-Return a base path.
+App basePath. Return a base path.
 
 **Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
 <table>
@@ -5377,6 +5406,24 @@ Return a base path.
     </tr>  </tbody>
 </table>
 
+<a name="Router.module_RouterHelpers..importView"></a>
+
+### RouterHelpers~importView(component) ⇒ <code>Node</code>
+Import a route component.
+
+**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>component</td><td><code>Node</code></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Router.module_RouterHelpers..pathJoin"></a>
 
 ### RouterHelpers~pathJoin(...paths) ⇒ <code>string</code>
@@ -5392,108 +5439,6 @@ Basic path join, minor emulation for path.join.
   <tbody>
 <tr>
     <td>...paths</td><td><code>object</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterHelpers..generateProductGroups"></a>
-
-### RouterHelpers~generateProductGroups(config) ⇒ <code>Array</code>
-Generate product groups for applying query filter resets.
-
-**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>config</td><td><code>Array</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterHelpers..generateRoutes"></a>
-
-### RouterHelpers~generateRoutes(config) ⇒ <code>Array</code>
-Generate routes to be consumed by router.
-
-**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>config</td><td><code>Array</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterHelpers..getRouteConfigByPath"></a>
-
-### RouterHelpers~getRouteConfigByPath(params) ⇒ <code>Object</code>
-Match route config entries by path.
-
-**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>params</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.pathName</td><td><code>string</code></td>
-    </tr><tr>
-    <td>params.config</td><td><code>Array</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterHelpers..getRouteConfig"></a>
-
-### RouterHelpers~getRouteConfig(params) ⇒ <code>object</code>
-Return a route config object.
-
-**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>params</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.id</td><td><code>string</code></td>
-    </tr><tr>
-    <td>params.pathName</td><td><code>string</code></td>
-    </tr><tr>
-    <td>params.returnDefault</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>params.config</td><td><code>Array</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterHelpers..importView"></a>
-
-### RouterHelpers~importView(component) ⇒ <code>React.ReactNode</code>
-Import a route component.
-
-**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>component</td><td><code>React.ReactNode</code></td>
     </tr>  </tbody>
 </table>
 
