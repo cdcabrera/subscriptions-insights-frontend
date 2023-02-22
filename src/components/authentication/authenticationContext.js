@@ -69,6 +69,8 @@ const useGetAuthorization = ({
   const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
   const errorStatus = (error && responses?.id?.errors?.status) || null;
 
+  console.log('>>>> auth context', responses, errorStatus);
+
   return {
     data: {
       ...user,
@@ -91,6 +93,7 @@ const useGetAuthorization = ({
  */
 const useSession = ({ useAuthContext: useAliasAuthContext = useAuthContext } = {}) => {
   const session = useAliasAuthContext();
+  console.log('>>>> session', session);
   return {
     ...session
   };

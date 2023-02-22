@@ -763,7 +763,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 2000
- * @apiMock {RandomSuccess}
+ * @apiMock {ForceStatus} 403
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Sockets Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -940,6 +940,20 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         },
  *         "usage": ""
  *       }
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 403 Forbidden
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1004",
+ *            "detail": "Opt-in required.",
+ *            "status": "403",
+ *            "title": "Access Denied"
+ *          }
+ *        ]
  *     }
  */
 /**
@@ -1856,6 +1870,20 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         },
  *         "usage": ""
  *       }
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 403 Forbidden
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1004",
+ *            "detail": "Opt-in required.",
+ *            "status": "403",
+ *            "title": "Access Denied"
+ *          }
+ *        ]
  *     }
  */
 /* Get RHSM API reporting/tally graph/chart data.

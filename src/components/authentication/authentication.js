@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
-import { routerContext, routerHelpers } from '../router';
+import { routerHelpers } from '../router';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
 import MessageView from '../messageView/messageView';
 import { translate } from '../i18n/i18n';
 import { AuthenticationContext, useGetAuthorization } from './authenticationContext';
+import { OptinView } from '../optinView/optinView';
 
 /**
  * An authentication pass-through component.
@@ -19,18 +20,9 @@ import { AuthenticationContext, useGetAuthorization } from './authenticationCont
  * @param {boolean} props.isDisabled
  * @param {Function} props.t
  * @param {Function} props.useGetAuthorization
- * @param {Function} props.useRedirect
  * @returns {React.ReactNode}
  */
-const Authentication = ({
-  appName,
-  children,
-  isDisabled,
-  t,
-  useGetAuthorization: useAliasGetAuthorization,
-  useRedirect: useAliasRedirect
-}) => {
-  const redirect = useAliasRedirect();
+const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization: useAliasGetAuthorization }) => {
   const { pending, data = {} } = useAliasGetAuthorization();
   const { authorized = {}, errorCodes, errorStatus } = data;
   const { [appName]: isAuthorized } = authorized;
@@ -56,7 +48,7 @@ const Authentication = ({
       (errorCodes && errorCodes.includes(rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN)) ||
       errorStatus === 418
     ) {
-      return redirect(routerHelpers.errorRoute.path);
+      return <OptinView />;
     }
 
     return (
@@ -79,8 +71,7 @@ Authentication.propTypes = {
   children: PropTypes.node.isRequired,
   isDisabled: PropTypes.bool,
   t: PropTypes.func,
-  useGetAuthorization: PropTypes.func,
-  useRedirect: PropTypes.func
+  useGetAuthorization: PropTypes.func
 };
 
 /**
@@ -92,8 +83,7 @@ Authentication.defaultProps = {
   appName: routerHelpers.appName,
   isDisabled: helpers.UI_DISABLED,
   t: translate,
-  useGetAuthorization,
-  useRedirect: routerContext.useRedirect
+  useGetAuthorization
 };
 
 export { Authentication as default, Authentication };
