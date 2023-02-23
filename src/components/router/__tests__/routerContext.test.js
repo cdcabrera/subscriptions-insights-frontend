@@ -1,4 +1,5 @@
-import { context, useHistory, useLocation, useRouteDetail } from '../routerContext';
+// import { productConfig } from '../../../config';
+import { context, useLocation, useNavigate, useRouteDetail } from '../routerContext';
 
 describe('RouterContext', () => {
   it('should return specific properties', () => {
@@ -17,27 +18,41 @@ describe('RouterContext', () => {
     expect(result).toMatchSnapshot('route details');
   });
 
-  it('should apply a hook for useHistory', () => {
-    const mockHistoryPush = jest.fn();
-    const { result: mockUseHistory } = shallowHook(() =>
-      useHistory({
-        useHistory: () => ({ push: mockHistoryPush })
-      })
-    );
-
-    mockUseHistory.push('/dolor/sit');
-    mockUseHistory.push('rhel');
-    mockUseHistory.push('insights');
-
-    expect(mockHistoryPush.mock.calls).toMatchSnapshot('history push');
-  });
-
   it('should apply a hook for useLocation', async () => {
     const mockLocation = {
       search: '?lorem=ipsum'
     };
 
-    const { result: mockUseLocation } = await shallowHook(() => useLocation({ useLocation: () => mockLocation }));
+    const { result: mockUseLocation } = await mountHook(() => useLocation({ useLocation: () => mockLocation }));
     expect(mockUseLocation).toMatchSnapshot('location');
+  });
+
+  it('should apply a hook for useNavigate', () => {
+    const mockLocation = {
+      search: '?lorem=ipsum'
+    };
+    const mockNavigation = jest.fn;
+    const updatedCalls = [];
+    // const mockNavFunc = jest.fn().mockImplementation(() => mockNavigation);
+    const { result: mockNavigationSet } = shallowHook(() =>
+      useNavigate({
+        useLocation: () => mockLocation,
+        useNavigate: () => value => updatedCalls.push(value) // jest.fn().mockImplementation(() => mockNavigation)
+        // useNavigate: () => mockNavFunc
+      })
+    );
+
+    mockNavigationSet('/dolor/sit');
+    mockNavigationSet('rhel');
+    mockNavigationSet('insights');
+
+    // console.log('>>>>>> result', mockNavigationSet, typeof mockNavigationSet);
+    console.log('>>>>>>>> result', mockNavigation);
+    // /{
+    //       rhods: mockNavigationSet('/dolor/sit'),
+    //       rhel: [mockNavigationSet('rhel'), mockNavigationSet('insights')]
+    //     }
+
+    expect(updatedCalls).toMatchSnapshot('navigation push');
   });
 });

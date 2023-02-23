@@ -1,30 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RouterContext should apply a hook for return routeDetail: route details 1`] = `
-{
-  "lorem": "ipsum",
-}
-`;
-
-exports[`RouterContext should apply a hook for useHistory: history push 1`] = `
-[
-  [
-    "/dolor/sit",
-    undefined,
-  ],
-  [
-    "/rhel",
-    undefined,
-  ],
-  [
-    "/rhel",
-    undefined,
-  ],
-]
-`;
+exports[`RouterContext should apply a hook for return routeDetail: route details 1`] = `{}`;
 
 exports[`RouterContext should apply a hook for useLocation: location 1`] = `
 {
+  "_id": "92c2cef6154c02e9d92294c0905713e55425dcf8",
   "assign": [Function],
   "hash": "",
   "host": "localhost",
@@ -41,62 +21,20 @@ exports[`RouterContext should apply a hook for useLocation: location 1`] = `
 }
 `;
 
+exports[`RouterContext should apply a hook for useNavigate: navigation push 1`] = `
+[
+  "./rhods?lorem=ipsum",
+  "./rhods?lorem=ipsum",
+  "./rhods?lorem=ipsum",
+]
+`;
+
 exports[`RouterContext should return specific properties: specific properties 1`] = `
 {
-  "DEFAULT_CONTEXT": [
-    {
-      "routeDetail": {
-        "baseName": null,
-        "errorRoute": null,
-        "routeItem": {},
-        "routes": [],
-      },
-    },
-    [Function],
-  ],
-  "RouterContext": {
-    "$$typeof": Symbol(react.context),
-    "Consumer": {
-      "$$typeof": Symbol(react.context),
-      "_calculateChangedBits": null,
-      "_context": [Circular],
-    },
-    "Provider": {
-      "$$typeof": Symbol(react.provider),
-      "_context": [Circular],
-    },
-    "_calculateChangedBits": null,
-    "_currentRenderer": null,
-    "_currentRenderer2": null,
-    "_currentValue": [
-      {
-        "routeDetail": {
-          "baseName": null,
-          "errorRoute": null,
-          "routeItem": {},
-          "routes": [],
-        },
-      },
-      [Function],
-    ],
-    "_currentValue2": [
-      {
-        "routeDetail": {
-          "baseName": null,
-          "errorRoute": null,
-          "routeItem": {},
-          "routes": [],
-        },
-      },
-      [Function],
-    ],
-    "_threadCount": 0,
-  },
-  "useHistory": [Function],
   "useLocation": [Function],
-  "useParams": [Function],
+  "useNavigate": [Function],
   "useRouteDetail": [Function],
-  "useRouteMatch": [Function],
-  "useRouterContext": [Function],
+  "useSearchParams": [Function],
+  "useSetRouteDetail": [Function],
 }
 `;

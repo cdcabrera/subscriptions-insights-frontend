@@ -23,7 +23,7 @@ import { storeHooks } from '../../redux';
  * @param {object} props
  * @param {Function} props.t
  * @param {Function} props.useRouteDetail
- * @param props.useSelector
+ * @param {Function} props.useSelector
  * @returns {Node}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail, useSelector: useAliasSelector }) => {

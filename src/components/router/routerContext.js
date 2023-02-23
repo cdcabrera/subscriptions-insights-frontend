@@ -43,31 +43,38 @@ const useLocation = ({ useLocation: useAliasLocation = useLocationRRD } = {}) =>
 };
 
 /**
- * Store product path, parameter, in state.
+ * useNavigate wrapper, apply application config context routing
  *
  * @param {object} options
- * @param {Function} options.useSelector
- * @param {Function} options.useDispatch
- * @returns {*|string}
+ * @param {Function} options.useLocation
+ * @param {Function} options.useNavigate
+ * @returns {Function}
  */
-const useSetRouteDetail = ({
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
+const useNavigate = ({
+  useLocation: useAliasLocation = useLocation,
+  useNavigate: useAliasNavigate = useRRDNavigate
 } = {}) => {
-  const dispatch = useAliasDispatch();
-  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const productPath = window.location.pathname; // useParam works in a similar manner
+  const { search = '', hash = '' } = useAliasLocation();
+  const navigate = useAliasNavigate();
+  console.log('>>>>>> useNavigate SETUP', search, hash, navigate);
 
-  useEffect(() => {
-    if (productPath && updatedPath !== productPath) {
-      dispatch({
-        type: reduxTypes.app.SET_PRODUCT,
-        config: productPath
-      });
-    }
-  }, [updatedPath, dispatch, productPath]);
+  return useCallback(
+    (pathLocation, options) => {
+      console.log('>>>>>> useNavigate', pathLocation);
+      const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
+      const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName });
 
-  return updatedPath;
+      // console.log('>>>>>> useNavigate', firstMatch);
+
+      return navigate(
+        (firstMatch?.productPath && `${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`) ||
+          (pathName && `${pathName}${search}${hash}`) ||
+          pathLocation,
+        options
+      );
+    },
+    [hash, navigate, search]
+  );
 };
 
 /**
@@ -122,37 +129,6 @@ const useRouteDetail = ({
 };
 
 /**
- * useNavigate wrapper, apply application config context routing
- *
- * @param {object} options
- * @param {Function} options.useLocation
- * @param {Function} options.useNavigate
- * @returns {Function}
- */
-const useNavigate = ({
-  useLocation: useAliasLocation = useLocation,
-  useNavigate: useAliasNavigate = useRRDNavigate
-} = {}) => {
-  const { search, hash } = useAliasLocation();
-  const navigate = useAliasNavigate();
-
-  return useCallback(
-    (pathLocation, options) => {
-      const pathName = (typeof pathLocation === 'string' && pathLocation) || pathLocation?.pathname;
-      const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName });
-
-      return navigate(
-        (firstMatch?.productPath && `${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`) ||
-          (pathName && `${pathName}${search}${hash}`) ||
-          pathLocation,
-        options
-      );
-    },
-    [hash, navigate, search]
-  );
-};
-
-/**
  * Search parameter, return
  *
  * @param {object} options
@@ -194,12 +170,40 @@ const useSearchParams = ({
   return [routerHelpers.parseSearchParams(search), setSearchParams];
 };
 
+/**
+ * Store product path, parameter, in state.
+ *
+ * @param {object} options
+ * @param {Function} options.useSelector
+ * @param {Function} options.useDispatch
+ * @returns {*|string}
+ */
+const useSetRouteDetail = ({
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
+} = {}) => {
+  const dispatch = useAliasDispatch();
+  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  const productPath = window.location.pathname; // useParam works in a similar manner
+
+  useEffect(() => {
+    if (productPath && updatedPath !== productPath) {
+      dispatch({
+        type: reduxTypes.app.SET_PRODUCT,
+        config: productPath
+      });
+    }
+  }, [updatedPath, dispatch, productPath]);
+
+  return updatedPath;
+};
+
 const context = {
   useLocation,
   useNavigate,
-  useSetRouteDetail,
   useRouteDetail,
-  useSearchParams
+  useSearchParams,
+  useSetRouteDetail
 };
 
-export { context as default, context, useLocation, useNavigate, useSetRouteDetail, useRouteDetail, useSearchParams };
+export { context as default, context, useLocation, useNavigate, useRouteDetail, useSearchParams, useSetRouteDetail };
