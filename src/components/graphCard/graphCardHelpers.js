@@ -50,8 +50,7 @@ const generateIsToolbarFilter = ({ query = {} } = {}) => (query?.[RHSM_API_QUERY
 const generateChartSettings = ({ filters = [], settings: graphCardSettings = {}, productId } = {}) => {
   const standaloneFiltersSettings = [];
   const groupedFiltersSettings = [];
-
-  filters.forEach(({ metric, isStandalone = false, actions, ...filterSettings }) => {
+  const filter = ({ metric, isStandalone = false, actions, ...filterSettings } = {}) => {
     if (!metric) {
       return;
     }
@@ -105,6 +104,17 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         ...filterSettings
       });
     }
+  };
+
+  filters.forEach(({ filters: groupedMetrics, settings: groupedMetricsSettings, ...remainingSettings }) => {
+    if (Array.isArray(groupedMetrics)) {
+      groupedMetrics.forEach(metricFilter => {
+        filter({ ...remainingSettings, ...metricFilter, isStandalone: false });
+      });
+      return;
+    }
+
+    filter({ ...remainingSettings });
   });
 
   const updatedGroupedFiltersSettings =

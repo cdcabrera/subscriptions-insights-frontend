@@ -72,9 +72,27 @@ const config = {
       isStacked: false,
       isStandalone: true,
       yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
+    },
+    // isStandalone: true
+    // yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
+    {
+      filters: [
+        {
+          metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+          fill: chartColorBlueLight.value,
+          stroke: chartColorBlueDark.value,
+          color: chartColorBlueDark.value,
+          chartType: ChartTypeVariant.area,
+          isStacked: true
+        }
+      ],
+      settings: {
+        yAxisChartLabel: () => 'testing'
+      }
     }
   ],
   initialGraphSettings: {
+    isMetricDisplay: true,
     isCardTitleDescription: true,
     xAxisChartLabel: () => translate('curiosity-graph.label_axisX', { context: GRANULARITY_TYPES.DAILY }),
     yAxisTickFormat: ({ tick }) => {
