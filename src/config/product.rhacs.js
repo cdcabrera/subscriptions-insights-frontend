@@ -87,6 +87,7 @@ const config = {
         }
       ],
       settings: {
+        isMultiMetricDisplay: true,
         yAxisChartLabel: () => 'testing'
       }
     }
