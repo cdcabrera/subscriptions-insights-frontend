@@ -48,13 +48,12 @@ const generateIsToolbarFilter = ({ query = {} } = {}) => (query?.[RHSM_API_QUERY
  * @returns {{standaloneFilters: Array, groupedFilters: object}}
  */
 const generateChartSettings = ({ filters = [], settings: graphCardSettings = {}, productId } = {}) => {
-  const standaloneFiltersSettings = [];
-  const groupedFiltersSettings = [];
-
-  filters.forEach(({ metric, isStandalone = false, actions, ...filterSettings }) => {
+  const filtersSettings = [];
+  const filter = ({ metric, settings: combinedSettings, ...filterSettings } = {}) => {
     if (!metric) {
       return;
     }
+    const { hasMultipleMetrics, isFirst, isStandalone, ...remainingCombinedSettings } = combinedSettings;
     const updatedChartType = filterSettings?.chartType || ChartTypeVariant.area;
     const isThreshold = filterSettings?.chartType === ChartTypeVariant.threshold;
     const baseFilterSettings = {
@@ -75,8 +74,8 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
       baseFilterSettings.strokeWidth = 3;
     }
 
-    if (isStandalone) {
-      standaloneFiltersSettings.push({
+    if (isFirst) {
+      filtersSettings.push({
         settings: {
           padding: {
             bottom: 75,
@@ -84,48 +83,68 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             right: 45,
             top: 45
           },
-          ...graphCardSettings,
-          actions,
-          isStandalone: true,
-          metric: {
-            ...baseFilterSettings,
-            ...filterSettings
-          },
+          ...remainingCombinedSettings,
+          isStandalone,
           metrics: [
             {
               ...baseFilterSettings,
               ...filterSettings
             }
-          ]
+          ],
+          stringId: (hasMultipleMetrics && productId) || baseFilterSettings.id
         }
       });
     } else {
-      groupedFiltersSettings.push({
-        ...baseFilterSettings,
-        ...filterSettings
-      });
-    }
-  });
+      const lastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
 
-  const updatedGroupedFiltersSettings =
-    (groupedFiltersSettings.length && {
+      if (lastFiltersSettingsEntry) {
+        lastFiltersSettingsEntry.metrics.push({
+          ...baseFilterSettings,
+          ...filterSettings
+        });
+      }
+    }
+  };
+
+  filters.forEach(({ filters: groupedMetrics, settings: groupedMetricsSettings, ...remainingSettings }) => {
+    if (Array.isArray(groupedMetrics)) {
+      groupedMetrics.forEach((metricFilter, index) => {
+        filter({
+          ...remainingSettings,
+          ...metricFilter,
+          settings: {
+            ...graphCardSettings,
+            ...remainingSettings,
+            ...groupedMetricsSettings,
+            ...metricFilter,
+            isFirst: index === 0,
+            hasMultipleMetrics: groupedMetrics.length > 1,
+            isStandalone: false
+          }
+        });
+      });
+      return;
+    }
+
+    filter({
+      ...remainingSettings,
       settings: {
         ...graphCardSettings,
-        isStandalone: false,
-        metric: undefined,
-        metrics: groupedFiltersSettings
+        ...remainingSettings,
+        isFirst: true,
+        hasMultipleMetrics: false,
+        isStandalone: true
       }
-    }) ||
-    undefined;
+    });
+  });
 
   return {
-    standaloneFiltersSettings,
-    groupedFiltersSettings: updatedGroupedFiltersSettings
+    filtersSettings
   };
 };
 
 /**
- * Returns x axis ticks/intervals array for the xAxisTickInterval
+ * Returns x-axis ticks/intervals array for the xAxisTickInterval
  *
  * @param {string} granularity See enum of RHSM_API_QUERY_GRANULARITY_TYPES
  * @returns {number}
@@ -175,7 +194,7 @@ const getTooltipDate = ({ date, granularity } = {}) => {
 };
 
 /**
- * Format x axis ticks.
+ * Format x-axis ticks.
  *
  * @param {object} params
  * @param {Function} params.callback
@@ -229,7 +248,7 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {
 };
 
 /**
- * Format y axis ticks.
+ * Format y-axis ticks.
  *
  * @param {object} params
  * @param {Function} params.callback
