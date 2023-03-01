@@ -109,7 +109,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
   filters.forEach(({ filters: groupedMetrics, settings: groupedMetricsSettings, ...remainingSettings }) => {
     if (Array.isArray(groupedMetrics)) {
       groupedMetrics.forEach(metricFilter => {
-        filter({ ...remainingSettings, ...metricFilter, isStandalone: false });
+        filter({ ...remainingSettings, ...groupedMetricsSettings, ...metricFilter });
       });
       return;
     }
@@ -135,7 +135,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
 };
 
 /**
- * Returns x axis ticks/intervals array for the xAxisTickInterval
+ * Returns x-axis ticks/intervals array for the xAxisTickInterval
  *
  * @param {string} granularity See enum of RHSM_API_QUERY_GRANULARITY_TYPES
  * @returns {number}
@@ -185,7 +185,7 @@ const getTooltipDate = ({ date, granularity } = {}) => {
 };
 
 /**
- * Format x axis ticks.
+ * Format x-axis ticks.
  *
  * @param {object} params
  * @param {Function} params.callback
@@ -239,7 +239,7 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {
 };
 
 /**
- * Format y axis ticks.
+ * Format y-axis ticks.
  *
  * @param {object} params
  * @param {Function} params.callback
