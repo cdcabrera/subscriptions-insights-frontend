@@ -49,8 +49,6 @@ const generateIsToolbarFilter = ({ query = {} } = {}) => (query?.[RHSM_API_QUERY
  */
 const generateChartSettings = ({ filters = [], settings: graphCardSettings = {}, productId } = {}) => {
   const filtersSettings = [];
-  // const standaloneFiltersSettings = [];
-  // const groupedFiltersSettings = [];
   const filter = ({ metric, settings: combinedSettings, ...filterSettings } = {}) => {
     if (!metric) {
       return;
@@ -88,10 +86,6 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
           ...remainingCombinedSettings,
           actions,
           isStandalone,
-          // metric: {
-          //  ...baseFilterSettings,
-          //  ...filterSettings
-          // },
           metrics: [
             {
               ...baseFilterSettings,
@@ -104,65 +98,17 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
       const lastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
 
       if (lastFiltersSettingsEntry) {
-        // lastFiltersSettingsEntry.metric = undefined;
         lastFiltersSettingsEntry.metrics.push({
           ...baseFilterSettings,
           ...filterSettings
         });
       }
     }
-
-    /*
-    if (isStandalone) {
-      standaloneFiltersSettings.push({
-        settings: {
-          padding: {
-            bottom: 75,
-            left: 75,
-            right: 45,
-            top: 45
-          },
-          ...graphCardSettings,
-          actions,
-          isStandalone: true,
-          metric: {
-            ...baseFilterSettings,
-            ...filterSettings
-          },
-          metrics: [
-            {
-              ...baseFilterSettings,
-              ...filterSettings
-            }
-          ]
-        }
-      });
-    } else {
-      groupedFiltersSettings.push({
-        settings: {
-          ...graphCardSettings,
-          isStandalone: false,
-          metric: undefined,
-          metrics: groupedFiltersSettings
-        }
-      });
-      /*
-      groupedFiltersSettings.push({
-        ...baseFilterSettings,
-        ...filterSettings
-      });
-       * /
-    }
-    */
   };
 
   filters.forEach(({ filters: groupedMetrics, settings: groupedMetricsSettings, ...remainingSettings }) => {
-    // const { isMetricDisplay: isParentMetricDisplay, ...remainingGroupedMetricsSettings } = groupedMetricsSettings;
     if (Array.isArray(groupedMetrics)) {
-      // groupedMetrics.forEach(({ isMetricDisplay: isChildMetricDisplay, ...metricFilter }, index) => {
       groupedMetrics.forEach((metricFilter, index) => {
-        // console.log('>>>>>>>> ismetricdisplay', isParentMetricDisplay, isChildMetricDisplay);
-
         filter({
           ...remainingSettings,
           ...metricFilter,
@@ -173,8 +119,6 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             ...metricFilter,
             isFirst: index === 0,
             isStandalone: false
-            // isMetricDisplay: isChildMetricDisplay ?? groupedMetricsSettings.isMetricDisplay
-            // ...metricFilter
           }
         });
       });
@@ -187,34 +131,13 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         ...graphCardSettings,
         ...remainingSettings,
         isFirst: true,
-        // isMetricDisplay: isParentMetricDisplay,
         isStandalone: true
       }
     });
   });
 
-  /*
-  const updatedGroupedFiltersSettings =
-    (groupedFiltersSettings.length && {
-      settings: {
-        ...graphCardSettings,
-        isStandalone: false,
-        metric: undefined,
-        metrics: groupedFiltersSettings
-      }
-    }) ||
-    undefined;
-
-  console.log('>>>>>>>>>> HELPERS STAND', standaloneFiltersSettings);
-  console.log('>>>>>>>>>> HELPERS GROUP', groupedFiltersSettings, updatedGroupedFiltersSettings);
-  */
-
-  console.log('>>>>>>>>>> HELPERS filtersSettings', filtersSettings);
-
   return {
     filtersSettings
-    // standaloneFiltersSettings,
-    // groupedFiltersSettings: updatedGroupedFiltersSettings
   };
 };
 
