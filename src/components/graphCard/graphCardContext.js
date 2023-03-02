@@ -150,6 +150,11 @@ const useGetMetrics = ({
 };
 
 /**
+ * FixMe: the pending condition for "content" will block subsequent responses from this hook, this is expected.
+ * This current limitation means if we decide to apply the same action to multiple cards the "content" will
+ * not display for all of them.
+ */
+/**
  * Return a component list for a configurable graphCard action toolbar.
  * Allow the "content" prop to receive graph data for display via callback.
  *
@@ -174,11 +179,6 @@ const useGraphCardActions = ({
         const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
         const { component: OptionComponent } = option || {};
 
-        /**
-         * Note: the pending condition for "content" will block subsequent responses to this hook, this is expected.
-         * This limitation means applying the same action to multiple cards the "content" will not display for all
-         * of them.
-         */
         return (
           (OptionComponent && (
             <ToolbarItem key={`option-${id}`}>
