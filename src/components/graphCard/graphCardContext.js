@@ -174,6 +174,11 @@ const useGraphCardActions = ({
         const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
         const { component: OptionComponent } = option || {};
 
+        /**
+         * Note: the pending condition for "content" will block subsequent responses to this hook, this is expected.
+         * This limitation means applying the same action to multiple cards the "content" will not display for all
+         * of them.
+         */
         return (
           (OptionComponent && (
             <ToolbarItem key={`option-${id}`}>
