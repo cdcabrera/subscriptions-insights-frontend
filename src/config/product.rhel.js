@@ -92,7 +92,8 @@ const config = {
       color: chartColorBlueDark.value,
       query: {
         [RHSM_API_QUERY_SET_TYPES.CATEGORY]: CATEGORY_TYPES.PHYSICAL
-      }
+      },
+      isMetricDisplay: true
     },
     {
       metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,

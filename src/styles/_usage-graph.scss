@@ -15,6 +15,10 @@
      */
     margin-top: var(--pf-global--spacer--md);
 
+    &:first-child {
+      // margin-top: inherit;
+    }
+
     &:last-child {
       margin-bottom: var(--pf-global--spacer--md);
     }

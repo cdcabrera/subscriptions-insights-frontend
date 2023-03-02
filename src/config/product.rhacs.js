@@ -64,14 +64,19 @@ const config = {
   },
   initialGraphFilters: [
     {
-      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
-      fill: chartColorBlueLight.value,
-      stroke: chartColorBlueDark.value,
-      color: chartColorBlueDark.value,
-      chartType: ChartTypeVariant.line,
-      isStacked: false,
-      isStandalone: true,
-      yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
+      filters: [
+        {
+          metric: RHSM_API_PATH_METRIC_TYPES.CORES,
+          fill: chartColorBlueLight.value,
+          stroke: chartColorBlueDark.value,
+          color: chartColorBlueDark.value,
+          chartType: ChartTypeVariant.line,
+          isStacked: false,
+          isStandalone: true,
+          // isMetricDisplay: true,
+          yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
+        }
+      ]
     },
     // isStandalone: true
     // yAxisChartLabel: ({ id }) => translate('curiosity-graph.label_axisY', { context: id })
@@ -83,12 +88,19 @@ const config = {
           stroke: chartColorBlueDark.value,
           color: chartColorBlueDark.value,
           chartType: ChartTypeVariant.area,
-          isStacked: true
+          isStacked: true,
+          isMetricDisplay: false
         }
       ],
       settings: {
-        isMultiMetricDisplay: true,
-        yAxisChartLabel: () => 'testing'
+        isMetricDisplay: true,
+        yAxisChartLabel: () => 'testing',
+        actions: [
+          {
+            id: RHSM_API_QUERY_SET_TYPES.GRANULARITY,
+            position: SelectPosition.right
+          }
+        ]
       }
     }
   ],
