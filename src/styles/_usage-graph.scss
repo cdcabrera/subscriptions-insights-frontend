@@ -5,12 +5,14 @@
   &-usage-graph {
     box-shadow: none !important;
     background-color: var(--pf-global--BackgroundColor--100);
+    /*
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     margin-left: var(--pf-global--spacer--md);
     margin-right: var(--pf-global--spacer--md);
+     */
     margin-top: var(--pf-global--spacer--md);
 
     &:last-child {

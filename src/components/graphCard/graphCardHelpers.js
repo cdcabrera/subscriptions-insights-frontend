@@ -53,7 +53,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
     if (!metric) {
       return;
     }
-    const { actions, isFirst, isStandalone, ...remainingCombinedSettings } = combinedSettings;
+    const { isFirst, isStandalone, ...remainingCombinedSettings } = combinedSettings;
     const updatedChartType = filterSettings?.chartType || ChartTypeVariant.area;
     const isThreshold = filterSettings?.chartType === ChartTypeVariant.threshold;
     const baseFilterSettings = {
@@ -84,7 +84,6 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             top: 45
           },
           ...remainingCombinedSettings,
-          actions,
           isStandalone,
           metrics: [
             {
