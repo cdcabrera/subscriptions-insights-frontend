@@ -53,7 +53,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
     if (!metric) {
       return;
     }
-    const { isFirst, isStandalone, ...remainingCombinedSettings } = combinedSettings;
+    const { hasMultipleMetrics, isFirst, isStandalone, ...remainingCombinedSettings } = combinedSettings;
     const updatedChartType = filterSettings?.chartType || ChartTypeVariant.area;
     const isThreshold = filterSettings?.chartType === ChartTypeVariant.threshold;
     const baseFilterSettings = {
@@ -90,7 +90,8 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
               ...baseFilterSettings,
               ...filterSettings
             }
-          ]
+          ],
+          stringId: (hasMultipleMetrics && productId) || baseFilterSettings.id
         }
       });
     } else {
@@ -117,6 +118,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             ...groupedMetricsSettings,
             ...metricFilter,
             isFirst: index === 0,
+            hasMultipleMetrics: groupedMetrics.length > 1,
             isStandalone: false
           }
         });
@@ -130,6 +132,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         ...graphCardSettings,
         ...remainingSettings,
         isFirst: true,
+        hasMultipleMetrics: false,
         isStandalone: true
       }
     });

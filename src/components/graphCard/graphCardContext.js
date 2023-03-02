@@ -18,7 +18,7 @@ import { graphCardHelpers } from './graphCardHelpers';
  *
  * @type {React.Context<{}>}
  */
-const DEFAULT_CONTEXT = [{ settings: { isStandalone: false, metrics: [], metric: undefined } }, helpers.noop];
+const DEFAULT_CONTEXT = [{ settings: { isStandalone: false, metrics: [] } }, helpers.noop];
 
 const GraphCardContext = React.createContext(DEFAULT_CONTEXT);
 
