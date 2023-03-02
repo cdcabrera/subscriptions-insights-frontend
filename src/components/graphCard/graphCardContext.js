@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useContext, useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import { ToolbarItem } from '@patternfly/react-core';
@@ -42,7 +43,8 @@ const useParseFiltersSettings = ({
 } = {}) => {
   const { productId } = useAliasProduct();
   const { filters = [], settings = {} } = useAliasProductGraphConfig();
-  const { groupedFiltersSettings, standaloneFiltersSettings = [] } = useMemo(
+
+  return useMemo(
     () =>
       graphCardHelpers.generateChartSettings({
         filters,
@@ -51,11 +53,6 @@ const useParseFiltersSettings = ({
       }),
     [filters, settings, productId]
   );
-
-  return {
-    groupedFiltersSettings,
-    standaloneFiltersSettings
-  };
 };
 
 /**

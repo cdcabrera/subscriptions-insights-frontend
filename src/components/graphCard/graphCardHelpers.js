@@ -48,12 +48,14 @@ const generateIsToolbarFilter = ({ query = {} } = {}) => (query?.[RHSM_API_QUERY
  * @returns {{standaloneFilters: Array, groupedFilters: object}}
  */
 const generateChartSettings = ({ filters = [], settings: graphCardSettings = {}, productId } = {}) => {
-  const standaloneFiltersSettings = [];
-  const groupedFiltersSettings = [];
-  const filter = ({ metric, isStandalone = false, actions, ...filterSettings } = {}) => {
+  const filtersSettings = [];
+  // const standaloneFiltersSettings = [];
+  // const groupedFiltersSettings = [];
+  const filter = ({ metric, settings: combinedSettings, ...filterSettings } = {}) => {
     if (!metric) {
       return;
     }
+    const { actions, isFirst, isStandalone, ...remainingCombinedSettings } = combinedSettings;
     const updatedChartType = filterSettings?.chartType || ChartTypeVariant.area;
     const isThreshold = filterSettings?.chartType === ChartTypeVariant.threshold;
     const baseFilterSettings = {
@@ -74,6 +76,43 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
       baseFilterSettings.strokeWidth = 3;
     }
 
+    if (isFirst) {
+      filtersSettings.push({
+        settings: {
+          padding: {
+            bottom: 75,
+            left: 75,
+            right: 45,
+            top: 45
+          },
+          ...remainingCombinedSettings,
+          actions,
+          isStandalone,
+          // metric: {
+          //  ...baseFilterSettings,
+          //  ...filterSettings
+          // },
+          metrics: [
+            {
+              ...baseFilterSettings,
+              ...filterSettings
+            }
+          ]
+        }
+      });
+    } else {
+      const lastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
+
+      if (lastFiltersSettingsEntry) {
+        // lastFiltersSettingsEntry.metric = undefined;
+        lastFiltersSettingsEntry.metrics.push({
+          ...baseFilterSettings,
+          ...filterSettings
+        });
+      }
+    }
+
+    /*
     if (isStandalone) {
       standaloneFiltersSettings.push({
         settings: {
@@ -100,23 +139,61 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
       });
     } else {
       groupedFiltersSettings.push({
+        settings: {
+          ...graphCardSettings,
+          isStandalone: false,
+          metric: undefined,
+          metrics: groupedFiltersSettings
+        }
+      });
+      /*
+      groupedFiltersSettings.push({
         ...baseFilterSettings,
         ...filterSettings
       });
+       * /
     }
+    */
   };
 
   filters.forEach(({ filters: groupedMetrics, settings: groupedMetricsSettings, ...remainingSettings }) => {
+    // const { isMetricDisplay: isParentMetricDisplay, ...remainingGroupedMetricsSettings } = groupedMetricsSettings;
     if (Array.isArray(groupedMetrics)) {
-      groupedMetrics.forEach(metricFilter => {
-        filter({ ...remainingSettings, ...groupedMetricsSettings, ...metricFilter });
+      // groupedMetrics.forEach(({ isMetricDisplay: isChildMetricDisplay, ...metricFilter }, index) => {
+      groupedMetrics.forEach((metricFilter, index) => {
+        // console.log('>>>>>>>> ismetricdisplay', isParentMetricDisplay, isChildMetricDisplay);
+
+        filter({
+          ...remainingSettings,
+          ...metricFilter,
+          settings: {
+            ...graphCardSettings,
+            ...remainingSettings,
+            ...groupedMetricsSettings,
+            ...metricFilter,
+            isFirst: index === 0,
+            isStandalone: false
+            // isMetricDisplay: isChildMetricDisplay ?? groupedMetricsSettings.isMetricDisplay
+            // ...metricFilter
+          }
+        });
       });
       return;
     }
 
-    filter({ ...remainingSettings });
+    filter({
+      ...remainingSettings,
+      settings: {
+        ...graphCardSettings,
+        ...remainingSettings,
+        isFirst: true,
+        // isMetricDisplay: isParentMetricDisplay,
+        isStandalone: true
+      }
+    });
   });
 
+  /*
   const updatedGroupedFiltersSettings =
     (groupedFiltersSettings.length && {
       settings: {
@@ -128,9 +205,16 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
     }) ||
     undefined;
 
+  console.log('>>>>>>>>>> HELPERS STAND', standaloneFiltersSettings);
+  console.log('>>>>>>>>>> HELPERS GROUP', groupedFiltersSettings, updatedGroupedFiltersSettings);
+  */
+
+  console.log('>>>>>>>>>> HELPERS filtersSettings', filtersSettings);
+
   return {
-    standaloneFiltersSettings,
-    groupedFiltersSettings: updatedGroupedFiltersSettings
+    filtersSettings
+    // standaloneFiltersSettings,
+    // groupedFiltersSettings: updatedGroupedFiltersSettings
   };
 };
 
