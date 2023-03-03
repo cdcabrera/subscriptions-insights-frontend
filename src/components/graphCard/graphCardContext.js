@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useContext, useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import { ToolbarItem } from '@patternfly/react-core';

@@ -233,37 +233,16 @@ const useProductContext = ({
   const applyUomFilter = useCallback(() => {
     if (productContextFilterUom === true) {
       const filterFilters = ({ id, metric, isOptional }) => {
-        /*
-        if (Array.isArray(filters)) {
-          const test = filters.filter(filterFilters);
-          console.log('>>>>>>>>>>> filter filters', test);
-          return test;
-        }
-         */
-
         if (!isOptional) {
           return true;
         }
         return new RegExp(uomFilter, 'i').test(metric) || new RegExp(uomFilter, 'i').test(id);
       };
 
-      /*
-      const isGraphFiltersNested = initialGraphFilters.find(({ filters }) => Array.isArray(filters));
-      let updatedGraphFilters;
-
-      if (isGraphFiltersNested) {
-        updatedGraphFilters = _cloneDeep(initialGraphFilters).map(({ filters, ...rest }) => ({
-          ...rest,
-          filters: filters.filter(filterFilters)
-        }));
-      } else {
-        updatedGraphFilters = initialGraphFilters.filter(filterFilters);
-      }
-      */
       /**
-       * Allowing nested filters with beside normal filters means we take the quick
-       * path, just run the loop twice. And we make sure to set "isOptional" false when it
-       * comes to nested filters in the event someone combined a config setting.
+       * Allowing nested filters beside normal filters we take the quick path, just run the loop twice.
+       * Make sure to set "isOptional" false when it comes to nested filters in the event someone
+       * combined a config setting in the subsequent loop.
        */
       const updatedGraphFilters = _cloneDeep(initialGraphFilters)
         .map(({ filters, ...rest }) => ({
