@@ -4,7 +4,7 @@ import { Card, CardBody, CardFooter, CardHeader, CardTitle, Title } from '@patte
 import moment from 'moment';
 import _camelCase from 'lodash/camelCase';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
-import { useMetricsSelector } from './graphCardContext';
+import { useGraphCardContext, useMetricsSelector } from './graphCardContext';
 import { Loader, SkeletonSize } from '../loader/loader';
 import { dateHelpers, helpers } from '../../common';
 import { toolbarFieldOptions } from '../toolbar/toolbarFieldRangedMonthly';
@@ -22,6 +22,7 @@ import { translate } from '../i18n/i18n';
  * @param {object} props
  * @param {React.ReactNode} props.children
  * @param {Function} props.t
+ * @param {Function} props.useGraphCardContext
  * @param {Function} props.useMetricsSelector
  * @param {Function} props.useProductGraphTallyQuery
  * @returns {React.ReactNode}
@@ -29,13 +30,17 @@ import { translate } from '../i18n/i18n';
 const GraphCardMetricTotals = ({
   children,
   t,
+  useGraphCardContext: useAliasGraphCardContext,
   useMetricsSelector: useAliasMetricsSelector,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
+  const { settings = {} } = useAliasGraphCardContext();
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets = [] } = useAliasMetricsSelector();
   const { data = [], id: chartId, metric: metricId, meta = {} } = dataSets[0] || {};
   const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
+
+  console.log('>>>> settings', settings);
 
   const {
     date: currentDate,
@@ -53,6 +58,81 @@ const GraphCardMetricTotals = ({
   const dailyDate = isCurrent ? currentDate : lastDate;
   const dailyHasData = isCurrent ? currentHasData : lastHasData;
   const dailyValue = isCurrent ? currentValue : lastValue;
+
+  if (settings?.cards?.length) {
+    return (
+      <div data-test={`graphMetricTotals-${_camelCase(metricId)}`} className="curiosity-usage-graph__totals">
+        <div>
+          <div className="curiosity-usage-graph__totals-column">
+            {settings.cards.map(({ header, body, footer }, index) => (
+              <Card
+                isPlain
+                data-test={`graphCard-${index}`}
+                className={`curiosity-usage-graph__totals-column-card ${(error && 'blur') || ''}`}
+              >
+                <CardHeader>
+                  <CardTitle>
+                    <Title headingLevel="h2" size="md">
+                      {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
+                      {fulfilled &&
+                        ((typeof header === 'function' &&
+                          header({
+                            chartId,
+                            dailyDate,
+                            dailyHasData,
+                            dailyValue,
+                            monthlyDate,
+                            monthlyHasData,
+                            monthlyValue
+                          })) ||
+                          header)}
+                    </Title>
+                  </CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <div>
+                    {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg, height: '60px' }} />}
+                    {fulfilled &&
+                      ((typeof body === 'function' &&
+                        body({
+                          chartId,
+                          dailyDate,
+                          dailyHasData,
+                          dailyValue,
+                          monthlyDate,
+                          monthlyHasData,
+                          monthlyValue
+                        })) ||
+                        body)}
+                  </div>
+                </CardBody>
+                <CardFooter>
+                  <div>
+                    {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
+                    {fulfilled &&
+                      ((typeof footer === 'function' &&
+                        footer({
+                          chartId,
+                          dailyDate,
+                          dailyHasData,
+                          dailyValue,
+                          monthlyDate,
+                          monthlyHasData,
+                          monthlyValue
+                        })) ||
+                        footer)}
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div className="curiosity-usage-graph__totals-graph-column">{children}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div data-test={`graphMetricTotals-${_camelCase(metricId)}`} className="curiosity-usage-graph__totals">
@@ -170,6 +250,7 @@ const GraphCardMetricTotals = ({
 GraphCardMetricTotals.propTypes = {
   children: PropTypes.node,
   t: PropTypes.func,
+  useGraphCardContext: PropTypes.func,
   useMetricsSelector: PropTypes.func,
   useProductGraphTallyQuery: PropTypes.func
 };
@@ -182,6 +263,7 @@ GraphCardMetricTotals.propTypes = {
 GraphCardMetricTotals.defaultProps = {
   children: null,
   t: translate,
+  useGraphCardContext,
   useMetricsSelector,
   useProductGraphTallyQuery
 };
