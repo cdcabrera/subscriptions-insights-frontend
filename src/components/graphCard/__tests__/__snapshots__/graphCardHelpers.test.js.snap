@@ -12,6 +12,7 @@ exports[`GraphCardHelpers generateChartSettings should return base graph setting
     {
       "settings": {
         "dolor": "sit",
+        "isMetricDisplay": false,
         "isMultiMetric": false,
         "isStandalone": undefined,
         "metric": undefined,

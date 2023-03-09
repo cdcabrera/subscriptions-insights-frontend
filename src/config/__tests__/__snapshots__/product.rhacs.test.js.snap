@@ -134,9 +134,23 @@ exports[`Product RHACS config should apply graph configuration: filters 1`] = `
   "filtersSettings": [
     {
       "settings": {
+        "cards": [
+          {
+            "body": [Function],
+            "footer": [Function],
+            "header": [Function],
+          },
+          {
+            "body": [Function],
+            "footer": [Function],
+            "header": [Function],
+          },
+        ],
         "chartType": "line",
         "color": "#06c",
         "fill": "#8bc1f7",
+        "isCardTitleDescription": true,
+        "isMetricDisplay": true,
         "isMultiMetric": false,
         "isStacked": false,
         "isStandalone": undefined,
@@ -165,7 +179,9 @@ exports[`Product RHACS config should apply graph configuration: filters 1`] = `
         },
         "stringId": "Cores",
         "stroke": "#06c",
+        "xAxisChartLabel": [Function],
         "yAxisChartLabel": [Function],
+        "yAxisTickFormat": [Function],
       },
     },
   ],
@@ -174,8 +190,19 @@ exports[`Product RHACS config should apply graph configuration: filters 1`] = `
 
 exports[`Product RHACS config should apply graph configuration: settings 1`] = `
 {
+  "cards": [
+    {
+      "body": [Function],
+      "footer": [Function],
+      "header": [Function],
+    },
+    {
+      "body": [Function],
+      "footer": [Function],
+      "header": [Function],
+    },
+  ],
   "isCardTitleDescription": true,
-  "isMetricDisplay": true,
   "xAxisChartLabel": [Function],
   "yAxisTickFormat": [Function],
 }

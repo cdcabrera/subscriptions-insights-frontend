@@ -11,27 +11,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
     >
       <Card
         className="curiosity-usage-graph__totals-column-card blur"
-        data-test="graphDailyTotalCard"
-        isPlain={true}
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
-            />
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div />
-        </CardBody>
-        <CardFooter>
-          <div />
-        </CardFooter>
-      </Card>
-      <Card
-        className="curiosity-usage-graph__totals-column-card blur"
-        data-test="graphMonthlyTotalCard"
+        data-test="graphMetricTotalsCard-0"
         isPlain={true}
       >
         <CardHeader>
@@ -70,7 +50,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
     >
       <Card
         className="curiosity-usage-graph__totals-column-card "
-        data-test="graphDailyTotalCard"
+        data-test="graphMetricTotalsCard-0"
         isPlain={true}
       >
         <CardHeader>
@@ -79,41 +59,19 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
               headingLevel="h2"
               size="md"
             >
-              t(curiosity-graph.cardHeadingMetric, {"context":"dailyTotal"})
+              lorem
             </Title>
           </CardTitle>
         </CardHeader>
         <CardBody>
           <div>
-            t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])
+            ipsum
           </div>
         </CardBody>
         <CardFooter>
-          <div />
-        </CardFooter>
-      </Card>
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMonthlyTotalCard"
-        isPlain={true}
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
-            >
-              t(curiosity-graph.cardHeadingMetric, {"context":"monthlyTotal"})
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
           <div>
-            t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])
+            dolor sit
           </div>
-        </CardBody>
-        <CardFooter>
-          <div />
         </CardFooter>
       </Card>
     </div>
@@ -137,58 +95,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
     >
       <Card
         className="curiosity-usage-graph__totals-column-card "
-        data-test="graphDailyTotalCard"
-        isPlain={true}
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
-            >
-              <Loader
-                skeletonProps={
-                  {
-                    "size": "lg",
-                  }
-                }
-                tableProps={{}}
-                variant="skeleton"
-              />
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div>
-            <Loader
-              skeletonProps={
-                {
-                  "height": "60px",
-                  "size": "lg",
-                }
-              }
-              tableProps={{}}
-              variant="skeleton"
-            />
-          </div>
-        </CardBody>
-        <CardFooter>
-          <div>
-            <Loader
-              skeletonProps={
-                {
-                  "size": "lg",
-                }
-              }
-              tableProps={{}}
-              variant="skeleton"
-            />
-          </div>
-        </CardFooter>
-      </Card>
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMonthlyTotalCard"
+        data-test="graphMetricTotalsCard-0"
         isPlain={true}
       >
         <CardHeader>
@@ -247,61 +154,4 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 </div>
 `;
 
-exports[`GraphCardMetricTotals Component should render a basic component: basic 1`] = `
-<div
-  className="curiosity-usage-graph__totals"
-  data-test="graphMetricTotals-"
->
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-column"
-    >
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphDailyTotalCard"
-        isPlain={true}
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
-            />
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div />
-        </CardBody>
-        <CardFooter>
-          <div />
-        </CardFooter>
-      </Card>
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMonthlyTotalCard"
-        isPlain={true}
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
-            />
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div />
-        </CardBody>
-        <CardFooter>
-          <div />
-        </CardFooter>
-      </Card>
-    </div>
-  </div>
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-graph-column"
-    />
-  </div>
-</div>
-`;
+exports[`GraphCardMetricTotals Component should render a basic component: basic 1`] = `""`;
