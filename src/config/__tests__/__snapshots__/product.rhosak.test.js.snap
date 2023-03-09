@@ -241,6 +241,9 @@ exports[`Product RHOSAK config should apply graph configuration: filters 1`] = `
         "chartType": "line",
         "color": "#06c",
         "fill": "#8bc1f7",
+        "groupMetric": [
+          "Transfer-gibibytes",
+        ],
         "isCardTitleDescription": true,
         "isMetricDisplay": true,
         "isMultiMetric": false,
@@ -293,6 +296,9 @@ exports[`Product RHOSAK config should apply graph configuration: filters 1`] = `
         "chartType": "line",
         "color": "#5752d1",
         "fill": "#b2b0ea",
+        "groupMetric": [
+          "Storage-gibibyte-months",
+        ],
         "isCardTitleDescription": true,
         "isMetricDisplay": true,
         "isMultiMetric": false,
@@ -345,6 +351,9 @@ exports[`Product RHOSAK config should apply graph configuration: filters 1`] = `
         "chartType": "line",
         "color": "#009596",
         "fill": "#a2d9d9",
+        "groupMetric": [
+          "Instance-hours",
+        ],
         "isCardTitleDescription": true,
         "isMetricDisplay": true,
         "isMultiMetric": false,

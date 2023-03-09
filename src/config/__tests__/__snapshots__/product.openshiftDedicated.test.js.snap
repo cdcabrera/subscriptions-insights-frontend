@@ -17,6 +17,10 @@ exports[`Product OpenShift Dedicated config should apply graph configuration: fi
         "chartType": "line",
         "color": "#06c",
         "fill": "#8bc1f7",
+        "groupMetric": [
+          "Cores",
+          "Instance-hours",
+        ],
         "isCardTitleDescription": true,
         "isMetricDisplay": false,
         "isMultiMetric": true,

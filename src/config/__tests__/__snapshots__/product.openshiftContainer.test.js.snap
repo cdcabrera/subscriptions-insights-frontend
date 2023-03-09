@@ -17,6 +17,10 @@ exports[`Product OpenShift Container config should apply graph configuration: fi
         ],
         "color": "#06c",
         "fill": "#8bc1f7",
+        "groupMetric": [
+          "Cores",
+          "Sockets",
+        ],
         "isCardTitleDescription": true,
         "isMetricDisplay": false,
         "isMultiMetric": true,
