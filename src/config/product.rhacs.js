@@ -76,7 +76,7 @@ const config = {
   initialGraphSettings: {
     cards: [
       {
-        header: ({ metricId }) =>
+        header: ({ metricId } = {}) =>
           translate('curiosity-graph.cardHeadingMetric', {
             context: ['dailyTotal', metricId]
           }),
@@ -103,7 +103,7 @@ const config = {
           })
       },
       {
-        header: ({ metricId }) =>
+        header: ({ metricId } = {}) =>
           translate('curiosity-graph.cardHeadingMetric', {
             context: ['monthlyTotal', metricId]
           }),

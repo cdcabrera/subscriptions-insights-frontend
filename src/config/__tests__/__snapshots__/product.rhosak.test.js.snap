@@ -816,3 +816,26 @@ exports[`Product RHOSAK config should handle a custom yAxisTickFormat for floati
   "9000000000000": "9T",
 }
 `;
+
+exports[`Product RHOSAK config should handle metric card display for graphs: cards 1`] = `
+[
+  "t(curiosity-graph.cardHeadingMetric, {"context":"dailyTotal"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"monthlyTotal"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"dailyTotal"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"monthlyTotal"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"dailyTotal"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"monthlyTotal"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+]
+`;

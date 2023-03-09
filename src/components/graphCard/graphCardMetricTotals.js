@@ -7,6 +7,7 @@ import { useGraphCardContext, useMetricsSelector } from './graphCardContext';
 import { Loader, SkeletonSize } from '../loader/loader';
 import { toolbarFieldOptions } from '../toolbar/toolbarFieldRangedMonthly';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { helpers } from '../../common';
 
 /**
  * @memberof GraphCard
@@ -53,9 +54,23 @@ const GraphCardMetricTotals = ({
   const dailyValue = isCurrent ? currentValue : lastValue;
 
   if (settings?.isMetricDisplay && settings?.cards?.length) {
+    const metricDisplayPassedData = helpers.setImmutableData({
+      chartId,
+      dailyDate,
+      dailyHasData,
+      dailyValue,
+      metricId: firstMetricId,
+      groupMetricId: [...settings.groupMetric],
+      monthlyDate,
+      monthlyHasData,
+      monthlyValue,
+      selectedValue: selectedMonth
+    });
+
     return (
       <div
         data-test={`graphMetricTotals-${settings?.groupMetric?.map(metricId => _camelCase(metricId))?.join('-')}`}
+        data-test-data={JSON.stringify(metricDisplayPassedData)}
         className="curiosity-usage-graph__totals"
       >
         <div>
@@ -70,62 +85,20 @@ const GraphCardMetricTotals = ({
                   <CardTitle>
                     <Title headingLevel="h2" size="md">
                       {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
-                      {fulfilled &&
-                        ((typeof header === 'function' &&
-                          header({
-                            chartId,
-                            dailyDate,
-                            dailyHasData,
-                            dailyValue,
-                            metricId: firstMetricId,
-                            groupMetricId: settings?.groupMetric,
-                            monthlyDate,
-                            monthlyHasData,
-                            monthlyValue,
-                            selectedValue: selectedMonth
-                          })) ||
-                          header)}
+                      {fulfilled && ((typeof header === 'function' && header(metricDisplayPassedData)) || header)}
                     </Title>
                   </CardTitle>
                 </CardHeader>
                 <CardBody>
                   <div>
                     {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg, height: '60px' }} />}
-                    {fulfilled &&
-                      ((typeof body === 'function' &&
-                        body({
-                          chartId,
-                          dailyDate,
-                          dailyHasData,
-                          dailyValue,
-                          metricId: firstMetricId,
-                          groupMetricId: settings?.groupMetric,
-                          monthlyDate,
-                          monthlyHasData,
-                          monthlyValue,
-                          selectedValue: selectedMonth
-                        })) ||
-                        body)}
+                    {fulfilled && ((typeof body === 'function' && body(metricDisplayPassedData)) || body)}
                   </div>
                 </CardBody>
                 <CardFooter>
                   <div>
                     {pending && <Loader variant="skeleton" skeletonProps={{ size: SkeletonSize.lg }} />}
-                    {fulfilled &&
-                      ((typeof footer === 'function' &&
-                        footer({
-                          chartId,
-                          dailyDate,
-                          dailyHasData,
-                          dailyValue,
-                          metricId: firstMetricId,
-                          groupMetricId: settings?.groupMetric,
-                          monthlyDate,
-                          monthlyHasData,
-                          monthlyValue,
-                          selectedValue: selectedMonth
-                        })) ||
-                        footer)}
+                    {fulfilled && ((typeof footer === 'function' && footer(metricDisplayPassedData)) || footer)}
                   </div>
                 </CardFooter>
               </Card>
