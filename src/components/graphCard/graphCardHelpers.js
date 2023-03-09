@@ -90,6 +90,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             top: 45
           },
           ...remainingCombinedSettings,
+          isMetricDisplay: remainingCombinedSettings?.isMetricDisplay ?? remainingCombinedSettings?.cards?.length > 0,
           isMultiMetric,
           isStandalone: undefined,
           metric: undefined,
