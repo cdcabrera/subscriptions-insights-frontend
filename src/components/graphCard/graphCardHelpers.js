@@ -60,7 +60,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
     if (!metric) {
       return;
     }
-    const { isMultiMetric, isFirst, ...remainingCombinedSettings } = combinedSettings;
+    const { isMultiMetric, isFirst, isLast, ...remainingCombinedSettings } = combinedSettings;
     const updatedChartType = filterSettings?.chartType || ChartTypeVariant.area;
     const isThreshold = filterSettings?.chartType === ChartTypeVariant.threshold;
     const baseFilterSettings = {
@@ -94,6 +94,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
           isMultiMetric,
           isStandalone: undefined,
           metric: undefined,
+          groupMetric: new Set([metric]),
           metrics: [
             {
               ...baseFilterSettings,
@@ -104,14 +105,20 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         }
       });
     } else {
-      const lastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
+      const currentLastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
 
-      if (lastFiltersSettingsEntry) {
-        lastFiltersSettingsEntry.metrics.push({
+      if (currentLastFiltersSettingsEntry) {
+        currentLastFiltersSettingsEntry.groupMetric.add(metric);
+        currentLastFiltersSettingsEntry.metrics.push({
           ...baseFilterSettings,
           ...filterSettings
         });
       }
+    }
+
+    if (isLast) {
+      const lastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
+      lastFiltersSettingsEntry.groupMetric = Array.from(lastFiltersSettingsEntry?.groupMetric).sort();
     }
   };
 
@@ -127,6 +134,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             ...groupedMetricsSettings,
             ...metricFilter,
             isFirst: index === 0,
+            isLast: groupedMetrics.length - 1 === index,
             isMultiMetric: groupedMetrics.length > 1
           }
         });
@@ -140,6 +148,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         ...graphCardSettings,
         ...remainingSettings,
         isFirst: true,
+        isLast: true,
         isMultiMetric: false
       }
     });

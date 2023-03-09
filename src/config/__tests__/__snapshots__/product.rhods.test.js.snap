@@ -149,6 +149,9 @@ exports[`Product RHODS config should apply graph configuration: filters 1`] = `
         "chartType": "line",
         "color": "#06c",
         "fill": "#8bc1f7",
+        "groupMetric": [
+          "Cores",
+        ],
         "isCardTitleDescription": true,
         "isMetricDisplay": true,
         "isMultiMetric": false,

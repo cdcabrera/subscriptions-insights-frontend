@@ -14,6 +14,7 @@ describe('GraphCardMetricTotals Component', () => {
       useGraphCardContext: () => ({
         settings: {
           isMetricDisplay: true,
+          groupMetric: ['hello', 'world'],
           cards: [
             {
               header: 'lorem',

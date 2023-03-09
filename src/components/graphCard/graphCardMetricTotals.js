@@ -32,7 +32,7 @@ const GraphCardMetricTotals = ({
   const { settings = {} } = useAliasGraphCardContext();
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets = [] } = useAliasMetricsSelector();
-  const { data = [], id: chartId, metric: metricId, meta = {} } = dataSets[0] || {};
+  const { data = [], id: chartId, metric: firstMetricId, meta = {} } = dataSets[0] || {};
   const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
 
   const {
@@ -54,7 +54,10 @@ const GraphCardMetricTotals = ({
 
   if (settings?.isMetricDisplay && settings?.cards?.length) {
     return (
-      <div data-test={`graphMetricTotals-${_camelCase(metricId)}`} className="curiosity-usage-graph__totals">
+      <div
+        data-test={`graphMetricTotals-${settings?.groupMetric?.map(metricId => _camelCase(metricId))?.join('-')}`}
+        className="curiosity-usage-graph__totals"
+      >
         <div>
           <div className="curiosity-usage-graph__totals-column">
             {settings?.cards?.map(({ header, body, footer }, index) => (
@@ -74,7 +77,8 @@ const GraphCardMetricTotals = ({
                             dailyDate,
                             dailyHasData,
                             dailyValue,
-                            metricId,
+                            metricId: firstMetricId,
+                            groupMetricId: settings?.groupMetric,
                             monthlyDate,
                             monthlyHasData,
                             monthlyValue,
@@ -94,7 +98,8 @@ const GraphCardMetricTotals = ({
                           dailyDate,
                           dailyHasData,
                           dailyValue,
-                          metricId,
+                          metricId: firstMetricId,
+                          groupMetricId: settings?.groupMetric,
                           monthlyDate,
                           monthlyHasData,
                           monthlyValue,
@@ -113,7 +118,8 @@ const GraphCardMetricTotals = ({
                           dailyDate,
                           dailyHasData,
                           dailyValue,
-                          metricId,
+                          metricId: firstMetricId,
+                          groupMetricId: settings?.groupMetric,
                           monthlyDate,
                           monthlyHasData,
                           monthlyValue,
