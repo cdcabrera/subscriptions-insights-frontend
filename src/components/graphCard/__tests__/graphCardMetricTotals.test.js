@@ -3,7 +3,9 @@ import { GraphCardMetricTotals } from '../graphCardMetricTotals';
 
 describe('GraphCardMetricTotals Component', () => {
   it('should render a basic component', async () => {
-    const props = {};
+    const props = {
+      children: 'lorem ipsum'
+    };
     const component = await shallowHookComponent(<GraphCardMetricTotals {...props} />);
 
     expect(component).toMatchSnapshot('basic');
@@ -12,6 +14,7 @@ describe('GraphCardMetricTotals Component', () => {
   it('should handle multiple display states', async () => {
     const props = {
       useGraphCardContext: () => ({
+        children: 'lorem ipsum',
         settings: {
           isMetricDisplay: true,
           groupMetric: ['hello', 'world'],

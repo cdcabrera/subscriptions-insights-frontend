@@ -4,6 +4,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
+  data-test-data="{"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -43,6 +44,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
+  data-test-data="{"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -88,6 +90,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
+  data-test-data="{"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -154,4 +157,4 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 </div>
 `;
 
-exports[`GraphCardMetricTotals Component should render a basic component: basic 1`] = `""`;
+exports[`GraphCardMetricTotals Component should render a basic component: basic 1`] = `"lorem ipsum"`;
