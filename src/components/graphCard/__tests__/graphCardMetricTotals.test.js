@@ -11,6 +11,18 @@ describe('GraphCardMetricTotals Component', () => {
 
   it('should handle multiple display states', async () => {
     const props = {
+      useGraphCardContext: () => ({
+        settings: {
+          isMetricDisplay: true,
+          cards: [
+            {
+              header: 'lorem',
+              body: 'ipsum',
+              footer: 'dolor sit'
+            }
+          ]
+        }
+      }),
       useMetricsSelector: () => ({
         pending: true,
         error: false,

@@ -60,7 +60,7 @@ const GraphCardMetricTotals = ({
             {settings?.cards?.map(({ header, body, footer }, index) => (
               <Card
                 isPlain
-                data-test={`graphCard-${index}`}
+                data-test={`graphMetricTotalsCard-${index}`}
                 className={`curiosity-usage-graph__totals-column-card ${(error && 'blur') || ''}`}
               >
                 <CardHeader>
