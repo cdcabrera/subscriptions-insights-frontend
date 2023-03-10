@@ -56,4 +56,37 @@ describe('I18nHelpers', () => {
       multiKey
     }).toMatchSnapshot('translate');
   });
+
+  it('should attempt to place a test identifier around copy', () => {
+    const mockI18next = { store: jest.fn(), t: jest.fn() };
+
+    const basic = translate('lorem.ipsum', { isTestId: true }, undefined, { i18next: mockI18next, isDebug: false });
+    const emptyContext = translate('lorem.ipsum', { context: EMPTY_CONTEXT, isTestId: true }, undefined, {
+      i18next: mockI18next,
+      isDebug: false
+    });
+    const emptyPartialContext = translate(
+      'lorem.ipsum',
+      { context: ['hello', EMPTY_CONTEXT], isTestId: true },
+      undefined,
+      { i18next: mockI18next, isDebug: false }
+    );
+    const stringContextNested = translate(
+      'lorem.ipsum',
+      {
+        context: 'hello_world_lorem_ipsum_dolor_sit',
+        i18next: mockI18next,
+        isTestId: true
+      },
+      undefined,
+      { i18next: mockI18next, isDebug: false }
+    );
+
+    expect({
+      basic,
+      emptyContext,
+      emptyPartialContext,
+      stringContextNested
+    }).toMatchSnapshot('test id');
+  });
 });
