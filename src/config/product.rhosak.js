@@ -100,13 +100,15 @@ const config = {
       {
         header: ({ metricId } = {}) =>
           translate('curiosity-graph.cardHeadingMetric', {
-            context: ['dailyTotal', metricId]
+            context: ['dailyTotal', metricId],
+            testId: 'graphDailyTotalCard-header'
           }),
         body: ({ dailyHasData, dailyValue, metricId } = {}) =>
           translate(
             'curiosity-graph.cardBodyMetric',
             {
               context: ['total', dailyHasData && metricId],
+              testId: 'graphDailyTotalCard-body',
               total: helpers
                 .numberDisplay(dailyValue)
                 ?.format({
@@ -121,19 +123,22 @@ const config = {
           ),
         footer: ({ dailyDate } = {}) =>
           translate('curiosity-graph.cardFooterMetric', {
-            date: moment.utc(dailyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort)
+            date: moment.utc(dailyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort),
+            testId: 'graphDailyTotalCard-footer'
           })
       },
       {
         header: ({ metricId } = {}) =>
           translate('curiosity-graph.cardHeadingMetric', {
-            context: ['monthlyTotal', metricId]
+            context: ['monthlyTotal', metricId],
+            testId: 'graphMonthlyTotalCard-header'
           }),
         body: ({ metricId, monthlyHasData, monthlyValue } = {}) =>
           translate(
             'curiosity-graph.cardBodyMetric',
             {
               context: ['total', monthlyHasData && metricId],
+              testId: 'graphMonthlyTotalCard-body',
               total: helpers
                 .numberDisplay(monthlyValue)
                 ?.format({ average: true, mantissa: 5, trimMantissa: true, lowPrecision: false })
@@ -143,7 +148,8 @@ const config = {
           ),
         footer: ({ monthlyDate } = {}) =>
           translate('curiosity-graph.cardFooterMetric', {
-            date: moment.utc(monthlyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort)
+            date: moment.utc(monthlyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort),
+            testId: 'graphMonthlyTotalCard-footer'
           })
       }
     ],

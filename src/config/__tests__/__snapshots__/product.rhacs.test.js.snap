@@ -617,11 +617,11 @@ exports[`Product RHACS config should handle a custom yAxisTickFormat for floatin
 
 exports[`Product RHACS config should handle metric card display for graphs: cards 1`] = `
 [
-  "t(curiosity-graph.cardHeadingMetric, {"context":"dailyTotal"})",
-  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
-  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
-  "t(curiosity-graph.cardHeadingMetric, {"context":"monthlyTotal"})",
-  "t(curiosity-graph.cardBodyMetric, {"context":"total"}, [object Object])",
-  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"dailyTotal","testId":"graphDailyTotalCard-header"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total","testId":"graphDailyTotalCard-body"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC","testId":"graphDailyTotalCard-footer"})",
+  "t(curiosity-graph.cardHeadingMetric, {"context":"monthlyTotal","testId":"graphMonthlyTotalCard-header"})",
+  "t(curiosity-graph.cardBodyMetric, {"context":"total","testId":"graphMonthlyTotalCard-body"}, [object Object])",
+  "t(curiosity-graph.cardFooterMetric, {"date":"09 Mar 2023 00:00 UTC","testId":"graphMonthlyTotalCard-footer"})",
 ]
 `;
