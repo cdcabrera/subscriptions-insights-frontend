@@ -77,6 +77,7 @@ const GraphCardMetricTotals = ({
           <div className="curiosity-usage-graph__totals-column">
             {settings?.cards?.map(({ header, body, footer }, index) => (
               <Card
+                key={helpers.generateId(`graphMetricTotalsCard-${index}`)}
                 isPlain
                 data-test={`graphMetricTotalsCard-${index}`}
                 className={`curiosity-usage-graph__totals-column-card ${(error && 'blur') || ''}`}
