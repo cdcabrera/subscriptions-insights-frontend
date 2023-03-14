@@ -75,9 +75,9 @@ const GraphCardMetricTotals = ({
       >
         <div>
           <div className="curiosity-usage-graph__totals-column">
-            {settings?.cards?.map(({ header, body, footer }, index) => (
+            {settings?.cards?.map(({ key, header, body, footer }, index) => (
               <Card
-                key={helpers.generateId(`graphMetricTotalsCard-${index}`)}
+                key={key || helpers.generateHash({ chartId, metrics: metricDisplayPassedData.groupMetricId, index })}
                 isPlain
                 data-test={`graphMetricTotalsCard-${index}`}
                 className={`curiosity-usage-graph__totals-column-card ${(error && 'blur') || ''}`}
