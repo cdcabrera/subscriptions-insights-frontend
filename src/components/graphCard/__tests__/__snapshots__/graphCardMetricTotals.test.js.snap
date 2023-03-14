@@ -1,5 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GraphCardMetricTotals Component should handle custom card displays: fulfilled 1`] = `
+<div
+  className="curiosity-usage-graph__totals"
+  data-test="graphMetricTotals-hello-world"
+  data-test-data="{"groupMetricId":["hello","world"]}"
+>
+  <div>
+    <div
+      className="curiosity-usage-graph__totals-column"
+    >
+      <Card
+        className="curiosity-usage-graph__totals-column-card "
+        data-test="graphMetricTotalsCard-0"
+        isPlain={true}
+        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+      >
+        <CardHeader>
+          <CardTitle>
+            <Title
+              headingLevel="h2"
+              size="md"
+            >
+              lorem
+            </Title>
+          </CardTitle>
+        </CardHeader>
+        <CardBody>
+          <div>
+            t(ipsum-{{data}}, {"testId":"custom test id","data":"{\\"groupMetricId\\":[\\"hello\\",\\"world\\"]}"})
+          </div>
+        </CardBody>
+        <CardFooter>
+          <div>
+            dolor sit timestamp
+          </div>
+        </CardFooter>
+      </Card>
+      <Card
+        className="curiosity-usage-graph__totals-column-card "
+        data-test="graphMetricTotalsCard-1"
+        isPlain={true}
+        key="my custom react key"
+      >
+        <CardHeader>
+          <CardTitle>
+            <Title
+              headingLevel="h2"
+              size="md"
+            >
+              hello-{"groupMetricId":["hello","world"]}
+            </Title>
+          </CardTitle>
+        </CardHeader>
+        <CardBody>
+          <div>
+            world
+          </div>
+        </CardBody>
+        <CardFooter>
+          <div>
+            dolor sit timestamp
+          </div>
+        </CardFooter>
+      </Card>
+      <Card
+        className="curiosity-usage-graph__totals-column-card "
+        data-test="graphMetricTotalsCard-2"
+        isPlain={true}
+        key="b21615e1e1be06472b2fd681bd40525fbfbe223d"
+      >
+        <CardHeader>
+          <CardTitle>
+            <Title
+              headingLevel="h2"
+              size="md"
+            >
+              dolor
+            </Title>
+          </CardTitle>
+        </CardHeader>
+        <CardBody>
+          <div>
+            sit
+          </div>
+        </CardBody>
+        <CardFooter>
+          <div>
+            dolor sit timestamp-{"groupMetricId":["hello","world"]}
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
+  </div>
+  <div>
+    <div
+      className="curiosity-usage-graph__totals-graph-column"
+    />
+  </div>
+</div>
+`;
+
 exports[`GraphCardMetricTotals Component should handle multiple display states: error 1`] = `
 <div
   className="curiosity-usage-graph__totals"
@@ -14,6 +115,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
         className="curiosity-usage-graph__totals-column-card blur"
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
+        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
       >
         <CardHeader>
           <CardTitle>
@@ -54,6 +156,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
         className="curiosity-usage-graph__totals-column-card "
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
+        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
       >
         <CardHeader>
           <CardTitle>
@@ -100,6 +203,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
         className="curiosity-usage-graph__totals-column-card "
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
+        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
       >
         <CardHeader>
           <CardTitle>

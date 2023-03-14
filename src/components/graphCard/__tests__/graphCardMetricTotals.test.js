@@ -1,5 +1,6 @@
 import React from 'react';
 import { GraphCardMetricTotals } from '../graphCardMetricTotals';
+import { translate } from '../../i18n/i18nHelpers';
 
 describe('GraphCardMetricTotals Component', () => {
   it('should render a basic component', async () => {
@@ -55,6 +56,44 @@ describe('GraphCardMetricTotals Component', () => {
       })
     });
 
+    expect(component).toMatchSnapshot('fulfilled');
+  });
+
+  it('should handle custom card displays', async () => {
+    const props = {
+      useGraphCardContext: () => ({
+        children: 'lorem ipsum',
+        settings: {
+          isMetricDisplay: true,
+          groupMetric: ['hello', 'world'],
+          cards: [
+            {
+              header: 'lorem',
+              body: passedValues =>
+                translate('ipsum-{{data}}', { testId: 'custom test id', data: JSON.stringify(passedValues) }),
+              footer: 'dolor sit timestamp'
+            },
+            {
+              key: 'my custom react key',
+              header: passedValues => `hello-${JSON.stringify(passedValues)}`,
+              body: 'world',
+              footer: 'dolor sit timestamp'
+            },
+            {
+              header: 'dolor',
+              body: 'sit',
+              footer: passedValues => `dolor sit timestamp-${JSON.stringify(passedValues)}`
+            }
+          ]
+        }
+      }),
+      useMetricsSelector: () => ({
+        pending: false,
+        error: false,
+        fulfilled: true
+      })
+    };
+    const component = await shallowHookComponent(<GraphCardMetricTotals {...props} />);
     expect(component).toMatchSnapshot('fulfilled');
   });
 });

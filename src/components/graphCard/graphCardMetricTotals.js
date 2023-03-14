@@ -33,7 +33,7 @@ const GraphCardMetricTotals = ({
   const { settings = {} } = useAliasGraphCardContext();
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets = [] } = useAliasMetricsSelector();
-  const { data = [], id: chartId, metric: firstMetricId, meta = {} } = dataSets[0] || {};
+  const { data = [], id: firstChartId, metric: firstMetricId, meta = {} } = dataSets[0] || {};
   const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
 
   const {
@@ -55,7 +55,7 @@ const GraphCardMetricTotals = ({
 
   if (settings?.isMetricDisplay && settings?.cards?.length) {
     const metricDisplayPassedData = helpers.setImmutableData({
-      chartId,
+      chartId: firstChartId,
       dailyDate,
       dailyHasData,
       dailyValue,
@@ -77,7 +77,7 @@ const GraphCardMetricTotals = ({
           <div className="curiosity-usage-graph__totals-column">
             {settings?.cards?.map(({ key, header, body, footer }, index) => (
               <Card
-                key={key || helpers.generateHash({ chartId, metrics: metricDisplayPassedData.groupMetricId, index })}
+                key={key || helpers.generateHash({ metricDisplayPassedData, index })}
                 isPlain
                 data-test={`graphMetricTotalsCard-${index}`}
                 className={`curiosity-usage-graph__totals-column-card ${(error && 'blur') || ''}`}
