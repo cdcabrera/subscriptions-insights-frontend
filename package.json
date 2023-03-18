@@ -102,8 +102,6 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^13.2.2",
     "react-redux": "^8.1.2",
-    "react-router": "6.8.1",
-    "react-router-dom": "6.8.1",
     "react-use": "^17.4.0",
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
