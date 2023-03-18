@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  useLocation as useLocationRRD,
-  useNavigate as useRRDNavigate,
-  useSearchParams as useRRDSearchParams
-} from 'react-router-dom';
+import { useLocation as useLocationRU } from 'react-use';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
@@ -16,7 +12,7 @@ import { translate } from '../i18n/i18n';
  */
 
 /**
- * Combine react-router-dom useLocation with actual window location.
+ * Combine react-use useLocation with actual window location.
  * Focused on exposing replace and href.
  *
  * @param {object} options
@@ -25,25 +21,32 @@ import { translate } from '../i18n/i18n';
  * @returns {{_id, search, hash}}
  */
 const useLocation = ({
-  useLocation: useAliasLocation = useLocationRRD,
+  useLocation: useAliasLocation = useLocationRU,
   windowLocation: aliasWindowLocation = window.location
 } = {}) => {
-  const location = useAliasLocation();
+  useAliasLocation();
   const windowLocation = aliasWindowLocation;
   const [updatedLocation, setUpdatedLocation] = useState({});
+  const forceUpdateLocation = useCallback(() => {
+    const _id = helpers.generateHash(windowLocation);
+    if (updatedLocation?._id !== _id) {
+      setUpdatedLocation({
+        ...windowLocation,
+        _id
+      });
+    }
+  }, [updatedLocation?._id, windowLocation]);
 
   useEffect(() => {
     const _id = helpers.generateHash(windowLocation);
     if (updatedLocation?._id !== _id) {
       setUpdatedLocation({
-        ...location,
         ...windowLocation,
         _id,
-        hash: location?.hash || '',
-        search: location?.search || ''
+        updateLocation: forceUpdateLocation
       });
     }
-  }, [location, updatedLocation?._id, windowLocation]);
+  }, [forceUpdateLocation, updatedLocation?._id, windowLocation]);
 
   return updatedLocation;
 };
@@ -55,16 +58,16 @@ const useLocation = ({
  * @param {object} options
  * @param {Function} options.useDispatch
  * @param {Function} options.useLocation
- * @param {Function} options.useNavigate
+ * @param {*} options.windowHistory
  * @returns {Function}
  */
 const useNavigate = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useLocation: useAliasLocation = useLocation,
-  useNavigate: useAliasNavigate = useRRDNavigate
+  windowHistory: aliasWindowHistory = window.history
 } = {}) => {
+  const windowHistory = aliasWindowHistory;
   const { search = '', hash = '' } = useAliasLocation();
-  const navigate = useAliasNavigate();
   const dispatch = useAliasDispatch();
 
   return useCallback(
@@ -78,13 +81,53 @@ const useNavigate = ({
           config: firstMatch?.productPath
         });
 
-        return navigate(`${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`, options);
+        return windowHistory.pushState(
+          {},
+          '',
+          `${routerHelpers.pathJoin(routerHelpers.dynamicBaseName(), firstMatch?.productPath)}${search}${hash}`,
+          options
+        );
       }
 
-      return navigate((pathName && `${pathName}${search}${hash}`) || pathLocation, options);
+      return windowHistory.pushState({}, '', (pathName && `${pathName}${search}${hash}`) || pathLocation, options);
     },
-    [dispatch, hash, navigate, search]
+    [dispatch, hash, search, windowHistory]
   );
+};
+
+/**
+ * Initialize and store product path, parameter, in a "state" update parallel to routing.
+ * We're opting to use "window.location.pathname" directly since it appears to be quicker,
+ * and returns a similar structured value as useParam.
+ *
+ * @param {object} options
+ * @param {Function} options.useSelector
+ * @param {Function} options.useDispatch
+ * @param {Function} options.useLocation
+ * @param {*} options.windowLocation
+ * @returns {*|string}
+ */
+const useSetRouteDetail = ({
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useLocation: useAliasLocation = useLocation,
+  windowLocation: aliasWindowLocation = window.location
+} = {}) => {
+  useAliasLocation();
+  const dispatch = useAliasDispatch();
+  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  const { pathname: productPath } = aliasWindowLocation;
+
+  useEffect(() => {
+    if (productPath && productPath !== updatedPath) {
+      dispatch({
+        type: reduxTypes.app.SET_PRODUCT,
+        config: productPath
+      });
+    }
+  }, [updatedPath, dispatch, productPath]);
+
+  return updatedPath;
 };
 
 /**
@@ -92,16 +135,21 @@ const useNavigate = ({
  * configuration context.
  *
  * @param {object} options
+ * @param {boolean} options.disableIsClosest
  * @param {Function} options.t
  * @param {Function} options.useChrome
  * @param {Function} options.useSelectors
+ * @param {Function} options.useSetRouteDetail
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({
+  disableIsClosest = helpers.DEV_MODE === true,
   t = translate,
   useChrome: useAliasChrome = useChrome,
-  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors,
+  useSetRouteDetail: useAliasSetRouteDetail = useSetRouteDetail
 } = {}) => {
+  useAliasSetRouteDetail();
   const { getBundleData = helpers.noop, updateDocumentTitle = helpers.noop } = useAliasChrome();
   const bundleData = getBundleData();
   const [productPath, productVariant] = useAliasSelectors([
@@ -153,10 +201,11 @@ const useRouteDetail = ({
         productGroup: firstMatch?.productGroup,
         productConfig: (configs?.length && configs) || [],
         productPath,
-        productVariant
+        productVariant,
+        disableIsClosest: disableIsClosest && isClosest
       });
     }
-  }, [bundleData?.bundleTitle, detail?._passed, productPath, productVariant, t, updateDocumentTitle]);
+  }, [bundleData?.bundleTitle, detail?._passed, disableIsClosest, productPath, productVariant, t, updateDocumentTitle]);
 
   return detail;
 };
@@ -166,15 +215,15 @@ const useRouteDetail = ({
  *
  * @param {object} options
  * @param {Function} options.useLocation
- * @param {Function} options.useSearchParams
+ * @param {*} options.windowHistory
  * @returns {Array}
  */
 const useSearchParams = ({
-  useSearchParams: useAliasSearchParams = useRRDSearchParams,
-  useLocation: useAliasLocation = useLocation
+  useLocation: useAliasLocation = useLocation,
+  windowHistory: aliasWindowHistory = window.history
 } = {}) => {
-  const { search } = useAliasLocation();
-  const [, setAliasSearchParams] = useAliasSearchParams();
+  const windowHistory = aliasWindowHistory;
+  const { updateLocation, search } = useAliasLocation();
 
   /**
    * Alias returned React Router Dom useSearchParams hook to something expected.
@@ -195,44 +244,20 @@ const useSearchParams = ({
         updatedSearch = updatedQuery;
       }
 
-      setAliasSearchParams(updatedSearch);
+      windowHistory.pushState(
+        {},
+        '',
+        `?${Object.entries(updatedSearch)
+          .map(([key, value]) => `${key}=${value}`)
+          .join('&')}`
+      );
+
+      updateLocation();
     },
-    [search, setAliasSearchParams]
+    [search, updateLocation, windowHistory]
   );
 
   return [routerHelpers.parseSearchParams(search), setSearchParams];
-};
-
-/**
- * Initialize and store product path, parameter, in a "state" update parallel to routing.
- * We're opting to use "window.location.pathname" directly since it appears to be quicker,
- * and returns a similar structured value as useParam.
- *
- * @param {object} options
- * @param {Function} options.useSelector
- * @param {Function} options.useDispatch
- * @param {*} options.windowLocation
- * @returns {*|string}
- */
-const useSetRouteDetail = ({
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  windowLocation: aliasWindowLocation = window.location
-} = {}) => {
-  const dispatch = useAliasDispatch();
-  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const { pathname: productPath } = aliasWindowLocation;
-
-  useEffect(() => {
-    if (productPath && productPath !== updatedPath) {
-      dispatch({
-        type: reduxTypes.app.SET_PRODUCT,
-        config: productPath
-      });
-    }
-  }, [updatedPath, dispatch, productPath]);
-
-  return updatedPath;
 };
 
 const context = {
