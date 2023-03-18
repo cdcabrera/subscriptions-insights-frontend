@@ -13,6 +13,7 @@ import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { InventoryCardSubscriptions } from '../inventoryCardSubscriptions/inventoryCardSubscriptions';
 import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
+import { ProductViewMissing } from './productViewMissing';
 
 /**
  * Primary product display component, and config context provider.
@@ -35,7 +36,7 @@ import { translate } from '../i18n/i18n';
  * @returns {React.ReactNode}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
-  const { productGroup, productConfig } = useAliasRouteDetail();
+  const { productGroup, productConfig, disableIsClosest } = useAliasRouteDetail();
 
   const renderProduct = useCallback(() => {
     const updated = config => {
@@ -100,6 +101,10 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
 
     return productConfig?.map(config => updated(config));
   }, [productConfig, t]);
+
+  if (disableIsClosest) {
+    return <ProductViewMissing />;
+  }
 
   return (
     (productGroup && (
