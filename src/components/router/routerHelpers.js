@@ -1,4 +1,3 @@
-import React from 'react';
 import { closest } from 'fastest-levenshtein';
 import { helpers } from '../../common/helpers';
 import { productConfig } from '../../config';
@@ -78,20 +77,6 @@ const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.s
 });
 
 /**
- * Import a route component.
- *
- * @param {Node} component
- * @returns {Node}
- */
-const importView = component => {
-  if (!helpers.TEST_MODE) {
-    return React.lazy(() => import(/* webpackExclude: /\.test\.js$/ */ `../${component}.js`));
-  }
-
-  return p => <React.Fragment>{JSON.stringify({ ...p, component }, null, 2)}</React.Fragment>;
-};
-
-/**
  * Parse search parameters from a string, using a set for "uniqueness"
  *
  * @param {string} currentPathAndOrSearch
@@ -140,7 +125,6 @@ const routerHelpers = {
   dynamicBaseName,
   dynamicBasePath,
   getRouteConfigByPath,
-  importView,
   parseSearchParams,
   pathJoin
 };
@@ -152,7 +136,6 @@ export {
   dynamicBaseName,
   dynamicBasePath,
   getRouteConfigByPath,
-  importView,
   parseSearchParams,
   pathJoin
 };
