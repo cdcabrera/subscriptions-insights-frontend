@@ -14,20 +14,9 @@ exports[`ProductViewMissing Component should render a basic component: basic 1`]
   "store": {},
   "children": [
     {
-      "displayName": "MemoryRouter",
+      "displayName": "ProductViewMissing",
       "props": {
-        "initialEntries": [
-          "/"
-        ],
-        "children": {
-          "key": null,
-          "ref": null,
-          "props": {
-            "availableProductsRedirect": 1
-          },
-          "_owner": null,
-          "_store": {}
-        }
+        "availableProductsRedirect": 1
       }
     }
   ]
