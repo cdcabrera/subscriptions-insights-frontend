@@ -88,6 +88,38 @@ const useNavigate = ({
 };
 
 /**
+ * Initialize and store product path, parameter, in a "state" update parallel to routing.
+ * We're opting to use "window.location.pathname" directly since it appears to be quicker,
+ * and returns a similar structured value as useParam.
+ *
+ * @param {object} options
+ * @param {Function} options.useSelector
+ * @param {Function} options.useDispatch
+ * @param {*} options.windowLocation
+ * @returns {*|string}
+ */
+const useSetRouteDetail = ({
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  windowLocation: aliasWindowLocation = window.location
+} = {}) => {
+  const dispatch = useAliasDispatch();
+  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  const { pathname: productPath } = aliasWindowLocation;
+
+  useEffect(() => {
+    if (productPath && productPath !== updatedPath) {
+      dispatch({
+        type: reduxTypes.app.SET_PRODUCT,
+        config: productPath
+      });
+    }
+  }, [updatedPath, dispatch, productPath]);
+
+  return updatedPath;
+};
+
+/**
  * Get a route detail from "state". Consume useSetRouteDetail and set basis for product
  * configuration context.
  *
@@ -95,13 +127,16 @@ const useNavigate = ({
  * @param {Function} options.t
  * @param {Function} options.useChrome
  * @param {Function} options.useSelector
+ * @param {Function} options.useSetRouteDetail
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({
   t = translate,
   useChrome: useAliasChrome = useChrome,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
+  useSetRouteDetail: useAliasSetRouteDetail = useSetRouteDetail
 } = {}) => {
+  useAliasSetRouteDetail();
   const { updateDocumentTitle = helpers.noop } = useAliasChrome();
   const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
   const [detail, setDetail] = useState({});
@@ -177,38 +212,6 @@ const useSearchParams = ({
   );
 
   return [routerHelpers.parseSearchParams(search), setSearchParams];
-};
-
-/**
- * Initialize and store product path, parameter, in a "state" update parallel to routing.
- * We're opting to use "window.location.pathname" directly since it appears to be quicker,
- * and returns a similar structured value as useParam.
- *
- * @param {object} options
- * @param {Function} options.useSelector
- * @param {Function} options.useDispatch
- * @param {*} options.windowLocation
- * @returns {*|string}
- */
-const useSetRouteDetail = ({
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  windowLocation: aliasWindowLocation = window.location
-} = {}) => {
-  const dispatch = useAliasDispatch();
-  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const { pathname: productPath } = aliasWindowLocation;
-
-  useEffect(() => {
-    if (productPath && productPath !== updatedPath) {
-      dispatch({
-        type: reduxTypes.app.SET_PRODUCT,
-        config: productPath
-      });
-    }
-  }, [updatedPath, dispatch, productPath]);
-
-  return updatedPath;
 };
 
 const context = {
