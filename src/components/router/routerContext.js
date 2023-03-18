@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  useLocation as useLocationRRD,
-  useNavigate as useRRDNavigate,
-  useSearchParams as useRRDSearchParams
-} from 'react-router-dom';
+import { useSearchParams as useRRDSearchParams } from 'react-router-dom';
+import { useLocation as useLocationRU } from 'react-use';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
@@ -25,7 +22,7 @@ import { translate } from '../i18n/i18n';
  * @returns {{_id, search, hash}}
  */
 const useLocation = ({
-  useLocation: useAliasLocation = useLocationRRD,
+  useLocation: useAliasLocation = useLocationRU,
   windowLocation: aliasWindowLocation = window.location
 } = {}) => {
   const location = useAliasLocation();
@@ -55,16 +52,13 @@ const useLocation = ({
  * @param {object} options
  * @param {Function} options.useDispatch
  * @param {Function} options.useLocation
- * @param {Function} options.useNavigate
  * @returns {Function}
  */
 const useNavigate = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useLocation: useAliasLocation = useLocation,
-  useNavigate: useAliasNavigate = useRRDNavigate
+  useLocation: useAliasLocation = useLocation
 } = {}) => {
   const { search = '', hash = '' } = useAliasLocation();
-  const navigate = useAliasNavigate();
   const dispatch = useAliasDispatch();
 
   return useCallback(
@@ -78,12 +72,17 @@ const useNavigate = ({
           config: firstMatch?.productPath
         });
 
-        return navigate(`${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`, options);
+        return window.history.pushState(
+          {},
+          '',
+          `${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`,
+          options
+        );
       }
 
-      return navigate((pathName && `${pathName}${search}${hash}`) || pathLocation, options);
+      return window.history.pushState({}, '', (pathName && `${pathName}${search}${hash}`) || pathLocation, options);
     },
-    [dispatch, hash, navigate, search]
+    [dispatch, hash, search]
   );
 };
 
