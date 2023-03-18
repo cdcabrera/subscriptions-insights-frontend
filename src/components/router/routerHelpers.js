@@ -1,7 +1,7 @@
 import React from 'react';
 import { closest } from 'fastest-levenshtein';
 import { helpers } from '../../common/helpers';
-import { routesConfig, productConfig } from '../../config';
+import { productConfig } from '../../config';
 
 /**
  * @memberof Router
@@ -38,20 +38,6 @@ const dynamicBaseName = ({ pathName = window.location.pathname, appName: applica
  */
 const dynamicBasePath = ({ pathName = window.location.pathname, appName: applicationName = helpers.UI_NAME } = {}) =>
   pathName.split(applicationName)[0];
-
-/**
- * The first redirect route.
- *
- * @type {object}
- */
-const redirectRoute = routesConfig.find(({ disabled, redirect }) => !disabled && redirect);
-
-/**
- * Return array of objects that describes routing.
- *
- * @returns {Array}
- */
-const routes = routesConfig.filter(item => !item.disabled);
 
 /**
  * Match pre-sorted route config entries with a path, or match with a fallback.
@@ -153,12 +139,10 @@ const routerHelpers = {
   appName,
   dynamicBaseName,
   dynamicBasePath,
-  redirectRoute,
   getRouteConfigByPath,
   importView,
   parseSearchParams,
-  pathJoin,
-  routes
+  pathJoin
 };
 
 export {
@@ -167,10 +151,8 @@ export {
   appName,
   dynamicBaseName,
   dynamicBasePath,
-  redirectRoute,
   getRouteConfigByPath,
   importView,
   parseSearchParams,
-  pathJoin,
-  routes
+  pathJoin
 };
