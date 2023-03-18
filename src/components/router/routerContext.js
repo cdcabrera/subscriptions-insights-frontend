@@ -95,14 +95,17 @@ const useNavigate = ({
  * @param {object} options
  * @param {Function} options.useSelector
  * @param {Function} options.useDispatch
+ * @param {Function} options.useLocation
  * @param {*} options.windowLocation
  * @returns {*|string}
  */
 const useSetRouteDetail = ({
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useLocation: useAliasLocation = useLocation,
   windowLocation: aliasWindowLocation = window.location
 } = {}) => {
+  useAliasLocation();
   const dispatch = useAliasDispatch();
   const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
   const { pathname: productPath } = aliasWindowLocation;
@@ -124,6 +127,7 @@ const useSetRouteDetail = ({
  * configuration context.
  *
  * @param {object} options
+ * @param {boolean} options.disableIsClosest
  * @param {Function} options.t
  * @param {Function} options.useChrome
  * @param {Function} options.useSelector
@@ -131,6 +135,7 @@ const useSetRouteDetail = ({
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({
+  disableIsClosest = helpers.DEV_MODE === true,
   t = translate,
   useChrome: useAliasChrome = useChrome,
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
@@ -164,10 +169,11 @@ const useRouteDetail = ({
         isClosest,
         productGroup: firstMatch?.productGroup,
         productConfig: (configs?.length && configs) || [],
-        productPath
+        productPath,
+        disableIsClosest: disableIsClosest && isClosest
       });
     }
-  }, [detail?._passed, productPath, t, updateDocumentTitle]);
+  }, [detail?._passed, disableIsClosest, productPath, t, updateDocumentTitle]);
 
   return detail;
 };
