@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams as useRRDSearchParams } from 'react-router-dom';
 import { useLocation as useLocationRU } from 'react-use';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { routerHelpers } from './routerHelpers';
@@ -25,22 +24,29 @@ const useLocation = ({
   useLocation: useAliasLocation = useLocationRU,
   windowLocation: aliasWindowLocation = window.location
 } = {}) => {
-  const location = useAliasLocation();
+  useAliasLocation();
   const windowLocation = aliasWindowLocation;
   const [updatedLocation, setUpdatedLocation] = useState({});
+  const forceUpdateLocation = useCallback(() => {
+    const _id = helpers.generateHash(windowLocation);
+    if (updatedLocation?._id !== _id) {
+      setUpdatedLocation({
+        ...windowLocation,
+        _id
+      });
+    }
+  }, [updatedLocation?._id, windowLocation]);
 
   useEffect(() => {
     const _id = helpers.generateHash(windowLocation);
     if (updatedLocation?._id !== _id) {
       setUpdatedLocation({
-        ...location,
         ...windowLocation,
         _id,
-        hash: location?.hash || '',
-        search: location?.search || ''
+        updateLocation: forceUpdateLocation
       });
     }
-  }, [location, updatedLocation?._id, windowLocation]);
+  }, [forceUpdateLocation, updatedLocation?._id, windowLocation]);
 
   return updatedLocation;
 };
@@ -182,15 +188,11 @@ const useRouteDetail = ({
  *
  * @param {object} options
  * @param {Function} options.useLocation
- * @param {Function} options.useSearchParams
  * @returns {Array}
  */
-const useSearchParams = ({
-  useSearchParams: useAliasSearchParams = useRRDSearchParams,
-  useLocation: useAliasLocation = useLocation
-} = {}) => {
-  const { search } = useAliasLocation();
-  const [, setAliasSearchParams] = useAliasSearchParams();
+const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) => {
+  const { updateLocation, search } = useAliasLocation();
+  // const [, setAliasSearchParams] = useAliasSearchParams();
 
   /**
    * Alias returned React Router Dom useSearchParams hook to something expected.
@@ -211,9 +213,23 @@ const useSearchParams = ({
         updatedSearch = updatedQuery;
       }
 
-      setAliasSearchParams(updatedSearch);
+      // setAliasSearchParams(updatedSearch);
+      window.history.pushState(
+        {},
+        '',
+        `?${Object.entries(updatedSearch)
+          .map(([key, value]) => `${key}=${value}`)
+          .join('&')}`
+      );
+
+      updateLocation();
+      /*
+      window.location.search = `?${Object.entries(updatedSearch)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')}`;
+       */
     },
-    [search, setAliasSearchParams]
+    [updateLocation, search]
   );
 
   return [routerHelpers.parseSearchParams(search), setSearchParams];
