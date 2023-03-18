@@ -81,7 +81,7 @@ const useNavigate = ({
         return window.history.pushState(
           {},
           '',
-          `${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`,
+          `${routerHelpers.pathJoin(routerHelpers.dynamicBaseName(), firstMatch?.productPath)}${search}${hash}`,
           options
         );
       }
@@ -192,7 +192,6 @@ const useRouteDetail = ({
  */
 const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) => {
   const { updateLocation, search } = useAliasLocation();
-  // const [, setAliasSearchParams] = useAliasSearchParams();
 
   /**
    * Alias returned React Router Dom useSearchParams hook to something expected.
@@ -213,7 +212,6 @@ const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) =
         updatedSearch = updatedQuery;
       }
 
-      // setAliasSearchParams(updatedSearch);
       window.history.pushState(
         {},
         '',
@@ -223,11 +221,6 @@ const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) =
       );
 
       updateLocation();
-      /*
-      window.location.search = `?${Object.entries(updatedSearch)
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&')}`;
-       */
     },
     [updateLocation, search]
   );
