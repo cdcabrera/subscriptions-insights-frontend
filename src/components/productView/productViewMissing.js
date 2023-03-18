@@ -87,6 +87,7 @@ const ProductViewMissing = ({
                   variant="link"
                   isInline
                   onClick={event => {
+                    event.stopPropagation();
                     event.preventDefault();
                     onNavigate(productPath);
                   }}
