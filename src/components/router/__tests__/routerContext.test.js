@@ -32,7 +32,7 @@ describe('RouterContext', () => {
         useLocation: () => ({
           search: '?lorem=ipsum'
         }),
-        useNavigate: () => value => updatedCalls.push(value)
+        windowHistory: { pushState: (...args) => updatedCalls.push(args) }
       })
     );
 
@@ -78,8 +78,8 @@ describe('RouterContext', () => {
     const mockSetParams = jest.fn();
     const { result } = await renderHook(() =>
       useSearchParams({
-        useLocation: () => ({ search: '?lorem=ipsum' }),
-        useSearchParams: () => [undefined, mockSetParams]
+        useLocation: () => ({ search: '?lorem=ipsum', updateLocation: jest.fn() }),
+        windowHistory: { pushState: mockSetParams }
       })
     );
 
