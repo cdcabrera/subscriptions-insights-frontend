@@ -2,10 +2,10 @@
 
 exports[`RouterContext should apply a hook for useLocation: location 1`] = `
 {
-  "_id": "92bfb354f8f38914f06cb3fad36215957efaf7cc",
-  "hash": "",
+  "_id": "bf6807e9c7823453ffe3ddf88d862b02889e73fa",
   "lorem": "ipsum",
   "search": "?lorem=ipsum",
+  "updateLocation": [Function],
 }
 `;
 
@@ -32,13 +32,7 @@ exports[`RouterContext should apply a hook for useNavigate: navigation dispatch 
 ]
 `;
 
-exports[`RouterContext should apply a hook for useNavigate: navigation push 1`] = `
-[
-  "./rhods?lorem=ipsum",
-  "./rhel?lorem=ipsum",
-  "./rhel?lorem=ipsum",
-]
-`;
+exports[`RouterContext should apply a hook for useNavigate: navigation push 1`] = `[]`;
 
 exports[`RouterContext should apply a hook for useRouteDetail: route details, closest 1`] = `
 {
@@ -51,6 +45,7 @@ exports[`RouterContext should apply a hook for useRouteDetail: route details, cl
     "productGroup",
     "productConfig",
     "productPath",
+    "disableIsClosest",
   ],
   "firstMatch": [
     "aliases",
@@ -90,6 +85,7 @@ exports[`RouterContext should apply a hook for useRouteDetail: route details, ma
     "productGroup",
     "productConfig",
     "productPath",
+    "disableIsClosest",
   ],
   "firstMatch": [
     "aliases",

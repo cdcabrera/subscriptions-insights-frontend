@@ -13,12 +13,9 @@ describe('RouterContext', () => {
   });
 
   it('should apply a hook for useLocation', async () => {
-    const mockLocation = {
-      search: '?lorem=ipsum'
-    };
-
+    const mockLocation = {};
     const { result: mockUseLocation } = await mountHook(() =>
-      useLocation({ useLocation: () => mockLocation, windowLocation: { lorem: 'ipsum' } })
+      useLocation({ useLocation: () => mockLocation, windowLocation: { lorem: 'ipsum', search: '?lorem=ipsum' } })
     );
     expect(mockUseLocation).toMatchSnapshot('location');
   });
@@ -71,7 +68,7 @@ describe('RouterContext', () => {
     const mockSetParams = jest.fn();
     const { result } = await mountHook(() =>
       useSearchParams({
-        useLocation: () => ({ search: '?lorem=ipsum' }),
+        useLocation: () => ({ search: '?lorem=ipsum', updateLocation: () => mockSetParams() }),
         useSearchParams: () => [undefined, mockSetParams]
       })
     );
