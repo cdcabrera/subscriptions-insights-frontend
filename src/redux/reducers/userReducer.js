@@ -14,10 +14,11 @@ import { reduxHelpers } from '../common';
  * Initial state.
  *
  * @private
- * @type {{auth: {}, optin: {}, locale: null, errors: {}}}
+ * @type {{auth: {}, optin: {}, locale: {}, bundle: {}, errors: {}}}
  */
 const initialState = {
   auth: {},
+  bundle: {},
   errors: {},
   locale: {},
   optin: {}
@@ -62,7 +63,8 @@ const userReducer = (state = initialState, action) => {
           { ref: 'optin', type: userTypes.DELETE_USER_OPTIN },
           { ref: 'optin', type: userTypes.GET_USER_OPTIN },
           { ref: 'optin', type: userTypes.UPDATE_USER_OPTIN },
-          { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }
+          { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH },
+          { ref: 'bundle', type: platformTypes.PLATFORM_BUNDLE_DATA }
         ],
         state,
         action

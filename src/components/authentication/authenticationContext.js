@@ -43,6 +43,7 @@ const useAuthContext = () => useContext(AuthenticationContext);
 const useGetAuthorization = ({
   appName = routerHelpers.appName,
   authorizeUser = reduxActions.platform.authorizeUser,
+  getBundleData = reduxActions.platform.getBundleData,
   hideGlobalFilter = reduxActions.platform.hideGlobalFilter,
   onNavigation = reduxActions.platform.onNavigation,
   useChrome: useAliasChrome = useChrome,
@@ -66,7 +67,7 @@ const useGetAuthorization = ({
   useMount(async () => {
     await dispatch(authorizeUser());
     updateDocumentTitle(appName);
-    dispatch([hideGlobalFilter()]);
+    dispatch([getBundleData(), hideGlobalFilter()]);
     setUnregister(() => dispatch(onNavigation(event => navigate(event.navId))));
   });
 

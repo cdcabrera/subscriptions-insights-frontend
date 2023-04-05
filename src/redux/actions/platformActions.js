@@ -49,6 +49,16 @@ const authorizeUser = appName => dispatch =>
   });
 
 /**
+ * Get platform bundle information for display.
+ *
+ * @returns {{Function}}
+ */
+const getBundleData = () => ({
+  type: platformTypes.PLATFORM_BUNDLE_DATA,
+  payload: platformServices.getBundleData()
+});
+
+/**
  * Hide platform global filter.
  *
  * @param {boolean} isHidden
@@ -77,6 +87,7 @@ const platformActions = {
   removeNotification,
   clearNotifications,
   authorizeUser,
+  getBundleData,
   hideGlobalFilter,
   onNavigation
 };
@@ -88,6 +99,7 @@ export {
   removeNotification,
   clearNotifications,
   authorizeUser,
+  getBundleData,
   hideGlobalFilter,
   onNavigation
 };
