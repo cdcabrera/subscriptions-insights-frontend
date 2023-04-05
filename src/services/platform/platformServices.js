@@ -17,6 +17,24 @@ import {
  */
 
 /**
+ * Return platform bundle information for display.
+ *
+ * @returns {Promise<*>}
+ */
+const getBundleData = () => {
+  const { insights } = window;
+  return axiosServiceCall({
+    url: async () => {
+      try {
+        return insights.chrome.getBundleData();
+      } catch (e) {
+        throw new Error(`{ getBundleData } = insights.chrome, ${e.message}`);
+      }
+    }
+  });
+};
+
+/**
  * Basic user authentication.
  *
  * @param {object} options
@@ -124,10 +142,19 @@ const onNavigation = callback => {
 };
 
 const platformServices = {
+  getBundleData,
   getUser,
   getUserPermissions,
   hideGlobalFilter,
   onNavigation
 };
 
-export { platformServices as default, platformServices, getUser, getUserPermissions, hideGlobalFilter, onNavigation };
+export {
+  platformServices as default,
+  platformServices,
+  getBundleData,
+  getUser,
+  getUserPermissions,
+  hideGlobalFilter,
+  onNavigation
+};

@@ -15,10 +15,11 @@ describe('PlatformServices', () => {
   };
 
   it('should export a specific number of methods and classes', () => {
-    expect(Object.keys(platformServices)).toHaveLength(4);
+    expect(Object.keys(platformServices)).toHaveLength(5);
   });
 
   it('should have specific methods', () => {
+    expect(platformServices.getBundleData).toBeDefined();
     expect(platformServices.getUser).toBeDefined();
     expect(platformServices.getUserPermissions).toBeDefined();
     expect(platformServices.hideGlobalFilter).toBeDefined();
@@ -34,6 +35,13 @@ describe('PlatformServices', () => {
     const response = await Promise.all(promises);
 
     expect(response.length).toEqual(Object.keys(platformServices).length);
+  });
+
+  it('should return a failed getBundleData', async () => {
+    window.insights.chrome.getBundleData = undefined;
+    const { status, statusText, data, message } = await returnPromiseAsync(platformServices.getBundleData);
+
+    expect({ status, statusText, data, message }).toMatchSnapshot('failed getBundleData');
   });
 
   it('should return a successful getUser', async () => {

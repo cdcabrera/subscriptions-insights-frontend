@@ -322,11 +322,18 @@ Emulated service calls for platform globals.
 
 
 * [PlatformServices](#Platform.module_PlatformServices)
+    * [~getBundleData()](#Platform.module_PlatformServices..getBundleData) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getUser(options)](#Platform.module_PlatformServices..getUser) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getUserPermissions(appName, options)](#Platform.module_PlatformServices..getUserPermissions) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~hideGlobalFilter(isHidden)](#Platform.module_PlatformServices..hideGlobalFilter) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~onNavigation(callback)](#Platform.module_PlatformServices..onNavigation) ⇒ <code>function</code>
 
+<a name="Platform.module_PlatformServices..getBundleData"></a>
+
+### PlatformServices~getBundleData() ⇒ <code>Promise.&lt;\*&gt;</code>
+Return platform bundle information for display.
+
+**Kind**: inner method of [<code>PlatformServices</code>](#Platform.module_PlatformServices)  
 <a name="Platform.module_PlatformServices..getUser"></a>
 
 ### PlatformServices~getUser(options) ⇒ <code>Promise.&lt;\*&gt;</code>

@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PlatformServices should return a failed getBundleData: failed getBundleData 1`] = `
+{
+  "data": undefined,
+  "message": "{ getBundleData } = insights.chrome, insights.chrome.getBundleData is not a function",
+  "status": 418,
+  "statusText": undefined,
+}
+`;
+
 exports[`PlatformServices should return a failed getUser: failed authorized user 1`] = `
 {
   "data": undefined,
