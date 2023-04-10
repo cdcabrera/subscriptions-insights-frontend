@@ -94,24 +94,59 @@ const useNavigate = ({
  * @param {object} options
  * @param {Function} options.t
  * @param {Function} options.useChrome
- * @param {Function} options.useSelector
+ * @param {Function} options.useSelectors
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({
   t = translate,
   useChrome: useAliasChrome = useChrome,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 } = {}) => {
   const { getBundleData = helpers.noop, updateDocumentTitle = helpers.noop } = useAliasChrome();
   const bundleData = getBundleData();
-  const [productPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  const [productPath, productVariant] = useAliasSelectors([
+    ({ view }) => view?.product?.config,
+    ({ view }) => view?.product?.variant
+  ]);
   const [detail, setDetail] = useState({});
 
   useEffect(() => {
-    if (productPath && detail?._passed !== productPath) {
-      const { allConfigs, configs, firstMatch, isClosest } = routerHelpers.getRouteConfigByPath({
-        pathName: productPath
+    // const updatedVariantPath = productVariant ?? productPath;
+    const updatedVariantPath = productPath;
+    const hashPath = helpers.generateHash({ productPath, productVariant });
+    console.log('>>>>> VARIANT', productPath, productVariant);
+    console.log('>>>>> VARIANT 2', updatedVariantPath);
+
+    if (updatedVariantPath && detail?._passed !== hashPath) {
+      let routeConfig = routerHelpers.getRouteConfigByPath({
+        pathName: updatedVariantPath
       });
+
+      console.log('>>>>>>>> VARIANT 2.5', productVariant);
+
+      if (productVariant) {
+        console.log('>>>>>>>> VARIANT 3', productVariant, routeConfig);
+        // const selectedVariant = routeConfig.allConfigs.find(config => productVariant?.[config.viewId]);
+        /*
+        const stateAvailableVariants = routeConfig
+          .allConfigs
+          .map(config => productVariant?.[config.viewId])
+          .filter(value => value !== undefined);
+
+        console.log('>>>>>>>> VARIANT 4', stateAvailableVariants);
+        */
+        const selectedVariant = productVariant?.[routeConfig?.firstMatch?.productGroup];
+
+        if (selectedVariant) {
+          routeConfig = routerHelpers.getRouteConfigByPath({
+            pathName: selectedVariant
+          });
+        }
+      }
+
+      const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routeConfig;
+
+      console.log('>>>> VARIANT TO DISPLAY', allConfigs, availableVariants, configs, firstMatch, isClosest);
 
       // Set document title, remove pre-baked suffix
       updateDocumentTitle(
@@ -124,17 +159,19 @@ const useRouteDetail = ({
 
       // Set route detail
       setDetail({
-        _passed: productPath,
+        _passed: hashPath,
         allConfigs,
+        availableVariants,
         firstMatch,
         errorRoute: routerHelpers.errorRoute,
         isClosest,
         productGroup: firstMatch?.productGroup,
         productConfig: (configs?.length && configs) || [],
-        productPath
+        productPath,
+        productVariant
       });
     }
-  }, [bundleData?.bundleTitle, detail?._passed, productPath, t, updateDocumentTitle]);
+  }, [bundleData?.bundleTitle, detail?._passed, productPath, productVariant, t, updateDocumentTitle]);
 
   return detail;
 };

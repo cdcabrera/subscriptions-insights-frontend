@@ -11,6 +11,7 @@ import {
 import { FilterIcon } from '@patternfly/react-icons';
 import { useProductToolbarQuery } from '../productView/productViewContext';
 import { useToolbarFieldClear, useToolbarFieldClearAll, useToolbarFields } from './toolbarContext';
+import { ToolbarFieldGroupVariant } from './toolbarFieldGroupVariant';
 import { ToolbarFieldSelectCategory, useSelectCategoryOptions } from './toolbarFieldSelectCategory';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
@@ -65,8 +66,12 @@ const Toolbar = ({
   const clearAllFields = useAliasToolbarFieldClearAll();
   const { itemFields, secondaryFields } = useAliasToolbarFields();
 
-  if (isDisabled || (!options?.length && !secondaryFields?.length)) {
+  if (isDisabled) {
     return null;
+  }
+
+  if (!options?.length && !secondaryFields?.length) {
+    return <ToolbarFieldGroupVariant isStandalone />;
   }
 
   /**
@@ -112,6 +117,7 @@ const Toolbar = ({
       clearAllFilters={onClearAll}
       clearFiltersButtonText={t('curiosity-toolbar.clearFilters')}
     >
+      <ToolbarFieldGroupVariant />
       <ToolbarContent>
         <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
           <ToolbarGroup variant="filter-group">
