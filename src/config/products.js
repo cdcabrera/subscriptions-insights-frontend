@@ -56,6 +56,7 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
   const grouped = {};
   const groupIdConfigs = {};
   const groupedGroupIds = {};
+  const groupedVariants = {};
   const groupedViewIds = {};
 
   configs?.forEach(config => {
@@ -114,11 +115,21 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
     if (productGroup) {
       groupIdConfigs[productGroup] ??= [];
       groupIdConfigs[productGroup].push(config);
+
+      if (Array.isArray(productVariants)) {
+        groupedVariants[productGroup] ??= [];
+        groupedVariants[productGroup].push(...productVariants);
+      }
     }
 
     if (productGroup && productId) {
       groupedGroupIds[productGroup] ??= [];
       groupedGroupIds[productGroup].push(productId);
+
+      if (!groupedVariants[productGroup]?.includes(productId)) {
+        groupedVariants[productGroup] ??= [];
+        groupedVariants[productGroup].push(productId);
+      }
     }
 
     if (viewId) {
@@ -142,6 +153,7 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
     byAliasGroupProductPathIds: Object.keys(grouped).sort(),
     byGroupIdConfigs: groupIdConfigs,
     byGroupIds: groupedGroupIds,
+    byGroupVariants: groupedVariants,
     byProductPathConfigs: productPathConfigs,
     byProductIdConfigs: productIdConfigs,
     byProductIds: Array.from(productIds),

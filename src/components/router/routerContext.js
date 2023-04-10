@@ -109,7 +109,7 @@ const useRouteDetail = ({
 
   useEffect(() => {
     if (productPath && detail?._passed !== productPath) {
-      const { allConfigs, configs, firstMatch, isClosest } = routerHelpers.getRouteConfigByPath({
+      const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routerHelpers.getRouteConfigByPath({
         pathName: productPath
       });
 
@@ -126,6 +126,7 @@ const useRouteDetail = ({
       setDetail({
         _passed: productPath,
         allConfigs,
+        availableVariants,
         firstMatch,
         errorRoute: routerHelpers.errorRoute,
         isClosest,

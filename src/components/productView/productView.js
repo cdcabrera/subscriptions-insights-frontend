@@ -5,6 +5,7 @@ import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { GraphCard } from '../graphCard/graphCard';
 import { Toolbar } from '../toolbar/toolbar';
+import { ToolbarFieldGroupVariant } from '../toolbar/toolbarFieldGroupVariant';
 import { InventoryCard } from '../inventoryCard/inventoryCard';
 import { InventoryCardHosts } from '../inventoryCard/inventoryCardHosts';
 import { helpers } from '../../common';
@@ -35,7 +36,7 @@ import { translate } from '../i18n/i18n';
  * @returns {React.ReactNode}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
-  const { productGroup, productConfig } = useAliasRouteDetail();
+  const { firstMatch, productGroup } = useAliasRouteDetail();
 
   const renderProduct = useCallback(() => {
     const updated = config => {
@@ -52,6 +53,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
             <BannerMessages />
           </PageMessages>
           <PageToolbar>
+            <ToolbarFieldGroupVariant />
             <Toolbar />
           </PageToolbar>
           <PageSection>
@@ -100,8 +102,8 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
       );
     };
 
-    return productConfig?.map(config => updated(config));
-  }, [productConfig, t]);
+    return updated(firstMatch);
+  }, [firstMatch, t]);
 
   return (
     (productGroup && (

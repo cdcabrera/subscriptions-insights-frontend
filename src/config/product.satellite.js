@@ -31,9 +31,9 @@ import { translate } from '../components/i18n/i18n';
  * or using anArray/List then generating "routes.js"
  */
 
-const productGroup = RHSM_API_PATH_PRODUCT_TYPES.SATELLITE;
+const productGroup = 'rhel-sat';
 
-const productId = RHSM_API_PATH_PRODUCT_TYPES.SATELLITE;
+const productId = RHSM_API_PATH_PRODUCT_TYPES.SATELLITE_SERVER;
 
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.SATELLITE;
 
@@ -52,7 +52,7 @@ const config = {
   productLabel,
   productPath: productGroup.toLowerCase(),
   productDisplay: DISPLAY_TYPES.CAPACITY,
-  viewId: `view${productGroup}`,
+  viewId: `view${productGroup}-${productId}`,
   productVariants: [...Object.values(RHSM_API_PATH_PRODUCT_VARIANT_SATELLITE_TYPES)],
   query: {
     [RHSM_API_QUERY_SET_TYPES.START_DATE]: dateHelpers
