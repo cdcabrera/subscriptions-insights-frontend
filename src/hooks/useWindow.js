@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useMount, useUnmount } from 'react-use';
-// import { helpers } from '../common';
 
 /**
  * Global window related hooks.
@@ -12,8 +11,8 @@ import { useMount, useUnmount } from 'react-use';
 /**
  * Apply a resize observer to an element.
  *
- * @param {*} targetRef
- * @returns {{width: number, height: number}}
+ * @param {*} targetRef A element React "ref", or to bypass an object in the form of "{ current: HTMLElementNodeOrReactElement }"
+ * @returns {{width: number, height: number, unregister: Function}}
  */
 const useResizeObserver = targetRef => {
   const [unregister, setUnregister] = useState();
@@ -24,24 +23,6 @@ const useResizeObserver = targetRef => {
       const element = targetRef?.current;
       const handler = () => {
         const { clientHeight = 0, clientWidth = 0, innerHeight = 0, innerWidth = 0 } = element || {};
-
-        /*
-        setDimensions(() =>
-          // let width;
-          // let height;
-
-          // const timeout = () => {
-          //  width = clientWidth ?? innerWidth;
-          //  height = clientHeight ?? innerHeight;
-          // };
-
-          ({
-            timeout: helpers.noop,
-            width: clientWidth ?? innerWidth,
-            height: clientHeight ?? innerHeight
-          })
-        );
-        */
 
         const timeout = window.setTimeout(() => {
           setDimensions(() => ({
@@ -61,8 +42,6 @@ const useResizeObserver = targetRef => {
   });
 
   useUnmount(() => {
-    console.log('>>>> WHAT');
-    console.log('>>> UNMOUNT', dimensions?.timeout, unregister);
     if (dimensions?.timeout) {
       window.clearTimeout(dimensions.timeout);
     }
