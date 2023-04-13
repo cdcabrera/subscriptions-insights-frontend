@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { helpers } from '../common';
+import { useMemo, useState } from 'react';
+import { useMount, useUnmount } from 'react-use';
+// import { helpers } from '../common';
 
 /**
  * Global window related hooks.
@@ -11,44 +12,72 @@ import { helpers } from '../common';
 /**
  * Apply a resize observer to an element.
  *
- * @param {*} target
+ * @param {*} targetRef
  * @returns {{width: number, height: number}}
  */
-const useResizeObserver = target => {
+const useResizeObserver = targetRef => {
+  const [unregister, setUnregister] = useState();
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  useEffect(() => {
-    const isElementResize = target && window.ResizeObserver && true;
-    const element = target?.current;
-    let removeObserver = helpers.noop;
-
-    if (element) {
+  useMount(() => {
+    if (targetRef?.current && !unregister) {
+      const element = targetRef?.current;
       const handler = () => {
         const { clientHeight = 0, clientWidth = 0, innerHeight = 0, innerWidth = 0 } = element || {};
 
-        setDimensions({
-          width: isElementResize ? clientWidth : innerWidth,
-          height: isElementResize ? clientHeight : innerHeight
+        /*
+        setDimensions(() =>
+          // let width;
+          // let height;
+
+          // const timeout = () => {
+          //  width = clientWidth ?? innerWidth;
+          //  height = clientHeight ?? innerHeight;
+          // };
+
+          ({
+            timeout: helpers.noop,
+            width: clientWidth ?? innerWidth,
+            height: clientHeight ?? innerHeight
+          })
+        );
+        */
+
+        const timeout = window.setTimeout(() => {
+          setDimensions(() => ({
+            timeout,
+            width: clientWidth ?? innerWidth,
+            height: clientHeight ?? innerHeight
+          }));
         });
       };
 
-      if (isElementResize) {
+      setUnregister(() => {
         const resizeObserver = new window.ResizeObserver(handler);
         resizeObserver.observe(element);
-        removeObserver = () => resizeObserver.unobserve(element);
-      } else {
-        handler();
-        window.addEventListener('resize', handler);
-        removeObserver = () => window.removeEventListener('resize', handler);
-      }
+        return () => resizeObserver.unobserve(element);
+      });
     }
+  });
 
-    return () => {
-      removeObserver();
-    };
-  }, [target]);
+  useUnmount(() => {
+    console.log('>>>> WHAT');
+    console.log('>>> UNMOUNT', dimensions?.timeout, unregister);
+    if (dimensions?.timeout) {
+      window.clearTimeout(dimensions.timeout);
+    }
+    if (unregister) {
+      unregister();
+    }
+  });
 
-  return dimensions;
+  return useMemo(
+    () => ({
+      ...dimensions,
+      unregister: () => unregister()
+    }),
+    [dimensions, unregister]
+  );
 };
 
 const windowHooks = {
