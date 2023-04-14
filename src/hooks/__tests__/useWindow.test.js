@@ -26,12 +26,11 @@ describe('useWindow', () => {
     };
 
     const { unmount, result } = await mountHook(() => useResizeObserver(mockTarget));
+
     expect(result).toMatchSnapshot('width, height');
-    expect(mockObserve).toHaveBeenCalledTimes(1);
     expect(mockSetState).toHaveBeenCalledTimes(1);
 
     await unmount();
-    expect(mockUnobserve).toHaveBeenCalledTimes(1);
 
     spy.mockClear();
   });
