@@ -3,6 +3,7 @@
 exports[`useWindow should apply a hook for useResizeObserver: width, height 1`] = `
 {
   "height": 0,
+  "unregister": [Function],
   "width": 0,
 }
 `;
