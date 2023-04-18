@@ -153,11 +153,7 @@ const Chart = ({
 
   return (
     <ChartContext.Provider value={context}>
-      <div
-        id="curiosity-chartarea"
-        className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
-        ref={containerRef}
-      >
+      <div className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading" ref={containerRef}>
         {chartWidth > 0 && (
           <React.Fragment>
             <ChartElements />
