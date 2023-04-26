@@ -64,7 +64,7 @@ const routes = routesConfig.filter(item => !item.disabled);
  * @returns {{configs: *, firstMatch: *, isClosest: boolean, allConfigs: Array}}
  */
 const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.sortedConfigs } = {}) => {
-  const { byGroup, byAliasGroupProductPathIds, byGroupVariants, byProductIdConfigs } = configs();
+  const { byAnything, byAliasGroupProductPathIds, byGroupVariants, byProductIdConfigs } = configs();
   const updatedPathName = (/^http/i.test(pathName) && new URL(pathName).pathname) || pathName;
   const trimmedPathName = updatedPathName
     ?.toLowerCase()
@@ -81,15 +81,25 @@ const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.s
 
   // Fallback attempt, match pathName with the closest string
   const closestStr = trimmedPathName && closest(trimmedPathName, byAliasGroupProductPathIds);
-  const configsByGroup = byGroup?.[focusedStr || closestStr];
+  const configsByAnything = byAnything?.[focusedStr || closestStr];
   const availableVariants = byGroupVariants?.[focusedStr || closestStr];
+
+  console.log('>>>>>> HELPER', trimmedPathName, focusedStr, closestStr, configsByAnything?.[0]);
+  /*
+  // const configsByGroup = byGroup?.[focusedStr || closestStr];
+  const configsByAnything = byAnything?.[focusedStr || closestStr];
+  const availableGroup = configsByAnything?.[0]?.productGroup;
+  const availableVariants = byGroupVariants?.[availableGroup];
+  // const availableVariants = byGroupVariants?.[focusedStr || closestStr];
+  // const availableVariants = Object.entries(byGroupVariants)?.find(([key, value]) => );
+  */
 
   return {
     isClosest: !focusedStr,
     allConfigs: Object.values(byProductIdConfigs),
     availableVariants,
-    configs: configsByGroup,
-    firstMatch: configsByGroup?.[0]
+    configs: configsByAnything,
+    firstMatch: configsByAnything?.[0]
   };
 });
 

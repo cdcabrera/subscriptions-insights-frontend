@@ -413,11 +413,11 @@ const viewReducer = (state = initialState, action) => {
           reset: false
         }
       );
-    case reduxTypes.app.SET_PRODUCT_CONFIG:
+    case reduxTypes.app.SET_PRODUCT_VARIANT:
       return reduxHelpers.setStateProp(
-        'productConfig',
+        'product',
         {
-          productId: action.productId
+          variant: action.variant
         },
         {
           state,

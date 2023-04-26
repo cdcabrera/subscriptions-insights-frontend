@@ -53,10 +53,12 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
   const productIds = new Set();
   const productIdConfigs = {};
   const productPathConfigs = {};
+  const anything = {};
   const grouped = {};
   const groupIdConfigs = {};
   const groupedGroupIds = {};
   const groupedVariants = {};
+  const groupedVariantGroups = {};
   const groupedViewIds = {};
 
   configs?.forEach(config => {
@@ -65,27 +67,30 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
     if (productGroup && productId) {
       grouped[productGroup] ??= {};
       grouped[productGroup][productId] = config;
+
+      anything[productGroup] ??= {};
+      anything[productGroup][productId] = config;
     }
 
     if (productId) {
-      grouped[productId] ??= {};
-      grouped[productId][productId] = config;
+      anything[productId] ??= {};
+      anything[productId][productId] = config;
     }
 
     if (productLabel && productId) {
-      grouped[productLabel] ??= {};
-      grouped[productLabel][productId] = config;
+      anything[productLabel] ??= {};
+      anything[productLabel][productId] = config;
     }
 
     if (productPath && productId) {
-      grouped[productPath] ??= {};
-      grouped[productPath][productId] = config;
+      anything[productPath] ??= {};
+      anything[productPath][productId] = config;
     }
 
     aliases?.forEach(alias => {
       if (productId) {
-        grouped[alias] ??= {};
-        grouped[alias][productId] = config;
+        anything[alias] ??= {};
+        anything[alias][productId] = config;
       }
 
       productAliases[alias] ??= [];
@@ -94,12 +99,13 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
 
     productVariants?.forEach(variant => {
       if (productId) {
-        grouped[variant] ??= {};
-        grouped[variant][productId] = config;
+        anything[variant] ??= {};
+        anything[variant][productId] = config;
+        anything[variant][productId] = { ...config, productId: variant };
       }
 
       productAliases[variant] ??= [];
-      productAliases[variant].push(config);
+      productAliases[variant].push({ ...config, productId: variant });
     });
 
     if (productId) {
@@ -119,6 +125,10 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
       if (Array.isArray(productVariants)) {
         groupedVariants[productGroup] ??= [];
         groupedVariants[productGroup].push(...productVariants);
+
+        productVariants.forEach(variant => {
+          groupedVariantGroups[variant] = productGroup;
+        });
       }
     }
 
@@ -129,6 +139,8 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
       if (!groupedVariants[productGroup]?.includes(productId)) {
         groupedVariants[productGroup] ??= [];
         groupedVariants[productGroup].push(productId);
+
+        groupedVariantGroups[productId] = productGroup;
       }
     }
 
@@ -147,19 +159,29 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
     grouped[key] = Object.values(value);
   });
 
-  return helpers.objFreeze({
+  Object.entries(anything).forEach(([key, value]) => {
+    anything[key] = Object.values(value);
+  });
+
+  const test = helpers.objFreeze({
     byAlias: productAliases,
+    byAnything: anything,
     byGroup: grouped,
     byAliasGroupProductPathIds: Object.keys(grouped).sort(),
     byGroupIdConfigs: groupIdConfigs,
     byGroupIds: groupedGroupIds,
     byGroupVariants: groupedVariants,
+    byVariantGroups: groupedVariantGroups,
     byProductPathConfigs: productPathConfigs,
     byProductIdConfigs: productIdConfigs,
     byProductIds: Array.from(productIds),
     byViewIdConfigs: viewIdConfigs,
     byViewIds: groupedViewIds
   });
+
+  console.log('>>>>> TEST', test);
+
+  return test;
 });
 
 const products = {

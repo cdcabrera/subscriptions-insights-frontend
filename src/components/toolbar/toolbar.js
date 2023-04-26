@@ -6,11 +6,13 @@ import {
   ToolbarFilter,
   ToolbarGroup,
   ToolbarItem,
+  ToolbarItemVariant,
   ToolbarToggleGroup
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import { useProductToolbarQuery } from '../productView/productViewContext';
 import { useToolbarFieldClear, useToolbarFieldClearAll, useToolbarFields } from './toolbarContext';
+import { ToolbarFieldGroupVariant } from './toolbarFieldGroupVariant';
 import { ToolbarFieldSelectCategory, useSelectCategoryOptions } from './toolbarFieldSelectCategory';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
@@ -112,6 +114,10 @@ const Toolbar = ({
       clearAllFilters={onClearAll}
       clearFiltersButtonText={t('curiosity-toolbar.clearFilters')}
     >
+      <ToolbarContent>
+        <ToolbarItem variant={ToolbarItemVariant.label}>Variant: </ToolbarItem>
+        <ToolbarFieldGroupVariant />
+      </ToolbarContent>
       <ToolbarContent>
         <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
           <ToolbarGroup variant="filter-group">

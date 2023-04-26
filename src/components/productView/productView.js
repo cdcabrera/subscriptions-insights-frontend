@@ -5,7 +5,6 @@ import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
 import { GraphCard } from '../graphCard/graphCard';
 import { Toolbar } from '../toolbar/toolbar';
-import { ToolbarFieldGroupVariant } from '../toolbar/toolbarFieldGroupVariant';
 import { InventoryCard } from '../inventoryCard/inventoryCard';
 import { InventoryCardHosts } from '../inventoryCard/inventoryCardHosts';
 import { helpers } from '../../common';
@@ -53,7 +52,6 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
             <BannerMessages />
           </PageMessages>
           <PageToolbar>
-            <ToolbarFieldGroupVariant />
             <Toolbar />
           </PageToolbar>
           <PageSection>

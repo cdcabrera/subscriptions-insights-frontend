@@ -54,8 +54,8 @@ const useOnSelect = ({ useDispatch: useAliasDispatch = storeHooks.reactRedux.use
 
   return ({ value = null } = {}) => {
     dispatch({
-      type: reduxTypes.app.SET_PRODUCT_CONFIG,
-      productId: value
+      type: reduxTypes.app.SET_PRODUCT_VARIANT,
+      variant: value
     });
   };
 };
@@ -81,11 +81,15 @@ const ToolbarFieldGroupVariant = ({
   useSelector: useAliasSelector,
   useToolbarFieldOptions: useAliasToolbarFieldOptions
 }) => {
-  const updatedValue = useAliasSelector(({ view }) => view?.productConfig?.config, {});
+  const updatedValue = useAliasSelector(({ view }) => view?.product?.variant, null);
   const onSelect = useAliasOnSelect();
   const options = useAliasToolbarFieldOptions();
-  const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
-
+  const updatedOptions = options.map(option => ({
+    ...option,
+    selected: (updatedValue && option.value === updatedValue) || option?.selected
+  }));
+  console.log('>>>> OPTIONS', options);
+  console.log('>>>> OPTIONS updatedValue', updatedValue);
   return (
     <Select
       aria-label={t('curiosity-toolbar.placeholder', { context: [isFilter && 'filter', 'product-config'] })}
