@@ -84,7 +84,14 @@ const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.s
   const configsByAnything = byAnything?.[focusedStr || closestStr];
   const availableVariants = byGroupVariants?.[focusedStr || closestStr];
 
-  console.log('>>>>>> HELPER', trimmedPathName, focusedStr, closestStr, configsByAnything?.[0]);
+  console.log(
+    '>>>>>> HELPER',
+    trimmedPathName,
+    focusedStr,
+    closestStr,
+    closest(trimmedPathName.split('/')[1], byAliasGroupProductPathIds),
+    configsByAnything?.[0]
+  );
   /*
   // const configsByGroup = byGroup?.[focusedStr || closestStr];
   const configsByAnything = byAnything?.[focusedStr || closestStr];
