@@ -38,7 +38,7 @@ const viewReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxTypes.app.SET_PRODUCT_VARIANT_QUERY_RESET_ALL:
       const updateVariantResetQueries = (query = {}, id) => {
-        const queryIds = productConfig.sortedConfigs().byGroup[id]?.map(({ viewId }) => viewId);
+        const queryIds = productConfig.sortedConfigs().byGroupIdConfigs[id]?.map(({ viewId }) => viewId);
         const updatedQuery = { ...query };
 
         queryIds.forEach(queryId => {

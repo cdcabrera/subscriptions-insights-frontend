@@ -111,30 +111,17 @@ const useRouteDetail = ({
   const [detail, setDetail] = useState({});
 
   useEffect(() => {
-    // const updatedVariantPath = productVariant ?? productPath;
     const updatedVariantPath = productPath;
     const hashPath = helpers.generateHash({ productPath, productVariant });
-    console.log('>>>>> VARIANT', productPath, productVariant);
-    console.log('>>>>> VARIANT 2', updatedVariantPath);
 
     if (updatedVariantPath && detail?._passed !== hashPath) {
+      // Get base configuration match
       let routeConfig = routerHelpers.getRouteConfigByPath({
         pathName: updatedVariantPath
       });
 
-      console.log('>>>>>>>> VARIANT 2.5', productVariant);
-
+      // Determine variant to display, if any
       if (productVariant) {
-        console.log('>>>>>>>> VARIANT 3', productVariant, routeConfig);
-        // const selectedVariant = routeConfig.allConfigs.find(config => productVariant?.[config.viewId]);
-        /*
-        const stateAvailableVariants = routeConfig
-          .allConfigs
-          .map(config => productVariant?.[config.viewId])
-          .filter(value => value !== undefined);
-
-        console.log('>>>>>>>> VARIANT 4', stateAvailableVariants);
-        */
         const selectedVariant = productVariant?.[routeConfig?.firstMatch?.productGroup];
 
         if (selectedVariant) {
@@ -145,8 +132,6 @@ const useRouteDetail = ({
       }
 
       const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routeConfig;
-
-      console.log('>>>> VARIANT TO DISPLAY', allConfigs, availableVariants, configs, firstMatch, isClosest);
 
       // Set document title, remove pre-baked suffix
       updateDocumentTitle(

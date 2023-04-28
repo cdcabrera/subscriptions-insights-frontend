@@ -82,28 +82,6 @@ const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.s
   const closestStr = trimmedPathName && closest(trimmedPathName, byAnythingPathIds);
   const configsByAnything = byAnything?.[focusedStr || closestStr];
   const availableVariants = byAnythingVariants?.[focusedStr || closestStr];
-  console.log('>>>> HELPER', byAnythingPathIds, trimmedPathName, focusedStr, closest);
-  console.log('>>>> HELPER closestStr', closestStr);
-  console.log('>>>> HELPER closestStr by Anything', byAnything[closestStr]);
-  console.log('>>>> HELPER configsByAnything', configsByAnything);
-  /*
-  console.log(
-    '>>>>>> HELPER',
-    trimmedPathName,
-    focusedStr,
-    closestStr,
-    closest(trimmedPathName?.split('/')[1], byAliasGroupProductPathIds),
-    configsByAnything?.[0]
-  );
-  */
-  /*
-  // const configsByGroup = byGroup?.[focusedStr || closestStr];
-  const configsByAnything = byAnything?.[focusedStr || closestStr];
-  const availableGroup = configsByAnything?.[0]?.productGroup;
-   */
-  // const availableVariants = byGroupVariants?.[availableGroup];
-  // const availableVariants = byGroupVariants?.[focusedStr || closestStr];
-  // const availableVariants = Object.entries(byGroupVariants)?.find(([key, value]) => );
 
   return {
     isClosest: !focusedStr,

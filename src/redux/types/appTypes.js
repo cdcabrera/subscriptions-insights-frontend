@@ -12,7 +12,8 @@ const SET_PRODUCT_VARIANT_QUERY_RESET_ALL = 'SET_PRODUCT_VARIANT_QUERY_RESET_ALL
 /**
  * Application action, reducer types.
  *
- * @type {{STATUS_4XX: string, SET_PRODUCT_VARIANT: string, SET_PRODUCT: string, STATUS_5XX: string}}
+ * @type {{STATUS_4XX: string, SET_PRODUCT_VARIANT: string, SET_PRODUCT_VARIANT_QUERY_RESET_ALL: string,
+ *     SET_PRODUCT: string, STATUS_5XX: string}}
  */
 const appTypes = {
   STATUS_4XX,

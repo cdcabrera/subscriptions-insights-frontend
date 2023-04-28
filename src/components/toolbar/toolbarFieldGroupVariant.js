@@ -8,7 +8,7 @@ import { translate } from '../i18n/i18n';
 import { routerContext } from '../router';
 
 /**
- * A standalone product configuration select filter.
+ * A toolbar product configuration select filter requiring a toolbar component parent.
  *
  * @memberof Toolbar
  * @module ToolbarFieldGroupVariant
@@ -25,23 +25,9 @@ const useToolbarFieldOptions = ({ useRouteDetail: useAliasRouteDetail = routerCo
   const { availableVariants, firstMatch } = useAliasRouteDetail();
   const options = [];
 
-  console.log('>>>>> OPTIONS', availableVariants);
-
   availableVariants?.forEach(variant => {
     options.push({ title: variant, value: variant, selected: variant === firstMatch.productId });
   });
-
-  /*
-  productConfig?.forEach((obj, index) => {
-    options.push({ title: obj.productId, value: obj.productId, isSelected: index === 0 });
-
-    console.log('>>>>>', obj.productVariants);
-
-    if (Array.isArray(obj.productVariants) && obj.productVariants.length) {
-      options.push(...obj.productVariants.map(variant => ({ title: variant, value: variant })));
-    }
-  });
-  */
 
   return options;
 };
@@ -109,8 +95,6 @@ const ToolbarFieldGroupVariant = ({
     ...option,
     selected: (updatedValue && option.value === updatedValue) || option?.selected
   }));
-  console.log('>>>> OPTIONS', options);
-  console.log('>>>> OPTIONS updatedValue', updatedValue);
 
   if (options?.length <= 1) {
     return null;
@@ -148,8 +132,8 @@ const ToolbarFieldGroupVariant = ({
 /**
  * Prop types.
  *
- * @type {{useOnSelect: Function, t: Function, useSelector: Function, isFilter: boolean,
- *     position: string, useToolbarFieldOptions: Function}}
+ * @type {{useOnSelect: Function, useProduct: Function, t: Function, useSelector: Function, isFilter: boolean,
+ *     isStandalone: boolean, position: string, useToolbarFieldOptions: Function}}
  */
 ToolbarFieldGroupVariant.propTypes = {
   isFilter: PropTypes.bool,
@@ -165,8 +149,8 @@ ToolbarFieldGroupVariant.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, t: translate, useSelector: Function, isFilter: boolean,
- *     position: string, useToolbarFieldOptions: Function}}
+ * @type {{useOnSelect: Function, useProduct: Function, t: translate, useSelector: Function, isFilter: boolean,
+ *     isStandalone: boolean, position: string, useToolbarFieldOptions: Function}}
  */
 ToolbarFieldGroupVariant.defaultProps = {
   isFilter: false,
