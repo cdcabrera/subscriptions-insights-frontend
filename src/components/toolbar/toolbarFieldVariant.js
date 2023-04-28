@@ -73,6 +73,7 @@ const useOnSelect = ({
 /**
  * Display a variant field with generated options.
  *
+ * @deprecated
  * @fires onSelect
  * @param {object} props
  * @param {boolean} props.isFilter

@@ -71,14 +71,18 @@ const Toolbar = ({
   }
 
   if (!options?.length && !secondaryFields?.length) {
+    const content = <ToolbarFieldGroupVariant />;
+
     return (
-      <PfToolbar
-        id="curiosity-toolbar"
-        className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
-        collapseListedFiltersBreakpoint="sm"
-      >
-        <ToolbarFieldGroupVariant />
-      </PfToolbar>
+      content?.ref && (
+        <PfToolbar
+          id="curiosity-toolbar"
+          className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+          collapseListedFiltersBreakpoint="sm"
+        >
+          {content}
+        </PfToolbar>
+      )
     );
   }
 
