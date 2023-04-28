@@ -314,9 +314,6 @@ const config = {
     },
     {
       id: RHSM_API_QUERY_SET_TYPES.CATEGORY
-    },
-    {
-      id: RHSM_API_QUERY_SET_TYPES.VARIANT
     }
   ]
 };

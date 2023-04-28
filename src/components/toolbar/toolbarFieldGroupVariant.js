@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ToolbarContent, ToolbarItem, ToolbarItemVariant } from '@patternfly/react-core';
 import { reduxTypes, storeHooks } from '../../redux';
 import { Select, SelectPosition } from '../form/select';
 import { translate } from '../i18n/i18n';
@@ -90,16 +91,24 @@ const ToolbarFieldGroupVariant = ({
   }));
   console.log('>>>> OPTIONS', options);
   console.log('>>>> OPTIONS updatedValue', updatedValue);
+
+  if (options?.length <= 1) {
+    return null;
+  }
+
   return (
-    <Select
-      aria-label={t('curiosity-toolbar.placeholder', { context: [isFilter && 'filter', 'product-config'] })}
-      onSelect={onSelect}
-      options={updatedOptions}
-      selectedOptions={updatedValue}
-      placeholder={t('curiosity-toolbar.placeholder', { context: [isFilter && 'filter', 'product-config'] })}
-      position={position}
-      data-test="toolbarFieldProductConfig"
-    />
+    <ToolbarContent>
+      <ToolbarItem variant={ToolbarItemVariant.label}>Variant: </ToolbarItem>
+      <Select
+        aria-label={t('curiosity-toolbar.placeholder', { context: [isFilter && 'filter', 'product-config'] })}
+        onSelect={onSelect}
+        options={updatedOptions}
+        selectedOptions={updatedValue}
+        placeholder={t('curiosity-toolbar.placeholder', { context: [isFilter && 'filter', 'product-config'] })}
+        position={position}
+        data-test="toolbarFieldProductConfig"
+      />
+    </ToolbarContent>
   );
 };
 

@@ -6,7 +6,6 @@ import {
   ToolbarFilter,
   ToolbarGroup,
   ToolbarItem,
-  ToolbarItemVariant,
   ToolbarToggleGroup
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
@@ -67,8 +66,20 @@ const Toolbar = ({
   const clearAllFields = useAliasToolbarFieldClearAll();
   const { itemFields, secondaryFields } = useAliasToolbarFields();
 
-  if (isDisabled || (!options?.length && !secondaryFields?.length)) {
+  if (isDisabled) {
     return null;
+  }
+
+  if (!options?.length && !secondaryFields?.length) {
+    return (
+      <PfToolbar
+        id="curiosity-toolbar"
+        className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+        collapseListedFiltersBreakpoint="sm"
+      >
+        <ToolbarFieldGroupVariant />
+      </PfToolbar>
+    );
   }
 
   /**
@@ -114,10 +125,7 @@ const Toolbar = ({
       clearAllFilters={onClearAll}
       clearFiltersButtonText={t('curiosity-toolbar.clearFilters')}
     >
-      <ToolbarContent>
-        <ToolbarItem variant={ToolbarItemVariant.label}>Variant: </ToolbarItem>
-        <ToolbarFieldGroupVariant />
-      </ToolbarContent>
+      <ToolbarFieldGroupVariant />
       <ToolbarContent>
         <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
           <ToolbarGroup variant="filter-group">
