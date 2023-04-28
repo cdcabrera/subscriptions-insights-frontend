@@ -21,7 +21,7 @@ import {
 } from '../services/rhsm/rhsmConstants';
 import { ChartTypeVariant } from '../components/chart/chart';
 import { dateHelpers, helpers } from '../common';
-import { SelectPosition } from '../components/form/select';
+// import { SelectPosition } from '../components/form/select';
 import { translate, EMPTY_CONTEXT } from '../components/i18n/i18n';
 
 const productGroup = RHSM_API_PATH_PRODUCT_TYPES.RHODS;
@@ -253,16 +253,7 @@ const config = {
       cellWidth: 15
     }
   ],
-  initialToolbarFilters: [
-    {
-      id: RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER
-    },
-    {
-      id: 'rangedMonthly',
-      isSecondary: true,
-      position: SelectPosition.right
-    }
-  ]
+  initialToolbarFilters: []
 };
 
 export { config as default, config, productGroup, productId };

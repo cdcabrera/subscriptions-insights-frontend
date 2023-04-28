@@ -108,6 +108,36 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
       <PageLayout>
         <PageHeader productLabel={productGroup}>
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
+          <ul>
+            <li>
+              <a
+                href="#"
+                onClick={e => {
+                  e.preventDefault();
+                  document.location.href = './rhel';
+                  // window.history.pushState(undefined, '', './rhel');
+                  // document.location.replace('./rhel');
+                  // navigate('/rhel');
+                }}
+              >
+                rhel
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                onClick={e => {
+                  e.preventDefault();
+                  document.location.href = './openshift-container';
+                  // window.history.pushState(undefined, '', './openshift-container');
+                  // document.location.replace('./openshift-container');
+                  // navigate('/openshift-container');
+                }}
+              >
+                openshift
+              </a>
+            </li>
+          </ul>
         </PageHeader>
         <PageColumns>{renderProduct()}</PageColumns>
       </PageLayout>
