@@ -36,6 +36,22 @@ const initialState = {
  */
 const viewReducer = (state = initialState, action) => {
   switch (action.type) {
+    case reduxTypes.app.SET_PRODUCT_VARIANT_QUERY_RESET_ALL:
+      return reduxHelpers.setStateProp(
+        null,
+        {
+          ...state,
+          query: {},
+          graphTallyQuery: {},
+          inventoryGuestsQuery: {},
+          inventoryHostsQuery: {},
+          inventorySubscriptionsQuery: {}
+        },
+        {
+          state,
+          reset: false
+        }
+      );
     case reduxTypes.query.SET_QUERY_RESET_INVENTORY_LIST:
       const updateResetQueries = (query = {}, id) => {
         const queryIds = productConfig.sortedConfigs().byViewIds[id] || (query[id] && [id]) || [];
@@ -417,7 +433,10 @@ const viewReducer = (state = initialState, action) => {
       return reduxHelpers.setStateProp(
         'product',
         {
-          variant: action.variant
+          variant: {
+            ...state.product.variant,
+            [action.productGroup]: action.variant
+          }
         },
         {
           state,

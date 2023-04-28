@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Toolbar as PfToolbar, ToolbarContent, ToolbarItem, ToolbarItemVariant } from '@patternfly/react-core';
 import { reduxTypes, storeHooks } from '../../redux';
+import { useProduct } from '../productView/productViewContext';
 import { Select, SelectPosition } from '../form/select';
 import { translate } from '../i18n/i18n';
 import { routerContext } from '../router';
@@ -50,16 +51,27 @@ const useToolbarFieldOptions = ({ useRouteDetail: useAliasRouteDetail = routerCo
  *
  * @param {object} options
  * @param {Function} options.useDispatch
+ * @param {Function} options.useProduct
  * @returns {Function}
  */
-const useOnSelect = ({ useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch } = {}) => {
+const useOnSelect = ({
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useProduct: useAliasProduct = useProduct
+} = {}) => {
+  const { productGroup } = useAliasProduct();
   const dispatch = useAliasDispatch();
 
   return ({ value = null } = {}) => {
-    dispatch({
-      type: reduxTypes.app.SET_PRODUCT_VARIANT,
-      variant: value
-    });
+    dispatch([
+      {
+        type: reduxTypes.app.SET_PRODUCT_VARIANT_QUERY_RESET_ALL
+      },
+      {
+        type: reduxTypes.app.SET_PRODUCT_VARIANT,
+        variant: value,
+        productGroup
+      }
+    ]);
   };
 };
 
@@ -73,6 +85,7 @@ const useOnSelect = ({ useDispatch: useAliasDispatch = storeHooks.reactRedux.use
  * @param {string} props.position
  * @param {Function} props.t
  * @param {Function} props.useOnSelect
+ * @param {Function} props.useProduct
  * @param {Function} props.useSelector
  * @param {Function} props.useToolbarFieldOptions
  * @returns {React.ReactNode}
@@ -83,10 +96,12 @@ const ToolbarFieldGroupVariant = ({
   position,
   t,
   useOnSelect: useAliasOnSelect,
+  useProduct: useAliasProduct,
   useSelector: useAliasSelector,
   useToolbarFieldOptions: useAliasToolbarFieldOptions
 }) => {
-  const updatedValue = useAliasSelector(({ view }) => view?.product?.variant, null);
+  const { productGroup } = useAliasProduct();
+  const updatedValue = useAliasSelector(({ view }) => view?.product?.variant?.[productGroup], null);
   const onSelect = useAliasOnSelect();
   const options = useAliasToolbarFieldOptions();
   const updatedOptions = options.map(option => ({
@@ -141,6 +156,7 @@ ToolbarFieldGroupVariant.propTypes = {
   position: PropTypes.string,
   t: PropTypes.func,
   useOnSelect: PropTypes.func,
+  useProduct: PropTypes.func,
   useSelector: PropTypes.func,
   useToolbarFieldOptions: PropTypes.func
 };
@@ -157,6 +173,7 @@ ToolbarFieldGroupVariant.defaultProps = {
   position: SelectPosition.left,
   t: translate,
   useOnSelect,
+  useProduct,
   useSelector: storeHooks.reactRedux.useSelector,
   useToolbarFieldOptions
 };

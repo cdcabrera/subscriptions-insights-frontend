@@ -111,14 +111,40 @@ const useRouteDetail = ({
   const [detail, setDetail] = useState({});
 
   useEffect(() => {
-    const updatedVariantPath = productVariant ?? productPath;
+    // const updatedVariantPath = productVariant ?? productPath;
+    const updatedVariantPath = productPath;
+    const hashPath = helpers.generateHash({ productPath, productVariant });
     console.log('>>>>> VARIANT', productPath, productVariant);
     console.log('>>>>> VARIANT 2', updatedVariantPath);
 
-    if (updatedVariantPath && detail?._passed !== updatedVariantPath) {
-      const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routerHelpers.getRouteConfigByPath({
+    if (updatedVariantPath && detail?._passed !== hashPath) {
+      let routeConfig = routerHelpers.getRouteConfigByPath({
         pathName: updatedVariantPath
       });
+
+      console.log('>>>>>>>> VARIANT 2.5', productVariant);
+
+      if (productVariant) {
+        console.log('>>>>>>>> VARIANT 3', productVariant, routeConfig);
+        // const selectedVariant = routeConfig.allConfigs.find(config => productVariant?.[config.viewId]);
+        /*
+        const stateAvailableVariants = routeConfig
+          .allConfigs
+          .map(config => productVariant?.[config.viewId])
+          .filter(value => value !== undefined);
+
+        console.log('>>>>>>>> VARIANT 4', stateAvailableVariants);
+        */
+        const selectedVariant = productVariant?.[routeConfig?.firstMatch?.productGroup];
+
+        if (selectedVariant) {
+          routeConfig = routerHelpers.getRouteConfigByPath({
+            pathName: selectedVariant
+          });
+        }
+      }
+
+      const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routeConfig;
 
       console.log('>>>> VARIANT TO DISPLAY', allConfigs, availableVariants, configs, firstMatch, isClosest);
 
@@ -133,7 +159,7 @@ const useRouteDetail = ({
 
       // Set route detail
       setDetail({
-        _passed: updatedVariantPath,
+        _passed: hashPath,
         allConfigs,
         availableVariants,
         firstMatch,

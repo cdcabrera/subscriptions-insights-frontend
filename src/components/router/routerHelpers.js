@@ -65,7 +65,8 @@ const routes = routesConfig.filter(item => !item.disabled);
  */
 const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.sortedConfigs } = {}) => {
   const { byAnything, byAnythingPathIds, byAnythingVariants, byProductIdConfigs } = configs();
-  const updatedPathName = (/^http/i.test(pathName) && new URL(pathName).pathname) || pathName;
+  const updatedPathName =
+    (/^http/i.test(pathName) && new URL(pathName).pathname) || (typeof pathName === 'string' && pathName) || undefined;
   const trimmedPathName = updatedPathName
     ?.toLowerCase()
     ?.split('#')?.[0]
