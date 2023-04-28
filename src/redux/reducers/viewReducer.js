@@ -37,15 +37,26 @@ const initialState = {
 const viewReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxTypes.app.SET_PRODUCT_VARIANT_QUERY_RESET_ALL:
+      const updateVariantResetQueries = (query = {}, id) => {
+        const queryIds = productConfig.sortedConfigs().byGroup[id]?.map(({ viewId }) => viewId);
+        const updatedQuery = { ...query };
+
+        queryIds.forEach(queryId => {
+          delete updatedQuery[queryId];
+        });
+
+        return updatedQuery;
+      };
+
       return reduxHelpers.setStateProp(
         null,
         {
           ...state,
-          query: {},
-          graphTallyQuery: {},
-          inventoryGuestsQuery: {},
-          inventoryHostsQuery: {},
-          inventorySubscriptionsQuery: {}
+          query: updateVariantResetQueries(state.query, action.productGroup),
+          graphTallyQuery: updateVariantResetQueries(state.graphTallyQuery, action.productGroup),
+          inventoryGuestsQuery: updateVariantResetQueries(state.inventoryGuestsQuery, action.productGroup),
+          inventoryHostsQuery: updateVariantResetQueries(state.inventoryHostsQuery, action.productGroup),
+          inventorySubscriptionsQuery: updateVariantResetQueries(state.inventorySubscriptionsQuery, action.productGroup)
         },
         {
           state,
