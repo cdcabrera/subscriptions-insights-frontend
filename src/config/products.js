@@ -1,3 +1,4 @@
+// import { closest } from 'fastest-levenshtein';
 import { helpers } from '../common/helpers';
 
 /**
@@ -54,6 +55,7 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
   const productIdConfigs = {};
   const productPathConfigs = {};
   const anything = {};
+  const anythingVariants = {};
   const grouped = {};
   const groupIdConfigs = {};
   const groupedGroupIds = {};
@@ -161,13 +163,21 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
 
   Object.entries(anything).forEach(([key, value]) => {
     anything[key] = Object.values(value);
+    anythingVariants[key] ??= [];
+
+    anything[key].forEach(({ productGroup }) => {
+      if (productGroup) {
+        anythingVariants[key].push(...groupedVariants[productGroup]);
+      }
+    });
   });
 
   const test = helpers.objFreeze({
     byAlias: productAliases,
     byAnything: anything,
+    byAnythingPathIds: Object.keys(anything).sort(),
+    byAnythingVariants: anythingVariants,
     byGroup: grouped,
-    byAliasGroupProductPathIds: Object.keys(grouped).sort(),
     byGroupIdConfigs: groupIdConfigs,
     byGroupIds: groupedGroupIds,
     byGroupVariants: groupedVariants,
