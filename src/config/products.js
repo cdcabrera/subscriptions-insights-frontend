@@ -167,7 +167,10 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
 
     anything[key].forEach(({ productGroup }) => {
       if (productGroup) {
-        anythingVariants[key].push(...groupedVariants[productGroup]);
+        // anythingVariants[key].push(...groupedVariants[productGroup]);
+        // anythingVariants[key].add(...groupedVariants[productGroup]);
+        // anythingVariants[key].apply('add', groupedVariants[productGroup]);
+        anythingVariants[key] = Array.from(new Set([...anythingVariants[key], ...groupedVariants[productGroup]]));
       }
     });
   });

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ToolbarContent, ToolbarItem, ToolbarItemVariant } from '@patternfly/react-core';
+import { Toolbar as PfToolbar, ToolbarContent, ToolbarItem, ToolbarItemVariant } from '@patternfly/react-core';
 import { reduxTypes, storeHooks } from '../../redux';
 import { Select, SelectPosition } from '../form/select';
 import { translate } from '../i18n/i18n';
@@ -23,6 +23,8 @@ import { routerContext } from '../router';
 const useToolbarFieldOptions = ({ useRouteDetail: useAliasRouteDetail = routerContext.useRouteDetail } = {}) => {
   const { availableVariants, firstMatch } = useAliasRouteDetail();
   const options = [];
+
+  console.log('>>>>> OPTIONS', availableVariants);
 
   availableVariants?.forEach(variant => {
     options.push({ title: variant, value: variant, selected: variant === firstMatch.productId });
@@ -67,6 +69,7 @@ const useOnSelect = ({ useDispatch: useAliasDispatch = storeHooks.reactRedux.use
  * @fires onSelect
  * @param {object} props
  * @param {boolean} props.isFilter
+ * @param {boolean} props.isStandalone
  * @param {string} props.position
  * @param {Function} props.t
  * @param {Function} props.useOnSelect
@@ -76,6 +79,7 @@ const useOnSelect = ({ useDispatch: useAliasDispatch = storeHooks.reactRedux.use
  */
 const ToolbarFieldGroupVariant = ({
   isFilter,
+  isStandalone,
   position,
   t,
   useOnSelect: useAliasOnSelect,
@@ -96,7 +100,7 @@ const ToolbarFieldGroupVariant = ({
     return null;
   }
 
-  return (
+  const element = (
     <ToolbarContent>
       <ToolbarItem variant={ToolbarItemVariant.label}>Variant: </ToolbarItem>
       <Select
@@ -110,6 +114,19 @@ const ToolbarFieldGroupVariant = ({
       />
     </ToolbarContent>
   );
+
+  return (
+    (isStandalone && (
+      <PfToolbar
+        id="curiosity-toolbar"
+        className="curiosity-toolbar pf-m-toggle-group-container ins-c-primary-toolbar"
+        collapseListedFiltersBreakpoint="sm"
+      >
+        {element}
+      </PfToolbar>
+    )) ||
+    element
+  );
 };
 
 /**
@@ -120,6 +137,7 @@ const ToolbarFieldGroupVariant = ({
  */
 ToolbarFieldGroupVariant.propTypes = {
   isFilter: PropTypes.bool,
+  isStandalone: PropTypes.bool,
   position: PropTypes.string,
   t: PropTypes.func,
   useOnSelect: PropTypes.func,
@@ -135,6 +153,7 @@ ToolbarFieldGroupVariant.propTypes = {
  */
 ToolbarFieldGroupVariant.defaultProps = {
   isFilter: false,
+  isStandalone: false,
   position: SelectPosition.left,
   t: translate,
   useOnSelect,
