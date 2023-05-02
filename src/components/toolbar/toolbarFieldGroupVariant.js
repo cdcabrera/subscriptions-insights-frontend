@@ -15,7 +15,7 @@ import { routerContext } from '../router';
  */
 
 /**
- * Generate select field options from config
+ * Generate select field options from config. Sorted by title string.
  *
  * @param {object} options
  * @param {Function} options.t
