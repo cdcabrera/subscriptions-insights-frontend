@@ -18,18 +18,34 @@ import { routerContext } from '../router';
  * Generate select field options from config
  *
  * @param {object} options
+ * @param {Function} options.t
  * @param {Function} options.useRouteDetail
  * @returns {Function}
  */
-const useToolbarFieldOptions = ({ useRouteDetail: useAliasRouteDetail = routerContext.useRouteDetail } = {}) => {
+const useToolbarFieldOptions = ({
+  t = translate,
+  useRouteDetail: useAliasRouteDetail = routerContext.useRouteDetail
+} = {}) => {
   const { availableVariants, firstMatch } = useAliasRouteDetail();
   const options = [];
 
   availableVariants?.forEach(variant => {
-    options.push({ title: variant, value: variant, selected: variant === firstMatch?.productId });
+    options.push({
+      title: t('curiosity-toolbar.label', { context: ['groupVariant', variant] }),
+      value: variant,
+      selected: variant === firstMatch?.productId
+    });
   });
 
-  return options;
+  return options.sort(({ title: titleA }, { title: titleB }) => {
+    if (titleA < titleB) {
+      return -1;
+    }
+    if (titleA > titleB) {
+      return 1;
+    }
+    return 0;
+  });
 };
 
 /**
