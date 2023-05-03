@@ -2675,7 +2675,8 @@ const getHostsInventoryGuests = (id, params = {}, options = {}) => {
  *         ],
  *         "product": "RHEL",
  *         "service_level": "Premium",
- *         "usage": "Production"
+ *         "usage": "Production",
+ *         "uom": "cores"
  *       }
  *     }
  *

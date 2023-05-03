@@ -1,6 +1,7 @@
 import moment from 'moment';
 import {
   RHSM_API_QUERY_SET_TYPES,
+  RHSM_API_PATH_METRIC_TYPES,
   RHSM_API_RESPONSE_HOSTS_DATA_TYPES as HOSTS_DATA_TYPES,
   RHSM_API_RESPONSE_HOSTS_META_TYPES as HOSTS_META_TYPES,
   RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INSTANCES_DATA_TYPES,
@@ -89,8 +90,17 @@ const rhsmInstances = response => {
     }
   );
 
+  let normalizedUom;
+
+  if (meta?.[INSTANCES_META_TYPES.UOM]?.toLowerCase() === RHSM_API_PATH_METRIC_TYPES.SOCKETS.toLowerCase()) {
+    normalizedUom = RHSM_API_PATH_METRIC_TYPES.SOCKETS;
+  } else if (meta?.[INSTANCES_META_TYPES.UOM]?.toLowerCase() === RHSM_API_PATH_METRIC_TYPES.CORES.toLowerCase()) {
+    normalizedUom = RHSM_API_PATH_METRIC_TYPES.CORES;
+  }
+
   updatedResponse.meta = {
     count: meta[INSTANCES_META_TYPES.COUNT],
+    uom: normalizedUom,
     productId: meta[INSTANCES_META_TYPES.PRODUCT]
   };
 

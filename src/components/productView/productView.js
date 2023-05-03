@@ -6,7 +6,6 @@ import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageCol
 import { GraphCard } from '../graphCard/graphCard';
 import { Toolbar } from '../toolbar/toolbar';
 import { InventoryCard } from '../inventoryCard/inventoryCard';
-import { InventoryCardHosts } from '../inventoryCard/inventoryCardHosts';
 import { helpers } from '../../common';
 import BannerMessages from '../bannerMessages/bannerMessages';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
@@ -63,29 +62,14 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
                 (!initialInventoryFilters && !initialSubscriptionsInventoryFilters) || helpers.UI_DISABLED_TABLE
               }
             >
-              {!helpers.UI_DISABLED_TABLE_HOSTS &&
-                productDisplay !== DISPLAY_TYPES.HOURLY &&
-                productDisplay !== DISPLAY_TYPES.CAPACITY &&
-                initialInventoryFilters && (
-                  <InventoryTab
-                    key={`inventory_hosts_${productId}`}
-                    title={t('curiosity-inventory.tabHosts', { context: [productId] })}
-                  >
-                    <InventoryCardHosts />
-                  </InventoryTab>
-                )}
-              {!helpers.UI_DISABLED_TABLE_INSTANCES &&
-                productDisplay !== DISPLAY_TYPES.DUAL_AXES &&
-                productDisplay !== DISPLAY_TYPES.LEGACY &&
-                productDisplay !== DISPLAY_TYPES.PARTIAL &&
-                initialInventoryFilters && (
-                  <InventoryTab
-                    key={`inventory_instances_${productId}`}
-                    title={t('curiosity-inventory.tabInstances', { context: [productId] })}
-                  >
-                    <InventoryCard />
-                  </InventoryTab>
-                )}
+              {!helpers.UI_DISABLED_TABLE_INSTANCES && initialInventoryFilters && (
+                <InventoryTab
+                  key={`inventory_instances_${productId}`}
+                  title={t('curiosity-inventory.tabInstances', { context: [productId] })}
+                >
+                  <InventoryCard />
+                </InventoryTab>
+              )}
               {!helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS && initialSubscriptionsInventoryFilters && (
                 <InventoryTab
                   key={`inventory_subs_${productId}`}

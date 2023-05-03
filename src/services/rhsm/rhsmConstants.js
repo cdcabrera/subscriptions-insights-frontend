@@ -175,11 +175,12 @@ const RHSM_API_RESPONSE_INSTANCES_DATA_TYPES = {
 /**
  * RHSM response Instances META types.
  *
- * @type {{MEASUREMENTS: string, PRODUCT: string, COUNT: string}}
+ * @type {{MEASUREMENTS: string, UOM: string, PRODUCT: string, COUNT: string}}
  */
 const RHSM_API_RESPONSE_INSTANCES_META_TYPES = {
   ...RHSM_API_RESPONSE_META_TYPES,
-  MEASUREMENTS: 'measurements'
+  MEASUREMENTS: 'measurements',
+  UOM: 'uom'
 };
 
 /**
