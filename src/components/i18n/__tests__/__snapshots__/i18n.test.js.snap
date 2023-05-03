@@ -528,7 +528,7 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       },
       {
         "key": "curiosity-inventory.header",
-        "match": "translate('curiosity-inventory.header', { context: [uom?.value] })",
+        "match": "translate('curiosity-inventory.header', { context: [uom, productId] })",
       },
       {
         "key": "curiosity-inventory.header",
