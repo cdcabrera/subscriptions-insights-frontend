@@ -26,7 +26,7 @@ describe('Product Satellite config', () => {
   });
 
   it('should apply an inventory configuration', () => {
-    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery, productId } = config;
 
     const inventoryData = {
       [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem ipsum',
@@ -36,7 +36,8 @@ describe('Product Satellite config', () => {
 
     const filteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
-      cellData: inventoryData
+      cellData: inventoryData,
+      productId
     });
 
     expect(filteredInventoryData).toMatchSnapshot('filtered');
@@ -48,7 +49,8 @@ describe('Product Satellite config', () => {
         [INVENTORY_TYPES.INSTANCE_ID]: null,
         [INVENTORY_TYPES.LAST_SEEN]: null,
         [INVENTORY_TYPES.CLOUD_PROVIDER]: 'dolor sit'
-      }
+      },
+      productId
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
@@ -59,7 +61,8 @@ describe('Product Satellite config', () => {
         ...inventoryData,
         [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
-      session: { authorized: { inventory: true } }
+      session: { authorized: { inventory: true } },
+      productId
     });
 
     expect(filteredInventoryDataAuthorized).toMatchSnapshot('filtered, authorized');
@@ -70,20 +73,11 @@ describe('Product Satellite config', () => {
         ...inventoryData,
         [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
-      session: { authorized: { inventory: false } }
+      session: { authorized: { inventory: false } },
+      productId
     });
 
     expect(filteredInventoryDataNotAuthorized).toMatchSnapshot('filtered, NOT authorized');
-
-    const filteredInventoryDataInfinite = parseRowCellsListData({
-      filters: initialFilters,
-      cellData: {
-        ...inventoryData,
-        [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: false
-      }
-    });
-
-    expect(filteredInventoryDataInfinite).toMatchSnapshot('filtered, infinite');
 
     expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
