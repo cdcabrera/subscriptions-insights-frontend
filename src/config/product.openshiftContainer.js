@@ -35,6 +35,15 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT;
 
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT;
 
+/**
+ * OpenShift Container product config
+ *
+ * @type {{productLabel: string, productPath: string, initialOption: string, aliases: string[], productId: string,
+ *     inventorySubscriptionsQuery: object, query: object, initialSubscriptionsInventoryFilters: {}[],
+ *     initialInventorySettings: {}, viewId: string, initialToolbarFilters: {}[], productGroup: string,
+ *     graphTallyQuery: object, inventoryHostsQuery: object, productDisplay: string, productContextFilterUom: boolean,
+ *     initialGraphFilters: {}[], initialGuestsFilters: {}[], initialGraphSettings: object, initialInventoryFilters: {}[]}}
+ */
 const config = {
   aliases: [RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT, 'openshift-container', 'container', 'platform', 'shift'],
   productGroup,

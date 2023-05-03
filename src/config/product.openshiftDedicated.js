@@ -28,6 +28,14 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_DEDICATED_METRICS;
 
+/**
+ * OpenShift Dedicated product config
+ *
+ * @type {{productLabel: string, productPath: string, aliases: string[], productId: string, query: object,
+ *     viewId: string, initialToolbarFilters: undefined, productGroup: string, graphTallyQuery: object,
+ *     inventoryHostsQuery: object, productDisplay: string, initialGraphFilters: {}[], initialGraphSettings: object,
+ *     initialInventoryFilters: {}[]}}
+ */
 const config = {
   aliases: ['openshift-dedicated', 'dedicated'],
   productGroup,

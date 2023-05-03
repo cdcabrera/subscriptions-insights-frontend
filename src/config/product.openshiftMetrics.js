@@ -27,6 +27,14 @@ const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS;
 
 const productLabel = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS;
 
+/**
+ * OpenShift Metrics product config
+ *
+ * @type {{productLabel: string, productPath: string, aliases: string[], productId: string, query: object,
+ *     viewId: string, initialToolbarFilters: undefined, productGroup: string, graphTallyQuery: object,
+ *     inventoryHostsQuery: object, productDisplay: string, initialGraphFilters: {}[], initialGraphSettings: object,
+ *     initialInventoryFilters: {}[]}}
+ */
 const config = {
   aliases: [RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS, 'metrics'],
   productGroup,
