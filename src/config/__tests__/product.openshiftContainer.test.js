@@ -2,9 +2,11 @@ import { config } from '../product.openshiftContainer';
 import { generateChartSettings } from '../../components/graphCard/graphCardHelpers';
 import { parseRowCellsListData } from '../../components/inventoryCard/inventoryCardHelpers';
 import {
+  RHSM_API_PATH_METRIC_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_SET_TYPES,
-  RHSM_API_RESPONSE_HOSTS_DATA_TYPES as INVENTORY_TYPES,
+  RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INVENTORY_TYPES,
+  RHSM_API_RESPONSE_INSTANCES_META_TYPES as INVENTORY_META_TYPES,
   RHSM_API_RESPONSE_SUBSCRIPTIONS_DATA_TYPES as SUBSCRIPTIONS_INVENTORY_TYPES
 } from '../../services/rhsm/rhsmConstants';
 
@@ -24,23 +26,24 @@ describe('Product OpenShift Container config', () => {
     expect(initialGraphSettings).toMatchSnapshot('settings');
   });
 
-  it('should apply hosts inventory configuration', () => {
-    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery, productId } = config;
+  it('should apply an inventory configuration', () => {
+    const { initialInventoryFilters: initialFilters } = config;
 
     const inventoryData = {
-      [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem',
-      [INVENTORY_TYPES.INVENTORY_ID]: undefined,
-      [INVENTORY_TYPES.NUMBER_OF_GUESTS]: 3,
-      [INVENTORY_TYPES.CORES]: 20,
-      [INVENTORY_TYPES.SOCKETS]: 100,
-      [INVENTORY_TYPES.LAST_SEEN]: '2022-01-01T00:00:00.000Z',
-      loremIpsum: 'hello world'
+      [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem ipsum',
+      [RHSM_API_PATH_METRIC_TYPES.CORES]: 100,
+      [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: 200,
+      [INVENTORY_TYPES.LAST_SEEN]: '2022-01-01T00:00:00.000Z'
+    };
+
+    const inventoryMeta = {
+      [INVENTORY_META_TYPES.UOM]: RHSM_API_PATH_METRIC_TYPES.SOCKETS
     };
 
     const filteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
       cellData: inventoryData,
-      productId
+      meta: inventoryMeta
     });
 
     expect(filteredInventoryData).toMatchSnapshot('filtered');
@@ -49,13 +52,11 @@ describe('Product OpenShift Container config', () => {
       filters: initialFilters,
       cellData: {
         ...inventoryData,
-        [INVENTORY_TYPES.INVENTORY_ID]: null,
-        [INVENTORY_TYPES.NUMBER_OF_GUESTS]: null,
-        [INVENTORY_TYPES.CORES]: null,
-        [INVENTORY_TYPES.SOCKETS]: null,
-        [INVENTORY_TYPES.LAST_SEEN]: null
+        [INVENTORY_TYPES.INSTANCE_ID]: null,
+        [INVENTORY_TYPES.LAST_SEEN]: null,
+        [INVENTORY_TYPES.NUMBER_OF_GUESTS]: null
       },
-      productId
+      meta: inventoryMeta
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
@@ -64,8 +65,9 @@ describe('Product OpenShift Container config', () => {
       filters: initialFilters,
       cellData: {
         ...inventoryData,
-        [INVENTORY_TYPES.INVENTORY_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
+        [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
+      meta: inventoryMeta,
       session: { authorized: { inventory: true } }
     });
 
@@ -75,24 +77,13 @@ describe('Product OpenShift Container config', () => {
       filters: initialFilters,
       cellData: {
         ...inventoryData,
-        [INVENTORY_TYPES.INVENTORY_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
+        [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
+      meta: inventoryMeta,
       session: { authorized: { inventory: false } }
     });
 
     expect(filteredInventoryDataNotAuthorized).toMatchSnapshot('filtered, NOT authorized');
-
-    const filteredInventoryDataInfinite = parseRowCellsListData({
-      filters: initialFilters,
-      cellData: {
-        ...inventoryData,
-        [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: false
-      }
-    });
-
-    expect(filteredInventoryDataInfinite).toMatchSnapshot('filtered, infinite');
-
-    expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
 
   it('should apply subscriptions inventory configuration', () => {

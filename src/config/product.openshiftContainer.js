@@ -205,8 +205,8 @@ const config = {
     {
       id: RHSM_API_PATH_METRIC_TYPES.CORES,
       header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
-        translate('curiosity-inventory.header', { context: [uom?.value] }),
-      cell: (data = {}, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) => data?.[uom?.value]?.value || '--',
+        translate('curiosity-inventory.header', { context: [uom, productId] }),
+      cell: (data = {}, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) => data?.[uom]?.value || '--',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
