@@ -157,7 +157,7 @@ const config = {
     {
       id: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: cores }) =>
-        (typeof cores?.value === 'number' && Number.parseFloat(cores?.value).toFixed(2)) || `0.00`,
+        (typeof cores?.value === 'number' && Number.parseFloat(cores?.value).toFixed(2)) || '--',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
@@ -165,7 +165,7 @@ const config = {
     {
       id: RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS]: instanceHours } = {}) =>
-        (typeof instanceHours?.value === 'number' && Number.parseFloat(instanceHours?.value).toFixed(2)) || `0.00`,
+        (typeof instanceHours?.value === 'number' && Number.parseFloat(instanceHours?.value).toFixed(2)) || '--',
       isSortable: true,
       isWrappable: true,
       cellWidth: 15
