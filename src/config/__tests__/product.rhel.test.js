@@ -26,7 +26,7 @@ describe('Product RHEL config', () => {
   });
 
   it('should apply an inventory configuration', () => {
-    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery, productId } = config;
 
     const inventoryData = {
       [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem ipsum',
@@ -36,7 +36,8 @@ describe('Product RHEL config', () => {
 
     const filteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
-      cellData: inventoryData
+      cellData: inventoryData,
+      productId
     });
 
     expect(filteredInventoryData).toMatchSnapshot('filtered');
@@ -48,7 +49,8 @@ describe('Product RHEL config', () => {
         [INVENTORY_TYPES.INSTANCE_ID]: null,
         [INVENTORY_TYPES.LAST_SEEN]: null,
         [INVENTORY_TYPES.CLOUD_PROVIDER]: 'dolor sit'
-      }
+      },
+      productId
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
@@ -59,7 +61,8 @@ describe('Product RHEL config', () => {
         ...inventoryData,
         [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
-      session: { authorized: { inventory: true } }
+      session: { authorized: { inventory: true } },
+      productId
     });
 
     expect(filteredInventoryDataAuthorized).toMatchSnapshot('filtered, authorized');
@@ -70,7 +73,8 @@ describe('Product RHEL config', () => {
         ...inventoryData,
         [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
-      session: { authorized: { inventory: false } }
+      session: { authorized: { inventory: false } },
+      productId
     });
 
     expect(filteredInventoryDataNotAuthorized).toMatchSnapshot('filtered, NOT authorized');
@@ -79,7 +83,7 @@ describe('Product RHEL config', () => {
   });
 
   it('should apply subscriptions inventory configuration', () => {
-    const { initialSubscriptionsInventoryFilters: initialFilters, inventorySubscriptionsQuery: inventoryQuery } =
+    const { initialSubscriptionsInventoryFilters: initialFilters, inventorySubscriptionsQuery: inventoryQuery, productId } =
       config;
 
     const inventoryData = {
@@ -92,7 +96,8 @@ describe('Product RHEL config', () => {
 
     const filteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
-      cellData: inventoryData
+      cellData: inventoryData,
+      productId
     });
 
     expect(filteredInventoryData).toMatchSnapshot('filtered');
@@ -105,7 +110,8 @@ describe('Product RHEL config', () => {
 
     const fallbackFilteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
-      cellData: fallbackInventoryData
+      cellData: fallbackInventoryData,
+      productId
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
@@ -115,7 +121,8 @@ describe('Product RHEL config', () => {
       cellData: {
         ...inventoryData,
         [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: false
-      }
+      },
+      productId
     });
 
     expect(filteredInventoryDataInfinite).toMatchSnapshot('filtered, infinite');

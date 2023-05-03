@@ -27,7 +27,7 @@ describe('Product OpenShift Container config', () => {
   });
 
   it('should apply an inventory configuration', () => {
-    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery, productId } = config;
 
     const inventoryData = {
       [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem ipsum',
@@ -43,7 +43,8 @@ describe('Product OpenShift Container config', () => {
     const filteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
       cellData: inventoryData,
-      meta: inventoryMeta
+      meta: inventoryMeta,
+      productId
     });
 
     expect(filteredInventoryData).toMatchSnapshot('filtered');
@@ -56,7 +57,8 @@ describe('Product OpenShift Container config', () => {
         [INVENTORY_TYPES.LAST_SEEN]: null,
         [INVENTORY_TYPES.NUMBER_OF_GUESTS]: null
       },
-      meta: inventoryMeta
+      meta: inventoryMeta,
+      productId
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
@@ -68,7 +70,8 @@ describe('Product OpenShift Container config', () => {
         [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
       meta: inventoryMeta,
-      session: { authorized: { inventory: true } }
+      session: { authorized: { inventory: true } },
+      productId
     });
 
     expect(filteredInventoryDataAuthorized).toMatchSnapshot('filtered, authorized');
@@ -80,7 +83,8 @@ describe('Product OpenShift Container config', () => {
         [INVENTORY_TYPES.INSTANCE_ID]: 'XXXX-XXXX-XXXXX-XXXXX'
       },
       meta: inventoryMeta,
-      session: { authorized: { inventory: false } }
+      session: { authorized: { inventory: false } },
+      productId
     });
 
     expect(filteredInventoryDataNotAuthorized).toMatchSnapshot('filtered, NOT authorized');
@@ -89,7 +93,7 @@ describe('Product OpenShift Container config', () => {
   });
 
   it('should apply subscriptions inventory configuration', () => {
-    const { initialSubscriptionsInventoryFilters: initialFilters, inventorySubscriptionsQuery: inventoryQuery } =
+    const { initialSubscriptionsInventoryFilters: initialFilters, inventorySubscriptionsQuery: inventoryQuery, productId } =
       config;
 
     const inventoryData = {
@@ -102,7 +106,8 @@ describe('Product OpenShift Container config', () => {
 
     const filteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
-      cellData: inventoryData
+      cellData: inventoryData,
+      productId
     });
 
     expect(filteredInventoryData).toMatchSnapshot('filtered');
@@ -115,7 +120,8 @@ describe('Product OpenShift Container config', () => {
 
     const fallbackFilteredInventoryData = parseRowCellsListData({
       filters: initialFilters,
-      cellData: fallbackInventoryData
+      cellData: fallbackInventoryData,
+      productId
     });
 
     expect(fallbackFilteredInventoryData).toMatchSnapshot('filtered, fallback display');
@@ -125,7 +131,8 @@ describe('Product OpenShift Container config', () => {
       cellData: {
         ...inventoryData,
         [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: false
-      }
+      },
+      productId
     });
 
     expect(filteredInventoryDataInfinite).toMatchSnapshot('filtered, infinite');
