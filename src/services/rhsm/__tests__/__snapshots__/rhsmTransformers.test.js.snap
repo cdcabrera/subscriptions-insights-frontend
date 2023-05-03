@@ -788,6 +788,7 @@ exports[`RHSM Transformers should attempt to parse an instances response: instan
   "meta": {
     "count": undefined,
     "productId": undefined,
+    "uom": undefined,
   },
 }
 `;
@@ -798,6 +799,7 @@ exports[`RHSM Transformers should attempt to parse an instances response: instan
   "meta": {
     "count": undefined,
     "productId": undefined,
+    "uom": undefined,
   },
 }
 `;

@@ -10,7 +10,6 @@ import { helpers } from '../../common';
 import BannerMessages from '../bannerMessages/bannerMessages';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
 import { InventoryCardSubscriptions } from '../inventoryCardSubscriptions/inventoryCardSubscriptions';
-import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -38,8 +37,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
 
   const renderProduct = useCallback(() => {
     const updated = config => {
-      const { initialInventoryFilters, initialSubscriptionsInventoryFilters, productDisplay, productId, viewId } =
-        config;
+      const { initialInventoryFilters, initialSubscriptionsInventoryFilters, productId, viewId } = config;
 
       if (!productId || !viewId) {
         return null;
@@ -56,7 +54,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
           <PageSection>
             <GraphCard />
           </PageSection>
-          <PageSection className={(productDisplay === DISPLAY_TYPES.HOURLY && 'curiosity-page-section__tabs') || ''}>
+          <PageSection className="curiosity-page-section__tabs">
             <InventoryTabs
               isDisabled={
                 (!initialInventoryFilters && !initialSubscriptionsInventoryFilters) || helpers.UI_DISABLED_TABLE
