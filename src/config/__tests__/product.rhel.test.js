@@ -26,7 +26,7 @@ describe('Product RHEL config', () => {
   });
 
   it('should apply an inventory configuration', () => {
-    const { initialInventoryFilters: initialFilters } = config;
+    const { initialInventoryFilters: initialFilters, inventoryHostsQuery: inventoryQuery } = config;
 
     const inventoryData = {
       [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem ipsum',
@@ -74,6 +74,8 @@ describe('Product RHEL config', () => {
     });
 
     expect(filteredInventoryDataNotAuthorized).toMatchSnapshot('filtered, NOT authorized');
+
+    expect(inventoryQuery[RHSM_API_QUERY_SET_TYPES.DIRECTION] === SORT_DIRECTION_TYPES.DESCENDING).toBe(true);
   });
 
   it('should apply subscriptions inventory configuration', () => {
