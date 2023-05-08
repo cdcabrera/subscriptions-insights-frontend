@@ -4,7 +4,7 @@ exports[`GraphCardMetricTotals Component should handle custom card displays: ful
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+  data-test-data="{"meta":[],"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -14,7 +14,7 @@ exports[`GraphCardMetricTotals Component should handle custom card displays: ful
         className="curiosity-usage-graph__totals-column-card "
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+        key="051ec9e5c23d532cf292965e42049c1e5c1366ee"
       >
         <CardHeader>
           <CardTitle>
@@ -28,7 +28,7 @@ exports[`GraphCardMetricTotals Component should handle custom card displays: ful
         </CardHeader>
         <CardBody>
           <div>
-            t(ipsum-{{data}}, {"testId":"custom test id","data":"{\\"groupMetricId\\":[\\"hello\\",\\"world\\"]}"})
+            t(ipsum-{{data}}, {"testId":"custom test id","data":"{\\"meta\\":[],\\"groupMetricId\\":[\\"hello\\",\\"world\\"]}"})
           </div>
         </CardBody>
         <CardFooter>
@@ -49,7 +49,7 @@ exports[`GraphCardMetricTotals Component should handle custom card displays: ful
               headingLevel="h2"
               size="md"
             >
-              hello-{"groupMetricId":["hello","world"]}
+              hello-{"meta":[],"groupMetricId":["hello","world"]}
             </Title>
           </CardTitle>
         </CardHeader>
@@ -68,7 +68,7 @@ exports[`GraphCardMetricTotals Component should handle custom card displays: ful
         className="curiosity-usage-graph__totals-column-card "
         data-test="graphMetricTotalsCard-2"
         isPlain={true}
-        key="b21615e1e1be06472b2fd681bd40525fbfbe223d"
+        key="387cedd97983da55cfd462f69d03502079d19b11"
       >
         <CardHeader>
           <CardTitle>
@@ -87,7 +87,7 @@ exports[`GraphCardMetricTotals Component should handle custom card displays: ful
         </CardBody>
         <CardFooter>
           <div>
-            dolor sit timestamp-{"groupMetricId":["hello","world"]}
+            dolor sit timestamp-{"meta":[],"groupMetricId":["hello","world"]}
           </div>
         </CardFooter>
       </Card>
@@ -105,7 +105,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+  data-test-data="{"meta":[],"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -115,7 +115,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
         className="curiosity-usage-graph__totals-column-card blur"
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+        key="051ec9e5c23d532cf292965e42049c1e5c1366ee"
       >
         <CardHeader>
           <CardTitle>
@@ -146,7 +146,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+  data-test-data="{"meta":[],"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -156,7 +156,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
         className="curiosity-usage-graph__totals-column-card "
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+        key="051ec9e5c23d532cf292965e42049c1e5c1366ee"
       >
         <CardHeader>
           <CardTitle>
@@ -193,7 +193,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
 <div
   className="curiosity-usage-graph__totals"
   data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+  data-test-data="{"meta":[],"groupMetricId":["hello","world"]}"
 >
   <div>
     <div
@@ -203,7 +203,7 @@ exports[`GraphCardMetricTotals Component should handle multiple display states: 
         className="curiosity-usage-graph__totals-column-card "
         data-test="graphMetricTotalsCard-0"
         isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+        key="051ec9e5c23d532cf292965e42049c1e5c1366ee"
       >
         <CardHeader>
           <CardTitle>
