@@ -80,6 +80,42 @@ const useGetAuthorization = ({
   };
 };
 
+const useGetModuleAuthorization = ({
+  authorizeUser = reduxActions.platform.authorizeUser,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+} = {}) => {
+  const dispatch = useAliasDispatch();
+  const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
+    { id: 'auth', selector: ({ user }) => user?.auth },
+    { id: 'locale', selector: ({ user }) => user?.locale },
+    {
+      id: 'errors',
+      selector: ({ user }) => (user?.errors?.error === true && user.errors) || { fulfilled: true, data: [] }
+    }
+  ]);
+
+  useMount(async () => {
+    await dispatch(authorizeUser());
+  });
+
+  const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
+  const errorStatus = (error && responses?.id?.errors?.status) || null;
+
+  return {
+    data: {
+      ...user,
+      ...app,
+      locale: data.locale,
+      errorCodes: data.errors,
+      errorStatus
+    },
+    error,
+    fulfilled,
+    pending
+  };
+};
+
 /**
  * Return session data from authentication context.
  *
@@ -108,5 +144,6 @@ export {
   DEFAULT_CONTEXT,
   useAuthContext,
   useGetAuthorization,
+  useGetModuleAuthorization,
   useSession
 };

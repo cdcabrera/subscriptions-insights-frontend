@@ -1,9 +1,9 @@
 import React from 'react';
-import GraphCard from '../../modules/graphCard';
+import { Module as RhelGraphCard } from '../../modules/rhelGraphCard/module';
 
 const ProductViewModules = () => (
   <div>
-    <GraphCard />
+    <RhelGraphCard />
   </div>
 );
 
