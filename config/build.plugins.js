@@ -36,7 +36,12 @@ const setCommonPlugins = () => {
       shared: [
         { 'react-router-dom': { singleton: true, requiredVersion: '*' } },
         { 'react-redux': { requiredVersion: dependencies['react-redux'] } }
-      ]
+      ],
+      exposes: {
+        './RootApp': './src/AppEntry',
+        // './GraphCard': resolve(__dirname, '../src/modules/graphCard.js')
+        './GraphCard': './src/modules/graphCard.js'
+      }
     })
   ];
 
