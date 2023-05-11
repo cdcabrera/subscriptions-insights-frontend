@@ -5,18 +5,18 @@
 
 A web user interface for subscription reporting, based on [Patternfly](https://www.patternfly.org/)
 
-## Requirements
-Before developing for Curiosity Frontend, the basic requirements:
+## Development, Quick Start
+
+### Requirements
+Before developing for Curiosity Frontend
  * Your system needs to be running [NodeJS version 18+ and NPM](https://nodejs.org/)
  * [Docker](https://docs.docker.com/engine/install/)
    * Alternatively, you can try [Podman](https://github.com/containers/podman).
- * And [Yarn 1.22+](https://yarnpkg.com) for dependency and script management.
+ * And [Yarn](https://yarnpkg.com) for dependency and script management.
 
-For in-depth tooling install guidance see the [contribution guidelines](./CONTRIBUTING.md#Install)
+For in-depth tooling install guidance see the [contribution guidelines](./CONTRIBUTING.md#Development)
 
-## Development, Quick Start
-
-### Installing
+### Install
   1. Clone the repository
      ```
      $ git clone https://github.com/RedHatInsights/curiosity-frontend.git
@@ -27,25 +27,27 @@ For in-depth tooling install guidance see the [contribution guidelines](./CONTRI
      $ cd curiosity-frontend && yarn
      ```
 
-### Serving Content
-This is the default context for running a local UI against mock styling.
+### Develop
+This is the base context for running a local UI against a mock API and styling.
 
-  1. Start up Docker or equivalent tooling
-  2. Run
+  1. In a terminal instance that uses the repo context... Run
      ```
      $ yarn start
      ```
+  1. Start developing against files in `./src`
 
 For in-depth local run guidance review the [contribution guidelines](./CONTRIBUTING.md#Serving%20Content) 
 
 ### Testing
-Run the tests with coverage.
+Run and update tests while developing. In a new terminal instance
 
-  ```
-  $ yarn test
-  ```
+  1. In a new terminal instance that uses the repo context...
+     ```
+     $ yarn test:dev
+     ```
+  2. Test files can be accessed under `__test__` directories parallel to the files you're editing.
 
 For in-depth testing guidance review the [contribution guidelines](./CONTRIBUTING.md#Testing) 
 
 ## Contributing
-Contributing encompasses [repository specific requirements](./CONTRIBUTING.md) and the global [Insights guidelines](https://console.redhat.com/docs/storybook?path=/story/welcome--getting-started).
+Contributing encompasses [repository specific requirements](./CONTRIBUTING.md).
