@@ -235,11 +235,91 @@ Once you've installed NodeJS you can use NPM to perform the [Yarn](https://yarnp
 </details>
 
 <details>
-<summary><h3 style="display: inline-block">Setup for React and Redux</h3></summary>
+<summary><h3 style="display: inline-block">dotenv file setup</h3></summary>
+
+"dotenv" files contain shared configuration settings across the Curiosity code and build structure. These settings are imported through [helpers](./src/common/helpers.js), or through other various `process.env.[dotenv parameter names]` within the code or build.
+
+#### Setup basic dotenv files
+Before you can start any local development you need to relax permissions associated with the platform. This
+affects various aspects of both `local` and `proxy` development.
+
+1. Create a local dotenv file in the root of `curiosity-frontend` called `.env.local` and add the following contents
+    ```
+    REACT_APP_DEBUG_MIDDLEWARE=true
+    REACT_APP_DEBUG_ORG_ADMIN=true
+    REACT_APP_DEBUG_PERMISSION_APP_ONE=subscriptions:*:*
+    REACT_APP_DEBUG_PERMISSION_APP_TWO=inventory:*:*
+    ```
+   
+#### Advanced dotenv files
+The dotenv files are structured to cascade each additional dotenv file settings
+```
+ .env = base dotenv file settings
+ .env -> .env.developement = local run development settings that enhances the base .env settings file
+ .env -> .env.proxy = local run proxy settings that enhances the base .env settings file
+ .env -> .env.test = tesing framework settings that enhances the base .env settings file
+```
+
+Current available dotenv parameters
+
+> Technically all dotenv parameters come across as strings when imported through `process.env`. It is important to cast them accordingly if "type" is required.
+
+| dotenv parameter                                  | definition                                                                                                                                    |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| REACT_APP_UI_VERSION                              | A dynamically build populated package.json version reference                                                                                  |
+| REACT_APP_UI_NAME                                 | A static string populated reference similar to the consoledot application name                                                                |
+ | REACT_APP_UI_DISPLAY_NAME                         | A static string populated reference to the display version of the application name                                                            |
+ | REACT_APP_UI_DISPLAY_CONFIG_NAME                  | A static string populated reference to the configuration version of the application name                                                      |
+ | REACT_APP_UI_DISPLAY_START_NAME                   | A static string populated reference to the "sentence start" application name                                                                  |
+ | REACT_APP_UI_DEPLOY_PATH_PREFIX                   | A dynamically build populated beta/preview environment path reference                                                                         |                                                               
+ | REACT_APP_UI_DEPLOY_PATH_LINK_PREFIX              | A dynamically build populated beta/preview environment path reference that may or may not be equivalent to `REACT_APP_UI_DEPLOY_PATH_PREFIX`  |
+ | PUBLIC_URL                                        | A dynamically prefix populated reference to where the application lives on consoledot                                                         |                                                                                                           
+ | REACT_APP_UI_LINK_CONTACT_US                      | A static contact us link for populating a link reference NOT directly controlled by the application and subject to randomly changing.         |
+ | REACT_APP_UI_LINK_LEARN_MORE                      | A static learn more link for populating a link reference NOT directly controlled by the application and subject to randomly changing.         |
+ | REACT_APP_UI_LINK_REPORT_ACCURACY_RECOMMENDATIONS | A static mismatched content link for populating a link reference NOT directly controlled by the application and subject to randomly changing. |
+ | REACT_APP_UI_DISABLED                             | A static boolean for disabling/hiding the entire UI/application                                                                               |
+ | REACT_APP_UI_DISABLED_NOTIFICATIONS               | A static boolean for disabling/hiding consoledot integrated notifications/toasts                                                              |
+ | REACT_APP_UI_DISABLED_TOOLBAR                     | A static boolean for disabling/hiding the UI/application product view primary toolbar                                                         |
+ | REACT_APP_UI_DISABLED_TOOLBAR_GROUP_VARIANT       | A static boolean for disabling/hiding the UI/application group variant toolbar and group variant select list                                  |
+ | REACT_APP_UI_DISABLED_GRAPH                       | A static boolean for disabling/hiding the UI/application graph card(s)                                                                        |
+ | REACT_APP_UI_DISABLED_TABLE                       | A static boolean for disabling/hiding ALL UI/application inventory displays                                                                   |
+ | REACT_APP_UI_DISABLED_TABLE_HOSTS                 | A static boolean for disabling/hiding ALL UI/application host inventory displays                                                              |
+ | REACT_APP_UI_DISABLED_TABLE_INSTANCES             | A static boolean for disabling/hiding ALL UI/application instances inventory displays                                                         |
+ | REACT_APP_UI_DISABLED_TABLE_SUBSCRIPTIONS         | A static boolean for disabling/hiding ALL UI/application subscription inventory displays                                                      |
+ | REACT_APP_UI_LOGGER_ID                            | A static string associated with the session storage name of debugger log files                                                                |
+ | REACT_APP_UI_LOGGER_FILE                          | A static string associated with the session storage file name download of debugger log files.                                                 |
+ | REACT_APP_UI_WINDOW_ID                            | A static string associated with accessing browser console UI/application methods such as `$ curiosity.UI_VERSION`                             |
+ | REACT_APP_AJAX_TIMEOUT                            | A static number associated with the milliseconds ALL AJAX/XHR/Fetch calls timeout.                                                            |
+ | REACT_APP_AJAX_CACHE                              | A static number associated with the milliseconds ALL AJAX/XHR/Fetch calls have their response cache timeout.                                  |
+ | REACT_APP_SELECTOR_CACHE                          | Currently NOT used, originally associated with the cache, similar to `REACT_APP_AJAX_CACHE` but for transformed Redux selectors.              |
+ | REACT_APP_CONFIG_SERVICE_LOCALES_COOKIE           | A static string associated with the platform cookie name used to store locale information                                                     |
+ | REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG      | A static string associated with the UI/application default locale language                                                                    |
+ | REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG_DESC | A static string describing the UI/application default locale language                                                                         |
+ | REACT_APP_CONFIG_SERVICE_LOCALES                  | A dynamically prefixed string referencing a JSON resource for available UI/application locales                                                |
+ | REACT_APP_CONFIG_SERVICE_LOCALES_PATH             | A dynamically prefixed string referencing JSON resources for available UI/application locale strings                                          |
+ | REACT_APP_CONFIG_SERVICE_LOCALES_EXPIRE           | A dynamically prefixed string referencing the milliseconds the UI/application locale strings/files expire                                     |
+ | REACT_APP_SERVICES_RHSM_VERSION                   | A static string referencing the RHSM API spec                                                                                                 |
+ | REACT_APP_SERVICES_RHSM_REPORT                    | A static string referencing the RHSM API spec                                                                                                 |
+ | REACT_APP_SERVICES_RHSM_TALLY                     | A static tokenized string referencing the RHSM API spec                                                                                       |
+ | REACT_APP_SERVICES_RHSM_CAPACITY                  | A static tokenized string referencing the RHSM API spec                                                                                       |
+ | REACT_APP_SERVICES_RHSM_CAPACITY_DEPRECATED       | A static tokenized string referencing the RHSM API spec                                                                                       |
+ | REACT_APP_SERVICES_RHSM_INVENTORY                 | A static string referencing the RHSM API spec                                                                                                 |
+ | REACT_APP_SERVICES_RHSM_INVENTORY_GUESTS          | A static tokenized string referencing the RHSM API spec                                                                                       |
+ | REACT_APP_SERVICES_RHSM_INVENTORY_INSTANCES       | A static string referencing the RHSM API spec                                                                                                 |
+ | REACT_APP_SERVICES_RHSM_INVENTORY_SUBSCRIPTIONS   | A static string referencing the RHSM API spec                                                                                                 |
+ | REACT_APP_SERVICES_RHSM_OPTIN                     | A static tokenized string referencing the RHSM API spec                                                                                       |
+
 </details>
 
 <details>
-<summary><h3 style="display: inline-block">Actual development</h3></summary>
+<summary><h3 style="display: inline-block">Setup for React and Redux</h3></summary>
+
+Various 
+
+</details>
+
+<details>
+<summary><h3 style="display: inline-block">Local and proxy development</h3></summary>
 </details>
 
 <details>

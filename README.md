@@ -30,6 +30,13 @@ For in-depth tooling install guidance see the [contribution guidelines](./CONTRI
 ### Develop
 This is the base context for running a local UI against a mock API and styling.
 
+  1. Create a local dotenv file called `.env.local` and add the following contents
+      ```
+      REACT_APP_DEBUG_MIDDLEWARE=true
+      REACT_APP_DEBUG_ORG_ADMIN=true
+      REACT_APP_DEBUG_PERMISSION_APP_ONE=subscriptions:*:*
+      REACT_APP_DEBUG_PERMISSION_APP_TWO=inventory:*:*
+     ```
   1. In a terminal instance that uses the repo context... Run
      ```
      $ yarn start
