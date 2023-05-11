@@ -31,7 +31,7 @@ import { translate } from '../components/i18n/i18n';
  * or using anArray/List then generating "routes.js"
  */
 
-const productGroup = 'rhel';
+const productGroup = 'swatch';
 
 const productId = RHSM_API_PATH_PRODUCT_TYPES.SATELLITE_SERVER;
 

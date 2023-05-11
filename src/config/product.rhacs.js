@@ -29,7 +29,7 @@ import { translate, EMPTY_CONTEXT } from '../components/i18n/i18n';
  * or using anArray/List then generating "routes.js"
  */
 
-const productGroup = RHSM_API_PATH_PRODUCT_TYPES.RHACS;
+const productGroup = 'swatch';
 
 const productId = RHSM_API_PATH_PRODUCT_TYPES.RHACS;
 

@@ -23,7 +23,7 @@ import { translate } from '../components/i18n/i18n';
 
 // ToDo: evaluate the need for "productLabel" or using productId
 
-const productGroup = 'openshift';
+const productGroup = 'swatch';
 
 const productId = RHSM_API_PATH_PRODUCT_TYPES.OPENSHIFT_METRICS;
 

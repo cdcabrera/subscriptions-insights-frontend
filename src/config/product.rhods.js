@@ -24,7 +24,7 @@ import { dateHelpers, helpers } from '../common';
 import { SelectPosition } from '../components/form/select';
 import { translate, EMPTY_CONTEXT } from '../components/i18n/i18n';
 
-const productGroup = RHSM_API_PATH_PRODUCT_TYPES.RHODS;
+const productGroup = 'swatch';
 
 const productId = RHSM_API_PATH_PRODUCT_TYPES.RHODS;
 
