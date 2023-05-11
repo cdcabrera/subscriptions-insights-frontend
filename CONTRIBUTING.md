@@ -122,13 +122,14 @@ For additional information on failures for
 
 <details>
 <summary>Releasing code for all environments</summary>
-Curiosity releases code to the following environments
-- stage preview
-- stage stable
-- production preview
-- production stable
 
-> Merging code to each environment A repository hook notifies continuous integration and starts the process of
+Curiosity releases code to the following environments
+   - stage preview
+   - stage stable
+   - production preview
+   - production stable
+
+> After pushing code, or tagging, a repository hook notifies continuous integration and starts the process of
 > environment updates.
 
 ### Release for stage preview
@@ -153,12 +154,16 @@ main -> release cadidate tag -> production preview
 
 ### Release for production stable
 To merge code into production stable a maintainer must run the release commit process locally.
+```
+local main -> release commit -> origin main -> tag -> production stable
+``` 
 
-1. clone the main repository, within the repo confirm you're on the `main` branch and synced with `origin`
+1. clone the main repository, within the repo confirm you're on the `main` branch and synced with `origin` `main`
 1. run
-   - `$ yarn`
-   - `$ yarn release --dry-run` to confirm the release output version and commits.
-   - `$ yarn release` to generate the commit and file changes.
+   1. `$ yarn`
+   1. `$ yarn release --dry-run` to confirm the release output version and commits.
+   1. `$ yarn release` to generate the commit and file changes.
+      
       >If the version recommended should be different you can run the command with an override version following a semver format
       >  ```
       >  $ yarn release --override X.X.X
@@ -169,15 +174,11 @@ To merge code into production stable a maintainer must run the release commit pr
    If there are issues with the file updates you can correct them and squish any fixes into the `chore(release): X.X.X` commit
 1. Push the SINGLE commit to `origin` `main`
 1. Using the [Curiosity GitHub releases interface](https://github.com/RedHatInsights/curiosity-frontend/releases)
-   - Draft a new release from `main` confirming you are aligned with the `chore(release): X.X.X` commit hash
-   - Create the new tag using the SAME semver version created by the release commit but add a `v` prefix to it, i.e. `vX.X.X`, for consistency.
+   1. Draft a new release from `main` confirming you are aligned with the `chore(release): X.X.X` commit hash
+   1. Create the new tag using the SAME semver version created by the release commit but add a `v` prefix to it, i.e. `vX.X.X`, for consistency.
+   
    > To avoid issues with inconsistent Git tagging use it is recommended you use the GitHub releases interface.
 
-tag the most recent commit as a release candidate using the format
-`v[x].[x].[x]`
-```
-main -> release commit then tag -> production stable
-``` 
 </details>
 
 ## Development
