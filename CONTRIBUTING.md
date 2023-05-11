@@ -9,7 +9,7 @@ Curiosity makes use of
 - GitHub's fork and pull workflow.
 - A linear commit process and rebasing. GitHub merge commits, and squashing are discouraged in favor of smaller independent commits
 
-**Working directly on the main repository is highly discouraged. Continuous Integration is dependent on branch structure.**
+> Working directly on the main repository is highly discouraged. Continuous Integration is dependent on branch structure.
 
 ### Main repository branches and continuous integration
 Curiosity makes use of the branches `dev`, `main`.
@@ -107,7 +107,7 @@ To resolve failures for any GitHub actions make sure you first review the result
 clicking the `checks` tab on the related pull request.
 
 For additional information on failures for
-- Commit messages, see [Pull request commits, messaging](#Pull%20request%20commits,%20messaging)
+- Commit messages, see [Pull request commits, messaging](#pull-request-commits-messaging)
 - Code documentation, see [Updating code documentation]()
 - Pull request code, see [Updating unit tests during development]()
 - Jenkins integration can be ignored until it actively runs integration testing.
