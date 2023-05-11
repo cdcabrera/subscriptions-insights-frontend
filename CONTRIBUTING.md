@@ -252,15 +252,33 @@ affects various aspects of both `local` and `proxy` development.
     ```
    
 #### Advanced dotenv files
-The dotenv files are structured to cascade each additional dotenv file settings
+The dotenv files are structured to cascade each additional dotenv file settings from a root `.env` file.
 ```
  .env = base dotenv file settings
+ .env.local = a gitignored file to allow local settings overrides
  .env -> .env.developement = local run development settings that enhances the base .env settings file
  .env -> .env.proxy = local run proxy settings that enhances the base .env settings file
+ .env -> .env.production = build modifications associated with all environments
+ .env -> .env.production.local = a gitignored, dynamcially generated build modifications associated with all environments
  .env -> .env.test = tesing framework settings that enhances the base .env settings file
 ```
 
-Current available dotenv parameters
+Current directly available developer/debugging/test dotenv parameters
+
+> Technically all dotenv parameters come across as strings when imported through `process.env`. It is important to cast them accordingly if "type" is required.
+
+| dotenv parameter                   | definition                                                                                                                                                                     |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DEV_PORT                           | A local proxy build modification for running against a custom port                                                                                                             |
+| DEV_BRANCH=stage-beta              | A local proxy build modification for running against a custom environment branch. Available options include `stage-beta`, `stage-stable`, `prod-beta`, `prod-stable`           |
+| GENERATE_SOURCEMAP                 | A static boolean that disables local run source map generation only. May speed up local development re-compiles. May eventually be moved into `.env.developement`.             | 
+| REACT_APP_DEBUG_DEFAULT_DATETIME   | A static string associated with overriding the assumed UI/applicaiton date in the form of `YYYYMMDD`                                                                           |
+| REACT_APP_DEBUG_MIDDLEWARE         | A static boolean that activates the console state debugging messages associated with Redux.                                                                                    |
+| REACT_APP_DEBUG_ORG_ADMIN          | A static boolean associated with local development only that overrides the organization admin. Useful in determining UI/application behavior when permissions are missing.     |
+| REACT_APP_DEBUG_PERMISSION_APP_ONE | A static string associated with local development only that overrides RBAC associated permissions. Useful in determining UI/application behavior when permissions are missing. |
+| REACT_APP_DEBUG_PERMISSION_APP_TWO | A static string associated with local development only that overrides RBAC associated permissions. Useful in determining UI/application behavior when permissions are missing. |
+
+Current directly available build dotenv parameters
 
 > Technically all dotenv parameters come across as strings when imported through `process.env`. It is important to cast them accordingly if "type" is required.
 
