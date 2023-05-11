@@ -10,7 +10,7 @@ A web user interface for subscription reporting, based on [Patternfly](https://w
 ### Requirements
 Before developing for Curiosity Frontend
  * Your system needs to be running [NodeJS version 18+ and NPM](https://nodejs.org/)
- * [Docker](https://docs.docker.com/engine/install/)
+ * [Docker](https://docs.docker.com/desktop/)
    * Alternatively, you can try [Podman](https://github.com/containers/podman).
  * And [Yarn](https://yarnpkg.com) for dependency and script management.
 
@@ -34,18 +34,19 @@ This is the base context for running a local UI against a mock API and styling.
      ```
      $ yarn start
      ```
-  1. Start developing against files in `./src`
+  1. Start developing against files in `./src`. Linting feedback will be automatically enabled through the terminal output
 
 For in-depth local run guidance review the [contribution guidelines](./CONTRIBUTING.md#Serving%20Content) 
 
-### Testing
-Run and update tests while developing. In a new terminal instance
+### Unit testing
+Run and update unit tests while developing instead of after-the-fact. In a new terminal instance
 
-  1. In a new terminal instance that uses the repo context...
+  1. In a new terminal instance that uses the repo context... Run
      ```
      $ yarn test:dev
      ```
-  2. Test files can be accessed under `__test__` directories parallel to the files you're editing.
+  2. Test files can be accessed, and edited, under `__test__` directories parallel to the files you're editing. Test failures for
+     recently edited files will be available in the terminal output along with basic testing framework use directions.
 
 For in-depth testing guidance review the [contribution guidelines](./CONTRIBUTING.md#Testing) 
 

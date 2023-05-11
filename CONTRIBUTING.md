@@ -3,7 +3,7 @@ Contributing encompasses repository specific requirements.
 
 ## Process
 <details>
-<summary>Using Git</summary>
+<summary><h3 style="display: inline-block">Using Git</h3></summary>
 
 Curiosity makes use of
 - GitHub's fork and pull workflow.
@@ -11,7 +11,7 @@ Curiosity makes use of
 
 > Working directly on the main repository is highly discouraged. Continuous Integration is dependent on branch structure.
 
-### Main repository branches and continuous integration
+#### Main repository branches and continuous integration
 Curiosity makes use of the branches `dev`, `main`.
 - `dev` branch is a representation of development and `stage-beta`.
    - When a branch push happens the `dev` branch is automatically deployed for `https://console.stage.redhat.com/preview`
@@ -20,7 +20,7 @@ Curiosity makes use of the branches `dev`, `main`.
    - When a release candidate tag is created for the latest commit in `main` branch it will automatically be deployed for `https://console.redhat.com/preview`
    - When the latest commit message uses the form `chore(release): [version number]` and a release tag with the same release version is created in `main` branch it will automatically be deployed for `https://console.redhat.com/`
 
-### Branch syncing
+#### Branch syncing
 Linear commit history for Curiosity makes syncing concise
 - `dev` is always rebased from `main`
    - typically after a release
@@ -31,25 +31,24 @@ Linear commit history for Curiosity makes syncing concise
 </details>
 
 <details>
-<summary>Pull request workflow, and testing</summary>
+<summary><h3 style="display: inline-block">Pull request workflow, and testing</h3></summary>
 
 All development work should be handled through GitHub's fork and pull workflow.
 
-### Setting up a pull request
-Development PRs should be opened against the `dev` branch. PRs directly to `main` are discouraged since branch structure
-represents environment. However, exceptions are allowed for
+#### Setting up a pull request
+Development pull requests (PRs) should be opened against the `dev` branch. PRs directly to `main` are discouraged since branch structure
+represents environment. However, exceptions are allowed, as long those updates are also rebased against the `dev` branch, for...
 - bug fixes
 - build updates
 
-As long those updates are also rebased against the `dev` branch.
-
 > If your pull request work contains any of the following warning signs 
->  - out of sync commits, is not rebased against the `dev` branch
+>  - out of sync commits (is not rebased against the `dev` branch)
 >  - poorly structured commits and messages
->  - any one commit relies on other commits to work correctly, in the same pull request
+>  - any one commit relies on other commits to work at all, in the same pull request
 >  - dramatic file restructures that attempt complex behavior
 >  - missing, relaxed, or removed unit tests
 >  - dramatic unit test snapshot updates
+>  - affects any file not directly associated with the associated issue being resolved
 >  - affects "many" files
 >
 > You will be encouraged to restructure your commits to help in review.
@@ -61,7 +60,7 @@ to provide consistent history and help generate [CHANGELOG.md](./CHANGELOG.md) u
 
 Commit messages follow three basic guidelines
 - No more than `65` characters for the first line
-- If your pull request has more than a single commit you include the pull request number using the format
+- If your pull request has more than a single commit you should include the pull request number in your message using the format. This additional copy is not counted towards the `65` character limit.
   ```
   [message] (#1234)
   ```
@@ -72,7 +71,7 @@ Commit messages follow three basic guidelines
 
 - Commit message formats follow the structure
   ```
-  <type>(scope): <issue number><description>
+  <type>(<scope>): <issue number><description>
   ```
   Where
   - Type = the type of work the commit resolves.
@@ -112,16 +111,21 @@ For additional information on failures for
 - Pull request code, see [Updating unit tests during development]()
 - Jenkins integration can be ignored until it actively runs integration testing.
 
-> Caching for GitHub actions and NPM packages is active in order to speed up subsequent pull request
-> updates. Occasionally test failures can occur after recent NPM package updates. Typically, this can
-> present if a NPM package has moved, or removed, support for an old or new version of NodeJS. If
-> test failures are happening shortly after a prior NPM update commit has merged into `dev`
-> you may need to clear the GitHub actions cache and restart the related tests.
+> Caching for GitHub actions and NPM packages is active. This caching allows subsequent pull request
+> updates to avoid reinstalling yarn dependencies. 
+> 
+> Occasionally test failures can occur after recent NPM package updates either in the pull request
+> itself or in a prior commit to the pull request. The most common reason for this failure presents when
+> a NPM package has changed its support for different versions of NodeJS and those packages are updated
+> in the `dev` branch. 
+> 
+> If test failures are happening shortly after a NPM package update you may need to clear the
+> GitHub actions cache and restart the related tests.
 
 </details>
 
 <details>
-<summary>Releasing code for all environments</summary>
+<summary><h3 style="display: inline-block">Releasing code for all environments</h3></summary>
 
 Curiosity releases code to the following environments
    - stage preview
@@ -132,34 +136,38 @@ Curiosity releases code to the following environments
 > After pushing code, or tagging, a repository hook notifies continuous integration and starts the process of
 > environment updates.
 
-### Release for stage preview
-Merging code into stage preview is simplistic, just merge a pull request into `dev`
-```
-pull-request -> dev -> stage preview
-```
+#### Release for stage preview
+Merging code into stage preview is simplistic
+1. merge a pull request into `dev`
+   ```
+   pull-request -> dev -> stage preview
+   ```
 
-### Release for stage stable
-To merge code into stage stable open a pull request from `dev` to
-`main` and merge using the `rebase` button.
-```
-dev -> pull-request -> main -> stage stable
-```
+#### Release for stage stable
+To merge code into stage stable
+1. open a pull request from `dev` to `main` and merge using the `rebase` button.
+   ```
+   dev -> pull-request -> main -> stage stable
+   ```
 
-### Release for production preview
-To merge code into production preview tag the most recent commit as a release candidate using the format
+#### Release for production preview
+To merge code into production preview
+1. tag the most recent commit on `main` as a release candidate using the format, where `rc.0` index is a typical starting point.
 `v[x].[x].[x]-rc.[x]`
-```
-main -> release cadidate tag -> production preview
-```
+   ```
+   main -> release cadidate tag -> production preview
+   ```
 
-### Release for production stable
+#### Release for production stable
 To merge code into production stable a maintainer must run the release commit process locally.
-```
-local main -> release commit -> origin main -> tag -> production stable
-``` 
+
+   ```
+   local main repo, main branch -> release commit -> origin main -> tag -> production stable
+   ```
 
 1. clone the main repository, within the repo confirm you're on the `main` branch and synced with `origin` `main`
 1. run
+   1. `$ git checkout main`
    1. `$ yarn`
    1. `$ yarn release --dry-run` to confirm the release output version and commits.
    1. `$ yarn release` to generate the commit and file changes.
@@ -172,10 +180,10 @@ local main -> release commit -> origin main -> tag -> production stable
    - `package.json`
    - `CHANGELOG.md`
    If there are issues with the file updates you can correct them and squish any fixes into the `chore(release): X.X.X` commit
-1. Push the SINGLE commit to `origin` `main`
+1. Push the **SINGLE** commit to `origin` `main`
 1. Using the [Curiosity GitHub releases interface](https://github.com/RedHatInsights/curiosity-frontend/releases)
    1. Draft a new release from `main` confirming you are aligned with the `chore(release): X.X.X` commit hash
-   1. Create the new tag using the SAME semver version created by the release commit but add a `v` prefix to it, i.e. `vX.X.X`, for consistency.
+   1. Create the new tag using the **SAME** semver version created by the release commit but add a `v` prefix to it, i.e. `vX.X.X`, for consistency.
    
    > To avoid issues with inconsistent Git tagging use it is recommended you use the GitHub releases interface.
 
@@ -183,16 +191,15 @@ local main -> release commit -> origin main -> tag -> production stable
 
 ## Development
 <details>
-<summary>Install tooling</summary>
+<summary><h3 style="display: inline-block">Install tooling</h3></summary>
 
-## Install tooling
 Before developing you'll need to install:
  * [NodeJS and NPM](https://nodejs.org/)
- * [Docker](https://docs.docker.com/engine/install/)
+ * [Docker](https://docs.docker.com/desktop/)
    * Alternatively, you can try [Podman](https://github.com/containers/podman). [Homebrew](https://brew.sh/) can be used for the install `$ brew install podman`
  * And [Yarn](https://yarnpkg.com)
 
-### OS support
+#### OS support
 The tooling for Curiosity is `Mac OS` centered.
 
 While some aspects of the tooling have been expanded for Linux there may still be issues. It is encouraged that OS tooling
@@ -200,21 +207,25 @@ changes are contributed back while maintaining existing `Mac OS` functionality.
 
 If you are unable to test additional OS support it is imperative that code reviews take place before integrating/merging build changes.
 
-### NodeJS and NPM
+#### NodeJS and NPM
 The Curiosity build attempts to align to the current NodeJS LTS version. It is possible to test future versions of NodeJS LTS. See CI Testing for more detail. 
 
-### Docker & Mac
-Setting Docker up on a Mac? Install the appropriate package and you should be good to go. To check if everything installed correctly you can try these steps.
+#### Docker and Mac
+Setting [Docker](https://docs.docker.com/desktop/) up on a Mac? Install the appropriate package. Confirm everything installed correctly by trying these steps.
    1. In a terminal instance run
       ```
       $ docker run hello-world
       ```
 
-### Docker & Linux
-Setting Docker up on a Linux machine can include an additional convenience step. If you're having to prefix "sudo" in front of your Docker commands you can try these steps.
-  * [Docker postinstall documentation](https://docs.docker.com/engine/install/linux-postinstall/)
+Reference the Docker documentation for additional installation help.
 
-### Yarn
+#### Docker and Linux
+Setting Docker up on a Linux machine may include additional steps.
+  * [Docker on Linux](https://docs.docker.com/desktop/install/linux-install/)
+
+Reference the Docker documentation for additional installation help.
+
+#### Yarn
 Once you've installed NodeJS you can use NPM to perform the [Yarn](https://yarnpkg.com) install
 
   ```
@@ -223,13 +234,13 @@ Once you've installed NodeJS you can use NPM to perform the [Yarn](https://yarnp
 </details>
 
 <details>
-<summary>Setup for React and Redux</summary>
+<summary><h3 style="display: inline-block">Setup for React and Redux</h3></summary>
 </details>
 
 <details>
-<summary>Actual development</summary>
+<summary><h3 style="display: inline-block">Actual development</h3></summary>
 </details>
 
 <details>
-<summary>Testing</summary>
+<summary><h3 style="display: inline-block">Testing</h3></summary>
 </details>
