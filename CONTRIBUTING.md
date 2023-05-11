@@ -263,7 +263,7 @@ The dotenv files are structured to cascade each additional dotenv file settings 
  .env -> .env.test = tesing framework settings that enhances the base .env settings file
 ```
 
-Current directly available developer/debugging/test dotenv parameters
+##### Current directly available developer/debugging/test dotenv parameters
 
 > Technically all dotenv parameters come across as strings when imported through `process.env`. It is important to cast them accordingly if "type" is required.
 
@@ -278,7 +278,7 @@ Current directly available developer/debugging/test dotenv parameters
 | REACT_APP_DEBUG_PERMISSION_APP_ONE | A static string associated with local development only that overrides RBAC associated permissions. Useful in determining UI/application behavior when permissions are missing. |
 | REACT_APP_DEBUG_PERMISSION_APP_TWO | A static string associated with local development only that overrides RBAC associated permissions. Useful in determining UI/application behavior when permissions are missing. |
 
-Current directly available build dotenv parameters
+##### Current directly available build dotenv parameters
 
 > Technically all dotenv parameters come across as strings when imported through `process.env`. It is important to cast them accordingly if "type" is required.
 
