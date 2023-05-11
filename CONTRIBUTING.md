@@ -179,6 +179,7 @@ To merge code into production stable a maintainer must run the release commit pr
 1. Confirm you now have a release commit with the format `chore(release): X.X.X` and there are updates to
    - `package.json`
    - `CHANGELOG.md`
+
    If there are issues with the file updates you can correct them and squish any fixes into the `chore(release): X.X.X` commit
 1. Push the **SINGLE** commit to `origin` `main`
 1. Using the [Curiosity GitHub releases interface](https://github.com/RedHatInsights/curiosity-frontend/releases)
