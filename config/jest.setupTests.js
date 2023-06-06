@@ -1,7 +1,8 @@
 import React from 'react';
 import * as reactRedux from 'react-redux';
-import { configure, mount, shallow } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+// import { configure, mount, shallow } from 'enzyme';
+// import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -15,7 +16,7 @@ setupDotenvFilesForEnv({ env: process.env.NODE_ENV });
 /**
  * Set enzyme adapter.
  */
-configure({ adapter: new Adapter() });
+// configure({ adapter: new Adapter() });
 
 /**
  * Conditionally skip "it" test statements.
@@ -153,15 +154,14 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 global.mountHookComponent = async (component, { callback, ...options } = {}) => {
   let mountedComponent = null;
   await act(async () => {
-    mountedComponent = mount(component, options);
+    const { container } = await render(component, options);
+    mountedComponent = container;
   });
-  mountedComponent?.update();
 
   if (typeof callback === 'function') {
     await act(async () => {
       await callback({ component: mountedComponent });
     });
-    mountedComponent?.update();
   }
 
   return mountedComponent;
@@ -182,15 +182,14 @@ global.mountHookWrapper = global.mountHookComponent;
 global.shallowHookComponent = async (component, { callback, ...options } = {}) => {
   let mountedComponent = null;
   await act(async () => {
-    mountedComponent = shallow(component, options);
+    const { container } = await render(component, options);
+    mountedComponent = container;
   });
-  mountedComponent?.update();
 
   if (typeof callback === 'function') {
     await act(async () => {
       await callback({ component: mountedComponent });
     });
-    mountedComponent?.update();
   }
 
   return mountedComponent;
@@ -209,6 +208,7 @@ global.shallowHookWrapper = global.shallowHookComponent;
 global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   let result;
   let mountedHook;
+  let unmountHook;
   let spyUseSelector;
   const Hook = () => {
     result = useHook();
@@ -218,12 +218,13 @@ global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
     if (state) {
       spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
     }
-    mountedHook = mount(<Hook />);
+    const { container, unmount } = await render(<Hook />);
+    mountedHook = container;
+    unmountHook = unmount;
   });
-  mountedHook?.update();
 
   const unmount = async () => {
-    await act(async () => mountedHook.unmount());
+    await act(async () => unmountHook());
   };
 
   if (state) {
@@ -253,8 +254,8 @@ global.shallowHook = (useHook = Function.prototype, { state } = {}) => {
     spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
   }
 
-  const shallowHook = shallow(<Hook />);
-  const unmount = () => shallowHook.unmount();
+  const { unmount: unmountHook } = render(<Hook />);
+  const unmount = () => unmountHook();
 
   if (state) {
     spyUseSelector.mockClear();
