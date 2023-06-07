@@ -2,7 +2,7 @@ import React from 'react';
 import * as reactRedux from 'react-redux';
 // import { configure, mount, shallow } from 'enzyme';
 // import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { render } from '@testing-library/react';
+import { prettyDOM, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -153,9 +153,11 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
  */
 global.mountHookComponent = async (component, { callback, ...options } = {}) => {
   let mountedComponent = null;
+  let setPropsProps = Function.prototype;
   await act(async () => {
-    const { container } = await render(component, options);
+    const { container, rerender } = await render(component, options);
     mountedComponent = container;
+    setPropsProps = rerender;
   });
 
   if (typeof callback === 'function') {
@@ -164,7 +166,26 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
     });
   }
 
-  return mountedComponent;
+  // return mountedComponent;
+  const mount = document.createElement('mount');
+  mount.innerHTML = mountedComponent.innerHTML;
+  mount.setProps = async props => {
+    await act(async () => {
+      await setPropsProps(<component {...props} />);
+    });
+  };
+
+  mount.find = selector => {
+    if (!React.isValidElement(selector)) {
+      return mount.querySelector(selector);
+    }
+
+    return React.Children.toArray(mountedComponent)?.filter(
+      child => React.isValidElement(child) && child.type === selector
+    );
+  };
+
+  return mount;
 };
 
 global.mountHookWrapper = global.mountHookComponent;
@@ -180,10 +201,15 @@ global.mountHookWrapper = global.mountHookComponent;
  * @returns {Promise<null>}
  */
 global.shallowHookComponent = async (component, { callback, ...options } = {}) => {
-  let mountedComponent = null;
+  let mountedComponent = null; // document.createElement('span');
+  let setPropsProps = Function.prototype;
   await act(async () => {
-    const { container } = await render(component, options);
+    const { container, rerender } = await render(component, {
+      baseElement: mountedComponent,
+      ...options
+    });
     mountedComponent = container;
+    setPropsProps = rerender;
   });
 
   if (typeof callback === 'function') {
@@ -192,7 +218,81 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
     });
   }
 
-  return mountedComponent;
+  // const fragment = document.createElement('shallow');
+  // fragment.append(mountedComponent?.children);
+
+  const shallow = document.createElement('shallow');
+  shallow.innerHTML = mountedComponent.innerHTML;
+  shallow.setProps = async props => {
+    await act(async () => {
+      await setPropsProps(<component {...props} />);
+    });
+  };
+
+  shallow.find = selector => {
+    if (!React.isValidElement(selector)) {
+      return shallow.querySelector(selector);
+    }
+
+    return React.Children.toArray(mountedComponent)?.filter(
+      child => React.isValidElement(child) && child.type === selector
+    );
+  };
+
+  return shallow;
+
+  /*
+  mountedComponent.setProps = async props => {
+    await act(async () => {
+      await setPropsProps(<component {...props} />);
+    });
+  };
+
+  return mountedComponent.innerHTML;
+  */
+
+  /*
+  mountedComponent.setProps = async props => {
+    // setPropsProps(<component {...props} />);
+    // let updatedComponent = null;
+    await act(async () => {
+      await setPropsProps(<component {...props} />);
+      // eslint-disable-next-line no-param-reassign
+      // component.setProps = setProps;
+      // updatedComponent =
+    });
+
+    // mountedComponent.setProps = setProps;
+    return mountedComponent;
+    /*
+    await act(async () => {
+      const { container } = await render(<component {...props} />, options);
+      updatedComponent = container;
+    });
+     * /
+    /*
+    const Component = component;
+    const { container: updatedComponent } = await setPropsProps(<Component {...props} />);
+    * /
+
+    // return updatedComponent;
+  };
+  */
+
+  // mountedComponent.setProps = setProps;
+  /*
+  const fragment = document.createDocumentFragment();
+  fragment.append(mountedComponent?.children);
+  mountedComponent.setProps = async props => {
+    await act(async () => {
+      await setPropsProps(<component {...props} />);
+    });
+  };
+  */
+  // const wrapper = document.createElement('Shallow');
+  // wrapper.append(mountedComponent?.children);
+
+  // return wrapper;
 };
 
 global.shallowHookWrapper = global.shallowHookComponent;
