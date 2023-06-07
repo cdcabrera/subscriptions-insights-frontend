@@ -2,7 +2,7 @@ import React from 'react';
 import * as reactRedux from 'react-redux';
 // import { configure, mount, shallow } from 'enzyme';
 // import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { prettyDOM, render } from '@testing-library/react';
+import { prettyDOM, queries, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -154,10 +154,12 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 global.mountHookComponent = async (component, { callback, ...options } = {}) => {
   let mountedComponent = null;
   let setPropsProps = Function.prototype;
+  let renderRest = {};
   await act(async () => {
-    const { container, rerender } = await render(component, options);
+    const { container, rerender, ...rest } = await render(component, { queries, ...options });
     mountedComponent = container;
     setPropsProps = rerender;
+    renderRest = rest;
   });
 
   if (typeof callback === 'function') {
@@ -176,14 +178,47 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
   };
 
   mount.find = selector => {
-    if (!React.isValidElement(selector)) {
-      return mount.querySelector(selector);
+    if (React.isValidElement(React.createElement(selector))) {
+      const p = [];
+      const loop = comp => {
+        React.Children.toArray(comp).forEach(child => {
+          if (React.isValidElement(child) && child.type === selector) {
+            p.push(child);
+          }
+
+          if (child?.props?.children) {
+            loop(child?.props?.children);
+          }
+        });
+      };
+
+      loop(component);
+
+      return p;
+
+      /*
+      React.Children.toArray(component)?.filter(child => {
+        console.log('>>>>>>>> CHILD', child);
+
+        if (React.isValidElement(child)) {
+          return child.type === selector;
+        }
+
+        return false;
+      });
+      */
     }
 
-    return React.Children.toArray(mountedComponent)?.filter(
-      child => React.isValidElement(child) && child.type === selector
-    );
+    try {
+      return mount?.querySelector(selector);
+    } catch (e) {
+      return undefined;
+    }
   };
+
+  Object.entries(renderRest).forEach(([key, value]) => {
+    mount[key] = value;
+  });
 
   return mount;
 };
@@ -201,8 +236,32 @@ global.mountHookWrapper = global.mountHookComponent;
  * @returns {Promise<null>}
  */
 global.shallowHookComponent = async (component, { callback, ...options } = {}) => {
+  /*
+  console.log(
+    '>>>>>>>>>>>>>>> displayName',
+    component?.displayName,
+    component?.name,
+    component?.type.displayName,
+    component?.type.name,
+    // component.$$typeof,
+    component.$$typeof.displayName,
+    component.$$typeof.name
+  );
+  */
   let mountedComponent = null; // document.createElement('span');
   let setPropsProps = Function.prototype;
+  const componentInfo = {
+    displayName: component?.displayName || component?.name || component?.type.displayName || component?.type.name,
+    props: {
+      ...component?.props,
+      children: React.Children.toArray(component?.props?.children).map(({ $$typeof: _type, type, props }) => ({
+        type,
+        displayName: type?.displayName || type?.name || _type?.displayName || _type?.name,
+        // props: JSON.stringify(props || {}, null, 2)
+        props
+      }))
+    }
+  };
   await act(async () => {
     const { container, rerender } = await render(component, {
       baseElement: mountedComponent,
@@ -210,6 +269,8 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
     });
     mountedComponent = container;
     setPropsProps = rerender;
+
+    // console.log('>>>>>>> REST', componentInfo);
   });
 
   if (typeof callback === 'function') {
@@ -220,8 +281,8 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
 
   // const fragment = document.createElement('shallow');
   // fragment.append(mountedComponent?.children);
-
-  const shallow = document.createElement('shallow');
+  const shallow = document.createElement(componentInfo.displayName || 'shallow');
+  shallow.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
   shallow.innerHTML = mountedComponent.innerHTML;
   shallow.setProps = async props => {
     await act(async () => {
@@ -234,9 +295,15 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
       return shallow.querySelector(selector);
     }
 
-    return React.Children.toArray(mountedComponent)?.filter(
-      child => React.isValidElement(child) && child.type === selector
-    );
+    return React.Children.toArray(mountedComponent)?.filter(child => {
+      console.log('>>>>>>>> CHILD', child);
+
+      if (React.isValidElement(child)) {
+        return child.type === selector;
+      }
+
+      return false;
+    });
   };
 
   return shallow;
