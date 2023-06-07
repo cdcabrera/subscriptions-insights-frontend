@@ -142,7 +142,7 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 };
 
 /**
- * Enzyme for components using hooks.
+ * React testing for components using hooks.
  *
  * @param {React.ReactNode} component
  * @param {object} options
@@ -152,6 +152,26 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
  * @returns {Promise<null>}
  */
 global.mountHookComponent = async (component, { callback, ...options } = {}) => {
+  const getDisplayName = reactComponent =>
+    reactComponent?.displayName ||
+    reactComponent?.$$typeof?.displayName ||
+    reactComponent?.$$typeof?.name ||
+    reactComponent?.name ||
+    reactComponent?.type.displayName ||
+    reactComponent?.type.name;
+
+  const componentInfo = {
+    displayName: getDisplayName(component),
+    props: {
+      ...component?.props,
+      children: React.Children.toArray(component?.props?.children).map(child => ({
+        displayName: getDisplayName(child),
+        props: child?.props,
+        type: child?.type
+      }))
+    }
+  };
+
   let mountedComponent = null;
   let setPropsProps = Function.prototype;
   let renderRest = {};
@@ -168,127 +188,18 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
     });
   }
 
-  // return mountedComponent;
-  const mount = document.createElement('mount');
+  const mount = document.createElement(componentInfo?.displayName || 'element');
+  mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
   mount.innerHTML = mountedComponent.innerHTML;
+  mount.props = componentInfo.props;
   mount.setProps = async props => {
+    // const Component = component;
     await act(async () => {
       await setPropsProps(<component {...props} />);
     });
   };
 
   mount.find = selector => {
-    if (React.isValidElement(React.createElement(selector))) {
-      const p = [];
-      const loop = comp => {
-        React.Children.toArray(comp).forEach(child => {
-          if (React.isValidElement(child) && child.type === selector) {
-            p.push(child);
-          }
-
-          if (child?.children || child?.props?.children) {
-            loop(child?.children || child?.props?.children);
-          }
-        });
-      };
-
-      loop(component);
-
-      return p;
-
-      /*
-      React.Children.toArray(component)?.filter(child => {
-        console.log('>>>>>>>> CHILD', child);
-
-        if (React.isValidElement(child)) {
-          return child.type === selector;
-        }
-
-        return false;
-      });
-      */
-    }
-
-    try {
-      return mount?.querySelector(selector);
-    } catch (e) {
-      return undefined;
-    }
-  };
-
-  Object.entries(renderRest).forEach(([key, value]) => {
-    mount[key] = value;
-  });
-
-  return mount;
-};
-
-global.mountHookWrapper = global.mountHookComponent;
-
-/**
- * Enzyme for components using hooks.
- *
- * @param {React.ReactNode} component
- * @param {object} options
- * @param {Function} options.callback
- * @param {object} options.options
- *
- * @returns {Promise<null>}
- */
-global.shallowHookComponent = async (component, { callback, ...options } = {}) => {
-  /*
-  console.log(
-    '>>>>>>>>>>>>>>> displayName',
-    component?.displayName,
-    component?.name,
-    component?.type.displayName,
-    component?.type.name,
-    // component.$$typeof,
-    component.$$typeof.displayName,
-    component.$$typeof.name
-  );
-  */
-  let mountedComponent = null; // document.createElement('span');
-  let setPropsProps = Function.prototype;
-  let renderRest = {};
-  const componentInfo = {
-    displayName: component?.displayName || component?.name || component?.type.displayName || component?.type.name,
-    props: {
-      ...component?.props,
-      children: React.Children.toArray(component?.props?.children).map(({ $$typeof: _type, type, props }) => ({
-        type,
-        displayName: type?.displayName || type?.name || _type?.displayName || _type?.name,
-        // props: JSON.stringify(props || {}, null, 2)
-        props
-      }))
-    }
-  };
-  await act(async () => {
-    const { container, rerender, ...rest } = await render(component, { queries, ...options });
-    mountedComponent = container;
-    setPropsProps = rerender;
-    renderRest = rest;
-    // console.log('>>>>>>> REST', componentInfo);
-  });
-
-  if (typeof callback === 'function') {
-    await act(async () => {
-      await callback({ component: mountedComponent });
-    });
-  }
-
-  // const fragment = document.createElement('shallow');
-  // fragment.append(mountedComponent?.children);
-  const shallow = document.createElement(componentInfo.displayName || 'shallow');
-  shallow.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
-  shallow.innerHTML = mountedComponent.innerHTML;
-  shallow.setProps = async props => {
-    await act(async () => {
-      await setPropsProps(<component {...props} />);
-    });
-  };
-
-  shallow.find = selector => {
     if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
       const p = [];
       const loop = comp => {
@@ -309,88 +220,41 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
     }
 
     try {
-      return component?.querySelector(selector);
+      return mount?.querySelector(selector);
     } catch (e) {
       return [];
     }
-    /*
-    if (!React.isValidElement(selector)) {
-      return shallow.querySelector(selector);
-    }
-
-    return React.Children.toArray(mountedComponent)?.filter(child => {
-      console.log('>>>>>>>> CHILD', child);
-
-      if (React.isValidElement(child)) {
-        return child.type === selector;
-      }
-
-      return false;
-    });
-    */
   };
 
   Object.entries(renderRest).forEach(([key, value]) => {
-    shallow[key] = value;
+    mount[key] = value;
+    /*
+    if (typeof value === 'function') {
+      mount[key] = async (...args) => value(...args);
+    } else {
+      mount[key] = value;
+    }
+    */
   });
 
-  return shallow;
-
-  /*
-  mountedComponent.setProps = async props => {
-    await act(async () => {
-      await setPropsProps(<component {...props} />);
-    });
-  };
-
-  return mountedComponent.innerHTML;
-  */
-
-  /*
-  mountedComponent.setProps = async props => {
-    // setPropsProps(<component {...props} />);
-    // let updatedComponent = null;
-    await act(async () => {
-      await setPropsProps(<component {...props} />);
-      // eslint-disable-next-line no-param-reassign
-      // component.setProps = setProps;
-      // updatedComponent =
-    });
-
-    // mountedComponent.setProps = setProps;
-    return mountedComponent;
-    /*
-    await act(async () => {
-      const { container } = await render(<component {...props} />, options);
-      updatedComponent = container;
-    });
-     * /
-    /*
-    const Component = component;
-    const { container: updatedComponent } = await setPropsProps(<Component {...props} />);
-    * /
-
-    // return updatedComponent;
-  };
-  */
-
-  // mountedComponent.setProps = setProps;
-  /*
-  const fragment = document.createDocumentFragment();
-  fragment.append(mountedComponent?.children);
-  mountedComponent.setProps = async props => {
-    await act(async () => {
-      await setPropsProps(<component {...props} />);
-    });
-  };
-  */
-  // const wrapper = document.createElement('Shallow');
-  // wrapper.append(mountedComponent?.children);
-
-  // return wrapper;
+  return mount;
 };
 
-global.shallowHookWrapper = global.shallowHookComponent;
+global.mountHookWrapper = global.mountHookComponent;
+
+/**
+ * Enzyme for components using hooks.
+ *
+ * @param {React.ReactNode} component
+ * @param {object} options
+ * @param {Function} options.callback
+ * @param {object} options.options
+ *
+ * @returns {Promise<null>}
+ */
+global.shallowHookComponent = global.mountHookComponent;
+
+global.shallowHookWrapper = global.mountHookComponent;
 
 /**
  * Fire a hook, return the result.
