@@ -1,8 +1,6 @@
 import React from 'react';
 import * as reactRedux from 'react-redux';
-// import { configure, mount, shallow } from 'enzyme';
-// import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { prettyDOM, queries, render } from '@testing-library/react';
+import { queries, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -193,7 +191,6 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
   mount.innerHTML = mountedComponent.innerHTML;
   mount.props = componentInfo.props;
   mount.setProps = async props => {
-    // const Component = component;
     await act(async () => {
       await setPropsProps(<component {...props} />);
     });
@@ -228,13 +225,6 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
 
   Object.entries(renderRest).forEach(([key, value]) => {
     mount[key] = value;
-    /*
-    if (typeof value === 'function') {
-      mount[key] = async (...args) => value(...args);
-    } else {
-      mount[key] = value;
-    }
-    */
   });
 
   return mount;
@@ -266,7 +256,6 @@ global.shallowHookWrapper = global.mountHookComponent;
  */
 global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   let result;
-  let mountedHook;
   let unmountHook;
   let spyUseSelector;
   const Hook = () => {
@@ -277,8 +266,7 @@ global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
     if (state) {
       spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
     }
-    const { container, unmount } = await render(<Hook />);
-    mountedHook = container;
+    const { unmount } = await render(<Hook />);
     unmountHook = unmount;
   });
 
@@ -293,72 +281,15 @@ global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   return { unmount, result };
 };
 
-/**
- * Fire a hook, return the result.
- *
- * @param {Function} useHook
- * @param {object} options
- * @param {object} options.state An object representing a mock Redux store's state.
- * @returns {*}
- */
-global.shallowHook = (useHook = Function.prototype, { state } = {}) => {
-  let result;
-  let spyUseSelector;
-  const Hook = () => {
-    result = useHook();
-    return null;
-  };
-
-  if (state) {
-    spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
-  }
-
-  const { unmount: unmountHook } = render(<Hook />);
-  const unmount = () => unmountHook();
-
-  if (state) {
-    spyUseSelector.mockClear();
-  }
-
-  return { unmount, result };
-};
-
-/**
- * Generate a mock window location object, allow async.
- *
- * @param {Function} callback
- * @param {object} options
- * @param {string} options.url
- * @param {object} options.location
- * @returns {Promise<void>}
- */
-global.mockWindowLocation = async (
-  callback = Function.prototype,
-  { url = 'https://ci.foo.redhat.com/subscriptions/rhel', location: locationProps = {} } = {}
-) => {
-  const updatedUrl = new URL(url);
-  const updatedLocation = {
-    href: updatedUrl.href,
-    search: updatedUrl.search,
-    hash: updatedUrl.hash,
-    pathname: updatedUrl.pathname,
-    replace: Function.prototype,
-    ...locationProps
-  };
-
-  const { mockClear } = mockObjectProperty(window, 'location', updatedLocation);
-  await callback(updatedLocation);
-
-  return {
-    mockClear
-  };
-};
+global.shallowHook = global.mountHook;
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging
 // ToDo: revisit squashing "popper" alerts
 /*
  * For applying a global Jest "beforeAll", based on
- * jest-prop-type-error, https://www.npmjs.com/package/jest-prop-type-error
+ * - consoledot/platform console messaging
+ * - jest-prop-type-error, https://www.npmjs.com/package/jest-prop-type-error
+ * - PF popper alerts
  */
 beforeAll(() => {
   const { error, group, log } = console;
