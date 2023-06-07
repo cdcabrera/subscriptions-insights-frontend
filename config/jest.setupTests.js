@@ -186,8 +186,8 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
             p.push(child);
           }
 
-          if (child?.props?.children) {
-            loop(child?.props?.children);
+          if (child?.children || child?.props?.children) {
+            loop(child?.children || child?.props?.children);
           }
         });
       };
@@ -250,6 +250,7 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
   */
   let mountedComponent = null; // document.createElement('span');
   let setPropsProps = Function.prototype;
+  let renderRest = {};
   const componentInfo = {
     displayName: component?.displayName || component?.name || component?.type.displayName || component?.type.name,
     props: {
@@ -263,13 +264,10 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
     }
   };
   await act(async () => {
-    const { container, rerender } = await render(component, {
-      baseElement: mountedComponent,
-      ...options
-    });
+    const { container, rerender, ...rest } = await render(component, { queries, ...options });
     mountedComponent = container;
     setPropsProps = rerender;
-
+    renderRest = rest;
     // console.log('>>>>>>> REST', componentInfo);
   });
 
@@ -291,6 +289,31 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
   };
 
   shallow.find = selector => {
+    if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
+      const p = [];
+      const loop = comp => {
+        React.Children.toArray(comp).forEach(child => {
+          if (React.isValidElement(child) && child.type === selector) {
+            p.push(child);
+          }
+
+          if (child?.children || child?.props?.children) {
+            loop(child?.children || child?.props?.children);
+          }
+        });
+      };
+
+      loop(component);
+
+      return p;
+    }
+
+    try {
+      return component?.querySelector(selector);
+    } catch (e) {
+      return [];
+    }
+    /*
     if (!React.isValidElement(selector)) {
       return shallow.querySelector(selector);
     }
@@ -304,7 +327,12 @@ global.shallowHookComponent = async (component, { callback, ...options } = {}) =
 
       return false;
     });
+    */
   };
+
+  Object.entries(renderRest).forEach(([key, value]) => {
+    shallow[key] = value;
+  });
 
   return shallow;
 
