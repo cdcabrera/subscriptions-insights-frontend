@@ -192,7 +192,6 @@ global.mountHookComponent = async (testComponent, { callback, ...options } = {})
   mount.props = componentInfo.props;
   mount.setProps = async props => {
     await act(async () => {
-      // const Component = p => <component {...p} />;
       await setPropsProps(<testComponent {...props} />);
     });
   };
