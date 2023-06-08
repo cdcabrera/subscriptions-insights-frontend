@@ -111,8 +111,6 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
               ...filterSettings
             }
           ],
-          // stringId: (isMultiMetric && !isMultiGraph && productId) || baseFilterSettings.id
-          // string: 'balls'
           productId,
           stringId: baseFilterSettings.id
         }
@@ -137,11 +135,6 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         lastFiltersSettingsEntry.stringId = `${lastFiltersSettingsEntry.groupMetric.join('_')}_${
           lastFiltersSettingsEntry.productId
         }`;
-
-        console.log(
-          '>>>>> string 2',
-          `${lastFiltersSettingsEntry.groupMetric.join('_')}_${lastFiltersSettingsEntry.productId}`
-        );
       }
     }
   };
