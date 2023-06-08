@@ -142,14 +142,14 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 /**
  * React testing for components using hooks.
  *
- * @param {React.ReactNode} component
+ * @param {React.ReactNode} testComponent
  * @param {object} options
  * @param {Function} options.callback
  * @param {object} options.options
  *
  * @returns {Promise<null>}
  */
-global.mountHookComponent = async (component, { callback, ...options } = {}) => {
+global.mountHookComponent = async (testComponent, { callback, ...options } = {}) => {
   const getDisplayName = reactComponent =>
     reactComponent?.displayName ||
     reactComponent?.$$typeof?.displayName ||
@@ -159,10 +159,10 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
     reactComponent?.type.name;
 
   const componentInfo = {
-    displayName: getDisplayName(component),
+    displayName: getDisplayName(testComponent),
     props: {
-      ...component?.props,
-      children: React.Children.toArray(component?.props?.children).map(child => ({
+      ...testComponent?.props,
+      children: React.Children.toArray(testComponent?.props?.children).map(child => ({
         displayName: getDisplayName(child),
         props: child?.props,
         type: child?.type
@@ -174,7 +174,7 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
   let setPropsProps = Function.prototype;
   let renderRest = {};
   await act(async () => {
-    const { container, rerender, ...rest } = await render(component, { queries, ...options });
+    const { container, rerender, ...rest } = await render(testComponent, { queries, ...options });
     mountedComponent = container;
     setPropsProps = rerender;
     renderRest = rest;
@@ -192,7 +192,8 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
   mount.props = componentInfo.props;
   mount.setProps = async props => {
     await act(async () => {
-      await setPropsProps(<component {...props} />);
+      // const Component = p => <component {...p} />;
+      await setPropsProps(<testComponent {...props} />);
     });
   };
 
@@ -211,8 +212,7 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
         });
       };
 
-      loop(component);
-
+      loop(testComponent);
       return p;
     }
 
@@ -232,16 +232,6 @@ global.mountHookComponent = async (component, { callback, ...options } = {}) => 
 
 global.mountHookWrapper = global.mountHookComponent;
 
-/**
- * Enzyme for components using hooks.
- *
- * @param {React.ReactNode} component
- * @param {object} options
- * @param {Function} options.callback
- * @param {object} options.options
- *
- * @returns {Promise<null>}
- */
 global.shallowHookComponent = global.mountHookComponent;
 
 global.shallowHookWrapper = global.mountHookComponent;
@@ -290,6 +280,7 @@ global.shallowHook = global.mountHook;
  * - consoledot/platform console messaging
  * - jest-prop-type-error, https://www.npmjs.com/package/jest-prop-type-error
  * - PF popper alerts
+ * - mountHookComponent, test function testComponent messaging
  */
 beforeAll(() => {
   const { error, group, log } = console;
@@ -310,6 +301,10 @@ beforeAll(() => {
   interceptConsoleMessaging(error, (message, ...args) => {
     if (/(Invalid prop|Failed prop type)/gi.test(message)) {
       throw new Error(message);
+    }
+
+    if (/<testComponent/gi.test(message) || args?.[0] === 'testComponent') {
+      return false;
     }
 
     return !/(Not implemented: navigation)/gi.test(message) && !/Popper/gi.test(args?.[0]);
