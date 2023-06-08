@@ -53,6 +53,8 @@ const GraphCardChart = ({
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
   const { pending, error, dataSets = [] } = useAliasGetMetrics();
 
+  console.log('>>>>>> string id', stringId);
+
   return (
     <Card isPlain className="curiosity-usage-graph">
       <CardHeader>

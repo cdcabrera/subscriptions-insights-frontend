@@ -90,7 +90,8 @@ const GraphCardChartLegend = ({
 
   return (
     <React.Fragment>
-      {datum.dataSets.map(({ id, isThreshold, stroke: color, data = [] }, index) => {
+      {datum.dataSets.map(({ id, isThreshold, stroke: color, data = [], ...rest }, index) => {
+        console.log('>>>>> REST', rest, id);
         const isDisabled =
           !data.find(({ y, hasData }) => (y >= 0 && hasData === true) || (y >= 0 && isThreshold === true)) || false;
 
