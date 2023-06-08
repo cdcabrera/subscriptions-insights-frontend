@@ -48,17 +48,19 @@ const GraphCardChart = ({
 }) => {
   const updatedActionDisplay = useAliasGraphCardActions();
   const { settings = {} } = useAliasGraphCardContext();
-  const { groupMetric, stringId } = settings;
+  const { stringId } = settings;
 
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
   const { pending, error, dataSets = [] } = useAliasGetMetrics();
+
+  console.log('>>>>>> string id', stringId);
 
   return (
     <Card isPlain className="curiosity-usage-graph">
       <CardHeader>
         <CardTitle>
           <Title headingLevel="h2" size="lg">
-            {t('curiosity-graph.cardHeading', { context: [stringId, groupMetric.join('-')] })}
+            {t('curiosity-graph.cardHeading', { context: stringId })}
             <GraphCardChartTitleTooltip />
           </Title>
         </CardTitle>

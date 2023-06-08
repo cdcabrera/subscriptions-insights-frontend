@@ -24,9 +24,10 @@ import { dateHelpers, helpers } from '../../common';
  */
 const generateChartIds = ({ isCapacity, metric, productId, query = {} } = {}) => {
   const metricCategory = query?.[RHSM_API_QUERY_SET_TYPES.CATEGORY] || undefined;
-  return `${(isCapacity && 'threshold_') || ''}${metric}${(metricCategory && `_${metricCategory}`) || ''}${
-    (productId && `_${productId}`) || ''
-  }`;
+  const billingCategory = query?.[RHSM_API_QUERY_SET_TYPES.BILLING_CATEGORY] || undefined;
+  return `${(isCapacity && 'threshold_') || ''}${metric}${(billingCategory && `_${billingCategory}`) || ''}${
+    (metricCategory && `_${metricCategory}`) || ''
+  }${(productId && `_${productId}`) || ''}`;
 };
 
 /**
@@ -60,6 +61,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
     if (!metric) {
       return;
     }
+    // const { isMultiMetric, isMultiGraph, isFirst, isLast, ...remainingCombinedSettings } = combinedSettings;
     const { isMultiMetric, isFirst, isLast, ...remainingCombinedSettings } = combinedSettings;
     const updatedChartType = filterSettings?.chartType || ChartTypeVariant.area;
     const isThreshold = filterSettings?.chartType === ChartTypeVariant.threshold;
@@ -98,6 +100,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
           }),
           ...remainingCombinedSettings,
           isMetricDisplay: remainingCombinedSettings?.isMetricDisplay ?? remainingCombinedSettings?.cards?.length > 0,
+          // isMultiGraph,
           isMultiMetric,
           isStandalone: undefined,
           metric: undefined,
@@ -108,7 +111,10 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
               ...filterSettings
             }
           ],
-          stringId: (isMultiMetric && productId) || baseFilterSettings.id
+          // stringId: (isMultiMetric && !isMultiGraph && productId) || baseFilterSettings.id
+          // string: 'balls'
+          productId,
+          stringId: baseFilterSettings.id
         }
       });
     } else {
@@ -126,6 +132,17 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
     if (isLast) {
       const lastFiltersSettingsEntry = filtersSettings?.[filtersSettings.length - 1]?.settings;
       lastFiltersSettingsEntry.groupMetric = Array.from(lastFiltersSettingsEntry?.groupMetric).sort();
+
+      if (lastFiltersSettingsEntry.isMultiMetric) {
+        lastFiltersSettingsEntry.stringId = `${lastFiltersSettingsEntry.groupMetric.join('_')}_${
+          lastFiltersSettingsEntry.productId
+        }`;
+
+        console.log(
+          '>>>>> string 2',
+          `${lastFiltersSettingsEntry.groupMetric.join('_')}_${lastFiltersSettingsEntry.productId}`
+        );
+      }
     }
   };
 
@@ -143,6 +160,7 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
             isFirst: index === 0,
             isLast: groupedMetrics.length - 1 === index,
             isMultiMetric: groupedMetrics.length > 1
+            // isMultiGraph: filters?.length > 1
           }
         });
       });
@@ -156,7 +174,8 @@ const generateChartSettings = ({ filters = [], settings: graphCardSettings = {},
         ...remainingSettings,
         isFirst: true,
         isLast: true,
-        isMultiMetric: false
+        isMultiMetric: false,
+        isMultiGraph: false
       }
     });
   });
