@@ -112,12 +112,52 @@ describe('Authentication Component', () => {
 
     expect(component).toMatchSnapshot('403 redirect error');
 
+    await component.setProps(
+      <Authentication
+        useGetAuthorization={() => ({
+          error: true,
+          pending: false,
+          data: {
+            authorized: {},
+            errorCodes: [],
+            errorStatus: 403
+          }
+        })}
+      >
+        <span className="test">lorem</span>
+      </Authentication>
+    );
+    /*
     component.setProps({
-      session: {
-        ...props.session,
-        errorCodes: []
-      }
+      useGetAuthorization: () => ({
+        error: true,
+        pending: false,
+        data: {
+          authorized: {},
+          errorCodes: [rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN],
+          errorStatus: 403
+        }
+      })
     });
+    */
+
+    /*
+    const again = await shallowHookComponent(
+      <Authentication
+        useGetAuthorization={() => ({
+          error: true,
+          pending: false,
+          data: {
+            authorized: {},
+            errorCodes: [],
+            errorStatus: 403
+          }
+        })}
+      >
+        <span className="test">lorem</span>
+      </Authentication>
+    );
+    */
 
     expect(component).toMatchSnapshot('403 error');
   });
@@ -140,7 +180,7 @@ describe('Authentication Component', () => {
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('401 error');
+    expect(component.getByText('You do not have access to Subscriptions')).toMatchSnapshot('401 error');
   });
 
   it('should render a component pending', async () => {
@@ -184,6 +224,6 @@ describe('Authentication Component', () => {
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('authorized');
+    expect(component.find('span')).toMatchSnapshot('authorized');
   });
 });

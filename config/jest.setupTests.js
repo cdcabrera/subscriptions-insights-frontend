@@ -171,29 +171,34 @@ global.mountHookComponent = async (testComponent, { callback, ...options } = {})
   };
 
   let mountedComponent = null;
-  let setPropsProps = Function.prototype;
+  let setPropsProps = undefined;
   let renderRest = {};
+
+  const { container, rerender, ...rest } = render(testComponent, { queries, ...options });
+  mountedComponent = container;
+  setPropsProps = rerender;
+  renderRest = rest;
+
+  /*
   await act(async () => {
-    const { container, rerender, ...rest } = await render(testComponent, { queries, ...options });
-    mountedComponent = container;
-    setPropsProps = rerender;
-    renderRest = rest;
+
   });
+  */
 
   if (typeof callback === 'function') {
-    await act(async () => {
-      await callback({ component: mountedComponent });
-    });
+    // await act(async () => {
+    await callback({ component: mountedComponent });
+    // });
   }
 
   const mount = document.createElement(componentInfo?.displayName || 'element');
   mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
   mount.innerHTML = mountedComponent.innerHTML;
   mount.props = componentInfo.props;
-  mount.setProps = async props => {
-    await act(async () => {
-      await setPropsProps(<testComponent {...props} />);
-    });
+  mount.setPropso = p => {
+    // await act(async () => {
+    setPropsProps(p);
+    // });
   };
 
   mount.find = selector => {
