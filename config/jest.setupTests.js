@@ -245,12 +245,14 @@ global.shallowHookWrapper = global.mountHookComponent;
  */
 global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   let result;
-  let unmountHook;
   let spyUseSelector;
+  let unmountHook;
+
   const Hook = () => {
     result = useHook();
     return null;
   };
+
   await act(async () => {
     if (state) {
       spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
