@@ -832,7 +832,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 50.090125,
- *           "has_data": null
+ *           "has_data": true
  *         },
  *         {
  *           "date": "2020-07-12T00:00:00Z",
@@ -1027,7 +1027,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 50.090125,
- *           "has_data": null
+ *           "has_data": true
  *         },
  *         {
  *           "date": "2020-07-12T00:00:00Z",
@@ -1208,7 +1208,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 50,
- *           "has_data": false
+ *           "has_data": true
  *         },
  *         {
  *           "date": "2020-07-12T00:00:00Z",
@@ -1392,7 +1392,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 50,
- *           "has_data": false
+ *           "has_data": true
  *         },
  *         {
  *           "date": "2020-07-12T00:00:00Z",
@@ -1576,7 +1576,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 50,
- *           "has_data": false
+ *           "has_data": true
  *         },
  *         {
  *           "date": "2020-07-12T00:00:00Z",
@@ -1760,7 +1760,7 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 50,
- *           "has_data": false
+ *           "has_data": true
  *         },
  *         {
  *           "date": "2020-07-12T00:00:00Z",
@@ -2010,7 +2010,7 @@ const getGraphTally = (id, params = {}, options = {}) => {
  *         {
  *           "date": "2020-07-11T00:00:00Z",
  *           "value": 100,
- *           "has_data": null,
+ *           "has_data": true,
  *           "has_infinite_quantity": false
  *         },
  *         {
