@@ -313,7 +313,7 @@ const yAxisTickFormat = ({ callback, tick } = {}) => {
  */
 const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
   ...settings,
-  xAxisLabelIncrement: getChartXAxisLabelIncrement(granularity),
+  xAxisLabelIncrement: settings?.xAxisLabelIncrement ?? getChartXAxisLabelIncrement(granularity),
   xAxisTickFormat: ({ item, previousItem, tick }) =>
     xAxisTickFormat({
       callback: settings?.xAxisTickFormat,
