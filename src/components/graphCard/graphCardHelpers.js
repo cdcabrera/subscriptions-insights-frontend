@@ -329,12 +329,93 @@ const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
     })
 });
 
+/**
+ * Get daily and monthly totals from a data set.
+ *
+ * @param {object} params
+ * @param {object} params.dataSet
+ * @param {boolean} params.isCurrent
+ * @returns {{chartId: string, metricId: string, monthlyHasData: boolean, dailyValue: *, dailyDate: *,
+ *     monthlyValue: *, monthlyDate: *, dailyHasData: boolean}}
+ */
+const getDailyMonthlyTotals = ({ dataSet, isCurrent }) => {
+  const { data = [], id: firstChartId, metric: firstMetricId, meta = {} } = dataSet || {};
+  const { totalMonthlyDate: monthlyDate, totalMonthlyHasData: monthlyHasData, totalMonthlyValue: monthlyValue } = meta;
+
+  const {
+    date: currentDate,
+    hasData: currentHasData,
+    y: currentValue
+  } = data.find(({ isCurrentDate }) => isCurrentDate === true) || {};
+  const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
+
+  const dailyDate = isCurrent ? currentDate : lastDate;
+  const dailyHasData = isCurrent ? currentHasData : lastHasData;
+  const dailyValue = isCurrent ? currentValue : lastValue;
+
+  return {
+    chartId: firstChartId,
+    dailyDate,
+    dailyHasData,
+    dailyValue,
+    metricId: firstMetricId,
+    monthlyDate,
+    monthlyHasData,
+    monthlyValue
+  };
+};
+
+/**
+ * Get a remaining capacity from data sets.
+ *
+ * @param {object} params
+ * @param {Array} params.capacityData
+ * @param {Array} params.tallyData
+ * @returns {number}
+ */
+const getRemainingCapacity = ({ capacityData = [], tallyData = [] } = {}) => {
+  const findCurrentValue = data => data?.find(({ isCurrentDate }) => isCurrentDate === true)?.y;
+  const capacityCurrent = findCurrentValue(capacityData);
+  const tallyCurrent = findCurrentValue(tallyData);
+
+  const remaining = Number.parseInt(capacityCurrent, 10) - Number.parseInt(tallyCurrent, 10) || 0;
+  if (remaining >= 0) {
+    return remaining;
+  }
+
+  return 0;
+};
+
+/**
+ * Get a remaining overage from data sets.
+ *
+ * @param {object} params
+ * @param {Array} params.capacityData
+ * @param {Array} params.tallyData
+ * @returns {number}
+ */
+const getRemainingOverage = ({ capacityData = [], tallyData = [] } = {}) => {
+  const findCurrentValue = data => data?.find(({ isCurrentDate }) => isCurrentDate === true)?.y;
+  const capacityCurrent = findCurrentValue(capacityData);
+  const tallyCurrent = findCurrentValue(tallyData);
+
+  const remaining = Number.parseInt(tallyCurrent, 10) - Number.parseInt(capacityCurrent, 10) || 0;
+  if (remaining >= 0) {
+    return remaining;
+  }
+
+  return 0;
+};
+
 const graphCardHelpers = {
   generateChartIds,
   generateChartSettings,
   generateExtendedChartSettings,
   generateIsToolbarFilter,
   getChartXAxisLabelIncrement,
+  getDailyMonthlyTotals,
+  getRemainingCapacity,
+  getRemainingOverage,
   getTooltipDate,
   xAxisTickFormat,
   yAxisTickFormat
@@ -348,6 +429,9 @@ export {
   generateExtendedChartSettings,
   generateIsToolbarFilter,
   getChartXAxisLabelIncrement,
+  getDailyMonthlyTotals,
+  getRemainingCapacity,
+  getRemainingOverage,
   getTooltipDate,
   xAxisTickFormat,
   yAxisTickFormat
