@@ -1749,17 +1749,17 @@ const getGraphReports = (id, params = {}, options = {}) => {
  *         },
  *         {
  *           "date": "2020-07-09T00:00:00Z",
- *           "value": 1000,
+ *           "value": 1000000,
  *           "has_data": false
  *         },
  *         {
  *           "date": "2020-07-10T00:00:00Z",
- *           "value": 50,
+ *           "value": 1000000,
  *           "has_data": false
  *         },
  *         {
  *           "date": "2020-07-11T00:00:00Z",
- *           "value": 50,
+ *           "value": 1000000,
  *           "has_data": true
  *         },
  *         {

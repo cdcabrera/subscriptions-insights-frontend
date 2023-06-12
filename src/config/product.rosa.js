@@ -121,7 +121,42 @@ const config = {
               })
           },
           {
-            header: ({ dataSets = [], getRemainingCapacity } = {}) => {
+            header: ({ dataSets = [] } = {}) =>
+              translate('curiosity-graph.cardHeadingMetric', {
+                context: ['remainingCapacity', dataSets?.[0]?.display?.chartId],
+                testId: 'graphRemainingCapacityCard-header'
+              }),
+            body: ({ dataSets = [], getRemainingCapacity } = {}) => {
+              const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
+              const capacityData = dataSets.find(({ chartType }) =>
+                new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
+              )?.data;
+
+              const remainingCapacity = getRemainingCapacity({
+                capacityData,
+                tallyData
+              });
+
+              return translate(
+                'curiosity-graph.cardBodyMetric',
+                {
+                  context: ['total', dataSets?.[0]?.display?.dailyHasData && dataSets?.[0]?.display?.chartId],
+                  testId: 'graphRemainingCapacityCard-body',
+                  total: helpers
+                    .numberDisplay(remainingCapacity)
+                    ?.format({
+                      average: true,
+                      mantissa: 5,
+                      trimMantissa: true,
+                      lowPrecision: false
+                    })
+                    ?.toUpperCase()
+                },
+                [<strong title={remainingCapacity} aria-label={remainingCapacity} />]
+              );
+            },
+            /*
+            {
               const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
               const capacityData = dataSets.find(({ chartType }) =>
                 new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
@@ -133,7 +168,15 @@ const config = {
               });
 
               return `header string remaining ${dataSets?.[0]?.display?.metricId} capacity = ${remainingCapacity}`;
-            }
+            },
+            */
+            footer: ({ dataSets = [] } = {}) =>
+              translate('curiosity-graph.cardFooterMetric', {
+                date: moment
+                  .utc(dataSets?.[0]?.display?.dailyDate)
+                  .format(dateHelpers.timestampUTCTimeFormats.yearTimeShort),
+                testId: 'graphRemainingCapacityCard-footer'
+              })
           }
         ]
       }
@@ -198,7 +241,42 @@ const config = {
               })
           },
           {
-            header: ({ dataSets = [], getRemainingCapacity } = {}) => {
+            header: ({ dataSets = [] } = {}) =>
+              translate('curiosity-graph.cardHeadingMetric', {
+                context: ['remainingCapacity', dataSets?.[0]?.display?.chartId],
+                testId: 'graphRemainingCapacityCard-header'
+              }),
+            body: ({ dataSets = [], getRemainingCapacity } = {}) => {
+              const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
+              const capacityData = dataSets.find(({ chartType }) =>
+                new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
+              )?.data;
+
+              const remainingCapacity = getRemainingCapacity({
+                capacityData,
+                tallyData
+              });
+
+              return translate(
+                'curiosity-graph.cardBodyMetric',
+                {
+                  context: ['total', dataSets?.[0]?.display?.dailyHasData && dataSets?.[0]?.display?.chartId],
+                  testId: 'graphRemainingCapacityCard-body',
+                  total: helpers
+                    .numberDisplay(remainingCapacity)
+                    ?.format({
+                      average: true,
+                      mantissa: 5,
+                      trimMantissa: true,
+                      lowPrecision: false
+                    })
+                    ?.toUpperCase()
+                },
+                [<strong title={remainingCapacity} aria-label={remainingCapacity} />]
+              );
+            },
+            /*
+            {
               const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
               const capacityData = dataSets.find(({ chartType }) =>
                 new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
@@ -210,7 +288,15 @@ const config = {
               });
 
               return `header string remaining ${dataSets?.[0]?.display?.metricId} capacity = ${remainingCapacity}`;
-            }
+            },
+            */
+            footer: ({ dataSets = [] } = {}) =>
+              translate('curiosity-graph.cardFooterMetric', {
+                date: moment
+                  .utc(dataSets?.[0]?.display?.dailyDate)
+                  .format(dateHelpers.timestampUTCTimeFormats.yearTimeShort),
+                testId: 'graphRemainingCapacityCard-footer'
+              })
           }
         ]
       }
