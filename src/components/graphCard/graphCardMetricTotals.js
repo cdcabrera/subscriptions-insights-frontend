@@ -33,7 +33,7 @@ const GraphCardMetricTotals = ({
 }) => {
   const { settings = {} } = useAliasGraphCardContext();
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = useAliasProductGraphTallyQuery();
-  const { pending, error, fulfilled, data: dataById = {}, dataSets: dataByList = [] } = useAliasMetricsSelector();
+  const { pending, error, fulfilled, dataSets: dataByList = [] } = useAliasMetricsSelector();
 
   const { title: selectedMonth, isCurrent: isSelectedMonthCurrent } =
     toolbarFieldOptions.find(
@@ -43,8 +43,7 @@ const GraphCardMetricTotals = ({
   if (settings?.isMetricDisplay && settings?.cards?.length) {
     const metricDisplayPassedData = helpers.setImmutableData(
       {
-        dataById,
-        dataByList: dataByList.map(dataSet => ({
+        dataSets: dataByList.map(dataSet => ({
           ...dataSet,
           display: graphCardHelpers.getDailyMonthlyTotals({ dataSet, isCurrent: isSelectedMonthCurrent })
         })),
