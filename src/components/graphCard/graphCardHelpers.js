@@ -329,6 +329,10 @@ const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
     })
 });
 
+// const getMetricTotalCurrentLastData = dataSet => {
+//
+// };
+
 /**
  * Get daily and monthly totals from a data set.
  *
@@ -338,8 +342,8 @@ const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
  * @returns {{chartId: string, metricId: string, monthlyHasData: boolean, dailyValue: *, dailyDate: *,
  *     monthlyValue: *, monthlyDate: *, dailyHasData: boolean}}
  */
-const getDailyMonthlyTotals = ({ dataSet, isCurrent }) => {
-  const { data = [], id: firstChartId, metric: firstMetricId, meta = {} } = dataSet || {};
+const getDailyMonthlyTotals = ({ dataSet, isCurrent } = {}) => {
+  const { data = [], meta = {} } = dataSet || {};
   const { totalMonthlyDate: monthlyDate, totalMonthlyHasData: monthlyHasData, totalMonthlyValue: monthlyValue } = meta;
 
   const {
@@ -354,11 +358,9 @@ const getDailyMonthlyTotals = ({ dataSet, isCurrent }) => {
   const dailyValue = isCurrent ? currentValue : lastValue;
 
   return {
-    chartId: firstChartId,
     dailyDate,
     dailyHasData,
     dailyValue,
-    metricId: firstMetricId,
     monthlyDate,
     monthlyHasData,
     monthlyValue
@@ -371,10 +373,14 @@ const getDailyMonthlyTotals = ({ dataSet, isCurrent }) => {
  * @param {object} params
  * @param {Array} params.capacityData
  * @param {Array} params.tallyData
+ * @param {boolean} params.isCurrent
  * @returns {number}
  */
-const getRemainingCapacity = ({ capacityData = [], tallyData = [] } = {}) => {
+const getRemainingCapacity = ({ capacityData = [], tallyData = [], isCurrent = false } = {}) => {
   const findCurrentValue = data => data?.find(({ isCurrentDate }) => isCurrentDate === true)?.y;
+  // const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
+  console.log('iscurrent', isCurrent);
+
   const capacityCurrent = findCurrentValue(capacityData);
   const tallyCurrent = findCurrentValue(tallyData);
 
@@ -392,12 +398,14 @@ const getRemainingCapacity = ({ capacityData = [], tallyData = [] } = {}) => {
  * @param {object} params
  * @param {Array} params.capacityData
  * @param {Array} params.tallyData
+ * @param {boolean} params.isCurrent
  * @returns {number}
  */
-const getRemainingOverage = ({ capacityData = [], tallyData = [] } = {}) => {
+const getRemainingOverage = ({ capacityData = [], tallyData = [], isCurrent = false } = {}) => {
   const findCurrentValue = data => data?.find(({ isCurrentDate }) => isCurrentDate === true)?.y;
   const capacityCurrent = findCurrentValue(capacityData);
   const tallyCurrent = findCurrentValue(tallyData);
+  console.log('iscurrent', isCurrent);
 
   const remaining = Number.parseInt(tallyCurrent, 10) - Number.parseInt(capacityCurrent, 10) || 0;
   if (remaining >= 0) {

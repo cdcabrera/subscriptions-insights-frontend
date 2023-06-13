@@ -32,9 +32,10 @@ const GraphCardMetricTotals = ({
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
   const { settings = {} } = useAliasGraphCardContext();
-  const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = useAliasProductGraphTallyQuery();
+  const query = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets: dataByList = [] } = useAliasMetricsSelector();
 
+  const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = query;
   const { title: selectedMonth, isCurrent: isSelectedMonthCurrent } =
     toolbarFieldOptions.find(
       option => option.title === startDate || option.value.startDate.toISOString() === startDate
@@ -43,16 +44,27 @@ const GraphCardMetricTotals = ({
   if (settings?.isMetricDisplay && settings?.cards?.length) {
     const metricDisplayPassedData = helpers.setImmutableData(
       {
-        dataSets: dataByList.map(dataSet => ({
-          ...dataSet,
-          display: graphCardHelpers.getDailyMonthlyTotals({ dataSet, isCurrent: isSelectedMonthCurrent })
-        })),
-        getDailyMonthlyTotals: graphCardHelpers.getDailyMonthlyTotals,
-        getRemainingCapacity: graphCardHelpers.getRemainingCapacity,
-        getRemainingOverage: graphCardHelpers.getRemainingOverage,
+        dataSets: dataByList.map(dataSet => {
+          const { id: chartId, metric: metricId } = dataSet || {};
+          return {
+            ...dataSet,
+            display: {
+              ...graphCardHelpers.getDailyMonthlyTotals({ dataSet, isCurrent: isSelectedMonthCurrent }),
+              chartId,
+              metricId
+            }
+          };
+        }),
+        getDailyMonthlyTotals: (params = {}) =>
+          graphCardHelpers.getDailyMonthlyTotals({ isCurrent: isSelectedMonthCurrent, ...params }),
+        getRemainingCapacity: (params = {}) =>
+          graphCardHelpers.getRemainingCapacity({ isCurrent: isSelectedMonthCurrent, ...params }),
+        getRemainingOverage: (params = {}) =>
+          graphCardHelpers.getRemainingOverage({ isCurrent: isSelectedMonthCurrent, ...params }),
         groupMetricId: settings.groupMetric,
         selectedValue: selectedMonth,
-        isSelectedValueCurrent: isSelectedMonthCurrent
+        isSelectedValueCurrent: isSelectedMonthCurrent,
+        query
       },
       { isClone: true }
     );
