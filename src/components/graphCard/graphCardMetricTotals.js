@@ -36,7 +36,7 @@ const GraphCardMetricTotals = ({
   const { pending, error, fulfilled, dataSets: dataByList = [] } = useAliasMetricsSelector();
 
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = query;
-  const { title: selectedMonth, isCurrent: isSelectedMonthCurrent } =
+  const { isCurrent: isSelectedMonthCurrent } =
     toolbarFieldOptions.find(
       option => option.title === startDate || option.value.startDate.toISOString() === startDate
     ) || {};
@@ -50,21 +50,51 @@ const GraphCardMetricTotals = ({
             ...dataSet,
             display: {
               ...graphCardHelpers.getDailyMonthlyTotals({ dataSet, isCurrent: isSelectedMonthCurrent }),
+              ...graphCardHelpers.getRemainingCapacity({
+                ...graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList }),
+                isCurrent: isSelectedMonthCurrent
+              }),
+              ...graphCardHelpers.getRemainingOverage({
+                ...graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList }),
+                isCurrent: isSelectedMonthCurrent
+              }),
               chartId,
               metricId
             }
           };
-        }),
+        })
+        /*
+        ,
         getDailyMonthlyTotals: (params = {}) =>
-          graphCardHelpers.getDailyMonthlyTotals({ isCurrent: isSelectedMonthCurrent, ...params }),
+          graphCardHelpers.getDailyMonthlyTotals({
+            isCurrent: isSelectedMonthCurrent,
+            ...params
+          }),
+        getMetricTotalCurrentOrLastData: (params = {}) =>
+          graphCardHelpers.getMetricTotalCurrentOrLastData({ isCurrent: isSelectedMonthCurrent, ...params }),
+        getPrepaidTallyCapacity: (params = {}) =>
+          graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList, ...params }),
         getRemainingCapacity: (params = {}) =>
-          graphCardHelpers.getRemainingCapacity({ isCurrent: isSelectedMonthCurrent, ...params }),
+          graphCardHelpers.getRemainingCapacity({
+            ...graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList }),
+            isCurrent: isSelectedMonthCurrent,
+            ...params
+          }),
         getRemainingOverage: (params = {}) =>
-          graphCardHelpers.getRemainingOverage({ isCurrent: isSelectedMonthCurrent, ...params }),
+          graphCardHelpers.getRemainingOverage({
+            ...graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList }),
+            isCurrent: isSelectedMonthCurrent,
+            ...params
+          })
+        */
+        /*
         groupMetricId: settings.groupMetric,
-        selectedValue: selectedMonth,
-        isSelectedValueCurrent: isSelectedMonthCurrent,
+        monthSelector: {
+          selectedValue: selectedMonth,
+          isSelectedValueCurrent: isSelectedMonthCurrent
+        },
         query
+        */
       },
       { isClone: true }
     );
