@@ -126,24 +126,17 @@ const config = {
                 context: ['remainingCapacity', dataSets?.[0]?.display?.chartId],
                 testId: 'graphRemainingCapacityCard-header'
               }),
-            body: ({ dataSets = [], getRemainingCapacity } = {}) => {
-              const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
-              const capacityData = dataSets.find(({ chartType }) =>
-                new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
-              )?.data;
-
-              const remainingCapacity = getRemainingCapacity({
-                capacityData,
-                tallyData
-              });
-
-              return translate(
+            body: ({ dataSets = [] } = {}) =>
+              translate(
                 'curiosity-graph.cardBodyMetric',
                 {
-                  context: ['total', dataSets?.[0]?.display?.dailyHasData && dataSets?.[0]?.display?.chartId],
+                  context: [
+                    'total',
+                    dataSets?.[0]?.display?.remainingCapacityHasData && dataSets?.[0]?.display?.chartId
+                  ],
                   testId: 'graphRemainingCapacityCard-body',
                   total: helpers
-                    .numberDisplay(remainingCapacity)
+                    .numberDisplay(dataSets?.[0]?.display?.remainingCapacity)
                     ?.format({
                       average: true,
                       mantissa: 5,
@@ -152,24 +145,13 @@ const config = {
                     })
                     ?.toUpperCase()
                 },
-                [<strong title={remainingCapacity} aria-label={remainingCapacity} />]
-              );
-            },
-            /*
-            {
-              const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
-              const capacityData = dataSets.find(({ chartType }) =>
-                new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
-              )?.data;
-
-              const remainingCapacity = getRemainingCapacity({
-                capacityData,
-                tallyData
-              });
-
-              return `header string remaining ${dataSets?.[0]?.display?.metricId} capacity = ${remainingCapacity}`;
-            },
-            */
+                [
+                  <strong
+                    title={dataSets?.[0]?.display?.remainingCapacity}
+                    aria-label={dataSets?.[0]?.display?.remainingCapacity}
+                  />
+                ]
+              ),
             footer: ({ dataSets = [] } = {}) =>
               translate('curiosity-graph.cardFooterMetric', {
                 date: moment
@@ -246,24 +228,17 @@ const config = {
                 context: ['remainingCapacity', dataSets?.[0]?.display?.chartId],
                 testId: 'graphRemainingCapacityCard-header'
               }),
-            body: ({ dataSets = [], getRemainingCapacity } = {}) => {
-              const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
-              const capacityData = dataSets.find(({ chartType }) =>
-                new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
-              )?.data;
-
-              const remainingCapacity = getRemainingCapacity({
-                capacityData,
-                tallyData
-              });
-
-              return translate(
+            body: ({ dataSets = [] } = {}) =>
+              translate(
                 'curiosity-graph.cardBodyMetric',
                 {
-                  context: ['total', dataSets?.[0]?.display?.dailyHasData && dataSets?.[0]?.display?.chartId],
+                  context: [
+                    'total',
+                    dataSets?.[0]?.display?.remainingCapacityHasData && dataSets?.[0]?.display?.chartId
+                  ],
                   testId: 'graphRemainingCapacityCard-body',
                   total: helpers
-                    .numberDisplay(remainingCapacity)
+                    .numberDisplay(dataSets?.[0]?.display?.remainingCapacity)
                     ?.format({
                       average: true,
                       mantissa: 5,
@@ -272,24 +247,13 @@ const config = {
                     })
                     ?.toUpperCase()
                 },
-                [<strong title={remainingCapacity} aria-label={remainingCapacity} />]
-              );
-            },
-            /*
-            {
-              const tallyData = dataSets.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data;
-              const capacityData = dataSets.find(({ chartType }) =>
-                new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
-              )?.data;
-
-              const remainingCapacity = getRemainingCapacity({
-                capacityData,
-                tallyData
-              });
-
-              return `header string remaining ${dataSets?.[0]?.display?.metricId} capacity = ${remainingCapacity}`;
-            },
-            */
+                [
+                  <strong
+                    title={dataSets?.[0]?.display?.remainingCapacity}
+                    aria-label={dataSets?.[0]?.display?.remainingCapacity}
+                  />
+                ]
+              ),
             footer: ({ dataSets = [] } = {}) =>
               translate('curiosity-graph.cardFooterMetric', {
                 date: moment
