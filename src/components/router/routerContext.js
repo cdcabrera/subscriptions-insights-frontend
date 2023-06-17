@@ -12,7 +12,7 @@ import { translate } from '../i18n/i18n';
  */
 
 /**
- * Combine react-router-dom useLocation with actual window location.
+ * Combine react-use useLocation with actual window location.
  * Focused on exposing replace and href.
  *
  * @param {object} options
@@ -58,12 +58,15 @@ const useLocation = ({
  * @param {object} options
  * @param {Function} options.useDispatch
  * @param {Function} options.useLocation
+ * @param {*} options.windowHistory
  * @returns {Function}
  */
 const useNavigate = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useLocation: useAliasLocation = useLocation
+  useLocation: useAliasLocation = useLocation,
+  windowHistory: aliasWindowHistory = window.history
 } = {}) => {
+  const windowHistory = aliasWindowHistory;
   const { search = '', hash = '' } = useAliasLocation();
   const dispatch = useAliasDispatch();
 
@@ -78,7 +81,7 @@ const useNavigate = ({
           config: firstMatch?.productPath
         });
 
-        return window.history.pushState(
+        return windowHistory.pushState(
           {},
           '',
           `${routerHelpers.pathJoin(routerHelpers.dynamicBaseName(), firstMatch?.productPath)}${search}${hash}`,
@@ -86,9 +89,9 @@ const useNavigate = ({
         );
       }
 
-      return window.history.pushState({}, '', (pathName && `${pathName}${search}${hash}`) || pathLocation, options);
+      return windowHistory.pushState({}, '', (pathName && `${pathName}${search}${hash}`) || pathLocation, options);
     },
-    [dispatch, hash, search]
+    [dispatch, hash, search, windowHistory]
   );
 };
 
@@ -212,9 +215,14 @@ const useRouteDetail = ({
  *
  * @param {object} options
  * @param {Function} options.useLocation
+ * @param {*} options.windowHistory
  * @returns {Array}
  */
-const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) => {
+const useSearchParams = ({
+  useLocation: useAliasLocation = useLocation,
+  windowHistory: aliasWindowHistory = window.history
+} = {}) => {
+  const windowHistory = aliasWindowHistory;
   const { updateLocation, search } = useAliasLocation();
 
   /**
@@ -236,7 +244,7 @@ const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) =
         updatedSearch = updatedQuery;
       }
 
-      window.history.pushState(
+      windowHistory.pushState(
         {},
         '',
         `?${Object.entries(updatedSearch)
@@ -246,7 +254,7 @@ const useSearchParams = ({ useLocation: useAliasLocation = useLocation } = {}) =
 
       updateLocation();
     },
-    [updateLocation, search]
+    [search, updateLocation, windowHistory]
   );
 
   return [routerHelpers.parseSearchParams(search), setSearchParams];
