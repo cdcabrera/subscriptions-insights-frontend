@@ -12,11 +12,6 @@ import { setupDotenvFilesForEnv } from './build.dotenv';
 setupDotenvFilesForEnv({ env: process.env.NODE_ENV });
 
 /**
- * Set enzyme adapter.
- */
-// configure({ adapter: new Adapter() });
-
-/**
  * Conditionally skip "it" test statements.
  * Ex:
  *   skipIt(true)('should do a thing...', () => { ... });
@@ -140,7 +135,7 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 };
 
 /**
- * React testing for components using hooks.
+ * React testing for components.
  *
  * @param {React.ReactNode} testComponent
  * @param {object} options
@@ -171,24 +166,14 @@ global.mountHookComponent = async (testComponent, { callback, ...options } = {})
   };
 
   let mountedComponent = null;
-  let setPropsProps = undefined;
   let renderRest = {};
 
-  const { container, rerender, ...rest } = render(testComponent, { queries, ...options });
+  const { container, ...rest } = render(testComponent, { queries, ...options });
   mountedComponent = container;
-  setPropsProps = rerender;
   renderRest = rest;
 
-  /*
-  await act(async () => {
-
-  });
-  */
-
   if (typeof callback === 'function') {
-    // await act(async () => {
     await callback({ component: mountedComponent });
-    // });
   }
 
   const mount = document.createElement(componentInfo?.displayName || 'element');
@@ -196,36 +181,9 @@ global.mountHookComponent = async (testComponent, { callback, ...options } = {})
   mount.innerHTML = mountedComponent.innerHTML;
   mount.props = componentInfo.props;
   mount.setProps = async updatedProps => {
-    // return setPropsProps(updatedProps);
     const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
-    // updatedComponent.props = updatedProps;
     return global.mountHookComponent(updatedComponent, { queries, ...options });
   };
-
-  /* works
-  mount.setProps = async updatedProps => {
-    // return setPropsProps(updatedProps);
-    const updatedComponent = { ...testComponent, props: updatedProps };
-    // updatedComponent.props = updatedProps;
-    return global.mountHookComponent(updatedComponent, { queries, ...options });
-  };
-  */
-
-  /* works'ish... just refires entire function but need to use the returned output
-  mount.setProps = async updatedComponent => {
-    //
-    return global.mountHookComponent(updatedComponent, { queries, ...options });
-    // await act(async () => {
-    // setPropsProps(p);
-    // });
-
-    /*
-    const { container2, ...rest2 } = await render(updatedComponent, { queries, ...options });
-    mountedComponent = container2;
-    renderRest = rest2;
-    * /
-  };
-  */
 
   mount.find = selector => {
     if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
