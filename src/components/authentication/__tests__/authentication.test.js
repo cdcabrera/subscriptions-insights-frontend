@@ -112,7 +112,20 @@ describe('Authentication Component', () => {
 
     expect(component).toMatchSnapshot('403 redirect error');
 
-    await component.setProps(
+    const component2 = await component.setProps({
+      useGetAuthorization: () => ({
+        error: true,
+        pending: false,
+        data: {
+          authorized: {},
+          errorCodes: [],
+          errorStatus: 403
+        }
+      })
+    });
+
+    /*
+    const component2 = await component.setProps(
       <Authentication
         useGetAuthorization={() => ({
           error: true,
@@ -127,6 +140,7 @@ describe('Authentication Component', () => {
         <span className="test">lorem</span>
       </Authentication>
     );
+    */
     /*
     component.setProps({
       useGetAuthorization: () => ({
@@ -159,7 +173,7 @@ describe('Authentication Component', () => {
     );
     */
 
-    expect(component).toMatchSnapshot('403 error');
+    expect(component2).toMatchSnapshot('403 error');
   });
 
   it('should return a message on 401 error', async () => {

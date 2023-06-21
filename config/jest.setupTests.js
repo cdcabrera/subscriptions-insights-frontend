@@ -195,11 +195,37 @@ global.mountHookComponent = async (testComponent, { callback, ...options } = {})
   mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
   mount.innerHTML = mountedComponent.innerHTML;
   mount.props = componentInfo.props;
-  mount.setPropso = p => {
-    // await act(async () => {
-    setPropsProps(p);
-    // });
+  mount.setProps = async updatedProps => {
+    // return setPropsProps(updatedProps);
+    const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
+    // updatedComponent.props = updatedProps;
+    return global.mountHookComponent(updatedComponent, { queries, ...options });
   };
+
+  /* works
+  mount.setProps = async updatedProps => {
+    // return setPropsProps(updatedProps);
+    const updatedComponent = { ...testComponent, props: updatedProps };
+    // updatedComponent.props = updatedProps;
+    return global.mountHookComponent(updatedComponent, { queries, ...options });
+  };
+  */
+
+  /* works'ish... just refires entire function but need to use the returned output
+  mount.setProps = async updatedComponent => {
+    //
+    return global.mountHookComponent(updatedComponent, { queries, ...options });
+    // await act(async () => {
+    // setPropsProps(p);
+    // });
+
+    /*
+    const { container2, ...rest2 } = await render(updatedComponent, { queries, ...options });
+    mountedComponent = container2;
+    renderRest = rest2;
+    * /
+  };
+  */
 
   mount.find = selector => {
     if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
