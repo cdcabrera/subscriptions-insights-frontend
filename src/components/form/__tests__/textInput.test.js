@@ -5,29 +5,29 @@ import TextInput from '../textInput';
 import { helpers } from '../../../common';
 
 describe('TextInput Component', () => {
-  it('should render a basic component', async () => {
+  it('should render a basic component', () => {
     const props = {};
 
-    const component = await renderComponent(<TextInput {...props} />);
+    const component = renderComponent(<TextInput {...props} />);
     expect(component).toMatchSnapshot('basic component');
   });
 
-  it('should handle readOnly, disabled', async () => {
+  it('should handle readOnly, disabled', () => {
     const props = {
       isReadOnly: true
     };
 
-    const component = await renderComponent(<TextInput {...props} />);
+    const component = renderComponent(<TextInput {...props} />);
     expect(component).toMatchSnapshot('readOnly');
 
-    const propsUpdatedDisabled = await component.setProps({
+    const propsUpdatedDisabled = component.setProps({
       isReadOnly: false,
       isDisabled: true
     });
 
     expect(propsUpdatedDisabled).toMatchSnapshot('disabled');
 
-    const propsUpdatedActive = await component.setProps({
+    const propsUpdatedActive = component.setProps({
       isReadOnly: false,
       isDisabled: false
     });
@@ -35,19 +35,19 @@ describe('TextInput Component', () => {
     expect(propsUpdatedActive).toMatchSnapshot('active');
   });
 
-  it('should return an emulated onChange event', async () => {
+  it('should return an emulated onChange event', () => {
     const props = {
       value: 'lorem ipsum'
     };
 
-    const component = await renderComponent(<TextInput {...props} />);
+    const component = renderComponent(<TextInput {...props} />);
     const mockEvent = { target: { value: 'dolor sit' }, persist: helpers.noop };
     const input = component.find('input');
     component.fireEvent.change(input, mockEvent);
     expect(input.value).toMatchSnapshot('emulated event, change');
   });
 
-  it('should return an emulated onClear event on escape', async () => {
+  it('should return an emulated onClear event on escape', () => {
     const mockClear = jest.fn();
     const props = {
       id: 'test-id',
@@ -56,11 +56,11 @@ describe('TextInput Component', () => {
       onClear: mockClear
     };
 
-    const component = await renderComponent(<TextInput {...props} />);
-    const input = component.original.querySelector('input');
+    const component = renderComponent(<TextInput {...props} />);
+    const input = component.querySelector('input');
     // const input = component.querySelector('input');
     const mockEvent = { target: { value: '' }, keyCode: 27, which: 27, key: 'Escape', persist: helpers.noop };
-    await fireEvent.keyUp(input, mockEvent);
+    fireEvent.keyUp(input, mockEvent);
     expect(props.onKeyUp).toHaveBeenCalledTimes(1);
     expect(mockClear).toHaveBeenCalledTimes(1);
     component.unmount();

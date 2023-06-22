@@ -228,7 +228,107 @@ global.shallowHookComponent = global.mountHookComponent;
 
 global.shallowHookWrapper = global.mountHookComponent;
 
-global.renderComponent = global.mountHookComponent;
+global.renderComponent = (testComponent, { ...options } = {}) => {
+  const getDisplayName = reactComponent =>
+    reactComponent?.displayName ||
+    reactComponent?.$$typeof?.displayName ||
+    reactComponent?.$$typeof?.name ||
+    reactComponent?.name ||
+    reactComponent?.type.displayName ||
+    reactComponent?.type.name;
+
+  const componentInfo = {
+    displayName: getDisplayName(testComponent),
+    props: {
+      ...testComponent?.props,
+      children: React.Children.toArray(testComponent?.props?.children).map(child => ({
+        displayName: getDisplayName(child),
+        props: child?.props,
+        type: child?.type
+      }))
+    }
+  };
+
+  const containerElement = document.createElement(componentInfo?.displayName || 'element');
+  containerElement.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+  containerElement.props = componentInfo.props;
+
+  const { container, ...renderRest } = render(testComponent, {
+    container: containerElement,
+    queries,
+    ...options
+  });
+
+  const updatedContainer = container;
+  /*
+  updatedContainer.render = () => {
+    const mount = document.createElement(componentInfo?.displayName || 'element');
+    mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+    mount.innerHTML = container.innerHTML;
+    mount.props = componentInfo.props;
+    return mount;
+  };
+  */
+
+  updatedContainer.setProps = updatedProps => {
+    const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
+    return global.renderComponent(updatedComponent, { queries, ...options });
+  };
+
+  updatedContainer.find = selector => container?.querySelector(selector);
+  updatedContainer.fireEvent = fireEvent;
+
+  Object.entries(renderRest).forEach(([key, value]) => {
+    updatedContainer[key] = value;
+  });
+
+  return updatedContainer;
+
+  /*
+  const mount = document.createElement(componentInfo?.displayName || 'element');
+  mount.original = mountedComponent;
+  mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+  mount.fireEvent = fireEvent;
+  mount.innerHTML = mountedComponent.innerHTML;
+  mount.props = componentInfo.props;
+  mount.setProps = async updatedProps => {
+    const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
+    return global.mountHookComponent(updatedComponent, { queries, ...options });
+  };
+
+  mount.find = selector => {
+    if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
+      const p = [];
+      const loop = comp => {
+        React.Children.toArray(comp).forEach(child => {
+          if (React.isValidElement(child) && child.type === selector) {
+            p.push(child);
+          }
+
+          if (child?.children || child?.props?.children) {
+            loop(child?.children || child?.props?.children);
+          }
+        });
+      };
+
+      loop(testComponent);
+      return p;
+    }
+
+    try {
+      return mount?.querySelector(selector);
+    } catch (e) {
+      return [];
+    }
+  };
+
+  Object.entries(renderRest).forEach(([key, value]) => {
+    mount[key] = value;
+  });
+
+  return mount;
+  */
+};
 
 /**
  * Fire a hook, return the result.
