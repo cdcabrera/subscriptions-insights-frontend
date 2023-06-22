@@ -57,6 +57,16 @@ describe('TextInput Component', () => {
     };
 
     const component = renderComponent(<TextInput {...props} />);
+    const input = component.find('input');
+    const mockEvent = { target: { value: '' }, keyCode: 27, which: 27, key: 'Escape', persist: helpers.noop };
+    component.fireEvent.keyUp(input, mockEvent);
+
+    expect(props.onKeyUp).toHaveBeenCalledTimes(1);
+    expect(mockClear).toHaveBeenCalledTimes(1);
+    component.unmount();
+
+    /*
+    const component = renderComponent(<TextInput {...props} />);
     const input = component.querySelector('input');
     // const input = component.querySelector('input');
     const mockEvent = { target: { value: '' }, keyCode: 27, which: 27, key: 'Escape', persist: helpers.noop };
@@ -64,6 +74,7 @@ describe('TextInput Component', () => {
     expect(props.onKeyUp).toHaveBeenCalledTimes(1);
     expect(mockClear).toHaveBeenCalledTimes(1);
     component.unmount();
+    */
 
     /*
     const filterArrayOfObjects = (arr, callback = () => true) => {
