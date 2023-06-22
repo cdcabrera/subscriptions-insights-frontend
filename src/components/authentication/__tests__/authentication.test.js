@@ -4,7 +4,7 @@ import { Authentication } from '../authentication';
 import { rhsmConstants } from '../../../services/rhsm/rhsmConstants';
 
 describe('Authentication Component', () => {
-  it('should render a basic component', async () => {
+  it('should render a basic component', () => {
     const props = {
       useGetAuthorization: () => ({
         error: false,
@@ -17,7 +17,7 @@ describe('Authentication Component', () => {
       })
     };
 
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -26,7 +26,7 @@ describe('Authentication Component', () => {
     expect(component).toMatchSnapshot('basic');
   });
 
-  it('should render a component error', async () => {
+  it('should render a component error', () => {
     const props = {
       useGetAuthorization: () => ({
         error: true,
@@ -38,7 +38,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -47,7 +47,7 @@ describe('Authentication Component', () => {
     expect(component).toMatchSnapshot('error');
   });
 
-  it('should allow being disabled', async () => {
+  it('should allow being disabled', () => {
     const props = {
       isDisabled: true,
       useGetAuthorization: () => ({
@@ -62,7 +62,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -71,7 +71,7 @@ describe('Authentication Component', () => {
     expect(component).toMatchSnapshot('disabled');
   });
 
-  it('should return a redirect on 418 error', async () => {
+  it('should return a redirect on 418 error', () => {
     const props = {
       useGetAuthorization: () => ({
         error: true,
@@ -83,7 +83,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -92,7 +92,7 @@ describe('Authentication Component', () => {
     expect(component).toMatchSnapshot('418 error');
   });
 
-  it('should return a redirect on a specific 403 error and error code', async () => {
+  it('should return a redirect on a specific 403 error and error code', () => {
     const props = {
       useGetAuthorization: () => ({
         error: true,
@@ -104,7 +104,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -112,7 +112,7 @@ describe('Authentication Component', () => {
 
     expect(component).toMatchSnapshot('403 redirect error');
 
-    const propsUpdated = await component.setProps({
+    const propsUpdated = component.setProps({
       useGetAuthorization: () => ({
         error: true,
         pending: false,
@@ -127,7 +127,7 @@ describe('Authentication Component', () => {
     expect(propsUpdated).toMatchSnapshot('403 error');
   });
 
-  it('should return a message on 401 error', async () => {
+  it('should return a message on 401 error', () => {
     const props = {
       useGetAuthorization: () => ({
         error: true,
@@ -139,7 +139,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -148,7 +148,7 @@ describe('Authentication Component', () => {
     expect(component.getByText('You do not have access to Subscriptions')).toMatchSnapshot('401 error');
   });
 
-  it('should render a component pending', async () => {
+  it('should render a component pending', () => {
     const props = {
       useGetAuthorization: () => ({
         error: false,
@@ -160,7 +160,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -169,7 +169,7 @@ describe('Authentication Component', () => {
     expect(component).toMatchSnapshot('pending');
   });
 
-  it('should render a component authorized', async () => {
+  it('should render a component authorized', () => {
     const props = {
       useGetAuthorization: () => ({
         error: false,
@@ -183,7 +183,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await renderComponent(
+    const component = renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
