@@ -1,12 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Chart Component should render a basic component: basic 1`] = `
-<ContextProvider>
+<chart
+  props="{
+  "chartLegend": null,
+  "chartTooltip": null,
+  "dataSets": [],
+  "padding": {
+    "bottom": 75,
+    "left": 55,
+    "right": 55,
+    "top": 50
+  },
+  "themeColor": "blue",
+  "xAxisChartLabel": null,
+  "yAxisChartLabel": null,
+  "xAxisFixLabelOverlap": true,
+  "xAxisLabelIncrement": 1,
+  "xAxisTickFormat": null,
+  "yAxisTickFormat": null,
+  "xValueFormat": null,
+  "yValueFormat": null,
+  "children": []
+}"
+>
   <div
-    className="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+    class="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
     data-test="curiosity-chartarea"
   />
-</ContextProvider>
+</chart>
 `;
 
 exports[`Chart Component should setup basic chart settings: settings 1`] = `
