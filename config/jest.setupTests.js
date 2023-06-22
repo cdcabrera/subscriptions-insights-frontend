@@ -1,7 +1,6 @@
 import React from 'react';
 import * as reactRedux from 'react-redux';
 import { fireEvent, queries, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -140,94 +139,8 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
  *
  * @param {React.ReactNode} testComponent
  * @param {object} options
- * @param {Function} options.callback
- * @param {object} options.options
- *
- * @returns {Promise<null>}
+ * @returns {HTMLElement}
  */
-global.mountHookComponent = async (testComponent, { callback, ...options } = {}) => {
-  const getDisplayName = reactComponent =>
-    reactComponent?.displayName ||
-    reactComponent?.$$typeof?.displayName ||
-    reactComponent?.$$typeof?.name ||
-    reactComponent?.name ||
-    reactComponent?.type.displayName ||
-    reactComponent?.type.name;
-
-  const componentInfo = {
-    displayName: getDisplayName(testComponent),
-    props: {
-      ...testComponent?.props,
-      children: React.Children.toArray(testComponent?.props?.children).map(child => ({
-        displayName: getDisplayName(child),
-        props: child?.props,
-        type: child?.type
-      }))
-    }
-  };
-
-  let mountedComponent = null;
-  let renderRest = {};
-
-  const { container, ...rest } = render(testComponent, { queries, ...options });
-  mountedComponent = container;
-  renderRest = rest;
-
-  if (typeof callback === 'function') {
-    await callback({ component: mountedComponent });
-  }
-
-  const mount = document.createElement(componentInfo?.displayName || 'element');
-  mount.original = mountedComponent;
-  mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
-  mount.userEventSetup = () => userEvent.setup();
-  mount.fireEvent = fireEvent;
-  mount.innerHTML = mountedComponent.innerHTML;
-  mount.props = componentInfo.props;
-  mount.setProps = async updatedProps => {
-    const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
-    return global.mountHookComponent(updatedComponent, { queries, ...options });
-  };
-
-  mount.find = selector => {
-    if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
-      const p = [];
-      const loop = comp => {
-        React.Children.toArray(comp).forEach(child => {
-          if (React.isValidElement(child) && child.type === selector) {
-            p.push(child);
-          }
-
-          if (child?.children || child?.props?.children) {
-            loop(child?.children || child?.props?.children);
-          }
-        });
-      };
-
-      loop(testComponent);
-      return p;
-    }
-
-    try {
-      return mount?.querySelector(selector);
-    } catch (e) {
-      return [];
-    }
-  };
-
-  Object.entries(renderRest).forEach(([key, value]) => {
-    mount[key] = value;
-  });
-
-  return mount;
-};
-
-global.mountHookWrapper = global.mountHookComponent;
-
-global.shallowHookComponent = global.mountHookComponent;
-
-global.shallowHookWrapper = global.mountHookComponent;
-
 global.renderComponent = (testComponent, { ...options } = {}) => {
   const getDisplayName = reactComponent =>
     reactComponent?.displayName ||
@@ -260,15 +173,6 @@ global.renderComponent = (testComponent, { ...options } = {}) => {
   });
 
   const updatedContainer = container;
-  /*
-  updatedContainer.render = () => {
-    const mount = document.createElement(componentInfo?.displayName || 'element');
-    mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
-    mount.innerHTML = container.innerHTML;
-    mount.props = componentInfo.props;
-    return mount;
-  };
-  */
 
   updatedContainer.setProps = updatedProps => {
     const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
@@ -283,51 +187,6 @@ global.renderComponent = (testComponent, { ...options } = {}) => {
   });
 
   return updatedContainer;
-
-  /*
-  const mount = document.createElement(componentInfo?.displayName || 'element');
-  mount.original = mountedComponent;
-  mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
-  mount.fireEvent = fireEvent;
-  mount.innerHTML = mountedComponent.innerHTML;
-  mount.props = componentInfo.props;
-  mount.setProps = async updatedProps => {
-    const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
-    return global.mountHookComponent(updatedComponent, { queries, ...options });
-  };
-
-  mount.find = selector => {
-    if (typeof selector !== 'string' && React.isValidElement(React.createElement(selector))) {
-      const p = [];
-      const loop = comp => {
-        React.Children.toArray(comp).forEach(child => {
-          if (React.isValidElement(child) && child.type === selector) {
-            p.push(child);
-          }
-
-          if (child?.children || child?.props?.children) {
-            loop(child?.children || child?.props?.children);
-          }
-        });
-      };
-
-      loop(testComponent);
-      return p;
-    }
-
-    try {
-      return mount?.querySelector(selector);
-    } catch (e) {
-      return [];
-    }
-  };
-
-  Object.entries(renderRest).forEach(([key, value]) => {
-    mount[key] = value;
-  });
-
-  return mount;
-  */
 };
 
 /**
