@@ -17,7 +17,7 @@ describe('Authentication Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -38,7 +38,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await mountHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -62,7 +62,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await shallowHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -83,7 +83,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await shallowHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -104,7 +104,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await shallowHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -112,7 +112,7 @@ describe('Authentication Component', () => {
 
     expect(component).toMatchSnapshot('403 redirect error');
 
-    const component2 = await component.setProps({
+    const propsUpdated = await component.setProps({
       useGetAuthorization: () => ({
         error: true,
         pending: false,
@@ -124,56 +124,7 @@ describe('Authentication Component', () => {
       })
     });
 
-    /*
-    const component2 = await component.setProps(
-      <Authentication
-        useGetAuthorization={() => ({
-          error: true,
-          pending: false,
-          data: {
-            authorized: {},
-            errorCodes: [],
-            errorStatus: 403
-          }
-        })}
-      >
-        <span className="test">lorem</span>
-      </Authentication>
-    );
-    */
-    /*
-    component.setProps({
-      useGetAuthorization: () => ({
-        error: true,
-        pending: false,
-        data: {
-          authorized: {},
-          errorCodes: [rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN],
-          errorStatus: 403
-        }
-      })
-    });
-    */
-
-    /*
-    const again = await shallowHookComponent(
-      <Authentication
-        useGetAuthorization={() => ({
-          error: true,
-          pending: false,
-          data: {
-            authorized: {},
-            errorCodes: [],
-            errorStatus: 403
-          }
-        })}
-      >
-        <span className="test">lorem</span>
-      </Authentication>
-    );
-    */
-
-    expect(component2).toMatchSnapshot('403 error');
+    expect(propsUpdated).toMatchSnapshot('403 error');
   });
 
   it('should return a message on 401 error', async () => {
@@ -188,7 +139,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await shallowHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -209,7 +160,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await shallowHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -232,7 +183,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = await mountHookComponent(
+    const component = await renderComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>

@@ -46,6 +46,7 @@
     "mountHookComponent": "readonly",
     "mountHookWrapper": "readonly",
     "mockWindowLocation": "readonly",
+    "renderComponent": "readonly",
     "shallowHook": "readonly",
     "shallowHookComponent": "readonly",
     "shallowHookWrapper": "readonly",

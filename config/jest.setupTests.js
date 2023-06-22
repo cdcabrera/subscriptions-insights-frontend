@@ -1,6 +1,7 @@
 import React from 'react';
 import * as reactRedux from 'react-redux';
-import { queries, render } from '@testing-library/react';
+import { fireEvent, queries, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -177,7 +178,10 @@ global.mountHookComponent = async (testComponent, { callback, ...options } = {})
   }
 
   const mount = document.createElement(componentInfo?.displayName || 'element');
+  mount.original = mountedComponent;
   mount.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+  mount.userEventSetup = () => userEvent.setup();
+  mount.fireEvent = fireEvent;
   mount.innerHTML = mountedComponent.innerHTML;
   mount.props = componentInfo.props;
   mount.setProps = async updatedProps => {
@@ -223,6 +227,8 @@ global.mountHookWrapper = global.mountHookComponent;
 global.shallowHookComponent = global.mountHookComponent;
 
 global.shallowHookWrapper = global.mountHookComponent;
+
+global.renderComponent = global.mountHookComponent;
 
 /**
  * Fire a hook, return the result.
