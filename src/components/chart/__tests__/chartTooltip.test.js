@@ -1,5 +1,4 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import { chartTooltip } from '../chartTooltip';
 
 describe('ChartTooltip Component', () => {
@@ -25,7 +24,7 @@ describe('ChartTooltip Component', () => {
     };
 
     const Component = chartTooltip(settings);
-    const updatedComponent = shallow(<Component {...props} />);
+    const updatedComponent = renderComponent(<Component {...props} />);
 
     expect(updatedComponent).toMatchSnapshot('basic');
   });
@@ -52,7 +51,7 @@ describe('ChartTooltip Component', () => {
     };
 
     const Component = chartTooltip(settings);
-    const updatedComponent = shallow(<Component {...props} />);
+    const updatedComponent = renderComponent(<Component {...props} />);
 
     expect(updatedComponent).toMatchSnapshot('missing content');
   });
@@ -86,12 +85,11 @@ describe('ChartTooltip Component', () => {
     };
 
     const Component = chartTooltip(settings);
-    const updatedComponent = shallow(<Component {...props} />);
+    const updatedComponent = renderComponent(<Component {...props} />);
 
     expect(updatedComponent).toMatchSnapshot('left tail');
 
     updatedComponent.setProps({
-      ...props,
       x: 250,
       datum: { x: 2 }
     });
@@ -99,7 +97,6 @@ describe('ChartTooltip Component', () => {
     expect(updatedComponent).toMatchSnapshot('middle tail');
 
     updatedComponent.setProps({
-      ...props,
       x: 500,
       datum: { x: 3 }
     });
