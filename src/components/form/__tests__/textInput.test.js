@@ -60,8 +60,6 @@ describe('TextInput Component', () => {
 
     expect(props.onKeyUp).toHaveBeenCalledTimes(1);
     expect(props.onClear).toHaveBeenCalledTimes(1);
-
-    component.unmount();
     expect(props.onClear.mock.calls).toMatchSnapshot('emulated event, esc');
   });
 });
