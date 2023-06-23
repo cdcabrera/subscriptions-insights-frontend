@@ -141,7 +141,7 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
  * @param {object} options
  * @returns {HTMLElement}
  */
-global.renderComponent = (testComponent, { ...options } = {}) => {
+global.renderComponent = (testComponent, options = {}) => {
   const getDisplayName = reactComponent =>
     reactComponent?.displayName ||
     reactComponent?.$$typeof?.displayName ||
@@ -275,7 +275,8 @@ beforeAll(() => {
       /<foreignObject/gi.test(message) ||
       args?.[0] === 'foreignObject' ||
       /<g/gi.test(message) ||
-      args?.[0] === 'g'
+      args?.[0] === 'g' ||
+      (/validateDOMNesting/gi.test(message) && args?.[0] === '<div>' && args?.[1] === 'select')
     ) {
       return false;
     }
