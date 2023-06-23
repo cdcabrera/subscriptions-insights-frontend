@@ -1,9 +1,8 @@
 import React from 'react';
-import { AlertActionCloseButton } from '@patternfly/react-core';
 import { BannerMessages } from '../bannerMessages';
 
 describe('BannerMessages Component', () => {
-  it('should render a basic component', async () => {
+  it('should render a basic component', () => {
     const props = {
       useBannerMessages: () => [
         {
@@ -13,12 +12,12 @@ describe('BannerMessages Component', () => {
         }
       ]
     };
-    const component = await mountHookComponent(<BannerMessages {...props} />);
+    const component = renderComponent(<BannerMessages {...props} />);
 
     expect(component).toMatchSnapshot('basic');
   });
 
-  it('should handle closing messages from state', async () => {
+  it('should handle closing messages from state', () => {
     const mockRemove = jest.fn();
     const props = {
       useBannerMessages: () => [
@@ -31,11 +30,11 @@ describe('BannerMessages Component', () => {
       useRemoveBannerMessages: () => mockRemove
     };
 
-    const component = await mountHookComponent(<BannerMessages {...props} />);
+    const component = renderComponent(<BannerMessages {...props} />);
     expect(component).toMatchSnapshot('state messages, ON');
 
-    component.find(AlertActionCloseButton).first().simulate('click');
-
+    const input = component.find('button');
+    component.fireEvent.click(input);
     expect(mockRemove.mock.calls).toMatchSnapshot('state messages, OFF id');
   });
 });

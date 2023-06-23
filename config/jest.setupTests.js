@@ -1,7 +1,6 @@
 import React from 'react';
 import * as reactRedux from 'react-redux';
-import { configure, mount, shallow } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { fireEvent, queries, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
@@ -11,11 +10,6 @@ import { setupDotenvFilesForEnv } from './build.dotenv';
  * Set dotenv params.
  */
 setupDotenvFilesForEnv({ env: process.env.NODE_ENV });
-
-/**
- * Set enzyme adapter.
- */
-configure({ adapter: new Adapter() });
 
 /**
  * Conditionally skip "it" test statements.
@@ -141,62 +135,69 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 };
 
 /**
- * Enzyme for components using hooks.
+ * React testing for components.
  *
- * @param {React.ReactNode} component
+ * @param {React.ReactNode} testComponent
  * @param {object} options
- * @param {Function} options.callback
- * @param {object} options.options
- *
- * @returns {Promise<null>}
+ * @returns {HTMLElement}
  */
-global.mountHookComponent = async (component, { callback, ...options } = {}) => {
-  let mountedComponent = null;
-  await act(async () => {
-    mountedComponent = mount(component, options);
+global.renderComponent = (testComponent, options = {}) => {
+  const getDisplayName = reactComponent =>
+    reactComponent?.displayName ||
+    reactComponent?.$$typeof?.displayName ||
+    reactComponent?.$$typeof?.name ||
+    reactComponent?.name ||
+    reactComponent?.type?.displayName ||
+    reactComponent?.type?.name;
+
+  const componentInfo = {
+    displayName: getDisplayName(testComponent),
+    props: {
+      ...testComponent?.props,
+      children: React.Children.toArray(testComponent?.props?.children).map(child => ({
+        displayName: getDisplayName(child),
+        props: child?.props,
+        type: child?.type
+      }))
+    }
+  };
+
+  const containerElement = document.createElement(componentInfo?.displayName || 'element');
+  containerElement.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+  containerElement.props = componentInfo.props;
+
+  const { container, ...renderRest } = render(testComponent, {
+    container: containerElement,
+    queries,
+    ...options
   });
-  mountedComponent?.update();
 
-  if (typeof callback === 'function') {
-    await act(async () => {
-      await callback({ component: mountedComponent });
-    });
-    mountedComponent?.update();
-  }
+  const updatedContainer = container;
 
-  return mountedComponent;
-};
+  updatedContainer.setProps = updatedProps => {
+    const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
+    // console.log('>>>> UPDATED', updatedComponent);
+    let rerender = renderRest.rerender(updatedComponent);
 
-global.mountHookWrapper = global.mountHookComponent;
+    if (rerender === undefined) {
+      rerender = global.renderComponent(updatedComponent, { queries, ...options });
+    }
 
-/**
- * Enzyme for components using hooks.
- *
- * @param {React.ReactNode} component
- * @param {object} options
- * @param {Function} options.callback
- * @param {object} options.options
- *
- * @returns {Promise<null>}
- */
-global.shallowHookComponent = async (component, { callback, ...options } = {}) => {
-  let mountedComponent = null;
-  await act(async () => {
-    mountedComponent = shallow(component, options);
+    return rerender;
+
+    // const UpdatedComponent = p => ({ ...testComponent, props: { ...testComponent?.props, ...p } });
+    // return renderRest.rerender(<UpdatedComponent {...updatedProps} />);
+  };
+
+  updatedContainer.find = selector => container?.querySelector(selector);
+  updatedContainer.fireEvent = fireEvent;
+
+  Object.entries(renderRest).forEach(([key, value]) => {
+    updatedContainer[key] = value;
   });
-  mountedComponent?.update();
 
-  if (typeof callback === 'function') {
-    await act(async () => {
-      await callback({ component: mountedComponent });
-    });
-    mountedComponent?.update();
-  }
-
-  return mountedComponent;
+  return updatedContainer;
 };
-
-global.shallowHookWrapper = global.shallowHookComponent;
 
 /**
  * Fire a hook, return the result.
@@ -208,22 +209,24 @@ global.shallowHookWrapper = global.shallowHookComponent;
  */
 global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   let result;
-  let mountedHook;
   let spyUseSelector;
+  let unmountHook;
+
   const Hook = () => {
     result = useHook();
     return null;
   };
+
   await act(async () => {
     if (state) {
       spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
     }
-    mountedHook = mount(<Hook />);
+    const { unmount } = await render(<Hook />);
+    unmountHook = unmount;
   });
-  mountedHook?.update();
 
   const unmount = async () => {
-    await act(async () => mountedHook.unmount());
+    await act(async () => unmountHook());
   };
 
   if (state) {
@@ -233,72 +236,16 @@ global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   return { unmount, result };
 };
 
-/**
- * Fire a hook, return the result.
- *
- * @param {Function} useHook
- * @param {object} options
- * @param {object} options.state An object representing a mock Redux store's state.
- * @returns {*}
- */
-global.shallowHook = (useHook = Function.prototype, { state } = {}) => {
-  let result;
-  let spyUseSelector;
-  const Hook = () => {
-    result = useHook();
-    return null;
-  };
-
-  if (state) {
-    spyUseSelector = jest.spyOn(reactRedux, 'useSelector').mockImplementation(_ => _(state));
-  }
-
-  const shallowHook = shallow(<Hook />);
-  const unmount = () => shallowHook.unmount();
-
-  if (state) {
-    spyUseSelector.mockClear();
-  }
-
-  return { unmount, result };
-};
-
-/**
- * Generate a mock window location object, allow async.
- *
- * @param {Function} callback
- * @param {object} options
- * @param {string} options.url
- * @param {object} options.location
- * @returns {Promise<void>}
- */
-global.mockWindowLocation = async (
-  callback = Function.prototype,
-  { url = 'https://ci.foo.redhat.com/subscriptions/rhel', location: locationProps = {} } = {}
-) => {
-  const updatedUrl = new URL(url);
-  const updatedLocation = {
-    href: updatedUrl.href,
-    search: updatedUrl.search,
-    hash: updatedUrl.hash,
-    pathname: updatedUrl.pathname,
-    replace: Function.prototype,
-    ...locationProps
-  };
-
-  const { mockClear } = mockObjectProperty(window, 'location', updatedLocation);
-  await callback(updatedLocation);
-
-  return {
-    mockClear
-  };
-};
+global.renderHook = global.mountHook;
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging
 // ToDo: revisit squashing "popper" alerts
 /*
  * For applying a global Jest "beforeAll", based on
- * jest-prop-type-error, https://www.npmjs.com/package/jest-prop-type-error
+ * - consoledot/platform console messaging
+ * - jest-prop-type-error, https://www.npmjs.com/package/jest-prop-type-error
+ * - PF popper alerts
+ * - mountHookComponent, test function testComponent messaging
  */
 beforeAll(() => {
   const { error, group, log } = console;
@@ -319,6 +266,19 @@ beforeAll(() => {
   interceptConsoleMessaging(error, (message, ...args) => {
     if (/(Invalid prop|Failed prop type)/gi.test(message)) {
       throw new Error(message);
+    }
+
+    // ignore SVG and other xml
+    if (
+      /<testComponent/gi.test(message) ||
+      args?.[0] === 'testComponent' ||
+      /<foreignObject/gi.test(message) ||
+      args?.[0] === 'foreignObject' ||
+      /<g/gi.test(message) ||
+      args?.[0] === 'g' ||
+      (/validateDOMNesting/gi.test(message) && args?.[0] === '<div>' && args?.[1] === 'select')
+    ) {
+      return false;
     }
 
     return !/(Not implemented: navigation)/gi.test(message) && !/Popper/gi.test(args?.[0]);
