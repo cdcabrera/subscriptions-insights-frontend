@@ -36,8 +36,6 @@ class TextInput extends React.Component {
     const { currentTarget, keyCode } = event;
     const clonedEvent = { ...event };
 
-    console.log('>>>>>> WORK', event);
-
     onKeyUp(createMockEvent(event, true));
 
     if (keyCode === 27) {
