@@ -176,7 +176,7 @@ global.renderComponent = (testComponent, { ...options } = {}) => {
 
   updatedContainer.setProps = updatedProps => {
     const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
-    return global.renderComponent(updatedComponent, { queries, ...options });
+    return renderRest.rerender(updatedComponent);
   };
 
   updatedContainer.find = selector => container?.querySelector(selector);
