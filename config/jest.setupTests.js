@@ -226,7 +226,7 @@ global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
   return { unmount, result };
 };
 
-global.shallowHook = global.mountHook;
+global.renderHook = global.mountHook;
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging
 // ToDo: revisit squashing "popper" alerts
