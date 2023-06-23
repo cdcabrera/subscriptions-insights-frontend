@@ -37,10 +37,10 @@ exports[`ChartTooltip Component should handle tooltip position: left tail 1`] = 
 exports[`ChartTooltip Component should handle tooltip position: middle tail 1`] = `
 <element
   props="{
-  "x": 0,
+  "x": 250,
   "y": 75,
   "datum": {
-    "x": 1
+    "x": 2
   },
   "children": []
 }"
@@ -71,10 +71,10 @@ exports[`ChartTooltip Component should handle tooltip position: middle tail 1`] 
 exports[`ChartTooltip Component should handle tooltip position: right tail 1`] = `
 <element
   props="{
-  "x": 0,
+  "x": 500,
   "y": 75,
   "datum": {
-    "x": 1
+    "x": 3
   },
   "children": []
 }"

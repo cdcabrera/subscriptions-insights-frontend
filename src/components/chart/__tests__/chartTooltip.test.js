@@ -89,18 +89,18 @@ describe('ChartTooltip Component', () => {
 
     expect(updatedComponent).toMatchSnapshot('left tail');
 
-    updatedComponent.setProps({
+    const middleTail = updatedComponent.setProps({
       x: 250,
       datum: { x: 2 }
     });
 
-    expect(updatedComponent).toMatchSnapshot('middle tail');
+    expect(middleTail).toMatchSnapshot('middle tail');
 
-    updatedComponent.setProps({
+    const rightTail = updatedComponent.setProps({
       x: 500,
       datum: { x: 3 }
     });
 
-    expect(updatedComponent).toMatchSnapshot('right tail');
+    expect(rightTail).toMatchSnapshot('right tail');
   });
 });
