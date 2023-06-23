@@ -147,8 +147,8 @@ global.renderComponent = (testComponent, { ...options } = {}) => {
     reactComponent?.$$typeof?.displayName ||
     reactComponent?.$$typeof?.name ||
     reactComponent?.name ||
-    reactComponent?.type.displayName ||
-    reactComponent?.type.name;
+    reactComponent?.type?.displayName ||
+    reactComponent?.type?.name;
 
   const componentInfo = {
     displayName: getDisplayName(testComponent),
