@@ -2,7 +2,7 @@ import React from 'react';
 import { GraphCard } from '../graphCard';
 
 describe('GraphCard Component', () => {
-  it('should setup basic settings', async () => {
+  it('should setup basic settings', () => {
     const props = {
       useParseFiltersSettings: () => ({
         filtersSettings: [
@@ -34,8 +34,9 @@ describe('GraphCard Component', () => {
         ]
       })
     };
-    const componentStandalone = await shallowHookComponent(<GraphCard {...props} />);
+    const componentStandalone = renderComponent(<GraphCard {...props} />);
     expect(componentStandalone).toMatchSnapshot('settings, standalone');
+    componentStandalone.unmount();
 
     props.useParseFiltersSettings = () => ({
       filtersSettings: [
@@ -69,15 +70,15 @@ describe('GraphCard Component', () => {
       ]
     });
 
-    const componentGrouped = await shallowHookComponent(<GraphCard {...props} />);
+    const componentGrouped = renderComponent(<GraphCard {...props} />);
     expect(componentGrouped).toMatchSnapshot('settings, grouped');
   });
 
-  it('should allow being disabled', async () => {
+  it('should allow being disabled', () => {
     const props = {
       isDisabled: true
     };
-    const component = await shallowHookComponent(<GraphCard {...props} />);
+    const component = renderComponent(<GraphCard {...props} />);
     expect(component).toMatchSnapshot('disabled');
   });
 });

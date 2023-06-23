@@ -1,271 +1,369 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GraphCardMetricTotals Component should handle custom card displays: fulfilled 1`] = `
-<div
-  className="curiosity-usage-graph__totals"
-  data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+<graphcardmetrictotals
+  props="{
+  "children": []
+}"
 >
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-column"
-    >
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMetricTotalsCard-0"
-        isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+  <div
+    class="curiosity-usage-graph__totals"
+    data-test="graphMetricTotals-hello-world"
+    data-test-data="{"groupMetricId":["hello","world"]}"
+  >
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-column"
       >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card "
+          data-ouia-component-id="OUIA-Generated-Card-4"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-0"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
             >
-              lorem
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div>
-            t(ipsum-{{data}}, {"testId":"custom test id","data":"{\\"groupMetricId\\":[\\"hello\\",\\"world\\"]}"})
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-4"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              >
+                lorem
+              </h2>
+            </div>
           </div>
-        </CardBody>
-        <CardFooter>
-          <div>
-            dolor sit timestamp
+          <div
+            class="pf-c-card__body"
+          >
+            <div>
+              t(ipsum-{{data}}, {"testId":"custom test id","data":"{\\"groupMetricId\\":[\\"hello\\",\\"world\\"]}"})
+            </div>
           </div>
-        </CardFooter>
-      </Card>
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMetricTotalsCard-1"
-        isPlain={true}
-        key="my custom react key"
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
+          <div
+            class="pf-c-card__footer"
+          >
+            <div>
+              dolor sit timestamp
+            </div>
+          </div>
+        </article>
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card "
+          data-ouia-component-id="OUIA-Generated-Card-5"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-1"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
             >
-              hello-{"groupMetricId":["hello","world"]}
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div>
-            world
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-5"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              >
+                hello-{"groupMetricId":["hello","world"]}
+              </h2>
+            </div>
           </div>
-        </CardBody>
-        <CardFooter>
-          <div>
-            dolor sit timestamp
+          <div
+            class="pf-c-card__body"
+          >
+            <div>
+              world
+            </div>
           </div>
-        </CardFooter>
-      </Card>
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMetricTotalsCard-2"
-        isPlain={true}
-        key="b21615e1e1be06472b2fd681bd40525fbfbe223d"
-      >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
+          <div
+            class="pf-c-card__footer"
+          >
+            <div>
+              dolor sit timestamp
+            </div>
+          </div>
+        </article>
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card "
+          data-ouia-component-id="OUIA-Generated-Card-6"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-2"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
             >
-              dolor
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div>
-            sit
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-6"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              >
+                dolor
+              </h2>
+            </div>
           </div>
-        </CardBody>
-        <CardFooter>
-          <div>
-            dolor sit timestamp-{"groupMetricId":["hello","world"]}
+          <div
+            class="pf-c-card__body"
+          >
+            <div>
+              sit
+            </div>
           </div>
-        </CardFooter>
-      </Card>
+          <div
+            class="pf-c-card__footer"
+          >
+            <div>
+              dolor sit timestamp-{"groupMetricId":["hello","world"]}
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-graph-column"
+      />
     </div>
   </div>
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-graph-column"
-    />
-  </div>
-</div>
+</graphcardmetrictotals>
 `;
 
 exports[`GraphCardMetricTotals Component should handle multiple display states: error 1`] = `
-<div
-  className="curiosity-usage-graph__totals"
-  data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+<graphcardmetrictotals
+  props="{
+  "children": []
+}"
 >
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-column"
-    >
-      <Card
-        className="curiosity-usage-graph__totals-column-card blur"
-        data-test="graphMetricTotalsCard-0"
-        isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+  <div
+    class="curiosity-usage-graph__totals"
+    data-test="graphMetricTotals-hello-world"
+    data-test-data="{"groupMetricId":["hello","world"]}"
+  >
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-column"
       >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
-            />
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div />
-        </CardBody>
-        <CardFooter>
-          <div />
-        </CardFooter>
-      </Card>
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card blur"
+          data-ouia-component-id="OUIA-Generated-Card-1"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-0"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
+            >
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-1"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              />
+            </div>
+          </div>
+          <div
+            class="pf-c-card__body"
+          >
+            <div />
+          </div>
+          <div
+            class="pf-c-card__footer"
+          >
+            <div />
+          </div>
+        </article>
+      </div>
+    </div>
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-graph-column"
+      />
     </div>
   </div>
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-graph-column"
-    />
-  </div>
-</div>
+</graphcardmetrictotals>
 `;
 
 exports[`GraphCardMetricTotals Component should handle multiple display states: fulfilled 1`] = `
-<div
-  className="curiosity-usage-graph__totals"
-  data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+<graphcardmetrictotals
+  props="{
+  "children": []
+}"
 >
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-column"
-    >
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMetricTotalsCard-0"
-        isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+  <div
+    class="curiosity-usage-graph__totals"
+    data-test="graphMetricTotals-hello-world"
+    data-test-data="{"groupMetricId":["hello","world"]}"
+  >
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-column"
       >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card "
+          data-ouia-component-id="OUIA-Generated-Card-1"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-0"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
             >
-              lorem
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div>
-            ipsum
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-1"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              >
+                lorem
+              </h2>
+            </div>
           </div>
-        </CardBody>
-        <CardFooter>
-          <div>
-            dolor sit
+          <div
+            class="pf-c-card__body"
+          >
+            <div>
+              ipsum
+            </div>
           </div>
-        </CardFooter>
-      </Card>
+          <div
+            class="pf-c-card__footer"
+          >
+            <div>
+              dolor sit
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-graph-column"
+      />
     </div>
   </div>
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-graph-column"
-    />
-  </div>
-</div>
+</graphcardmetrictotals>
 `;
 
 exports[`GraphCardMetricTotals Component should handle multiple display states: pending 1`] = `
-<div
-  className="curiosity-usage-graph__totals"
-  data-test="graphMetricTotals-hello-world"
-  data-test-data="{"groupMetricId":["hello","world"]}"
+<graphcardmetrictotals
+  props="{
+  "children": []
+}"
 >
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-column"
-    >
-      <Card
-        className="curiosity-usage-graph__totals-column-card "
-        data-test="graphMetricTotalsCard-0"
-        isPlain={true}
-        key="3409dd31007d6ac3d52cd7bf810296df8201c75d"
+  <div
+    class="curiosity-usage-graph__totals"
+    data-test="graphMetricTotals-hello-world"
+    data-test-data="{"groupMetricId":["hello","world"]}"
+  >
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-column"
       >
-        <CardHeader>
-          <CardTitle>
-            <Title
-              headingLevel="h2"
-              size="md"
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card "
+          data-ouia-component-id="OUIA-Generated-Card-1"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-0"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
             >
-              <Loader
-                skeletonProps={
-                  {
-                    "size": "lg",
-                  }
-                }
-                tableProps={{}}
-                variant="skeleton"
-              />
-            </Title>
-          </CardTitle>
-        </CardHeader>
-        <CardBody>
-          <div>
-            <Loader
-              skeletonProps={
-                {
-                  "height": "60px",
-                  "size": "lg",
-                }
-              }
-              tableProps={{}}
-              variant="skeleton"
-            />
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-1"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              >
+                <div
+                  class="pf-c-skeleton ins-c-skeleton ins-c-skeleton__lg"
+                >
+                  <span
+                    class="pf-u-screen-reader"
+                  />
+                </div>
+              </h2>
+            </div>
           </div>
-        </CardBody>
-        <CardFooter>
-          <div>
-            <Loader
-              skeletonProps={
-                {
-                  "size": "lg",
-                }
-              }
-              tableProps={{}}
-              variant="skeleton"
-            />
+          <div
+            class="pf-c-card__body"
+          >
+            <div>
+              <div
+                class="pf-c-skeleton ins-c-skeleton ins-c-skeleton__lg"
+                style="--pf-c-skeleton--Height: 60px;"
+              >
+                <span
+                  class="pf-u-screen-reader"
+                />
+              </div>
+            </div>
           </div>
-        </CardFooter>
-      </Card>
+          <div
+            class="pf-c-card__footer"
+          >
+            <div>
+              <div
+                class="pf-c-skeleton ins-c-skeleton ins-c-skeleton__lg"
+              >
+                <span
+                  class="pf-u-screen-reader"
+                />
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-graph-column"
+      />
     </div>
   </div>
-  <div>
-    <div
-      className="curiosity-usage-graph__totals-graph-column"
-    />
-  </div>
-</div>
+</graphcardmetrictotals>
 `;
 
 exports[`GraphCardMetricTotals Component should render a basic component: basic 1`] = `
-<div
-  className="curiosity-usage-graph__standalone"
-  data-test="graphStandalone"
+<graphcardmetrictotals
+  props="{
+  "children": [
+    {}
+  ]
+}"
 >
-  lorem ipsum
-</div>
+  <div
+    class="curiosity-usage-graph__standalone"
+    data-test="graphStandalone"
+  >
+    lorem ipsum
+  </div>
+</graphcardmetrictotals>
 `;

@@ -1,99 +1,170 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GraphCard Component should allow being disabled: disabled 1`] = `""`;
+exports[`GraphCard Component should allow being disabled: disabled 1`] = `
+<graphcard
+  props="{
+  "isDisabled": true,
+  "children": []
+}"
+/>
+`;
 
 exports[`GraphCard Component should setup basic settings: settings, grouped 1`] = `
-<ContextProvider
-  key="graphCard-Core-seconds"
-  value={
-    {
-      "settings": {
-        "cards": [
-          {
-            "body": "ipsum",
-            "footer": "dolor sit",
-            "header": "lorem",
-          },
-        ],
-        "isMetricDisplay": true,
-        "loremIpsum": false,
-        "metric": undefined,
-        "metrics": [
-          {
-            "chartType": "area",
-            "id": "Core-seconds",
-            "isCapacity": false,
-            "isStacked": true,
-            "isThreshold": false,
-            "isToolbarFilter": false,
-            "loremIpsum": false,
-            "metric": "Core-seconds",
-            "strokeWidth": 2,
-          },
-        ],
-      },
-    }
-  }
+<graphcard
+  props="{
+  "isDisabled": false,
+  "children": []
+}"
 >
-  <GraphCardMetricTotals
-    useGraphCardContext={[Function]}
-    useMetricsSelector={[Function]}
-    useProductGraphTallyQuery={[Function]}
+  <div
+    class="curiosity-usage-graph__totals"
+    data-test="graphMetricTotals-undefined"
+    data-test-data="{}"
   >
-    <GraphCardChart
-      t={[Function]}
-      useGetMetrics={[Function]}
-      useGraphCardActions={[Function]}
-      useGraphCardContext={[Function]}
-      useProductGraphTallyQuery={[Function]}
-    />
-  </GraphCardMetricTotals>
-</ContextProvider>
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-column"
+      >
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph__totals-column-card "
+          data-ouia-component-id="OUIA-Generated-Card-2"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          data-test="graphMetricTotalsCard-0"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
+            >
+              <h2
+                class="pf-c-title pf-m-md"
+                data-ouia-component-id="OUIA-Generated-Title-2"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              />
+            </div>
+          </div>
+          <div
+            class="pf-c-card__body"
+          >
+            <div />
+          </div>
+          <div
+            class="pf-c-card__footer"
+          >
+            <div />
+          </div>
+        </article>
+      </div>
+    </div>
+    <div>
+      <div
+        class="curiosity-usage-graph__totals-graph-column"
+      >
+        <article
+          class="pf-c-card pf-m-plain curiosity-usage-graph"
+          data-ouia-component-id="OUIA-Generated-Card-3"
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe="true"
+          id=""
+        >
+          <div
+            class="pf-c-card__header"
+          >
+            <div
+              class="pf-c-card__title"
+            >
+              <h2
+                class="pf-c-title pf-m-lg"
+                data-ouia-component-id="OUIA-Generated-Title-3"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe="true"
+              >
+                t(curiosity-graph.cardHeading, {})
+              </h2>
+            </div>
+          </div>
+          <div
+            class="curiosity-minheight"
+          >
+            <div>
+              <div
+                class="pf-c-card__body"
+              >
+                <div
+                  class=""
+                >
+                  <div
+                    class="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+                    data-test="curiosity-chartarea"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</graphcard>
 `;
 
 exports[`GraphCard Component should setup basic settings: settings, standalone 1`] = `
-<ContextProvider
-  key="graphCard-Sockets"
-  value={
-    {
-      "settings": {
-        "loremIpsum": true,
-        "metric": undefined,
-        "metrics": [
-          {
-            "chartType": "area",
-            "id": "Sockets",
-            "isCapacity": false,
-            "isStacked": true,
-            "isThreshold": false,
-            "isToolbarFilter": false,
-            "loremIpsum": true,
-            "metric": "Sockets",
-            "strokeWidth": 2,
-          },
-        ],
-        "padding": {
-          "bottom": 75,
-          "left": 75,
-          "right": 45,
-          "top": 45,
-        },
-      },
-    }
-  }
+<graphcard
+  props="{
+  "isDisabled": false,
+  "children": []
+}"
 >
-  <GraphCardMetricTotals
-    useGraphCardContext={[Function]}
-    useMetricsSelector={[Function]}
-    useProductGraphTallyQuery={[Function]}
+  <div
+    class="curiosity-usage-graph__standalone"
+    data-test="graphStandalone"
   >
-    <GraphCardChart
-      t={[Function]}
-      useGetMetrics={[Function]}
-      useGraphCardActions={[Function]}
-      useGraphCardContext={[Function]}
-      useProductGraphTallyQuery={[Function]}
-    />
-  </GraphCardMetricTotals>
-</ContextProvider>
+    <article
+      class="pf-c-card pf-m-plain curiosity-usage-graph"
+      data-ouia-component-id="OUIA-Generated-Card-1"
+      data-ouia-component-type="PF4/Card"
+      data-ouia-safe="true"
+      id=""
+    >
+      <div
+        class="pf-c-card__header"
+      >
+        <div
+          class="pf-c-card__title"
+        >
+          <h2
+            class="pf-c-title pf-m-lg"
+            data-ouia-component-id="OUIA-Generated-Title-1"
+            data-ouia-component-type="PF4/Title"
+            data-ouia-safe="true"
+          >
+            t(curiosity-graph.cardHeading, {})
+          </h2>
+        </div>
+      </div>
+      <div
+        class="curiosity-minheight"
+      >
+        <div>
+          <div
+            class="pf-c-card__body"
+          >
+            <div
+              class=""
+            >
+              <div
+                class="curiosity-chartarea uxui-curiosity__modal uxui-curiosity__modal--loading"
+                data-test="curiosity-chartarea"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</graphcard>
 `;

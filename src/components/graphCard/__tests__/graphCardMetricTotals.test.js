@@ -3,16 +3,16 @@ import { GraphCardMetricTotals } from '../graphCardMetricTotals';
 import { translate } from '../../i18n/i18nHelpers';
 
 describe('GraphCardMetricTotals Component', () => {
-  it('should render a basic component', async () => {
+  it('should render a basic component', () => {
     const props = {
       children: 'lorem ipsum'
     };
-    const component = await shallowHookComponent(<GraphCardMetricTotals {...props} />);
+    const component = renderComponent(<GraphCardMetricTotals {...props} />);
 
     expect(component).toMatchSnapshot('basic');
   });
 
-  it('should handle multiple display states', async () => {
+  it('should handle multiple display states', () => {
     const props = {
       useGraphCardContext: () => ({
         children: 'lorem ipsum',
@@ -34,7 +34,7 @@ describe('GraphCardMetricTotals Component', () => {
         fulfilled: false
       })
     };
-    const component = await shallowHookComponent(<GraphCardMetricTotals {...props} />);
+    const component = renderComponent(<GraphCardMetricTotals {...props} />);
 
     expect(component).toMatchSnapshot('pending');
 
@@ -59,7 +59,7 @@ describe('GraphCardMetricTotals Component', () => {
     expect(component).toMatchSnapshot('fulfilled');
   });
 
-  it('should handle custom card displays', async () => {
+  it('should handle custom card displays', () => {
     const props = {
       useGraphCardContext: () => ({
         children: 'lorem ipsum',
@@ -93,7 +93,7 @@ describe('GraphCardMetricTotals Component', () => {
         fulfilled: true
       })
     };
-    const component = await shallowHookComponent(<GraphCardMetricTotals {...props} />);
+    const component = renderComponent(<GraphCardMetricTotals {...props} />);
     expect(component).toMatchSnapshot('fulfilled');
   });
 });
