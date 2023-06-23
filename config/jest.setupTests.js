@@ -176,7 +176,17 @@ global.renderComponent = (testComponent, { ...options } = {}) => {
 
   updatedContainer.setProps = updatedProps => {
     const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
-    return renderRest.rerender(updatedComponent);
+    // console.log('>>>> UPDATED', updatedComponent);
+    let rerender = renderRest.rerender(updatedComponent);
+
+    if (rerender === undefined) {
+      rerender = global.renderComponent(updatedComponent, { queries, ...options });
+    }
+
+    return rerender;
+
+    // const UpdatedComponent = p => ({ ...testComponent, props: { ...testComponent?.props, ...p } });
+    // return renderRest.rerender(<UpdatedComponent {...updatedProps} />);
   };
 
   updatedContainer.find = selector => container?.querySelector(selector);
@@ -258,7 +268,15 @@ beforeAll(() => {
       throw new Error(message);
     }
 
-    if (/<testComponent/gi.test(message) || args?.[0] === 'testComponent') {
+    // ignore SVG and other xml
+    if (
+      /<testComponent/gi.test(message) ||
+      args?.[0] === 'testComponent' ||
+      /<foreignObject/gi.test(message) ||
+      args?.[0] === 'foreignObject' ||
+      /<g/gi.test(message) ||
+      args?.[0] === 'g'
+    ) {
       return false;
     }
 
