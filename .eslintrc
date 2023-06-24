@@ -45,6 +45,7 @@
     "mockWindowLocation": "readonly",
     "renderHook": "readonly",
     "renderComponent": "readonly",
+    "shallowComponent": "readonly",
     "skipIt": "readonly"
   },
   "rules": {

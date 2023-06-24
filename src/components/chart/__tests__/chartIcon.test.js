@@ -4,7 +4,7 @@ import { ChartIcon } from '../chartIcon';
 describe('ChartIcon Component', () => {
   it('should render a basic component', () => {
     const props = {};
-    const component = renderComponent(<ChartIcon {...props} />);
+    const component = shallowComponent(<ChartIcon {...props} />);
 
     expect(component).toMatchSnapshot('basic');
   });
@@ -41,8 +41,8 @@ describe('ChartIcon Component', () => {
     ];
 
     iconProps.forEach(({ symbol, ...props }) => {
-      const component = renderComponent(<ChartIcon symbol={symbol} {...props} />);
-      expect(component.find('span')).toMatchSnapshot(symbol);
+      const component = shallowComponent(<ChartIcon symbol={symbol} {...props} />);
+      expect(component).toMatchSnapshot(symbol);
     });
   });
 });

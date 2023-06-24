@@ -135,7 +135,45 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 };
 
 /**
+ * Quick React function component results testing.
+ * use "shallowComponent" if
+ * - the component is a function, class results may not be expected
+ * - you want a quick component response typically determined by a condition
+ * - snapshot size needs to be reduced
+ *
+ * use "renderComponent" if... see "renderComponent"
+ *
+ * @param {React.ReactNode} testComponent
+ * @returns {*}
+ */
+global.shallowComponent = testComponent => {
+  if (typeof testComponent?.type === 'function') {
+    try {
+      return testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+    } catch (e) {
+      //
+    }
+
+    try {
+      // eslint-disable-next-line
+      const instance = new testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+      return instance.render();
+    } catch (e) {
+      //
+    }
+  }
+
+  return testComponent;
+};
+
+/**
  * React testing for components.
+ * use "shallowComponent" if... see "shallowComponent"
+ *
+ * use "renderComponent" if... see "renderComponent
+ * - hooks are used, and are not passed in as props and/or you want to skip writing mocks
+ * - html output is required
+ * - events are involved
  *
  * @param {React.ReactNode} testComponent
  * @param {object} options
@@ -176,7 +214,6 @@ global.renderComponent = (testComponent, options = {}) => {
 
   updatedContainer.setProps = updatedProps => {
     const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
-    // console.log('>>>> UPDATED', updatedComponent);
     let rerender = renderRest.rerender(updatedComponent);
 
     if (rerender === undefined) {
@@ -184,9 +221,6 @@ global.renderComponent = (testComponent, options = {}) => {
     }
 
     return rerender;
-
-    // const UpdatedComponent = p => ({ ...testComponent, props: { ...testComponent?.props, ...p } });
-    // return renderRest.rerender(<UpdatedComponent {...updatedProps} />);
   };
 
   updatedContainer.find = selector => container?.querySelector(selector);
@@ -207,7 +241,7 @@ global.renderComponent = (testComponent, options = {}) => {
  * @param {object} options.state An object representing a mock Redux store's state.
  * @returns {*}
  */
-global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
+global.renderHook = async (useHook = Function.prototype, { state } = {}) => {
   let result;
   let spyUseSelector;
   let unmountHook;
@@ -235,8 +269,6 @@ global.mountHook = async (useHook = Function.prototype, { state } = {}) => {
 
   return { unmount, result };
 };
-
-global.renderHook = global.mountHook;
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging
 // ToDo: revisit squashing "popper" alerts

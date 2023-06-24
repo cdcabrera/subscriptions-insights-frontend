@@ -10,9 +10,11 @@ describe('BannerMessages Component', () => {
           title: 'Lorem ipsum title',
           message: 'Lorem ipsum message'
         }
-      ]
+      ],
+      useRemoveBannerMessages: Function.prototype
     };
-    const component = renderComponent(<BannerMessages {...props} />);
+
+    const component = shallowComponent(<BannerMessages {...props} />);
 
     expect(component).toMatchSnapshot('basic');
   });

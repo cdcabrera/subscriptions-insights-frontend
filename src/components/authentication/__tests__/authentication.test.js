@@ -17,7 +17,7 @@ describe('Authentication Component', () => {
       })
     };
 
-    const component = renderComponent(
+    const component = shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -38,7 +38,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = renderComponent(
+    const component = shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -62,7 +62,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = renderComponent(
+    const component = shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -83,7 +83,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = renderComponent(
+    const component = shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
@@ -160,7 +160,7 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = renderComponent(
+    const component = shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
