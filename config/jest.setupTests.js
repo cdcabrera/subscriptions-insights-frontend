@@ -235,7 +235,11 @@ global.renderComponent = (testComponent, options = {}) => {
   };
 
   const containerElement = document.createElement(componentInfo?.displayName || 'element');
-  containerElement.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+  try {
+    containerElement.setAttribute('props', JSON.stringify(componentInfo?.props || {}, null, 2));
+  } catch (e) {
+    //
+  }
   containerElement.props = componentInfo.props;
 
   const { container, ...renderRest } = render(testComponent, {
@@ -244,8 +248,15 @@ global.renderComponent = (testComponent, options = {}) => {
     ...options
   });
 
-  const updatedContainer = container;
+  const appendProps = obj => {
+    Object.entries(renderRest).forEach(([key, value]) => {
+      obj[key] = value; // eslint-disable-line
+    });
+  };
 
+  const updatedContainer = container;
+  updatedContainer.find = selector => container?.querySelector(selector);
+  updatedContainer.fireEvent = fireEvent;
   updatedContainer.setProps = updatedProps => {
     const updatedComponent = { ...testComponent, props: { ...testComponent?.props, ...updatedProps } };
     let rerender = renderRest.rerender(updatedComponent);
@@ -254,15 +265,17 @@ global.renderComponent = (testComponent, options = {}) => {
       rerender = global.renderComponent(updatedComponent, { queries, ...options });
     }
 
+    if (rerender) {
+      rerender.find = selector => rerender?.querySelector(selector);
+      rerender.fireEvent = fireEvent;
+      rerender.setProps = updatedContainer.setProps;
+      appendProps(rerender);
+    }
+
     return rerender;
   };
 
-  updatedContainer.find = selector => container?.querySelector(selector);
-  updatedContainer.fireEvent = fireEvent;
-
-  Object.entries(renderRest).forEach(([key, value]) => {
-    updatedContainer[key] = value;
-  });
+  appendProps(updatedContainer);
 
   return updatedContainer;
 };
@@ -340,6 +353,7 @@ global.shallowHookComponent = async testComponent => {
 
       console.log('>>>>>> typeof', typeof result);
 
+      /*
       const querySelector = (sel, _int) => {
         const { container } = render(_int || result);
         return container.querySelector(sel);
@@ -363,8 +377,47 @@ global.shallowHookComponent = async testComponent => {
           querySelectorAll: _querySelectorAll
         };
       };
+       */
 
-      return { ...result, setProps, find: querySelector, querySelector, querySelectorAll };
+      // return { ...result, setProps, find: querySelector, querySelector, querySelectorAll };
+      // const rendered = global.renderComponent(result);
+
+      const querySelector = (sel, _internal) => {
+        const { container } = render(_internal || result);
+        return container.querySelector(sel);
+      };
+
+      const querySelectorAll = (sel, _internal) => {
+        const { container } = render(_internal || result);
+        return container.querySelectorAll(sel);
+      };
+
+      const setProps = async p => {
+        const { result: setPropsResult } = await global.renderHook(() =>
+          testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props, ...p })
+        );
+        const _querySelector = sel => querySelector(sel, setPropsResult);
+        const _querySelectorAll = sel => querySelectorAll(sel, setPropsResult);
+        return {
+          ...setPropsResult,
+          querySelector: _querySelector,
+          find: _querySelector,
+          querySelectorAll: _querySelectorAll
+        };
+      };
+
+      // const test = { ...result, render: () => global.renderComponent(result), find: rendered.find, setProps: rendered.setProps };
+      const test = {
+        ...result,
+        render: () => global.renderComponent(result),
+        find: querySelector,
+        querySelector,
+        querySelectorAll,
+        setProps
+      };
+
+      console.log('>>>> WORK', test);
+      return test;
     } catch (e) {
       //
     }
