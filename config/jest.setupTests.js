@@ -332,9 +332,39 @@ global.renderHook = async (useHook = Function.prototype, { state } = {}) => {
 global.shallowHookComponent = async testComponent => {
   if (typeof testComponent?.type === 'function') {
     try {
-      return global.renderHook(() =>
+      const { result } = await global.renderHook(() =>
         testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props })
       );
+
+      // const updatedResult = result;
+
+      console.log('>>>>>> typeof', typeof result);
+
+      const querySelector = (sel, _int) => {
+        const { container } = render(_int || result);
+        return container.querySelector(sel);
+      };
+
+      const querySelectorAll = (sel, _int) => {
+        const { container } = render(_int || result);
+        return container.querySelectorAll(sel);
+      };
+
+      const setProps = async p => {
+        const { result: setPropsResult } = await global.renderHook(() =>
+          testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props, ...p })
+        );
+        const _querySelector = s => querySelector(s, setPropsResult);
+        const _querySelectorAll = s => querySelectorAll(s, setPropsResult);
+        return {
+          ...setPropsResult,
+          querySelector: _querySelector,
+          find: _querySelector,
+          querySelectorAll: _querySelectorAll
+        };
+      };
+
+      return { ...result, setProps, find: querySelector, querySelector, querySelectorAll };
     } catch (e) {
       //
     }
