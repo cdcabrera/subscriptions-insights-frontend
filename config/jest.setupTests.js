@@ -343,6 +343,51 @@ global.renderHook = async (useHook = Function.prototype, { state } = {}) => {
 };
 
 global.shallowHookComponent = async testComponent => {
+  const renderHook = async (component, updatedProps) => {
+    if (typeof component?.type === 'function') {
+      try {
+        const { result } = await global.renderHook(() =>
+          component.type({ ...component.type.defaultProps, ...component.props, ...updatedProps })
+        );
+
+        const querySelector = (sel, _internalRender = result) => {
+          const { container } = render(_internalRender);
+          return container.querySelector(sel);
+        };
+
+        const querySelectorAll = (sel, _internalRender = result) => {
+          const { container } = render(_internalRender);
+          return container.querySelectorAll(sel);
+        };
+
+        const setProps = async p => renderHook(component, p);
+
+        if (!result) {
+          return result;
+        }
+
+        console.log('>>>>>> result object', result, Array.isArray(result), Object.prototype.toString.call(result));
+
+        return {
+          ...result,
+          render: () => global.renderComponent(result),
+          find: querySelector,
+          querySelector,
+          querySelectorAll,
+          setProps
+        };
+      } catch (e) {
+        //
+      }
+    }
+
+    return component;
+  };
+
+  return renderHook(testComponent);
+};
+
+global.shallowHookComponentOG = async testComponent => {
   if (typeof testComponent?.type === 'function') {
     try {
       const { result } = await global.renderHook(() =>
