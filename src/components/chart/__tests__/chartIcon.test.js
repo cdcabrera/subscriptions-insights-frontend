@@ -4,9 +4,9 @@ import { ChartIcon } from '../chartIcon';
 describe('ChartIcon Component', () => {
   it('should render a basic component', async () => {
     const props = {};
-    const { result } = await shallowHookComponent(<ChartIcon {...props} />);
+    const component = await shallowComponent(<ChartIcon {...props} />);
 
-    expect(result).toMatchSnapshot('basic');
+    expect(component).toMatchSnapshot('basic');
   });
 
   it('should handle basic icons, variations in settings', () => {

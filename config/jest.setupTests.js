@@ -342,7 +342,7 @@ global.renderHook = async (useHook = Function.prototype, { state } = {}) => {
   return { unmount, result };
 };
 
-global.shallowHookComponent = async testComponent => {
+global.shallowComponent = async testComponent => {
   const renderHook = async (component, updatedProps) => {
     if (typeof component?.type === 'function') {
       try {
@@ -350,7 +350,7 @@ global.shallowHookComponent = async testComponent => {
           component.type({ ...component.type.defaultProps, ...component.props, ...updatedProps })
         );
 
-        if (!result) {
+        if (!result || typeof result === 'string' || typeof result === 'number') {
           return result;
         }
 

@@ -5,9 +5,9 @@ import * as chartContext from '../chartContext';
 describe('Chart Component', () => {
   it('should render a basic component', async () => {
     const props = {};
-    const { result } = await shallowHookComponent(<Chart {...props} />);
+    const component = await shallowComponent(<Chart {...props} />);
 
-    expect(result).toMatchSnapshot('basic');
+    expect(component).toMatchSnapshot('basic');
   });
 
   it('should setup basic chart settings', async () => {

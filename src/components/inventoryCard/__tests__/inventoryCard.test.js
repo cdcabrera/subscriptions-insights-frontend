@@ -15,7 +15,7 @@ describe('InventoryCard Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(<InventoryCard {...props} />);
+    const component = await shallowComponent(<InventoryCard {...props} />);
     expect(component).toMatchSnapshot('basic render');
   });
 
@@ -39,7 +39,7 @@ describe('InventoryCard Component', () => {
         }
       })
     };
-    const component = await shallowHookComponent(<InventoryCard {...props} />);
+    const component = await shallowComponent(<InventoryCard {...props} />);
 
     expect(component).toMatchSnapshot('disabled component');
   });
@@ -55,7 +55,7 @@ describe('InventoryCard Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(<InventoryCard {...props} />);
+    const component = await shallowComponent(<InventoryCard {...props} />);
     expect(component).toMatchSnapshot('pending');
 
     const componentError = await component.setProps({
@@ -108,7 +108,7 @@ describe('InventoryCard Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(<InventoryCard {...props} />);
+    const component = await shallowComponent(<InventoryCard {...props} />);
     expect(component).toMatchSnapshot('variable data');
 
     const componentFiltered = await component.setProps({
@@ -136,7 +136,7 @@ describe('InventoryCard Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(<InventoryCard {...props} />);
+    const component = await shallowComponent(<InventoryCard {...props} />);
     expect(component.find('tbody')).toMatchSnapshot('number of guests');
 
     const componentGuests = await component.setProps({

@@ -35,7 +35,7 @@ describe('GraphCard Component', () => {
       })
     };
 
-    const { result: componentStandalone } = await shallowHookComponent(<GraphCard {...props} />);
+    const componentStandalone = await shallowComponent(<GraphCard {...props} />);
     expect(componentStandalone).toMatchSnapshot('settings, standalone');
 
     props.useParseFiltersSettings = () => ({
@@ -69,7 +69,7 @@ describe('GraphCard Component', () => {
         }
       ]
     });
-    const { result: componentGrouped } = await shallowHookComponent(<GraphCard {...props} />);
+    const componentGrouped = await shallowComponent(<GraphCard {...props} />);
     expect(componentGrouped).toMatchSnapshot('settings, grouped');
   });
 
@@ -78,7 +78,7 @@ describe('GraphCard Component', () => {
       useParseFiltersSettings: () => ({}),
       isDisabled: true
     };
-    const { result } = await shallowHookComponent(<GraphCard {...props} />);
-    expect(result).toMatchSnapshot('disabled');
+    const component = await shallowComponent(<GraphCard {...props} />);
+    expect(component).toMatchSnapshot('disabled');
   });
 });

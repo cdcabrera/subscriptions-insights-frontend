@@ -14,9 +14,9 @@ describe('BannerMessages Component', () => {
       useRemoveBannerMessages: Function.prototype
     };
 
-    const { result } = await shallowHookComponent(<BannerMessages {...props} />);
+    const component = await shallowComponent(<BannerMessages {...props} />);
 
-    expect(result).toMatchSnapshot('basic');
+    expect(component).toMatchSnapshot('basic');
   });
 
   it('should handle closing messages from state', () => {

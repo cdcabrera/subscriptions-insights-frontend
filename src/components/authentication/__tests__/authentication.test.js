@@ -17,13 +17,13 @@ describe('Authentication Component', () => {
       })
     };
 
-    const { result } = await shallowHookComponent(
+    const component = await shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(result).toMatchSnapshot('basic');
+    expect(component).toMatchSnapshot('basic');
   });
 
   it('should render a component error', async () => {
@@ -38,13 +38,13 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const { result } = await shallowHookComponent(
+    const component = await shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(result).toMatchSnapshot('error');
+    expect(component).toMatchSnapshot('error');
   });
 
   it('should allow being disabled', async () => {
@@ -62,13 +62,13 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const { result } = await shallowHookComponent(
+    const component = await shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(result).toMatchSnapshot('disabled');
+    expect(component).toMatchSnapshot('disabled');
   });
 
   it('should return a redirect on 418 error', async () => {
@@ -83,13 +83,13 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const { result } = await shallowHookComponent(
+    const component = await shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(result).toMatchSnapshot('418 error');
+    expect(component).toMatchSnapshot('418 error');
   });
 
   it('should return a redirect on a specific 403 error and error code', () => {
@@ -160,13 +160,13 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const { result } = await shallowHookComponent(
+    const component = await shallowComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(result).toMatchSnapshot('pending');
+    expect(component).toMatchSnapshot('pending');
   });
 
   it('should render a component authorized', () => {
