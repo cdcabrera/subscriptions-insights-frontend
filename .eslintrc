@@ -46,6 +46,7 @@
     "renderHook": "readonly",
     "renderComponent": "readonly",
     "shallowComponent": "readonly",
+    "shallowHookComponent": "readonly",
     "skipIt": "readonly"
   },
   "rules": {

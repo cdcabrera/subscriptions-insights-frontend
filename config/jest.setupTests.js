@@ -135,9 +135,10 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
 };
 
 /**
- * Quick React function component results testing.
+ * Quick React function component results testing. Results may not be helpful.
  * use "shallowComponent" if
  * - the component is a function, class results may not be expected
+ * - all hooks are passed in as props
  * - you want a quick component response typically determined by a condition
  * - snapshot size needs to be reduced
  *
@@ -166,12 +167,43 @@ global.shallowComponent = testComponent => {
   return testComponent;
 };
 
+global.shallowComponentOLD = async testComponent => {
+  if (typeof testComponent?.type === 'function') {
+    try {
+      // return testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+      let result;
+      const Hook = () => {
+        result = testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+        return null;
+      };
+
+      await act(async () => render(<Hook />));
+      // await render(<Hook />);
+      // await act(async () => render(<Hook />));
+      // pAct(() => render(<Hook />));
+      return result;
+    } catch (e) {
+      //
+    }
+
+    try {
+      // eslint-disable-next-line
+      const instance = new testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+      return instance.render();
+    } catch (e) {
+      //
+    }
+  }
+
+  return testComponent;
+};
+
 /**
  * React testing for components.
  * use "shallowComponent" if... see "shallowComponent"
  *
  * use "renderComponent" if... see "renderComponent
- * - hooks are used, and are not passed in as props and/or you want to skip writing mocks
+ * - hooks are used and are not being passed in as mock props, and/or you want to skip writing mocks for hooks
  * - html output is required
  * - events are involved
  *
@@ -268,6 +300,20 @@ global.renderHook = async (useHook = Function.prototype, { state } = {}) => {
   }
 
   return { unmount, result };
+};
+
+global.shallowHookComponent = async testComponent => {
+  if (typeof testComponent?.type === 'function') {
+    try {
+      return global.renderHook(() =>
+        testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props })
+      );
+    } catch (e) {
+      //
+    }
+  }
+
+  return testComponent;
 };
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging
