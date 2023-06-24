@@ -350,6 +350,10 @@ global.shallowHookComponent = async testComponent => {
           component.type({ ...component.type.defaultProps, ...component.props, ...updatedProps })
         );
 
+        if (!result) {
+          return result;
+        }
+
         const querySelector = (sel, _internalRender = result) => {
           const { container } = render(_internalRender);
           return container.querySelector(sel);
@@ -362,14 +366,12 @@ global.shallowHookComponent = async testComponent => {
 
         const setProps = async p => renderHook(component, p);
 
-        if (!result) {
-          return result;
-        }
+        const renderResult = () => global.renderComponent(result);
 
         if (Array.isArray(result)) {
           // const updatedR = new String(JSON.stringify(result, null, 2)); // eslint-disable-line
           const updatedR = result;
-          updatedR.render = () => global.renderComponent(result);
+          updatedR.render = renderResult;
           updatedR.find = querySelector;
           updatedR.querySelector = querySelector;
           updatedR.querySelectorAll = querySelectorAll;
@@ -379,7 +381,7 @@ global.shallowHookComponent = async testComponent => {
 
         return {
           ...result,
-          render: () => global.renderComponent(result),
+          render: renderResult,
           find: querySelector,
           querySelector,
           querySelectorAll,
