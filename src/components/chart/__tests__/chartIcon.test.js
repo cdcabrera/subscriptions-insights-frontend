@@ -2,11 +2,11 @@ import React from 'react';
 import { ChartIcon } from '../chartIcon';
 
 describe('ChartIcon Component', () => {
-  it('should render a basic component', () => {
+  it('should render a basic component', async () => {
     const props = {};
-    const component = shallowComponent(<ChartIcon {...props} />);
+    const { result } = await shallowHookComponent(<ChartIcon {...props} />);
 
-    expect(component).toMatchSnapshot('basic');
+    expect(result).toMatchSnapshot('basic');
   });
 
   it('should handle basic icons, variations in settings', () => {
@@ -40,9 +40,9 @@ describe('ChartIcon Component', () => {
       }
     ];
 
-    iconProps.forEach(({ symbol, ...props }) => {
-      const component = shallowComponent(<ChartIcon symbol={symbol} {...props} />);
-      expect(component).toMatchSnapshot(symbol);
+    iconProps.forEach(async ({ symbol, ...props }) => {
+      const component = renderComponent(<ChartIcon symbol={symbol} {...props} />);
+      expect(component.find('span')).toMatchSnapshot(symbol);
     });
   });
 });

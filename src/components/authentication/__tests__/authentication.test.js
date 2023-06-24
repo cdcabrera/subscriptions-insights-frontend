@@ -4,7 +4,7 @@ import { Authentication } from '../authentication';
 import { rhsmConstants } from '../../../services/rhsm/rhsmConstants';
 
 describe('Authentication Component', () => {
-  it('should render a basic component', () => {
+  it('should render a basic component', async () => {
     const props = {
       useGetAuthorization: () => ({
         error: false,
@@ -17,16 +17,16 @@ describe('Authentication Component', () => {
       })
     };
 
-    const component = shallowComponent(
+    const { result } = await shallowHookComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('basic');
+    expect(result).toMatchSnapshot('basic');
   });
 
-  it('should render a component error', () => {
+  it('should render a component error', async () => {
     const props = {
       useGetAuthorization: () => ({
         error: true,
@@ -38,16 +38,16 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = shallowComponent(
+    const { result } = await shallowHookComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('error');
+    expect(result).toMatchSnapshot('error');
   });
 
-  it('should allow being disabled', () => {
+  it('should allow being disabled', async () => {
     const props = {
       isDisabled: true,
       useGetAuthorization: () => ({
@@ -62,16 +62,16 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = shallowComponent(
+    const { result } = await shallowHookComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('disabled');
+    expect(result).toMatchSnapshot('disabled');
   });
 
-  it('should return a redirect on 418 error', () => {
+  it('should return a redirect on 418 error', async () => {
     const props = {
       useGetAuthorization: () => ({
         error: true,
@@ -83,13 +83,13 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = shallowComponent(
+    const { result } = await shallowHookComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('418 error');
+    expect(result).toMatchSnapshot('418 error');
   });
 
   it('should return a redirect on a specific 403 error and error code', () => {
@@ -148,7 +148,7 @@ describe('Authentication Component', () => {
     expect(component.getByText('You do not have access to Subscriptions')).toMatchSnapshot('401 error');
   });
 
-  it('should render a component pending', () => {
+  it('should render a component pending', async () => {
     const props = {
       useGetAuthorization: () => ({
         error: false,
@@ -160,13 +160,13 @@ describe('Authentication Component', () => {
         }
       })
     };
-    const component = shallowComponent(
+    const { result } = await shallowHookComponent(
       <Authentication {...props}>
         <span className="test">lorem</span>
       </Authentication>
     );
 
-    expect(component).toMatchSnapshot('pending');
+    expect(result).toMatchSnapshot('pending');
   });
 
   it('should render a component authorized', () => {

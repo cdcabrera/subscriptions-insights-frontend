@@ -147,7 +147,8 @@ global.mockObjectProperty = (object = {}, property, mockValue) => {
  * @param {React.ReactNode} testComponent
  * @returns {*}
  */
-global.shallowComponent = testComponent => {
+/*
+global.shallowComponentWORKING = testComponent => {
   if (typeof testComponent?.type === 'function') {
     try {
       return testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
@@ -197,6 +198,7 @@ global.shallowComponentOLD = async testComponent => {
 
   return testComponent;
 };
+ */
 
 /**
  * React testing for components.
@@ -264,6 +266,31 @@ global.renderComponent = (testComponent, options = {}) => {
 
   return updatedContainer;
 };
+
+/*
+global.shallowComponent = testComponent => {
+  if (typeof testComponent?.type === 'function') {
+    try {
+      // return testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+      const Element = () => testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+      Element.displayName = testComponent.displayName;
+      return global.renderComponent(<Element />);
+    } catch (e) {
+      //
+    }
+
+    try {
+      // eslint-disable-next-line
+      const instance = new testComponent.type({ ...testComponent.type.defaultProps, ...testComponent.props });
+      return instance.render();
+    } catch (e) {
+      //
+    }
+  }
+
+  return testComponent;
+};
+ */
 
 /**
  * Fire a hook, return the result.

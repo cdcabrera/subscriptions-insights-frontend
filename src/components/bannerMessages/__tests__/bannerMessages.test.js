@@ -2,7 +2,7 @@ import React from 'react';
 import { BannerMessages } from '../bannerMessages';
 
 describe('BannerMessages Component', () => {
-  it('should render a basic component', () => {
+  it('should render a basic component', async () => {
     const props = {
       useBannerMessages: () => [
         {
@@ -14,9 +14,9 @@ describe('BannerMessages Component', () => {
       useRemoveBannerMessages: Function.prototype
     };
 
-    const component = shallowComponent(<BannerMessages {...props} />);
+    const { result } = await shallowHookComponent(<BannerMessages {...props} />);
 
-    expect(component).toMatchSnapshot('basic');
+    expect(result).toMatchSnapshot('basic');
   });
 
   it('should handle closing messages from state', () => {

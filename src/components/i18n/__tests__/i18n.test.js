@@ -50,8 +50,8 @@ const getTranslationKeys = ({ files = './src/**/!(*.test|*.spec).@(js|jsx)', lis
 describe('I18n Component', () => {
   const getKeys = getTranslationKeys({});
 
-  it('should render a basic component', async () => {
-    const { result } = await shallowHookComponent(<I18n>lorem ipsum</I18n>);
+  it('should render a basic component', () => {
+    const result = shallowComponent(<I18n>lorem ipsum</I18n>);
     expect(result).toMatchSnapshot('basic');
   });
 

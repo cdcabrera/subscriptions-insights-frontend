@@ -3,11 +3,11 @@ import { Chart } from '../chart';
 import * as chartContext from '../chartContext';
 
 describe('Chart Component', () => {
-  it('should render a basic component', () => {
+  it('should render a basic component', async () => {
     const props = {};
-    const component = renderComponent(<Chart {...props} />);
+    const { result } = await shallowHookComponent(<Chart {...props} />);
 
-    expect(component).toMatchSnapshot('basic');
+    expect(result).toMatchSnapshot('basic');
   });
 
   it('should setup basic chart settings', async () => {
