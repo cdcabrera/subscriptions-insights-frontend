@@ -366,6 +366,30 @@ global.shallowHookComponent = async testComponent => {
           return result;
         }
 
+        if (Array.isArray(result)) {
+          // const updatedR = new String(JSON.stringify(result, null, 2)); // eslint-disable-line
+          const updatedR = result;
+          updatedR.render = () => global.renderComponent(result);
+          updatedR.find = querySelector;
+          updatedR.querySelector = querySelector;
+          updatedR.querySelectorAll = querySelectorAll;
+          updatedR.setProps = setProps;
+          return updatedR;
+        }
+
+        return {
+          ...result,
+          render: () => global.renderComponent(result),
+          find: querySelector,
+          querySelector,
+          querySelectorAll,
+          setProps
+        };
+        /*
+        if (!result) {
+          return result;
+        }
+
         console.log('>>>>>> result object', result, Array.isArray(result), Object.prototype.toString.call(result));
 
         return {
@@ -376,6 +400,7 @@ global.shallowHookComponent = async testComponent => {
           querySelectorAll,
           setProps
         };
+        */
       } catch (e) {
         //
       }
