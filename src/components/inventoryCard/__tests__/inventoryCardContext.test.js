@@ -62,7 +62,6 @@ describe('InventoryCardContext', () => {
         getInventory: () => () => {},
         useProduct: () => ({ productId: 'lorem' }),
         useDispatch: () => {},
-        useProductInventoryQuery: () => ({}),
         useSelectorsResponse: () => ({ pending: true })
       })
     );
@@ -74,7 +73,6 @@ describe('InventoryCardContext', () => {
         getInventory: () => () => {},
         useProduct: () => ({ productId: 'lorem' }),
         useDispatch: () => {},
-        useProductInventoryQuery: () => ({}),
         useSelectorsResponse: () => ({ cancelled: true })
       })
     );
@@ -86,7 +84,6 @@ describe('InventoryCardContext', () => {
         getInventory: () => () => {},
         useProduct: () => ({ productId: 'lorem' }),
         useDispatch: () => {},
-        useProductInventoryQuery: () => ({}),
         useSelectorsResponse: () => ({ fulfilled: true })
       })
     );
@@ -99,7 +96,6 @@ describe('InventoryCardContext', () => {
         getInventory: () => () => {},
         useProduct: () => ({ productId: 'lorem' }),
         useDispatch: () => {},
-        useProductInventoryQuery: () => ({}),
         useSelectorsResponse: () => ({ fulfilled: true })
       })
     );
