@@ -265,7 +265,7 @@ global.renderHook = async (useHook = Function.prototype, { state } = {}) => {
  * @returns {*}
  */
 global.shallowComponent = async testComponent => {
-  const renderHook = async (component, updatedProps) => {
+  const localRenderHook = async (component, updatedProps) => {
     if (typeof component?.type === 'function') {
       try {
         const { result } = await global.renderHook(() =>
@@ -286,7 +286,7 @@ global.shallowComponent = async testComponent => {
           return container.querySelectorAll(sel);
         };
 
-        const setProps = async p => renderHook(component, p);
+        const setProps = async p => localRenderHook(component, p);
 
         const renderResult = () => global.renderComponent(result);
 
@@ -316,7 +316,7 @@ global.shallowComponent = async testComponent => {
     return component;
   };
 
-  return renderHook(testComponent);
+  return localRenderHook(testComponent);
 };
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging

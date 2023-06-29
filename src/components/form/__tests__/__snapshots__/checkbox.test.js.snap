@@ -131,6 +131,7 @@ exports[`Checkbox Component should render a basic component: basic component 1`]
       type="checkbox"
       value=""
     />
+    
   </div>
 </checkbox>
 `;

@@ -12,7 +12,7 @@ describe('GraphCardMetricTotals Component', () => {
     expect(component).toMatchSnapshot('basic');
   });
 
-  it('should handle multiple display states', () => {
+  it('should handle multiple display states', async () => {
     const props = {
       useGraphCardContext: () => ({
         children: 'lorem ipsum',
@@ -34,11 +34,11 @@ describe('GraphCardMetricTotals Component', () => {
         fulfilled: false
       })
     };
-    const component = renderComponent(<GraphCardMetricTotals {...props} />);
+    const component = await shallowComponent(<GraphCardMetricTotals {...props} />);
 
     expect(component).toMatchSnapshot('pending');
 
-    component.setProps({
+    const componentPending = await component.setProps({
       useMetricsSelector: () => ({
         pending: false,
         error: true,
@@ -46,9 +46,9 @@ describe('GraphCardMetricTotals Component', () => {
       })
     });
 
-    expect(component).toMatchSnapshot('error');
+    expect(componentPending).toMatchSnapshot('error');
 
-    component.setProps({
+    const componentFulfilled = await component.setProps({
       useMetricsSelector: () => ({
         pending: false,
         error: false,
@@ -56,7 +56,7 @@ describe('GraphCardMetricTotals Component', () => {
       })
     });
 
-    expect(component).toMatchSnapshot('fulfilled');
+    expect(componentFulfilled).toMatchSnapshot('fulfilled');
   });
 
   it('should handle custom card displays', () => {

@@ -194,12 +194,14 @@ exports[`GraphCardContext should return specific properties: specific properties
     "$$typeof": Symbol(react.context),
     "Consumer": {
       "$$typeof": Symbol(react.context),
+      "_calculateChangedBits": null,
       "_context": [Circular],
     },
     "Provider": {
       "$$typeof": Symbol(react.provider),
       "_context": [Circular],
     },
+    "_calculateChangedBits": null,
     "_currentRenderer": null,
     "_currentRenderer2": null,
     "_currentValue": [
@@ -218,8 +220,6 @@ exports[`GraphCardContext should return specific properties: specific properties
       },
       [Function],
     ],
-    "_defaultValue": null,
-    "_globalName": null,
     "_threadCount": 0,
   },
   "useGetMetrics": [Function],
