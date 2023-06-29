@@ -2,5 +2,6 @@ const { setupDotenvFilesForEnv } = require('./config/build.dotenv');
 setupDotenvFilesForEnv({ env: process.env.NODE_ENV || 'production' });
 
 module.exports = {
-  presets: ['react-app']
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+  plugins: ['@babel/plugin-transform-runtime']
 };
