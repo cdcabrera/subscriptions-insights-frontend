@@ -12,7 +12,7 @@ describe('ProductView Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(<ProductView {...props} />);
+    const component = await shallowComponent(<ProductView {...props} />);
     expect(component).toMatchSnapshot('basic');
   });
 
@@ -24,7 +24,7 @@ describe('ProductView Component', () => {
       })
     };
 
-    const componentProductGroup = await shallowHookComponent(<ProductView {...props} />);
+    const componentProductGroup = await shallowComponent(<ProductView {...props} />);
     expect(componentProductGroup).toMatchSnapshot('empty, productGroup');
 
     props.useRouteDetail = () => ({
@@ -34,7 +34,7 @@ describe('ProductView Component', () => {
       viewId: null
     });
 
-    const componentProductId = await shallowHookComponent(<ProductView {...props} />);
+    const componentProductId = await shallowComponent(<ProductView {...props} />);
     expect(componentProductId).toMatchSnapshot('empty, productId and viewId');
   });
 
@@ -46,35 +46,35 @@ describe('ProductView Component', () => {
       })
     };
 
-    const componentTypeOne = await shallowHookComponent(<ProductView {...props} />);
+    const componentTypeOne = await shallowComponent(<ProductView {...props} />);
     expect(componentTypeOne).toMatchSnapshot('custom view, hourly');
 
     props.useRouteDetail = () => ({
       firstMatch: { lorem: 'ipsum', productId: 'lorem', viewId: 'viewIpsum', productDisplay: DISPLAY_TYPES.CAPACITY },
       productGroup: 'lorem ipsum'
     });
-    const componentTypeTwo = await shallowHookComponent(<ProductView {...props} />);
+    const componentTypeTwo = await shallowComponent(<ProductView {...props} />);
     expect(componentTypeTwo).toMatchSnapshot('custom view, capacity');
 
     props.useRouteDetail = () => ({
       firstMatch: { lorem: 'ipsum', productId: 'lorem', viewId: 'viewIpsum', productDisplay: DISPLAY_TYPES.DUAL_AXES },
       productGroup: 'lorem ipsum'
     });
-    const componentTypeThree = await shallowHookComponent(<ProductView {...props} />);
+    const componentTypeThree = await shallowComponent(<ProductView {...props} />);
     expect(componentTypeThree).toMatchSnapshot('custom view, dual axes');
 
     props.useRouteDetail = () => ({
       firstMatch: { lorem: 'ipsum', productId: 'lorem', viewId: 'viewIpsum', productDisplay: DISPLAY_TYPES.LEGACY },
       productGroup: 'lorem ipsum'
     });
-    const componentTypeFour = await shallowHookComponent(<ProductView {...props} />);
+    const componentTypeFour = await shallowComponent(<ProductView {...props} />);
     expect(componentTypeFour).toMatchSnapshot('custom view, legacy');
 
     props.useRouteDetail = () => ({
       firstMatch: { lorem: 'ipsum', productId: 'lorem', viewId: 'viewIpsum', productDisplay: DISPLAY_TYPES.PARTIAL },
       productGroup: 'lorem ipsum'
     });
-    const componentTypeFive = await shallowHookComponent(<ProductView {...props} />);
+    const componentTypeFive = await shallowComponent(<ProductView {...props} />);
     expect(componentTypeFive).toMatchSnapshot('custom view, partial');
   });
 
@@ -93,10 +93,10 @@ describe('ProductView Component', () => {
       })
     };
 
-    const component = await shallowHookComponent(<ProductView {...props} />);
-    expect(component.find(InventoryTabs)).toMatchSnapshot('custom tabs, basic inventory tables');
+    const component = await shallowComponent(<ProductView {...props} />);
+    expect(component).toMatchSnapshot('custom tabs, basic inventory tables');
 
-    component.setProps({
+    const componentMissingInv = await component.setProps({
       ...props,
       useRouteDetail: () => ({
         firstMatch: {
@@ -110,9 +110,9 @@ describe('ProductView Component', () => {
       })
     });
 
-    expect(component.find(InventoryTabs)).toMatchSnapshot('custom tabs, missing inventory');
+    expect(componentMissingInv).toMatchSnapshot('custom tabs, missing inventory');
 
-    component.setProps({
+    const componentMissingSubsInv = await component.setProps({
       ...props,
       useRouteDetail: () => ({
         firstMatch: {
@@ -126,6 +126,6 @@ describe('ProductView Component', () => {
       })
     });
 
-    expect(component.find(InventoryTabs)).toMatchSnapshot('custom tabs, missing subscriptions inventory');
+    expect(componentMissingSubsInv).toMatchSnapshot('custom tabs, missing subscriptions inventory');
   });
 });
