@@ -1,5 +1,4 @@
 import React from 'react';
-import { ToolbarFilter } from '@patternfly/react-core';
 import { Toolbar } from '../toolbar';
 import { RHSM_API_QUERY_SLA_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../../services/rhsm/rhsmConstants';
 import { toolbarFieldOptions as selectCategoryOptions } from '../toolbarFieldSelectCategory';

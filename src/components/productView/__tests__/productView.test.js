@@ -1,7 +1,6 @@
 import React from 'react';
 import { ProductView } from '../productView';
 import { RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES } from '../../../services/rhsm/rhsmConstants';
-import { InventoryTabs } from '../../inventoryTabs/inventoryTabs';
 
 describe('ProductView Component', () => {
   it('should render a basic component', async () => {

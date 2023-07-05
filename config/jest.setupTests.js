@@ -320,7 +320,9 @@ global.shallowComponent = async testComponent => {
 };
 
 // FixMe: revisit squashing log and group messaging, redux leaks log messaging
-// ToDo: revisit squashing "popper" alerts
+// ToDo: revisit squashing PF4 "popper" alerts
+// ToDo: revisit squashing PF4 "validateDOMNesting" select alerts
+// ToDo: revisit squashing PF4 "validateDOMNesting" table alerts
 /*
  * For applying a global Jest "beforeAll", based on
  * - consoledot/platform console messaging
@@ -357,7 +359,8 @@ beforeAll(() => {
       args?.[0] === 'foreignObject' ||
       /<g/gi.test(message) ||
       args?.[0] === 'g' ||
-      (/validateDOMNesting/gi.test(message) && args?.[0] === '<div>' && args?.[1] === 'select')
+      (/validateDOMNesting/gi.test(message) && args?.[0] === '<div>' && args?.[1] === 'select') ||
+      (/validateDOMNesting/gi.test(message) && args?.[0] === '<div>' && args?.[1] === 'table')
     ) {
       return false;
     }
