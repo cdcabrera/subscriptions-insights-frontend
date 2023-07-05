@@ -9,7 +9,7 @@ describe('Toolbar Component', () => {
     const props = {
       useSelectCategoryOptions: () => ({ options: [selectCategoryOptions[4], selectCategoryOptions[5]] })
     };
-    const component = await shallowHookComponent(<Toolbar {...props} />);
+    const component = await shallowComponent(<Toolbar {...props} />);
 
     expect(component).toMatchSnapshot('basic');
   });
@@ -18,28 +18,29 @@ describe('Toolbar Component', () => {
     const props = {
       isDisabled: true
     };
-    const component = await shallowHookComponent(<Toolbar {...props} />);
+    const component = await shallowComponent(<Toolbar {...props} />);
 
     expect(component).toMatchSnapshot('disabled component');
 
-    component.setProps({
+    const propsVariantFilter = {
       isDisabled: false,
       useSelectCategoryOptions: () => ({ options: [] }),
       useToolbarFields: () => ({ itemFields: [], secondaryFields: [] })
-    });
-    expect(component).toMatchSnapshot('missing filters, has variant filter');
+    };
+    const componentVariantFilter = await shallowComponent(<Toolbar {...propsVariantFilter} />);
+    expect(componentVariantFilter).toMatchSnapshot('missing filters, has variant filter');
 
-    component.setProps({
+    const componentSecondary = await componentVariantFilter.setProps({
       useToolbarFields: () => ({ itemFields: [], secondaryFields: [<span key="lorem">lorem ipsum</span>] })
     });
-    expect(component).toMatchSnapshot('missing primary, has secondary filters');
+    expect(componentSecondary).toMatchSnapshot('missing primary, has secondary filters');
   });
 
   it('should hide categories when a single filter is available', async () => {
     const props = {
       useSelectCategoryOptions: () => ({ options: [selectCategoryOptions[4]] })
     };
-    const component = await shallowHookComponent(<Toolbar {...props} />);
+    const component = await shallowComponent(<Toolbar {...props} />);
 
     expect(component).toMatchSnapshot('single filter');
   });
@@ -49,15 +50,15 @@ describe('Toolbar Component', () => {
       useSelectCategoryOptions: () => ({ options: [selectCategoryOptions[4]] }),
       useProductToolbarQuery: () => ({ [RHSM_API_QUERY_SET_TYPES.SLA]: RHSM_API_QUERY_SLA_TYPES.PREMIUM })
     };
-    const component = await shallowHookComponent(<Toolbar {...props} />);
+    const component = await shallowComponent(<Toolbar {...props} />);
 
-    expect(component.find(ToolbarFilter).props()).toMatchSnapshot('chips');
+    expect(component.find('.pf-c-chip')).toMatchSnapshot('chips');
 
-    component.setProps({
+    const componentNotClearable = await component.setProps({
       useSelectCategoryOptions: () => ({ options: [{ ...selectCategoryOptions[4], isClearable: false }] })
     });
 
-    expect(component.find(ToolbarFilter).props()).toMatchSnapshot('chips, not clearable');
+    expect(componentNotClearable.find('.pf-c-chip')).toMatchSnapshot('chips, not clearable');
   });
 
   it('should handle displaying secondary components, fields', async () => {
@@ -65,7 +66,7 @@ describe('Toolbar Component', () => {
       useSelectCategoryOptions: () => ({ options: [selectCategoryOptions[4]] }),
       useToolbarFields: () => ({ itemFields: [], secondaryFields: [<span key="lorem">lorem ipsum</span>] })
     };
-    const component = await shallowHookComponent(<Toolbar {...props} />);
+    const component = await shallowComponent(<Toolbar {...props} />);
 
     expect(component).toMatchSnapshot('secondary');
   });
@@ -76,16 +77,16 @@ describe('Toolbar Component', () => {
       useSelectCategoryOptions: () => ({ options: [selectCategoryOptions[4]] }),
       useToolbarFields: () => ({ itemFields: [], secondaryFields: [<span key="lorem">lorem ipsum</span>] })
     };
-    const component = await shallowHookComponent(<Toolbar {...props} />);
+    const component = await shallowComponent(<Toolbar {...props} />);
 
     expect(component).toMatchSnapshot('group variant, disabled');
 
-    component.setProps({
+    const componentStandalone = await component.setProps({
       isGroupVariantDisabled: false,
       useSelectCategoryOptions: () => ({ options: [] }),
       useToolbarFields: () => ({ itemFields: [], secondaryFields: [] })
     });
 
-    expect(component).toMatchSnapshot('group variant, standalone');
+    expect(componentStandalone).toMatchSnapshot('group variant, standalone');
   });
 });
