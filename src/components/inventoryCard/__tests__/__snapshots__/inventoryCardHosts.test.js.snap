@@ -16,7 +16,6 @@ exports[`InventoryCardHosts Component should render a basic component: basic ren
   perPageDefault={10}
   t={[Function]}
   useGetInventory={[Function]}
-  useGuestProperty={[Function]}
   useOnColumnSort={[Function]}
   useOnPage={[Function]}
   useProduct={[Function]}

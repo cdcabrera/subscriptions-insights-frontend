@@ -266,7 +266,6 @@ exports[`InventoryCardContext should return specific properties: specific proper
 {
   "useGetHostsInventory": [Function],
   "useGetInstancesInventory": [Function],
-  "useInstancesGuestProperty": [Function],
   "useOnColumnSortHosts": [Function],
   "useOnColumnSortInstances": [Function],
   "useOnPageInstances": [Function],

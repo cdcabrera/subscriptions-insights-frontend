@@ -21,12 +21,7 @@ import { ToolbarFieldDisplayName } from '../toolbar/toolbarFieldDisplayName';
 import { paginationHelpers } from '../pagination/paginationHelpers';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
-import {
-  useGetInstancesInventory,
-  useInstancesGuestProperty,
-  useOnPageInstances,
-  useOnColumnSortInstances
-} from './inventoryCardContext';
+import { useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances } from './inventoryCardContext';
 
 /**
  * Instances, Hosts, and Subscriptions base inventory card.
@@ -52,7 +47,6 @@ import {
  * @param {number} props.perPageDefault
  * @param {Function} props.t
  * @param {Function} props.useGetInventory
- * @param {Function} props.useGuestProperty
  * @param {Function} props.useOnPage
  * @param {Function} props.useOnColumnSort
  * @param {Function} props.useProduct
@@ -69,7 +63,6 @@ const InventoryCard = ({
   perPageDefault,
   t,
   useGetInventory: useAliasGetInventory,
-  useGuestProperty: useAliasGuestProperty,
   useOnPage: useAliasOnPage,
   useOnColumnSort: useAliasOnColumnSort,
   useProduct: useAliasProduct,
@@ -80,11 +73,10 @@ const InventoryCard = ({
   const [updatedColumnsRows, setUpdatedColumnsRows] = useState({ columnHeaders: [], rows: [] });
   const sessionData = useAliasSession();
   const query = useAliasProductInventoryQuery();
-  const guestProperties = useAliasGuestProperty();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
   const { productId } = useAliasProduct();
-  const { filters: filterInventoryData } = useAliasProductInventoryConfig();
+  const { filters: filterInventoryData, settings } = useAliasProductInventoryConfig();
   const { error, fulfilled, pending, data = {} } = useAliasGetInventory({ isDisabled });
   const { data: listData = [], meta = {} } = data;
 
@@ -107,11 +99,21 @@ const InventoryCard = ({
         });
 
         updatedColumnHeaders = columnHeaders;
-        const inventoryGuestsProps = guestProperties(cellData);
+        let expandedContent;
+
+        if (typeof settings?.guestContent === 'function') {
+          const guestId = settings?.guestContent({ ...cellData }, { ...sessionData });
+
+          if (guestId) {
+            expandedContent = (
+              <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={cellData.numberOfGuests} />
+            );
+          }
+        }
 
         return {
           cells,
-          expandedContent: (inventoryGuestsProps && <InventoryGuests {...inventoryGuestsProps} />) || undefined
+          expandedContent
         };
       });
     }
@@ -215,8 +217,8 @@ const InventoryCard = ({
 /**
  * Prop types.
  *
- * @type {{cardActions: React.ReactNode, useSession: Function, useGuestProperty: Function, useOnPage: Function, useProduct: Function,
- *     t: Function, perPageDefault: number, isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function,
+ * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, useProduct: Function, t: Function,
+ *     perPageDefault: number, isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function,
  *     useOnColumnSort: Function, useProductInventoryQuery: Function}}
  */
 InventoryCard.propTypes = {
@@ -225,7 +227,6 @@ InventoryCard.propTypes = {
   perPageDefault: PropTypes.number,
   t: PropTypes.func,
   useGetInventory: PropTypes.func,
-  useGuestProperty: PropTypes.func,
   useOnPage: PropTypes.func,
   useOnColumnSort: PropTypes.func,
   useProduct: PropTypes.func,
@@ -237,8 +238,8 @@ InventoryCard.propTypes = {
 /**
  * Default props.
  *
- * @type {{cardActions: React.ReactNode, useSession: Function, useGuestProperty: Function, useOnPage: Function, useProduct: Function,
- *     t: translate, perPageDefault: number, isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function,
+ * @type {{cardActions: React.ReactNode, useSession: Function, useOnPage: Function, useProduct: Function, t: translate,
+ *     perPageDefault: number, isDisabled: boolean, useProductInventoryConfig: Function, useGetInventory: Function,
  *     useOnColumnSort: Function, useProductInventoryQuery: Function}}
  */
 InventoryCard.defaultProps = {
@@ -251,7 +252,6 @@ InventoryCard.defaultProps = {
   perPageDefault: 10,
   t: translate,
   useGetInventory: useGetInstancesInventory,
-  useGuestProperty: useInstancesGuestProperty,
   useOnPage: useOnPageInstances,
   useOnColumnSort: useOnColumnSortInstances,
   useProduct,

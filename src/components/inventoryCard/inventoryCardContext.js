@@ -97,30 +97,6 @@ const useGetInstancesInventory = ({
 };
 
 /**
- * Note: We're using hooks here to remove logic from the component. In the event another inventory display
- * requires slightly different logic we can substitute with an alternative hook.
- */
-/**
- * Consume the appropriate Instance API properties to generate an expandable guest display.
- *
- * @returns {Function}
- */
-const useInstancesGuestProperty =
-  () =>
-  (data = {}) => {
-    const { guestId, numberOfGuests } = data;
-
-    return (
-      (guestId && {
-        key: `guests-${guestId}`,
-        numberOfGuests,
-        id: guestId
-      }) ||
-      undefined
-    );
-  };
-
-/**
  * An onPage callback for instances inventory.
  *
  * @param {object} options
@@ -287,7 +263,6 @@ const useOnColumnSortInstances = ({
 const context = {
   useGetHostsInventory,
   useGetInstancesInventory,
-  useInstancesGuestProperty,
   useOnPageInstances,
   useOnColumnSortHosts,
   useOnColumnSortInstances
@@ -298,7 +273,6 @@ export {
   context,
   useGetHostsInventory,
   useGetInstancesInventory,
-  useInstancesGuestProperty,
   useOnPageInstances,
   useOnColumnSortHosts,
   useOnColumnSortInstances

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InventoryCard Component should handle expandable guests data: number of guests 1`] = `
+exports[`InventoryCard Component should handle expandable guests data: NO number of guests and NO expandable guests display 1`] = `
 {
   "ariaLabel": null,
   "borders": true,
@@ -9,7 +9,7 @@ exports[`InventoryCard Component should handle expandable guests data: number of
   "columnHeaders": [
     "t(curiosity-inventory.header, {"context":"lorem"})",
     "t(curiosity-inventory.header, {"context":"dolor"})",
-    "t(curiosity-inventory.header, {"context":"numberOfGuests"})",
+    "t(curiosity-inventory.header_number_of, {"context":"guests"})",
   ],
   "isHeader": true,
   "rows": [
@@ -17,7 +17,7 @@ exports[`InventoryCard Component should handle expandable guests data: number of
       "cells": [
         "sit",
         "amet",
-        1,
+        "...",
       ],
       "expandedContent": undefined,
     },
@@ -28,7 +28,7 @@ exports[`InventoryCard Component should handle expandable guests data: number of
 }
 `;
 
-exports[`InventoryCard Component should handle expandable guests data: number of guests, and id 1`] = `
+exports[`InventoryCard Component should handle expandable guests data: number of guests, and returned id 1`] = `
 {
   "ariaLabel": null,
   "borders": true,
@@ -37,8 +37,7 @@ exports[`InventoryCard Component should handle expandable guests data: number of
   "columnHeaders": [
     "t(curiosity-inventory.header, {"context":"lorem"})",
     "t(curiosity-inventory.header, {"context":"dolor"})",
-    "t(curiosity-inventory.header, {"context":"numberOfGuests"})",
-    "t(curiosity-inventory.header, {"context":"guestId"})",
+    "t(curiosity-inventory.header_number_of, {"context":"guests"})",
   ],
   "isHeader": true,
   "rows": [
@@ -47,51 +46,10 @@ exports[`InventoryCard Component should handle expandable guests data: number of
         "sit",
         "amet",
         1,
-        "loremIpsum",
       ],
       "expandedContent": <InventoryGuests
         defaultPerPage={5}
-        id="loremIpsum"
-        numberOfGuests={1}
-        useGetGuestsInventory={[Function]}
-        useOnScroll={[Function]}
-        useProductInventoryGuestsConfig={[Function]}
-        useProductInventoryGuestsQuery={[Function]}
-        useSession={[Function]}
-      />,
-    },
-  ],
-  "summary": null,
-  "t": [Function],
-  "variant": "compact",
-}
-`;
-
-exports[`InventoryCard Component should handle expandable guests data: number of guests, id, and NO expandable guests display 1`] = `
-{
-  "ariaLabel": null,
-  "borders": true,
-  "children": null,
-  "className": "curiosity-inventory-list",
-  "columnHeaders": [
-    "t(curiosity-inventory.header, {"context":"lorem"})",
-    "t(curiosity-inventory.header, {"context":"dolor"})",
-    "t(curiosity-inventory.header, {"context":"numberOfGuests"})",
-    "t(curiosity-inventory.header, {"context":"guestId"})",
-  ],
-  "isHeader": true,
-  "rows": [
-    {
-      "cells": [
-        "sit",
-        "amet",
-        2,
-        "loremIpsum",
-      ],
-      "expandedContent": <InventoryGuests
-        defaultPerPage={5}
-        id="loremIpsum"
-        numberOfGuests={2}
+        id="loremIpsum-{"lorem":"sit","dolor":"amet","number_of_guests":1}"
         useGetGuestsInventory={[Function]}
         useOnScroll={[Function]}
         useProductInventoryGuestsConfig={[Function]}
