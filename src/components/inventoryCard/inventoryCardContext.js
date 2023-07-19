@@ -1,8 +1,10 @@
+import { useCallback } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import _camelCase from 'lodash/camelCase';
 import { SortByDirection } from '@patternfly/react-table';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
-import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import { useSession } from '../authentication/authenticationContext';
+import { useProduct, useProductInventoryHostsConfig, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import {
   RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES as HOSTS_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -94,6 +96,39 @@ const useGetInstancesInventory = ({
     pending: pending || cancelled || false,
     data: (data?.length === 1 && data[0]) || data || {}
   };
+};
+
+const useInstancesGuestProperty = ({
+  useSession: useAliasSession = useSession,
+  useProductInventoryConfig: useAliasProductInventoryConfig = useProductInventoryHostsConfig
+} = {}) => {
+  const { settings } = useAliasProductInventoryConfig();
+  const sessionData = useAliasSession();
+
+  return useCallback(
+    (data = {}) => {
+      const subscriptionManagerId = data?.subscriptionManagerId;
+      const numberOfGuests = data?.numberOfGuests;
+      let isSubTable;
+
+      // Is there a subTable, callback, or attempt to determine, return boolean
+      if (typeof settings?.hasSubTable === 'function') {
+        isSubTable = settings.hasSubTable({ ...data }, { ...sessionData });
+      } else {
+        isSubTable = numberOfGuests > 0 && subscriptionManagerId;
+      }
+
+      return (
+        (isSubTable && {
+          key: `guests-${subscriptionManagerId}`,
+          numberOfGuests,
+          id: subscriptionManagerId
+        }) ||
+        undefined
+      );
+    },
+    [sessionData, settings]
+  );
 };
 
 /**
@@ -263,6 +298,7 @@ const useOnColumnSortInstances = ({
 const context = {
   useGetHostsInventory,
   useGetInstancesInventory,
+  useInstancesGuestProperty,
   useOnPageInstances,
   useOnColumnSortHosts,
   useOnColumnSortInstances
@@ -273,6 +309,7 @@ export {
   context,
   useGetHostsInventory,
   useGetInstancesInventory,
+  useInstancesGuestProperty,
   useOnPageInstances,
   useOnColumnSortHosts,
   useOnColumnSortInstances
