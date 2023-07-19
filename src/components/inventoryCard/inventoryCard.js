@@ -107,31 +107,6 @@ const InventoryCard = ({
         });
 
         updatedColumnHeaders = columnHeaders;
-        /*
-        const subscriptionManagerId = cellData?.subscriptionManagerId;
-        const numberOfGuests = cellData?.numberOfGuests;
-        let isSubTable;
-
-        // Is there a subTable, callback, or attempt to determine, return boolean
-        if (typeof settings?.hasSubTable === 'function') {
-          isSubTable = settings.hasSubTable({ ...cellData }, { ...sessionData });
-        } else {
-          isSubTable = numberOfGuests > 0 && subscriptionManagerId;
-        }
-        return {
-          cells,
-          expandedContent:
-            (isSubTable && (
-              <InventoryGuests
-                key={`guests-${subscriptionManagerId}`}
-                numberOfGuests={numberOfGuests}
-                id={subscriptionManagerId}
-              />
-            )) ||
-            undefined
-        };
-        */
-
         const inventoryGuestsProps = guestProperties(cellData);
 
         return {
