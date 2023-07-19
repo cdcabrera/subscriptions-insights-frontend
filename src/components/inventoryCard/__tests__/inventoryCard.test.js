@@ -1,7 +1,10 @@
 import React from 'react';
 import Table from '../../table/table';
 import { InventoryCard } from '../inventoryCard';
-import { RHSM_API_QUERY_SET_TYPES } from '../../../services/rhsm/rhsmConstants';
+import {
+  RHSM_API_QUERY_SET_TYPES,
+  RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INVENTORY_TYPES
+} from '../../../services/rhsm/rhsmConstants';
 
 describe('InventoryCard Component', () => {
   it('should render a basic component', async () => {
@@ -122,7 +125,6 @@ describe('InventoryCard Component', () => {
 
   it('should handle expandable guests data', async () => {
     const props = {
-      useProductInventoryConfig: () => ({ filters: [], settings: {} }),
       useProductInventoryQuery: () => ({
         [RHSM_API_QUERY_SET_TYPES.LIMIT]: 10,
         [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
@@ -130,55 +132,36 @@ describe('InventoryCard Component', () => {
       useGetInventory: () => ({
         fulfilled: true,
         data: {
-          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 1 }],
-          meta: {
-            count: 1
-          }
-        }
-      })
-    };
-
-    const component = await mountHookComponent(<InventoryCard {...props} />);
-    expect(component.find(Table).props()).toMatchSnapshot('number of guests');
-
-    component.setProps({
-      ...props,
-      useGetInventory: () => ({
-        fulfilled: true,
-        data: {
-          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 1, subscriptionManagerId: 'loremIpsum' }],
-          meta: {
-            count: 1
-          }
-        }
-      })
-    });
-
-    component.update();
-    expect(component.find(Table).props()).toMatchSnapshot('number of guests, and id');
-
-    component.setProps({
-      ...props,
-      useGetInventory: () => ({
-        fulfilled: true,
-        data: {
-          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 2, subscriptionManagerId: 'loremIpsum' }],
+          data: [{ lorem: 'sit', dolor: 'amet', [INVENTORY_TYPES.NUMBER_OF_GUESTS]: 0 }],
           meta: {
             count: 1
           }
         }
       }),
+      useProductInventoryConfig: () => ({ filters: [], settings: {} })
+    };
+
+    const component = await mountHookComponent(<InventoryCard {...props} />);
+    expect(component.find(Table).props()).toMatchSnapshot('NO number of guests and NO expandable guests display');
+
+    component.setProps({
+      ...props,
       useProductInventoryConfig: () => ({
-        settings: {
-          hasSubTable: data => {
-            const { numberOfGuests = 0, subscriptionManagerId = null } = data;
-            return numberOfGuests > 2 && subscriptionManagerId;
+        filters: [],
+        settings: { guestContent: data => `loremIpsum-${JSON.stringify(data)}` }
+      }),
+      useGetInventory: () => ({
+        fulfilled: true,
+        data: {
+          data: [{ lorem: 'sit', dolor: 'amet', [INVENTORY_TYPES.NUMBER_OF_GUESTS]: 1 }],
+          meta: {
+            count: 1
           }
         }
       })
     });
 
     component.update();
-    expect(component.find(Table).props()).toMatchSnapshot('number of guests, id, and NO expandable guests display');
+    expect(component.find(Table).props()).toMatchSnapshot('number of guests, and returned id');
   });
 });
