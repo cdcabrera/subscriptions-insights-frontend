@@ -146,7 +146,7 @@ describe('InventoryCard Component', () => {
       useGetInventory: () => ({
         fulfilled: true,
         data: {
-          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 1, subscriptionManagerId: 'loremIpsum' }],
+          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 1, guestId: 'loremIpsum' }],
           meta: {
             count: 1
           }
@@ -162,7 +162,7 @@ describe('InventoryCard Component', () => {
       useGetInventory: () => ({
         fulfilled: true,
         data: {
-          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 2, subscriptionManagerId: 'loremIpsum' }],
+          data: [{ lorem: 'sit', dolor: 'amet', numberOfGuests: 2, guestId: 'loremIpsum' }],
           meta: {
             count: 1
           }

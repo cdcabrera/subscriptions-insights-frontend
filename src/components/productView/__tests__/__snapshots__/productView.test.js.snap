@@ -30,6 +30,7 @@ exports[`ProductView Component should allow custom inventory displays via config
       perPageDefault={10}
       t={[Function]}
       useGetInventory={[Function]}
+      useGuestProperty={[Function]}
       useOnColumnSort={[Function]}
       useOnPage={[Function]}
       useProduct={[Function]}
@@ -112,6 +113,7 @@ exports[`ProductView Component should allow custom inventory displays via config
       perPageDefault={10}
       t={[Function]}
       useGetInventory={[Function]}
+      useGuestProperty={[Function]}
       useOnColumnSort={[Function]}
       useOnPage={[Function]}
       useProduct={[Function]}

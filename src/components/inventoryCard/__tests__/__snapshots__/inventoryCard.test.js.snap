@@ -38,7 +38,7 @@ exports[`InventoryCard Component should handle expandable guests data: number of
     "t(curiosity-inventory.header, {"context":"lorem"})",
     "t(curiosity-inventory.header, {"context":"dolor"})",
     "t(curiosity-inventory.header, {"context":"numberOfGuests"})",
-    "t(curiosity-inventory.header, {"context":"subscriptionManagerId"})",
+    "t(curiosity-inventory.header, {"context":"guestId"})",
   ],
   "isHeader": true,
   "rows": [
@@ -77,7 +77,7 @@ exports[`InventoryCard Component should handle expandable guests data: number of
     "t(curiosity-inventory.header, {"context":"lorem"})",
     "t(curiosity-inventory.header, {"context":"dolor"})",
     "t(curiosity-inventory.header, {"context":"numberOfGuests"})",
-    "t(curiosity-inventory.header, {"context":"subscriptionManagerId"})",
+    "t(curiosity-inventory.header, {"context":"guestId"})",
   ],
   "isHeader": true,
   "rows": [
@@ -88,7 +88,16 @@ exports[`InventoryCard Component should handle expandable guests data: number of
         2,
         "loremIpsum",
       ],
-      "expandedContent": undefined,
+      "expandedContent": <InventoryGuests
+        defaultPerPage={5}
+        id="loremIpsum"
+        numberOfGuests={2}
+        useGetGuestsInventory={[Function]}
+        useOnScroll={[Function]}
+        useProductInventoryGuestsConfig={[Function]}
+        useProductInventoryGuestsQuery={[Function]}
+        useSession={[Function]}
+      />,
     },
   ],
   "summary": null,

@@ -78,11 +78,17 @@ const rhsmInstances = (response, { params } = {}) => {
       [INSTANCES_DATA_TYPES.NUMBER_OF_GUESTS]: numberOfGuests,
       ...dataResponse
     }) => {
+      let guestId;
+
+      if (numberOfGuests > 0 && subscriptionManagerId) {
+        guestId = subscriptionManagerId;
+      }
+
       const updatedData = {
+        guestId,
         [INSTANCES_DATA_TYPES.NUMBER_OF_GUESTS]: numberOfGuests,
         numberOfGuests,
         [INSTANCES_DATA_TYPES.SUBSCRIPTION_MANAGER_ID]: subscriptionManagerId,
-        subscriptionManagerId,
         ...dataResponse
       };
 

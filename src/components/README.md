@@ -3152,6 +3152,8 @@ Set up inventory cards. Expand filters with base settings.
     </tr><tr>
     <td>props.useGetInventory</td><td><code>function</code></td>
     </tr><tr>
+    <td>props.useGuestProperty</td><td><code>function</code></td>
+    </tr><tr>
     <td>props.useOnPage</td><td><code>function</code></td>
     </tr><tr>
     <td>props.useOnColumnSort</td><td><code>function</code></td>
@@ -3190,6 +3192,7 @@ Default props.
 * [InventoryCardContext](#InventoryCard.module_InventoryCardContext)
     * [~useGetHostsInventory(options)](#InventoryCard.module_InventoryCardContext..useGetHostsInventory) ⇒ <code>Object</code>
     * [~useGetInstancesInventory(options)](#InventoryCard.module_InventoryCardContext..useGetInstancesInventory) ⇒ <code>Object</code>
+    * [~useInstancesGuestProperty()](#InventoryCard.module_InventoryCardContext..useInstancesGuestProperty) ⇒ <code>function</code>
     * [~useOnPageInstances(options)](#InventoryCard.module_InventoryCardContext..useOnPageInstances) ⇒ <code>function</code>
     * [~useOnColumnSortHosts(options)](#InventoryCard.module_InventoryCardContext..useOnColumnSortHosts) ⇒ <code>function</code>
     * [~useOnColumnSortInstances(options)](#InventoryCard.module_InventoryCardContext..useOnColumnSortInstances) ⇒ <code>function</code>
@@ -3257,6 +3260,12 @@ Combined Redux RHSM Actions, getInstancesInventory, and inventory selector respo
     </tr>  </tbody>
 </table>
 
+<a name="InventoryCard.module_InventoryCardContext..useInstancesGuestProperty"></a>
+
+### InventoryCardContext~useInstancesGuestProperty() ⇒ <code>function</code>
+Consume the appropriate Instance API properties to generate an expandable guest display.
+
+**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
 <a name="InventoryCard.module_InventoryCardContext..useOnPageInstances"></a>
 
 ### InventoryCardContext~useOnPageInstances(options) ⇒ <code>function</code>

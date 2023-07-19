@@ -7,6 +7,7 @@ exports[`InventoryCardSubscriptions Component should render a basic component: b
   perPageDefault={10}
   t={[Function]}
   useGetInventory={[Function]}
+  useGuestProperty={[Function]}
   useOnColumnSort={[Function]}
   useOnPage={[Function]}
   useProduct={[Function]}

@@ -1,10 +1,8 @@
-import { useCallback } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import _camelCase from 'lodash/camelCase';
 import { SortByDirection } from '@patternfly/react-table';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
-import { useSession } from '../authentication/authenticationContext';
-import { useProduct, useProductInventoryHostsConfig, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import {
   RHSM_API_QUERY_INVENTORY_HOSTS_SORT_TYPES as HOSTS_SORT_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -98,38 +96,29 @@ const useGetInstancesInventory = ({
   };
 };
 
-const useInstancesGuestProperty = ({
-  useSession: useAliasSession = useSession,
-  useProductInventoryConfig: useAliasProductInventoryConfig = useProductInventoryHostsConfig
-} = {}) => {
-  const { settings } = useAliasProductInventoryConfig();
-  const sessionData = useAliasSession();
+/**
+ * Note: We're using hooks here to remove logic from the component. In the event another inventory display
+ * requires slightly different logic we can substitute with an alternative hook.
+ */
+/**
+ * Consume the appropriate Instance API properties to generate an expandable guest display.
+ *
+ * @returns {Function}
+ */
+const useInstancesGuestProperty =
+  () =>
+  (data = {}) => {
+    const { guestId, numberOfGuests } = data;
 
-  return useCallback(
-    (data = {}) => {
-      const subscriptionManagerId = data?.subscriptionManagerId;
-      const numberOfGuests = data?.numberOfGuests;
-      let isSubTable;
-
-      // Is there a subTable, callback, or attempt to determine, return boolean
-      if (typeof settings?.hasSubTable === 'function') {
-        isSubTable = settings.hasSubTable({ ...data }, { ...sessionData });
-      } else {
-        isSubTable = numberOfGuests > 0 && subscriptionManagerId;
-      }
-
-      return (
-        (isSubTable && {
-          key: `guests-${subscriptionManagerId}`,
-          numberOfGuests,
-          id: subscriptionManagerId
-        }) ||
-        undefined
-      );
-    },
-    [sessionData, settings]
-  );
-};
+    return (
+      (guestId && {
+        key: `guests-${guestId}`,
+        numberOfGuests,
+        id: guestId
+      }) ||
+      undefined
+    );
+  };
 
 /**
  * An onPage callback for instances inventory.
