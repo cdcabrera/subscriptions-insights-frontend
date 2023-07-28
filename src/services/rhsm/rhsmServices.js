@@ -1918,7 +1918,7 @@ const getSubscriptionsInventory = (id, params = {}, options = {}) => {
     cancel = true,
     cancelId,
     schema = [rhsmSchemas.subscriptions, rhsmSchemas.errors],
-    transform = []
+    transform = [rhsmTransformers.subscriptions]
   } = options;
   const updatedId = rhsmHelpers.filterArchitectureVariant(id, params);
   return serviceCall({

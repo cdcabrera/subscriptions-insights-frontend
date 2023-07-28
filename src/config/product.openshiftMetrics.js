@@ -197,7 +197,7 @@ const config = {
   ],
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: ({
         [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
         [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {},
@@ -206,11 +206,11 @@ const config = {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};
 
-        if (!instanceId.value) {
-          return displayName.value;
+        if (!instanceId) {
+          return displayName;
         }
 
-        let updatedDisplayName = displayName.value || instanceId.value;
+        let updatedDisplayName = displayName || instanceId;
 
         if (authorized) {
           updatedDisplayName = (
@@ -218,9 +218,9 @@ const config = {
               isInline
               component="a"
               variant="link"
-              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId.value}/`}
+              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId}/`}
             >
-              {displayName.value || instanceId.value}
+              {updatedDisplayName}
             </Button>
           );
         }
@@ -228,31 +228,30 @@ const config = {
         return (
           <React.Fragment>
             {updatedDisplayName}{' '}
-            {(numberOfGuests.value &&
-              translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests?.value }, [
+            {(numberOfGuests &&
+              translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests }, [
                 <PfLabel color="blue" />
               ])) ||
               ''}
           </React.Fragment>
         );
       },
-      isSortable: true
+      isSort: true
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.CORES,
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: cores } = {}) =>
-        (typeof cores?.value === 'number' && Number.parseFloat(cores?.value).toFixed(2)) || '--',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 20
+        (typeof cores === 'number' && Number.parseFloat(cores).toFixed(2)) || '--',
+      isSort: true,
+      isWrap: true,
+      width: 20
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
-      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) =>
-        (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 20
+      metric: INVENTORY_TYPES.LAST_SEEN,
+      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
+      isSort: true,
+      isWrap: true,
+      width: 20
     }
   ],
   initialInventorySettings: {

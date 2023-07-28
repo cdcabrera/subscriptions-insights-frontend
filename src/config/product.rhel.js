@@ -184,18 +184,19 @@ const config = {
   ],
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: (
         { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} },
         session
       ) => {
         const { inventory: authorized } = session?.authorized || {};
 
-        if (!instanceId.value) {
-          return displayName.value;
+        if (!instanceId) {
+          console.log('>>>> DISPLAY NAME CELL', displayName);
+          return displayName;
         }
 
-        let updatedDisplayName = displayName.value || instanceId.value;
+        let updatedDisplayName = displayName || instanceId;
 
         if (authorized) {
           updatedDisplayName = (
@@ -203,56 +204,57 @@ const config = {
               isInline
               component="a"
               variant="link"
-              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId.value}/`}
+              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId}/`}
             >
               {updatedDisplayName}
             </Button>
           );
         }
 
+        console.log('>>>> DISPLAY NAME CELL', updatedDisplayName);
+
         return updatedDisplayName;
       },
-      isSortable: true
+      isSort: true
     },
     {
-      id: INVENTORY_TYPES.NUMBER_OF_GUESTS,
-      cell: ({ [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests } = {}) => numberOfGuests?.value || '--',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      metric: INVENTORY_TYPES.NUMBER_OF_GUESTS,
+      cell: ({ [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests } = {}) => numberOfGuests || '--',
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: INVENTORY_TYPES.CATEGORY,
+      metric: INVENTORY_TYPES.CATEGORY,
       cell: ({ [INVENTORY_TYPES.CLOUD_PROVIDER]: cloudProvider, [INVENTORY_TYPES.CATEGORY]: category } = {}) => (
         <React.Fragment>
-          {translate('curiosity-inventory.label', { context: [INVENTORY_TYPES.CATEGORY, category?.value] })}{' '}
-          {(cloudProvider?.value && (
+          {translate('curiosity-inventory.label', { context: [INVENTORY_TYPES.CATEGORY, category] })}{' '}
+          {(cloudProvider && (
             <PfLabel color="purple">
               {translate('curiosity-inventory.label', {
-                context: [INVENTORY_TYPES.CLOUD_PROVIDER, cloudProvider?.value]
+                context: [INVENTORY_TYPES.CLOUD_PROVIDER, cloudProvider]
               })}
             </PfLabel>
           )) ||
             ''}
         </React.Fragment>
       ),
-      isSortable: true,
-      cellWidth: 20
+      isSort: true,
+      width: 20
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
-      cell: ({ [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: sockets } = {}) => sockets?.value || '--',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      cell: ({ [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: sockets } = {}) => sockets || '--',
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
-      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) =>
-        (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      metric: INVENTORY_TYPES.LAST_SEEN,
+      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
+      isSort: true,
+      isWrap: true,
+      width: 15
     }
   ],
   initialInventorySettings: {
