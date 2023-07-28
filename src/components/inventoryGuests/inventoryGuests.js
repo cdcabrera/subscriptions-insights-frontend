@@ -1,12 +1,8 @@
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TableVariant } from '@patternfly/react-table';
-import { useSession } from '../authentication/authenticationContext';
-import { useProductInventoryGuestsConfig, useProductInventoryGuestsQuery } from '../productView/productViewContext';
 import { Loader } from '../loader/loader';
-import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
-import { Table } from '../table/table';
+import { Table, TableVariant } from '../table/table';
 import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
 
 /**
@@ -26,9 +22,6 @@ import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
  * @param {number} props.numberOfGuests
  * @param {Function} props.useGetGuestsInventory
  * @param {Function} props.useOnScroll
- * @param {Function} props.useProductInventoryGuestsQuery
- * @param {Function} props.useProductInventoryGuestsConfig
- * @param {Function} props.useSession
  * @fires onScroll
  * @returns {React.ReactNode}
  */
@@ -37,75 +30,24 @@ const InventoryGuests = ({
   id,
   numberOfGuests,
   useGetGuestsInventory: useAliasGetGuestsInventory,
-  useOnScroll: useAliasOnScroll,
-  useProductInventoryGuestsQuery: useAliasProductInventoryGuestsQuery,
-  useProductInventoryGuestsConfig: useAliasProductInventoryGuestsConfig,
-  useSession: useAliasSession
+  useOnScroll: useAliasOnScroll
 }) => {
-  const sessionData = useAliasSession();
-  const { filters: filterGuestsData } = useAliasProductInventoryGuestsConfig();
-  const { pending, data: listData = [] } = useAliasGetGuestsInventory(id);
-  const onScroll = useAliasOnScroll(id);
-  const query = useAliasProductInventoryGuestsQuery({ options: { overrideId: id } });
-  const { [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage } = query;
+  const {
+    pending,
+    dataSetColumnHeaders = [],
+    dataSetRows = [],
+    resultsColumnCountAndWidths = { count: 1, widths: [] },
+    resultsOffset
+  } = useAliasGetGuestsInventory(id);
 
-  /**
-   * Render a scroll table loader.
-   *
-   * @param {boolean} isFirstPage
-   * @returns {React.ReactNode}
-   */
-  const renderLoader = isFirstPage => {
-    if (pending) {
-      let updatedRowCount = 0;
-
-      if (isFirstPage) {
-        if (numberOfGuests < defaultPerPage) {
-          updatedRowCount = numberOfGuests;
-        } else {
-          updatedRowCount = defaultPerPage;
-        }
-      }
-
-      const scrollLoader = (
-        <Loader
-          variant="table"
-          tableProps={{
-            borders: false,
-            className: (isFirstPage && 'curiosity-guests-list') || undefined,
-            colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
-            colWidth: (filterGuestsData?.length && filterGuestsData.map(({ cellWidth }) => cellWidth)) || [],
-            rowCount: updatedRowCount,
-            variant: TableVariant.compact
-          }}
-        />
-      );
-
-      return <div className="curiosity-table-scroll-loader__custom">{scrollLoader}</div>;
-    }
-
-    return null;
-  };
-
-  let updatedColumnHeaders = [];
-  const updatedRows = listData.map(({ ...cellData }) => {
-    const { columnHeaders, cells } = inventoryCardHelpers.parseRowCellsListData({
-      filters: filterGuestsData,
-      cellData,
-      session: sessionData
-    });
-
-    updatedColumnHeaders = columnHeaders;
-
-    return {
-      cells
-    };
-  });
+  const onScroll = useAliasOnScroll({ id, numberOfGuests });
 
   // ToDo: Review having the height be a calc value
   // Include the table header
   let updatedHeight = (numberOfGuests + 1) * 42;
   updatedHeight = (updatedHeight < 275 && updatedHeight) || 275;
+
+  console.log('>>> widths', resultsColumnCountAndWidths.widths);
 
   return (
     <div className="fadein">
@@ -114,14 +56,31 @@ const InventoryGuests = ({
           className={`curiosity-table-scroll-list${(updatedHeight < 275 && '__no-scroll') || ''}`}
           onScroll={onScroll}
         >
-          {renderLoader(currentPage === 0)}
-          {(updatedRows.length && (
+          {pending && (
+            <div className="curiosity-table-scroll-loader__custom">
+              <Loader
+                variant="table"
+                tableProps={{
+                  borders: false,
+                  // className: (resultsOffset === 0 && 'curiosity-guests-list') || undefined,
+                  className: 'curiosity-guests-list',
+                  colCount: resultsColumnCountAndWidths.count,
+                  colWidth: resultsColumnCountAndWidths.widths,
+                  rowCount:
+                    (resultsOffset === 0 && numberOfGuests < defaultPerPage && numberOfGuests) || 1,
+                  variant: TableVariant.compact,
+                  isHeader: false
+                }}
+              />
+            </div>
+          )}
+          {(dataSetRows?.length && (
             <Table
-              borders={false}
-              variant={TableVariant.compact}
+              isBorders={false}
+              isHeader
               className="curiosity-guests-list"
-              columnHeaders={updatedColumnHeaders}
-              rows={updatedRows}
+              columnHeaders={dataSetColumnHeaders}
+              rows={dataSetRows}
             />
           )) ||
             null}
@@ -143,10 +102,7 @@ InventoryGuests.propTypes = {
   id: PropTypes.string.isRequired,
   numberOfGuests: PropTypes.number.isRequired,
   useGetGuestsInventory: PropTypes.func,
-  useOnScroll: PropTypes.func,
-  useProductInventoryGuestsConfig: PropTypes.func,
-  useProductInventoryGuestsQuery: PropTypes.func,
-  useSession: PropTypes.func
+  useOnScroll: PropTypes.func
 };
 
 /**
@@ -158,10 +114,7 @@ InventoryGuests.propTypes = {
 InventoryGuests.defaultProps = {
   defaultPerPage: 5,
   useGetGuestsInventory,
-  useOnScroll,
-  useProductInventoryGuestsConfig,
-  useProductInventoryGuestsQuery,
-  useSession
+  useOnScroll
 };
 
 export { InventoryGuests as default, InventoryGuests };

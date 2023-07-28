@@ -1,19 +1,123 @@
-import { useShallowCompareEffect } from 'react-use';
-import _camelCase from 'lodash/camelCase';
-import { SortByDirection } from '@patternfly/react-table';
+import React, { useMemo } from 'react';
+import { useMount, useShallowCompareEffect } from 'react-use';
+import { ToolbarItem } from '@patternfly/react-core';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
-import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import { useSession } from '../authentication/authenticationContext';
+import {
+  useProduct,
+  useProductInventoryGuestsConfig,
+  useProductInventoryHostsConfig,
+  useProductInventoryHostsQuery
+} from '../productView/productViewContext';
 import {
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES as SORT_TYPES,
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
+import { inventoryCardHelpers } from './inventoryCardHelpers';
+import { tableHelpers } from '../table/table';
+import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 
 /**
  * @memberof InventoryCard
  * @module InventoryCardContext
  */
+
+/**
+ * Parse filters settings for context.
+ *
+ * @param {object} options
+ * @param {boolean} options.isDisabled
+ * @param {Function} options.useProduct
+ * @param {Function} options.useProductConfig
+ * @returns {{standaloneFiltersSettings: Array<{ settings: object }>, groupedFiltersSettings: { settings: object }}}
+ */
+const useParseInstancesFiltersSettings = ({
+  isDisabled = false,
+  useProduct: useAliasProduct = useProduct,
+  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig,
+  useProductGuestsConfig: useAliasProductGuestsConfig = useProductInventoryGuestsConfig
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const { filters = [], settings = {} } = useAliasProductConfig();
+  const { filters: guestFilters = [] } = useAliasProductGuestsConfig();
+
+  return useMemo(() => {
+    if (isDisabled) {
+      return undefined;
+    }
+    return inventoryCardHelpers.normalizeInventorySettings({
+      filters,
+      guestFilters,
+      settings,
+      productId
+    });
+  }, [filters, guestFilters, isDisabled, settings, productId]);
+};
+
+const useSelectorInstances = ({
+  useParseInstancesFiltersSettings: useAliasParseInstancesFiltersSettings = useParseInstancesFiltersSettings,
+  useProduct: useAliasProduct = useProduct,
+  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
+  useSession: useAliasSession = useSession
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const session = useAliasSession();
+  const query = useAliasProductInventoryQuery();
+  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseInstancesFiltersSettings();
+  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesInventory?.[productId]);
+
+  const { pending, cancelled, data, ...restResponse } = response;
+  const updatedPending = pending || cancelled || false;
+  let parsedData;
+
+  if (response?.fulfilled) {
+    const updatedData = (data?.length === 1 && data[0]) || data || {};
+    parsedData = inventoryCardHelpers.parseInventoryResponse({
+      data: updatedData,
+      filters,
+      isGuestFiltersDisabled,
+      query,
+      session,
+      settings
+    });
+  }
+
+  return {
+    ...restResponse,
+    pending: updatedPending,
+    resultsColumnCountAndWidths: columnCountAndWidths,
+    ...parsedData
+  };
+
+  /*
+  return useMemo(() => {
+    const { pending, cancelled, data, ...restResponse } = response;
+    const updatedPending = pending || cancelled || false;
+    let parsedData;
+
+    if (response?.fulfilled) {
+      const updatedData = (data?.length === 1 && data[0]) || data || {};
+      parsedData = inventoryCardHelpers.parseInventoryResponse({
+        data: updatedData,
+        filters,
+        query,
+        session,
+        settings
+      });
+    }
+
+    return {
+      ...restResponse,
+      pending: updatedPending,
+      resultsColumnCountAndWidths: columnCountAndWidths,
+      ...parsedData
+    };
+  }, [columnCountAndWidths, filters, query, response, session, settings]);
+  */
+};
 
 /**
  * Combined Redux RHSM Actions, getInstancesInventory, and inventory selector response.
@@ -24,36 +128,187 @@ import { helpers } from '../../common';
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
- * @param {Function} options.useSelectorsResponse
+ * @param {Function} options.useSelector
  * @returns {{data: (*|{}|Array|{}), pending: boolean, fulfilled: boolean, error: boolean}}
  */
 const useGetInstancesInventory = ({
   isDisabled = false,
   getInventory = reduxActions.rhsm.getInstancesInventory,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useSelector: useAliasSelector = useSelectorInstances,
+  // useParseInstancesFiltersSettings: useAliasParseInstancesFiltersSettings = useParseInstancesFiltersSettings,
   useProduct: useAliasProduct = useProduct,
-  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
-  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
+  // useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
+  // useSession: useAliasSession = useSession
 } = {}) => {
   const { productId } = useAliasProduct();
+  // const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const dispatch = useAliasDispatch();
-  const { cancelled, pending, data, ...response } = useAliasSelectorsResponse(
-    ({ inventory }) => inventory?.instancesInventory?.[productId]
-  );
+  // const { columnCountAndWidths, filters, settings } = useAliasParseInstancesFiltersSettings();
+  // const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesInventory?.[productId]);
+  const response = useAliasSelector();
+
+  /*
+  const { productId } = {}; // useAliasProduct();
+  const session = {}; // useAliasSession();
+  const query = {}; // useAliasProductInventoryQuery();
+  const dispatch = Function.prototype; // useAliasDispatch();
+  const { columnCountAndWidths, filters, settings } = {}; // useAliasParseInstancesFiltersSettings();
+  const { cancelled, pending, data, ...response } = {}; // useAliasSelectorsResponse(
+  //  ({ inventory }) => inventory?.instancesInventory?.[productId]
+  // );
+  const updatedPending = pending || cancelled || false;
+  */
+
+  useMount(() => {
+    console.log(
+      '>>>> MOUNTED INVENTORY'
+      // useAliasDispatch,
+      // useAliasProduct,
+      // useAliasSession,
+      // useAliasSelectorsResponse,
+      // useAliasParseInstancesFiltersSettings,
+      // useAliasProductInventoryQuery
+    );
+  });
 
   useShallowCompareEffect(() => {
     if (!isDisabled) {
       getInventory(productId, query)(dispatch);
     }
-  }, [dispatch, isDisabled, productId, query]);
+  }, [isDisabled, productId, query]);
+
+  return response;
+
+  /*
+  return useMemo(() => {
+    const { pending, cancelled, data, ...restResponse } = response;
+    const updatedPending = pending || cancelled || false;
+    let parsedData;
+
+    if (response?.fulfilled) {
+      const updatedData = (data?.length === 1 && data[0]) || data || {};
+      parsedData = inventoryCardHelpers.parseInventoryResponse({
+        data: updatedData,
+        filters,
+        query,
+        session,
+        settings
+      });
+    }
+
+    return {
+      ...restResponse,
+      pending: updatedPending,
+      resultsColumnCountAndWidths: columnCountAndWidths,
+      ...parsedData
+    };
+  }, [columnCountAndWidths, filters, query, response, session, settings]);
+   */
+  /*
+  const parsedData = useMemo(() => {
+    if (response?.fulfilled) {
+      const updatedData = (data?.length === 1 && data[0]) || data || {};
+      return inventoryCardHelpers.parseInventoryResponse({ data: updatedData, filters, query, session, settings });
+    }
+
+    return undefined;
+  }, [data, filters, query, response?.fulfilled, session, settings]);
 
   return {
     ...response,
-    pending: pending || cancelled || false,
-    data: (data?.length === 1 && data[0]) || data || {}
+    pending: updatedPending,
+    resultsColumnCountAndWidths: columnCountAndWidths,
+    ...parsedData
   };
+  */
 };
+
+/**
+ * Return a component list for a configurable inventoryCard action toolbar.
+ * Allow the "content" prop to receive inventory data for display via callback.
+ *
+ * @param {object} options
+ * @param {Array} options.categoryOptions
+ * @param {Function} options.useSelector
+ * @param {Function} options.useProductConfig
+ * @returns {Array}
+ */
+const useInventoryCardActionsInstances = ({
+  categoryOptions = toolbarFieldOptions,
+  // useGetInventory: useAliasGetInventory = useGetInstancesInventory,
+  useSelector: useAliasSelector = useSelectorInstances,
+  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
+} = {}) => {
+  const results = useAliasSelector();
+  const { pending, resultsCount } = results;
+  const { settings = {} } = useAliasProductConfig();
+  const { actions } = settings;
+
+  return useMemo(
+    () =>
+      actions?.map(({ id, content, ...actionProps }) => {
+        const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
+        const { component: OptionComponent } = option || {};
+
+        return (
+          (OptionComponent && (
+            <ToolbarItem key={`option-${id}`}>
+              <OptionComponent isFilter={false} {...actionProps} />
+            </ToolbarItem>
+          )) ||
+          (content && !pending && resultsCount && (
+            <ToolbarItem key={id || helpers.generateId()}>
+              {typeof content === 'function' ? content({ data: results }) : content}
+            </ToolbarItem>
+          )) ||
+          null
+        );
+      }),
+    [actions, categoryOptions, results, resultsCount, pending]
+  );
+};
+/* works
+const useInventoryCardActionsInstances = (
+  { results, settings },
+  {
+    categoryOptions = toolbarFieldOptions
+    // useGetInventory: useAliasGetInventory = useGetInstancesInventory,
+    // useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
+  } = {}
+) => {
+  // const results = useAliasGetInventory();
+  const { pending, resultsCount } = results;
+  // const { settings = {} } = useAliasProductConfig();
+  const { actions } = settings;
+
+  return useMemo(
+    () =>
+      actions?.map(({ id, content, ...actionProps }) => {
+        const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
+        const { component: OptionComponent } = option || {};
+
+        return (
+          (OptionComponent && (
+            <ToolbarItem key={`option-${id}`}>
+              <OptionComponent isFilter={false} {...actionProps} />
+            </ToolbarItem>
+          )) ||
+          (content && !pending && resultsCount && (
+            <ToolbarItem key={id || helpers.generateId()}>
+              {typeof content === 'function' ? content({ data: results }) : content}
+            </ToolbarItem>
+          )) ||
+          null
+        );
+      }),
+    [actions, categoryOptions, results, resultsCount, pending]
+  );
+};
+
+ */
 
 /**
  * An onPage callback for instances inventory.
@@ -116,14 +371,14 @@ const useOnColumnSortInstances = ({
    * On event update state for instances inventory.
    *
    * @event onColumnSort
-   * @param {*} _data
    * @param {object} params
    * @param {string} params.direction
-   * @param {string} params.id
+   * @param {object} params.data
    * @returns {void}
    */
-  return (_data, { direction, id }) => {
-    const updatedSortColumn = Object.values(sortColumns).find(value => value === id || _camelCase(value) === id);
+  return ({ direction, data = {} }) => {
+    const { metric: id } = data;
+    const updatedSortColumn = Object.values(sortColumns).find(value => value === id);
     let updatedDirection;
 
     if (!updatedSortColumn) {
@@ -134,7 +389,7 @@ const useOnColumnSortInstances = ({
     }
 
     switch (direction) {
-      case SortByDirection.desc:
+      case tableHelpers.SortByDirectionVariant.desc:
         updatedDirection = SORT_DIRECTION_TYPES.DESCENDING;
         break;
       default:
@@ -159,8 +414,18 @@ const useOnColumnSortInstances = ({
 
 const context = {
   useGetInstancesInventory,
+  useInventoryCardActionsInstances,
   useOnPageInstances,
-  useOnColumnSortInstances
+  useOnColumnSortInstances,
+  useParseInstancesFiltersSettings
 };
 
-export { context as default, context, useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances };
+export {
+  context as default,
+  context,
+  useGetInstancesInventory,
+  useInventoryCardActionsInstances,
+  useOnPageInstances,
+  useOnColumnSortInstances,
+  useParseInstancesFiltersSettings
+};
