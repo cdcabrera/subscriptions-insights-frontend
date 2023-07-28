@@ -54,6 +54,14 @@ const inventoryReducer = (state = initialState, action) => {
           reset: false
         }
       );
+    /*
+    case rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM:
+      return reduxHelpers.generatedPromiseActionReducer(
+        [{ ref: 'instancesGuests', type: rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM }],
+        state,
+        action
+      );
+      */
     default:
       return reduxHelpers.generatedPromiseActionReducer(
         [

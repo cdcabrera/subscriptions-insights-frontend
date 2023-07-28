@@ -152,16 +152,16 @@ const config = {
   },
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} }) => {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};
 
-        if (!instanceId.value) {
-          return displayName.value;
+        if (!instanceId) {
+          return displayName;
         }
 
-        let updatedDisplayName = displayName.value || instanceId.value;
+        let updatedDisplayName = displayName || instanceId;
 
         if (authorized) {
           updatedDisplayName = (
@@ -169,9 +169,9 @@ const config = {
               isInline
               component="a"
               variant="link"
-              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId.value}/`}
+              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId}/`}
             >
-              {displayName.value || instanceId.value}
+              {updatedDisplayName}
             </Button>
           );
         }
@@ -181,40 +181,44 @@ const config = {
       isSortable: true
     },
     {
-      id: INVENTORY_TYPES.BILLING_PROVIDER,
+      metric: INVENTORY_TYPES.BILLING_PROVIDER,
       cell: ({ [INVENTORY_TYPES.BILLING_PROVIDER]: provider }) =>
         translate(`curiosity-inventory.label_${INVENTORY_TYPES.BILLING_PROVIDER}`, {
-          context: provider?.value || 'none'
+          context: provider || 'none'
         }),
-      isSortable: true,
-      isWrappable: false,
-      cellWidth: 15
+      isSort: true,
+      isWrap: false,
+      width: 15
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.CORES,
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: total }) =>
         translate('curiosity-inventory.measurement', {
           context: RHSM_API_PATH_METRIC_TYPES.CORES,
-          total: helpers.numberDisplay(total?.value)?.format({ mantissa: 5, trimMantissa: true }) || 0
+          total: helpers.numberDisplay(total)?.format({ mantissa: 5, trimMantissa: true }) || 0
         }),
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
-      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen }) =>
-        (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      metric: INVENTORY_TYPES.LAST_SEEN,
+      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen }) => (lastSeen && <DateFormat date={lastSeen} />) || '',
+      isSort: true,
+      isWrap: true,
+      width: 15
     }
   ],
   initialInventorySettings: {
+    actions: [
+      {
+        id: RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME
+      }
+    ],
     guestContent: ({
       [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests = {},
       [INVENTORY_TYPES.INSTANCE_ID]: id
-    } = {}) => (numberOfGuests > 0 && id) || undefined
+    } = {}) => (numberOfGuests > 0 && id && { id, numberOfGuests }) || undefined
   },
   initialSubscriptionsInventoryFilters: [
     {
