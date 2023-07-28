@@ -1,19 +1,95 @@
+import React, { useCallback, useContext, useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import _camelCase from 'lodash/camelCase';
 import { SortByDirection } from '@patternfly/react-table';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
-import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import {
+  useProduct,
+  useProductInventoryHostsConfig,
+  useProductInventoryHostsQuery
+} from '../productView/productViewContext';
 import {
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_TYPES as SORT_TYPES,
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
+import { inventoryCardHelpers } from './inventoryCardHelpers';
 
 /**
  * @memberof InventoryCard
  * @module InventoryCardContext
  */
+
+/**
+ * Chart context.
+ *
+ * @type {React.Context<{}>}
+ */
+const DEFAULT_CONTEXT = [{ settings: { metrics: [] } }, helpers.noop];
+
+const InventoryCardContext = React.createContext(DEFAULT_CONTEXT);
+
+/**
+ * Get an updated inventory card context.
+ *
+ * @returns {React.Context<{}>}
+ */
+const useInventoryCardContext = () => useContext(InventoryCardContext);
+
+/**
+ * Parse filters settings for context.
+ *
+ * @param {object} options
+ * @param {Function} options.useProduct
+ * @param {Function} options.useProductConfig
+ * @returns {{standaloneFiltersSettings: Array<{ settings: object }>, groupedFiltersSettings: { settings: object }}}
+ */
+/*
+const useParseInstancesFiltersSettings = ({
+  useProduct: useAliasProduct = useProduct,
+  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const { filters = [], settings = {} } = useAliasProductConfig();
+  const transformed = useMemo(
+    () =>
+      inventoryCardHelpers.generateInventorySettings({
+        filters,
+        settings,
+        productId
+      }),
+    [filters, settings, productId]
+  );
+
+  return useCallback(
+    () =>
+      inventoryCardHelpers.generateInventorySettings({
+        filters,
+        settings,
+        productId
+      }),
+    [filters, settings, productId]
+  );
+};
+*/
+const useParseInstancesFiltersSettings = ({
+  useProduct: useAliasProduct = useProduct,
+  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const { filters = [], settings = {} } = useAliasProductConfig();
+
+  return useMemo(
+    () =>
+      inventoryCardHelpers.generateInventorySettings({
+        filters,
+        settings,
+        productId
+      }),
+    [filters, settings, productId]
+  );
+};
 
 /**
  * Combined Redux RHSM Actions, getInstancesInventory, and inventory selector response.
@@ -160,7 +236,15 @@ const useOnColumnSortInstances = ({
 const context = {
   useGetInstancesInventory,
   useOnPageInstances,
-  useOnColumnSortInstances
+  useOnColumnSortInstances,
+  useParseInstancesFiltersSettings
 };
 
-export { context as default, context, useGetInstancesInventory, useOnPageInstances, useOnColumnSortInstances };
+export {
+  context as default,
+  context,
+  useGetInstancesInventory,
+  useOnPageInstances,
+  useOnColumnSortInstances,
+  useParseInstancesFiltersSettings
+};
