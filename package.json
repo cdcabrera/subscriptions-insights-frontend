@@ -16,7 +16,7 @@
     "node": ">=18.0.0"
   },
   "insights": {
-    "appname": "subscriptions"
+    "appname": "usage"
   },
   "browserslist": {
     "production": [

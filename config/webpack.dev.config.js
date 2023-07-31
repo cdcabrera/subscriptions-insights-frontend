@@ -7,10 +7,10 @@ const { _BUILD_RELATIVE_DIRNAME, DEV_BRANCH, DEV_PORT } = setupDotenvFilesForEnv
 
 const { config: webpackConfig, plugins } = config({
   appUrl: [
-    '/insights/subscriptions',
-    '/openshift/subscriptions',
-    '/application-services/subscriptions',
-    '/subscriptions'
+    '/insights/subscriptions/usage',
+    '/openshift/subscriptions/usage',
+    '/application-services/subscriptions/usage',
+    '/subscriptions/usage'
   ],
   client: { overlay: false },
   debug: true,

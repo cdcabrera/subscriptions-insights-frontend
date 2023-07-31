@@ -15,14 +15,14 @@ if (/(prod|stage|qa|ci)-beta/.test(DEV_BRANCH)) {
 
 const { config: webpackConfig, plugins } = config({
   appUrl: [
-    `${BETA_PREFIX}/insights/subscriptions`,
-    `${BETA_PREFIX}/openshift/subscriptions`,
-    `${BETA_PREFIX}/application-services/subscriptions`,
-    `${BETA_PREFIX}/subscriptions`,
-    `preview/insights/subscriptions`,
-    `preview/openshift/subscriptions`,
-    `preview/application-services/subscriptions`,
-    `preview/subscriptions`
+    `${BETA_PREFIX}/insights/subscriptions/usage`,
+    `${BETA_PREFIX}/openshift/subscriptions/usage`,
+    `${BETA_PREFIX}/application-services/subscriptions/usage`,
+    `${BETA_PREFIX}/subscriptions/usage`,
+    `preview/insights/subscriptions/usage`,
+    `preview/openshift/subscriptions/usage`,
+    `preview/application-services/subscriptions/usage`,
+    `preview/subscriptions/usage`
   ],
   client: { overlay: false },
   debug: true,

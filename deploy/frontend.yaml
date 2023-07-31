@@ -7,7 +7,7 @@ objects:
     kind: Frontend
     metadata:
       # this must match appList value in frontend-configs/deploy/deploy.yaml
-      name: subscriptions
+      name: usage
     spec:
       envName: ${ENV_NAME}
       title: rhsm
@@ -17,49 +17,49 @@ objects:
           - v1
       frontend:
         paths:
-          - /apps/subscriptions
+          - /apps/usage
       image: ${IMAGE}:${IMAGE_TAG}
       navItems:
         # use *-navigation.json in cloud-services-config for reference
         - title: "Subscriptions"
           expandable: true
           routes:
-            - appId: "subscriptions"
+            - appId: "usage"
               title: "RHEL"
-              href: "/insights/subscriptions/rhel"
+              href: "/insights/subscriptions/usage/rhel"
               product: "Subscription Watch"
             - appId: "subscriptions"
               title: "OpenShift Subscriptions"
-              href: "/openshift/subscriptions/openshift"
+              href: "/openshift/subscriptions/usage/openshift"
               product: "Subscription Watch"
             - appId: "subscriptions"
               title: "Streams for Apache Kafka"
-              href: "/application-services/subscriptions/streams"
+              href: "/application-services/subscriptions/usage/streams"
               product: "Subscription Watch"
             - appId: "subscriptions"
               title: "OpenShift Data Science"
-              href: "/application-services/subscriptions/rhods"
+              href: "/application-services/subscriptions/usage/rhods"
               product: "Subscription Watch"
             - appId: "subscriptions"
               title: "Advanced Cluster Security"
-              href: "/application-services/subscriptions/rhacs"
+              href: "/application-services/subscriptions/usage/rhacs"
               product: "Subscription Watch"
       module:
         # this should match chrome/fed-modules.json in cloud-services-config
-        manifestLocation: "/apps/subscriptions/fed-mods.json"
+        manifestLocation: "/apps/usage/fed-mods.json"
         modules:
           - id: "application-services-subscriptions"
             module: "./RootApp"
             routes:
-              - pathname: "/application-services/subscriptions"
+              - pathname: "/application-services/subscriptions/usage"
           - id: "insights-subscriptions"
             module: "./RootApp"
             routes:
-              - pathname: "/insights/subscriptions"
+              - pathname: "/insights/subscriptions/usage"
           - id: "openshift-subscriptions"
             module: "./RootApp"
             routes:
-              - pathname: "/openshift/subscriptions"
+              - pathname: "/openshift/subscriptions/usage"
 
 parameters:
   - name: ENV_NAME
