@@ -62,7 +62,7 @@ describe('AuthenticationContext', () => {
               {
                 permissions: [
                   {
-                    subscriptions: {
+                    usage: {
                       all: true,
                       resources: {
                         '*': {
@@ -75,7 +75,7 @@ describe('AuthenticationContext', () => {
                   }
                 ],
                 authorized: {
-                  subscriptions: true
+                  usage: true
                 }
               }
             ]

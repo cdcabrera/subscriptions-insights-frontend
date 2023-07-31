@@ -5,6 +5,7 @@ exports[`Platform Transformers should attempt to parse a permissions response: p
   "authorized": {
     "inventory": false,
     "subscriptions": false,
+    "usage": false,
   },
   "permissions": {},
 }
@@ -14,7 +15,8 @@ exports[`Platform Transformers should attempt to parse a permissions response: p
 {
   "authorized": {
     "inventory": false,
-    "subscriptions": true,
+    "subscriptions": false,
+    "usage": true,
   },
   "permissions": {
     "broken": {
@@ -39,7 +41,7 @@ exports[`Platform Transformers should attempt to parse a permissions response: p
         },
       },
     },
-    "subscriptions": {
+    "usage": {
       "all": true,
       "resources": {
         "*": {

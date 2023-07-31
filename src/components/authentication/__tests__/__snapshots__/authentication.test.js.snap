@@ -5,7 +5,7 @@ exports[`Authentication Component should allow being disabled: disabled 1`] = `
   value={
     {
       "authorized": {
-        "subscriptions": true,
+        "usage": true,
       },
       "errorCodes": [],
       "errorStatus": undefined,
@@ -141,7 +141,7 @@ exports[`Authentication Component should return a redirect on a specific 403 err
       "type": "span"
     }
   ],
-  "appName": "subscriptions",
+  "appName": "usage",
   "isDisabled": false
 }"
 >
@@ -243,7 +243,7 @@ exports[`Authentication Component should return a redirect on a specific 403 err
       "type": "span"
     }
   ],
-  "appName": "subscriptions",
+  "appName": "usage",
   "isDisabled": false
 }"
 >

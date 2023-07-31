@@ -57,7 +57,7 @@ describe('Build distribution', () => {
     expect(
       yamlRoutes.map(({ href }) => {
         const updatedRoute = { coverage: 'FALSE' };
-        const match = guiRoutes.find(({ path }) => href.split('subscriptions')[1] === path);
+        const match = guiRoutes.find(({ path }) => href.split('usage')[1] === path);
 
         if (match) {
           updatedRoute.coverage = 'TRUE';
@@ -76,7 +76,7 @@ describe('Build distribution', () => {
     expect(
       guiRoutes.map(({ path, productGroup, productId, productVariants }) => {
         const updatedRoute = { path, productId, productGroup, productVariants, coverage: 'FALSE' };
-        const match = yamlRoutes.find(({ href }) => href.split('subscriptions')[1] === path);
+        const match = yamlRoutes.find(({ href }) => href.split('usage')[1] === path);
 
         if (match) {
           updatedRoute.coverage = 'TRUE';

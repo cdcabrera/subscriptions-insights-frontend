@@ -35,7 +35,7 @@ exports[`AuthenticationContext should apply a hook for retrieving auth data from
 {
   "data": {
     "authorized": {
-      "subscriptions": true,
+      "usage": true,
     },
     "errorCodes": [],
     "errorStatus": null,
@@ -44,7 +44,7 @@ exports[`AuthenticationContext should apply a hook for retrieving auth data from
     "locale": {},
     "permissions": [
       {
-        "subscriptions": {
+        "usage": {
           "all": true,
           "resources": {
             "*": {

@@ -14,7 +14,7 @@ exports[`Platform Constants should have specific properties: all exported consta
     "ORG_ADMIN": "is_org_admin",
   },
   "PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES": {
-    "SUBSCRIPTIONS": "subscriptions",
+    "SUBSCRIPTIONS": "usage",
   },
   "PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES": {
     "ALL": "*",
@@ -41,7 +41,7 @@ exports[`Platform Constants should have specific properties: all exported consta
       "ORG_ADMIN": "is_org_admin",
     },
     "PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES": {
-      "SUBSCRIPTIONS": "subscriptions",
+      "SUBSCRIPTIONS": "usage",
     },
     "PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES": {
       "ALL": "*",
@@ -69,7 +69,7 @@ exports[`Platform Constants should have specific properties: all exported consta
       "ORG_ADMIN": "is_org_admin",
     },
     "PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES": {
-      "SUBSCRIPTIONS": "subscriptions",
+      "SUBSCRIPTIONS": "usage",
     },
     "PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES": {
       "ALL": "*",
@@ -101,7 +101,7 @@ exports[`Platform Constants should have specific properties: specific constants 
     "ORG_ADMIN": "is_org_admin",
   },
   "PLATFORM_API_RESPONSE_USER_PERMISSION_APP_TYPES": {
-    "SUBSCRIPTIONS": "subscriptions",
+    "SUBSCRIPTIONS": "usage",
   },
   "PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES": {
     "ALL": "*",

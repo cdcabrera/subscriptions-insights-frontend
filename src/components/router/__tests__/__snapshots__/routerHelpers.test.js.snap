@@ -101,7 +101,7 @@ exports[`RouterHelpers should return product configuration details from a url, p
 
 exports[`RouterHelpers should return specific properties: routerHelpers 1`] = `
 {
-  "appName": "subscriptions",
+  "appName": "usage",
   "dynamicBaseName": [Function],
   "dynamicBasePath": [Function],
   "getRouteConfigByPath": [Function],
