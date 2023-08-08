@@ -184,7 +184,7 @@ const config = {
   ],
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: (
         { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} },
         session
@@ -212,17 +212,17 @@ const config = {
 
         return updatedDisplayName;
       },
-      isSortable: true
+      isSort: true
     },
     {
-      id: INVENTORY_TYPES.NUMBER_OF_GUESTS,
+      metric: INVENTORY_TYPES.NUMBER_OF_GUESTS,
       cell: ({ [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests } = {}) => numberOfGuests?.value || '--',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: INVENTORY_TYPES.CATEGORY,
+      metric: INVENTORY_TYPES.CATEGORY,
       cell: ({ [INVENTORY_TYPES.CLOUD_PROVIDER]: cloudProvider, [INVENTORY_TYPES.CATEGORY]: category } = {}) => (
         <React.Fragment>
           {translate('curiosity-inventory.label', { context: [INVENTORY_TYPES.CATEGORY, category?.value] })}{' '}
@@ -236,23 +236,23 @@ const config = {
             ''}
         </React.Fragment>
       ),
-      isSortable: true,
-      cellWidth: 20
+      isSort: true,
+      width: 20
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: sockets } = {}) => sockets?.value || '--',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
+      metric: INVENTORY_TYPES.LAST_SEEN,
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) =>
         (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      isSort: true,
+      isWrap: true,
+      width: 15
     }
   ],
   initialInventorySettings: {

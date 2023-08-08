@@ -4,13 +4,12 @@ import { TableVariant } from '@patternfly/react-table';
 import { Bullseye, Card, CardActions, CardBody, CardFooter, CardHeader } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import { helpers } from '../../common';
-import Table from '../table/table';
+import { Table } from '../table/_table';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import {
-  InventoryCardContext,
   useGetInstancesInventory,
-  useInventoryCardActions,
+  // useInventoryCardActions,
   useOnPageInstances,
   useOnColumnSortInstances,
   useParseInstancesFiltersSettings
@@ -20,6 +19,11 @@ import { translate } from '../i18n/i18n';
 
 /**
  * Instances, and Subscriptions base inventory table card.
+ *
+ *     The InventoryCard pattern is purposefully different when compared to the current GraphCard component
+ *     for the specific purpose of using hook dependency injection. Minor lifecycle hook alterations
+ *     allow the InventoryCard to be used against multiple inventory API endpoints without the need to
+ *     recreate the core component.
  *
  * @memberof Components
  * @module InventoryCard
@@ -54,7 +58,7 @@ const InventoryCard = ({
   const updatedActionDisplay = useAliasInventoryCardActions();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
-  const { filtersSettings } = useAliasParseFiltersSettings({ isDisabled });
+  const filtersSettings = useAliasParseFiltersSettings({ isDisabled });
   const {
     error,
     pending,
@@ -75,72 +79,72 @@ const InventoryCard = ({
     );
   }
 
+  console.log('>>> CARD INV', filtersSettings);
+
   return (
-    <InventoryCardContext.Provider key={`inventoryCard-${filtersSettings}`} value={filtersSettings}>
-      <Card className="curiosity-inventory-card">
-        <MinHeight key="headerMinHeight">
-          <CardHeader className={(error && 'hidden') || ''} aria-hidden={error || false}>
-            {updatedActionDisplay}
-            <CardActions className={(!resultsCount && 'transparent') || ''} aria-hidden={!resultsCount || false}>
-              <Pagination
-                isCompact
-                isDisabled={pending || error}
-                itemCount={resultsCount}
-                offset={resultsOffset}
-                onPage={onPage}
-                onPerPage={onPage}
-                perPage={resultsPerPage}
+    <Card className="curiosity-inventory-card">
+      <MinHeight key="headerMinHeight">
+        <CardHeader className={(error && 'hidden') || ''} aria-hidden={error || false}>
+          {updatedActionDisplay}
+          <CardActions className={(!resultsCount && 'transparent') || ''} aria-hidden={!resultsCount || false}>
+            <Pagination
+              isCompact
+              isDisabled={pending || error}
+              itemCount={resultsCount}
+              offset={resultsOffset}
+              onPage={onPage}
+              onPerPage={onPage}
+              perPage={resultsPerPage}
+            />
+          </CardActions>
+        </CardHeader>
+      </MinHeight>
+      <MinHeight key="bodyMinHeight">
+        <CardBody>
+          <div className={(error && 'blur') || (pending && 'fadein') || ''}>
+            {pending && (
+              <Loader
+                variant="table"
+                tableProps={{
+                  className: 'curiosity-inventory-list',
+                  colCount: filtersSettings?.length || 1,
+                  colWidth: (filtersSettings?.length && filtersSettings.map(({ cellWidth }) => cellWidth)) || [],
+                  rowCount: dataSetRows?.length || resultsPerPage,
+                  variant: TableVariant.compact
+                }}
               />
-            </CardActions>
-          </CardHeader>
-        </MinHeight>
-        <MinHeight key="bodyMinHeight">
-          <CardBody>
-            <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-              {pending && (
-                <Loader
-                  variant="table"
-                  tableProps={{
-                    className: 'curiosity-inventory-list',
-                    colCount: filtersSettings?.length || 1,
-                    colWidth: (filtersSettings?.length && filtersSettings.map(({ cellWidth }) => cellWidth)) || [],
-                    rowCount: dataSetRows?.length || resultsPerPage,
-                    variant: TableVariant.compact
-                  }}
-                />
-              )}
-              {!pending && (
-                <Table
-                  className="curiosity-inventory-list"
-                  isBorders
-                  onSort={onColumnSort}
-                  columnHeaders={dataSetColumnHeaders}
-                  rows={dataSetRows}
-                />
-              )}
-            </div>
-          </CardBody>
-        </MinHeight>
-        <MinHeight key="footerMinHeight">
-          <CardFooter
-            className={(error && 'hidden') || (!resultsCount && 'transparent') || ''}
-            aria-hidden={error || !resultsCount || false}
-          >
-            <TableToolbar isFooter>
-              <Pagination
-                dropDirection="up"
-                isDisabled={pending || error}
-                itemCount={resultsCount}
-                offset={resultsOffset}
-                onPage={onPage}
-                onPerPage={onPage}
-                perPage={resultsPerPage}
+            )}
+            {!pending && (
+              <Table
+                className="curiosity-inventory-list"
+                isBorders
+                onSort={onColumnSort}
+                columnHeaders={dataSetColumnHeaders}
+                rows={dataSetRows}
               />
-            </TableToolbar>
-          </CardFooter>
-        </MinHeight>
-      </Card>
-    </InventoryCardContext.Provider>
+            )}
+          </div>
+        </CardBody>
+      </MinHeight>
+      <MinHeight key="footerMinHeight">
+        <CardFooter
+          className={(error && 'hidden') || (!resultsCount && 'transparent') || ''}
+          aria-hidden={error || !resultsCount || false}
+        >
+          <TableToolbar isFooter>
+            <Pagination
+              dropDirection="up"
+              isDisabled={pending || error}
+              itemCount={resultsCount}
+              offset={resultsOffset}
+              onPage={onPage}
+              onPerPage={onPage}
+              perPage={resultsPerPage}
+            />
+          </TableToolbar>
+        </CardFooter>
+      </MinHeight>
+    </Card>
   );
 };
 
@@ -170,7 +174,7 @@ InventoryCard.defaultProps = {
   isDisabled: helpers.UI_DISABLED_TABLE_INSTANCES,
   t: translate,
   useGetInventory: useGetInstancesInventory,
-  useInventoryCardActions,
+  useInventoryCardActions: Function.prototype,
   useOnPage: useOnPageInstances,
   useOnColumnSort: useOnColumnSortInstances,
   useParseFiltersSettings: useParseInstancesFiltersSettings
