@@ -332,49 +332,6 @@ const parseRowCellsListData = ({ filters = [], cellData = {}, meta = {}, product
   };
 };
 
-/**
- * Update inventory filters with core settings.
- *
- * @param {object} params
- * @param {Array} params.filters
- * @param {object} params.settings
- * @param {string} params.productId
- * @returns {{filtersSettings: *[]}}
- */
-const generateInventorySettings = ({ filters = [], settings = {}, productId } = {}) => {
-  const filtersSettings = [];
-
-  filters.forEach(
-    ({
-      id,
-      header,
-      cell,
-      cellWidth,
-      isSortable,
-      isWrappable
-      /*
-      isStandalone,
-      id,
-      cell,
-      cellWidth,
-      header,
-      onSort,
-      showEmptyCell = true,
-      sortId,
-      sortActive,
-      sortDirection,
-      transforms
-      */
-    }) => {
-      //
-    }
-  );
-
-  return {
-    filtersSettings
-  };
-};
-
 const inventoryCardHelpers = {
   applyConfigProperty,
   applyHeaderRowCellFilters,

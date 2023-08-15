@@ -1,49 +1,42 @@
+import React from 'react'; // eslint-disable-line
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
 // import { helpers } from '../../common';
 
 const normalizeInventorySettings = ({ filters = [], settings = {}, productId } = {}) => {
   const updatedFilters = [];
+  const columnCountAndWidths = { count: filters.length, widths: [] };
 
-  // filters.forEach(({ id, header, cell, cellWidth, isSortable, isWrappable, ...rest }) => {
-  // filters.forEach(({ metric, header, content, width, isSort, isWrap, ...rest }) => {
-  filters.forEach(({ metric, header, cell, ...rest }) => {
+  filters.forEach(({ metric, header, cell, width, ...rest }) => {
     let updatedHeader;
     let updatedCell;
+    let updatedWidth;
 
     if (typeof header === 'function' && header) {
       updatedHeader = header;
     } else if (header) {
       updatedHeader = () => header;
     } else {
-      updatedHeader = () => {
-        console.log('>>> HEADER CONTENT', metric, productId);
-        return translate('curiosity-inventory.header', { context: [metric, productId] });
-      };
+      updatedHeader = () => translate('curiosity-inventory.header', { context: [metric, productId] });
     }
 
     if (typeof cell === 'function' && cell) {
-      updatedCell = (...args) => cell(...args);
+      updatedCell = cell;
     } else if (cell) {
-      updatedCell = () => {
-        console.log('>>> CELL cell', cell);
-        return cell;
-      };
+      updatedCell = () => cell;
     } else {
-      /*
-      updatedCell = () => {
-        console.log('>>> CELL CONTENT', metric, productId);
-        return translate('curiosity-inventory.cell', { context: [metric, productId] });
-      };
-      */
-      updatedCell = ({ [metric]: displayValue }) => {
-        console.log('>>>> CELL FALLBACK', displayValue);
-        return displayValue;
-      };
+      updatedCell = ({ [metric]: displayValue }) => displayValue;
     }
+
+    if (typeof width === 'number' && !Number.isNaN(width)) {
+      updatedWidth = width;
+    }
+
+    columnCountAndWidths.widths.push(updatedWidth);
 
     updatedFilters.push({
       metric,
+      width,
       ...rest,
       header: updatedHeader,
       cell: updatedCell
@@ -51,6 +44,7 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
   });
 
   return {
+    columnCountAndWidths,
     filters: updatedFilters,
     settings
   };
@@ -63,7 +57,6 @@ const parseInventoryResponse = (
   // normalizeInventorySettings: aliasNormalizeInventorySettings = normalizeInventorySettings
   // } = {}
 ) => {
-  // const { data: listData = [], meta = {} } = (data?.length === 1 && data[0]) || data || {};
   const { data: listData = [], meta = {} } = data;
   const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
   const resultsOffset = query[RHSM_API_QUERY_SET_TYPES.OFFSET];
@@ -72,12 +65,9 @@ const parseInventoryResponse = (
   const dataSetRows = [];
   const columnData = {};
 
-  // console.log('>>>>> HELPER', listData, meta, filters);
-
   listData.forEach(rowData => {
     const dataSetRow = [];
     filters.forEach(({ metric, cell, ...rest }) => {
-      // const updatedCell = (...args) => cell({ ...rowData }, { ...session }, { ...meta }, ...args);
       const updatedCell = cell({ ...rowData }, { ...session }, { ...meta });
       dataSetRow.push({ metric, ...rest, content: updatedCell });
 

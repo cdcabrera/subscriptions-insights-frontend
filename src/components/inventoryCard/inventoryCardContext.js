@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import _camelCase from 'lodash/camelCase';
 import { SortByDirection } from '@patternfly/react-table';
@@ -26,16 +26,16 @@ import { inventoryCardHelpers } from './inventoryCardHelpers';
  *
  * @type {React.Context<{}>}
  */
-const DEFAULT_CONTEXT = [{ settings: { metrics: [] } }, helpers.noop];
+// const DEFAULT_CONTEXT = [{ settings: { metrics: [] } }, helpers.noop];
 
-const InventoryCardContext = React.createContext(DEFAULT_CONTEXT);
+// const InventoryCardContext = React.createContext(DEFAULT_CONTEXT);
 
 /**
  * Get an updated inventory card context.
  *
  * @returns {React.Context<{}>}
  */
-const useInventoryCardContext = () => useContext(InventoryCardContext);
+// const useInventoryCardContext = () => useContext(InventoryCardContext);
 
 /**
  * Parse filters settings for context.

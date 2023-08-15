@@ -125,7 +125,7 @@ const useGetInstancesInventory = ({
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const dispatch = useAliasDispatch();
-  const { filters } = useAliasParseInstancesFiltersSettings();
+  const { filters, columnCountAndWidths } = useAliasParseInstancesFiltersSettings();
   const { cancelled, pending, data, ...response } = useAliasSelectorsResponse(
     ({ inventory }) => inventory?.instancesInventory?.[productId]
   );
@@ -153,6 +153,7 @@ const useGetInstancesInventory = ({
   return {
     ...response,
     pending: updatedPending,
+    resultsColumnCountAndWidths: columnCountAndWidths,
     ...parsedData
     // data: (data?.length === 1 && data[0]) || data || {},
     // dataSetColumnHeaders: [],
@@ -230,7 +231,9 @@ const useOnColumnSortInstances = ({
    * @param {string} params.id
    * @returns {void}
    */
-  return (_data, { direction, id }) => {
+  return (_data, { direction, id } = {}) => {
+    console.log();
+
     const updatedSortColumn = Object.values(sortColumns).find(value => value === id || _camelCase(value) === id);
     let updatedDirection;
 

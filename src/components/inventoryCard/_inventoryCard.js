@@ -58,18 +58,19 @@ const InventoryCard = ({
   const updatedActionDisplay = useAliasInventoryCardActions();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
-  const filtersSettings = useAliasParseFiltersSettings({ isDisabled });
+  const { filters } = useAliasParseFiltersSettings({ isDisabled });
   const {
     error,
     pending,
     dataSetColumnHeaders = [],
     dataSetRows = [],
+    resultsColumnCountAndWidths = { count: 1, widths: [] },
     resultsCount,
     resultsOffset,
     resultsPerPage
   } = useAliasGetInventory({ isDisabled });
 
-  if (isDisabled || !filtersSettings) {
+  if (isDisabled || !filters?.length) {
     return (
       <Card className="curiosity-inventory-card__disabled">
         <CardBody>
@@ -78,8 +79,6 @@ const InventoryCard = ({
       </Card>
     );
   }
-
-  console.log('>>> CARD INV', filtersSettings);
 
   return (
     <Card className="curiosity-inventory-card">
@@ -107,8 +106,8 @@ const InventoryCard = ({
                 variant="table"
                 tableProps={{
                   className: 'curiosity-inventory-list',
-                  colCount: filtersSettings?.length || 1,
-                  colWidth: (filtersSettings?.length && filtersSettings.map(({ cellWidth }) => cellWidth)) || [],
+                  colCount: resultsColumnCountAndWidths.count,
+                  colWidth: resultsColumnCountAndWidths.widths,
                   rowCount: dataSetRows?.length || resultsPerPage,
                   variant: TableVariant.compact
                 }}
@@ -118,6 +117,7 @@ const InventoryCard = ({
               <Table
                 className="curiosity-inventory-list"
                 isBorders
+                isHeader
                 onSort={onColumnSort}
                 columnHeaders={dataSetColumnHeaders}
                 rows={dataSetRows}
