@@ -175,11 +175,11 @@ const config = {
       ) => {
         const { inventory: authorized } = session?.authorized || {};
 
-        if (!instanceId.value) {
-          return displayName.value;
+        if (!instanceId) {
+          return displayName;
         }
 
-        let updatedDisplayName = displayName.value || instanceId.value;
+        let updatedDisplayName = displayName || instanceId;
 
         if (authorized) {
           updatedDisplayName = (
@@ -187,7 +187,7 @@ const config = {
               isInline
               component="a"
               variant="link"
-              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId.value}/`}
+              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${instanceId}/`}
             >
               {updatedDisplayName}
             </Button>
@@ -197,32 +197,31 @@ const config = {
         return (
           <React.Fragment>
             {updatedDisplayName}{' '}
-            {(numberOfGuests.value &&
-              translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests?.value }, [
+            {(numberOfGuests &&
+              translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests }, [
                 <PfLabel color="blue" />
               ])) ||
               ''}
           </React.Fragment>
         );
       },
-      isSortable: true
+      isSort: true
     },
     {
       id: RHSM_API_PATH_METRIC_TYPES.CORES,
       header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
         translate('curiosity-inventory.header', { context: [uom, productId] }),
-      cell: (data = {}, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) => data?.[uom]?.value || '--',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      cell: (data = {}, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) => data?.[uom] || '--',
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
       id: INVENTORY_TYPES.LAST_SEEN,
-      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) =>
-        (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 20
+      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
+      isSort: true,
+      isWrap: true,
+      width: 20
     }
   ],
   initialInventorySettings: {
