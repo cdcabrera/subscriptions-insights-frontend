@@ -2,6 +2,19 @@ import React from 'react';
 import { SortByDirection } from '@patternfly/react-table';
 
 /**
+ * Table header copy wrapping modifier.
+ *
+ * @type {{noWrap: string, truncate: string, fitContent: string, breakWord: string, wrap: string}}
+ */
+const WrapModifierVariant = {
+  wrap: 'wrap',
+  noWrap: 'nowrap',
+  truncate: 'truncate',
+  breakWord: 'breakWord',
+  fitContent: 'fitContent'
+};
+
+/**
  * Allow additional content to display in cells.
  *
  * @param {React.ReactNode|Function|object|*} content
@@ -56,6 +69,7 @@ const tableHeader = ({
         content,
         dataLabel,
         info,
+        modifier,
         tooltip,
         ...headerCellData
       } = columnHeader;
@@ -65,6 +79,7 @@ const tableHeader = ({
         props: {
           dataLabel,
           info,
+          modifier,
           tooltip
         },
         data: headerCellData
@@ -229,7 +244,8 @@ const tableRows = ({ onExpand, onSelect, rows = [] } = {}) => {
 const tableHelpers = {
   parseContent,
   tableHeader,
-  tableRows
+  tableRows,
+  WrapModifierVariant
 };
 
-export { tableHelpers as default, tableHelpers, parseContent, tableHeader, tableRows };
+export { tableHelpers as default, tableHelpers, parseContent, tableHeader, tableRows, WrapModifierVariant };

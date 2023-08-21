@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
-import _camelCase from 'lodash/camelCase';
+// import _camelCase from 'lodash/camelCase';
 import { SortByDirection } from '@patternfly/react-table';
+// import _cloneDeep from 'lodash/cloneDeep';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useSession } from '../authentication/authenticationContext';
 import {
@@ -225,16 +226,17 @@ const useOnColumnSortInstances = ({
    * On event update state for instances inventory.
    *
    * @event onColumnSort
-   * @param {*} _data
    * @param {object} params
    * @param {string} params.direction
-   * @param {string} params.id
+   * @param {object} params.data
    * @returns {void}
    */
-  return (_data, { direction, id } = {}) => {
-    console.log();
+  return ({ direction, data = {}, ...rest }) => {
+    const { metric: id } = data;
 
-    const updatedSortColumn = Object.values(sortColumns).find(value => value === id || _camelCase(value) === id);
+    console.log('>>>>> SORT IT', direction, data, rest);
+
+    const updatedSortColumn = Object.values(sortColumns).find(value => value === id);
     let updatedDirection;
 
     if (!updatedSortColumn) {

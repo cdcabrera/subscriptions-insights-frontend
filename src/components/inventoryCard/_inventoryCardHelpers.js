@@ -1,6 +1,7 @@
 import React from 'react'; // eslint-disable-line
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
+import { tableHelpers } from '../table/_table';
 // import { helpers } from '../../common';
 
 const normalizeInventorySettings = ({ filters = [], settings = {}, productId } = {}) => {
@@ -50,6 +51,7 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
   };
 };
 
+// ToDo: evaluate moving isWrap under the table component
 const parseInventoryResponse = (
   { data = {}, filters = [], query = {}, session = {} } = {}
   // {
@@ -59,8 +61,13 @@ const parseInventoryResponse = (
 ) => {
   const { data: listData = [], meta = {} } = data;
   const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
-  const resultsOffset = query[RHSM_API_QUERY_SET_TYPES.OFFSET];
-  const resultsPerPage = query[RHSM_API_QUERY_SET_TYPES.LIMIT];
+  const {
+    [RHSM_API_QUERY_SET_TYPES.OFFSET]: resultsOffset,
+    [RHSM_API_QUERY_SET_TYPES.LIMIT]: resultsPerPage,
+    [RHSM_API_QUERY_SET_TYPES.SORT]: sortColumn,
+    [RHSM_API_QUERY_SET_TYPES.DIRECTION]: sortDirection
+  } = query;
+
   const dataSetColumnHeaders = [];
   const dataSetRows = [];
   const columnData = {};
@@ -79,13 +86,20 @@ const parseInventoryResponse = (
   });
 
   filters.forEach(({ metric, header, ...rest }) => {
-    // const updatedHeader = (...args) => header({ ...columnData[metric] }, { ...session }, { ...meta }, ...args);
     const updatedHeader = header({ ...columnData[metric] }, { ...session }, { ...meta });
-    dataSetColumnHeaders.push({ ...rest, content: updatedHeader });
-  });
+    const updatedRest = { ...rest };
 
-  console.log('>>>>> dataSetColumnHeaders', dataSetColumnHeaders);
-  console.log('>>>>> dataSetRows', dataSetRows);
+    if (sortDirection && sortColumn === metric) {
+      updatedRest.isSortActive = true;
+      updatedRest.sortDirection = sortDirection;
+    }
+
+    if (updatedRest.isWrap === true) {
+      updatedRest.modifier = tableHelpers.WrapModifierVariant.wrap;
+    }
+
+    dataSetColumnHeaders.push({ metric, ...updatedRest, content: updatedHeader });
+  });
 
   return {
     dataSetColumnHeaders,

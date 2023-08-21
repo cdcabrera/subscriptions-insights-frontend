@@ -497,4 +497,4 @@ Table.defaultProps = {
   variant: TableVariant.compact
 };
 
-export { Table as default, Table, TableVariant };
+export { Table as default, Table, TableVariant, tableHelpers };

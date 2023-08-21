@@ -157,7 +157,7 @@ const config = {
   },
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: (
         { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} },
         session
@@ -188,7 +188,7 @@ const config = {
       isSort: true
     },
     {
-      id: INVENTORY_TYPES.BILLING_PROVIDER,
+      metric: INVENTORY_TYPES.BILLING_PROVIDER,
       cell: ({ [INVENTORY_TYPES.BILLING_PROVIDER]: provider }) =>
         translate(`curiosity-inventory.label_${INVENTORY_TYPES.BILLING_PROVIDER}`, {
           context: provider || 'none'
@@ -209,7 +209,7 @@ const config = {
       width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
+      metric: INVENTORY_TYPES.LAST_SEEN,
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen }) => (lastSeen && <DateFormat date={lastSeen} />) || '',
       isSort: true,
       isWrap: true,
