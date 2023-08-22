@@ -1,8 +1,6 @@
-import React from 'react'; // eslint-disable-line
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
 import { tableHelpers } from '../table/_table';
-// import { helpers } from '../../common';
 
 const normalizeInventorySettings = ({ filters = [], settings = {}, productId } = {}) => {
   const updatedFilters = [];

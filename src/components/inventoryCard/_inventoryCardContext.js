@@ -1,8 +1,5 @@
 import { useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
-// import _camelCase from 'lodash/camelCase';
-import { SortByDirection } from '@patternfly/react-table';
-// import _cloneDeep from 'lodash/cloneDeep';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useSession } from '../authentication/authenticationContext';
 import {
@@ -17,7 +14,7 @@ import {
 } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
 import { inventoryCardHelpers } from './_inventoryCardHelpers';
-// import { normalizeInventorySettings } from './_inventoryCardHelpers';
+import { tableHelpers } from '../table/_table';
 
 /**
  * @memberof InventoryCard
@@ -25,57 +22,14 @@ import { inventoryCardHelpers } from './_inventoryCardHelpers';
  */
 
 /**
- * Chart context.
- *
- * @type {React.Context<{}>}
- */
-// const DEFAULT_CONTEXT = [{ settings: {}, filters: [] }, helpers.noop];
-
-// const InventoryCardContext = React.createContext(DEFAULT_CONTEXT);
-
-/**
- * Get an updated inventory card context.
- *
- * @returns {React.Context<{}>}
- */
-// const useInventoryCardContext = () => useContext(InventoryCardContext);
-
-/**
  * Parse filters settings for context.
  *
  * @param {object} options
+ * @param {boolean} options.isDisabled
  * @param {Function} options.useProduct
  * @param {Function} options.useProductConfig
  * @returns {{standaloneFiltersSettings: Array<{ settings: object }>, groupedFiltersSettings: { settings: object }}}
  */
-/*
-const useParseInstancesFiltersSettings = ({
-  useProduct: useAliasProduct = useProduct,
-  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
-} = {}) => {
-  const { productId } = useAliasProduct();
-  const { filters = [], settings = {} } = useAliasProductConfig();
-  const transformed = useMemo(
-    () =>
-      inventoryCardHelpers.generateInventorySettings({
-        filters,
-        settings,
-        productId
-      }),
-    [filters, settings, productId]
-  );
-
-  return useCallback(
-    () =>
-      inventoryCardHelpers.generateInventorySettings({
-        filters,
-        settings,
-        productId
-      }),
-    [filters, settings, productId]
-  );
-};
-*/
 const useParseInstancesFiltersSettings = ({
   isDisabled = false,
   useProduct: useAliasProduct = useProduct,
@@ -113,9 +67,7 @@ const useParseInstancesFiltersSettings = ({
 const useGetInstancesInventory = ({
   isDisabled = false,
   getInventory = reduxActions.rhsm.getInstancesInventory,
-  // perPageDefault = 10,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  // useInventoryCardContext: useAliasInventoryCardContext = useInventoryCardContext,
   useParseInstancesFiltersSettings: useAliasParseInstancesFiltersSettings = useParseInstancesFiltersSettings,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
@@ -138,14 +90,10 @@ const useGetInstancesInventory = ({
     }
   }, [dispatch, isDisabled, productId, query]);
 
-  // const { data: listData = [], meta = {} } = (data?.length === 1 && data[0]) || data || {};
   const parsedData = useMemo(() => {
     if (response?.fulfilled) {
       const updatedData = (data?.length === 1 && data[0]) || data || {};
-      const temp = inventoryCardHelpers.parseInventoryResponse({ data: updatedData, filters, query, session });
-
-      console.log('>>>>>>>> PARSED', temp, updatedData, filters);
-      return temp;
+      return inventoryCardHelpers.parseInventoryResponse({ data: updatedData, filters, query, session });
     }
 
     return undefined;
@@ -156,12 +104,6 @@ const useGetInstancesInventory = ({
     pending: updatedPending,
     resultsColumnCountAndWidths: columnCountAndWidths,
     ...parsedData
-    // data: (data?.length === 1 && data[0]) || data || {},
-    // dataSetColumnHeaders: [],
-    // dataSetRows: [],
-    // resultsCount: meta?.count || 0,
-    // resultsOffset: query[RHSM_API_QUERY_SET_TYPES.OFFSET],
-    // resultsPerPage: query[RHSM_API_QUERY_SET_TYPES.LIMIT] || perPageDefault
   };
 };
 
@@ -231,11 +173,8 @@ const useOnColumnSortInstances = ({
    * @param {object} params.data
    * @returns {void}
    */
-  return ({ direction, data = {}, ...rest }) => {
+  return ({ direction, data = {} }) => {
     const { metric: id } = data;
-
-    console.log('>>>>> SORT IT', direction, data, rest);
-
     const updatedSortColumn = Object.values(sortColumns).find(value => value === id);
     let updatedDirection;
 
@@ -247,7 +186,7 @@ const useOnColumnSortInstances = ({
     }
 
     switch (direction) {
-      case SortByDirection.desc:
+      case tableHelpers.SortByDirectionVariant.desc:
         updatedDirection = SORT_DIRECTION_TYPES.DESCENDING;
         break;
       default:
@@ -271,8 +210,6 @@ const useOnColumnSortInstances = ({
 };
 
 const context = {
-  // InventoryCardContext,
-  // DEFAULT_CONTEXT,
   useGetInstancesInventory,
   // useInventoryCardContext,
   useOnPageInstances,
@@ -283,8 +220,6 @@ const context = {
 export {
   context as default,
   context,
-  // InventoryCardContext,
-  // DEFAULT_CONTEXT,
   useGetInstancesInventory,
   // useInventoryCardContext,
   useOnPageInstances,

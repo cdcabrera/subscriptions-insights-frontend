@@ -2,6 +2,13 @@ import React from 'react';
 import { SortByDirection } from '@patternfly/react-table';
 
 /**
+ * Table sorting directions.
+ *
+ * @type {{asc: SortByDirection.asc, desc: SortByDirection.desc}}
+ */
+const SortByDirectionVariant = { ...SortByDirection };
+
+/**
  * Table header copy wrapping modifier.
  *
  * @type {{noWrap: string, truncate: string, fitContent: string, breakWord: string, wrap: string}}
@@ -245,7 +252,16 @@ const tableHelpers = {
   parseContent,
   tableHeader,
   tableRows,
+  SortByDirectionVariant,
   WrapModifierVariant
 };
 
-export { tableHelpers as default, tableHelpers, parseContent, tableHeader, tableRows, WrapModifierVariant };
+export {
+  tableHelpers as default,
+  tableHelpers,
+  parseContent,
+  tableHeader,
+  tableRows,
+  SortByDirectionVariant,
+  WrapModifierVariant
+};
