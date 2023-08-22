@@ -261,7 +261,6 @@ const config = {
     actions: [
       {
         id: RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME
-        // position: SelectPosition.right
       }
     ],
     guestContent: ({

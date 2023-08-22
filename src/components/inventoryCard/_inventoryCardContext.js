@@ -109,6 +109,16 @@ const useGetInstancesInventory = ({
   };
 };
 
+/**
+ * Return a component list for a configurable inventoryCard action toolbar.
+ * Allow the "content" prop to receive inventory data for display via callback.
+ *
+ * @param {object} options
+ * @param {Array} options.categoryOptions
+ * @param {Function} options.useGetInventory
+ * @param {Function} options.useProductConfig
+ * @returns {Array}
+ */
 const useInventoryCardActionsInstances = ({
   categoryOptions = toolbarFieldOptions,
   useGetInventory: useAliasGetInventory = useGetInstancesInventory,
@@ -118,8 +128,6 @@ const useInventoryCardActionsInstances = ({
   const { pending, resultsCount } = results;
   const { settings = {} } = useAliasProductConfig();
   const { actions } = settings;
-
-  console.log('>>>> actions', settings, actions);
 
   return useMemo(
     () =>

@@ -210,6 +210,11 @@ const config = {
     }
   ],
   initialInventorySettings: {
+    actions: [
+      {
+        id: RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME
+      }
+    ],
     guestContent: ({
       [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests = {},
       [INVENTORY_TYPES.INSTANCE_ID]: id

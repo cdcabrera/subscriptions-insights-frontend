@@ -80,8 +80,6 @@ const InventoryCard = ({
     resultsPerPage
   } = useAliasGetInventory({ isDisabled });
 
-  console.log('>>> updated', updatedActionDisplay);
-
   if (isDisabled || !filters?.length) {
     return (
       <Card className="curiosity-inventory-card__disabled">
