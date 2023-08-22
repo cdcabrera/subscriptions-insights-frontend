@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
+import { ToolbarItem } from '@patternfly/react-core';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useSession } from '../authentication/authenticationContext';
 import {
@@ -15,6 +16,7 @@ import {
 import { helpers } from '../../common';
 import { inventoryCardHelpers } from './_inventoryCardHelpers';
 import { tableHelpers } from '../table/_table';
+import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 
 /**
  * @memberof InventoryCard
@@ -105,6 +107,42 @@ const useGetInstancesInventory = ({
     resultsColumnCountAndWidths: columnCountAndWidths,
     ...parsedData
   };
+};
+
+const useInventoryCardActionsInstances = ({
+  categoryOptions = toolbarFieldOptions,
+  useGetInventory: useAliasGetInventory = useGetInstancesInventory,
+  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
+} = {}) => {
+  const results = useAliasGetInventory();
+  const { pending, resultsCount } = results;
+  const { settings = {} } = useAliasProductConfig();
+  const { actions } = settings;
+
+  console.log('>>>> actions', settings, actions);
+
+  return useMemo(
+    () =>
+      actions?.map(({ id, content, ...actionProps }) => {
+        const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
+        const { component: OptionComponent } = option || {};
+
+        return (
+          (OptionComponent && (
+            <ToolbarItem key={`option-${id}`}>
+              <OptionComponent isFilter={false} {...actionProps} />
+            </ToolbarItem>
+          )) ||
+          (content && !pending && resultsCount && (
+            <ToolbarItem key={id || helpers.generateId()}>
+              {typeof content === 'function' ? content({ data: results }) : content}
+            </ToolbarItem>
+          )) ||
+          null
+        );
+      }),
+    [actions, categoryOptions, results, resultsCount, pending]
+  );
 };
 
 /**
@@ -211,7 +249,7 @@ const useOnColumnSortInstances = ({
 
 const context = {
   useGetInstancesInventory,
-  // useInventoryCardContext,
+  useInventoryCardActionsInstances,
   useOnPageInstances,
   useOnColumnSortInstances,
   useParseInstancesFiltersSettings
@@ -221,7 +259,7 @@ export {
   context as default,
   context,
   useGetInstancesInventory,
-  // useInventoryCardContext,
+  useInventoryCardActionsInstances,
   useOnPageInstances,
   useOnColumnSortInstances,
   useParseInstancesFiltersSettings

@@ -2,6 +2,20 @@ import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
 import { tableHelpers } from '../table/_table';
 
+/**
+ * @memberof InventoryCard
+ * @module InventoryCardHelpers
+ */
+
+/**
+ * Normalize inventory filters, settings into a consistent format.
+ *
+ * @param {object} params
+ * @param {Array} params.filters
+ * @param {object} params.settings
+ * @param {string} params.productId
+ * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: []}, filters: []}}
+ */
 const normalizeInventorySettings = ({ filters = [], settings = {}, productId } = {}) => {
   const updatedFilters = [];
   const columnCountAndWidths = { count: filters.length, widths: [] };
@@ -34,6 +48,7 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
     columnCountAndWidths.widths.push(updatedWidth);
 
     updatedFilters.push({
+      label: translate('curiosity-inventory.header', { context: [metric, productId] }),
       metric,
       width,
       ...rest,
@@ -50,13 +65,18 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
 };
 
 // ToDo: evaluate moving isWrap under the table component
-const parseInventoryResponse = (
-  { data = {}, filters = [], query = {}, session = {} } = {}
-  // {
-  // perPageDefault = 10
-  // normalizeInventorySettings: aliasNormalizeInventorySettings = normalizeInventorySettings
-  // } = {}
-) => {
+// ToDo: evaluate a fallback "perPageDefault = 10" defined here
+/**
+ * Parse an inventory API response against available filters, query parameters, and session values.
+ *
+ * @param {object} params
+ * @param {object} params.data
+ * @param {Array} params.filters
+ * @param {object} params.query
+ * @param {object} params.session
+ * @returns {{dataSetColumnHeaders: [], resultsPerPage: number, resultsOffset: number, dataSetRows: [], resultsCount: number}}
+ */
+const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session = {} } = {}) => {
   const { data: listData = [], meta = {} } = data;
   const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
   const {
@@ -72,9 +92,9 @@ const parseInventoryResponse = (
 
   listData.forEach(rowData => {
     const dataSetRow = [];
-    filters.forEach(({ metric, cell, ...rest }) => {
+    filters.forEach(({ metric, label, cell, ...rest }) => {
       const updatedCell = cell({ ...rowData }, { ...session }, { ...meta });
-      dataSetRow.push({ metric, ...rest, content: updatedCell });
+      dataSetRow.push({ metric, ...rest, dataLabel: label, content: updatedCell });
 
       columnData[metric] ??= [];
       columnData[metric].push(updatedCell);

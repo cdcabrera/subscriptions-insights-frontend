@@ -1,7 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TableVariant } from '@patternfly/react-table';
-import { Bullseye, Card, CardActions, CardBody, CardFooter, CardHeader } from '@patternfly/react-core';
+import {
+  Bullseye,
+  Card,
+  CardActions,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup
+} from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import { helpers } from '../../common';
 import { Table } from '../table/_table';
@@ -9,7 +19,7 @@ import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
 import {
   useGetInstancesInventory,
-  // useInventoryCardActions,
+  useInventoryCardActionsInstances,
   useOnPageInstances,
   useOnColumnSortInstances,
   useParseInstancesFiltersSettings
@@ -70,6 +80,8 @@ const InventoryCard = ({
     resultsPerPage
   } = useAliasGetInventory({ isDisabled });
 
+  console.log('>>> updated', updatedActionDisplay);
+
   if (isDisabled || !filters?.length) {
     return (
       <Card className="curiosity-inventory-card__disabled">
@@ -84,17 +96,27 @@ const InventoryCard = ({
     <Card className="curiosity-inventory-card">
       <MinHeight key="headerMinHeight">
         <CardHeader className={(error && 'hidden') || ''} aria-hidden={error || false}>
-          {updatedActionDisplay}
           <CardActions className={(!resultsCount && 'transparent') || ''} aria-hidden={!resultsCount || false}>
-            <Pagination
-              isCompact
-              isDisabled={pending || error}
-              itemCount={resultsCount}
-              offset={resultsOffset}
-              onPage={onPage}
-              onPerPage={onPage}
-              perPage={resultsPerPage}
-            />
+            <Toolbar collapseListedFiltersBreakpoint="sm">
+              <ToolbarContent>
+                {updatedActionDisplay && (
+                  <ToolbarGroup key="inventory-actions" alignment={{ default: 'alignLeft' }}>
+                    {updatedActionDisplay}
+                  </ToolbarGroup>
+                )}
+                <ToolbarGroup key="inventory-paging" alignment={{ default: 'alignRight' }}>
+                  <Pagination
+                    isCompact
+                    isDisabled={pending || error}
+                    itemCount={resultsCount}
+                    offset={resultsOffset}
+                    onPage={onPage}
+                    onPerPage={onPage}
+                    perPage={resultsPerPage}
+                  />
+                </ToolbarGroup>
+              </ToolbarContent>
+            </Toolbar>
           </CardActions>
         </CardHeader>
       </MinHeight>
@@ -174,7 +196,7 @@ InventoryCard.defaultProps = {
   isDisabled: helpers.UI_DISABLED_TABLE_INSTANCES,
   t: translate,
   useGetInventory: useGetInstancesInventory,
-  useInventoryCardActions: Function.prototype,
+  useInventoryCardActions: useInventoryCardActionsInstances,
   useOnPage: useOnPageInstances,
   useOnColumnSort: useOnColumnSortInstances,
   useParseFiltersSettings: useParseInstancesFiltersSettings

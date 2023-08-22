@@ -5,7 +5,7 @@
     }
 
     .pf-c-card__header {
-      padding-bottom: 0;
+      // padding-bottom: 0;
     }
 
     .pf-c-card__title {
@@ -13,8 +13,24 @@
     }
 
     .pf-c-card__actions {
-      margin: inherit;
-      margin-left: auto;
+      padding-left: 0;
+      width: 100%;
+
+      .pf-c-toolbar {
+        // padding-bottom: 1em;
+        padding-bottom: 0;
+        padding-top: 0;
+        width: 100%;
+
+        .pf-c-toolbar__content {
+          padding-left: 0;
+          padding-right: 0;
+
+          .pf-c-toolbar__group:nth-child(2) {
+            margin-left: auto;
+          }
+        }
+      }
     }
 
     .pf-c-card__body {
