@@ -164,7 +164,7 @@ const config = {
   ],
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: (
         {
           [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
@@ -208,7 +208,7 @@ const config = {
       isSort: true
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.CORES,
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
         translate('curiosity-inventory.header', { context: [uom, productId] }),
       cell: (data = {}, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) => data?.[uom] || '--',
@@ -217,7 +217,7 @@ const config = {
       width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
+      metric: INVENTORY_TYPES.LAST_SEEN,
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
       isSort: true,
       isWrap: true,

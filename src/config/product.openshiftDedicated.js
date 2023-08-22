@@ -206,7 +206,7 @@ const config = {
   ],
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: ({
         [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
         [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {},
@@ -248,7 +248,7 @@ const config = {
       isSort: true
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.CORES,
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: cores }) =>
         (typeof cores === 'number' && Number.parseFloat(cores).toFixed(2)) || '--',
       isSort: true,
@@ -256,7 +256,7 @@ const config = {
       width: 15
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS,
+      metric: RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.INSTANCE_HOURS]: instanceHours } = {}) =>
         (typeof instanceHours === 'number' && Number.parseFloat(instanceHours).toFixed(2)) || '--',
       isSort: true,
@@ -264,7 +264,7 @@ const config = {
       width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
+      metric: INVENTORY_TYPES.LAST_SEEN,
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
       isSort: true,
       isWrap: true,

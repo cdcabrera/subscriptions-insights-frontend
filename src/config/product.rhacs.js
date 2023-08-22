@@ -198,7 +198,7 @@ const config = {
       width: 15
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.CORES,
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: total }) =>
         translate('curiosity-inventory.measurement', {
           context: RHSM_API_PATH_METRIC_TYPES.CORES,

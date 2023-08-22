@@ -152,7 +152,7 @@ const config = {
   },
   initialInventoryFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} }) => {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};
@@ -181,7 +181,7 @@ const config = {
       isSortable: true
     },
     {
-      id: INVENTORY_TYPES.BILLING_PROVIDER,
+      metric: INVENTORY_TYPES.BILLING_PROVIDER,
       cell: ({ [INVENTORY_TYPES.BILLING_PROVIDER]: provider }) =>
         translate(`curiosity-inventory.label_${INVENTORY_TYPES.BILLING_PROVIDER}`, {
           context: provider || 'none'
@@ -191,7 +191,7 @@ const config = {
       width: 15
     },
     {
-      id: RHSM_API_PATH_METRIC_TYPES.CORES,
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: total }) =>
         translate('curiosity-inventory.measurement', {
           context: RHSM_API_PATH_METRIC_TYPES.CORES,
@@ -202,7 +202,7 @@ const config = {
       width: 15
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
+      metric: INVENTORY_TYPES.LAST_SEEN,
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen }) => (lastSeen && <DateFormat date={lastSeen} />) || '',
       isSort: true,
       isWrap: true,
