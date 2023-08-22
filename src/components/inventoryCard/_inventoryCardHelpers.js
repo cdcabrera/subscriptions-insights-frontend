@@ -89,7 +89,7 @@ const parseInventoryResponse = (
     const updatedHeader = header({ ...columnData[metric] }, { ...session }, { ...meta });
     const updatedRest = { ...rest };
 
-    if (sortDirection && sortColumn === metric) {
+    if (updatedRest.isSort === true && sortDirection && sortColumn === metric) {
       updatedRest.isSortActive = true;
       updatedRest.sortDirection = sortDirection;
     }
