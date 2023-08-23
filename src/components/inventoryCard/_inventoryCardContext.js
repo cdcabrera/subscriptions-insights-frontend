@@ -86,6 +86,11 @@ const useGetInstancesInventory = ({
   );
   const updatedPending = pending || cancelled || false;
 
+  console.log(
+    '>>>> WHYYYYY',
+    helpers.generateHash({ data, filters, query, fulfilled: response?.fulfilled, session, settings })
+  );
+
   useShallowCompareEffect(() => {
     if (!isDisabled) {
       getInventory(productId, query)(dispatch);

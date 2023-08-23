@@ -90,6 +90,9 @@ const InventoryCard = ({
     );
   }
 
+  // const onExpand = obj => console.log('>>>> onexpand', obj);
+  console.log('>>> CARD CHECK RERENDER');
+
   return (
     <Card className="curiosity-inventory-card">
       <MinHeight key="headerMinHeight">
@@ -135,6 +138,7 @@ const InventoryCard = ({
             )}
             {!pending && (
               <Table
+                key="inventory-table"
                 className="curiosity-inventory-list"
                 isBorders
                 isHeader

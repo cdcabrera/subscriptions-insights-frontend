@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
-import { InventoryGuests } from '../inventoryGuests/inventoryGuests';
+import { InventoryGuests } from '../inventoryGuests/_inventoryGuests';
 import { tableHelpers } from '../table/_table';
 
 /**
@@ -110,6 +110,7 @@ const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session =
       const { id: guestId, numberOfGuests } = guestContentResults || {};
 
       if (guestId && numberOfGuests) {
+        // expandedContent = () => <span>hello world</span>;
         expandedContent = () => (
           <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
         );

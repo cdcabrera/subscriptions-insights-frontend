@@ -105,12 +105,16 @@ const Table = ({
         const nextBodyRows = [...prevState.bodyRows];
         nextBodyRows[rowIndex].expand.isExpanded = isExpanded;
 
+        console.log('>>>>>> TABLE ON EXPAND TEST', nextBodyRows);
+
         return {
           ...prevState,
           bodyRows: nextBodyRows
         };
       });
     }
+
+    console.log('>>>> TABLE EXPAND', type, data);
 
     if (typeof onExpand === 'function') {
       onExpand({
@@ -276,6 +280,8 @@ const Table = ({
   const renderBody = () => {
     const BodyWrapper = ((updatedIsExpandableCell || updatedIsExpandableRow) && React.Fragment) || Tbody;
 
+    console.log('>>>> RENDER TABLE BODY', updatedHeaderAndRows?.bodyRows);
+
     return (
       <BodyWrapper>
         {updatedHeaderAndRows?.bodyRows?.map(({ key: rowKey, cells, expand, select, expandedContent }) => {
@@ -332,7 +338,9 @@ const Table = ({
                     colSpan={cells.length + ((expand && 1) || 0) + ((select && 1) || 0)}
                   >
                     <div className={componentClassNames.tdExpandedContent}>
-                      <ExpandableRowContent>{expandedContent}</ExpandableRowContent>
+                      <ExpandableRowContent>
+                        {(typeof expandedContent === 'function' && expandedContent()) || expandedContent}
+                      </ExpandableRowContent>
                     </div>
                   </Td>
                 </Tr>

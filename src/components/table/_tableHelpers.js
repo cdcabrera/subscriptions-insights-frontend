@@ -1,5 +1,7 @@
 import React from 'react';
 import { SortByDirection } from '@patternfly/react-table';
+// import _cloneDeep from 'lodash/cloneDeep';
+import { helpers } from '../../common/helpers';
 
 /**
  * Table sorting directions.
@@ -141,7 +143,8 @@ const tableHeader = ({
  * @param {Array} params.rows
  * @returns {{isExpandableCell: boolean, isSelectTable: boolean, isExpandableRow: boolean, isAllSelected: boolean, rows: *[]}}
  */
-const tableRows = ({ onExpand, onSelect, rows = [] } = {}) => {
+const tableRows = ({ onExpand, onSelect, rows: originalRows = [] } = {}) => {
+  const rows = originalRows;
   const updatedRows = [];
   const isSelectTable = typeof onSelect === 'function';
   let isExpandableRow = false;
@@ -159,7 +162,7 @@ const tableRows = ({ onExpand, onSelect, rows = [] } = {}) => {
     };
     updatedRows.push(rowObj);
     rowObj.rowIndex = updatedRows.length - 1;
-    rowObj.key = `${window.btoa(rowObj)}-${rowObj.rowIndex}`;
+    rowObj.key = `${helpers.generateHash(rowObj)}-${rowObj.rowIndex}`;
 
     if (isSelectTable) {
       const updatedIsSelected = isSelected ?? false;
