@@ -1,5 +1,7 @@
+import React from 'react';
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
+import { InventoryGuests } from '../inventoryGuests/inventoryGuests';
 import { tableHelpers } from '../table/_table';
 
 /**
@@ -74,9 +76,10 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
  * @param {Array} params.filters
  * @param {object} params.query
  * @param {object} params.session
+ * @param {object} params.settings
  * @returns {{dataSetColumnHeaders: [], resultsPerPage: number, resultsOffset: number, dataSetRows: [], resultsCount: number}}
  */
-const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session = {} } = {}) => {
+const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session = {}, settings = {} } = {}) => {
   const { data: listData = [], meta = {} } = data;
   const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
   const {
@@ -92,6 +95,8 @@ const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session =
 
   listData.forEach(rowData => {
     const dataSetRow = [];
+    let expandedContent;
+
     filters.forEach(({ metric, label, cell, ...rest }) => {
       const updatedCell = cell({ ...rowData }, { ...session }, { ...meta });
       dataSetRow.push({ metric, ...rest, dataLabel: label, content: updatedCell });
@@ -100,7 +105,16 @@ const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session =
       columnData[metric].push(updatedCell);
     });
 
-    dataSetRows.push({ cells: dataSetRow });
+    if (typeof settings?.guestContent === 'function') {
+      const guestContentResults = settings.guestContent({ ...rowData }, { ...session }, { ...meta });
+      const { id: guestId, numberOfGuests } = guestContentResults || {};
+
+      if (guestId && numberOfGuests) {
+        expandedContent = <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />;
+      }
+    }
+
+    dataSetRows.push({ cells: dataSetRow, expandedContent });
   });
 
   filters.forEach(({ metric, header, ...rest }) => {

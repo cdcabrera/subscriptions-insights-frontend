@@ -293,13 +293,14 @@ const Table = ({
           return (
             <CellWrapper key={`${rowKey}-parent-row`} {...cellWrapperProps}>
               <Tr className={componentClassNames.tr} key={`${rowKey}-row`}>
-                {expand && (
+                {(expand && (
                   <Td
                     className={`${componentClassNames.td} ${componentClassNames.tdExpand}`}
                     key={`${rowKey}-expand-col`}
                     expand={expand}
                   />
-                )}
+                )) ||
+                  (updatedIsExpandableRow && <Td className={componentClassNames.td} key="expand-td-cell" />)}
                 {select && (
                   <Td
                     className={`${componentClassNames.td} ${componentClassNames.tdSelect}`}
@@ -472,19 +473,19 @@ Table.defaultProps = {
   className: '',
   columnHeaders: [],
   componentClassNames: {
-    table: 'quipucords-table',
-    td: 'quipucords-table__td',
-    tdAction: 'quipucords-table__td-action',
-    tdSelect: 'quipucords-table__td-select',
-    th: 'quipucords-table__th',
-    tr: 'quipucords-table__tr',
-    trExpand: 'quipucords-table__tr-expand',
-    trExpanded: 'quipucords-table__tr-expand-expanded',
-    trExpandedContent: 'quipucords-table__tr-expand-content',
-    tdExpand: 'quipucords-table__td-expand',
-    tdExpanded: 'quipucords-table__td-expand-expanded',
-    tdExpandedWrapper: 'quipucords-table__td-expand-wrapper',
-    tdExpandedContent: 'quipucords-table__td-expand-content'
+    table: 'curiosity-table',
+    td: 'curiosity-table__td',
+    tdAction: 'curiosity-table__td-action',
+    tdSelect: 'curiosity-table__td-select',
+    th: 'curiosity-table__th',
+    tr: 'curiosity-table__tr',
+    trExpand: 'curiosity-table__tr-expand',
+    trExpanded: 'curiosity-table__tr-expand-expanded',
+    trExpandedContent: 'curiosity-table__tr-expand-content',
+    tdExpand: 'curiosity-table__td-expand',
+    tdExpanded: 'curiosity-table__td-expand-expanded',
+    tdExpandedWrapper: 'curiosity-table__td-expand-wrapper',
+    tdExpandedContent: 'curiosity-table__td-expand-content'
   },
   isBorders: true,
   isHeader: false,

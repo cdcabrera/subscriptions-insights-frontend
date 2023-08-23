@@ -192,7 +192,6 @@ const config = {
         const { inventory: authorized } = session?.authorized || {};
 
         if (!instanceId) {
-          console.log('>>>> DISPLAY NAME CELL', displayName);
           return displayName;
         }
 
@@ -210,8 +209,6 @@ const config = {
             </Button>
           );
         }
-
-        console.log('>>>> DISPLAY NAME CELL', updatedDisplayName);
 
         return updatedDisplayName;
       },
@@ -266,7 +263,7 @@ const config = {
     guestContent: ({
       [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests = {},
       [INVENTORY_TYPES.INSTANCE_ID]: id
-    } = {}) => (numberOfGuests > 0 && id) || undefined
+    } = {}) => (numberOfGuests > 0 && id && { id, numberOfGuests }) || undefined
   },
   initialSubscriptionsInventoryFilters: [
     {

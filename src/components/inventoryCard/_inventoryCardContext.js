@@ -80,7 +80,7 @@ const useGetInstancesInventory = ({
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const dispatch = useAliasDispatch();
-  const { filters, columnCountAndWidths } = useAliasParseInstancesFiltersSettings();
+  const { columnCountAndWidths, filters, settings } = useAliasParseInstancesFiltersSettings();
   const { cancelled, pending, data, ...response } = useAliasSelectorsResponse(
     ({ inventory }) => inventory?.instancesInventory?.[productId]
   );
@@ -95,11 +95,11 @@ const useGetInstancesInventory = ({
   const parsedData = useMemo(() => {
     if (response?.fulfilled) {
       const updatedData = (data?.length === 1 && data[0]) || data || {};
-      return inventoryCardHelpers.parseInventoryResponse({ data: updatedData, filters, query, session });
+      return inventoryCardHelpers.parseInventoryResponse({ data: updatedData, filters, query, session, settings });
     }
 
     return undefined;
-  }, [data, filters, query, response?.fulfilled, session]);
+  }, [data, filters, query, response?.fulfilled, session, settings]);
 
   return {
     ...response,
