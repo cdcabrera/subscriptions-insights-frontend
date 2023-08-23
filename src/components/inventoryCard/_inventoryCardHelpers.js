@@ -110,11 +110,13 @@ const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session =
       const { id: guestId, numberOfGuests } = guestContentResults || {};
 
       if (guestId && numberOfGuests) {
-        expandedContent = <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />;
+        expandedContent = () => (
+          <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
+        );
       }
     }
 
-    dataSetRows.push({ cells: dataSetRow, expandedContent });
+    dataSetRows.push({ cells: dataSetRow, row: rowData, expandedContent });
   });
 
   filters.forEach(({ metric, header, ...rest }) => {
