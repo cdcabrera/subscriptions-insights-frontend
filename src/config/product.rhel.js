@@ -141,7 +141,7 @@ const config = {
   },
   initialGuestsFilters: [
     {
-      id: INVENTORY_TYPES.DISPLAY_NAME,
+      metric: INVENTORY_TYPES.DISPLAY_NAME,
       header: () => translate('curiosity-inventory.header', { context: ['guests', INVENTORY_TYPES.DISPLAY_NAME] }),
       cell: (
         { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {} } = {},
@@ -149,11 +149,11 @@ const config = {
       ) => {
         const { inventory: authorized } = session?.authorized || {};
 
-        if (!inventoryId?.value) {
-          return displayName?.value;
+        if (!inventoryId) {
+          return displayName;
         }
 
-        let updatedDisplayName = displayName.value || inventoryId.value;
+        let updatedDisplayName = displayName || inventoryId;
 
         if (authorized) {
           updatedDisplayName = (
@@ -161,7 +161,7 @@ const config = {
               isInline
               component="a"
               variant="link"
-              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${inventoryId.value}/`}
+              href={`${helpers.UI_DEPLOY_PATH_LINK_PREFIX}/insights/inventory/${inventoryId}/`}
             >
               {updatedDisplayName}
             </Button>
@@ -172,14 +172,13 @@ const config = {
       }
     },
     {
-      id: INVENTORY_TYPES.INVENTORY_ID,
-      cellWidth: 40
+      metric: INVENTORY_TYPES.INVENTORY_ID,
+      width: 40
     },
     {
-      id: INVENTORY_TYPES.LAST_SEEN,
-      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) =>
-        (lastSeen?.value && <DateFormat date={lastSeen?.value} />) || '',
-      cellWidth: 15
+      metric: INVENTORY_TYPES.LAST_SEEN,
+      cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
+      width: 15
     }
   ],
   initialInventoryFilters: [
