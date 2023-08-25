@@ -98,6 +98,27 @@
   }
 
   .curiosity-guests-list {
+    .curiosity-table__tr > :first-child {
+      padding-left: calc(var(--pf-c-table--m-compact--cell--first-last-child--xl--PaddingLeft) * 2);
+    }
+
+    // .curiosity-table__tr > *:last-child {
+    // &.pf-c-table.pf-m-compact tr > *:last-child {
+    // padding-right: calc(var(--pf-c-table--m-compact--cell--first-last-child--PaddingRight) / 2);
+    // }
+
+    @media (max-width: $pf-global--breakpoint--md) {
+      .curiosity-table__tr > :first-child {
+        padding-left: 0;
+      }
+
+      &.pf-c-table.pf-m-compact > tbody > tr {
+        padding-top: 0;
+      }
+    }
+
+    /*
+    .curiosity-table__tr > :first-child,
     &.pf-c-table.pf-m-compact tr:not(.pf-c-table__expandable-row) > :first-child {
       padding-left: 20px;
     }
@@ -115,5 +136,6 @@
         padding-top: 0;
       }
     }
+    */
   }
 }

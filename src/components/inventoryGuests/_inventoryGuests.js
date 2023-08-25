@@ -69,7 +69,7 @@ const InventoryGuests = ({
                   rowCount:
                     (resultsOffset === 0 && numberOfGuests < defaultPerPage && numberOfGuests) || 1,
                   variant: TableVariant.compact,
-                  isHeader: true
+                  isHeader: false
                 }}
               />
             </div>
