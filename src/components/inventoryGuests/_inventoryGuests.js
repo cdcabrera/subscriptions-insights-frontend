@@ -37,12 +37,8 @@ const InventoryGuests = ({
     dataSetColumnHeaders = [],
     dataSetRows = [],
     resultsColumnCountAndWidths = { count: 1, widths: [] },
-    // resultsCount,
     resultsOffset
-    // resultsPerPage
-  } = useAliasGetGuestsInventory({ id, numberOfGuests });
-
-  // return 'hello world';
+  } = useAliasGetGuestsInventory(id);
 
   const onScroll = useAliasOnScroll({ id, numberOfGuests });
 
@@ -50,6 +46,8 @@ const InventoryGuests = ({
   // Include the table header
   let updatedHeight = (numberOfGuests + 1) * 42;
   updatedHeight = (updatedHeight < 275 && updatedHeight) || 275;
+
+  console.log('>>> widths', resultsColumnCountAndWidths.widths);
 
   return (
     <div className="fadein">
@@ -64,15 +62,14 @@ const InventoryGuests = ({
                 variant="table"
                 tableProps={{
                   borders: false,
-                  className: (resultsOffset === 0 && 'curiosity-guests-list') || undefined,
+                  // className: (resultsOffset === 0 && 'curiosity-guests-list') || undefined,
+                  className: 'curiosity-guests-list',
                   colCount: resultsColumnCountAndWidths.count,
                   colWidth: resultsColumnCountAndWidths.widths,
-                  // rowCount: dataSetRows?.length || resultsPerPage,
-                  // colCount: filterGuestsData?.length || (listData?.[0] && Object.keys(listData[0]).length) || 1,
-                  // colWidth: (filterGuestsData?.length && filterGuestsData.map(({ cellWidth }) => cellWidth)) || [],
                   rowCount:
-                    (resultsOffset === 0 && numberOfGuests < defaultPerPage && numberOfGuests) || defaultPerPage,
-                  variant: TableVariant.compact
+                    (resultsOffset === 0 && numberOfGuests < defaultPerPage && numberOfGuests) || 1,
+                  variant: TableVariant.compact,
+                  isHeader: true
                 }}
               />
             </div>

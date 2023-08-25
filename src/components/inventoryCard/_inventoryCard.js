@@ -135,7 +135,8 @@ const InventoryCard = ({
                   colCount: resultsColumnCountAndWidths.count,
                   colWidth: resultsColumnCountAndWidths.widths,
                   rowCount: dataSetRows?.length || resultsPerPage,
-                  variant: TableVariant.compact
+                  variant: TableVariant.compact,
+                  isHeader: true
                 }}
               />
             )}

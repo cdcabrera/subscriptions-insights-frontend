@@ -99,9 +99,15 @@ const rhsmInstancesGuests = (response, { params, _id } = {}) => {
     Number.parseInt(params[RHSM_API_QUERY_SET_TYPES.OFFSET], 10) /
     Number.parseInt(params[RHSM_API_QUERY_SET_TYPES.LIMIT], 10);
 
+  // Note: null is considered "finite" hence the OR
   cacheIndex = (!Number.isNaN(cacheIndex) && Number.isFinite(cacheIndex) && cacheIndex) || 0;
 
-  rhsmInstancesGuestsCache[_id] ??= [];
+  // rhsmInstancesGuestsCache[_id] ??= [];
+
+  if (cacheIndex <= 0) {
+    rhsmInstancesGuestsCache[_id] = [];
+  }
+
   rhsmInstancesGuestsCache[_id][cacheIndex] = data;
   // rhsmInstancesGuestsCache[_id] = [...rhsmInstancesGuestsCache[_id], ...data];
 
