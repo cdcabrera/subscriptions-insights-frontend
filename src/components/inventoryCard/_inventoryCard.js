@@ -65,9 +65,12 @@ const InventoryCard = ({
   useOnColumnSort: useAliasOnColumnSort,
   useParseFiltersSettings: useAliasParseFiltersSettings
 }) => {
+  // const updatedActionDisplay = null;
+  // console.log('>>>>', useAliasInventoryCardActions);
   const updatedActionDisplay = useAliasInventoryCardActions();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
+  // const { filters, settings } = useAliasParseFiltersSettings({ isDisabled });
   const { filters } = useAliasParseFiltersSettings({ isDisabled });
   const {
     error,
@@ -80,6 +83,9 @@ const InventoryCard = ({
     resultsPerPage
   } = useAliasGetInventory({ isDisabled });
 
+  // const updatedActionDisplay = useAliasInventoryCardActions({ results, settings });
+  // const updatedActionDisplay = useAliasInventoryCardActions({ results, settings });
+
   if (isDisabled || !filters?.length) {
     return (
       <Card className="curiosity-inventory-card__disabled">
@@ -89,9 +95,6 @@ const InventoryCard = ({
       </Card>
     );
   }
-
-  // const onExpand = obj => console.log('>>>> onexpand', obj);
-  console.log('>>> CARD CHECK RERENDER');
 
   return (
     <Card className="curiosity-inventory-card">

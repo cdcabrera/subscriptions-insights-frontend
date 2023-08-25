@@ -280,8 +280,6 @@ const Table = ({
   const renderBody = () => {
     const BodyWrapper = ((updatedIsExpandableCell || updatedIsExpandableRow) && React.Fragment) || Tbody;
 
-    console.log('>>>> RENDER TABLE BODY', updatedHeaderAndRows?.bodyRows);
-
     return (
       <BodyWrapper>
         {updatedHeaderAndRows?.bodyRows?.map(({ key: rowKey, cells, expand, select, expandedContent }) => {

@@ -11,6 +11,7 @@ import {
   rhsmConstants
 } from './rhsmConstants';
 import { dateHelpers } from '../../common';
+// import LruCache from 'lru-cache';
 
 /**
  * Transform RHSM responses. Replaces selector usage.
@@ -71,6 +72,44 @@ const rhsmInstances = (response, { params } = {}) => {
     uom: normalizedUom,
     productId: meta[INSTANCES_META_TYPES.PRODUCT]
   };
+
+  return updatedResponse;
+};
+
+/**
+ * Guests cache, expire after an hour
+ *
+ * @type {LRUCache<unknown, unknown>}
+ */
+/*
+const rhsmInstancesGuestsCache = new LruCache({
+  ttl: 3600000,
+  max: 10,
+  updateAgeOnGet: true
+});
+*/
+const rhsmInstancesGuestsCache = {};
+
+const rhsmInstancesGuests = (response, { params, _id } = {}) => {
+  const updatedResponse = {};
+  const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
+    response || {};
+
+  let cacheIndex =
+    Number.parseInt(params[RHSM_API_QUERY_SET_TYPES.OFFSET], 10) /
+    Number.parseInt(params[RHSM_API_QUERY_SET_TYPES.LIMIT], 10);
+
+  cacheIndex = (!Number.isNaN(cacheIndex) && Number.isFinite(cacheIndex) && cacheIndex) || 0;
+
+  rhsmInstancesGuestsCache[_id] ??= [];
+  rhsmInstancesGuestsCache[_id][cacheIndex] = data;
+  // rhsmInstancesGuestsCache[_id] = [...rhsmInstancesGuestsCache[_id], ...data];
+
+  // console.log('>>>> GUESTS', params, _id, data, meta, rhsmInstancesGuestsCache);
+  updatedResponse.data = rhsmInstancesGuestsCache[_id].flat();
+  updatedResponse.meta = meta;
+
+  console.log('>>>>> GUESTS', updatedResponse);
 
   return updatedResponse;
 };
@@ -209,9 +248,17 @@ const rhsmTallyCapacity = (response, { _isCapacity, params } = {}) => {
 };
 
 const rhsmTransformers = {
+  guests: rhsmInstancesGuests,
   instances: rhsmInstances,
   subscriptions: rhsmSubscriptions,
   tallyCapacity: rhsmTallyCapacity
 };
 
-export { rhsmTransformers as default, rhsmTransformers, rhsmInstances, rhsmSubscriptions, rhsmTallyCapacity };
+export {
+  rhsmTransformers as default,
+  rhsmTransformers,
+  rhsmInstances,
+  rhsmInstancesGuests,
+  rhsmSubscriptions,
+  rhsmTallyCapacity
+};

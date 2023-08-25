@@ -1,6 +1,5 @@
-/* eslint-disable */
-import { useEffect, useMemo, useState } from 'react';
-import { useMount, useUnmount, useShallowCompareEffect } from 'react-use';
+import { useMemo } from 'react';
+import { useUnmount, useShallowCompareEffect } from 'react-use';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import {
   useProduct,
@@ -9,7 +8,7 @@ import {
 } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useSession } from '../authentication/authenticationContext';
-import { inventoryCardHelpers } from '../inventoryCard/_inventoryCardHelpers';
+import { inventoryCardHelpers } from '../inventoryCard/_inventoryCardHelpers'; // eslint-disable-line
 
 /**
  * @memberof InventoryGuests
@@ -36,43 +35,86 @@ const useParseGuestsFiltersSettings = ({
   }, [filters, isDisabled, settings, productId]);
 };
 
-const useGetGuestsInventory = (
+const useSelectorGuests = (
   id,
+  {
+    useParseFiltersSettings: useAliasParseFiltersSettings = useParseGuestsFiltersSettings,
+    useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
+    useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
+    useSession: useAliasSession = useSession
+  } = {}
+) => {
+  // const [infiniteRows, setInfiniteRows] = useState([]);
+  const session = useAliasSession();
+  const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
+  const { columnCountAndWidths, filters, settings } = useAliasParseFiltersSettings();
+  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesGuests?.[id]);
+  const { pending, cancelled, data, ...restResponse } = response;
+  const updatedPending = pending || cancelled || false;
+  let parsedData;
+
+  /*
+  useDeepCompareEffect(() => {
+    if (response.fulfilled && parsedData.dataSetRows) {
+      console.log('>>>> ROWS', response);
+      setInfiniteRows(prevState => [...prevState, ...parsedData?.dataSetRows]);
+    }
+  }, [response.fulfilled, response.data.data]);
+  */
+
+  if (response?.fulfilled) {
+    const updatedData = (data?.length === 1 && data[0]) || data || {};
+    parsedData = inventoryCardHelpers.parseInventoryResponse({
+      data: updatedData,
+      filters,
+      query,
+      session,
+      settings
+    });
+  }
+
+  return {
+    ...restResponse,
+    pending: updatedPending,
+    resultsColumnCountAndWidths: columnCountAndWidths,
+    ...parsedData
+    // dataSetRows: infiniteRows
+  };
+};
+
+const useGetGuestsInventory = (
+  { id, numberOfGuests } = {},
   {
     getInventory = reduxActions.rhsm.getInstancesInventoryGuests,
     useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
     // useParseFiltersSettings: useAliasParseFiltersSettings = useParseGuestsFiltersSettings,
     useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
     // useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
-    // useSession: useAliasSession = useSession
+    // useSession: useAliasSession = useSession,
+    useSelector: useAliasSelector = useSelectorGuests
   } = {}
 ) => {
-  // const [infiniteData, setInfiniteData] = useState([]);
   // const session = useAliasSession();
-  // const query = useAliasProductInventoryQuery();
+  const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
+  // const { [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage } = query;
   const dispatch = useAliasDispatch();
   // const { columnCountAndWidths, filters, settings } = useAliasParseFiltersSettings();
   // const { cancelled, pending, data, ...response } = useAliasSelectorsResponse(
   //  ({ inventory }) => inventory?.instancesGuests?.[id]
   // );
   // const updatedPending = pending || cancelled || false;
+  const response = useAliasSelector(id);
 
-  useMount(() => {
-    console.log('>>> FIRE API CALL', id);
-    // getInventory(id, {})(dispatch);
-    dispatch(getInventory(id, {}));
-  });
-  // }, [dispatch, id, query]);
+  console.log('>>> FIRE 001', id, query);
 
-  return useMemo(() => ({
-    pending: false
-  }));
+  useShallowCompareEffect(() => {
+    console.log('>>>> FIRE 002 GET INVENTORY', id, query);
+    if (numberOfGuests !== response?.dataSetRows?.length) {
+      getInventory(id, query)(dispatch);
+    }
+  }, [id, query]);
 
-
-
-
-
-
+  return response;
 
   /*
   const parsedData = useMemo(() => {
@@ -96,7 +138,8 @@ const useGetGuestsInventory = (
   }, [data, filters, query, response?.fulfilled, session, settings]);
   */
 
-  useEffect(() => {
+  /*
+  useDeepCompareEffect(() => {
     if (response?.fulfilled) {
       const updatedData = (data?.length === 1 && data[0]) || data || {};
       const parsedData = inventoryCardHelpers.parseInventoryResponse({
@@ -110,10 +153,12 @@ const useGetGuestsInventory = (
       setInfiniteData(prevState => ({
         ...parsedData,
         ...prevState,
-        dataSetRows: [...prevState.dataSetRows, ...parsedData.dataSetRows]
+        dataSetRows: []
+        // dataSetRows: [...prevState?.dataSetRows, ...parsedData?.dataSetRows]
       }));
     }
-  }, [data, filters, query, response?.fulfilled, session, settings]);
+    // }, [data, filters, query, response?.fulfilled, session, settings]);
+  }, [data, response?.fulfilled]);
 
   return {
     ...response,
@@ -121,6 +166,7 @@ const useGetGuestsInventory = (
     resultsColumnCountAndWidths: columnCountAndWidths,
     ...infiniteData
   };
+   */
 };
 
 /**
@@ -131,7 +177,7 @@ const useGetGuestsInventory = (
  * @param {number} params.numberOfGuests
  * @param {object} options
  * @param {Function} options.useDispatch
- * @param {Function} options.useGetGuestsInventory
+ * @param {Function} options.useSelector
  * @param {Function} options.useProductInventoryQuery
  * @returns {Function}
  */
@@ -139,12 +185,13 @@ const useOnScroll = (
   { id, numberOfGuests } = {},
   {
     useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-    useGetGuestsInventory: useAliasGetGuestsInventory = useGetGuestsInventory,
+    // useGetGuestsInventory: useAliasGetGuestsInventory = useGetGuestsInventory,
+    useSelector: useAliasSelector = useSelectorGuests,
     useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery
   } = {}
 ) => {
   const dispatch = useAliasDispatch();
-  const { pending } = useAliasGetGuestsInventory();
+  const { pending } = useAliasSelector(id);
   const { [RHSM_API_QUERY_SET_TYPES.LIMIT]: limit, [RHSM_API_QUERY_SET_TYPES.OFFSET]: currentPage } =
     useAliasProductInventoryQuery({ options: { overrideId: id } });
 

@@ -40,9 +40,9 @@ const InventoryGuests = ({
     // resultsCount,
     resultsOffset
     // resultsPerPage
-  } = useAliasGetGuestsInventory(id);
+  } = useAliasGetGuestsInventory({ id, numberOfGuests });
 
-  return 'hello world';
+  // return 'hello world';
 
   const onScroll = useAliasOnScroll({ id, numberOfGuests });
 
@@ -80,6 +80,7 @@ const InventoryGuests = ({
           {(dataSetRows?.length && (
             <Table
               isBorders={false}
+              isHeader
               className="curiosity-guests-list"
               columnHeaders={dataSetColumnHeaders}
               rows={dataSetRows}

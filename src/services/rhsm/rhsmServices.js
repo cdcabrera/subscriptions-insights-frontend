@@ -1651,7 +1651,7 @@ const getInstancesInventoryGuests = (id, params = {}, options = {}) => {
     cancel = false,
     cancelId,
     schema = [rhsmSchemas.guests, rhsmSchemas.errors],
-    transform = []
+    transform = [rhsmTransformers.guests]
   } = options;
   const updatedId = rhsmHelpers.filterArchitectureVariant(id, params);
   return serviceCall({
@@ -1661,7 +1661,8 @@ const getInstancesInventoryGuests = (id, params = {}, options = {}) => {
     cancel,
     cancelId,
     schema,
-    transform
+    transform,
+    _id: updatedId
   });
 };
 
