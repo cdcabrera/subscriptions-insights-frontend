@@ -5,6 +5,7 @@ import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useSession } from '../authentication/authenticationContext';
 import {
   useProduct,
+  useProductInventoryGuestsConfig,
   useProductInventoryHostsConfig,
   useProductInventoryHostsQuery
 } from '../productView/productViewContext';
@@ -35,10 +36,12 @@ import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 const useParseInstancesFiltersSettings = ({
   isDisabled = false,
   useProduct: useAliasProduct = useProduct,
-  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
+  useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig,
+  useProductGuestsConfig: useAliasProductGuestsConfig = useProductInventoryGuestsConfig
 } = {}) => {
   const { productId } = useAliasProduct();
   const { filters = [], settings = {} } = useAliasProductConfig();
+  const { filters: guestFilters = [] } = useAliasProductGuestsConfig();
 
   return useMemo(() => {
     if (isDisabled) {
@@ -46,10 +49,11 @@ const useParseInstancesFiltersSettings = ({
     }
     return inventoryCardHelpers.normalizeInventorySettings({
       filters,
+      guestFilters,
       settings,
       productId
     });
-  }, [filters, isDisabled, settings, productId]);
+  }, [filters, guestFilters, isDisabled, settings, productId]);
 };
 
 const useSelectorInstances = ({
@@ -62,7 +66,7 @@ const useSelectorInstances = ({
   const { productId } = useAliasProduct();
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
-  const { columnCountAndWidths, filters, settings } = useAliasParseInstancesFiltersSettings();
+  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseInstancesFiltersSettings();
   const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesInventory?.[productId]);
 
   const { pending, cancelled, data, ...restResponse } = response;
@@ -74,6 +78,7 @@ const useSelectorInstances = ({
     parsedData = inventoryCardHelpers.parseInventoryResponse({
       data: updatedData,
       filters,
+      isGuestFiltersDisabled,
       query,
       session,
       settings
