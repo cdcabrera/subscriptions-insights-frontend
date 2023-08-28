@@ -147,7 +147,7 @@ const config = {
   initialGuestsFilters: [
     {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
-      header: () => translate('curiosity-inventory.header', { context: ['guests', INVENTORY_TYPES.DISPLAY_NAME] }),
+      header: () => translate('curiosity-inventory.guestsHeader', { context: [INVENTORY_TYPES.DISPLAY_NAME] }),
       cell: (
         { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {} } = {},
         session

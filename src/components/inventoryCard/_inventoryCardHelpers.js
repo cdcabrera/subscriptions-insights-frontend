@@ -33,7 +33,10 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
     } else if (header) {
       updatedHeader = () => header;
     } else {
-      updatedHeader = () => translate('curiosity-inventory.header', { context: [metric, productId] });
+      updatedHeader = () =>
+        translate([`curiosity-inventory.header`, `curiosity-inventory.guestsHeader`], {
+          context: [metric, productId]
+        });
     }
 
     if (typeof cell === 'function' && cell) {
@@ -51,7 +54,9 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
     columnCountAndWidths.widths.push(updatedWidth);
 
     updatedFilters.push({
-      label: translate('curiosity-inventory.header', { context: [metric, productId] }),
+      label: translate(['curiosity-inventory.header', 'curiosity-inventory.guestsHeader'], {
+        context: [metric, productId]
+      }),
       metric,
       width,
       ...rest,
