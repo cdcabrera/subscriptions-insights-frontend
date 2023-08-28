@@ -14,11 +14,12 @@ import { tableHelpers } from '../table/_table';
  *
  * @param {object} params
  * @param {Array} params.filters
+ * @param {Array} params.guestFilters
  * @param {object} params.settings
  * @param {string} params.productId
  * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: []}, filters: []}}
  */
-const normalizeInventorySettings = ({ filters = [], settings = {}, productId } = {}) => {
+const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings = {}, productId } = {}) => {
   const updatedFilters = [];
   const columnCountAndWidths = { count: filters.length, widths: [] };
 
@@ -60,13 +61,14 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
   });
 
   return {
+    isGuestFiltersDisabled: !guestFilters || !guestFilters?.length,
     columnCountAndWidths,
     filters: updatedFilters,
     settings
   };
 };
 
-// ToDo: evaluate moving isWrap under the table component
+// ToDo: evaluate moving isWrap logic under the table component helpers
 // ToDo: evaluate a fallback "perPageDefault = 10" defined here
 /**
  * Parse an inventory API response against available filters, query parameters, and session values.
@@ -74,12 +76,20 @@ const normalizeInventorySettings = ({ filters = [], settings = {}, productId } =
  * @param {object} params
  * @param {object} params.data
  * @param {Array} params.filters
+ * @param {boolean} params.isGuestFiltersDisabled
  * @param {object} params.query
  * @param {object} params.session
  * @param {object} params.settings
  * @returns {{dataSetColumnHeaders: [], resultsPerPage: number, resultsOffset: number, dataSetRows: [], resultsCount: number}}
  */
-const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session = {}, settings = {} } = {}) => {
+const parseInventoryResponse = ({
+  data = {},
+  filters = [],
+  isGuestFiltersDisabled = true,
+  query = {},
+  session = {},
+  settings = {}
+} = {}) => {
   const { data: listData = [], meta = {} } = data;
   const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
   const {
@@ -109,7 +119,7 @@ const parseInventoryResponse = ({ data = {}, filters = [], query = {}, session =
       const guestContentResults = settings.guestContent({ ...rowData }, { ...session }, { ...meta });
       const { id: guestId, numberOfGuests } = guestContentResults || {};
 
-      if (guestId && numberOfGuests) {
+      if (isGuestFiltersDisabled === false && guestId && numberOfGuests) {
         expandedContent = () => (
           <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
         );
