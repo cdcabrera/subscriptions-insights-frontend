@@ -239,55 +239,54 @@ const config = {
   },
   initialSubscriptionsInventoryFilters: [
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
-      isSortable: true,
-      isWrappable: true
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
+      isSort: true,
+      isWrap: true
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.SERVICE_LEVEL,
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.SERVICE_LEVEL,
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.QUANTITY,
-      isSortable: true,
-      cellWidth: 20,
-      isWrappable: true
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.QUANTITY,
+      isSort: true,
+      isWrap: true,
+      width: 20
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY,
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY,
       header: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.UOM]: uom } = {}) =>
-        translate('curiosity-inventory.header', { context: ['subscriptions', uom?.value] }),
+        translate('curiosity-inventory.header', { context: ['subscriptions', uom] }),
       cell: ({
         [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,
         [SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY]: totalCapacity,
         [SUBSCRIPTIONS_INVENTORY_TYPES.UOM]: uom
       } = {}) => {
-        if (hasInfiniteQuantity?.value === true) {
-          const content = translate(
-            `curiosity-inventory.label_${SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY}`,
-            { context: uom?.value }
-          );
+        if (hasInfiniteQuantity === true) {
+          const content = translate(`curiosity-inventory.label`, {
+            context: [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY, uom]
+          });
           return (
             <Tooltip content={content}>
               <ChartIcon symbol="infinity" aria-label={content} />
             </Tooltip>
           );
         }
-        return totalCapacity?.value;
+        return totalCapacity;
       },
-      isSortable: true,
-      cellWidth: 15,
-      isWrappable: true
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
       cell: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE]: nextEventDate } = {}) =>
-        (nextEventDate?.value && moment.utc(nextEventDate?.value).format('YYYY-MM-DD')) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+        (nextEventDate && moment.utc(nextEventDate).format('YYYY-MM-DD')) || '',
+      isSort: true,
+      isWrap: true,
+      width: 15
     }
   ],
   initialToolbarFilters: [

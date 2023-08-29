@@ -9,7 +9,7 @@ import { InventoryCard } from '../inventoryCard/_inventoryCard';
 import { helpers } from '../../common';
 import BannerMessages from '../bannerMessages/bannerMessages';
 import InventoryTabs, { InventoryTab } from '../inventoryTabs/inventoryTabs';
-import { InventoryCardSubscriptions } from '../inventoryCardSubscriptions/inventoryCardSubscriptions';
+import { InventoryCardSubscriptions } from '../inventoryCardSubscriptions/_inventoryCardSubscriptions';
 import { translate } from '../i18n/i18n';
 
 /**
