@@ -62,7 +62,6 @@
     }
   }
 
-  // ToDo: reevaluate this fix periodically, originally for non-expandable table rows to aid in alignment with heading
   .curiosity-inventory-list {
     // FixMe: an unknown border-top-width appears?
     &.pf-c-table.pf-m-compact tbody {
@@ -102,11 +101,6 @@
       padding-left: calc(var(--pf-c-table--m-compact--cell--first-last-child--xl--PaddingLeft) * 2);
     }
 
-    // .curiosity-table__tr > *:last-child {
-    // &.pf-c-table.pf-m-compact tr > *:last-child {
-    // padding-right: calc(var(--pf-c-table--m-compact--cell--first-last-child--PaddingRight) / 2);
-    // }
-
     @media (max-width: $pf-global--breakpoint--md) {
       .curiosity-table__tr > :first-child {
         padding-left: 0;
@@ -116,26 +110,5 @@
         padding-top: 0;
       }
     }
-
-    /*
-    .curiosity-table__tr > :first-child,
-    &.pf-c-table.pf-m-compact tr:not(.pf-c-table__expandable-row) > :first-child {
-      padding-left: 20px;
-    }
-
-    &.pf-c-table.pf-m-compact tr > *:last-child {
-      padding-right: var(--pf-c-table--m-compact--cell--first-last-child--PaddingRight);
-    }
-
-    @media (max-width: $pf-global--breakpoint--md) {
-      &.pf-c-table.pf-m-compact tr:not(.pf-c-table__expandable-row) > :first-child {
-        padding-left: 0;
-      }
-
-      &.pf-c-table.pf-m-compact > tbody > tr {
-        padding-top: 0;
-      }
-    }
-    */
   }
 }
