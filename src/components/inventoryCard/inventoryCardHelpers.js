@@ -54,9 +54,7 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
     columnCountAndWidths.widths.push(updatedWidth);
 
     updatedFilters.push({
-      label: translate(['curiosity-inventory.header', 'curiosity-inventory.guestsHeader'], {
-        context: [metric, productId]
-      }),
+      label: updatedHeader,
       metric,
       width,
       ...rest,
@@ -114,7 +112,8 @@ const parseInventoryResponse = ({
 
     filters.forEach(({ metric, label, cell, ...rest }) => {
       const updatedCell = cell({ ...rowData }, { ...session }, { ...meta });
-      dataSetRow.push({ metric, ...rest, dataLabel: label, content: updatedCell });
+      const updatedLabel = label({ columnData: [] }, { ...session }, { ...meta });
+      dataSetRow.push({ metric, ...rest, dataLabel: updatedLabel, content: updatedCell });
 
       columnData[metric] ??= [];
       columnData[metric].push(updatedCell);
@@ -135,7 +134,7 @@ const parseInventoryResponse = ({
   });
 
   filters.forEach(({ metric, header, ...rest }) => {
-    const updatedHeader = header({ ...columnData[metric] }, { ...session }, { ...meta });
+    const updatedHeader = header({ columnData: columnData[metric] }, { ...session }, { ...meta });
     const updatedRest = { ...rest };
 
     if (updatedRest.isSort === true && sortDirection && sortColumn === metric) {
