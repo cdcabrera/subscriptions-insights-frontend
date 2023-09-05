@@ -56,7 +56,7 @@ InventoryCardSubscriptions.propTypes = {
  *     isDisabled: boolean, useGetInventory: Function, useOnColumnSort: Function}}
  */
 InventoryCardSubscriptions.defaultProps = {
-  isDisabled: helpers.UI_DISABLED_TABLE_INSTANCES,
+  isDisabled: helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS,
   t: translate,
   useGetInventory: useGetSubscriptionsInventory,
   useInventoryCardActions: useInventoryCardActionsSubscriptions,

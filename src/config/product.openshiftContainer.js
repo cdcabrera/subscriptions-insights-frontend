@@ -257,7 +257,7 @@ const config = {
     },
     {
       metric: SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY,
-      header: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.UOM]: uom } = {}) =>
+      header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
         translate('curiosity-inventory.header', { context: ['subscriptions', uom] }),
       cell: ({
         [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,

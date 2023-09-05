@@ -25,7 +25,8 @@ import {
   RHSM_API_QUERY_UOM_TYPES,
   RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INVENTORY_TYPES,
   RHSM_API_RESPONSE_SUBSCRIPTIONS_DATA_TYPES as SUBSCRIPTIONS_INVENTORY_TYPES,
-  RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES
+  RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES as DISPLAY_TYPES,
+  RHSM_API_RESPONSE_INSTANCES_META_TYPES as INVENTORY_META_TYPES
 } from '../services/rhsm/rhsmConstants';
 import { dateHelpers, helpers } from '../common';
 import { Tooltip } from '../components/tooltip/tooltip';
@@ -289,8 +290,8 @@ const config = {
     },
     {
       id: SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY,
-      header: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.UOM]: uom } = {}) =>
-        translate('curiosity-inventory.header', { context: ['subscriptions', uom?.value] }),
+      header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
+        translate('curiosity-inventory.header', { context: ['subscriptions', uom] }),
       cell: ({
         [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,
         [SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY]: totalCapacity,

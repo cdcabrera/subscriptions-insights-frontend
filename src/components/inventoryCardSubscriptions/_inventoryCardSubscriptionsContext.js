@@ -71,7 +71,6 @@ const useSelectorSubscriptions = ({
 
   if (response?.fulfilled) {
     const updatedData = (data?.length === 1 && data[0]) || data || {};
-    console.log('>>>>> DATA', updatedData);
     parsedData = inventoryCardHelpers.parseInventoryResponse({
       data: updatedData,
       filters,

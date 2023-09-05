@@ -65,12 +65,9 @@ const InventoryCard = ({
   useOnColumnSort: useAliasOnColumnSort,
   useParseFiltersSettings: useAliasParseFiltersSettings
 }) => {
-  // const updatedActionDisplay = null;
-  // console.log('>>>>', useAliasInventoryCardActions);
   const updatedActionDisplay = useAliasInventoryCardActions();
   const onPage = useAliasOnPage();
   const onColumnSort = useAliasOnColumnSort();
-  // const { filters, settings } = useAliasParseFiltersSettings({ isDisabled });
   const { filters } = useAliasParseFiltersSettings({ isDisabled });
   const {
     error,
@@ -82,9 +79,6 @@ const InventoryCard = ({
     resultsOffset,
     resultsPerPage
   } = useAliasGetInventory({ isDisabled });
-
-  // const updatedActionDisplay = useAliasInventoryCardActions({ results, settings });
-  // const updatedActionDisplay = useAliasInventoryCardActions({ results, settings });
 
   if (isDisabled || !filters?.length) {
     return (
