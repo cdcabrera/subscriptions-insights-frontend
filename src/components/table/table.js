@@ -329,7 +329,7 @@ const Table = ({
                 })}
               </Tr>
               {updatedIsExpandableRow && expandedRow && (
-                <Tr className={componentClassNames.tr} isExpanded key={`${rowKey}-expandedrow`}>
+                <Tr className={componentClassNames.tr} isExpanded key={`${rowKey}-expandedRow`}>
                   <Td
                     noPadding={expandedRow?.props?.noPadding}
                     className={`${componentClassNames.td} ${componentClassNames.tdExpanded} ${componentClassNames.tdExpandedWrapper}`}
@@ -344,7 +344,7 @@ const Table = ({
                 </Tr>
               )}
               {updatedIsExpandableCell && expandedCell && (
-                <Tr className={componentClassNames.tr} isExpanded key={`${rowKey}-expandedcol`}>
+                <Tr className={componentClassNames.tr} isExpanded key={`${rowKey}-expandedCol`}>
                   <Td
                     noPadding={expandedCell?.props?.noPadding}
                     className={`${componentClassNames.td} ${componentClassNames.tdExpanded} ${componentClassNames.tdExpandedWrapper}`}

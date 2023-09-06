@@ -153,7 +153,7 @@ const config = {
   initialInventoryFilters: [
     {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
-      cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} }) => {
+      cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName, [INVENTORY_TYPES.INSTANCE_ID]: instanceId }) => {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};
 
@@ -222,52 +222,49 @@ const config = {
   },
   initialSubscriptionsInventoryFilters: [
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
-      isSortable: true,
-      isWrappable: true
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
+      isSort: true,
+      isWrap: true
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.BILLING_PROVIDER,
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.BILLING_PROVIDER,
       cell: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.BILLING_PROVIDER]: provider }) =>
         translate(`curiosity-inventory.label`, {
-          context: [SUBSCRIPTIONS_INVENTORY_TYPES.BILLING_PROVIDER, provider?.value || 'none']
+          context: [SUBSCRIPTIONS_INVENTORY_TYPES.BILLING_PROVIDER, provider || 'none']
         }),
-      isSortable: true,
-      isWrappable: false,
-      cellWidth: 15
+      isSort: false,
+      isWrap: false,
+      width: 15
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.SERVICE_LEVEL,
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.SERVICE_LEVEL,
+      isSort: true,
+      isWrap: true,
+      width: 15
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.QUANTITY,
-      isSortable: true,
-      cellWidth: 10,
-      isWrappable: true
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.QUANTITY,
+      isSort: true,
+      isWrap: true,
+      width: 10
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_META_TYPES.SUBSCRIPTION_TYPE,
+      metric: SUBSCRIPTIONS_INVENTORY_META_TYPES.SUBSCRIPTION_TYPE,
       cell: (data, session, { [SUBSCRIPTIONS_INVENTORY_META_TYPES.SUBSCRIPTION_TYPE]: subscriptionType } = {}) =>
         translate(`curiosity-inventory.label_${SUBSCRIPTIONS_INVENTORY_META_TYPES.SUBSCRIPTION_TYPE}`, {
           context: subscriptionType || EMPTY_CONTEXT
         }),
-      isSortable: false,
-      cellWidth: 15,
-      isWrappable: true
+      isSort: false,
+      isWrap: true,
+      width: 15
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
       cell: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE]: nextEventDate } = {}) =>
-        (nextEventDate?.value &&
-          helpers.isDate(nextEventDate?.value) &&
-          moment.utc(nextEventDate?.value).format('YYYY-MM-DD')) ||
-        '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+        (nextEventDate && helpers.isDate(nextEventDate) && moment.utc(nextEventDate).format('YYYY-MM-DD')) || '',
+      isSort: true,
+      isWrap: true,
+      width: 15
     }
   ],
   initialToolbarFilters: [
