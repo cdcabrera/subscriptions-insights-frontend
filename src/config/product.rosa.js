@@ -285,23 +285,23 @@ const config = {
   },
   initialSubscriptionsInventoryFilters: [
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
-      isSortable: true,
-      isWrappable: true
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.PRODUCT_NAME,
+      isSort: true,
+      isWrap: true
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.QUANTITY,
-      isSortable: true,
-      cellWidth: 10,
-      isWrappable: true
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.QUANTITY,
+      isSort: true,
+      isWrap: true,
+      width: 10
     },
     {
-      id: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
+      metric: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
       cell: ({ [SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE]: nextEventDate } = {}) =>
-        (nextEventDate?.value && moment.utc(nextEventDate?.value).format('YYYY-MM-DD')) || '',
-      isSortable: true,
-      isWrappable: true,
-      cellWidth: 15
+        (nextEventDate && moment.utc(nextEventDate).format('YYYY-MM-DD')) || '',
+      isSort: true,
+      isWrap: true,
+      width: 15
     }
   ],
   initialToolbarFilters: [
