@@ -168,10 +168,7 @@ const config = {
     {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
       header: () => translate('curiosity-inventory.guestsHeader', { context: [INVENTORY_TYPES.DISPLAY_NAME] }),
-      cell: ({
-        [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
-        [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {}
-      } = {}) => {
+      cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId } = {}) => {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};
 
@@ -211,9 +208,9 @@ const config = {
     {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: ({
-        [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
-        [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {},
-        [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests = {}
+        [INVENTORY_TYPES.DISPLAY_NAME]: displayName,
+        [INVENTORY_TYPES.INSTANCE_ID]: instanceId,
+        [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests
       } = {}) => {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};

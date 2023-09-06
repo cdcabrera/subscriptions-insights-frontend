@@ -153,7 +153,7 @@ const config = {
   initialInventoryFilters: [
     {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
-      cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} }) => {
+      cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName, [INVENTORY_TYPES.INSTANCE_ID]: instanceId }) => {
         // FixMe: Disabled, see SWATCH-1209 for resolution
         const { inventory: authorized = false } = {};
 

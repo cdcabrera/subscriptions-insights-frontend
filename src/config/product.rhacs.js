@@ -158,10 +158,7 @@ const config = {
   initialInventoryFilters: [
     {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
-      cell: (
-        { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {} },
-        session
-      ) => {
+      cell: ({ [INVENTORY_TYPES.DISPLAY_NAME]: displayName, [INVENTORY_TYPES.INSTANCE_ID]: instanceId }, session) => {
         const { inventory: authorized } = session?.authorized || {};
 
         if (!instanceId) {
