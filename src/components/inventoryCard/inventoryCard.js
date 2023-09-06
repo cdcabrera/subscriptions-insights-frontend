@@ -94,7 +94,7 @@ const InventoryCard = ({
     <Card className="curiosity-inventory-card">
       <MinHeight key="headerMinHeight">
         <CardHeader className={(error && 'hidden') || ''} aria-hidden={error || false}>
-          <CardActions className={(!resultsCount && 'transparent') || ''} aria-hidden={!resultsCount || false}>
+          <CardActions>
             <Toolbar collapseListedFiltersBreakpoint="sm">
               <ToolbarContent>
                 {updatedActionDisplay && (
@@ -102,7 +102,12 @@ const InventoryCard = ({
                     {updatedActionDisplay}
                   </ToolbarGroup>
                 )}
-                <ToolbarGroup key="inventory-paging" alignment={{ default: 'alignRight' }}>
+                <ToolbarGroup
+                  key="inventory-paging"
+                  alignment={{ default: 'alignRight' }}
+                  className={(!resultsCount && 'transparent') || ''}
+                  aria-hidden={!resultsCount || false}
+                >
                   <Pagination
                     isCompact
                     isDisabled={pending || error}

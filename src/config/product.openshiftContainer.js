@@ -127,7 +127,7 @@ const config = {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
       header: () => translate('curiosity-inventory.guestsHeader', { context: [INVENTORY_TYPES.DISPLAY_NAME] }),
       cell: (
-        { [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {}, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId = {} } = {},
+        { [INVENTORY_TYPES.DISPLAY_NAME]: displayName, [INVENTORY_TYPES.INVENTORY_ID]: inventoryId } = {},
         session
       ) => {
         const { inventory: authorized } = session?.authorized || {};
@@ -169,9 +169,9 @@ const config = {
       metric: INVENTORY_TYPES.DISPLAY_NAME,
       cell: (
         {
-          [INVENTORY_TYPES.DISPLAY_NAME]: displayName = {},
-          [INVENTORY_TYPES.INSTANCE_ID]: instanceId = {},
-          [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests = {}
+          [INVENTORY_TYPES.DISPLAY_NAME]: displayName,
+          [INVENTORY_TYPES.INSTANCE_ID]: instanceId,
+          [INVENTORY_TYPES.NUMBER_OF_GUESTS]: numberOfGuests
         } = {},
         session
       ) => {
