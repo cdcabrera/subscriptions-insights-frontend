@@ -104,6 +104,50 @@ exports[`InventoryListHelpers applyWrappableFilters should apply and return upda
 ]
 `;
 
+exports[`InventoryListHelpers normalizeInventorySettings should return base graph settings: basic filters 1`] = `
+{
+  "columnCountAndWidths": {
+    "count": 2,
+    "widths": [
+      undefined,
+      undefined,
+    ],
+  },
+  "filters": [
+    {
+      "cell": [Function],
+      "header": [Function],
+      "label": [Function],
+      "lorem": "ipsum",
+      "metric": undefined,
+      "width": undefined,
+    },
+    {
+      "cell": [Function],
+      "dolor": "sit",
+      "header": [Function],
+      "label": [Function],
+      "metric": "dolorSit",
+      "width": undefined,
+    },
+  ],
+  "isGuestFiltersDisabled": true,
+  "settings": {},
+}
+`;
+
+exports[`InventoryListHelpers normalizeInventorySettings should return base graph settings: no filters 1`] = `
+{
+  "columnCountAndWidths": {
+    "count": 0,
+    "widths": [],
+  },
+  "filters": [],
+  "isGuestFiltersDisabled": true,
+  "settings": {},
+}
+`;
+
 exports[`InventoryListHelpers parseInventoryFilters should parse and return updated filters for table cells: NOT sortable 1`] = `
 [
   {
