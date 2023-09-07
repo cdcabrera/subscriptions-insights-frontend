@@ -106,6 +106,8 @@ const parseInventoryResponse = ({
   const dataSetRows = [];
   const columnData = {};
 
+  console.log('>>>> FILTERS', filters, data);
+
   listData.forEach(rowData => {
     const dataSetRow = [];
     let expandedContent;

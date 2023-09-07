@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`InventoryCardSubscriptionsContext should apply custom actions: custom actions 1`] = `
+[
+  <ToolbarItem>
+    <DisplayName
+      isFilter={false}
+    />
+  </ToolbarItem>,
+  <ToolbarItem>
+    hello world
+  </ToolbarItem>,
+]
+`;
+
 exports[`InventoryCardSubscriptionsContext should expect specific sort properties: sort properties 1`] = `
 {
   "NEXT_EVENT_DATE": "next_event_date",
@@ -13,21 +26,18 @@ exports[`InventoryCardSubscriptionsContext should expect specific sort propertie
 }
 `;
 
-exports[`InventoryCardSubscriptionsContext should handle a store response with useGetSubscriptionsInventory: store response 1`] = `
+exports[`InventoryCardSubscriptionsContext should handle a store response using selectors: store response 1`] = `
 {
-  "data": [
+  "dataSetColumnHeaders": [
     {
-      "data": [
-        {
-          "lorem": "ipsum",
-        },
-        {
-          "dolor": "sit",
-        },
-      ],
-      "meta": {},
+      "cell": [Function],
+      "content": "t([curiosity-inventory.header_product_name,curiosity-inventory.guestsHeader_product_name], {"context":"lorem"})",
+      "label": [Function],
+      "metric": "product_name",
+      "width": undefined,
     },
   ],
+  "dataSetRows": [],
   "error": false,
   "fulfilled": true,
   "message": null,
@@ -40,10 +50,10 @@ exports[`InventoryCardSubscriptionsContext should handle a store response with u
           {
             "data": [
               {
-                "lorem": "ipsum",
+                "product_name": "lorem-ipsum",
               },
               {
-                "dolor": "sit",
+                "product_name": "dolor-sit",
               },
             ],
             "meta": {},
@@ -53,6 +63,15 @@ exports[`InventoryCardSubscriptionsContext should handle a store response with u
       },
     ],
   },
+  "resultsColumnCountAndWidths": {
+    "count": 1,
+    "widths": [
+      undefined,
+    ],
+  },
+  "resultsCount": undefined,
+  "resultsOffset": undefined,
+  "resultsPerPage": undefined,
 }
 `;
 
@@ -110,46 +129,66 @@ exports[`InventoryCardSubscriptionsContext should handle an onPage event: onPage
 
 exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, cancelled 1`] = `
 {
-  "data": {},
-  "pending": true,
+  "cancelled": true,
 }
 `;
 
 exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, disabled 1`] = `
 {
   "data": {},
-  "fulfilled": true,
+  "error": false,
+  "fulfilled": false,
   "pending": false,
 }
 `;
 
 exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, error 1`] = `
 {
-  "data": {},
   "error": true,
-  "pending": false,
 }
 `;
 
 exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, fulfilled 1`] = `
 {
-  "data": {},
   "fulfilled": true,
-  "pending": false,
 }
 `;
 
 exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, pending 1`] = `
 {
-  "data": {},
   "pending": true,
+}
+`;
+
+exports[`InventoryCardSubscriptionsContext should parse filters and settings: parsed 1`] = `
+{
+  "columnCountAndWidths": {
+    "count": 1,
+    "widths": [
+      undefined,
+    ],
+  },
+  "filters": [
+    {
+      "cell": [Function],
+      "header": [Function],
+      "label": [Function],
+      "metric": "lorem ipsum",
+      "width": undefined,
+    },
+  ],
+  "isGuestFiltersDisabled": true,
+  "settings": {},
 }
 `;
 
 exports[`InventoryCardSubscriptionsContext should return specific properties: specific properties 1`] = `
 {
   "useGetSubscriptionsInventory": [Function],
+  "useInventoryCardActionsSubscriptions": [Function],
   "useOnColumnSortSubscriptions": [Function],
   "useOnPageSubscriptions": [Function],
+  "useParseSubscriptionsFiltersSettings": [Function],
+  "useSelectorSubscriptions": [Function],
 }
 `;
