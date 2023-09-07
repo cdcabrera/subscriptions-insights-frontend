@@ -2,16 +2,14 @@
 
 exports[`InventoryCardSubscriptions Component should render a basic component: basic render 1`] = `
 <InventoryCard
-  cardActions={null}
   isDisabled={false}
-  perPageDefault={10}
   t={[Function]}
   useGetInventory={[Function]}
+  useInventoryCardActions={[Function]}
   useOnColumnSort={[Function]}
   useOnPage={[Function]}
-  useProduct={[Function]}
+  useParseFiltersSettings={[Function]}
   useProductInventoryConfig={[Function]}
   useProductInventoryQuery={[Function]}
-  useSession={[Function]}
 />
 `;

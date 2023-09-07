@@ -52,8 +52,21 @@ const useParseSubscriptionsFiltersSettings = ({
   }, [filters, isDisabled, settings, productId]);
 };
 
+/**
+ * Parse selector response for consuming components.
+ *
+ * @param {object} options
+ * @param {Function} options.useParseInstancesFiltersSettings
+ * @param {Function} options.useProduct
+ * @param {Function} options.useProductInventoryQuery
+ * @param {Function} options.useSelectorsResponse
+ * @param {Function} options.useSession
+ * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
+ *     widths: []}, dataSetColumnHeaders: [], resultsPerPage: number, resultsOffset: number, dataSetRows: [],
+ *     resultsCount: number}}
+ */
 const useSelectorSubscriptions = ({
-  useParseInstancesFiltersSettings: useAliasParseInstancesFiltersSettings = useParseSubscriptionsFiltersSettings,
+  useParseFiltersSettings: useAliasParseFiltersSettings = useParseSubscriptionsFiltersSettings,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventorySubscriptionsQuery,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
@@ -62,8 +75,10 @@ const useSelectorSubscriptions = ({
   const { productId } = useAliasProduct();
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
-  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseInstancesFiltersSettings();
+  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
   const response = useAliasSelectorsResponse(({ inventory }) => inventory?.subscriptionsInventory?.[productId]);
+
+  console.log('>>>>>', JSON.stringify(response, null, 2));
 
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
@@ -274,7 +289,8 @@ const context = {
   useInventoryCardActionsSubscriptions,
   useOnPageSubscriptions,
   useOnColumnSortSubscriptions,
-  useParseSubscriptionsFiltersSettings
+  useParseSubscriptionsFiltersSettings,
+  useSelectorSubscriptions
 };
 
 export {
@@ -284,5 +300,6 @@ export {
   useInventoryCardActionsSubscriptions,
   useOnPageSubscriptions,
   useOnColumnSortSubscriptions,
-  useParseSubscriptionsFiltersSettings
+  useParseSubscriptionsFiltersSettings,
+  useSelectorSubscriptions
 };
