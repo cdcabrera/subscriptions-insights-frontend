@@ -15,6 +15,15 @@ import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers'; //
  * @module InventoryGuestsContext
  */
 
+/**
+ * Parse filters settings for context.
+ *
+ * @param {object} options
+ * @param {boolean} options.isDisabled
+ * @param {Function} options.useProduct
+ * @param {Function} options.useProductConfig
+ * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: Array}, filters: Array}}
+ */
 const useParseGuestsFiltersSettings = ({
   isDisabled = false,
   useProduct: useAliasProduct = useProduct,
@@ -35,6 +44,19 @@ const useParseGuestsFiltersSettings = ({
   }, [filters, isDisabled, settings, productId]);
 };
 
+/**
+ * Parse selector response for consuming components.
+ *
+ * @param {string} id
+ * @param {object} options
+ * @param {Function} options.useParseFiltersSettings
+ * @param {Function} options.useProductInventoryQuery
+ * @param {Function} options.useSelectorsResponse
+ * @param {Function} options.useSession
+ * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
+ *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
+ *     resultsCount: number}}
+ */
 const useSelectorGuests = (
   id,
   {
@@ -71,6 +93,19 @@ const useSelectorGuests = (
   };
 };
 
+/**
+ * Combine service call, Redux, and inventory selector response.
+ *
+ * @param {string} id
+ * @param {object} options
+ * @param {Function} options.getInventory
+ * @param {Function} options.useDispatch
+ * @param {Function} options.useProductInventoryQuery
+ * @param {Function} options.useSelector
+ * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
+ *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
+ *     resultsCount: number}}
+ */
 const useGetGuestsInventory = (
   id,
   {

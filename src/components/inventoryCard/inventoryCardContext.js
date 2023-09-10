@@ -31,7 +31,7 @@ import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
  * @param {boolean} options.isDisabled
  * @param {Function} options.useProduct
  * @param {Function} options.useProductConfig
- * @returns {{standaloneFiltersSettings: Array<{ settings: object }>, groupedFiltersSettings: { settings: object }}}
+ * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: Array}, filters: Array}}
  */
 const useParseInstancesFiltersSettings = ({
   isDisabled = false,
@@ -56,8 +56,21 @@ const useParseInstancesFiltersSettings = ({
   }, [filters, guestFilters, isDisabled, settings, productId]);
 };
 
+/**
+ * Parse selector response for consuming components.
+ *
+ * @param {object} options
+ * @param {Function} options.useParseFiltersSettings
+ * @param {Function} options.useProduct
+ * @param {Function} options.useProductInventoryQuery
+ * @param {Function} options.useSelectorsResponse
+ * @param {Function} options.useSession
+ * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
+ *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
+ *     resultsCount: number}}
+ */
 const useSelectorInstances = ({
-  useParseInstancesFiltersSettings: useAliasParseInstancesFiltersSettings = useParseInstancesFiltersSettings,
+  useParseFiltersSettings: useAliasParseFiltersSettings = useParseInstancesFiltersSettings,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
@@ -66,7 +79,7 @@ const useSelectorInstances = ({
   const { productId } = useAliasProduct();
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
-  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseInstancesFiltersSettings();
+  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
   const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesInventory?.[productId]);
 
   const { pending, cancelled, data, ...restResponse } = response;
@@ -120,7 +133,7 @@ const useSelectorInstances = ({
 };
 
 /**
- * Combined Redux RHSM Actions, getInstancesInventory, and inventory selector response.
+ * Combine service call, Redux, and inventory selector response.
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
@@ -129,7 +142,9 @@ const useSelectorInstances = ({
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelector
- * @returns {{data: (*|{}|Array|{}), pending: boolean, fulfilled: boolean, error: boolean}}
+ * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
+ *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
+ *     resultsCount: number}}
  */
 const useGetInstancesInventory = ({
   isDisabled = false,

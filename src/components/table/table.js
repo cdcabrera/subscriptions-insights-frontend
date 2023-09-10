@@ -469,8 +469,8 @@ Table.propTypes = {
  *
  * @type {{componentClassNames: {tdExpanded: string, trExpand: string, trExpandedContent: string, tdExpandedWrapper: string,
  *     tdAction: string, tdExpand: string, td: string, trExpanded: string, th: string, tdSelect: string, tdExpandedContent: string,
- *     table: string, tr: string}, summary: null, onSort: null, onExpand: null, className: string, isStriped: boolean, rows: *[],
- *     isBorders: boolean, ariaLabel: null, onSelect: null, columnHeaders: *[], children: null, isHeader: boolean,
+ *     table: string, tr: string}, summary: null, onSort: null, onExpand: null, className: string, isStriped: boolean, rows: any[],
+ *     isBorders: boolean, ariaLabel: null, onSelect: null, columnHeaders: any[], children: null, isHeader: boolean,
  *     variant: TableVariant.compact}}
  */
 Table.defaultProps = {
