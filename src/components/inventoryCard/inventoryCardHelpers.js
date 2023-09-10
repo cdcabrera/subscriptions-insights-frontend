@@ -17,7 +17,7 @@ import { tableHelpers } from '../table/table';
  * @param {Array} params.guestFilters
  * @param {object} params.settings
  * @param {string} params.productId
- * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: []}, filters: []}}
+ * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: Array}, filters: Array}}
  */
 const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings = {}, productId } = {}) => {
   const updatedFilters = [];
@@ -83,7 +83,7 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
  * @param {object} params.query
  * @param {object} params.session
  * @param {object} params.settings
- * @returns {{dataSetColumnHeaders: [], resultsPerPage: number, resultsOffset: number, dataSetRows: [], resultsCount: number}}
+ * @returns {{dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array, resultsCount: number}}
  */
 const parseInventoryResponse = ({
   data = {},

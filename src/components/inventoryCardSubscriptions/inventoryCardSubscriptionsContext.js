@@ -30,7 +30,7 @@ import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
  * @param {boolean} options.isDisabled
  * @param {Function} options.useProduct
  * @param {Function} options.useProductConfig
- * @returns {{standaloneFiltersSettings: Array<{ settings: object }>, groupedFiltersSettings: { settings: object }}}
+ * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: Array}, filters: Array}}
  */
 const useParseSubscriptionsFiltersSettings = ({
   isDisabled = false,
@@ -56,13 +56,13 @@ const useParseSubscriptionsFiltersSettings = ({
  * Parse selector response for consuming components.
  *
  * @param {object} options
- * @param {Function} options.useParseInstancesFiltersSettings
+ * @param {Function} options.useParseFiltersSettings
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelectorsResponse
  * @param {Function} options.useSession
  * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
- *     widths: []}, dataSetColumnHeaders: [], resultsPerPage: number, resultsOffset: number, dataSetRows: [],
+ *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
  *     resultsCount: number}}
  */
 const useSelectorSubscriptions = ({
@@ -105,7 +105,7 @@ const useSelectorSubscriptions = ({
 };
 
 /**
- * Combine Redux RHSM Actions, getSubscriptionsInventory, and inventory selector response.
+ * Combine service call, Redux, and inventory selector response.
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
@@ -114,7 +114,9 @@ const useSelectorSubscriptions = ({
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelector
- * @returns {{data: (*|{}|Array|{}), pending: boolean, fulfilled: boolean, error: boolean}}
+ * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
+ *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
+ *     resultsCount: number}}
  */
 const useGetSubscriptionsInventory = ({
   isDisabled = false,

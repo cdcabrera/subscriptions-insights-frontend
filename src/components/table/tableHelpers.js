@@ -46,7 +46,7 @@ const parseContent = content =>
  * @param {Array} params.parsedRows
  * @param {Function} params.onSelect
  * @param {Function} params.onSort
- * @returns {{headerRow: *[], headerSelectProps: {}}}
+ * @returns {{headerRow: any[], headerSelectProps: {}}}
  */
 const tableHeader = ({
   columnHeaders = [],
@@ -141,7 +141,7 @@ const tableHeader = ({
  * @param {Function} params.onExpand
  * @param {Function} params.onSelect
  * @param {Array} params.rows
- * @returns {{isExpandableCell: boolean, isSelectTable: boolean, isExpandableRow: boolean, isAllSelected: boolean, rows: *[]}}
+ * @returns {{isExpandableCell: boolean, isSelectTable: boolean, isExpandableRow: boolean, isAllSelected: boolean, rows: any[]}}
  */
 const tableRows = ({ onExpand, onSelect, rows = [] } = {}) => {
   const updatedRows = [];
