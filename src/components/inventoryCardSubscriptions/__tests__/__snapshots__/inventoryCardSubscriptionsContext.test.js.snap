@@ -1,18 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InventoryCardSubscriptionsContext should apply custom actions: custom actions 1`] = `
-[
-  <ToolbarItem>
-    <DisplayName
-      isFilter={false}
-    />
-  </ToolbarItem>,
-  <ToolbarItem>
-    hello world
-  </ToolbarItem>,
-]
-`;
-
 exports[`InventoryCardSubscriptionsContext should expect specific sort properties: sort properties 1`] = `
 {
   "NEXT_EVENT_DATE": "next_event_date",
@@ -23,55 +10,6 @@ exports[`InventoryCardSubscriptionsContext should expect specific sort propertie
   "SKU": "sku",
   "TOTAL_CAPACITY": "total_capacity",
   "USAGE": "usage",
-}
-`;
-
-exports[`InventoryCardSubscriptionsContext should handle a store response using selectors: store response 1`] = `
-{
-  "dataSetColumnHeaders": [
-    {
-      "cell": [Function],
-      "content": "t([curiosity-inventory.header_product_name,curiosity-inventory.guestsHeader_product_name], {"context":"lorem"})",
-      "label": [Function],
-      "metric": "product_name",
-      "width": undefined,
-    },
-  ],
-  "dataSetRows": [],
-  "error": false,
-  "fulfilled": true,
-  "message": null,
-  "pending": false,
-  "responses": {
-    "id": {},
-    "list": [
-      {
-        "data": [
-          {
-            "data": [
-              {
-                "product_name": "lorem-ipsum",
-              },
-              {
-                "product_name": "dolor-sit",
-              },
-            ],
-            "meta": {},
-          },
-        ],
-        "fulfilled": true,
-      },
-    ],
-  },
-  "resultsColumnCountAndWidths": {
-    "count": 1,
-    "widths": [
-      undefined,
-    ],
-  },
-  "resultsCount": undefined,
-  "resultsOffset": undefined,
-  "resultsPerPage": undefined,
 }
 `;
 
@@ -125,61 +63,6 @@ exports[`InventoryCardSubscriptionsContext should handle an onPage event: onPage
     ],
   ],
 ]
-`;
-
-exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, cancelled 1`] = `
-{
-  "cancelled": true,
-}
-`;
-
-exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, disabled 1`] = `
-{
-  "data": {},
-  "error": false,
-  "fulfilled": false,
-  "pending": false,
-}
-`;
-
-exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, error 1`] = `
-{
-  "error": true,
-}
-`;
-
-exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, fulfilled 1`] = `
-{
-  "fulfilled": true,
-}
-`;
-
-exports[`InventoryCardSubscriptionsContext should handle variations in instances inventory API responses: inventory, pending 1`] = `
-{
-  "pending": true,
-}
-`;
-
-exports[`InventoryCardSubscriptionsContext should parse filters and settings: parsed 1`] = `
-{
-  "columnCountAndWidths": {
-    "count": 1,
-    "widths": [
-      undefined,
-    ],
-  },
-  "filters": [
-    {
-      "cell": [Function],
-      "header": [Function],
-      "label": [Function],
-      "metric": "lorem ipsum",
-      "width": undefined,
-    },
-  ],
-  "isGuestFiltersDisabled": true,
-  "settings": {},
-}
 `;
 
 exports[`InventoryCardSubscriptionsContext should return specific properties: specific properties 1`] = `
