@@ -19,7 +19,7 @@ import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext'; /
  * @param {number} props.defaultPerPage
  * @param {string} props.id
  * @param {number} props.numberOfGuests
- * @param {Function} props.useGetGuestsInventory
+ * @param {Function} props.useGetInventory
  * @param {Function} props.useOnScroll
  * @fires onScroll
  * @returns {React.ReactNode}
@@ -28,16 +28,17 @@ const InventoryGuests = ({
   defaultPerPage,
   id,
   numberOfGuests,
-  useGetGuestsInventory: useAliasGetGuestsInventory,
+  useGetInventory: useAliasGetInventory,
   useOnScroll: useAliasOnScroll
 }) => {
   const {
+    error,
     pending,
     dataSetColumnHeaders = [],
     dataSetRows = [],
     resultsColumnCountAndWidths = { count: 1, widths: [] },
     resultsOffset
-  } = useAliasGetGuestsInventory(id);
+  } = useAliasGetInventory(id);
 
   const onScroll = useAliasOnScroll({ id, numberOfGuests });
 
@@ -89,27 +90,25 @@ const InventoryGuests = ({
 /**
  * Prop types.
  *
- * @type {{useProductInventoryGuestsConfig: Function, useSession: Function, numberOfGuests: number, id: string,
- *     useOnScroll: Function, useGetGuestsInventory: Function, useProductInventoryGuestsQuery: Function,
+ * @type {{numberOfGuests: number, id: string, useOnScroll: Function, useGetInventory: Function,
  *     defaultPerPage: number}}
  */
 InventoryGuests.propTypes = {
   defaultPerPage: PropTypes.number,
   id: PropTypes.string.isRequired,
   numberOfGuests: PropTypes.number.isRequired,
-  useGetGuestsInventory: PropTypes.func,
+  useGetInventory: PropTypes.func,
   useOnScroll: PropTypes.func
 };
 
 /**
  * Default props.
  *
- * @type {{useProductInventoryGuestsConfig: Function, useSession: Function, useOnScroll: Function,
- *     useGetGuestsInventory: Function, useProductInventoryGuestsQuery: Function, defaultPerPage: number}}
+ * @type {{useOnScroll: Function, useGetInventory: Function, defaultPerPage: number}}
  */
 InventoryGuests.defaultProps = {
   defaultPerPage: 5,
-  useGetGuestsInventory,
+  useGetInventory: useGetGuestsInventory,
   useOnScroll
 };
 
