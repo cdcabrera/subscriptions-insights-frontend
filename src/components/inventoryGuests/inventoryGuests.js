@@ -32,7 +32,6 @@ const InventoryGuests = ({
   useOnScroll: useAliasOnScroll
 }) => {
   const {
-    error,
     pending,
     dataSetColumnHeaders = [],
     dataSetRows = [],
