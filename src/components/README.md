@@ -2948,40 +2948,8 @@ Default props.
 ## InventoryCardHelpers
 
 * [InventoryCardHelpers](#InventoryCard.module_InventoryCardHelpers)
-    * [~parseInventoryResponse](#InventoryCard.module_InventoryCardHelpers..parseInventoryResponse) ⇒ <code>Object</code>
     * [~normalizeInventorySettings(params)](#InventoryCard.module_InventoryCardHelpers..normalizeInventorySettings) ⇒ <code>Object</code>
-
-<a name="InventoryCard.module_InventoryCardHelpers..parseInventoryResponse"></a>
-
-### InventoryCardHelpers~parseInventoryResponse ⇒ <code>Object</code>
-Parse an inventory API response against available filters, query parameters, and session values.
-
-**Kind**: inner constant of [<code>InventoryCardHelpers</code>](#InventoryCard.module_InventoryCardHelpers)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>params</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.data</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.filters</td><td><code>Array</code></td>
-    </tr><tr>
-    <td>params.GuestComponent</td><td><code>React.ReactNode</code></td>
-    </tr><tr>
-    <td>params.isGuestFiltersDisabled</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>params.query</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.session</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.settings</td><td><code>object</code></td>
-    </tr>  </tbody>
-</table>
+    * [~parseInventoryResponse(params)](#InventoryCard.module_InventoryCardHelpers..parseInventoryResponse) ⇒ <code>Object</code>
 
 <a name="InventoryCard.module_InventoryCardHelpers..normalizeInventorySettings"></a>
 
@@ -3006,6 +2974,38 @@ Normalize inventory filters, settings into a consistent format.
     <td>params.settings</td><td><code>object</code></td>
     </tr><tr>
     <td>params.productId</td><td><code>string</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="InventoryCard.module_InventoryCardHelpers..parseInventoryResponse"></a>
+
+### InventoryCardHelpers~parseInventoryResponse(params) ⇒ <code>Object</code>
+Parse an inventory API response against available filters, query parameters, and session values.
+
+**Kind**: inner method of [<code>InventoryCardHelpers</code>](#InventoryCard.module_InventoryCardHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.data</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.filters</td><td><code>Array</code></td>
+    </tr><tr>
+    <td>params.GuestComponent</td><td><code>React.ReactNode</code></td>
+    </tr><tr>
+    <td>params.isGuestFiltersDisabled</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>params.query</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.session</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.settings</td><td><code>object</code></td>
     </tr>  </tbody>
 </table>
 
@@ -3623,7 +3623,7 @@ A system inventory guests component.
     </tr><tr>
     <td>props.numberOfGuests</td><td><code>number</code></td>
     </tr><tr>
-    <td>props.useGetGuestsInventory</td><td><code>function</code></td>
+    <td>props.useGetInventory</td><td><code>function</code></td>
     </tr><tr>
     <td>props.useOnScroll</td><td><code>function</code></td>
     </tr>  </tbody>
