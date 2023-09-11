@@ -2,7 +2,6 @@ import React from 'react';
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
 import { tableHelpers } from '../table/table';
-import { helpers } from '../../common/helpers';
 
 /**
  * @memberof InventoryCard
@@ -86,82 +85,79 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
  * @param {object} params.settings
  * @returns {{dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array, resultsCount: number}}
  */
-const parseInventoryResponse = helpers.memo(
-  ({
-    data = {},
-    filters = [],
-    GuestComponent,
-    isGuestFiltersDisabled = true,
-    query = {},
-    session = {},
-    settings = {}
-  } = {}) => {
-    const { data: listData = [], meta = {} } = data;
-    const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
-    const {
-      [RHSM_API_QUERY_SET_TYPES.OFFSET]: resultsOffset,
-      [RHSM_API_QUERY_SET_TYPES.LIMIT]: resultsPerPage,
-      [RHSM_API_QUERY_SET_TYPES.SORT]: sortColumn,
-      [RHSM_API_QUERY_SET_TYPES.DIRECTION]: sortDirection
-    } = query;
+const parseInventoryResponse = ({
+  data = {},
+  filters = [],
+  GuestComponent,
+  isGuestFiltersDisabled = true,
+  query = {},
+  session = {},
+  settings = {}
+} = {}) => {
+  const { data: listData = [], meta = {} } = data;
+  const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
+  const {
+    [RHSM_API_QUERY_SET_TYPES.OFFSET]: resultsOffset,
+    [RHSM_API_QUERY_SET_TYPES.LIMIT]: resultsPerPage,
+    [RHSM_API_QUERY_SET_TYPES.SORT]: sortColumn,
+    [RHSM_API_QUERY_SET_TYPES.DIRECTION]: sortDirection
+  } = query;
 
-    const dataSetColumnHeaders = [];
-    const dataSetRows = [];
-    const columnData = {};
+  const dataSetColumnHeaders = [];
+  const dataSetRows = [];
+  const columnData = {};
 
-    listData.forEach(rowData => {
-      const dataSetRow = [];
-      let expandedContent;
+  listData.forEach(rowData => {
+    const dataSetRow = [];
+    let expandedContent;
 
-      filters.forEach(({ metric, label, cell, ...rest }) => {
-        const updatedCell = cell({ ...rowData }, { ...session }, { ...meta });
-        const updatedLabel = label({ columnData: [] }, { ...session }, { ...meta });
-        dataSetRow.push({ metric, ...rest, dataLabel: updatedLabel, content: updatedCell });
+    filters.forEach(({ metric, label, cell, ...rest }) => {
+      const updatedCell = cell({ ...rowData }, { ...session }, { ...meta });
+      const updatedLabel = label({ columnData: [] }, { ...session }, { ...meta });
+      dataSetRow.push({ metric, ...rest, dataLabel: updatedLabel, content: updatedCell });
 
-        columnData[metric] ??= [];
-        columnData[metric].push(updatedCell);
-      });
-
-      if (typeof settings?.guestContent === 'function') {
-        const guestContentResults = settings.guestContent({ ...rowData }, { ...session }, { ...meta });
-        const { id: guestId, numberOfGuests } = guestContentResults || {};
-
-        if (isGuestFiltersDisabled === false && guestId && numberOfGuests && GuestComponent) {
-          expandedContent = () => (
-            <GuestComponent key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
-          );
-        }
-      }
-
-      dataSetRows.push({ cells: dataSetRow, row: rowData, expandedContent });
+      columnData[metric] ??= [];
+      columnData[metric].push(updatedCell);
     });
 
-    filters.forEach(({ metric, header, ...rest }) => {
-      const updatedHeader = header({ columnData: columnData[metric] }, { ...session }, { ...meta });
-      const updatedRest = { ...rest };
+    if (typeof settings?.guestContent === 'function') {
+      const guestContentResults = settings.guestContent({ ...rowData }, { ...session }, { ...meta });
+      const { id: guestId, numberOfGuests } = guestContentResults || {};
 
-      if (updatedRest.isSort === true && sortDirection && sortColumn === metric) {
-        updatedRest.isSortActive = true;
-        updatedRest.sortDirection = sortDirection;
+      if (isGuestFiltersDisabled === false && guestId && numberOfGuests && GuestComponent) {
+        expandedContent = () => (
+          <GuestComponent key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
+        );
       }
+    }
 
-      if (updatedRest.isWrap === true) {
-        updatedRest.modifier = tableHelpers.WrapModifierVariant.wrap;
-      }
+    dataSetRows.push({ cells: dataSetRow, row: rowData, expandedContent });
+  });
 
-      dataSetColumnHeaders.push({ metric, ...updatedRest, content: updatedHeader });
-    });
+  filters.forEach(({ metric, header, ...rest }) => {
+    const updatedHeader = header({ columnData: columnData[metric] }, { ...session }, { ...meta });
+    const updatedRest = { ...rest };
 
-    return {
-      dataSetColumnHeaders,
-      dataSetRows,
-      resultsCount,
-      resultsOffset,
-      resultsPerPage
-    };
-  },
-  { cacheLimit: 5 }
-);
+    if (updatedRest.isSort === true && sortDirection && sortColumn === metric) {
+      updatedRest.isSortActive = true;
+      updatedRest.sortDirection = sortDirection;
+    }
+
+    if (updatedRest.isWrap === true) {
+      updatedRest.modifier = tableHelpers.WrapModifierVariant.wrap;
+    }
+
+    dataSetColumnHeaders.push({ metric, ...updatedRest, content: updatedHeader });
+  });
+
+  return {
+    dataSetColumnHeaders,
+    dataSetRows,
+    resultsCount,
+    resultsOffset,
+    resultsPerPage
+  };
+};
 
 const inventoryCardHelpers = {
   normalizeInventorySettings,
