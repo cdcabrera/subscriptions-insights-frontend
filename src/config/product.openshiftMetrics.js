@@ -245,14 +245,14 @@ const config = {
         (typeof cores === 'number' && Number.parseFloat(cores).toFixed(2)) || '--',
       isSort: true,
       isWrap: true,
-      width: 20
+      width: 15
     },
     {
       metric: INVENTORY_TYPES.LAST_SEEN,
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
       isSort: true,
       isWrap: true,
-      width: 20
+      width: 15
     }
   ],
   initialInventorySettings: {

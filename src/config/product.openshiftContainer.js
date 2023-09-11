@@ -223,7 +223,7 @@ const config = {
       cell: ({ [INVENTORY_TYPES.LAST_SEEN]: lastSeen } = {}) => (lastSeen && <DateFormat date={lastSeen} />) || '',
       isSort: true,
       isWrap: true,
-      width: 20
+      width: 15
     }
   ],
   initialInventorySettings: {

@@ -191,7 +191,7 @@ const config = {
           context: provider || 'none'
         }),
       isSort: true,
-      isWrap: false,
+      isWrap: true,
       width: 15
     },
     {
