@@ -5,6 +5,7 @@ import { Table } from '../table';
 describe('Table Component', () => {
   it('should render a basic component', () => {
     const props = {
+      isHeader: true,
       columnHeaders: ['lorem', 'ipsum', 'dolor', 'sit']
     };
 
@@ -14,6 +15,7 @@ describe('Table Component', () => {
 
   it('should allow variations in table layout', () => {
     const props = {
+      isHeader: true,
       columnHeaders: ['lorem ipsum'],
       rows: [{ cells: ['dolor'] }, { cells: ['sit'] }]
     };
@@ -42,6 +44,7 @@ describe('Table Component', () => {
 
   it('should allow expandable content', () => {
     const props = {
+      isHeader: true,
       columnHeaders: ['lorem ipsum'],
       rows: [{ cells: ['dolor'], expandedContent: 'dolor sit expandable content' }, { cells: ['sit'] }]
     };
@@ -57,8 +60,11 @@ describe('Table Component', () => {
   });
 
   it('should allow sortable content', () => {
+    const mockSort = jest.fn();
     const props = {
-      columnHeaders: [{ title: 'lorem ipsum', onSort: jest.fn() }],
+      isHeader: true,
+      onSort: mockSort,
+      columnHeaders: [{ content: 'lorem ipsum', isSort: true }],
       rows: [{ cells: ['dolor'] }, { cells: ['sit'] }]
     };
 
@@ -68,11 +74,12 @@ describe('Table Component', () => {
     const input = component.find('th button.pf-c-table__button');
     component.fireEvent.click(input);
 
-    expect(props.columnHeaders[0].onSort).toHaveBeenCalledTimes(1);
+    expect(mockSort).toHaveBeenCalledTimes(1);
   });
 
   it('should pass child components, nodes when there are no rows', () => {
     const props = {
+      isHeader: true,
       columnHeaders: ['lorem ipsum'],
       rows: []
     };
