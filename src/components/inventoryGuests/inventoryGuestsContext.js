@@ -1,14 +1,10 @@
-import { useMemo } from 'react';
 import { useUnmount, useShallowCompareEffect } from 'react-use';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
-import {
-  useProduct,
-  useProductInventoryGuestsQuery,
-  useProductInventoryGuestsConfig
-} from '../productView/productViewContext';
+import { useProductInventoryGuestsQuery, useProductInventoryGuestsConfig } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useSession } from '../authentication/authenticationContext';
-import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers'; // eslint-disable-line
+import { useParseInstancesFiltersSettings } from '../inventoryCard/inventoryCardContext'; // eslint-disable-line
+import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
 
 /**
  * @memberof InventoryGuests
@@ -20,35 +16,22 @@ import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers'; //
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
- * @param {Function} options.useProduct
+ * @param {Function} options.useParseFiltersSettings
  * @param {Function} options.useProductConfig
  * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: Array}, filters: Array}}
  */
 const useParseGuestsFiltersSettings = ({
   isDisabled = false,
-  useProduct: useAliasProduct = useProduct,
+  useParseFiltersSettings: useAliasParseFiltersSettings = useParseInstancesFiltersSettings,
   useProductConfig: useAliasProductConfig = useProductInventoryGuestsConfig
-} = {}) => {
-  const { productId } = useAliasProduct();
-  const { filters = [], settings = {} } = useAliasProductConfig();
-
-  return useMemo(() => {
-    if (isDisabled) {
-      return undefined;
-    }
-    return inventoryCardHelpers.normalizeInventorySettings({
-      filters,
-      settings,
-      productId
-    });
-  }, [filters, isDisabled, settings, productId]);
-};
+} = {}) => useAliasParseFiltersSettings({ isDisabled, useProductConfig: useAliasProductConfig });
 
 /**
  * Parse selector response for consuming components.
  *
  * @param {string} id
  * @param {object} options
+ * @param {string} options.storeRef
  * @param {Function} options.useParseFiltersSettings
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelectorsResponse
@@ -60,6 +43,7 @@ const useParseGuestsFiltersSettings = ({
 const useSelectorGuests = (
   id,
   {
+    storeRef = 'instancesGuests',
     useParseFiltersSettings: useAliasParseFiltersSettings = useParseGuestsFiltersSettings,
     useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
     useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
@@ -69,7 +53,7 @@ const useSelectorGuests = (
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
   const { columnCountAndWidths, filters, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesGuests?.[id]);
+  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.[storeRef]?.[id]);
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
   let parsedData;

@@ -28,7 +28,7 @@ import { Pagination } from '../pagination/pagination';
 import { translate } from '../i18n/i18n';
 
 /**
- * Instances, and Subscriptions base inventory table card.
+ * Base inventory table card.
  *
  *     The InventoryCard pattern is purposefully different when compared to the current GraphCard component
  *     for the specific purpose of using hook dependency injection. Minor lifecycle hook alterations

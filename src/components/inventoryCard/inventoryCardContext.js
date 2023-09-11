@@ -15,7 +15,7 @@ import {
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
-import { inventoryCardHelpers } from './inventoryCardHelpers';
+import { inventoryCardHelpers } from './inventoryCardHelpers'; // eslint-disable-line
 import { tableHelpers } from '../table/table';
 import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 
@@ -60,6 +60,7 @@ const useParseInstancesFiltersSettings = ({
  * Parse selector response for consuming components.
  *
  * @param {object} options
+ * @param {string} options.storeRef
  * @param {Function} options.useParseFiltersSettings
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
@@ -70,6 +71,7 @@ const useParseInstancesFiltersSettings = ({
  *     resultsCount: number}}
  */
 const useSelectorInstances = ({
+  storeRef = 'instancesInventory',
   useParseFiltersSettings: useAliasParseFiltersSettings = useParseInstancesFiltersSettings,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
@@ -80,7 +82,7 @@ const useSelectorInstances = ({
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesInventory?.[productId]);
+  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.[storeRef]?.[productId]);
 
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
@@ -293,7 +295,8 @@ const context = {
   useInventoryCardActionsInstances,
   useOnPageInstances,
   useOnColumnSortInstances,
-  useParseInstancesFiltersSettings
+  useParseInstancesFiltersSettings,
+  useSelectorInstances
 };
 
 export {
@@ -303,5 +306,6 @@ export {
   useInventoryCardActionsInstances,
   useOnPageInstances,
   useOnColumnSortInstances,
-  useParseInstancesFiltersSettings
+  useParseInstancesFiltersSettings,
+  useSelectorInstances
 };

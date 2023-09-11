@@ -1,8 +1,4 @@
-import React, { useMemo } from 'react';
-import { useShallowCompareEffect } from 'react-use';
-import { ToolbarItem } from '@patternfly/react-core';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
-import { useSession } from '../authentication/authenticationContext';
 import {
   useProduct,
   useProductInventorySubscriptionsConfig,
@@ -14,9 +10,13 @@ import {
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
-import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
+import {
+  useGetInstancesInventory,
+  useInventoryCardActionsInstances,
+  useParseInstancesFiltersSettings,
+  useSelectorInstances
+} from '../inventoryCard/inventoryCardContext';
 import { tableHelpers } from '../table/table';
-import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 
 /**
  * @memberof InventoryCardSubscriptions
@@ -28,79 +28,43 @@ import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
- * @param {Function} options.useProduct
+ * @param {Function} options.useParseFiltersSettings
  * @param {Function} options.useProductConfig
  * @returns {{settings: {}, columnCountAndWidths: {count: number, widths: Array}, filters: Array}}
  */
 const useParseSubscriptionsFiltersSettings = ({
   isDisabled = false,
-  useProduct: useAliasProduct = useProduct,
+  useParseFiltersSettings: useAliasParseFiltersSettings = useParseInstancesFiltersSettings,
   useProductConfig: useAliasProductConfig = useProductInventorySubscriptionsConfig
-} = {}) => {
-  const { productId } = useAliasProduct();
-  const { filters = [], settings = {} } = useAliasProductConfig();
-
-  return useMemo(() => {
-    if (isDisabled) {
-      return undefined;
-    }
-    return inventoryCardHelpers.normalizeInventorySettings({
-      filters,
-      settings,
-      productId
-    });
-  }, [filters, isDisabled, settings, productId]);
-};
+} = {}) =>
+  useAliasParseFiltersSettings({
+    isDisabled,
+    useProductConfig: useAliasProductConfig
+  });
 
 /**
  * Parse selector response for consuming components.
  *
  * @param {object} options
+ * @param {string} options.storeRef
  * @param {Function} options.useParseFiltersSettings
- * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
- * @param {Function} options.useSelectorsResponse
- * @param {Function} options.useSession
+ * @param {Function} options.useSelector
  * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
  *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
  *     resultsCount: number}}
  */
 const useSelectorSubscriptions = ({
+  storeRef = 'subscriptionsInventory',
   useParseFiltersSettings: useAliasParseFiltersSettings = useParseSubscriptionsFiltersSettings,
-  useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventorySubscriptionsQuery,
-  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
-  useSession: useAliasSession = useSession
-} = {}) => {
-  const { productId } = useAliasProduct();
-  const session = useAliasSession();
-  const query = useAliasProductInventoryQuery();
-  const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.subscriptionsInventory?.[productId]);
-
-  const { pending, cancelled, data, ...restResponse } = response;
-  const updatedPending = pending || cancelled || false;
-  let parsedData;
-
-  if (response?.fulfilled) {
-    const updatedData = (data?.length === 1 && data[0]) || data || {};
-    parsedData = inventoryCardHelpers.parseInventoryResponse({
-      data: updatedData,
-      filters,
-      isGuestFiltersDisabled,
-      query,
-      session,
-      settings
-    });
-  }
-
-  return {
-    ...restResponse,
-    pending: updatedPending,
-    resultsColumnCountAndWidths: columnCountAndWidths,
-    ...parsedData
-  };
-};
+  useSelector: useAliasSelector = useSelectorInstances
+} = {}) =>
+  useAliasSelector({
+    storeRef,
+    useParseFiltersSettings: useAliasParseFiltersSettings,
+    useProductInventoryQuery: useAliasProductInventoryQuery
+  });
 
 /**
  * Combine service call, Redux, and inventory selector response.
@@ -108,8 +72,7 @@ const useSelectorSubscriptions = ({
  * @param {object} options
  * @param {boolean} options.isDisabled
  * @param {Function} options.getInventory
- * @param {Function} options.useDispatch
- * @param {Function} options.useProduct
+ * @param {Function} options.useGetInventory
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelector
  * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
@@ -119,68 +82,32 @@ const useSelectorSubscriptions = ({
 const useGetSubscriptionsInventory = ({
   isDisabled = false,
   getInventory = reduxActions.rhsm.getSubscriptionsInventory,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useProduct: useAliasProduct = useProduct,
+  useGetInventory: useAliasGetInventory = useGetInstancesInventory,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventorySubscriptionsQuery,
   useSelector: useAliasSelector = useSelectorSubscriptions
-} = {}) => {
-  const { productId } = useAliasProduct();
-  const query = useAliasProductInventoryQuery();
-  const dispatch = useAliasDispatch();
-  const response = useAliasSelector();
-
-  useShallowCompareEffect(() => {
-    if (!isDisabled) {
-      getInventory(productId, query)(dispatch);
-    }
-  }, [isDisabled, productId, query]);
-
-  return response;
-};
+} = {}) =>
+  useAliasGetInventory({
+    isDisabled,
+    getInventory,
+    useProductInventoryQuery: useAliasProductInventoryQuery,
+    useSelector: useAliasSelector
+  });
 
 /**
  * Return a component list for a configurable inventoryCard action toolbar.
  * Allow the "content" prop to receive inventory data for display via callback.
  *
  * @param {object} options
- * @param {Array} options.categoryOptions
+ * @param {Function} options.useInventoryCardActions
  * @param {Function} options.useSelector
  * @param {Function} options.useProductConfig
  * @returns {Array}
  */
 const useInventoryCardActionsSubscriptions = ({
-  categoryOptions = toolbarFieldOptions,
+  useInventoryCardActions: useAliasInventoryCardActions = useInventoryCardActionsInstances,
   useSelector: useAliasSelector = useSelectorSubscriptions,
   useProductConfig: useAliasProductConfig = useProductInventorySubscriptionsConfig
-} = {}) => {
-  const results = useAliasSelector();
-  const { pending, resultsCount } = results;
-  const { settings = {} } = useAliasProductConfig();
-  const { actions } = settings;
-
-  return useMemo(
-    () =>
-      actions?.map(({ id, content, ...actionProps }) => {
-        const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
-        const { component: OptionComponent } = option || {};
-
-        return (
-          (OptionComponent && (
-            <ToolbarItem key={`option-${id}`}>
-              <OptionComponent isFilter={false} {...actionProps} />
-            </ToolbarItem>
-          )) ||
-          (content && !pending && resultsCount && (
-            <ToolbarItem key={id || helpers.generateId()}>
-              {typeof content === 'function' ? content({ data: results }) : content}
-            </ToolbarItem>
-          )) ||
-          null
-        );
-      }),
-    [actions, categoryOptions, results, resultsCount, pending]
-  );
-};
+} = {}) => useAliasInventoryCardActions({ useSelector: useAliasSelector, useProductConfig: useAliasProductConfig });
 
 /**
  * An onPage callback for inventory.
