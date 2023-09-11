@@ -88,7 +88,7 @@ const useSelectorInstances = ({
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
   let parsedData;
-  ///
+
   if (response?.fulfilled) {
     const updatedData = (data?.length === 1 && data[0]) || data || {};
     parsedData = inventoryCardHelpers.parseInventoryResponse({

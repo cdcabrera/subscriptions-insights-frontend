@@ -71,7 +71,7 @@ exports[`ProductView Component should allow custom inventory displays via config
             active={false}
             title="t(curiosity-inventory.tabInstances, {"context":"lorem"})"
           >
-            <InventoryCard
+            <InventoryCardInstances
               isDisabled={false}
               t={[Function]}
               useGetInventory={[Function]}
@@ -261,7 +261,7 @@ exports[`ProductView Component should allow custom inventory displays via config
             active={false}
             title="t(curiosity-inventory.tabInstances, {"context":"lorem"})"
           >
-            <InventoryCard
+            <InventoryCardInstances
               isDisabled={false}
               t={[Function]}
               useGetInventory={[Function]}

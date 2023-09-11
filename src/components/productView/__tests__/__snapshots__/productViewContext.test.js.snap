@@ -101,7 +101,7 @@ exports[`ProductViewContext should apply a hook for retrieving product context: 
       "isSort": true,
       "isWrap": true,
       "metric": "last_seen",
-      "width": 20,
+      "width": 15,
     },
   ],
   "initialInventorySettings": {
@@ -261,7 +261,7 @@ exports[`ProductViewContext should apply a hook for retrieving product context: 
       "isSort": true,
       "isWrap": true,
       "metric": "last_seen",
-      "width": 20,
+      "width": 15,
     },
   ],
   "initialInventorySettings": {
