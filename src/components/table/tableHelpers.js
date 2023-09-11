@@ -1,7 +1,5 @@
 import React from 'react';
 import { SortByDirection } from '@patternfly/react-table';
-// import _cloneDeep from 'lodash/cloneDeep';
-// import { helpers } from '../../common/helpers';
 
 /**
  * Table sorting directions.
