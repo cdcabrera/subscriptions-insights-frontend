@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useMount, useShallowCompareEffect } from 'react-use';
+import { useShallowCompareEffect } from 'react-use';
 import { ToolbarItem } from '@patternfly/react-core';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useSession } from '../authentication/authenticationContext';
@@ -104,32 +104,6 @@ const useSelectorInstances = ({
     resultsColumnCountAndWidths: columnCountAndWidths,
     ...parsedData
   };
-
-  /*
-  return useMemo(() => {
-    const { pending, cancelled, data, ...restResponse } = response;
-    const updatedPending = pending || cancelled || false;
-    let parsedData;
-
-    if (response?.fulfilled) {
-      const updatedData = (data?.length === 1 && data[0]) || data || {};
-      parsedData = inventoryCardHelpers.parseInventoryResponse({
-        data: updatedData,
-        filters,
-        query,
-        session,
-        settings
-      });
-    }
-
-    return {
-      ...restResponse,
-      pending: updatedPending,
-      resultsColumnCountAndWidths: columnCountAndWidths,
-      ...parsedData
-    };
-  }, [columnCountAndWidths, filters, query, response, session, settings]);
-  */
 };
 
 /**
@@ -150,44 +124,14 @@ const useGetInstancesInventory = ({
   isDisabled = false,
   getInventory = reduxActions.rhsm.getInstancesInventory,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useSelector: useAliasSelector = useSelectorInstances,
-  // useParseInstancesFiltersSettings: useAliasParseInstancesFiltersSettings = useParseInstancesFiltersSettings,
   useProduct: useAliasProduct = useProduct,
-  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
-  // useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
-  // useSession: useAliasSession = useSession
+  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
+  useSelector: useAliasSelector = useSelectorInstances
 } = {}) => {
   const { productId } = useAliasProduct();
-  // const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const dispatch = useAliasDispatch();
-  // const { columnCountAndWidths, filters, settings } = useAliasParseInstancesFiltersSettings();
-  // const response = useAliasSelectorsResponse(({ inventory }) => inventory?.instancesInventory?.[productId]);
   const response = useAliasSelector();
-
-  /*
-  const { productId } = {}; // useAliasProduct();
-  const session = {}; // useAliasSession();
-  const query = {}; // useAliasProductInventoryQuery();
-  const dispatch = Function.prototype; // useAliasDispatch();
-  const { columnCountAndWidths, filters, settings } = {}; // useAliasParseInstancesFiltersSettings();
-  const { cancelled, pending, data, ...response } = {}; // useAliasSelectorsResponse(
-  //  ({ inventory }) => inventory?.instancesInventory?.[productId]
-  // );
-  const updatedPending = pending || cancelled || false;
-  */
-
-  useMount(() => {
-    console.log(
-      '>>>> MOUNTED INVENTORY'
-      // useAliasDispatch,
-      // useAliasProduct,
-      // useAliasSession,
-      // useAliasSelectorsResponse,
-      // useAliasParseInstancesFiltersSettings,
-      // useAliasProductInventoryQuery
-    );
-  });
 
   useShallowCompareEffect(() => {
     if (!isDisabled) {
@@ -196,49 +140,6 @@ const useGetInstancesInventory = ({
   }, [isDisabled, productId, query]);
 
   return response;
-
-  /*
-  return useMemo(() => {
-    const { pending, cancelled, data, ...restResponse } = response;
-    const updatedPending = pending || cancelled || false;
-    let parsedData;
-
-    if (response?.fulfilled) {
-      const updatedData = (data?.length === 1 && data[0]) || data || {};
-      parsedData = inventoryCardHelpers.parseInventoryResponse({
-        data: updatedData,
-        filters,
-        query,
-        session,
-        settings
-      });
-    }
-
-    return {
-      ...restResponse,
-      pending: updatedPending,
-      resultsColumnCountAndWidths: columnCountAndWidths,
-      ...parsedData
-    };
-  }, [columnCountAndWidths, filters, query, response, session, settings]);
-   */
-  /*
-  const parsedData = useMemo(() => {
-    if (response?.fulfilled) {
-      const updatedData = (data?.length === 1 && data[0]) || data || {};
-      return inventoryCardHelpers.parseInventoryResponse({ data: updatedData, filters, query, session, settings });
-    }
-
-    return undefined;
-  }, [data, filters, query, response?.fulfilled, session, settings]);
-
-  return {
-    ...response,
-    pending: updatedPending,
-    resultsColumnCountAndWidths: columnCountAndWidths,
-    ...parsedData
-  };
-  */
 };
 
 /**
@@ -253,7 +154,6 @@ const useGetInstancesInventory = ({
  */
 const useInventoryCardActionsInstances = ({
   categoryOptions = toolbarFieldOptions,
-  // useGetInventory: useAliasGetInventory = useGetInstancesInventory,
   useSelector: useAliasSelector = useSelectorInstances,
   useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
 } = {}) => {
@@ -285,48 +185,9 @@ const useInventoryCardActionsInstances = ({
     [actions, categoryOptions, results, resultsCount, pending]
   );
 };
-/* works
-const useInventoryCardActionsInstances = (
-  { results, settings },
-  {
-    categoryOptions = toolbarFieldOptions
-    // useGetInventory: useAliasGetInventory = useGetInstancesInventory,
-    // useProductConfig: useAliasProductConfig = useProductInventoryHostsConfig
-  } = {}
-) => {
-  // const results = useAliasGetInventory();
-  const { pending, resultsCount } = results;
-  // const { settings = {} } = useAliasProductConfig();
-  const { actions } = settings;
-
-  return useMemo(
-    () =>
-      actions?.map(({ id, content, ...actionProps }) => {
-        const option = categoryOptions.find(({ value: categoryOptionValue }) => id === categoryOptionValue);
-        const { component: OptionComponent } = option || {};
-
-        return (
-          (OptionComponent && (
-            <ToolbarItem key={`option-${id}`}>
-              <OptionComponent isFilter={false} {...actionProps} />
-            </ToolbarItem>
-          )) ||
-          (content && !pending && resultsCount && (
-            <ToolbarItem key={id || helpers.generateId()}>
-              {typeof content === 'function' ? content({ data: results }) : content}
-            </ToolbarItem>
-          )) ||
-          null
-        );
-      }),
-    [actions, categoryOptions, results, resultsCount, pending]
-  );
-};
-
- */
 
 /**
- * An onPage callback for instances inventory.
+ * An onPage callback for inventory.
  *
  * @param {object} options
  * @param {Function} options.useDispatch
@@ -366,7 +227,7 @@ const useOnPageInstances = ({
 };
 
 /**
- * An onColumnSort callback for instances inventory.
+ * An onColumnSort callback for inventory.
  *
  * @param {object} options
  * @param {object} options.sortColumns
@@ -383,7 +244,7 @@ const useOnColumnSortInstances = ({
   const dispatch = useAliasDispatch();
 
   /**
-   * On event update state for instances inventory.
+   * On event update state for inventory.
    *
    * @event onColumnSort
    * @param {object} params

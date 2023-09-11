@@ -105,16 +105,12 @@ const Table = ({
         const nextBodyRows = [...prevState.bodyRows];
         nextBodyRows[rowIndex].expand.isExpanded = isExpanded;
 
-        console.log('>>>>>> TABLE ON EXPAND TEST', nextBodyRows);
-
         return {
           ...prevState,
           bodyRows: nextBodyRows
         };
       });
     }
-
-    console.log('>>>> TABLE EXPAND', type, data);
 
     if (typeof onExpand === 'function') {
       onExpand({

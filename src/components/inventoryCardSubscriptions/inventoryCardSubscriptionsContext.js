@@ -78,8 +78,6 @@ const useSelectorSubscriptions = ({
   const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
   const response = useAliasSelectorsResponse(({ inventory }) => inventory?.subscriptionsInventory?.[productId]);
 
-  console.log('>>>>>', JSON.stringify(response, null, 2));
-
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
   let parsedData;
@@ -185,7 +183,7 @@ const useInventoryCardActionsSubscriptions = ({
 };
 
 /**
- * An onPage callback for subscription inventory.
+ * An onPage callback for inventory.
  *
  * @param {object} options
  * @param {Function} options.useDispatch
@@ -225,7 +223,7 @@ const useOnPageSubscriptions = ({
 };
 
 /**
- * An onColumnSort callback for subscription inventory.
+ * An onColumnSort callback for inventory.
  *
  * @param {object} options
  * @param {object} options.sortColumns
@@ -242,7 +240,7 @@ const useOnColumnSortSubscriptions = ({
   const dispatch = useAliasDispatch();
 
   /**
-   * On event update state for subscription inventory.
+   * On event update state for inventory.
    *
    * @event onColumnSort
    * @param {object} params

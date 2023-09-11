@@ -1,9 +1,8 @@
-/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Loader } from '../loader/loader';
 import { Table, TableVariant } from '../table/table';
-import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext';
+import { useGetGuestsInventory, useOnScroll } from './inventoryGuestsContext'; // eslint-disable-line
 
 /**
  * Guests inventory table wrapper.
@@ -47,8 +46,6 @@ const InventoryGuests = ({
   let updatedHeight = (numberOfGuests + 1) * 42;
   updatedHeight = (updatedHeight < 275 && updatedHeight) || 275;
 
-  console.log('>>> widths', resultsColumnCountAndWidths.widths);
-
   return (
     <div className="fadein">
       <div className="curiosity-table-scroll" style={{ height: `${updatedHeight}px` }}>
@@ -66,8 +63,7 @@ const InventoryGuests = ({
                   className: 'curiosity-guests-list',
                   colCount: resultsColumnCountAndWidths.count,
                   colWidth: resultsColumnCountAndWidths.widths,
-                  rowCount:
-                    (resultsOffset === 0 && numberOfGuests < defaultPerPage && numberOfGuests) || 1,
+                  rowCount: (resultsOffset === 0 && numberOfGuests < defaultPerPage && numberOfGuests) || 1,
                   variant: TableVariant.compact,
                   isHeader: false
                 }}
