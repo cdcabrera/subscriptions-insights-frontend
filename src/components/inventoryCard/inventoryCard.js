@@ -13,17 +13,9 @@ import {
   ToolbarGroup
 } from '@patternfly/react-core';
 import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
-import { helpers } from '../../common';
 import { Table } from '../table/table';
 import { Loader } from '../loader/loader';
 import { MinHeight } from '../minHeight/minHeight';
-import {
-  useGetInstancesInventory,
-  useInventoryCardActionsInstances,
-  useOnPageInstances,
-  useOnColumnSortInstances,
-  useParseInstancesFiltersSettings
-} from './inventoryCardContext';
 import { Pagination } from '../pagination/pagination';
 import { translate } from '../i18n/i18n';
 
@@ -37,7 +29,6 @@ import { translate } from '../i18n/i18n';
  *
  * @memberof Components
  * @module InventoryCard
- * @property {module} InventoryCardContext
  * @property {module} InventoryCardHelpers
  */
 
@@ -184,27 +175,21 @@ const InventoryCard = ({
 InventoryCard.propTypes = {
   isDisabled: PropTypes.bool,
   t: PropTypes.func,
-  useGetInventory: PropTypes.func,
-  useInventoryCardActions: PropTypes.func,
-  useOnPage: PropTypes.func,
-  useOnColumnSort: PropTypes.func,
-  useParseFiltersSettings: PropTypes.func
+  useGetInventory: PropTypes.func.isRequired,
+  useInventoryCardActions: PropTypes.func.isRequired,
+  useOnPage: PropTypes.func.isRequired,
+  useOnColumnSort: PropTypes.func.isRequired,
+  useParseFiltersSettings: PropTypes.func.isRequired
 };
 
 /**
  * Default props.
  *
- * @type {{useOnPage: Function, useParseFiltersSettings: Function, t: translate, useInventoryCardActions: Function,
- *     isDisabled: boolean, useGetInventory: Function, useOnColumnSort: Function}}
+ * @type {{t: translate, isDisabled: boolean}}
  */
 InventoryCard.defaultProps = {
-  isDisabled: helpers.UI_DISABLED_TABLE_INSTANCES,
-  t: translate,
-  useGetInventory: useGetInstancesInventory,
-  useInventoryCardActions: useInventoryCardActionsInstances,
-  useOnPage: useOnPageInstances,
-  useOnColumnSort: useOnColumnSortInstances,
-  useParseFiltersSettings: useParseInstancesFiltersSettings
+  isDisabled: false,
+  t: translate
 };
 
 export { InventoryCard as default, InventoryCard };

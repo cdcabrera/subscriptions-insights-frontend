@@ -63,16 +63,18 @@
 <dt><a href="#i18n.module_i18nHelpers">i18nHelpers</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_InventoryCard">InventoryCard</a></dt>
-<dd><p>Instances, and Subscriptions base inventory table card.</p>
+<dd><p>Base inventory table card.</p>
 <pre><code>The InventoryCard pattern is purposefully different when compared to the current GraphCard component
 for the specific purpose of using hook dependency injection. Minor lifecycle hook alterations
 allow the InventoryCard to be used against multiple inventory API endpoints without the need to
 recreate the core component.
 </code></pre>
 </dd>
-<dt><a href="#InventoryCard.module_InventoryCardContext">InventoryCardContext</a></dt>
-<dd></dd>
 <dt><a href="#InventoryCard.module_InventoryCardHelpers">InventoryCardHelpers</a></dt>
+<dd></dd>
+<dt><a href="#Components.module_InventoryCardInstances">InventoryCardInstances</a></dt>
+<dd></dd>
+<dt><a href="#InventoryCardInstances.module_InventoryCardInstancesContext">InventoryCardInstancesContext</a></dt>
 <dd></dd>
 <dt><a href="#Components.module_InventoryCardSubscriptions">InventoryCardSubscriptions</a></dt>
 <dd></dd>
@@ -2864,7 +2866,7 @@ Apply string replacements against a component, HOC.
 <a name="Components.module_InventoryCard"></a>
 
 ## InventoryCard
-Instances, and Subscriptions base inventory table card.
+Base inventory table card.
 
     The InventoryCard pattern is purposefully different when compared to the current GraphCard component
     for the specific purpose of using hook dependency injection. Minor lifecycle hook alterations
@@ -2881,8 +2883,6 @@ Instances, and Subscriptions base inventory table card.
   </thead>
   <tbody>
 <tr>
-    <td>InventoryCardContext</td><td><code>module</code></td>
-    </tr><tr>
     <td>InventoryCardHelpers</td><td><code>module</code></td>
     </tr>  </tbody>
 </table>
@@ -2943,224 +2943,45 @@ Prop types.
 Default props.
 
 **Kind**: static property of [<code>InventoryCard</code>](#Components.module_InventoryCard..InventoryCard)  
-<a name="InventoryCard.module_InventoryCardContext"></a>
-
-## InventoryCardContext
-
-* [InventoryCardContext](#InventoryCard.module_InventoryCardContext)
-    * [~useParseInstancesFiltersSettings(options)](#InventoryCard.module_InventoryCardContext..useParseInstancesFiltersSettings) ⇒ <code>Object</code>
-    * [~useSelectorInstances(options)](#InventoryCard.module_InventoryCardContext..useSelectorInstances) ⇒ <code>Object</code>
-    * [~useGetInstancesInventory(options)](#InventoryCard.module_InventoryCardContext..useGetInstancesInventory) ⇒ <code>Object</code>
-    * [~useInventoryCardActionsInstances(options)](#InventoryCard.module_InventoryCardContext..useInventoryCardActionsInstances) ⇒ <code>Array</code>
-    * [~useOnPageInstances(options)](#InventoryCard.module_InventoryCardContext..useOnPageInstances) ⇒ <code>function</code>
-    * [~useOnColumnSortInstances(options)](#InventoryCard.module_InventoryCardContext..useOnColumnSortInstances) ⇒ <code>function</code>
-    * ["onPage" (params)](#event_onPage) ⇒ <code>void</code>
-    * ["onColumnSort" (params)](#event_onColumnSort) ⇒ <code>void</code>
-
-<a name="InventoryCard.module_InventoryCardContext..useParseInstancesFiltersSettings"></a>
-
-### InventoryCardContext~useParseInstancesFiltersSettings(options) ⇒ <code>Object</code>
-Parse filters settings for context.
-
-**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.isDisabled</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProductConfig</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="InventoryCard.module_InventoryCardContext..useSelectorInstances"></a>
-
-### InventoryCardContext~useSelectorInstances(options) ⇒ <code>Object</code>
-Parse selector response for consuming components.
-
-**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.useParseFiltersSettings</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProductInventoryQuery</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useSelectorsResponse</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useSession</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="InventoryCard.module_InventoryCardContext..useGetInstancesInventory"></a>
-
-### InventoryCardContext~useGetInstancesInventory(options) ⇒ <code>Object</code>
-Combine service call, Redux, and inventory selector response.
-
-**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.isDisabled</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>options.getInventory</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProductInventoryQuery</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useSelector</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="InventoryCard.module_InventoryCardContext..useInventoryCardActionsInstances"></a>
-
-### InventoryCardContext~useInventoryCardActionsInstances(options) ⇒ <code>Array</code>
-Return a component list for a configurable inventoryCard action toolbar.
-Allow the "content" prop to receive inventory data for display via callback.
-
-**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.categoryOptions</td><td><code>Array</code></td>
-    </tr><tr>
-    <td>options.useSelector</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProductConfig</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="InventoryCard.module_InventoryCardContext..useOnPageInstances"></a>
-
-### InventoryCardContext~useOnPageInstances(options) ⇒ <code>function</code>
-An onPage callback for instances inventory.
-
-**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="InventoryCard.module_InventoryCardContext..useOnColumnSortInstances"></a>
-
-### InventoryCardContext~useOnColumnSortInstances(options) ⇒ <code>function</code>
-An onColumnSort callback for instances inventory.
-
-**Kind**: inner method of [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.sortColumns</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="event_onPage"></a>
-
-### "onPage" (params) ⇒ <code>void</code>
-On event update state for instances inventory.
-
-**Kind**: event emitted by [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>params</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.offset</td><td><code>number</code></td>
-    </tr><tr>
-    <td>params.perPage</td><td><code>number</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="event_onColumnSort"></a>
-
-### "onColumnSort" (params) ⇒ <code>void</code>
-On event update state for instances inventory.
-
-**Kind**: event emitted by [<code>InventoryCardContext</code>](#InventoryCard.module_InventoryCardContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>params</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.direction</td><td><code>string</code></td>
-    </tr><tr>
-    <td>params.data</td><td><code>object</code></td>
-    </tr>  </tbody>
-</table>
-
 <a name="InventoryCard.module_InventoryCardHelpers"></a>
 
 ## InventoryCardHelpers
 
 * [InventoryCardHelpers](#InventoryCard.module_InventoryCardHelpers)
+    * [~parseInventoryResponse](#InventoryCard.module_InventoryCardHelpers..parseInventoryResponse) ⇒ <code>Object</code>
     * [~normalizeInventorySettings(params)](#InventoryCard.module_InventoryCardHelpers..normalizeInventorySettings) ⇒ <code>Object</code>
-    * [~parseInventoryResponse(params)](#InventoryCard.module_InventoryCardHelpers..parseInventoryResponse) ⇒ <code>Object</code>
+
+<a name="InventoryCard.module_InventoryCardHelpers..parseInventoryResponse"></a>
+
+### InventoryCardHelpers~parseInventoryResponse ⇒ <code>Object</code>
+Parse an inventory API response against available filters, query parameters, and session values.
+
+**Kind**: inner constant of [<code>InventoryCardHelpers</code>](#InventoryCard.module_InventoryCardHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.data</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.filters</td><td><code>Array</code></td>
+    </tr><tr>
+    <td>params.GuestComponent</td><td><code>React.ReactNode</code></td>
+    </tr><tr>
+    <td>params.isGuestFiltersDisabled</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>params.query</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.session</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.settings</td><td><code>object</code></td>
+    </tr>  </tbody>
+</table>
 
 <a name="InventoryCard.module_InventoryCardHelpers..normalizeInventorySettings"></a>
 
@@ -3188,12 +3009,252 @@ Normalize inventory filters, settings into a consistent format.
     </tr>  </tbody>
 </table>
 
-<a name="InventoryCard.module_InventoryCardHelpers..parseInventoryResponse"></a>
+<a name="Components.module_InventoryCardInstances"></a>
 
-### InventoryCardHelpers~parseInventoryResponse(params) ⇒ <code>Object</code>
-Parse an inventory API response against available filters, query parameters, and session values.
+## InventoryCardInstances
+**Properties**
 
-**Kind**: inner method of [<code>InventoryCardHelpers</code>](#InventoryCard.module_InventoryCardHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>InventoryCardInstancesContext</td><td><code>module</code></td>
+    </tr>  </tbody>
+</table>
+
+
+* [InventoryCardInstances](#Components.module_InventoryCardInstances)
+    * [~InventoryCardInstances(props)](#Components.module_InventoryCardInstances..InventoryCardInstances) ⇒ <code>React.ReactNode</code>
+        * [.propTypes](#Components.module_InventoryCardInstances..InventoryCardInstances.propTypes) : <code>Object</code>
+        * [.defaultProps](#Components.module_InventoryCardInstances..InventoryCardInstances.defaultProps) : <code>Object</code>
+
+<a name="Components.module_InventoryCardInstances..InventoryCardInstances"></a>
+
+### InventoryCardInstances~InventoryCardInstances(props) ⇒ <code>React.ReactNode</code>
+An instances' system inventory component.
+
+**Kind**: inner method of [<code>InventoryCardInstances</code>](#Components.module_InventoryCardInstances)  
+**Emits**: [<code>onColumnSort</code>](#event_onColumnSort), [<code>onPage</code>](#event_onPage)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>props</td><td><code>object</code></td>
+    </tr><tr>
+    <td>props.isDisabled</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>props.useGetInventory</td><td><code>function</code></td>
+    </tr><tr>
+    <td>props.useOnPage</td><td><code>function</code></td>
+    </tr><tr>
+    <td>props.useOnColumnSort</td><td><code>function</code></td>
+    </tr><tr>
+    <td>props.useProductInventoryConfig</td><td><code>function</code></td>
+    </tr><tr>
+    <td>props.useProductInventoryQuery</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+
+* [~InventoryCardInstances(props)](#Components.module_InventoryCardInstances..InventoryCardInstances) ⇒ <code>React.ReactNode</code>
+    * [.propTypes](#Components.module_InventoryCardInstances..InventoryCardInstances.propTypes) : <code>Object</code>
+    * [.defaultProps](#Components.module_InventoryCardInstances..InventoryCardInstances.defaultProps) : <code>Object</code>
+
+<a name="Components.module_InventoryCardInstances..InventoryCardInstances.propTypes"></a>
+
+#### InventoryCardInstances.propTypes : <code>Object</code>
+Prop types.
+
+**Kind**: static property of [<code>InventoryCardInstances</code>](#Components.module_InventoryCardInstances..InventoryCardInstances)  
+<a name="Components.module_InventoryCardInstances..InventoryCardInstances.defaultProps"></a>
+
+#### InventoryCardInstances.defaultProps : <code>Object</code>
+Default props.
+
+**Kind**: static property of [<code>InventoryCardInstances</code>](#Components.module_InventoryCardInstances..InventoryCardInstances)  
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext"></a>
+
+## InventoryCardInstancesContext
+
+* [InventoryCardInstancesContext](#InventoryCardInstances.module_InventoryCardInstancesContext)
+    * [~useParseInstancesFiltersSettings(options)](#InventoryCardInstances.module_InventoryCardInstancesContext..useParseInstancesFiltersSettings) ⇒ <code>Object</code>
+    * [~useSelectorInstances(options)](#InventoryCardInstances.module_InventoryCardInstancesContext..useSelectorInstances) ⇒ <code>Object</code>
+    * [~useGetInstancesInventory(options)](#InventoryCardInstances.module_InventoryCardInstancesContext..useGetInstancesInventory) ⇒ <code>Object</code>
+    * [~useInventoryCardActionsInstances(options)](#InventoryCardInstances.module_InventoryCardInstancesContext..useInventoryCardActionsInstances) ⇒ <code>Array</code>
+    * [~useOnPageInstances(options)](#InventoryCardInstances.module_InventoryCardInstancesContext..useOnPageInstances) ⇒ <code>function</code>
+    * [~useOnColumnSortInstances(options)](#InventoryCardInstances.module_InventoryCardInstancesContext..useOnColumnSortInstances) ⇒ <code>function</code>
+    * ["onPage" (params)](#event_onPage) ⇒ <code>void</code>
+    * ["onColumnSort" (params)](#event_onColumnSort) ⇒ <code>void</code>
+
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext..useParseInstancesFiltersSettings"></a>
+
+### InventoryCardInstancesContext~useParseInstancesFiltersSettings(options) ⇒ <code>Object</code>
+Parse filters settings for context.
+
+**Kind**: inner method of [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.isDisabled</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProductConfig</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext..useSelectorInstances"></a>
+
+### InventoryCardInstancesContext~useSelectorInstances(options) ⇒ <code>Object</code>
+Parse selector response for consuming components.
+
+**Kind**: inner method of [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.storeRef</td><td><code>string</code></td>
+    </tr><tr>
+    <td>options.useParseFiltersSettings</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProductInventoryQuery</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useSelectorsResponse</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useSession</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext..useGetInstancesInventory"></a>
+
+### InventoryCardInstancesContext~useGetInstancesInventory(options) ⇒ <code>Object</code>
+Combine service call, Redux, and inventory selector response.
+
+**Kind**: inner method of [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.isDisabled</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>options.getInventory</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProductInventoryQuery</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useSelector</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext..useInventoryCardActionsInstances"></a>
+
+### InventoryCardInstancesContext~useInventoryCardActionsInstances(options) ⇒ <code>Array</code>
+Return a component list for a configurable inventoryCard action toolbar.
+Allow the "content" prop to receive inventory data for display via callback.
+
+**Kind**: inner method of [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.categoryOptions</td><td><code>Array</code></td>
+    </tr><tr>
+    <td>options.useSelector</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProductConfig</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext..useOnPageInstances"></a>
+
+### InventoryCardInstancesContext~useOnPageInstances(options) ⇒ <code>function</code>
+An onPage callback for inventory.
+
+**Kind**: inner method of [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="InventoryCardInstances.module_InventoryCardInstancesContext..useOnColumnSortInstances"></a>
+
+### InventoryCardInstancesContext~useOnColumnSortInstances(options) ⇒ <code>function</code>
+An onColumnSort callback for inventory.
+
+**Kind**: inner method of [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.sortColumns</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="event_onPage"></a>
+
+### "onPage" (params) ⇒ <code>void</code>
+On event update state for instances inventory.
+
+**Kind**: event emitted by [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
 <table>
   <thead>
     <tr>
@@ -3204,17 +3265,31 @@ Parse an inventory API response against available filters, query parameters, and
 <tr>
     <td>params</td><td><code>object</code></td>
     </tr><tr>
+    <td>params.offset</td><td><code>number</code></td>
+    </tr><tr>
+    <td>params.perPage</td><td><code>number</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="event_onColumnSort"></a>
+
+### "onColumnSort" (params) ⇒ <code>void</code>
+On event update state for inventory.
+
+**Kind**: event emitted by [<code>InventoryCardInstancesContext</code>](#InventoryCardInstances.module_InventoryCardInstancesContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.direction</td><td><code>string</code></td>
+    </tr><tr>
     <td>params.data</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.filters</td><td><code>Array</code></td>
-    </tr><tr>
-    <td>params.isGuestFiltersDisabled</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>params.query</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.session</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.settings</td><td><code>object</code></td>
     </tr>  </tbody>
 </table>
 
@@ -3307,6 +3382,7 @@ Default props.
 
 ### InventoryCardSubscriptionsContext~useParseSubscriptionsFiltersSettings(options) ⇒ <code>Object</code>
 Parse filters settings for context.
+See @module InventoryCardInstancesContext
 
 **Kind**: inner method of [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3321,7 +3397,7 @@ Parse filters settings for context.
     </tr><tr>
     <td>options.isDisabled</td><td><code>boolean</code></td>
     </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
+    <td>options.useParseFiltersSettings</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useProductConfig</td><td><code>function</code></td>
     </tr>  </tbody>
@@ -3331,6 +3407,7 @@ Parse filters settings for context.
 
 ### InventoryCardSubscriptionsContext~useSelectorSubscriptions(options) ⇒ <code>Object</code>
 Parse selector response for consuming components.
+See @module InventoryCardInstancesContext
 
 **Kind**: inner method of [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3343,15 +3420,13 @@ Parse selector response for consuming components.
 <tr>
     <td>options</td><td><code>object</code></td>
     </tr><tr>
-    <td>options.useParseFiltersSettings</td><td><code>function</code></td>
+    <td>options.storeRef</td><td><code>string</code></td>
     </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
+    <td>options.useParseFiltersSettings</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useProductInventoryQuery</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useSelectorsResponse</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useSession</td><td><code>function</code></td>
+    <td>options.useSelector</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 
@@ -3359,6 +3434,7 @@ Parse selector response for consuming components.
 
 ### InventoryCardSubscriptionsContext~useGetSubscriptionsInventory(options) ⇒ <code>Object</code>
 Combine service call, Redux, and inventory selector response.
+See @module InventoryCardInstancesContext
 
 **Kind**: inner method of [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3375,9 +3451,7 @@ Combine service call, Redux, and inventory selector response.
     </tr><tr>
     <td>options.getInventory</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
+    <td>options.useGetInventory</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useProductInventoryQuery</td><td><code>function</code></td>
     </tr><tr>
@@ -3390,6 +3464,7 @@ Combine service call, Redux, and inventory selector response.
 ### InventoryCardSubscriptionsContext~useInventoryCardActionsSubscriptions(options) ⇒ <code>Array</code>
 Return a component list for a configurable inventoryCard action toolbar.
 Allow the "content" prop to receive inventory data for display via callback.
+See @module InventoryCardInstancesContext
 
 **Kind**: inner method of [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3402,7 +3477,7 @@ Allow the "content" prop to receive inventory data for display via callback.
 <tr>
     <td>options</td><td><code>object</code></td>
     </tr><tr>
-    <td>options.categoryOptions</td><td><code>Array</code></td>
+    <td>options.useInventoryCardActions</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useSelector</td><td><code>function</code></td>
     </tr><tr>
@@ -3413,7 +3488,7 @@ Allow the "content" prop to receive inventory data for display via callback.
 <a name="InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext..useOnPageSubscriptions"></a>
 
 ### InventoryCardSubscriptionsContext~useOnPageSubscriptions(options) ⇒ <code>function</code>
-An onPage callback for subscription inventory.
+An onPage callback for inventory.
 
 **Kind**: inner method of [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3435,7 +3510,7 @@ An onPage callback for subscription inventory.
 <a name="InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext..useOnColumnSortSubscriptions"></a>
 
 ### InventoryCardSubscriptionsContext~useOnColumnSortSubscriptions(options) ⇒ <code>function</code>
-An onColumnSort callback for subscription inventory.
+An onColumnSort callback for inventory.
 
 **Kind**: inner method of [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3481,7 +3556,7 @@ On event update state for instances inventory.
 <a name="event_onColumnSort"></a>
 
 ### "onColumnSort" (params) ⇒ <code>void</code>
-On event update state for subscription inventory.
+On event update state for inventory.
 
 **Kind**: event emitted by [<code>InventoryCardSubscriptionsContext</code>](#InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext)  
 <table>
@@ -3586,6 +3661,7 @@ Default props.
 
 ### InventoryGuestsContext~useParseGuestsFiltersSettings(options) ⇒ <code>Object</code>
 Parse filters settings for context.
+See @module InventoryCardInstancesContext
 
 **Kind**: inner method of [<code>InventoryGuestsContext</code>](#InventoryGuests.module_InventoryGuestsContext)  
 <table>
@@ -3600,7 +3676,7 @@ Parse filters settings for context.
     </tr><tr>
     <td>options.isDisabled</td><td><code>boolean</code></td>
     </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
+    <td>options.useParseFiltersSettings</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useProductConfig</td><td><code>function</code></td>
     </tr>  </tbody>
@@ -3623,6 +3699,8 @@ Parse selector response for consuming components.
     <td>id</td><td><code>string</code></td>
     </tr><tr>
     <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.storeRef</td><td><code>string</code></td>
     </tr><tr>
     <td>options.useParseFiltersSettings</td><td><code>function</code></td>
     </tr><tr>

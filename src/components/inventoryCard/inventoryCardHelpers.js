@@ -1,7 +1,6 @@
 import React from 'react';
 import { translate } from '../i18n/i18n';
 import { RHSM_API_QUERY_SET_TYPES, RHSM_API_RESPONSE_META_TYPES } from '../../services/rhsm/rhsmConstants';
-import { InventoryGuests } from '../inventoryGuests/inventoryGuests'; // eslint-disable-line
 import { tableHelpers } from '../table/table';
 import { helpers } from '../../common/helpers';
 
@@ -80,6 +79,7 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
  * @param {object} params
  * @param {object} params.data
  * @param {Array} params.filters
+ * @param {React.ReactNode} params.GuestComponent
  * @param {boolean} params.isGuestFiltersDisabled
  * @param {object} params.query
  * @param {object} params.session
@@ -87,7 +87,15 @@ const normalizeInventorySettings = ({ filters = [], guestFilters = [], settings 
  * @returns {{dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array, resultsCount: number}}
  */
 const parseInventoryResponse = helpers.memo(
-  ({ data = {}, filters = [], isGuestFiltersDisabled = true, query = {}, session = {}, settings = {} } = {}) => {
+  ({
+    data = {},
+    filters = [],
+    GuestComponent,
+    isGuestFiltersDisabled = true,
+    query = {},
+    session = {},
+    settings = {}
+  } = {}) => {
     const { data: listData = [], meta = {} } = data;
     const resultsCount = meta[RHSM_API_RESPONSE_META_TYPES.COUNT];
     const {
@@ -118,9 +126,9 @@ const parseInventoryResponse = helpers.memo(
         const guestContentResults = settings.guestContent({ ...rowData }, { ...session }, { ...meta });
         const { id: guestId, numberOfGuests } = guestContentResults || {};
 
-        if (isGuestFiltersDisabled === false && guestId && numberOfGuests) {
+        if (isGuestFiltersDisabled === false && guestId && numberOfGuests && GuestComponent) {
           expandedContent = () => (
-            <InventoryGuests key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
+            <GuestComponent key={`guests-${guestId}`} id={guestId} numberOfGuests={numberOfGuests} />
           );
         }
       }

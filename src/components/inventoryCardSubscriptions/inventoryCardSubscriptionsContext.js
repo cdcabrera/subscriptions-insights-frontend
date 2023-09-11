@@ -15,7 +15,7 @@ import {
   useInventoryCardActionsInstances,
   useParseInstancesFiltersSettings,
   useSelectorInstances
-} from '../inventoryCard/inventoryCardContext';
+} from '../inventoryCardInstances/inventoryCardInstancesContext';
 import { tableHelpers } from '../table/table';
 
 /**
@@ -25,6 +25,7 @@ import { tableHelpers } from '../table/table';
 
 /**
  * Parse filters settings for context.
+ * See @module InventoryCardInstancesContext
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
@@ -44,6 +45,7 @@ const useParseSubscriptionsFiltersSettings = ({
 
 /**
  * Parse selector response for consuming components.
+ * See @module InventoryCardInstancesContext
  *
  * @param {object} options
  * @param {string} options.storeRef
@@ -68,6 +70,7 @@ const useSelectorSubscriptions = ({
 
 /**
  * Combine service call, Redux, and inventory selector response.
+ * See @module InventoryCardInstancesContext
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
@@ -96,6 +99,7 @@ const useGetSubscriptionsInventory = ({
 /**
  * Return a component list for a configurable inventoryCard action toolbar.
  * Allow the "content" prop to receive inventory data for display via callback.
+ * See @module InventoryCardInstancesContext
  *
  * @param {object} options
  * @param {Function} options.useInventoryCardActions

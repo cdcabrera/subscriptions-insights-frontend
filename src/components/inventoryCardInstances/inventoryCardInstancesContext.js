@@ -15,13 +15,14 @@ import {
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
-import { inventoryCardHelpers } from './inventoryCardHelpers'; // eslint-disable-line
+import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
 import { tableHelpers } from '../table/table';
 import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
+import { InventoryGuests } from '../inventoryGuests/inventoryGuests'; // eslint-disable-line
 
 /**
- * @memberof InventoryCard
- * @module InventoryCardContext
+ * @memberof InventoryCardInstances
+ * @module InventoryCardInstancesContext
  */
 
 /**
@@ -87,12 +88,13 @@ const useSelectorInstances = ({
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
   let parsedData;
-
+  ///
   if (response?.fulfilled) {
     const updatedData = (data?.length === 1 && data[0]) || data || {};
     parsedData = inventoryCardHelpers.parseInventoryResponse({
       data: updatedData,
       filters,
+      GuestComponent: InventoryGuests,
       isGuestFiltersDisabled,
       query,
       session,

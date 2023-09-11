@@ -3,7 +3,7 @@ import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useProductInventoryGuestsQuery, useProductInventoryGuestsConfig } from '../productView/productViewContext';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useSession } from '../authentication/authenticationContext';
-import { useParseInstancesFiltersSettings } from '../inventoryCard/inventoryCardContext'; // eslint-disable-line
+import { useParseInstancesFiltersSettings } from '../inventoryCardInstances/inventoryCardInstancesContext'; // eslint-disable-line
 import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
 
 /**
@@ -13,6 +13,7 @@ import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
 
 /**
  * Parse filters settings for context.
+ * See @module InventoryCardInstancesContext
  *
  * @param {object} options
  * @param {boolean} options.isDisabled
