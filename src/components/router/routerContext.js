@@ -4,7 +4,7 @@ import {
   useNavigate as useRRDNavigate,
   useSearchParams as useRRDSearchParams
 } from 'react-router-dom';
-import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome } from '../../hooks/usePlatform';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 import { storeHooks, reduxTypes } from '../../redux';

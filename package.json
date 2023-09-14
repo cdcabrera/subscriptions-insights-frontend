@@ -30,12 +30,12 @@
     ]
   },
   "scripts": {
-    "api:dev": "mock -p 5000 -w ./src/services -w ./src/services/rhsm",
+    "api:dev": "mock -p 5000 -w ./api -w ./src/services -w ./src/services/rhsm",
     "api:docs": "node ./scripts/openapi.docs.js",
     "api:proxy-hosts": "bash ./scripts/proxy.api.sh",
     "build": "run-s -l build:pre build:js build:post test:integration",
     "build:deps": "bash ./scripts/dependencies.sh --doctor -u --doctorInstall \"yarn\" --doctorTest \"yarn test:deps\" --reject \"@patternfly/*, @redhat-cloud-services/frontend*, react-router, victory*\"",
-    "build:deps-core": "bash ./scripts/dependencies.sh --doctor -u --doctorInstall \"yarn\" --doctorTest \"yarn test:deps\" --filter \"@patternfly/*, @redhat-cloud-services/frontend*, victory*\"",
+    "build:deps-core": "bash ./scripts/dependencies.sh --doctor -u --doctorInstall \"yarn\" --doctorTest \"yarn test:deps\" --filter \"@patternfly/*, @redhat-cloud-services/frontend*, *unleash*, victory*\"",
     "build:docs": "run-s -l test:docs docs:md",
     "build:ephemeral": "run-s -l build:pre build:js build:post test:integration-ephemeral",
     "build:js": "export NODE_ENV=production; webpack --config config/webpack.prod.config.js",
@@ -82,6 +82,7 @@
     "@redhat-cloud-services/frontend-components": "3.9.36",
     "@redhat-cloud-services/frontend-components-notifications": "3.2.14",
     "@redhat-cloud-services/frontend-components-utilities": "3.5.0",
+    "@unleash/proxy-client-react": "3.6.0",
     "axios": "^0.27.2",
     "classnames": "^2.3.2",
     "crypto-js": "^4.1.1",
@@ -155,6 +156,7 @@
     "react-scripts": "^5.0.1",
     "redux-mock-store": "^1.5.4",
     "swagger-ui-express": "^4.6.3",
+    "unleash-proxy-client": "2.5.0",
     "webpack-bundle-analyzer": "^4.9.0",
     "yamljs": "^0.3.0"
   }

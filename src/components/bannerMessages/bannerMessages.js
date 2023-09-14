@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, AlertActionCloseButton, AlertGroup, AlertVariant } from '@patternfly/react-core';
-import { useBannerMessages, useRemoveBannerMessages } from './bannerMessagesContext';
+import { useBannerMessages, useCheckFeatureFlags, useRemoveBannerMessages } from './bannerMessagesContext';
 
 /**
  * Banner alert messages for a product view.
@@ -23,6 +23,7 @@ const BannerMessages = ({
   useBannerMessages: useAliasBannerMessages,
   useRemoveBannerMessages: useAliasRemoveBannerMessages
 }) => {
+  useCheckFeatureFlags();
   const bannerMessages = useAliasBannerMessages();
   const removeBannerMessages = useAliasRemoveBannerMessages();
 

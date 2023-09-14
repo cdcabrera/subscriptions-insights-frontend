@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useMount } from 'react-use';
-import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome, useFeatureFlag } from '../../hooks/usePlatform';
 import { reduxActions, storeHooks } from '../../redux';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router';
@@ -54,6 +54,10 @@ const useGetAuthorization = ({
       selector: ({ user }) => (user?.errors?.error === true && user.errors) || { fulfilled: true, data: [] }
     }
   ]);
+
+  // const result = useFeatureFlag({ 'dolor.sit': false });
+  const result = useFeatureFlag(['dolor.sit'], 'now');
+  console.log('>>> result', result);
 
   useMount(async () => {
     await dispatch(authorizeUser());

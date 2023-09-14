@@ -1,4 +1,6 @@
 import { useCallback } from 'react';
+import { useMount } from 'react-use';
+import { useFeatureFlag } from '../../hooks/usePlatform';
 import { reduxTypes, storeHooks } from '../../redux';
 import { useProduct } from '../productView/productViewContext';
 import { helpers } from '../../common/helpers';
@@ -126,10 +128,47 @@ const useSetBannerMessages = ({
   );
 };
 
+const useCheckFeatureFlags = ({
+  useFeatureFlag: useAliasFeatureFlag = useFeatureFlag,
+  useSetBannerMessages: useAliasSetBannerMessages = useSetBannerMessages
+} = {}) => {
+  const setBannerMessages = useAliasSetBannerMessages();
+  const outage = useAliasFeatureFlag('swatch.outage');
+  const maintenance = useAliasFeatureFlag('swatch.maintenance');
+
+  useMount(() => {
+    const messages = [];
+
+    if (outage === true) {
+      messages.push({
+        title: 'Outage',
+        message: 'A general outage'
+      });
+    }
+
+    if (maintenance === true) {
+      messages.push({
+        title: 'Maintenance',
+        message: 'Sorry for the incontinence'
+      });
+    }
+
+    setBannerMessages(messages);
+  });
+};
+
 const context = {
   useBannerMessages,
+  useCheckFeatureFlags,
   useRemoveBannerMessages,
   useSetBannerMessages
 };
 
-export { context as default, context, useBannerMessages, useRemoveBannerMessages, useSetBannerMessages };
+export {
+  context as default,
+  context,
+  useBannerMessages,
+  useCheckFeatureFlags,
+  useRemoveBannerMessages,
+  useSetBannerMessages
+};
