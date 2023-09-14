@@ -48,23 +48,11 @@ const authorizeUser = appName => dispatch =>
     payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions(appName)])
   });
 
-/**
- * Hide platform global filter.
- *
- * @param {boolean} isHidden
- * @returns {{Function}}
- */
-const hideGlobalFilter = isHidden => ({
-  type: platformTypes.PLATFORM_GLOBAL_FILTER_HIDE,
-  payload: platformServices.hideGlobalFilter(isHidden)
-});
-
 const platformActions = {
   addNotification,
   removeNotification,
   clearNotifications,
-  authorizeUser,
-  hideGlobalFilter
+  authorizeUser
 };
 
 export {
@@ -73,6 +61,5 @@ export {
   addNotification,
   removeNotification,
   clearNotifications,
-  authorizeUser,
-  hideGlobalFilter
+  authorizeUser
 };

@@ -18,8 +18,6 @@ exports[`PlatformServices should return a failed getUserPermissions: failed user
 }
 `;
 
-exports[`PlatformServices should return a failed hideGlobalFilter: failed hideGlobalFilter 1`] = `[Error: { on } = insights.chrome, insights.chrome.hideGlobalFilter is not a function]`;
-
 exports[`PlatformServices should return a successful getUser with a specific response: specific success for authorized user 1`] = `
 {
   "data": {

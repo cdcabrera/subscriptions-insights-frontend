@@ -15,13 +15,12 @@ describe('PlatformServices', () => {
   };
 
   it('should export a specific number of methods and classes', () => {
-    expect(Object.keys(platformServices)).toHaveLength(3);
+    expect(Object.keys(platformServices)).toHaveLength(2);
   });
 
   it('should have specific methods', () => {
     expect(platformServices.getUser).toBeDefined();
     expect(platformServices.getUserPermissions).toBeDefined();
-    expect(platformServices.hideGlobalFilter).toBeDefined();
   });
 
   /**
@@ -60,12 +59,5 @@ describe('PlatformServices', () => {
     const { status, statusText, data, message } = await returnPromiseAsync(platformServices.getUserPermissions);
 
     expect({ status, statusText, data, message }).toMatchSnapshot('failed user permissions');
-  });
-
-  it('should return a failed hideGlobalFilter', async () => {
-    window.insights.chrome.hideGlobalFilter = undefined;
-    const response = await returnPromiseAsync(platformServices.hideGlobalFilter);
-
-    expect(response).toMatchSnapshot('failed hideGlobalFilter');
   });
 });

@@ -93,25 +93,9 @@ const getUserPermissions = (appName = Object.keys(rbacConfig), options = {}) => 
   });
 };
 
-/**
- * Disables the Platform's global filter display.
- *
- * @param {boolean} isHidden
- * @returns {Promise<*>}
- */
-const hideGlobalFilter = async (isHidden = true) => {
-  const { insights } = window;
-  try {
-    await insights.chrome.hideGlobalFilter(isHidden);
-  } catch (e) {
-    throw new Error(`{ on } = insights.chrome, ${e.message}`);
-  }
-};
-
 const platformServices = {
   getUser,
-  getUserPermissions,
-  hideGlobalFilter
+  getUserPermissions
 };
 
-export { platformServices as default, platformServices, getUser, getUserPermissions, hideGlobalFilter };
+export { platformServices as default, platformServices, getUser, getUserPermissions };

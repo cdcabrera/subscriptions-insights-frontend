@@ -81,7 +81,6 @@ Platform service wrappers for dispatch, state update.
     * [~removeNotification(id)](#Actions.module_PlatformActions..removeNotification) ⇒ <code>\*</code>
     * [~clearNotifications()](#Actions.module_PlatformActions..clearNotifications) ⇒ <code>\*</code>
     * [~authorizeUser(appName)](#Actions.module_PlatformActions..authorizeUser) ⇒ <code>function</code>
-    * [~hideGlobalFilter(isHidden)](#Actions.module_PlatformActions..hideGlobalFilter) ⇒ <code>Object</code>
 
 <a name="Actions.module_PlatformActions..addNotification"></a>
 
@@ -140,24 +139,6 @@ Get an emulated and combined API response from the platforms "getUser" and "getU
   <tbody>
 <tr>
     <td>appName</td><td><code>string</code> | <code>Array</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Actions.module_PlatformActions..hideGlobalFilter"></a>
-
-### PlatformActions~hideGlobalFilter(isHidden) ⇒ <code>Object</code>
-Hide platform global filter.
-
-**Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>isHidden</td><td><code>boolean</code></td>
     </tr>  </tbody>
 </table>
 

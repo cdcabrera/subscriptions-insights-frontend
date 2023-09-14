@@ -24,8 +24,4 @@ describe('PlatformActions', () => {
       done();
     });
   });
-
-  it('Should return a dispatch object for the hideGlobalFilter method', () => {
-    expect(platformActions.hideGlobalFilter()).toMatchSnapshot('dispatch object');
-  });
 });
