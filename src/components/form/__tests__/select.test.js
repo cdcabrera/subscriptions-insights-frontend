@@ -1,5 +1,4 @@
 import React from 'react';
-import { SelectVariant } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import {
   ButtonVariant,
@@ -9,7 +8,8 @@ import {
   formatSelectProps,
   SelectDirection,
   SelectPosition,
-  SplitButtonVariant
+  SplitButtonVariant,
+  SelectVariant
 } from '../select';
 import { helpers } from '../../../common';
 
