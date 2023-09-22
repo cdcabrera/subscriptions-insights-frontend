@@ -669,7 +669,9 @@ RHSM constants.
 ## RhsmHelpers
 <a name="Rhsm.module_RhsmHelpers..filterArchitectureVariant"></a>
 
-### RhsmHelpers~filterArchitectureVariant(id, params) ⇒ <code>string</code>
+### <del>RhsmHelpers~filterArchitectureVariant(id, params) ⇒ <code>string</code></del>
+***Deprecated***
+
 Patch for returning a made up API architecture, variant param as a product ID
 
 **Kind**: inner method of [<code>RhsmHelpers</code>](#Rhsm.module_RhsmHelpers)  

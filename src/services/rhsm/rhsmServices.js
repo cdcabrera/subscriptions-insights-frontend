@@ -15,6 +15,7 @@ import { rhsmHelpers } from './rhsmHelpers';
  * ToDo: remove rhsmHelpers.filterArchitectureVariant
  * We're using a temporary helper to emulate a param for architectures and/or variants.
  * When the api supports architecture and variant query params this needs to be refactored.
+ * The deprecated supporting toolbar filter "toolbarFieldVariant" has been removed.
  */
 
 /**
