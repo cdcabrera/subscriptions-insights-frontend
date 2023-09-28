@@ -2,9 +2,9 @@ const { join, resolve } = require('path');
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const fedModulePlugin = require('@redhat-cloud-services/frontend-components-config/federated-modules');
+// const fedModulePlugin = require('@redhat-cloud-services/frontend-components-config/federated-modules');
 const { setupWebpackDotenvFilesForEnv } = require('./build.dotenv');
-const { dependencies } = require('../package.json');
+// const { dependencies } = require('../package.json');
 
 const setReplacePlugin = () => [
   {
@@ -30,7 +30,8 @@ const setCommonPlugins = () => {
     ...setupWebpackDotenvFilesForEnv({ directory: RELATIVE_DIRNAME, env: DOTENV_ENV }),
     new CopyPlugin({
       patterns: [{ from: join(STATIC_DIR, 'locales'), to: join(DIST_DIR, 'locales'), noErrorOnMissing: true }]
-    }),
+    })
+    /*
     fedModulePlugin({
       root: RELATIVE_DIRNAME,
       shared: [
@@ -38,6 +39,7 @@ const setCommonPlugins = () => {
         { 'react-redux': { requiredVersion: dependencies['react-redux'] } }
       ]
     })
+     */
   ];
 
   // Development plugins

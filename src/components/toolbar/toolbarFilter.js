@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { useMount } from 'react-use';
-import { ToolbarItem, Chip, ChipGroup, ToolbarContentContext, ToolbarContext } from '@patternfly/react-core';
+import { ToolbarItem, Chip, ChipGroup } from '@patternfly/react-core';
+import { ToolbarContext, ToolbarContentContext } from '@patternfly/react-core/dist/js/components/Toolbar/ToolbarUtils';
 import { helpers } from '../../common/helpers';
 
 /**

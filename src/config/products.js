@@ -16,6 +16,7 @@ const productConfigs = (() => {
     /**
      * Basic configuration for testing only.
      */
+    /*
     if (process.env.REACT_APP_ENV === 'test' && require) {
       return [
         ...require('fs') // eslint-disable-line
@@ -24,6 +25,7 @@ const productConfigs = (() => {
           ?.map(file => require(`./${file}`)) // eslint-disable-line
       ];
     }
+    */
 
     console.warn(`Product configuration failed to load: ${e.message}`);
     return [];
