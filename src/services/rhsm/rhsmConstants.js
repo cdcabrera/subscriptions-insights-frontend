@@ -50,7 +50,8 @@ const RHSM_API_PATH_PRODUCT_TYPES = {
   ROSA: 'rosa',
   OPENSHIFT: 'OpenShift Container Platform',
   OPENSHIFT_METRICS: 'OpenShift-metrics',
-  OPENSHIFT_DEDICATED_METRICS: 'OpenShift-dedicated-metrics'
+  OPENSHIFT_DEDICATED_METRICS: 'OpenShift-dedicated-metrics',
+  RHEL_X86_EUS: 'rhel-for-eus-x86'
 };
 
 /**
