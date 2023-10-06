@@ -5044,7 +5044,7 @@ exports[`Product specific configurations should apply variations in inventory fi
           "label": [Function],
           "metric": "quantity",
           "modifier": "wrap",
-          "width": 10,
+          "width": 20,
         },
         {
           "cell": [Function],
@@ -5054,7 +5054,7 @@ exports[`Product specific configurations should apply variations in inventory fi
           "label": [Function],
           "metric": "total_capacity",
           "modifier": "wrap",
-          "width": 10,
+          "width": 15,
         },
         {
           "cell": [Function],
@@ -5095,7 +5095,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "isSort": true,
               "isWrap": true,
               "metric": "quantity",
-              "width": 10,
+              "width": 20,
             },
             {
               "content": <Tooltip
@@ -5120,7 +5120,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "isSort": true,
               "isWrap": true,
               "metric": "total_capacity",
-              "width": 10,
+              "width": 15,
             },
             {
               "content": "2022-01-01",
@@ -5699,7 +5699,7 @@ exports[`Product specific configurations should apply variations in inventory fi
           "label": [Function],
           "metric": "quantity",
           "modifier": "wrap",
-          "width": 10,
+          "width": 20,
         },
         {
           "cell": [Function],
@@ -5709,7 +5709,7 @@ exports[`Product specific configurations should apply variations in inventory fi
           "label": [Function],
           "metric": "total_capacity",
           "modifier": "wrap",
-          "width": 10,
+          "width": 15,
         },
         {
           "cell": [Function],
@@ -5750,7 +5750,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "isSort": true,
               "isWrap": true,
               "metric": "quantity",
-              "width": 10,
+              "width": 20,
             },
             {
               "content": <Tooltip
@@ -5775,7 +5775,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "isSort": true,
               "isWrap": true,
               "metric": "total_capacity",
-              "width": 10,
+              "width": 15,
             },
             {
               "content": "2022-01-01",
