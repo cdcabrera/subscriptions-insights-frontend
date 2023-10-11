@@ -18,6 +18,7 @@ import { MinHeight } from '../minHeight/minHeight';
 import { Pagination } from '../pagination/pagination';
 import { translate } from '../i18n/i18n';
 import { helpers } from '../../common';
+import { TableEmpty } from '../table/tableEmpty';
 
 /**
  * Base inventory table card.
@@ -62,6 +63,7 @@ const InventoryCard = ({
   const { filters } = useAliasParseFiltersSettings({ isDisabled });
   const {
     error,
+    fulfilled,
     pending,
     dataSetColumnHeaders = [],
     dataSetRows = [],
@@ -133,41 +135,41 @@ const InventoryCard = ({
       <MinHeight key="bodyMinHeight">
         <CardBody className="curiosity-card__body">
           <div className={(error && 'blur') || (pending && 'fadein') || ''}>
-            {pending && (
-              <Loader
-                variant="table"
-                tableProps={{
-                  ariaLabel: tableAriaLabel,
-                  className: tableClassName,
-                  colCount: resultsColumnCountAndWidths.count,
-                  colWidth: resultsColumnCountAndWidths.widths,
-                  rowCount: dataSetRows?.length || resultsPerPage,
-                  summary: tableSummary,
-                  variant: TableVariant.compact,
-                  isHeader: true
-                }}
-              />
-            )}
-            {!pending && (
-              <Table
-                key="inventory-table"
-                ariaLabel={tableAriaLabel}
-                className={tableClassName}
-                emptyTable={{
-                  ariaLabel: tableAriaLabel,
-                  className: tableClassName,
-                  summary: tableSummary,
-                  title: translate('curiosity-inventory.table', { context: ['emptyState', 'title'] }),
-                  message: translate('curiosity-inventory.table', { context: ['emptyState', 'description'] })
-                }}
-                isBorders
-                isHeader
-                onSort={onColumnSort}
-                columnHeaders={dataSetColumnHeaders}
-                rows={dataSetRows}
-                summary={tableSummary}
-              />
-            )}
+            <Table
+              key="inventory-table"
+              ariaLabel={tableAriaLabel}
+              className={tableClassName}
+              isBorders
+              isHeader
+              onSort={onColumnSort}
+              columnHeaders={dataSetColumnHeaders}
+              rows={dataSetRows}
+              summary={tableSummary}
+            >
+              {(fulfilled && (
+                <TableEmpty
+                  ariaLabel={tableAriaLabel}
+                  className={`${tableClassName} blur`}
+                  summary={tableSummary}
+                  title={translate('curiosity-inventory.table', { context: ['emptyState', 'title'] })}
+                  message={translate('curiosity-inventory.table', { context: ['emptyState', 'description'] })}
+                />
+              )) || (
+                <Loader
+                  variant="table"
+                  tableProps={{
+                    ariaLabel: tableAriaLabel,
+                    className: tableClassName,
+                    colCount: resultsColumnCountAndWidths.count,
+                    colWidth: resultsColumnCountAndWidths.widths,
+                    rowCount: dataSetRows?.length || resultsPerPage,
+                    summary: tableSummary,
+                    variant: TableVariant.compact,
+                    isHeader: true
+                  }}
+                />
+              )}
+            </Table>
           </div>
         </CardBody>
       </MinHeight>
