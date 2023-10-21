@@ -2,11 +2,14 @@ import React from 'react';
 import i18next from 'i18next';
 import { Trans } from 'react-i18next';
 import { helpers } from '../../common/helpers';
+import { localeKeys } from '../../locales/locales';
 
 /**
  * @memberof i18n
  * @module i18nHelpers
  */
+
+const TRANSLATE_KEYS = localeKeys;
 
 /**
  * Check to help provide an empty context.
@@ -166,7 +169,7 @@ const setI18nTestElement = ({ defaultTestId, testId }) => {
  * Apply a string towards a key. Optional replacement values and component/nodes.
  * See, https://react.i18next.com/
  *
- * @param {string|Array} translateKey A key reference, or an array of a primary key with fallback keys.
+ * @param {TRANSLATE_KEYS|Array} translateKey A key reference, or an array of a primary key with fallback keys.
  * @param {string|object|Array} values
  *     - A default string if the key can't be found.
  *     - An object with i18next settings. i.e. "{ context: Array|string, testId: boolean|string|React.ReactNode }"
@@ -264,6 +267,7 @@ const translateComponent = (
 };
 
 const i18nHelpers = {
+  TRANSLATE_KEYS,
   EMPTY_CONTEXT,
   noopTranslate,
   parseContext,
@@ -276,6 +280,7 @@ const i18nHelpers = {
 export {
   i18nHelpers as default,
   i18nHelpers,
+  TRANSLATE_KEYS,
   EMPTY_CONTEXT,
   noopTranslate,
   parseContext,

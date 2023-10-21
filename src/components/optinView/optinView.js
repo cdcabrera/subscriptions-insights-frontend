@@ -17,7 +17,8 @@ import {
 } from '@patternfly/react-core';
 import { useSession } from '../authentication/authenticationContext';
 import { reduxActions, storeHooks } from '../../redux';
-import { translate } from '../i18n/i18n';
+import { translate, TRANSLATE_KEYS } from '../i18n/i18n';
+import testKeys from '../../locales/keys.json';
 import { PageLayout } from '../pageLayout/pageLayout';
 import { helpers } from '../../common';
 import graphPng2x from '../../images/graph2x.png';
@@ -84,7 +85,7 @@ const OptinView = ({
     if (error) {
       return (
         <p>
-          {t('curiosity-optin.cardIsErrorDescription', { appName: helpers.UI_DISPLAY_NAME }, [
+          {t(TRANSLATE_KEYS, { appName: helpers.UI_DISPLAY_NAME }, [
             <Button isInline component="a" variant="link" target="_blank" href={helpers.UI_LINK_CONTACT_US} />
           ])}
         </p>

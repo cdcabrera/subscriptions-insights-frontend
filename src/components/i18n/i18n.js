@@ -5,7 +5,7 @@ import XHR from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 import { useMount } from 'react-use';
 import { helpers } from '../../common/helpers';
-import { EMPTY_CONTEXT, translate, translateComponent } from './i18nHelpers';
+import { EMPTY_CONTEXT, TRANSLATE_KEYS, translate, translateComponent } from './i18nHelpers';
 
 /**
  * Populate, load, remote locale strings.
@@ -96,4 +96,4 @@ I18n.defaultProps = {
   locale: null
 };
 
-export { I18n as default, I18n, i18next, translate, translateComponent, EMPTY_CONTEXT };
+export { I18n as default, I18n, i18next, translate, translateComponent, EMPTY_CONTEXT, TRANSLATE_KEYS };
