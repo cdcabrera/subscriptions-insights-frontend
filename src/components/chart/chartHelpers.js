@@ -380,7 +380,7 @@ const generateAxisProps = ({
   maxY,
   xAxisChartLabel,
   yAxisChartLabel,
-  xAxisFixLabelOverlap = true,
+  xAxisFixLabelOverlap = false,
   xAxisLabelIncrement = 1,
   xAxisTickFormat,
   yAxisTickFormat

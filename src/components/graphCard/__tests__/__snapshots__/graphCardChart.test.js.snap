@@ -48,7 +48,7 @@ exports[`GraphCardChart Component should handle API response states: error 1`] =
           }
           themeColor="blue"
           xAxisChartLabel={null}
-          xAxisFixLabelOverlap={true}
+          xAxisFixLabelOverlap={false}
           xAxisLabelIncrement={1}
           xAxisTickFormat={[Function]}
           xValueFormat={null}
@@ -110,7 +110,7 @@ exports[`GraphCardChart Component should handle API response states: fulfilled 1
           }
           themeColor="blue"
           xAxisChartLabel={null}
-          xAxisFixLabelOverlap={true}
+          xAxisFixLabelOverlap={false}
           xAxisLabelIncrement={1}
           xAxisTickFormat={[Function]}
           xValueFormat={null}
@@ -221,7 +221,7 @@ exports[`GraphCardChart Component should render a basic component: basic 1`] = `
           }
           themeColor="blue"
           xAxisChartLabel={null}
-          xAxisFixLabelOverlap={true}
+          xAxisFixLabelOverlap={false}
           xAxisLabelIncrement={1}
           xAxisTickFormat={[Function]}
           xValueFormat={null}
