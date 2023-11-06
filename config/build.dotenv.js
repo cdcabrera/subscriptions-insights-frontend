@@ -88,14 +88,14 @@ const setupDotenvFilesForEnv = ({
 
   if (setBuildDefaults) {
     // Core Build
-    const DEV_MODE = process.env[`${dotenvNamePrefix}_DEV_MODE`] || process.env.DEV_MODE || undefined;
+    const DEV_MODE = process.env[`${dotenvNamePrefix}_DEV_MODE`] || process.env.DEV_MODE || '';
     const DIST_DIR = path.resolve(
       relativePath,
       process.env[`${dotenvNamePrefix}_DIST_DIR`] || process.env.DIST_DIR || 'dist'
     );
     const HOST = process.env[`${dotenvNamePrefix}_HOST`] || process.env.HOST || 'localhost';
     const OUTPUT_ONLY = process.env[`_${dotenvNamePrefix}_OUTPUT_ONLY`] === 'true';
-    const OPEN_PATH = process.env[`${dotenvNamePrefix}_OPEN_PATH`] || process.env.OPEN_PATH || undefined;
+    const OPEN_PATH = process.env[`${dotenvNamePrefix}_OPEN_PATH`] || process.env.OPEN_PATH || '';
     const PORT = process.env[`${dotenvNamePrefix}_PORT`] || process.env.PORT || '3000';
     const PUBLIC_PATH = process.env[`${dotenvNamePrefix}_PUBLIC_PATH`] || process.env.PUBLIC_PATH || '/';
     const SRC_DIR = path.resolve(
@@ -108,7 +108,7 @@ const setupDotenvFilesForEnv = ({
     );
 
     // Build Extras - Display name, HTML title
-    const UI_NAME = process.env[`${dotenvNamePrefix}_UI_NAME`] || process.env.UI_NAME || undefined;
+    const UI_NAME = process.env[`${dotenvNamePrefix}_UI_NAME`] || process.env.UI_NAME || '';
 
     /**
      * Note: Consider adding dotenv parameters to your dotenv file instead of adding additional
