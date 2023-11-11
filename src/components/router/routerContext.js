@@ -73,14 +73,16 @@ const useNavigate = ({
       const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName });
 
       if (firstMatch?.productPath) {
+        console.log('>>>> FIRST MATCH', routerHelpers.pathJoin('.', firstMatch?.productPath));
         dispatch({
           type: reduxTypes.app.SET_PRODUCT,
           config: firstMatch?.productPath
         });
 
-        return navigate(`${routerHelpers.pathJoin('.', firstMatch?.productPath)}${search}${hash}`, options);
+        return navigate(`${routerHelpers.pathJoin('../', firstMatch?.productPath)}${search}${hash}`, options);
       }
 
+      console.log('>>>> FALLBACK MATCH', pathName, pathLocation);
       return navigate((pathName && `${pathName}${search}${hash}`) || pathLocation, options);
     },
     [dispatch, hash, navigate, search]

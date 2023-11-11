@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+// import { useNavigate as useRRDNavigate } from 'react-router-dom';
 import { routerContext } from '../router';
 import { ProductViewContext } from './productViewContext';
 import { PageLayout, PageHeader, PageSection, PageToolbar, PageMessages, PageColumns } from '../pageLayout/pageLayout';
@@ -30,10 +31,12 @@ import { translate } from '../i18n/i18n';
  * @param {object} props
  * @param {Function} props.t
  * @param {Function} props.useRouteDetail
+ * @param {Function} props.useNavigate
  * @returns {React.ReactNode}
  */
-const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
+const ProductView = ({ t, useRouteDetail: useAliasRouteDetail, useNavigate: useAliasNavigate }) => {
   const { firstMatch, productGroup } = useAliasRouteDetail();
+  const navigate = useAliasNavigate();
 
   const renderProduct = useCallback(() => {
     const updated = config => {
@@ -90,6 +93,36 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
       <PageLayout>
         <PageHeader productLabel={productGroup}>
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
+          <ul>
+            <li>
+              <a
+                href="#"
+                onClick={e => {
+                  e.preventDefault();
+                  // document.location.href = './rhel';
+                  // window.history.pushState(undefined, '', './rhel');
+                  // document.location.replace('./rhel');
+                  navigate('../rhel');
+                }}
+              >
+                rhel
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                onClick={e => {
+                  e.preventDefault();
+                  // document.location.href = './openshift-container';
+                  // window.history.pushState(undefined, '', './openshift-container');
+                  // document.location.replace('./openshift-container');
+                  navigate('../openshift');
+                }}
+              >
+                openshift
+              </a>
+            </li>
+          </ul>
         </PageHeader>
         <PageColumns>{renderProduct()}</PageColumns>
       </PageLayout>
@@ -105,7 +138,8 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
  */
 ProductView.propTypes = {
   t: PropTypes.func,
-  useRouteDetail: PropTypes.func
+  useRouteDetail: PropTypes.func,
+  useNavigate: PropTypes.func
 };
 
 /**
@@ -115,7 +149,8 @@ ProductView.propTypes = {
  */
 ProductView.defaultProps = {
   t: translate,
-  useRouteDetail: routerContext.useRouteDetail
+  useRouteDetail: routerContext.useRouteDetail,
+  useNavigate: routerContext.useNavigate
 };
 
 export { ProductView as default, ProductView };

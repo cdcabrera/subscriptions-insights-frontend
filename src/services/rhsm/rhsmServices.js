@@ -990,7 +990,7 @@ const getApiVersion = (options = {}) => {
  *     }
  */
 /**
- * @apiMock {DelayResponse} 250
+ * @apiMock {DelayResponse} 2000
  * @apiMock {RandomSuccess}
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/:metric_id Get RHSM graph data
  * @apiDescription Retrieve graph data.
@@ -1655,7 +1655,7 @@ const getInstancesInventoryGuests = (id, params = {}, options = {}) => {
 };
 
 /**
- * @apiMock {DelayResponse} 750
+ * @apiMock {DelayResponse} 5000
  * @api {get} /api/rhsm-subscriptions/v1/instances/products/:product_id Get RHSM instances table/inventory data
  * @apiDescription Retrieve instances table/inventory data.
  *
@@ -1793,7 +1793,7 @@ const getInstancesInventory = (id, params = {}, options = {}) => {
   const {
     cache = true,
     cancel = true,
-    cancelId,
+    cancelId = 'instancesCancelId',
     schema = [rhsmSchemas.instances, rhsmSchemas.errors],
     transform = [rhsmTransformers.instances]
   } = options;

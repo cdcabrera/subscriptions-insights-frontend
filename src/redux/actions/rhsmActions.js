@@ -26,11 +26,77 @@ const getGraphMetrics =
     const multiMetric = (Array.isArray(idMetric) && idMetric) || [idMetric];
     const multiDispatch = [];
 
-    multiMetric.forEach(({ id, metric, isCapacity, query: metricQuery }) => {
+    multiMetric
+      .filter(({ isCapacity }) => !isCapacity)
+      .forEach(({ id, metric, isCapacity, query: metricQuery }, index) => {
+        const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
+        const methodType = isCapacity ? rhsmTypes.GET_GRAPH_CAPACITY_RHSM : rhsmTypes.GET_GRAPH_TALLY_RHSM;
+        const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
+        const generatedId = generateChartIds({ isCapacity, metric, productId: id, query: metricQuery });
+        const altId = generateChartIds({ isCapacity, metric, query: metricQuery });
+
+        console.log('>>>> CANCEL ID', `${methodCancelId}_${generatedId}`);
+        console.log('>>>> CANCEL ID ALT', altId);
+        console.log('>>>> CANCEL ID INDEX', `${methodCancelId}_${index}`);
+
+        multiDispatch.push({
+          type: methodType,
+          payload: methodService(
+            [id, metric],
+            { ...query, ...metricQuery },
+            {
+              cancelId: `${methodCancelId}_${index}`
+            }
+          ),
+          meta: {
+            id: generatedId,
+            query: { ...query, ...metricQuery },
+            notifications: {}
+          }
+        });
+      });
+
+    multiMetric
+      .filter(({ isCapacity }) => isCapacity)
+      .forEach(({ id, metric, isCapacity, query: metricQuery }, index) => {
+        const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
+        const methodType = isCapacity ? rhsmTypes.GET_GRAPH_CAPACITY_RHSM : rhsmTypes.GET_GRAPH_TALLY_RHSM;
+        const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
+        const generatedId = generateChartIds({ isCapacity, metric, productId: id, query: metricQuery });
+        const altId = generateChartIds({ isCapacity, metric, query: metricQuery });
+
+        console.log('>>>> CANCEL ID', `${methodCancelId}_${generatedId}`);
+        console.log('>>>> CANCEL ID ALT', altId);
+        console.log('>>>> CANCEL ID INDEX', `${methodCancelId}_${index}`);
+
+        multiDispatch.push({
+          type: methodType,
+          payload: methodService(
+            [id, metric],
+            { ...query, ...metricQuery },
+            {
+              cancelId: `${methodCancelId}_${index}`
+            }
+          ),
+          meta: {
+            id: generatedId,
+            query: { ...query, ...metricQuery },
+            notifications: {}
+          }
+        });
+      });
+
+    /*
+    multiMetric.forEach(({ id, metric, isCapacity, query: metricQuery }, index) => {
       const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
       const methodType = isCapacity ? rhsmTypes.GET_GRAPH_CAPACITY_RHSM : rhsmTypes.GET_GRAPH_TALLY_RHSM;
       const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
       const generatedId = generateChartIds({ isCapacity, metric, productId: id, query: metricQuery });
+      const altId = generateChartIds({ isCapacity, metric, query: metricQuery });
+
+      console.log('>>>> CANCEL ID', `${methodCancelId}_${generatedId}`);
+      console.log('>>>> CANCEL ID ALT', altId);
+      console.log('>>>> CANCEL ID INDEX', `${methodCancelId}_${index}`);
 
       multiDispatch.push({
         type: methodType,
@@ -38,7 +104,7 @@ const getGraphMetrics =
           [id, metric],
           { ...query, ...metricQuery },
           {
-            cancelId: `${methodCancelId}_${generatedId}`
+            cancelId: `${methodCancelId}_${index}`
           }
         ),
         meta: {
@@ -48,6 +114,7 @@ const getGraphMetrics =
         }
       });
     });
+    */
 
     return Promise.all(dispatch(multiDispatch));
   };
