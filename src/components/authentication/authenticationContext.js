@@ -67,7 +67,7 @@ const useGetAuthorization = ({
   // const dispatch = useAliasDispatch();
   // const { updateDocumentTitle = helpers.noop } = useAliasChrome();
   const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
-    { id: 'auth', selector: ({ user }) => user?.auth },
+    // { id: 'auth', selector: ({ user }) => user?.auth },
     { id: 'locale', selector: ({ user }) => user?.locale },
     {
       id: 'errors',
@@ -94,7 +94,7 @@ const useGetAuthorization = ({
     await dispatch(Promise.all([platformServices.getUser(), platformServices.getUserPermissions()]));
   });
 
-  const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
+  const [user = {}, app = {}] = (Array.isArray(results[0]?.data) && results[0]?.data) || [];
   const errorStatus = (error && responses?.id?.errors?.status) || null;
 
   return {

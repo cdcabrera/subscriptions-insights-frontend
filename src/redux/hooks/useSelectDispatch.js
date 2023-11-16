@@ -12,7 +12,7 @@ const useAction = (
 ) => {
   const updatedActionType = (Array.isArray(actionType) && actionType) || [actionType];
   const dispatch = useAliasDispatch();
-  const select = useAliasSelectors([...updatedActionType.map(t => state => state[t])]);
+  const select = useAliasSelectors([...updatedActionType.map(t => state => state?.flat?.[t])]);
 
   return {
     select: () => select,
