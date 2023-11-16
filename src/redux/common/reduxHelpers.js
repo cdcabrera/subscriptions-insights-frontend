@@ -15,7 +15,7 @@ import { helpers } from '../../common';
  * @param {string} base
  * @returns {string}
  */
-const FULFILLED_ACTION = (base = '') => `${base}_FULFILLED`;
+const FULFILLED_ACTION = (base = '') => (!/_FULFILLED$/.test(base) && `${base}_FULFILLED`) || base;
 
 /**
  * Apply a "pending" suffix for Redux Promise Middleware action responses.
@@ -23,7 +23,7 @@ const FULFILLED_ACTION = (base = '') => `${base}_FULFILLED`;
  * @param {string} base
  * @returns {string}
  */
-const PENDING_ACTION = (base = '') => `${base}_PENDING`;
+const PENDING_ACTION = (base = '') => (!/_PENDING$/.test(base) && `${base}_PENDING`) || base;
 
 /**
  * Apply a "rejected" suffix for Redux Promise Middleware action responses.
@@ -31,7 +31,7 @@ const PENDING_ACTION = (base = '') => `${base}_PENDING`;
  * @param {string} base
  * @returns {string}
  */
-const REJECTED_ACTION = (base = '') => `${base}_REJECTED`;
+const REJECTED_ACTION = (base = '') => (!/_REJECTED$/.test(base) && `${base}_REJECTED`) || base;
 
 /**
  * Apply a "status range" suffix for Status Middleware action responses.
@@ -366,6 +366,8 @@ const generatedPromiseActionReducer = (types = [], state = {}, action = {}) => {
       `^(${REJECTED_ACTION(val.type || val)}|${PENDING_ACTION(val.type || val)}|${FULFILLED_ACTION(val.type || val)})$`
     ).test(type)
   );
+
+  console.log('>>>>> GEN', expandedTypes[0], FULFILLED_ACTION(expandedTypes[0].type), whichType);
 
   if (!whichType) {
     return state;

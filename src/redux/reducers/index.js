@@ -6,9 +6,11 @@ import messagesReducer from './messagesReducer';
 import toolbarReducer from './toolbarReducer';
 import userReducer from './userReducer';
 import viewReducer from './viewReducer';
+import flatReducer from './flatReducer';
 
 const reducers = {
   notifications,
+  flat: flatReducer,
   graph: graphReducer,
   inventory: inventoryReducer,
   messages: messagesReducer,
@@ -27,5 +29,6 @@ export {
   messagesReducer,
   toolbarReducer,
   userReducer,
-  viewReducer
+  viewReducer,
+  flatReducer
 };

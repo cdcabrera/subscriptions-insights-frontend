@@ -47,6 +47,10 @@ const useOnSelect = ({
     const { startDate, endDate } = dateHelpers.getRangedDateTime(value);
     dispatch([
       {
+        action: 'DYNAMIC',
+        lorem: 'ipsum'
+      },
+      {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST,
         viewId
       },

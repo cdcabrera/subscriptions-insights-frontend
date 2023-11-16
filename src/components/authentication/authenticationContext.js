@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 import { useMount } from 'react-use';
-import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
-import { reduxActions, storeHooks } from '../../redux';
+// import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { storeHooks } from '../../redux';
+import { useAction } from '../../redux/hooks/useSelectDispatch';
 import { helpers } from '../../common';
-import { routerHelpers } from '../router';
+// import { platformTypes } from '../../redux/types';
+import { platformServices } from '../../services/platform/platformServices';
+// import { routerHelpers } from '../router';
 
 /**
  * @memberof Authentication
@@ -18,6 +21,20 @@ import { routerHelpers } from '../router';
 const DEFAULT_CONTEXT = [{}, helpers.noop];
 
 const AuthenticationContext = React.createContext(DEFAULT_CONTEXT);
+
+/*
+const authorizeUser = appName => dispatch =>
+  dispatch({
+    type: platformTypes.PLATFORM_USER_AUTH,
+    payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions(appName)])
+  });
+
+const authorizeUser = appName => dispatch =>
+  dispatch({
+    type: platformTypes.PLATFORM_USER_AUTH,
+    payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions(appName)])
+  });
+*/
 
 /**
  * Get an updated authentication context.
@@ -39,15 +56,16 @@ const useAuthContext = () => useContext(AuthenticationContext);
  * @returns {{data: {errorCodes, errorStatus: *, locale}, pending: boolean, fulfilled: boolean, error: boolean}}
  */
 const useGetAuthorization = ({
-  appName = routerHelpers.appName,
-  authorizeUser = reduxActions.platform.authorizeUser,
-  hideGlobalFilter = reduxActions.platform.hideGlobalFilter,
-  useChrome: useAliasChrome = useChrome,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  // appName = routerHelpers.appName,
+  // authorizeUser = reduxActions.platform.authorizeUser,
+  // hideGlobalFilter = reduxActions.platform.hideGlobalFilter,
+  // useChrome: useAliasChrome = useChrome,
+  // useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
-  const dispatch = useAliasDispatch();
-  const { updateDocumentTitle = helpers.noop } = useAliasChrome();
+  const { select, dispatch: actionDispatch } = useAction('hello_world');
+  // const dispatch = useAliasDispatch();
+  // const { updateDocumentTitle = helpers.noop } = useAliasChrome();
   const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
     { id: 'auth', selector: ({ user }) => user?.auth },
     { id: 'locale', selector: ({ user }) => user?.locale },
@@ -57,10 +75,23 @@ const useGetAuthorization = ({
     }
   ]);
 
+  const results = select();
+  const dispatch = actionDispatch();
+  console.log('>>>>>>> RESULTS', results);
+
   useMount(async () => {
-    await dispatch(authorizeUser());
-    updateDocumentTitle(appName);
-    dispatch([hideGlobalFilter()]);
+    // await dispatch(authorizeUser());
+    // updateDocumentTitle(appName);
+    // dispatch([hideGlobalFilter()]);
+    /*
+    await dispatch({
+      // meta: {
+      //  _internal: true
+      // },
+      payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions()])
+    });
+    */
+    await dispatch(Promise.all([platformServices.getUser(), platformServices.getUserPermissions()]));
   });
 
   const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];

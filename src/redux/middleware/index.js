@@ -5,6 +5,7 @@ import { notificationsMiddleware } from '@redhat-cloud-services/frontend-compone
 import { multiActionMiddleware } from './multiActionMiddleware';
 import { statusMiddleware } from './statusMiddleware';
 import { actionRecordMiddleware } from './actionRecordMiddleware';
+import { dynamicActionMiddleware } from './dynamicActionMiddleware';
 import { reduxHelpers } from '../common/reduxHelpers';
 
 /**
@@ -35,6 +36,7 @@ const reduxMiddleware = [
   statusMiddleware(),
   multiActionMiddleware,
   promiseMiddleware,
+  dynamicActionMiddleware,
   actionRecordMiddleware({
     id: process.env.REACT_APP_UI_LOGGER_ID,
     app: { version: process.env.REACT_APP_UI_VERSION }
@@ -52,6 +54,7 @@ export {
   createLogger,
   notificationsMiddleware,
   promiseMiddleware,
+  dynamicActionMiddleware,
   statusMiddleware,
   thunkMiddleware
 };
