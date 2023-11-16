@@ -13,10 +13,7 @@ import { reduxHelpers } from '../common/reduxHelpers';
  * @private
  * @type {{}}
  */
-const initialState = {
-  fields: {},
-  responses: {}
-};
+const initialState = {};
 
 /**
  * Apply anything to state, against any action.

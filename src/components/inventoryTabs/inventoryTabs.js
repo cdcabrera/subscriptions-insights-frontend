@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Title } from '@patternfly/react-core';
-import { reduxTypes, storeHooks } from '../../redux';
+import { reduxTypes } from '../../redux';
 import { useProduct } from '../productView/productViewContext';
 import { Tabs } from '../tabs/tabs';
 import { helpers } from '../../common';
 import { translate } from '../i18n/i18n';
 import { InventoryTab } from './inventoryTab';
+import { useAction } from '../../redux/hooks/useSelectDispatch';
 
 /**
  * An inventory tabs display with state. Consume Tabs.
@@ -26,12 +27,24 @@ import { InventoryTab } from './inventoryTab';
  * @returns {Function}
  */
 const useOnTab = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  // useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
-  const dispatch = useAliasDispatch();
+  // const dispatch = useAliasDispatch();
+  const { dispatch: actionDispatch } = useAction(reduxTypes.inventory.SET_INVENTORY_TAB);
 
+  const dispatch = actionDispatch();
+
+  return ({ index } = {}) => {
+    dispatch({
+      tabs: {
+        [productId]: index
+      }
+    });
+  };
+
+  /*
   return ({ index } = {}) => {
     dispatch({
       type: reduxTypes.inventory.SET_INVENTORY_TAB,
@@ -40,6 +53,7 @@ const useOnTab = ({
       }
     });
   };
+   */
 };
 
 /**
@@ -65,11 +79,16 @@ const InventoryTabs = ({
   isDisabled,
   t,
   useOnTab: useAliasOnTab,
-  useProduct: useAliasProduct,
-  useSelector: useAliasSelector
+  useProduct: useAliasProduct
+  // useSelector: useAliasSelector
 }) => {
   const { productId } = useAliasProduct();
-  const updatedActiveTab = useAliasSelector(({ inventory }) => inventory.tabs?.[productId], activeTab);
+  // const updatedActiveTab = useAliasSelector(({ inventory }) => inventory.tabs?.[productId], activeTab);
+  const { select } = useAction(reduxTypes.inventory.SET_INVENTORY_TAB);
+  let updatedActiveTab = select();
+  updatedActiveTab = updatedActiveTab?.[0]?.tabs?.[productId];
+  console.log('>>>> TABS', productId, activeTab, updatedActiveTab);
+
   const onTab = useAliasOnTab();
 
   if (isDisabled) {
@@ -109,8 +128,8 @@ InventoryTabs.propTypes = {
   isDisabled: PropTypes.bool,
   t: PropTypes.func,
   useOnTab: PropTypes.func,
-  useProduct: PropTypes.func,
-  useSelector: PropTypes.func
+  useProduct: PropTypes.func
+  // useSelector: PropTypes.func
 };
 
 /**
@@ -125,8 +144,8 @@ InventoryTabs.defaultProps = {
   isDisabled: helpers.UI_DISABLED_TABLE,
   t: translate,
   useOnTab,
-  useProduct,
-  useSelector: storeHooks.reactRedux.useSelector
+  useProduct
+  // useSelector: storeHooks.reactRedux.useSelector
 };
 
 export { InventoryTabs as default, InventoryTabs, InventoryTab, useOnTab };
