@@ -63,6 +63,7 @@ const useGetAuthorization = ({
   // useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
+  // const { select, dispatch: actionDispatch, clear, reset } = useAction('hello_world', initialValue);
   const { select, dispatch: actionDispatch } = useAction('hello_world');
   // const dispatch = useAliasDispatch();
   // const { updateDocumentTitle = helpers.noop } = useAliasChrome();

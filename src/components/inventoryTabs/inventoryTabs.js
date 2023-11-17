@@ -38,9 +38,10 @@ const useOnTab = ({
 
   return ({ index } = {}) => {
     dispatch({
-      tabs: {
-        [productId]: index
-      }
+      [productId]: index
+      // tabs: {
+      //  [productId]: index
+      // }
     });
   };
 
@@ -86,7 +87,8 @@ const InventoryTabs = ({
   // const updatedActiveTab = useAliasSelector(({ inventory }) => inventory.tabs?.[productId], activeTab);
   const { select } = useAction(reduxTypes.inventory.SET_INVENTORY_TAB);
   let updatedActiveTab = select();
-  updatedActiveTab = updatedActiveTab?.[0]?.tabs?.[productId];
+  // updatedActiveTab = updatedActiveTab?.[0]?.tabs?.[productId];
+  updatedActiveTab = updatedActiveTab?.[0]?.[productId];
   console.log('>>>> TABS', productId, activeTab, updatedActiveTab);
 
   const onTab = useAliasOnTab();
