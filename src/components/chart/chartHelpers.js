@@ -380,14 +380,18 @@ const generateAxisProps = ({
   maxY,
   xAxisChartLabel,
   yAxisChartLabel,
-  xAxisFixLabelOverlap = false,
+  xAxisFixLabelOverlap,
   xAxisLabelIncrement = 1,
   xAxisTickFormat,
   yAxisTickFormat
 } = {}) => {
   const xAxisPropDefaults = {
-    fixLabelOverlap: xAxisFixLabelOverlap
+    fixLabelOverlap: false
   };
+
+  if (dataSets.length && xAxisFixLabelOverlap === true) {
+    xAxisPropDefaults.fixLabelOverlap = true;
+  }
 
   const yAxisPropDefaults = {
     dependentAxis: true,
