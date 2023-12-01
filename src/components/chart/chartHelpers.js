@@ -389,14 +389,16 @@ const generateAxisProps = ({
     fixLabelOverlap: false
   };
 
-  if (dataSets.length && xAxisFixLabelOverlap === true) {
-    xAxisPropDefaults.fixLabelOverlap = true;
-  }
-
   const yAxisPropDefaults = {
     dependentAxis: true,
     showGrid: true
   };
+
+  const allowLabelOverlap = dataSets.filter(({ data }) => data?.length > 0).length === dataSets.length;
+
+  if (allowLabelOverlap && xAxisFixLabelOverlap === true) {
+    xAxisPropDefaults.fixLabelOverlap = true;
+  }
 
   let yAxisDataSets = [];
   let xAxisDataSet;
