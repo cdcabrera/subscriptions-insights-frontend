@@ -394,7 +394,7 @@ const generateAxisProps = ({
     showGrid: true
   };
 
-  const allowLabelOverlap = dataSets.filter(({ data }) => data?.length > 0).length === dataSets.length;
+  const allowLabelOverlap = dataSets.filter(({ data }) => data?.length > 0).length > 0;
 
   if (allowLabelOverlap && xAxisFixLabelOverlap === true) {
     xAxisPropDefaults.fixLabelOverlap = true;
