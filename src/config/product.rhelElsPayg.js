@@ -226,7 +226,8 @@ const config = {
         (!total && '--') ||
         translate('curiosity-inventory.measurement', {
           context: RHSM_API_PATH_METRIC_TYPES.VCPUS,
-          total: helpers.numberDisplay(total)?.format({ mantissa: 5, trimMantissa: true }) || 0
+          total: helpers.numberDisplay(total)?.format({ mantissa: 5, trimMantissa: true }) || 0,
+          testId: <span data-test={RHSM_API_PATH_METRIC_TYPES.VCPUS} data-value={total} />
         }),
       isSort: true,
       isWrap: true,
