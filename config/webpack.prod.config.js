@@ -3,6 +3,7 @@ const config = require('@redhat-cloud-services/frontend-components-config');
 const { dotenv } = require('weldable');
 const { setReplacePlugin, setCommonPlugins } = require('./build.plugins');
 
+
 const {
   _BUILD_RELATIVE_DIRNAME,
   REACT_APP_UI_DEPLOY_PATH_PREFIX: BETA_PREFIX,
@@ -21,7 +22,10 @@ if (DEV_ANALYZE === 'true') {
   plugins.push(new BundleAnalyzerPlugin());
 }
 
-module.exports = {
-  ...webpackConfig,
-  plugins
+module.exports = () => {
+
+  return {
+    ...webpackConfig,
+    plugins
+  };
 };

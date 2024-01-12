@@ -32,3 +32,5 @@ public/locales/*.json
 .proxy
 .docs
 .openapi
+.cache
+tsconfig.json
