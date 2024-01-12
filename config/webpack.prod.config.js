@@ -1,4 +1,4 @@
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { webpackBundleAnalyzer: BundleAnalyzerPlugin } = require('weldable/lib/packages');
 const config = require('@redhat-cloud-services/frontend-components-config');
 const { dotenv } = require('weldable');
 const { setReplacePlugin, setCommonPlugins } = require('./build.plugins');

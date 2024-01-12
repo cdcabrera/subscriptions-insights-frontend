@@ -1,7 +1,5 @@
 const { join, resolve } = require('path');
-const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
+const { webpack, CopyWebpackPlugin: CopyPlugin, EslintWebpackPlugin: ESLintPlugin } = require('weldable/lib/packages');
 const fedModulePlugin = require('@redhat-cloud-services/frontend-components-config/federated-modules');
 const { dotenv } = require('weldable');
 const { dependencies } = require('../package.json');
