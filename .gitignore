@@ -33,4 +33,3 @@ public/locales/*.json
 .docs
 .openapi
 .cache
-tsconfig.json
