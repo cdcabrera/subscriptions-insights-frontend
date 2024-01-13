@@ -5,6 +5,7 @@ const { dotenv } = require('weldable');
 
 const {
   // _BUILD_RELATIVE_DIRNAME,
+  DEV_BRANCH,
   _BUILD_DIST_DIR: DIST_DIR,
   _BUILD_STATIC_DIR: STATIC_DIR,
   // REACT_APP_UI_DEPLOY_PATH_PREFIX: BETA_PREFIX,
@@ -32,6 +33,7 @@ module.exports = {
   appUrl: '/subscriptions/usage',
   // deployment: (/beta/.test(BETA_PREFIX) && 'beta/apps') || (/preview/.test(BETA_PREFIX) && 'preview/apps') || 'apps',
   debug: true,
+  env: (/(prod|stage|qa|ci)(-stable|-beta)$/.test(DEV_BRANCH) && DEV_BRANCH) || 'stage-stable',
   useProxy: true,
   proxyVerbose: true,
   // sassPrefix: '.frontend-starter-app, .frontendStarterApp',
