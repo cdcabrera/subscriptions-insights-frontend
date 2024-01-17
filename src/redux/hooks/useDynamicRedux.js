@@ -14,21 +14,31 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
 
       return dispatch(
         updatedTypeValue
-          .filter(value => 'type' in value && _isPlainObject(value))
+          // .filter(value => 'type' in value && _isPlainObject(value))
           .map(value => {
-            if (value.payload) {
-              // consider placing meta id as part of type... but that could be confusing the consumer should just do it
+            // allow blending of dynamic and regular action types
+            if ('dynamicType' in value) {
+              if (value.payload) {
+                return {
+                  ...value,
+                  type: value.dynamicType,
+                  meta: {
+                    ...value.meta,
+                    __originalType: value.dynamicType,
+                    __dynamic: true
+                  }
+                };
+              }
+
               return {
                 ...value,
-                meta: {
-                  ...value.meta,
-                  __originalType: value.type,
-                  __dynamic: true
-                }
+                type: value.dynamicType,
+                __originalType: value.dynamicType,
+                __dynamic: true
               };
             }
 
-            return { ...value, __originalType: value.type, __dynamic: true };
+            return value;
           })
       );
     },
