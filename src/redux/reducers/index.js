@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 import { notifications } from '@redhat-cloud-services/frontend-components-notifications';
 import graphReducer from './graphReducer';
-import inventoryReducer from './inventoryReducer';
 import messagesReducer from './messagesReducer';
-import toolbarReducer from './toolbarReducer';
 import userReducer from './userReducer';
 import viewReducer from './viewReducer';
 import dynamicReducer from './dynamicReducer';
@@ -12,9 +10,7 @@ const reducers = {
   notifications,
   dynamic: dynamicReducer,
   graph: graphReducer,
-  inventory: inventoryReducer,
   messages: messagesReducer,
-  toolbar: toolbarReducer,
   user: userReducer,
   view: viewReducer
 };
@@ -25,9 +21,7 @@ export {
   reduxReducers as default,
   reduxReducers,
   graphReducer,
-  inventoryReducer,
   messagesReducer,
-  toolbarReducer,
   userReducer,
   viewReducer,
   dynamicReducer

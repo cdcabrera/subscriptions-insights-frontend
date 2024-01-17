@@ -3,8 +3,6 @@ import {
   removeNotification as RcsRemoveNotification,
   clearNotifications as RcsClearNotifications
 } from '@redhat-cloud-services/frontend-components-notifications';
-import { platformTypes } from '../types';
-import { platformServices } from '../../services/platform/platformServices';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -36,43 +34,10 @@ const removeNotification = id => RcsRemoveNotification(id);
  */
 const clearNotifications = () => RcsClearNotifications();
 
-/**
- * Get an emulated and combined API response from the platforms "getUser" and "getUserPermissions" global methods.
- *
- * @param {string|Array} appName
- * @returns {Function}
- */
-const authorizeUser = appName => dispatch =>
-  dispatch({
-    type: platformTypes.PLATFORM_USER_AUTH,
-    payload: Promise.all([platformServices.getUser(), platformServices.getUserPermissions(appName)])
-  });
-
-/**
- * Hide platform global filter.
- *
- * @param {boolean} isHidden
- * @returns {{Function}}
- */
-const hideGlobalFilter = isHidden => ({
-  type: platformTypes.PLATFORM_GLOBAL_FILTER_HIDE,
-  payload: platformServices.hideGlobalFilter(isHidden)
-});
-
 const platformActions = {
   addNotification,
   removeNotification,
-  clearNotifications,
-  authorizeUser,
-  hideGlobalFilter
+  clearNotifications
 };
 
-export {
-  platformActions as default,
-  platformActions,
-  addNotification,
-  removeNotification,
-  clearNotifications,
-  authorizeUser,
-  hideGlobalFilter
-};
+export { platformActions as default, platformActions, addNotification, removeNotification, clearNotifications };

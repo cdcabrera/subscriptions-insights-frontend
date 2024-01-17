@@ -52,78 +52,8 @@ const getGraphMetrics =
     return Promise.all(dispatch(multiDispatch));
   };
 
-/**
- * Get an instances response listing from RHSM subscriptions.
- *
- * @param {string} id
- * @param {object} query
- * @returns {Function}
- */
-const getInstancesInventory =
-  (id = null, query = {}) =>
-  dispatch =>
-    dispatch({
-      type: rhsmTypes.GET_INSTANCES_INVENTORY_RHSM,
-      payload: rhsmServices.getInstancesInventory(id, query),
-      meta: {
-        id,
-        query,
-        notifications: {}
-      }
-    });
-
-/**
- * Get an instance guest response listing from RHSM subscriptions.
- *
- * @param {string} id
- * @param {object} query
- * @returns {Function}
- */
-const getInstancesInventoryGuests =
-  (id = null, query = {}) =>
-  dispatch =>
-    dispatch({
-      type: rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM,
-      payload: rhsmServices.getInstancesInventoryGuests(id, query),
-      meta: {
-        id,
-        query,
-        notifications: {}
-      }
-    });
-
-/**
- * Get a subscriptions response from RHSM subscriptions.
- *
- * @param {string} id
- * @param {object} query
- * @returns {Function}
- */
-const getSubscriptionsInventory =
-  (id = null, query = {}) =>
-  dispatch =>
-    dispatch({
-      type: rhsmTypes.GET_SUBSCRIPTIONS_INVENTORY_RHSM,
-      payload: rhsmServices.getSubscriptionsInventory(id, query),
-      meta: {
-        id,
-        query,
-        notifications: {}
-      }
-    });
-
 const rhsmActions = {
-  getGraphMetrics,
-  getInstancesInventory,
-  getInstancesInventoryGuests,
-  getSubscriptionsInventory
+  getGraphMetrics
 };
 
-export {
-  rhsmActions as default,
-  rhsmActions,
-  getGraphMetrics,
-  getInstancesInventory,
-  getInstancesInventoryGuests,
-  getSubscriptionsInventory
-};
+export { rhsmActions as default, rhsmActions, getGraphMetrics };

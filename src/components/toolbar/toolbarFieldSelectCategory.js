@@ -117,7 +117,7 @@ const toolbarFieldOptions = [
  * @returns {Function}
  */
 const useOnSelect = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { viewId } = useAliasProduct();
@@ -126,8 +126,7 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     dispatch([
       {
-        type: reduxTypes.toolbar.SET_FILTER_TYPE,
-        viewId,
+        type: `${reduxTypes.toolbar.SET_FILTER_TYPE}-${viewId}`,
         currentFilter: value
       }
     ]);
@@ -148,10 +147,10 @@ const useSelectCategoryOptions = ({
   categoryOptions = toolbarFieldOptions,
   useProduct: useAliasProduct = useProduct,
   useProductToolbarConfig: useAliasProductToolbarConfig = useProductToolbarConfig,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+  useSelector: useAliasSelector = storeHooks.reactRedux.useDynamicSelector
 } = {}) => {
   const { viewId } = useAliasProduct();
-  const { currentFilter: updatedValue } = useAliasSelector(({ toolbar }) => toolbar.filters?.[viewId], {});
+  const { currentFilter: updatedValue } = useAliasSelector(`${reduxTypes.toolbar.SET_FILTER_TYPE}-${viewId}`, {});
   const { filters = [] } = useAliasProductToolbarConfig();
 
   let initialValue;
