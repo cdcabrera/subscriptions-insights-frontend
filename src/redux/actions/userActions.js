@@ -11,17 +11,6 @@ import { translate } from '../../components/i18n/i18n';
  */
 
 /**
- * Get a user's locale.
- *
- * @returns {{payload: Promise<{data: void}>, type: string}}
- */
-const getLocale = () => dispatch =>
-  dispatch({
-    type: userTypes.USER_LOCALE,
-    payload: userServices.getLocale()
-  });
-
-/**
  * Delete a user's opt-in.
  *
  * @returns {Function}
@@ -81,6 +70,6 @@ const updateAccountOptIn =
       }
     });
 
-const userActions = { getLocale, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
+const userActions = { deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
 
-export { userActions as default, userActions, getLocale, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
+export { userActions as default, userActions, deleteAccountOptIn, getAccountOptIn, updateAccountOptIn };
