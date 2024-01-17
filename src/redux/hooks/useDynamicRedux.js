@@ -82,7 +82,7 @@ const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAlia
       };
     }
 
-    if (typeof select === 'string') {
+    if (typeof selector === 'string') {
       return ({ dynamic }) => dynamic?.[selector];
     }
 
