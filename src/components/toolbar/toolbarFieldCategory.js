@@ -71,7 +71,7 @@ const useToolbarFieldOptions = ({ useProductGraphConfig: useAliasProductGraphCon
  * @returns {Function}
  */
 const useOnSelect = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId, viewId } = useAliasProduct();
@@ -90,7 +90,7 @@ const useOnSelect = ({
 
     dispatch([
       {
-        type: reduxTypes.graph.SET_GRAPH_LEGEND,
+        dynamicType: `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-inverted`,
         id: `${viewId}-inverted`,
         value: updatedGraphLegendValue
       },

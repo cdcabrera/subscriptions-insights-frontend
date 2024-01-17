@@ -108,9 +108,8 @@ const useGetGuestsInventory = (
   const response = useAliasSelector(id);
 
   useShallowCompareEffect(() => {
-    // getInventory(id, query)(dispatch);
     dispatch({
-      type: `${storeRef}-${id}`,
+      dynamicType: `${storeRef}-${id}`,
       payload: getInventory(id, query)
     });
   }, [id, query]);
@@ -149,14 +148,13 @@ const useOnScroll = (
    */
   useUnmount(() => {
     // need a way to reset dynamic set props
-    console.log('>>>>> UNMOUNT GUESTS', `${storeRef}-${id}`);
     dispatch([
       {
         type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_GUESTS_LIST,
         viewId: id
       },
       {
-        type: `${storeRef}-${id}`,
+        dynamicType: `${storeRef}-${id}`,
         __hardReset: true
       }
     ]);

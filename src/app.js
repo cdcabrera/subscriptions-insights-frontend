@@ -38,7 +38,7 @@ const App = ({ getLocale, useDispatch: useAliasDispatch, useSelector: useAliasSe
   useMount(() => {
     if (!locale) {
       dispatch({
-        type: userTypes.USER_LOCALE,
+        dynamicType: userTypes.USER_LOCALE,
         payload: getLocale()
       });
     }

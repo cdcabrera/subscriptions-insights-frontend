@@ -126,7 +126,7 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     dispatch([
       {
-        type: `${reduxTypes.toolbar.SET_FILTER_TYPE}-${viewId}`,
+        dynamicType: `${reduxTypes.toolbar.SET_FILTER_TYPE}-${viewId}`,
         currentFilter: value
       }
     ]);

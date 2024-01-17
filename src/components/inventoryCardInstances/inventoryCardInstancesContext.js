@@ -145,7 +145,7 @@ const useGetInstancesInventory = ({
     if (!isDisabled) {
       // getInventory(productId, query)(dispatch);
       dispatch({
-        type: `${storeRef}-${productId}`,
+        dynamicType: `${storeRef}-${productId}`,
         payload: getInventory(productId, query)
       });
     }

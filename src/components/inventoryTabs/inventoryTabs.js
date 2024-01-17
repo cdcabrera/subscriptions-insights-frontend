@@ -34,7 +34,7 @@ const useOnTab = ({
 
   return ({ index } = {}) => {
     dispatch({
-      type: `${reduxTypes.inventory.SET_INVENTORY_TAB}-${productId}`,
+      dynamicType: `${reduxTypes.inventory.SET_INVENTORY_TAB}-${productId}`,
       index
     });
   };

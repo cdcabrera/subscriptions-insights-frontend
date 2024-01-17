@@ -64,13 +64,13 @@ const useGetAuthorization = ({
   useMount(async () => {
     // await authorizeUser()(dispatch);
     await dispatch({
-      type: platformTypes.PLATFORM_USER_AUTH,
+      dynamicType: platformTypes.PLATFORM_USER_AUTH,
       payload: Promise.all([getUser(), getUserPermissions()])
     });
     updateDocumentTitle(appName);
     dispatch([
       {
-        type: platformTypes.PLATFORM_GLOBAL_FILTER_HIDE,
+        dynamicType: platformTypes.PLATFORM_GLOBAL_FILTER_HIDE,
         payload: hideGlobalFilter()
       }
     ]);
