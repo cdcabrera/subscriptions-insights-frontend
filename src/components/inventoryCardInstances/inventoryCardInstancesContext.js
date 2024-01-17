@@ -207,7 +207,7 @@ const useInventoryCardActionsInstances = ({
  * @returns {Function}
  */
 const useOnPageInstances = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -225,16 +225,9 @@ const useOnPageInstances = ({
   return ({ offset, perPage }) => {
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.OFFSET,
-        value: offset
-      },
-      {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.LIMIT,
-        value: perPage
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${productId}`,
+        [RHSM_API_QUERY_SET_TYPES.OFFSET]: offset,
+        [RHSM_API_QUERY_SET_TYPES.LIMIT]: perPage
       }
     ]);
   };
@@ -251,7 +244,7 @@ const useOnPageInstances = ({
  */
 const useOnColumnSortInstances = ({
   sortColumns = SORT_TYPES,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -289,16 +282,9 @@ const useOnColumnSortInstances = ({
 
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.DIRECTION,
-        value: updatedDirection
-      },
-      {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.SORT,
-        value: updatedSortColumn
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${productId}`,
+        [RHSM_API_QUERY_SET_TYPES.DIRECTION]: updatedDirection,
+        [RHSM_API_QUERY_SET_TYPES.SORT]: updatedSortColumn
       }
     ]);
   };

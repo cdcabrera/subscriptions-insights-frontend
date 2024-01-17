@@ -127,7 +127,7 @@ const useInventoryCardActionsSubscriptions = ({
  * @returns {Function}
  */
 const useOnPageSubscriptions = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -145,16 +145,9 @@ const useOnPageSubscriptions = ({
   return ({ offset, perPage }) => {
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.OFFSET,
-        value: offset
-      },
-      {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.LIMIT,
-        value: perPage
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${productId}`,
+        [RHSM_API_QUERY_SET_TYPES.OFFSET]: offset,
+        [RHSM_API_QUERY_SET_TYPES.LIMIT]: perPage
       }
     ]);
   };
@@ -171,7 +164,7 @@ const useOnPageSubscriptions = ({
  */
 const useOnColumnSortSubscriptions = ({
   sortColumns = SORT_TYPES,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -209,16 +202,9 @@ const useOnColumnSortSubscriptions = ({
 
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.DIRECTION,
-        value: updatedDirection
-      },
-      {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.SORT,
-        value: updatedSortColumn
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${productId}`,
+        [RHSM_API_QUERY_SET_TYPES.DIRECTION]: updatedDirection,
+        [RHSM_API_QUERY_SET_TYPES.SORT]: updatedSortColumn
       }
     ]);
   };

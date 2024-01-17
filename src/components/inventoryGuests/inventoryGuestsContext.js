@@ -2,7 +2,7 @@ import { useUnmount, useShallowCompareEffect } from 'react-use';
 import { rhsmServices } from '../../services/rhsm/rhsmServices';
 import { reduxTypes, storeHooks } from '../../redux';
 import { useProductInventoryGuestsQuery, useProductInventoryGuestsConfig } from '../productView/productViewContext';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useSession } from '../authentication/authenticationContext';
 import { useParseInstancesFiltersSettings } from '../inventoryCardInstances/inventoryCardInstancesContext'; // eslint-disable-line
 import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
@@ -150,8 +150,8 @@ const useOnScroll = (
     // need a way to reset dynamic set props
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_GUESTS_LIST,
-        viewId: id
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_GUESTS}-${id}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
         dynamicType: `${storeRef}-${id}`,
