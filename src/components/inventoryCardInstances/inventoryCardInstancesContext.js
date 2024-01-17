@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import { ToolbarItem } from '@patternfly/react-core';
-import { reduxActions, reduxTypes, storeHooks } from '../../redux';
+import { rhsmServices } from '../../services/rhsm/rhsmServices';
+import { reduxTypes, storeHooks } from '../../redux';
 import { useSession } from '../authentication/authenticationContext';
 import {
   useProduct,
@@ -19,6 +20,7 @@ import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
 import { tableHelpers } from '../table/table';
 import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 import { InventoryGuests } from '../inventoryGuests/inventoryGuests'; // eslint-disable-line
+import { rhsmTypes } from '../../redux/types';
 
 /**
  * @memberof InventoryCardInstances
@@ -72,18 +74,19 @@ const useParseInstancesFiltersSettings = ({
  *     resultsCount: number}}
  */
 const useSelectorInstances = ({
-  storeRef = 'instancesInventory',
+  storeRef = rhsmTypes.GET_INSTANCES_INVENTORY_RHSM,
   useParseFiltersSettings: useAliasParseFiltersSettings = useParseInstancesFiltersSettings,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
-  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useDynamicSelectorsResponse,
   useSession: useAliasSession = useSession
 } = {}) => {
   const { productId } = useAliasProduct();
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.[storeRef]?.[productId]);
+  // const response = useAliasSelectorsResponse(({ inventory }) => inventory?.[storeRef]?.[productId]);
+  const response = useAliasSelectorsResponse(`${storeRef}-${productId}`);
 
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
@@ -125,9 +128,10 @@ const useSelectorInstances = ({
  *     resultsCount: number}}
  */
 const useGetInstancesInventory = ({
+  storeRef = rhsmTypes.GET_INSTANCES_INVENTORY_RHSM,
   isDisabled = false,
-  getInventory = reduxActions.rhsm.getInstancesInventory,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  getInventory = rhsmServices.getInstancesInventory,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
   useSelector: useAliasSelector = useSelectorInstances
@@ -139,7 +143,11 @@ const useGetInstancesInventory = ({
 
   useShallowCompareEffect(() => {
     if (!isDisabled) {
-      getInventory(productId, query)(dispatch);
+      // getInventory(productId, query)(dispatch);
+      dispatch({
+        type: `${storeRef}-${productId}`,
+        payload: getInventory(productId, query)
+      });
     }
   }, [isDisabled, productId, query]);
 

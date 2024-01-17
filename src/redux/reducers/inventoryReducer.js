@@ -16,10 +16,7 @@ import { inventoryTypes } from '../types';
  * @type {{subscriptionsInventory: {}, instancesGuests: {}, instancesInventory: {}, tabs: {}}}
  */
 const initialState = {
-  instancesInventory: {},
-  instancesGuests: {},
-  subscriptionsInventory: {},
-  tabs: {}
+  instancesGuests: {}
 };
 
 /**
@@ -32,17 +29,6 @@ const initialState = {
  */
 const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
-    case inventoryTypes.SET_INVENTORY_TAB:
-      return reduxHelpers.setStateProp(
-        'tabs',
-        {
-          ...action.tabs
-        },
-        {
-          state,
-          reset: false
-        }
-      );
     case inventoryTypes.CLEAR_INVENTORY_GUESTS:
       return reduxHelpers.setStateProp(
         'instancesGuests',
@@ -57,9 +43,7 @@ const inventoryReducer = (state = initialState, action) => {
     default:
       return reduxHelpers.generatedPromiseActionReducer(
         [
-          { ref: 'instancesInventory', type: rhsmTypes.GET_INSTANCES_INVENTORY_RHSM },
-          { ref: 'instancesGuests', type: rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM },
-          { ref: 'subscriptionsInventory', type: rhsmTypes.GET_SUBSCRIPTIONS_INVENTORY_RHSM }
+          { ref: 'instancesGuests', type: rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM }
         ],
         state,
         action

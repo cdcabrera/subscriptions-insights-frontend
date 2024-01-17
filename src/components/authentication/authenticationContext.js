@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { useMount } from 'react-use';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
-import { reduxActions, storeHooks } from '../../redux';
+import { platformServices } from '../../services/platform/platformServices';
+import { storeHooks } from '../../redux';
 import { helpers } from '../../common';
 import { routerHelpers } from '../router';
+import { userTypes, platformTypes } from '../../redux/types';
 
 /**
  * @memberof Authentication
@@ -31,7 +33,8 @@ const useAuthContext = () => useContext(AuthenticationContext);
  *
  * @param {object} options
  * @param {string} options.appName
- * @param {Function} options.authorizeUser
+ * @param {Function} options.getUser
+ * @param {Function} options.getUserPermissions
  * @param {Function} options.hideGlobalFilter
  * @param {Function} options.useChrome
  * @param {Function} options.useDispatch
@@ -40,17 +43,18 @@ const useAuthContext = () => useContext(AuthenticationContext);
  */
 const useGetAuthorization = ({
   appName = routerHelpers.appName,
-  authorizeUser = reduxActions.platform.authorizeUser,
-  hideGlobalFilter = reduxActions.platform.hideGlobalFilter,
+  getUser = platformServices.getUser,
+  getUserPermissions = platformServices.getUserPermissions,
+  hideGlobalFilter = platformServices.hideGlobalFilter,
   useChrome: useAliasChrome = useChrome,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useDynamicSelectorsResponse
 } = {}) => {
   const dispatch = useAliasDispatch();
   const { updateDocumentTitle = helpers.noop } = useAliasChrome();
   const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
-    { id: 'auth', selector: ({ user }) => user?.auth },
-    { id: 'locale', selector: ({ user }) => user?.locale },
+    { id: 'auth', selector: platformTypes.PLATFORM_USER_AUTH },
+    { id: 'locale', selector: userTypes.USER_LOCALE },
     {
       id: 'errors',
       selector: ({ user }) => (user?.errors?.error === true && user.errors) || { fulfilled: true, data: [] }
@@ -58,9 +62,18 @@ const useGetAuthorization = ({
   ]);
 
   useMount(async () => {
-    await dispatch(authorizeUser());
+    // await authorizeUser()(dispatch);
+    await dispatch({
+      type: platformTypes.PLATFORM_USER_AUTH,
+      payload: Promise.all([getUser(), getUserPermissions()])
+    });
     updateDocumentTitle(appName);
-    dispatch([hideGlobalFilter()]);
+    dispatch([
+      {
+        type: platformTypes.PLATFORM_GLOBAL_FILTER_HIDE,
+        payload: hideGlobalFilter()
+      }
+    ]);
   });
 
   const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
