@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useProduct, useProductGraphConfig, useProductToolbarQuery } from '../productView/productViewContext';
 import { reduxTypes, storeHooks } from '../../redux';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { Select, SelectPosition } from '../form/select';
 import { graphCardHelpers } from '../graphCard/graphCardHelpers';
 import { translate } from '../i18n/i18n';
@@ -95,14 +95,20 @@ const useOnSelect = ({
         value: updatedGraphLegendValue
       },
       {
-        type: reduxTypes.query.SET_QUERY_RESET_INVENTORY_LIST,
-        viewId
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0,
+        [RHSM_API_QUERY_TYPES.DIRECTION]: undefined,
+        [RHSM_API_QUERY_TYPES.SORT]: undefined
       },
       {
-        type: reduxTypes.query.SET_QUERY,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.CATEGORY,
-        value
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0,
+        [RHSM_API_QUERY_TYPES.DIRECTION]: undefined,
+        [RHSM_API_QUERY_TYPES.SORT]: undefined
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        [RHSM_API_QUERY_SET_TYPES.CATEGORY]: value
       }
     ]);
   };
