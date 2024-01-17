@@ -27,6 +27,25 @@ const dynamicReducer = (state = initialState, action) => {
 
   console.log('>>>> DYNAMIC REDUCER', action);
 
+  if (action.__hardReset === true) {
+    const updatedState = { ...state };
+    delete updatedState[action.__originalType];
+    return updatedState;
+    /*s
+     *const retValue = reduxHelpers.setStateProp(
+     *  action.__originalType,
+     *  {},
+     *  {
+     *    state,
+     *    reset: true
+     *  }
+     *);
+     *
+     *console.log('>>>>> DYNAMIC RESET', retValue);
+     *return retValue;
+     */
+  }
+
   if (action.__dynamic === true) {
     console.log('>>> DYNAMIC ACTION', action);
     return reduxHelpers.setStateProp(

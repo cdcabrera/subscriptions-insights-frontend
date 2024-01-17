@@ -17,6 +17,7 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
           .filter(value => 'type' in value && _isPlainObject(value))
           .map(value => {
             if (value.payload) {
+              // consider placing meta id as part of type... but that could be confusing the consumer should just do it
               return {
                 ...value,
                 meta: {
