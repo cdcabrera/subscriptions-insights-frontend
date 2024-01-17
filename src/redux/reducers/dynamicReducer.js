@@ -1,4 +1,5 @@
 import { reduxHelpers } from '../common/reduxHelpers';
+import _cloneDeep from 'lodash/cloneDeep';
 
 /**
  * Dynamic state reducer.
@@ -27,23 +28,15 @@ const dynamicReducer = (state = initialState, action) => {
 
   console.log('>>>> DYNAMIC REDUCER', action);
 
-  if (action.__hardReset === true) {
+  if (action.__hardReset === true || action.__reset === true) {
     const updatedState = { ...state };
     delete updatedState[action.__originalType];
     return updatedState;
-    /*s
-     *const retValue = reduxHelpers.setStateProp(
-     *  action.__originalType,
-     *  {},
-     *  {
-     *    state,
-     *    reset: true
-     *  }
-     *);
-     *
-     *console.log('>>>>> DYNAMIC RESET', retValue);
-     *return retValue;
-     */
+  }
+
+  if (typeof action.__custom === 'function') {
+    const stateSnapshot = (state[action.__originalType] && _cloneDeep(state[action.__originalType])) || {};
+    return action.__custom(stateSnapshot, { __state__: state[action.__originalType] });
   }
 
   if (action.__dynamic === true) {
