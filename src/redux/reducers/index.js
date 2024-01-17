@@ -6,9 +6,11 @@ import messagesReducer from './messagesReducer';
 import toolbarReducer from './toolbarReducer';
 import userReducer from './userReducer';
 import viewReducer from './viewReducer';
+import dynamicReducer from './dynamicReducer';
 
 const reducers = {
   notifications,
+  dynamic: dynamicReducer,
   graph: graphReducer,
   inventory: inventoryReducer,
   messages: messagesReducer,
@@ -27,5 +29,6 @@ export {
   messagesReducer,
   toolbarReducer,
   userReducer,
-  viewReducer
+  viewReducer,
+  dynamicReducer
 };
