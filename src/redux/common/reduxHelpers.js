@@ -284,7 +284,7 @@ const setStateProp = (prop, data, options) => {
   let obj = { ...state };
 
   if (helpers.DEV_MODE && prop && !state[prop]) {
-    console.error(`Error: Property ${prop} does not exist within the passed state.`, state);
+    console.warn(`Warning: Property ${prop} does not exist within the passed state.`, state);
   }
 
   if (helpers.DEV_MODE && reset && prop && !initialState[prop]) {
