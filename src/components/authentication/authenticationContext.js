@@ -57,7 +57,7 @@ const useGetAuthorization = ({
     { id: 'locale', selector: userTypes.USER_LOCALE },
     {
       id: 'errors',
-      selector: ({ user }) => (user?.errors?.error === true && user.errors) || { fulfilled: true, data: [] }
+      selector: ({ app }) => (app?.errors?.error === true && app.errors) || { fulfilled: true, data: [] }
     }
   ]);
 

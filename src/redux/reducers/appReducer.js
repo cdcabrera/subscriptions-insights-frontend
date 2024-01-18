@@ -1,28 +1,27 @@
 import _get from 'lodash/get';
-import { appTypes, userTypes } from '../types';
+import { appTypes } from '../types';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { reduxHelpers } from '../common';
 
 /**
- * User related API, platform and user state reducer.
+ * Application related state reducer.
  *
  * @memberof Reducers
- * @module UserReducer
+ * @module AppReducer
  */
 
 /**
  * Initial state.
  *
  * @private
- * @type {{optin: {}, errors: {}}}
+ * @type {{errors: {}}}
  */
 const initialState = {
-  errors: {},
-  optin: {}
+  errors: {}
 };
 
 /**
- * Apply user observer/reducer logic for session to state, against actions.
+ * Apply application observer/reducer logic to state, against actions.
  *
  * @param {object} state
  * @param {object} action
@@ -54,15 +53,7 @@ const appReducer = (state = initialState, action) => {
       return state;
 
     default:
-      return reduxHelpers.generatedPromiseActionReducer(
-        [
-          { ref: 'optin', type: userTypes.DELETE_USER_OPTIN },
-          { ref: 'optin', type: userTypes.GET_USER_OPTIN },
-          { ref: 'optin', type: userTypes.UPDATE_USER_OPTIN }
-        ],
-        state,
-        action
-      );
+      return state;
   }
 };
 
