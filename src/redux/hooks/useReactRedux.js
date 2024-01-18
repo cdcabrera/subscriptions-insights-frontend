@@ -117,6 +117,8 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
   const selectorResponse = useAliasSelectors(selectors, []);
   const isSelectorResponseArray = Array.isArray(selectorResponse);
 
+  console.log('>>>>>>>>>>> response', selectors, selectorResponse);
+
   const cancelledById = {};
   const cancelledByList = [];
   const cancelledDataById = {};
@@ -150,10 +152,10 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
 
     const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response;
     const isServiceResponse =
-      typeof updatedResponse.cancelled === 'boolean' ||
-      typeof updatedResponse.error === 'boolean' ||
-      typeof updatedResponse.fulfilled === 'boolean' ||
-      typeof updatedResponse.pending === 'boolean';
+      typeof updatedResponse?.cancelled === 'boolean' ||
+      typeof updatedResponse?.error === 'boolean' ||
+      typeof updatedResponse?.fulfilled === 'boolean' ||
+      typeof updatedResponse?.pending === 'boolean';
 
     const { pending, fulfilled, error, cancelled, message } = (isServiceResponse && updatedResponse) || {};
 

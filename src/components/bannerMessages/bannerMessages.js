@@ -31,7 +31,7 @@ const BannerMessages = ({
   useBannerMessages: useAliasBannerMessages,
   useRemoveBannerMessages: useAliasRemoveBannerMessages
 }) => {
-  const bannerMessages = useAliasBannerMessages();
+  const { bannerMessages } = useAliasBannerMessages();
   const removeBannerMessages = useAliasRemoveBannerMessages();
 
   if (bannerMessages?.length) {

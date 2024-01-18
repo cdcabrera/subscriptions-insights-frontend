@@ -1,36 +1,33 @@
 import _get from 'lodash/get';
-import { appTypes, platformTypes, userTypes } from '../types';
+import { appTypes } from '../types';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { reduxHelpers } from '../common';
 
 /**
- * User related API, platform and user state reducer.
+ * Application related state reducer.
  *
  * @memberof Reducers
- * @module UserReducer
+ * @module AppReducer
  */
 
 /**
  * Initial state.
  *
  * @private
- * @type {{auth: {}, optin: {}, locale: null, errors: {}}}
+ * @type {{errors: {}}}
  */
 const initialState = {
-  auth: {},
-  errors: {},
-  locale: {},
-  optin: {}
+  errors: {}
 };
 
 /**
- * Apply user observer/reducer logic for session to state, against actions.
+ * Apply application observer/reducer logic to state, against actions.
  *
  * @param {object} state
  * @param {object} action
  * @returns {object|{}}
  */
-const userReducer = (state = initialState, action) => {
+const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_4XX):
       const actionStatus = reduxHelpers.getStatusFromResults(action);
@@ -56,20 +53,10 @@ const userReducer = (state = initialState, action) => {
       return state;
 
     default:
-      return reduxHelpers.generatedPromiseActionReducer(
-        [
-          { ref: 'locale', type: userTypes.USER_LOCALE },
-          { ref: 'optin', type: userTypes.DELETE_USER_OPTIN },
-          { ref: 'optin', type: userTypes.GET_USER_OPTIN },
-          { ref: 'optin', type: userTypes.UPDATE_USER_OPTIN },
-          { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }
-        ],
-        state,
-        action
-      );
+      return state;
   }
 };
 
-userReducer.initialState = initialState;
+appReducer.initialState = initialState;
 
-export { userReducer as default, initialState, userReducer };
+export { appReducer as default, initialState, appReducer };

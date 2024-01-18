@@ -4,6 +4,7 @@ import { reduxHelpers } from '../../redux/common';
 import { storeHooks } from '../../redux/hooks';
 import { rhsmConstants, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common/helpers';
+import { reduxTypes } from '../../redux';
 
 /**
  * @memberof ProductView
@@ -39,16 +40,20 @@ const useProductViewContext = () => useContext(ProductViewContext);
 const useProductQueryFactory = (
   queryType,
   {
+    productContext,
     overrideId,
     useProductViewContext: useAliasProductViewContext = useProductViewContext,
-    useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
+    useSelectors: useAliasSelectors = storeHooks.reactRedux.useDynamicSelectors
   } = {}
 ) => {
-  const { [queryType]: initialQuery, productId, viewId } = useAliasProductViewContext();
+  const { [productContext]: initialQuery, productId, viewId } = useAliasProductViewContext();
   const [queryOverride, queryProduct, queryView] = useAliasSelectors([
-    ({ view }) => view?.[queryType]?.[overrideId],
-    ({ view }) => view?.[queryType]?.[productId],
-    ({ view }) => view?.[queryType]?.[viewId]
+    `${queryType}-${overrideId}`,
+    `${queryType}-${productId}`,
+    `${queryType}-${viewId}`
+    // ({ view }) => view?.[queryType]?.[overrideId],
+    // ({ view }) => view?.[queryType]?.[productId],
+    // ({ view }) => view?.[queryType]?.[viewId]
   ]);
 
   return {
@@ -69,10 +74,10 @@ const useProductQueryFactory = (
  * @returns {object}
  */
 const useProductQuery = ({
-  queryType = 'query',
+  queryType = reduxTypes.query.SET_QUERY,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
   options
-} = {}) => useAliasProductQueryFactory(queryType, options);
+} = {}) => useAliasProductQueryFactory(queryType, { productContext: 'query', ...options });
 
 /**
  * Return the graph query based off of tally and capacity.
@@ -86,7 +91,7 @@ const useProductQuery = ({
  * @returns {object}
  */
 const useProductGraphTallyQuery = ({
-  queryType = 'graphTallyQuery',
+  queryType = reduxTypes.query.SET_QUERY_GRAPH,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -95,7 +100,7 @@ const useProductGraphTallyQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { productContext: 'graphTallyQuery', ...options })
     },
     schemaCheck
   );
@@ -112,7 +117,7 @@ const useProductGraphTallyQuery = ({
  * @returns {object}
  */
 const useProductInventoryGuestsQuery = ({
-  queryType = 'inventoryGuestsQuery',
+  queryType = reduxTypes.query.SET_QUERY_INVENTORY_GUESTS,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -121,7 +126,7 @@ const useProductInventoryGuestsQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { productContext: 'inventoryGuestsQuery', ...options })
     },
     schemaCheck
   );
@@ -138,7 +143,7 @@ const useProductInventoryGuestsQuery = ({
  * @returns {object}
  */
 const useProductInventoryHostsQuery = ({
-  queryType = 'inventoryHostsQuery',
+  queryType = reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -147,7 +152,7 @@ const useProductInventoryHostsQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { productContext: 'inventoryHostsQuery', ...options })
     },
     schemaCheck
   );
@@ -164,7 +169,7 @@ const useProductInventoryHostsQuery = ({
  * @returns {object}
  */
 const useProductInventorySubscriptionsQuery = ({
-  queryType = 'inventorySubscriptionsQuery',
+  queryType = reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -173,7 +178,7 @@ const useProductInventorySubscriptionsQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { productContext: 'inventorySubscriptionsQuery', ...options })
     },
     schemaCheck
   );

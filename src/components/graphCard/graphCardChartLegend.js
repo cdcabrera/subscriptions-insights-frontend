@@ -48,22 +48,23 @@ const GraphCardChartLegend = ({
 
   const dispatch = useAliasDispatch();
   const [invertedLegendItem, ...legendItems] = useAliasSelectors([
-    ({ graph }) => graph.legend?.[`${viewId}-inverted`],
-    ...datum.dataSets.map(
-      ({ id }) =>
-        ({ graph }) =>
-          graph.legend?.[`${viewId}-${id}`]
-    )
+    `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-inverted`,
+    ...datum.dataSets.map(({ id }) => `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-${id}`)
   ]);
+
+  console.log('>>>>>>>>> LEGEND', invertedLegendItem);
+  console.log('>>>>>>>>> LEGEND', legendItems);
 
   useMount(() => {
     datum.dataSets.forEach(({ id, isToolbarFilter }, index) => {
-      if (invertedLegendItem && isToolbarFilter) {
-        if (!new RegExp(invertedLegendItem).test(id)) {
+      if (invertedLegendItem?.value && isToolbarFilter) {
+        if (!new RegExp(invertedLegendItem.value).test(id)) {
           chart.hide(id);
         }
       } else {
-        const checkIsToggled = legendItems?.[index] || chart.isToggled(id);
+        // const checkIsToggled = legendItems?.[index] || chart.isToggled(id);
+        // const checkIsToggled = legendItems?.[index]?.id === id && legendItems?.[index]?.value || chart.isToggled(id);
+        const checkIsToggled = legendItems?.[index]?.value || chart.isToggled(id);
 
         if (checkIsToggled) {
           chart.hide(id);
@@ -82,7 +83,7 @@ const GraphCardChartLegend = ({
     const updatedToggle = chart.toggle(id);
 
     dispatch({
-      type: reduxTypes.graph.SET_GRAPH_LEGEND,
+      dynamicType: `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-${id}`,
       id: `${viewId}-${id}`,
       value: updatedToggle
     });
@@ -108,7 +109,7 @@ const GraphCardChartLegend = ({
           [<span style={{ whiteSpace: 'nowrap' }} />]
         );
 
-        const checkIsToggled = legendItems?.[index] || chart.isToggled(id);
+        const checkIsToggled = legendItems?.[index]?.value || chart.isToggled(id);
         const buttonActionProps = {};
 
         if (!isDisabledLegendClick) {
@@ -205,10 +206,10 @@ GraphCardChartLegend.defaultProps = {
     dataSets: []
   },
   t: translate,
-  useDispatch: storeHooks.reactRedux.useDispatch,
+  useDispatch: storeHooks.reactRedux.useDynamicDispatch,
   useGraphCardContext,
   useProduct,
-  useSelectors: storeHooks.reactRedux.useSelectors
+  useSelectors: storeHooks.reactRedux.useDynamicSelectors
 };
 
 export { GraphCardChartLegend as default, GraphCardChartLegend };
