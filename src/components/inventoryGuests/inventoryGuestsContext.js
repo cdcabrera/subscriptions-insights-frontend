@@ -1,10 +1,12 @@
 import { useUnmount, useShallowCompareEffect } from 'react-use';
-import { reduxActions, reduxTypes, storeHooks } from '../../redux';
+import { rhsmServices } from '../../services/rhsm/rhsmServices';
+import { reduxTypes, storeHooks } from '../../redux';
 import { useProductInventoryGuestsQuery, useProductInventoryGuestsConfig } from '../productView/productViewContext';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { useSession } from '../authentication/authenticationContext';
 import { useParseInstancesFiltersSettings } from '../inventoryCardInstances/inventoryCardInstancesContext'; // eslint-disable-line
 import { inventoryCardHelpers } from '../inventoryCard/inventoryCardHelpers';
+import { rhsmTypes } from '../../redux/types';
 
 /**
  * @memberof InventoryGuests
@@ -44,17 +46,17 @@ const useParseGuestsFiltersSettings = ({
 const useSelectorGuests = (
   id,
   {
-    storeRef = 'instancesGuests',
+    storeRef = rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM,
     useParseFiltersSettings: useAliasParseFiltersSettings = useParseGuestsFiltersSettings,
     useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
-    useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse,
+    useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useDynamicSelectorsResponse,
     useSession: useAliasSession = useSession
   } = {}
 ) => {
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
   const { columnCountAndWidths, filters, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(({ inventory }) => inventory?.[storeRef]?.[id]);
+  const response = useAliasSelectorsResponse(`${storeRef}-${id}`);
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
   let parsedData;
@@ -94,8 +96,9 @@ const useSelectorGuests = (
 const useGetGuestsInventory = (
   id,
   {
-    getInventory = reduxActions.rhsm.getInstancesInventoryGuests,
-    useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+    storeRef = rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM,
+    getInventory = rhsmServices.getInstancesInventoryGuests,
+    useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
     useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery,
     useSelector: useAliasSelector = useSelectorGuests
   } = {}
@@ -105,7 +108,10 @@ const useGetGuestsInventory = (
   const response = useAliasSelector(id);
 
   useShallowCompareEffect(() => {
-    getInventory(id, query)(dispatch);
+    dispatch({
+      dynamicType: `${storeRef}-${id}`,
+      payload: getInventory(id, query)
+    });
   }, [id, query]);
 
   return response;
@@ -126,7 +132,8 @@ const useGetGuestsInventory = (
 const useOnScroll = (
   { id, numberOfGuests } = {},
   {
-    useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+    storeRef = rhsmTypes.GET_INSTANCES_INVENTORY_GUESTS_RHSM,
+    useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
     useSelector: useAliasSelector = useSelectorGuests,
     useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryGuestsQuery
   } = {}
@@ -142,12 +149,12 @@ const useOnScroll = (
   useUnmount(() => {
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_GUESTS_LIST,
-        viewId: id
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_GUESTS}-${id}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        type: reduxTypes.inventory.CLEAR_INVENTORY_GUESTS,
-        id
+        dynamicType: `${storeRef}-${id}`,
+        __hardReset: true
       }
     ]);
   });

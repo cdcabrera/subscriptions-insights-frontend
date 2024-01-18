@@ -1,4 +1,5 @@
-import { reduxActions, reduxTypes, storeHooks } from '../../redux';
+import { rhsmServices } from '../../services/rhsm/rhsmServices';
+import { reduxTypes, storeHooks } from '../../redux';
 import {
   useProduct,
   useProductInventorySubscriptionsConfig,
@@ -17,6 +18,7 @@ import {
   useSelectorInstances
 } from '../inventoryCardInstances/inventoryCardInstancesContext';
 import { tableHelpers } from '../table/table';
+import { rhsmTypes } from '../../redux/types';
 
 /**
  * @memberof InventoryCardSubscriptions
@@ -57,7 +59,7 @@ const useParseSubscriptionsFiltersSettings = ({
  *     resultsCount: number}}
  */
 const useSelectorSubscriptions = ({
-  storeRef = 'subscriptionsInventory',
+  storeRef = rhsmTypes.GET_SUBSCRIPTIONS_INVENTORY_RHSM,
   useParseFiltersSettings: useAliasParseFiltersSettings = useParseSubscriptionsFiltersSettings,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventorySubscriptionsQuery,
   useSelector: useAliasSelector = useSelectorInstances
@@ -78,18 +80,21 @@ const useSelectorSubscriptions = ({
  * @param {Function} options.useGetInventory
  * @param {Function} options.useProductInventoryQuery
  * @param {Function} options.useSelector
+ * @param options.storeRef
  * @returns {{pending: boolean, fulfilled: boolean, error: boolean, resultsColumnCountAndWidths: {count: number,
  *     widths: Array}, dataSetColumnHeaders: Array, resultsPerPage: number, resultsOffset: number, dataSetRows: Array,
  *     resultsCount: number}}
  */
 const useGetSubscriptionsInventory = ({
+  storeRef = rhsmTypes.GET_SUBSCRIPTIONS_INVENTORY_RHSM,
   isDisabled = false,
-  getInventory = reduxActions.rhsm.getSubscriptionsInventory,
+  getInventory = rhsmServices.getSubscriptionsInventory,
   useGetInventory: useAliasGetInventory = useGetInstancesInventory,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventorySubscriptionsQuery,
   useSelector: useAliasSelector = useSelectorSubscriptions
 } = {}) =>
   useAliasGetInventory({
+    storeRef,
     isDisabled,
     getInventory,
     useProductInventoryQuery: useAliasProductInventoryQuery,
@@ -122,7 +127,7 @@ const useInventoryCardActionsSubscriptions = ({
  * @returns {Function}
  */
 const useOnPageSubscriptions = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -140,16 +145,9 @@ const useOnPageSubscriptions = ({
   return ({ offset, perPage }) => {
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.OFFSET,
-        value: offset
-      },
-      {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.LIMIT,
-        value: perPage
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${productId}`,
+        [RHSM_API_QUERY_SET_TYPES.OFFSET]: offset,
+        [RHSM_API_QUERY_SET_TYPES.LIMIT]: perPage
       }
     ]);
   };
@@ -166,7 +164,7 @@ const useOnPageSubscriptions = ({
  */
 const useOnColumnSortSubscriptions = ({
   sortColumns = SORT_TYPES,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -204,16 +202,9 @@ const useOnColumnSortSubscriptions = ({
 
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.DIRECTION,
-        value: updatedDirection
-      },
-      {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
-        viewId: productId,
-        filter: RHSM_API_QUERY_SET_TYPES.SORT,
-        value: updatedSortColumn
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${productId}`,
+        [RHSM_API_QUERY_SET_TYPES.DIRECTION]: updatedDirection,
+        [RHSM_API_QUERY_SET_TYPES.SORT]: updatedSortColumn
       }
     ]);
   };
