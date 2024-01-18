@@ -82,11 +82,9 @@ const useDynamicSelector = (selector, value = null, { equality, useSelector: use
  */
 const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAliasSelectors = useSelectors } = {}) => {
   let updatedSelectors = Array.isArray(selectors) ? selectors : [selectors];
-  const selectorIds = new Set();
 
   updatedSelectors = updatedSelectors.map(selector => {
-    if (typeof selector?.selector === 'string' && selector.id) {
-      selectorIds.add(selector.id);
+    if (typeof selector.selector === 'string') {
       return {
         ...selector,
         selector: ({ dynamic }) => dynamic?.[selector.selector]
