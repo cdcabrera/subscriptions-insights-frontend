@@ -52,9 +52,6 @@ const GraphCardChartLegend = ({
     ...datum.dataSets.map(({ id }) => `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-${id}`)
   ]);
 
-  console.log('>>>>>>>>> LEGEND', invertedLegendItem);
-  console.log('>>>>>>>>> LEGEND', legendItems);
-
   useMount(() => {
     datum.dataSets.forEach(({ id, isToolbarFilter }, index) => {
       if (invertedLegendItem?.value && isToolbarFilter) {
@@ -62,8 +59,6 @@ const GraphCardChartLegend = ({
           chart.hide(id);
         }
       } else {
-        // const checkIsToggled = legendItems?.[index] || chart.isToggled(id);
-        // const checkIsToggled = legendItems?.[index]?.id === id && legendItems?.[index]?.value || chart.isToggled(id);
         const checkIsToggled = legendItems?.[index]?.value || chart.isToggled(id);
 
         if (checkIsToggled) {

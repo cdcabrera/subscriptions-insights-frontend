@@ -1,8 +1,21 @@
 import { useCallback } from 'react';
-import _isPlainObject from 'lodash/isPlainObject';
 import { useDispatch, useSelector, useSelectors, useSelectorsResponse } from './useReactRedux';
 
-// dispatch([{ payload: func, one, two, three }])
+/**
+ * State hooks for both dynamic, and standard, dispatch and selectors.
+ *
+ * @memberof Hooks
+ * @module UseDynamicReactRedux
+ */
+
+/**
+ * Wrapper for useReactRedux hook useDispatch, store.dispatch. Look for a "dynamicType" on useDispatch.
+ * Allows blending of dynamic and regular action types.
+ *
+ * @param {object} options
+ * @param {Function} options.useDispatch
+ * @returns {Function}
+ */
 const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}) => {
   const dispatch = useAliasDispatch();
 
@@ -10,36 +23,31 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
     typeValue => {
       const updatedTypeValue = (Array.isArray(typeValue) && typeValue) || [typeValue];
 
-      console.log('>>>> DYNAMIC DISPATCH', updatedTypeValue);
-
       return dispatch(
-        updatedTypeValue
-          // .filter(value => 'type' in value && _isPlainObject(value))
-          .map(value => {
-            // allow blending of dynamic and regular action types
-            if ('dynamicType' in value) {
-              if (value.payload) {
-                return {
-                  ...value,
-                  type: value.dynamicType,
-                  meta: {
-                    ...value.meta,
-                    __originalType: value.dynamicType,
-                    __dynamic: true
-                  }
-                };
-              }
-
+        updatedTypeValue.map(value => {
+          if ('dynamicType' in value) {
+            if (value.payload) {
               return {
                 ...value,
                 type: value.dynamicType,
-                __originalType: value.dynamicType,
-                __dynamic: true
+                meta: {
+                  ...value.meta,
+                  __originalType: value.dynamicType,
+                  __dynamic: true
+                }
               };
             }
 
-            return value;
-          })
+            return {
+              ...value,
+              type: value.dynamicType,
+              __originalType: value.dynamicType,
+              __dynamic: true
+            };
+          }
+
+          return value;
+        })
       );
     },
     [dispatch]
@@ -47,10 +55,10 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
 };
 
 /**
- * Wrapper for Redux hook, useDynamicSelector. Uses a base action.type to build a selector query for you.
- * Applies test mode and a fallback value.
+ * Wrapper for useReactRedux useSelector hook, useDynamicSelector. Uses a base action.type string, or passes
+ * the selector, to build a selector query for you. Applies test mode and a fallback value.
  *
- * @param {string} selector
+ * @param {string|Function} selector
  * @param {*} value
  * @param {object} options
  * @param {*} options.equality
@@ -58,7 +66,6 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
  * @returns {*}
  */
 const useDynamicSelector = (selector, value = null, { equality, useSelector: useAliasSelector = useSelector } = {}) => {
-  // const updatedSelector = (typeof selector === 'string' && ({ dynamic }) => dynamic?.[selector]) || selector;
   let updatedSelector = selector;
 
   if (typeof selector === 'string') {
@@ -101,6 +108,19 @@ const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAlia
   return useAliasSelectors(updatedSelectors, value, { equality });
 };
 
+/**
+ * Wrapper for returning a combined selector response using a "Promise.all" like response. Allows
+ * for the use of dynamicTypes or regular types.
+ *
+ * @param {Array|Function} selectors A selector function or array of functions. Or an array of objects in the form of
+ *     { selector: Function, id: string } If an "ID" is used for each selector the returned response will be in the
+ *     form of an object whose properties reflect said IDs with the associated selector value.
+ * @param {object} options
+ * @param {Function} options.useSelectors
+ * @param {Function} options.customResponse Callback for customizing your own response
+ * @returns {{data: ({}|Array), pending: boolean, fulfilled: boolean, responses: {errorList: Array, errorId: {},
+ *     id: {}, list: Array}, cancelled: boolean, error: boolean, message: null}}
+ */
 const useDynamicSelectorsResponse = (
   selectors,
   {

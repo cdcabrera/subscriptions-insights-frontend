@@ -51,9 +51,6 @@ const useProductQueryFactory = (
     `${queryType}-${overrideId}`,
     `${queryType}-${productId}`,
     `${queryType}-${viewId}`
-    // ({ view }) => view?.[queryType]?.[overrideId],
-    // ({ view }) => view?.[queryType]?.[productId],
-    // ({ view }) => view?.[queryType]?.[viewId]
   ]);
 
   return {

@@ -85,7 +85,6 @@ const useSelectorInstances = ({
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
-  // const response = useAliasSelectorsResponse(({ inventory }) => inventory?.[storeRef]?.[productId]);
   const response = useAliasSelectorsResponse(`${storeRef}-${productId}`);
 
   const { pending, cancelled, data, ...restResponse } = response;
@@ -143,7 +142,6 @@ const useGetInstancesInventory = ({
 
   useShallowCompareEffect(() => {
     if (!isDisabled) {
-      // getInventory(productId, query)(dispatch);
       dispatch({
         dynamicType: `${storeRef}-${productId}`,
         payload: getInventory(productId, query)

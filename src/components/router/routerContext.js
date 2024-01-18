@@ -107,12 +107,8 @@ const useRouteDetail = ({
   const [{ config: productPath } = {}, productVariant = {}] = useAliasSelectors([
     reduxTypes.app.SET_PRODUCT,
     reduxTypes.app.SET_PRODUCT_VARIANT
-    // ({ view }) => view?.product?.config,
-    // ({ view }) => view?.product?.variant
   ]);
   const [detail, setDetail] = useState({});
-
-  console.log('>>>>> ROUTE DETAIL', productPath, productVariant);
 
   useEffect(() => {
     const updatedVariantPath = productPath;

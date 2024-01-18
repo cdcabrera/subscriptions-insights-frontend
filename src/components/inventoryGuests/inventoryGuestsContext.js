@@ -147,7 +147,6 @@ const useOnScroll = (
    * Reset paging in scenarios where inventory is filtered, or guests is collapsed.
    */
   useUnmount(() => {
-    // need a way to reset dynamic set props
     dispatch([
       {
         dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_GUESTS}-${id}`,

@@ -117,8 +117,6 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
   const selectorResponse = useAliasSelectors(selectors, []);
   const isSelectorResponseArray = Array.isArray(selectorResponse);
 
-  console.log('>>>>>>>>>>> response', selectors, selectorResponse);
-
   const cancelledById = {};
   const cancelledByList = [];
   const cancelledDataById = {};

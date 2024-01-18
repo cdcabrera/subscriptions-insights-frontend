@@ -62,7 +62,6 @@ const useGetAuthorization = ({
   ]);
 
   useMount(async () => {
-    // await authorizeUser()(dispatch);
     await dispatch({
       dynamicType: platformTypes.PLATFORM_USER_AUTH,
       payload: Promise.all([getUser(), getUserPermissions()])

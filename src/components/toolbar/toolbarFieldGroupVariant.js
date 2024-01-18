@@ -79,11 +79,8 @@ const useOnSelect = ({
         __resetHard: true
       },
       {
-        // dynamicType: `${reduxTypes.app.SET_PRODUCT_VARIANT}-${productGroup}`,
         dynamicType: reduxTypes.app.SET_PRODUCT_VARIANT,
         [productGroup]: value
-        // variant: value
-        // productGroup
       }
     ]);
   };

@@ -161,8 +161,6 @@ const useGetMetrics = ({
       });
     });
 
-    console.log('>>>>> GRAPH CARD', multiDispatch);
-    // return multiDispatch;
     return Promise.all(dispatch(multiDispatch));
   };
 
@@ -173,10 +171,7 @@ const useGetMetrics = ({
       isCapacity,
       query: metricQuery
     }));
-    /*
-     * getGraphMetrics(updatedMetrics, query)(dispatch);
-     * Promise.all(dispatch(setupDispatch(updatedMetrics, query)));
-     */
+
     setupDispatch(updatedMetrics, query);
   }, [metrics, productId, query]);
 
