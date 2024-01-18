@@ -28,7 +28,7 @@ const initialState = {
  * @param {object} action
  * @returns {object|{}}
  */
-const userReducer = (state = initialState, action) => {
+const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_4XX):
       const actionStatus = reduxHelpers.getStatusFromResults(action);
@@ -66,6 +66,6 @@ const userReducer = (state = initialState, action) => {
   }
 };
 
-userReducer.initialState = initialState;
+appReducer.initialState = initialState;
 
-export { userReducer as default, initialState, userReducer };
+export { appReducer as default, initialState, appReducer };
