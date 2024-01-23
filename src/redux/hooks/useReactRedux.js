@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { useSelector as useReactReduxSelector, shallowEqual } from 'react-redux';
+import { useSelector as useReactReduxSelector } from 'react-redux';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { store } from '../store';
@@ -23,6 +23,9 @@ import { helpers } from '../../common';
 const createSimpleSelector = (selectors, callback) => {
   const updatedSelectors = (Array.isArray(selectors) && selectors) || [selectors];
 
+  // eslint-disable-next-line prefer-spread
+  const result = helpers.memo((...resultArgs) => callback.apply(null, resultArgs));
+
   // eslint-disable-next-line func-names
   const selector = function (...args) {
     const results = [];
@@ -31,11 +34,21 @@ const createSimpleSelector = (selectors, callback) => {
       results.push(sel.apply(this, args));
     });
     // eslint-disable-next-line prefer-spread
-    return callback.apply(this, results);
+    return result.apply(this, results);
   };
 
   return helpers.memo(selector);
 };
+
+/**
+ * Shallow equal comparison. Is argument A mostly equal to argument B.
+ *
+ * @param {object} args
+ * @param {object|Array} args.A
+ * @param {object|Array} args.B
+ * @returns {boolean}
+ */
+const shallowEqual = (...args) => helpers.isShallowEqual(...args);
 
 /**
  * Deep equal comparison with extended memoized cache. Is argument A equal to argument B.
@@ -88,7 +101,7 @@ const useSelector = (
 const useSelectors = (
   selectors,
   value,
-  { equality = deepEqual, useSelector: useAliasSelector = useReactReduxSelector } = {}
+  { equality = shallowEqual, useSelector: useAliasSelector = useReactReduxSelector } = {}
 ) => {
   let updatedSelectors = Array.isArray(selectors) ? selectors : [selectors];
   const selectorIds = new Set();
@@ -173,10 +186,10 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
 
     const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response;
     const isServiceResponse =
-      typeof updatedResponse.cancelled === 'boolean' ||
-      typeof updatedResponse.error === 'boolean' ||
-      typeof updatedResponse.fulfilled === 'boolean' ||
-      typeof updatedResponse.pending === 'boolean';
+      typeof updatedResponse?.cancelled === 'boolean' ||
+      typeof updatedResponse?.error === 'boolean' ||
+      typeof updatedResponse?.fulfilled === 'boolean' ||
+      typeof updatedResponse?.pending === 'boolean';
 
     const { pending, fulfilled, error, cancelled, message } = (isServiceResponse && updatedResponse) || {};
 
