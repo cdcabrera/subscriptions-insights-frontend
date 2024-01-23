@@ -26,7 +26,7 @@ import { InventoryTab } from './inventoryTab';
  * @returns {Function}
  */
 const useOnTab = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { productId } = useAliasProduct();
@@ -34,10 +34,8 @@ const useOnTab = ({
 
   return ({ index } = {}) => {
     dispatch({
-      type: reduxTypes.inventory.SET_INVENTORY_TAB,
-      tabs: {
-        [productId]: index
-      }
+      dynamicType: `${reduxTypes.inventory.SET_INVENTORY_TAB}-${productId}`,
+      index
     });
   };
 };
@@ -69,7 +67,7 @@ const InventoryTabs = ({
   useSelector: useAliasSelector
 }) => {
   const { productId } = useAliasProduct();
-  const updatedActiveTab = useAliasSelector(({ inventory }) => inventory.tabs?.[productId], activeTab);
+  const updatedActiveTab = useAliasSelector(`${reduxTypes.inventory.SET_INVENTORY_TAB}-${productId}`, activeTab);
   const onTab = useAliasOnTab();
 
   if (isDisabled) {
@@ -126,7 +124,7 @@ InventoryTabs.defaultProps = {
   t: translate,
   useOnTab,
   useProduct,
-  useSelector: storeHooks.reactRedux.useSelector
+  useSelector: storeHooks.reactRedux.useDynamicSelector
 };
 
 export { InventoryTabs as default, InventoryTabs, InventoryTab, useOnTab };

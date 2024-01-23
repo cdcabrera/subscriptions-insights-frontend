@@ -59,7 +59,7 @@ const useLocation = ({
  * @returns {Function}
  */
 const useNavigate = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useLocation: useAliasLocation = useLocation,
   useNavigate: useAliasNavigate = useRRDNavigate
 } = {}) => {
@@ -74,7 +74,7 @@ const useNavigate = ({
 
       if (firstMatch?.productPath) {
         dispatch({
-          type: reduxTypes.app.SET_PRODUCT,
+          dynamicType: reduxTypes.app.SET_PRODUCT,
           config: firstMatch?.productPath
         });
 
@@ -100,13 +100,13 @@ const useNavigate = ({
 const useRouteDetail = ({
   t = translate,
   useChrome: useAliasChrome = useChrome,
-  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useDynamicSelectors
 } = {}) => {
   const { getBundleData = helpers.noop, updateDocumentTitle = helpers.noop } = useAliasChrome();
   const bundleData = getBundleData();
-  const [productPath, productVariant] = useAliasSelectors([
-    ({ view }) => view?.product?.config,
-    ({ view }) => view?.product?.variant
+  const [{ config: productPath } = {}, productVariant = {}] = useAliasSelectors([
+    reduxTypes.app.SET_PRODUCT,
+    reduxTypes.app.SET_PRODUCT_VARIANT
   ]);
   const [detail, setDetail] = useState({});
 
@@ -216,7 +216,7 @@ const useSearchParams = ({
  */
 const useSetRouteDetail = ({
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   windowLocation: aliasWindowLocation = window.location
 } = {}) => {
   const dispatch = useAliasDispatch();
@@ -226,7 +226,7 @@ const useSetRouteDetail = ({
   useEffect(() => {
     if (productPath && productPath !== updatedPath) {
       dispatch({
-        type: reduxTypes.app.SET_PRODUCT,
+        dynamicType: reduxTypes.app.SET_PRODUCT,
         config: productPath
       });
     }
