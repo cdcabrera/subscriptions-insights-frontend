@@ -14,6 +14,7 @@ import {
   RHSM_API_RESPONSE_INSTANCES_DATA_TYPES as INVENTORY_TYPES
 } from '../../../services/rhsm/rhsmConstants';
 import { inventoryCardHelpers } from '../../inventoryCard/inventoryCardHelpers';
+import { reduxTypes } from '../../../redux';
 
 describe('InventoryCardInstancesContext', () => {
   it('should return specific properties', () => {
@@ -28,7 +29,7 @@ describe('InventoryCardInstancesContext', () => {
     const { result: errorResponse } = await renderHook(() =>
       useGetInstancesInventory({
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProduct: () => ({ productId: 'lorem' }),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ error: true })
@@ -40,7 +41,7 @@ describe('InventoryCardInstancesContext', () => {
     const { result: pendingResponse } = await renderHook(() =>
       useGetInstancesInventory({
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProduct: () => ({ productId: 'lorem' }),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ pending: true })
@@ -52,7 +53,7 @@ describe('InventoryCardInstancesContext', () => {
     const { result: cancelledResponse } = await renderHook(() =>
       useGetInstancesInventory({
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProduct: () => ({ productId: 'lorem' }),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ cancelled: true })
@@ -64,7 +65,7 @@ describe('InventoryCardInstancesContext', () => {
     const { result: fulfilledResponse } = await renderHook(() =>
       useGetInstancesInventory({
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProduct: () => ({ productId: 'lorem' }),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ fulfilled: true })
@@ -77,7 +78,7 @@ describe('InventoryCardInstancesContext', () => {
       useGetInstancesInventory({
         isDisabled: true,
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProduct: () => ({ productId: 'lorem' }),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ data: {}, fulfilled: false, pending: false, error: false })
@@ -172,17 +173,15 @@ describe('InventoryCardInstancesContext', () => {
         }),
       {
         state: {
-          inventory: {
-            instancesInventory: {
-              lorem: {
-                fulfilled: true,
-                data: {
-                  data: [
-                    { [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem-ipsum' },
-                    { [INVENTORY_TYPES.DISPLAY_NAME]: 'dolor-sit' }
-                  ],
-                  meta: {}
-                }
+          dynamic: {
+            [`${reduxTypes.rhsm.GET_INSTANCES_INVENTORY_RHSM}-lorem`]: {
+              fulfilled: true,
+              data: {
+                data: [
+                  { [INVENTORY_TYPES.DISPLAY_NAME]: 'lorem-ipsum' },
+                  { [INVENTORY_TYPES.DISPLAY_NAME]: 'dolor-sit' }
+                ],
+                meta: {}
               }
             }
           }

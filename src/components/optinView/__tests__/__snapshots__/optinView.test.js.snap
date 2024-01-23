@@ -547,6 +547,7 @@ exports[`OptinView Component should submit an opt-in form: dispatch 1`] = `
 [
   [
     {
+      "dynamicType": "UPDATE_USER_OPTIN",
       "meta": {
         "notifications": {
           "fulfilled": {
@@ -563,10 +564,8 @@ exports[`OptinView Component should submit an opt-in form: dispatch 1`] = `
             "variant": "danger",
           },
         },
-        "query": {},
       },
       "payload": Promise {},
-      "type": "UPDATE_USER_OPTIN",
     },
   ],
 ]

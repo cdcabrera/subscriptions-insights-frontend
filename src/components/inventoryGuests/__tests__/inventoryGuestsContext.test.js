@@ -10,7 +10,7 @@ describe('InventoryGuestsContext', () => {
     const { result: errorResponse } = await renderHook(() =>
       useGetGuestsInventory('1234567890', {
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ error: true })
       })
@@ -21,7 +21,7 @@ describe('InventoryGuestsContext', () => {
     const { result: pendingResponse } = await renderHook(() =>
       useGetGuestsInventory('1234567890', {
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ pending: true })
       })
@@ -32,7 +32,7 @@ describe('InventoryGuestsContext', () => {
     const { result: cancelledResponse } = await renderHook(() =>
       useGetGuestsInventory('1234567890', {
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ cancelled: true })
       })
@@ -43,7 +43,7 @@ describe('InventoryGuestsContext', () => {
     const { result: fulfilledResponse } = await renderHook(() =>
       useGetGuestsInventory('1234567890', {
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ fulfilled: true })
       })
@@ -55,7 +55,7 @@ describe('InventoryGuestsContext', () => {
       useGetGuestsInventory('1234567890', {
         isDisabled: true,
         getInventory: () => () => {},
-        useDispatch: () => {},
+        useDispatch: () => jest.fn(),
         useProductInventoryQuery: () => ({}),
         useSelector: () => ({ data: {}, fulfilled: false, pending: false, error: false })
       })

@@ -43,12 +43,12 @@ describe('ToolbarFieldGranularity Component', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, component');
   });
 
-  it('should handle updating granularity through redux state with hook', () => {
+  it('should handle updating granularity through redux state with hook', async () => {
     const options = {
       useProduct: () => ({ viewId: 'loremIpsum' })
     };
 
-    const onSelect = useOnSelect(options);
+    const { result: onSelect } = await renderHook(() => useOnSelect(options));
 
     onSelect({ value: 'dolor sit' });
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, hook');

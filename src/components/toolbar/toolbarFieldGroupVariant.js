@@ -49,22 +49,37 @@ const useToolbarFieldOptions = ({
  * @returns {Function}
  */
 const useOnSelect = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
-  const { productGroup } = useAliasProduct();
+  const { productGroup, viewId } = useAliasProduct();
   const dispatch = useAliasDispatch();
 
   return ({ value = null } = {}) => {
     dispatch([
       {
-        type: reduxTypes.app.SET_PRODUCT_VARIANT_QUERY_RESET_ALL,
-        productGroup
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        __resetHard: true
       },
       {
-        type: reduxTypes.app.SET_PRODUCT_VARIANT,
-        variant: value,
-        productGroup
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_GUESTS}-${viewId}`,
+        __resetHard: true
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        __resetHard: true
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY_GRAPH}-${viewId}`,
+        __resetHard: true
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        __resetHard: true
+      },
+      {
+        dynamicType: reduxTypes.app.SET_PRODUCT_VARIANT,
+        [productGroup]: value
       }
     ]);
   };

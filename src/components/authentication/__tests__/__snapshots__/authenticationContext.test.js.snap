@@ -66,13 +66,16 @@ exports[`AuthenticationContext should apply a hook for retrieving auth data from
 exports[`AuthenticationContext should apply a hook for retrieving auth data from multiple selectors: success dispatch 1`] = `
 [
   [
-    [Function],
+    {
+      "dynamicType": "PLATFORM_USER_AUTH",
+      "payload": Promise {},
+    },
   ],
   [
     [
       {
+        "dynamicType": "PLATFORM_GLOBAL_FILTER_HIDE",
         "payload": Promise {},
-        "type": "PLATFORM_GLOBAL_FILTER_HIDE",
       },
     ],
   ],

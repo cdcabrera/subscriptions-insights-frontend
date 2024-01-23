@@ -16,12 +16,13 @@ import {
   Title
 } from '@patternfly/react-core';
 import { useSession } from '../authentication/authenticationContext';
-import { reduxActions, storeHooks } from '../../redux';
+import { reduxTypes, storeHooks } from '../../redux';
 import { translate } from '../i18n/i18n';
 import { PageLayout } from '../pageLayout/pageLayout';
 import { helpers } from '../../common';
 import graphPng2x from '../../images/graph2x.png';
 import graphPng4x from '../../images/graph4x.png';
+import { userServices } from '../../services/user/userServices';
 
 /**
  * Opt-in view
@@ -51,7 +52,7 @@ const OptinView = ({
 }) => {
   const dispatch = useAliasDispatch();
   const { errorStatus } = useAliasSession();
-  const { error, fulfilled, pending } = useAliasSelectorsResponse(({ app }) => app?.optin);
+  const { error, fulfilled, pending } = useAliasSelectorsResponse(reduxTypes.app.UPDATE_USER_OPTIN);
 
   /**
    * Submit and update account opt-in.
@@ -59,7 +60,28 @@ const OptinView = ({
    * @event onSubmitOptIn
    * @returns {void}
    */
-  const onSubmitOptIn = () => updateAccountOptIn()(dispatch);
+  const onSubmitOptIn = () =>
+    dispatch({
+      dynamicType: reduxTypes.app.UPDATE_USER_OPTIN,
+      payload: updateAccountOptIn(),
+      meta: {
+        notifications: {
+          rejected: {
+            variant: 'danger',
+            title: translate('curiosity-optin.notificationsErrorTitle', { appName: helpers.UI_DISPLAY_NAME }),
+            description: translate('curiosity-optin.notificationsErrorDescription'),
+            dismissable: true
+          },
+          fulfilled: {
+            variant: 'success',
+            title: translate('curiosity-optin.notificationsSuccessTitle', { appName: helpers.UI_DISPLAY_NAME }),
+            description: translate('curiosity-optin.notificationsSuccessDescription'),
+            dismissable: true,
+            autoDismiss: false
+          }
+        }
+      }
+    });
 
   /**
    * Render opt-in form states.
@@ -221,9 +243,9 @@ OptinView.propTypes = {
  */
 OptinView.defaultProps = {
   t: translate,
-  updateAccountOptIn: reduxActions.user.updateAccountOptIn,
-  useDispatch: storeHooks.reactRedux.useDispatch,
-  useSelectorsResponse: storeHooks.reactRedux.useSelectorsResponse,
+  updateAccountOptIn: userServices.updateAccountOptIn,
+  useDispatch: storeHooks.reactRedux.useDynamicDispatch,
+  useSelectorsResponse: storeHooks.reactRedux.useDynamicSelectorsResponse,
   useSession
 };
 

@@ -1,11 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 import { useShallowCompareEffect } from 'react-use';
 import { ToolbarItem } from '@patternfly/react-core';
-import { reduxActions, storeHooks } from '../../redux';
+import { storeHooks, reduxTypes } from '../../redux';
 import { useProduct, useProductGraphConfig, useProductGraphTallyQuery } from '../productView/productViewContext';
 import { toolbarFieldOptions } from '../toolbar/toolbarFieldSelectCategory';
 import { helpers } from '../../common/helpers';
-import { graphCardHelpers } from './graphCardHelpers';
+import { generateChartIds, graphCardHelpers } from './graphCardHelpers';
+import { rhsmServices } from '../../services/rhsm/rhsmServices';
 
 /**
  * @memberof GraphCard
@@ -65,7 +66,7 @@ const useParseFiltersSettings = ({
  */
 const useMetricsSelector = ({
   useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
-  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useDynamicSelectorsResponse
 } = {}) => {
   const { settings = {} } = useAliasGraphCardContext();
   const { metrics = [] } = settings;
@@ -77,10 +78,10 @@ const useMetricsSelector = ({
     data = [],
     ...response
   } = useAliasSelectorsResponse(
-    metrics.map(
-      ({ id: metricId, isCapacity }) =>
-        ({ graph }) =>
-          isCapacity ? graph.capacity?.[metricId] : graph.tally?.[metricId]
+    metrics.map(({ id: metricId, isCapacity }) =>
+      isCapacity
+        ? `${reduxTypes.rhsm.GET_GRAPH_CAPACITY_RHSM}-${metricId}`
+        : `${reduxTypes.rhsm.GET_GRAPH_TALLY_RHSM}-${metricId}`
     )
   );
 
@@ -111,7 +112,6 @@ const useMetricsSelector = ({
  * Get graph metrics from Tally or Capacity.
  *
  * @param {object} params
- * @param {Function} params.getGraphMetrics
  * @param {Function} params.useDispatch
  * @param {Function} params.useGraphCardContext
  * @param {Function} params.useMetricsSelector
@@ -121,8 +121,8 @@ const useMetricsSelector = ({
  *     id: {}, list: Array}, cancelled: boolean, dataSets: Array, message: null, error: boolean}}
  */
 const useGetMetrics = ({
-  getGraphMetrics = reduxActions.rhsm.getGraphMetrics,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  // getGraphMetrics = reduxActions.rhsm.getGraphMetrics,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
   useMetricsSelector: useAliasMetricsSelector = useMetricsSelector,
   useProduct: useAliasProduct = useProduct,
@@ -135,6 +135,35 @@ const useGetMetrics = ({
   const { settings = {} } = useAliasGraphCardContext();
   const { metrics = [] } = settings;
 
+  const setupDispatch = (idMetric, dispatchQuery = {}, options = {}) => {
+    const { cancelId = 'graphTally' } = options;
+    const multiMetric = (Array.isArray(idMetric) && idMetric) || [idMetric];
+    const multiDispatch = [];
+
+    multiMetric.forEach(({ id, metric, isCapacity, query: metricQuery }) => {
+      const methodService = isCapacity ? rhsmServices.getGraphCapacity : rhsmServices.getGraphTally;
+      const methodType = isCapacity ? reduxTypes.rhsm.GET_GRAPH_CAPACITY_RHSM : reduxTypes.rhsm.GET_GRAPH_TALLY_RHSM;
+      const methodCancelId = isCapacity ? 'graphCapacity' : cancelId;
+      const generatedId = generateChartIds({ isCapacity, metric, productId: id, query: metricQuery });
+
+      multiDispatch.push({
+        dynamicType: `${methodType}-${generatedId}`,
+        payload: methodService(
+          [id, metric],
+          { ...dispatchQuery, ...metricQuery },
+          {
+            cancelId: `${methodCancelId}_${generatedId}`
+          }
+        ),
+        meta: {
+          query: { ...dispatchQuery, ...metricQuery }
+        }
+      });
+    });
+
+    return Promise.all(dispatch(multiDispatch));
+  };
+
   useShallowCompareEffect(() => {
     const updatedMetrics = metrics.map(({ metric: metricId, isCapacity, query: metricQuery }) => ({
       id: productId,
@@ -142,7 +171,8 @@ const useGetMetrics = ({
       isCapacity,
       query: metricQuery
     }));
-    getGraphMetrics(updatedMetrics, query)(dispatch);
+
+    setupDispatch(updatedMetrics, query);
   }, [metrics, productId, query]);
 
   return response;

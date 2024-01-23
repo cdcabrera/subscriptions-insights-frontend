@@ -5,6 +5,7 @@ import { useProduct, useProductGraphTallyQuery } from '../productView/productVie
 import { Select, SelectPosition } from '../form/select';
 import {
   RHSM_API_QUERY_GRANULARITY_TYPES as FIELD_TYPES,
+  RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES,
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { dateHelpers } from '../../common';
@@ -36,7 +37,7 @@ const toolbarFieldOptions = dateHelpers.getRangedMonthDateTime().listDateTimeRan
  * @returns {Function}
  */
 const useOnSelect = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { viewId } = useAliasProduct();
@@ -46,26 +47,21 @@ const useOnSelect = ({
     const { startDate, endDate } = value;
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST,
-        viewId
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        type: reduxTypes.query.SET_QUERY_GRAPH,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.GRANULARITY,
-        value: FIELD_TYPES.DAILY
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        type: reduxTypes.query.SET_QUERY,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.START_DATE,
-        value: startDate.toISOString()
+        dynamicType: `${reduxTypes.query.SET_QUERY_GRAPH}-${viewId}`,
+        [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: FIELD_TYPES.DAILY
       },
       {
-        type: reduxTypes.query.SET_QUERY,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.END_DATE,
-        value: endDate.toISOString()
+        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate.toISOString(),
+        [RHSM_API_QUERY_SET_TYPES.END_DATE]: endDate.toISOString()
       }
     ]);
   };

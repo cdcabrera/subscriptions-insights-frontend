@@ -14,19 +14,19 @@ exports[`RouterContext should apply a hook for useNavigate: navigation dispatch 
   [
     {
       "config": "rhods",
-      "type": "SET_PRODUCT",
+      "dynamicType": "SET_PRODUCT",
     },
   ],
   [
     {
       "config": "rhel",
-      "type": "SET_PRODUCT",
+      "dynamicType": "SET_PRODUCT",
     },
   ],
   [
     {
       "config": "rhel",
-      "type": "SET_PRODUCT",
+      "dynamicType": "SET_PRODUCT",
     },
   ],
 ]
@@ -144,7 +144,7 @@ exports[`RouterContext should apply a hook for useSetRouteDetail: dispatch route
   [
     {
       "config": "dolor-sit",
-      "type": "SET_PRODUCT",
+      "dynamicType": "SET_PRODUCT",
     },
   ],
 ]

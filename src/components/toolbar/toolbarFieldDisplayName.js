@@ -6,7 +6,10 @@ import _debounce from 'lodash/debounce';
 import { reduxTypes, storeHooks } from '../../redux';
 import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { TextInput } from '../form/textInput';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import {
+  RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES,
+  RHSM_API_QUERY_SET_TYPES
+} from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -52,14 +55,16 @@ const ToolbarFieldDisplayName = ({
   const onSubmit = submitValue =>
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST,
-        viewId
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME,
-        value: submitValue?.trim() || null
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME]: submitValue?.trim() || null
       }
     ]);
 
@@ -76,14 +81,16 @@ const ToolbarFieldDisplayName = ({
 
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_CLEAR_INVENTORY_LIST,
-        viewId
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        type: reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME,
-        value: null
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME]: null
       }
     ]);
   };
@@ -150,7 +157,7 @@ ToolbarFieldDisplayName.propTypes = {
  */
 ToolbarFieldDisplayName.defaultProps = {
   t: translate,
-  useDispatch: storeHooks.reactRedux.useDispatch,
+  useDispatch: storeHooks.reactRedux.useDynamicDispatch,
   useProduct,
   useProductInventoryHostsQuery
 };

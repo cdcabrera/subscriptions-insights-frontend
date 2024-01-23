@@ -72,12 +72,12 @@ describe('InventoryTabs Component', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, component');
   });
 
-  it('should handle updating through redux state with hook', () => {
+  it('should handle updating through redux state with hook', async () => {
     const options = {
       useProduct: () => ({ productId: 'lorem' })
     };
 
-    const onTab = useOnTab(options);
+    const { result: onTab } = await renderHook(() => useOnTab(options));
     onTab({
       index: 1
     });

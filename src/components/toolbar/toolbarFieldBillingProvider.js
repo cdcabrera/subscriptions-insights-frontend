@@ -5,6 +5,7 @@ import { useProduct, useProductQuery } from '../productView/productViewContext';
 import { Select, SelectPosition } from '../form/select';
 import {
   RHSM_API_QUERY_BILLING_PROVIDER_TYPES as FIELD_TYPES,
+  RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES,
   RHSM_API_QUERY_SET_TYPES
 } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
@@ -36,7 +37,7 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  * @returns {Function}
  */
 const useOnSelect = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct
 } = {}) => {
   const { viewId } = useAliasProduct();
@@ -45,14 +46,20 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     dispatch([
       {
-        type: reduxTypes.query.SET_QUERY_RESET_INVENTORY_LIST,
-        viewId
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0,
+        [RHSM_API_QUERY_TYPES.DIRECTION]: undefined,
+        [RHSM_API_QUERY_TYPES.SORT]: undefined
       },
       {
-        type: reduxTypes.query.SET_QUERY,
-        viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER,
-        value
+        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        [RHSM_API_QUERY_TYPES.OFFSET]: 0,
+        [RHSM_API_QUERY_TYPES.DIRECTION]: undefined,
+        [RHSM_API_QUERY_TYPES.SORT]: undefined
+      },
+      {
+        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: value
       }
     ]);
   };

@@ -52,12 +52,12 @@ describe('ToolbarFieldRangedMonthly Component', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, component');
   });
 
-  it('should handle updating granularity and date through redux state with hook', () => {
+  it('should handle updating granularity and date through redux state with hook', async () => {
     const options = {
       useProduct: () => ({ viewId: 'loremIpsum' })
     };
 
-    const onSelect = useOnSelect(options);
+    const { result: onSelect } = await renderHook(() => useOnSelect(options));
 
     onSelect({
       value: { startDate: new Date('2018-08-01T00:00:00.000Z'), endDate: new Date('2018-08-31T00:00:00.000Z') }

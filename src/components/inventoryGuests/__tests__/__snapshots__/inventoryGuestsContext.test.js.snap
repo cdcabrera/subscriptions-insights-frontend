@@ -21,12 +21,12 @@ exports[`InventoryGuestsContext should handle an onScroll event: onPage event, d
   [
     [
       {
-        "type": "SET_QUERY_CLEAR_INVENTORY_GUESTS_LIST",
-        "viewId": "1234567890",
+        "dynamicType": "SET_QUERY_INVENTORY_GUESTS-1234567890",
+        "offset": 0,
       },
       {
-        "id": "1234567890",
-        "type": "CLEAR_INVENTORY_GUESTS",
+        "__hardReset": true,
+        "dynamicType": "GET_INSTANCES_INVENTORY_GUESTS_RHSM-1234567890",
       },
     ],
   ],
