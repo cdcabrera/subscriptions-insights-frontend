@@ -1,11 +1,7 @@
 import { createLogger } from 'redux-logger';
-import promiseMiddleware from 'redux-promise-middleware';
-import { thunk as thunkMiddleware } from 'redux-thunk';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications';
-import { multiActionMiddleware } from './multiActionMiddleware';
-import { statusMiddleware } from './statusMiddleware';
 import { actionRecordMiddleware } from './actionRecordMiddleware';
-import { reduxHelpers } from '../common/reduxHelpers';
+import { reduxHelpers } from '../helpers';
 
 /**
  * Platform notifications settings.
@@ -31,10 +27,6 @@ const notificationsOptions = {
  * @type {Array}
  */
 const reduxMiddleware = [
-  thunkMiddleware,
-  statusMiddleware(),
-  multiActionMiddleware,
-  promiseMiddleware,
   actionRecordMiddleware({
     id: process.env.REACT_APP_UI_LOGGER_ID,
     app: { version: process.env.REACT_APP_UI_VERSION }
@@ -46,12 +38,4 @@ if (process.env.NODE_ENV !== 'production' && process.env.REACT_APP_DEBUG_MIDDLEW
   reduxMiddleware.push(createLogger());
 }
 
-export {
-  reduxMiddleware as default,
-  reduxMiddleware,
-  createLogger,
-  notificationsMiddleware,
-  promiseMiddleware,
-  statusMiddleware,
-  thunkMiddleware
-};
+export { reduxMiddleware as default, reduxMiddleware, createLogger, notificationsMiddleware };
