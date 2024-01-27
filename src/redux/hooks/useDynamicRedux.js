@@ -20,33 +20,36 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
   const dispatch = useAliasDispatch();
 
   return useCallback(
-    typeValue => {
-      const updatedTypeValue = (Array.isArray(typeValue) && typeValue) || [typeValue];
+    actionValue => {
+      const updatedActionValue = (Array.isArray(actionValue) && actionValue) || [actionValue];
 
       return dispatch(
-        updatedTypeValue.map(value => {
-          if ('dynamicType' in value) {
-            if (value.payload) {
+        updatedActionValue.map(action => {
+          if ('dynamicType' in action) {
+            const { dynamicType, ...updatedAction } = action;
+            const updatedDynamicType = (Array.isArray(dynamicType) && dynamicType.join('-')) || dynamicType;
+
+            if (updatedAction.payload) {
               return {
-                ...value,
-                type: value.dynamicType,
+                ...updatedAction,
+                type: updatedDynamicType,
                 meta: {
-                  ...value.meta,
-                  __originalType: value.dynamicType,
+                  ...updatedAction.meta,
+                  __originalType: updatedDynamicType,
                   __dynamic: true
                 }
               };
             }
 
             return {
-              ...value,
-              type: value.dynamicType,
-              __originalType: value.dynamicType,
+              ...updatedAction,
+              type: updatedDynamicType,
+              __originalType: updatedDynamicType,
               __dynamic: true
             };
           }
 
-          return value;
+          return action;
         })
       );
     },
@@ -67,6 +70,10 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
  */
 const useDynamicSelector = (selector, value = null, { equality, useSelector: useAliasSelector = useSelector } = {}) => {
   let updatedSelector = selector;
+
+  if (Array.isArray(selector)) {
+    updatedSelector = ({ dynamic }) => dynamic?.[selector.join('-')];
+  }
 
   if (typeof selector === 'string') {
     updatedSelector = ({ dynamic }) => dynamic?.[selector];
@@ -91,6 +98,15 @@ const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAlia
   let updatedSelectors = Array.isArray(selectors) ? selectors : [selectors];
 
   updatedSelectors = updatedSelectors.map(selector => {
+    if (Array.isArray(selector.selector)) {
+      const { selector: arrSelector, ...restSelector } = selector;
+      const updatedSelector = arrSelector.join('-');
+      return {
+        ...restSelector,
+        selector: ({ dynamic }) => dynamic?.[updatedSelector]
+      };
+    }
+
     if (typeof selector.selector === 'string') {
       return {
         ...selector,
