@@ -4,13 +4,15 @@ import { BannerMessages } from '../bannerMessages';
 describe('BannerMessages Component', () => {
   it('should render a basic component', async () => {
     const props = {
-      useBannerMessages: () => [
-        {
-          id: 'loremIpsum',
-          title: 'Lorem ipsum title',
-          message: 'Lorem ipsum message'
-        }
-      ],
+      useBannerMessages: () => ({
+        bannerMessages: [
+          {
+            id: 'loremIpsum',
+            title: 'Lorem ipsum title',
+            message: 'Lorem ipsum message'
+          }
+        ]
+      }),
       useRemoveBannerMessages: Function.prototype
     };
 
@@ -22,13 +24,15 @@ describe('BannerMessages Component', () => {
   it('should handle closing messages from state', () => {
     const mockRemove = jest.fn();
     const props = {
-      useBannerMessages: () => [
-        {
-          id: 'loremIpsum',
-          title: 'Lorem ipsum title',
-          message: 'Lorem ipsum message'
-        }
-      ],
+      useBannerMessages: () => ({
+        bannerMessages: [
+          {
+            id: 'loremIpsum',
+            title: 'Lorem ipsum title',
+            message: 'Lorem ipsum message'
+          }
+        ]
+      }),
       useRemoveBannerMessages: () => mockRemove
     };
 

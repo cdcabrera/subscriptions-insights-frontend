@@ -143,7 +143,13 @@ describe('GraphCardChartLegend Component', () => {
       },
       useDispatch: () => {},
       useProduct: () => ({ productId: 'mock-product-id', productLabel: 'mock-product-label', viewId: 'mock-view-id' }),
-      useSelectors: () => [undefined, undefined, undefined, true, false]
+      useSelectors: () => [
+        undefined,
+        undefined,
+        undefined,
+        { value: 'helloWorld_mock-product-id' },
+        { value: undefined }
+      ]
     };
 
     const component = renderComponent(<GraphCardChartLegend {...props} />);
@@ -196,7 +202,7 @@ describe('GraphCardChartLegend Component', () => {
       },
       useDispatch: () => {},
       useProduct: () => ({ productId: 'mock-product-id', productLabel: 'mock-product-label', viewId: 'mock-view-id' }),
-      useSelectors: () => ['helloWorld_mock-product-id']
+      useSelectors: () => [{ value: 'helloWorld_mock-product-id' }]
     };
 
     renderComponent(<GraphCardChartLegend {...props} />);

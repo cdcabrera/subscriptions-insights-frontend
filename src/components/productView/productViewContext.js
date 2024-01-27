@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import _cloneDeep from 'lodash/cloneDeep';
-import { reduxHelpers } from '../../redux/common';
+import { reduxTypes, reduxHelpers } from '../../redux';
 import { storeHooks } from '../../redux/hooks';
 import { rhsmConstants, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common/helpers';
@@ -31,6 +31,7 @@ const useProductViewContext = () => useContext(ProductViewContext);
  *
  * @param {string} queryType An identifier used to pull from both config and Redux, they should named the same.
  * @param {object} options
+ * @param {string} options.selectorContext
  * @param {string} options.overrideId A custom identifier, used for scenarios like the Guest inventory IDs
  * @param {object} options.useProductViewContext
  * @param {Function} options.useSelectors
@@ -39,16 +40,17 @@ const useProductViewContext = () => useContext(ProductViewContext);
 const useProductQueryFactory = (
   queryType,
   {
+    selectorContext,
     overrideId,
     useProductViewContext: useAliasProductViewContext = useProductViewContext,
-    useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
+    useSelectors: useAliasSelectors = storeHooks.reactRedux.useDynamicSelectors
   } = {}
 ) => {
   const { [queryType]: initialQuery, productId, viewId } = useAliasProductViewContext();
   const [queryOverride, queryProduct, queryView] = useAliasSelectors([
-    ({ view }) => view?.[queryType]?.[overrideId],
-    ({ view }) => view?.[queryType]?.[productId],
-    ({ view }) => view?.[queryType]?.[viewId]
+    `${selectorContext}-${overrideId}`,
+    `${selectorContext}-${productId}`,
+    `${selectorContext}-${viewId}`
   ]);
 
   return {
@@ -64,21 +66,24 @@ const useProductQueryFactory = (
  *
  * @param {object} options
  * @param {string} options.queryType
+ * @param {string} options.selectorContext
  * @param {Function} options.useProductQueryFactory
  * @param {object} options.options
  * @returns {object}
  */
 const useProductQuery = ({
   queryType = 'query',
+  selectorContext = reduxTypes.query.SET_QUERY,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
   options
-} = {}) => useAliasProductQueryFactory(queryType, options);
+} = {}) => useAliasProductQueryFactory(queryType, { selectorContext, ...options });
 
 /**
  * Return the graph query based off of tally and capacity.
  *
  * @param {object} options
  * @param {string} options.queryType
+ * @param {string} options.selectorContext
  * @param {object} options.schemaCheck
  * @param {Function} options.useProductQuery
  * @param {Function} options.useProductQueryFactory
@@ -87,6 +92,7 @@ const useProductQuery = ({
  */
 const useProductGraphTallyQuery = ({
   queryType = 'graphTallyQuery',
+  selectorContext = reduxTypes.query.SET_QUERY_GRAPH,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -95,7 +101,7 @@ const useProductGraphTallyQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { selectorContext, ...options })
     },
     schemaCheck
   );
@@ -105,6 +111,7 @@ const useProductGraphTallyQuery = ({
  *
  * @param {object} options
  * @param {string} options.queryType
+ * @param {string} options.selectorContext
  * @param {object} options.schemaCheck
  * @param {Function} options.useProductQuery
  * @param {Function} options.useProductQueryFactory
@@ -113,6 +120,7 @@ const useProductGraphTallyQuery = ({
  */
 const useProductInventoryGuestsQuery = ({
   queryType = 'inventoryGuestsQuery',
+  selectorContext = reduxTypes.query.SET_QUERY_INVENTORY_GUESTS,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -121,7 +129,7 @@ const useProductInventoryGuestsQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { selectorContext, ...options })
     },
     schemaCheck
   );
@@ -131,6 +139,7 @@ const useProductInventoryGuestsQuery = ({
  *
  * @param {object} options
  * @param {string} options.queryType
+ * @param {string} options.selectorContext
  * @param {object} options.schemaCheck
  * @param {Function} options.useProductQuery
  * @param {Function} options.useProductQueryFactory
@@ -139,6 +148,7 @@ const useProductInventoryGuestsQuery = ({
  */
 const useProductInventoryHostsQuery = ({
   queryType = 'inventoryHostsQuery',
+  selectorContext = reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -147,7 +157,7 @@ const useProductInventoryHostsQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { selectorContext, ...options })
     },
     schemaCheck
   );
@@ -157,6 +167,7 @@ const useProductInventoryHostsQuery = ({
  *
  * @param {object} options
  * @param {string} options.queryType
+ * @param {string} options.selectorContext
  * @param {object} options.schemaCheck
  * @param {Function} options.useProductQuery
  * @param {Function} options.useProductQueryFactory
@@ -165,6 +176,7 @@ const useProductInventoryHostsQuery = ({
  */
 const useProductInventorySubscriptionsQuery = ({
   queryType = 'inventorySubscriptionsQuery',
+  selectorContext = reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS,
   schemaCheck = rhsmConstants.RHSM_API_QUERY_SET_INVENTORY_TYPES,
   useProductQuery: useAliasProductQuery = useProductQuery,
   useProductQueryFactory: useAliasProductQueryFactory = useProductQueryFactory,
@@ -173,7 +185,7 @@ const useProductInventorySubscriptionsQuery = ({
   reduxHelpers.setApiQuery(
     {
       ...useAliasProductQuery(),
-      ...useAliasProductQueryFactory(queryType, options)
+      ...useAliasProductQueryFactory(queryType, { selectorContext, ...options })
     },
     schemaCheck
   );

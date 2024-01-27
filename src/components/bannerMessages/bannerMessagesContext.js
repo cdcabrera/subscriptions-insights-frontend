@@ -18,10 +18,13 @@ import { helpers } from '../../common/helpers';
  */
 const useBannerMessages = ({
   useProduct: useAliasProduct = useProduct,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+  useSelector: useAliasSelector = storeHooks.reactRedux.useDynamicSelector
 } = {}) => {
   const { productId } = useAliasProduct();
-  return useAliasSelector(({ messages }) => messages?.bannerMessages?.[productId], []);
+  const { bannerMessages } = useAliasSelector(`${reduxTypes.message.SET_BANNER_MESSAGES}-${productId}`, {});
+  return {
+    bannerMessages: bannerMessages || []
+  };
 };
 
 /**
@@ -34,13 +37,13 @@ const useBannerMessages = ({
  * @returns {Function}
  */
 const useRemoveBannerMessages = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct,
   useBannerMessages: useAliasBannerMessages = useBannerMessages
 } = {}) => {
   const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
-  const bannerMessages = useAliasBannerMessages();
+  const { bannerMessages } = useAliasBannerMessages();
 
   /**
    * Remove a banner message from state.
@@ -54,8 +57,7 @@ const useRemoveBannerMessages = ({
         const filteredMessages = bannerMessages.filter(({ id, title }) => id !== idTitle && title !== idTitle);
 
         dispatch({
-          type: reduxTypes.message.SET_BANNER_MESSAGES,
-          viewId: productId,
+          type: `${reduxTypes.message.SET_BANNER_MESSAGES}-${productId}`,
           bannerMessages: filteredMessages || []
         });
       }
@@ -74,13 +76,13 @@ const useRemoveBannerMessages = ({
  * @returns {Function}
  */
 const useSetBannerMessages = ({
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   useProduct: useAliasProduct = useProduct,
   useBannerMessages: useAliasBannerMessages = useBannerMessages
 } = {}) => {
   const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
-  const bannerMessages = useAliasBannerMessages();
+  const { bannerMessages } = useAliasBannerMessages();
 
   /**
    * Set application messages for banner display
@@ -91,30 +93,62 @@ const useSetBannerMessages = ({
   return useCallback(
     messages => {
       if (productId) {
-        const updatedMessages = (Array.isArray(messages) && messages) || [messages];
+        let updatedMessages = (Array.isArray(messages) && messages) || [messages];
+        updatedMessages = updatedMessages
+          .filter(
+            value =>
+              (Array.isArray(bannerMessages) &&
+                bannerMessages?.findIndex(({ hash }) => hash === helpers.generateHash(value)) < 0) ||
+              true
+          )
+          .map(value => {
+            if (value?.id || value?.title || value?.message || value?.variant) {
+              return {
+                value,
+                hash: helpers.generateHash(value)
+              };
+            }
+
+            if (typeof value === 'string' || typeof value === 'number') {
+              return {
+                id: value,
+                title: value,
+                hash: helpers.generateHash(value)
+              };
+            }
+
+            return undefined;
+          })
+          .filter(value => value !== undefined);
+
+        /*
+         *bannerMessages?.push([
+         *  ...updatedMessages
+         *    .map(value => {
+         *      if (value?.id || value?.title || value?.message || value?.variant) {
+         *        return {
+         *          value,
+         *          hash: helpers.generateHash(value)
+         *        };
+         *      }
+         *
+         *      if (typeof value === 'string' || typeof value === 'number') {
+         *        return {
+         *          id: value,
+         *          title: value,
+         *          hash: helpers.generateHash(value)
+         *        };
+         *      }
+         *
+         *      return undefined;
+         *    })
+         *    .filter(value => value !== undefined)
+         *]) || []
+         */
 
         dispatch({
-          type: reduxTypes.message.SET_BANNER_MESSAGES,
-          viewId: productId,
-          bannerMessages: [
-            ...(bannerMessages || []),
-            ...updatedMessages
-              .map(value => {
-                if (value?.id || value?.title || value?.message || value?.variant) {
-                  return value;
-                }
-
-                if (typeof value === 'string' || typeof value === 'number') {
-                  return {
-                    id: value,
-                    title: value
-                  };
-                }
-
-                return undefined;
-              })
-              .filter(value => value !== undefined)
-          ]
+          type: `${reduxTypes.message.SET_BANNER_MESSAGES}-${productId}`,
+          bannerMessages: [...updatedMessages]
         });
       } else if (helpers.DEV_MODE) {
         console.warn(

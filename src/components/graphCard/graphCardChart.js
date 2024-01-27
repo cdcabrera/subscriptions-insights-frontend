@@ -50,7 +50,7 @@ const GraphCardChart = ({
   const { stringId } = settings;
 
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
-  const { pending, error, dataSets = [] } = useAliasGetMetrics();
+  const { pending, error, fulfilled, dataSets = [] } = useAliasGetMetrics();
 
   const cardHeaderProps = {};
 
@@ -81,7 +81,7 @@ const GraphCardChart = ({
         <CardBody className="curiosity-card__body">
           <div className={(error && 'blur') || (pending && 'fadein') || ''}>
             {pending && <Loader variant="graph" />}
-            {!pending && (
+            {fulfilled && (
               <Chart
                 {...graphCardHelpers.generateExtendedChartSettings({ settings, granularity })}
                 dataSets={dataSets}

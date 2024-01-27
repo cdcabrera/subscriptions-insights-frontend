@@ -18,32 +18,18 @@ exports[`InventoryCardSubscriptionsContext should handle an onColumnSort event: 
   [
     [
       {
-        "filter": "dir",
-        "type": "SET_QUERY_INVENTORY_SUBSCRIPTIONS",
-        "value": "desc",
-        "viewId": "lorem",
-      },
-      {
-        "filter": "sort",
-        "type": "SET_QUERY_INVENTORY_SUBSCRIPTIONS",
-        "value": "loremIpsumColumnOne",
-        "viewId": "lorem",
+        "dir": "desc",
+        "dynamicType": "SET_QUERY_INVENTORY_SUBSCRIPTIONS-lorem",
+        "sort": "loremIpsumColumnOne",
       },
     ],
   ],
   [
     [
       {
-        "filter": "dir",
-        "type": "SET_QUERY_INVENTORY_SUBSCRIPTIONS",
-        "value": "asc",
-        "viewId": "lorem",
-      },
-      {
-        "filter": "sort",
-        "type": "SET_QUERY_INVENTORY_SUBSCRIPTIONS",
-        "value": "loremIpsumColumnOne",
-        "viewId": "lorem",
+        "dir": "asc",
+        "dynamicType": "SET_QUERY_INVENTORY_SUBSCRIPTIONS-lorem",
+        "sort": "loremIpsumColumnOne",
       },
     ],
   ],
@@ -55,16 +41,9 @@ exports[`InventoryCardSubscriptionsContext should handle an onPage event: onPage
   [
     [
       {
-        "filter": "offset",
-        "type": "SET_QUERY_INVENTORY_SUBSCRIPTIONS",
-        "value": 1,
-        "viewId": "lorem",
-      },
-      {
-        "filter": "limit",
-        "type": "SET_QUERY_INVENTORY_SUBSCRIPTIONS",
-        "value": 5,
-        "viewId": "lorem",
+        "dynamicType": "SET_QUERY_INVENTORY_SUBSCRIPTIONS-lorem",
+        "limit": 5,
+        "offset": 1,
       },
     ],
   ],

@@ -3,12 +3,15 @@
 exports[`InventoryTabs Component should handle updating through redux state with component: dispatch, component 1`] = `
 [
   [
-    {
-      "tabs": {
-        "undefined": 1,
+    [
+      {
+        "__dynamic": true,
+        "__originalType": "SET_INVENTORY_TAB-undefined",
+        "dynamicType": "SET_INVENTORY_TAB-undefined",
+        "index": 1,
+        "type": "SET_INVENTORY_TAB-undefined",
       },
-      "type": "SET_INVENTORY_TAB",
-    },
+    ],
   ],
 ]
 `;
@@ -16,12 +19,15 @@ exports[`InventoryTabs Component should handle updating through redux state with
 exports[`InventoryTabs Component should handle updating through redux state with hook: dispatch, hook 1`] = `
 [
   [
-    {
-      "tabs": {
-        "lorem": 1,
+    [
+      {
+        "__dynamic": true,
+        "__originalType": "SET_INVENTORY_TAB-lorem",
+        "dynamicType": "SET_INVENTORY_TAB-lorem",
+        "index": 1,
+        "type": "SET_INVENTORY_TAB-lorem",
       },
-      "type": "SET_INVENTORY_TAB",
-    },
+    ],
   ],
 ]
 `;

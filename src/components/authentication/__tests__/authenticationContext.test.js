@@ -1,5 +1,6 @@
 import { context, useGetAuthorization, useSession } from '../authenticationContext';
 import { rhsmConstants } from '../../../services/rhsm/rhsmConstants';
+import { reduxTypes } from '../../../redux';
 
 describe('AuthenticationContext', () => {
   it('should return specific properties', () => {
@@ -55,7 +56,10 @@ describe('AuthenticationContext', () => {
     const { result: mockStoreSuccessResponse } = await renderHook(() => useGetAuthorization(), {
       state: {
         app: {
-          auth: {
+          errors: {}
+        },
+        dynamic: {
+          [reduxTypes.platform.PLATFORM_USER_AUTH]: {
             fulfilled: true,
             data: [
               { isAdmin: true, isEntitled: true },
@@ -80,8 +84,7 @@ describe('AuthenticationContext', () => {
               }
             ]
           },
-          locale: { fulfilled: true, data: {} },
-          errors: {}
+          [reduxTypes.app.USER_LOCALE]: { fulfilled: true, data: {} }
         }
       }
     });
@@ -91,15 +94,17 @@ describe('AuthenticationContext', () => {
     const { result: mockStoreErrorResponse } = await renderHook(() => useGetAuthorization(), {
       state: {
         app: {
-          auth: {
-            error: true,
-            data: []
-          },
-          locale: { fulfilled: true, data: {} },
           errors: {
             error: true,
             data: ['lorem', 'ipsum']
           }
+        },
+        dynamic: {
+          [reduxTypes.platform.PLATFORM_USER_AUTH]: {
+            error: true,
+            data: []
+          },
+          [reduxTypes.app.USER_LOCALE]: { fulfilled: true, data: {} }
         }
       }
     });

@@ -1,5 +1,5 @@
 import _get from 'lodash/get';
-import { appTypes, platformTypes } from '../types';
+import { appTypes } from '../types';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { reduxHelpers } from '../common';
 
@@ -14,13 +14,10 @@ import { reduxHelpers } from '../common';
  * Initial state.
  *
  * @private
- * @type {{auth: {}, optin: {}, locale: null, errors: {}}}
+ * @type {{errors: {}}}
  */
 const initialState = {
-  auth: {},
-  errors: {},
-  locale: {},
-  optin: {}
+  errors: {}
 };
 
 /**
@@ -56,15 +53,7 @@ const appReducer = (state = initialState, action) => {
       return state;
 
     default:
-      return reduxHelpers.generatedPromiseActionReducer(
-        [
-          { ref: 'locale', type: appTypes.USER_LOCALE },
-          { ref: 'optin', type: [appTypes.DELETE_USER_OPTIN, appTypes.GET_USER_OPTIN, appTypes.UPDATE_USER_OPTIN] },
-          { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }
-        ],
-        state,
-        action
-      );
+      return state;
   }
 };
 

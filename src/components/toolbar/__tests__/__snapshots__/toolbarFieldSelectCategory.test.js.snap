@@ -269,9 +269,11 @@ exports[`ToolbarFieldSelectCategory Component should handle updating categories 
   [
     [
       {
+        "__dynamic": true,
+        "__originalType": "SET_FILTER_TYPE-undefined",
         "currentFilter": "rangedMonthly",
-        "type": "SET_FILTER_TYPE",
-        "viewId": undefined,
+        "dynamicType": "SET_FILTER_TYPE-undefined",
+        "type": "SET_FILTER_TYPE-undefined",
       },
     ],
   ],
@@ -283,9 +285,11 @@ exports[`ToolbarFieldSelectCategory Component should handle updating categories 
   [
     [
       {
+        "__dynamic": true,
+        "__originalType": "SET_FILTER_TYPE-loremIpsum",
         "currentFilter": "dolor sit",
-        "type": "SET_FILTER_TYPE",
-        "viewId": "loremIpsum",
+        "dynamicType": "SET_FILTER_TYPE-loremIpsum",
+        "type": "SET_FILTER_TYPE-loremIpsum",
       },
     ],
   ],

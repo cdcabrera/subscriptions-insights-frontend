@@ -82,12 +82,12 @@ describe('ToolbarFieldCategory Component', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, component');
   });
 
-  it('should handle updating through redux state with hook', () => {
+  it('should handle updating through redux state with hook', async () => {
     const options = {
       useProduct: () => ({ productId: 'mock-product-id', viewId: 'mock-view-id' })
     };
 
-    const onSelect = useOnSelect(options);
+    const { result: onSelect } = await renderHook(() => useOnSelect(options));
     onSelect({
       value: 'dolor sit',
       selected: {

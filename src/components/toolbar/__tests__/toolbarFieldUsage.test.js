@@ -43,12 +43,12 @@ describe('ToolbarFieldSla Component', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, component');
   });
 
-  it('should handle updating usage through redux state with hook', () => {
+  it('should handle updating usage through redux state with hook', async () => {
     const options = {
       useProduct: () => ({ viewId: 'loremIpsum' })
     };
 
-    const onSelect = useOnSelect(options);
+    const { result: onSelect } = await renderHook(() => useOnSelect(options));
 
     onSelect({
       value: 'dolor sit'
