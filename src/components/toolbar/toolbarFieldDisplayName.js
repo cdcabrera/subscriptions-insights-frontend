@@ -55,15 +55,15 @@ const ToolbarFieldDisplayName = ({
   const onSubmit = submitValue =>
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         [RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME]: submitValue?.trim() || null
       }
     ]);
@@ -81,15 +81,15 @@ const ToolbarFieldDisplayName = ({
 
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         [RHSM_API_QUERY_SET_TYPES.DISPLAY_NAME]: null
       }
     ]);

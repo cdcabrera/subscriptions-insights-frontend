@@ -21,7 +21,7 @@ const useBannerMessages = ({
   useSelector: useAliasSelector = storeHooks.reactRedux.useDynamicSelector
 } = {}) => {
   const { productId } = useAliasProduct();
-  const { bannerMessages } = useAliasSelector(`${reduxTypes.message.SET_BANNER_MESSAGES}-${productId}`, {});
+  const { bannerMessages } = useAliasSelector([reduxTypes.message.SET_BANNER_MESSAGES, productId]);
   return {
     bannerMessages: bannerMessages || []
   };

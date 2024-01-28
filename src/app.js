@@ -31,7 +31,7 @@ import { helpers } from './common';
  */
 const App = ({ getLocale, useDispatch: useAliasDispatch, useSelector: useAliasSelector }) => {
   const dispatch = useAliasDispatch();
-  const { value: locale } = useAliasSelector(reduxTypes.app.USER_LOCALE, {});
+  const { value: locale } = useAliasSelector(reduxTypes.app.USER_LOCALE);
   let platformNotifications = null;
 
   useMount(() => {

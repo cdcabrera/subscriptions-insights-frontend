@@ -34,8 +34,8 @@ const useOnTab = ({
 
   return ({ index } = {}) => {
     dispatch({
-      dynamicType: `${reduxTypes.inventory.SET_INVENTORY_TAB}-${productId}`,
-      index
+      dynamicType: [reduxTypes.inventory.SET_INVENTORY_TAB, productId],
+      tab: index
     });
   };
 };
@@ -67,7 +67,7 @@ const InventoryTabs = ({
   useSelector: useAliasSelector
 }) => {
   const { productId } = useAliasProduct();
-  const updatedActiveTab = useAliasSelector(`${reduxTypes.inventory.SET_INVENTORY_TAB}-${productId}`, activeTab);
+  const { tab: updatedActiveTab = activeTab } = useAliasSelector([reduxTypes.inventory.SET_INVENTORY_TAB, productId]);
   const onTab = useAliasOnTab();
 
   if (isDisabled) {

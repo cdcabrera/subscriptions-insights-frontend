@@ -80,8 +80,8 @@ const useMetricsSelector = ({
   } = useAliasSelectorsResponse(
     metrics.map(({ id: metricId, isCapacity }) =>
       isCapacity
-        ? `${reduxTypes.rhsm.GET_GRAPH_CAPACITY_RHSM}-${metricId}`
-        : `${reduxTypes.rhsm.GET_GRAPH_TALLY_RHSM}-${metricId}`
+        ? [reduxTypes.rhsm.GET_GRAPH_CAPACITY_RHSM, metricId]
+        : [reduxTypes.rhsm.GET_GRAPH_TALLY_RHSM, metricId]
     )
   );
 
@@ -147,7 +147,7 @@ const useGetMetrics = ({
       const generatedId = generateChartIds({ isCapacity, metric, productId: id, query: metricQuery });
 
       multiDispatch.push({
-        dynamicType: `${methodType}-${generatedId}`,
+        dynamicType: [methodType, generatedId],
         payload: methodService(
           [id, metric],
           { ...dispatchQuery, ...metricQuery },

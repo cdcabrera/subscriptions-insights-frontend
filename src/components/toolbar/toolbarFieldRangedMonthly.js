@@ -47,19 +47,19 @@ const useOnSelect = ({
     const { startDate, endDate } = value;
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_GRAPH}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_GRAPH, viewId],
         [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: FIELD_TYPES.DAILY
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY, viewId],
         [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate.toISOString(),
         [RHSM_API_QUERY_SET_TYPES.END_DATE]: endDate.toISOString()
       }

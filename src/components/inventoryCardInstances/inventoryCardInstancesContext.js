@@ -84,7 +84,7 @@ const useSelectorInstances = ({
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery();
   const { columnCountAndWidths, filters, isGuestFiltersDisabled, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(`${storeRef}-${productId}`);
+  const response = useAliasSelectorsResponse([[storeRef, productId]]);
 
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
@@ -143,7 +143,7 @@ const useGetInstancesInventory = ({
   useShallowCompareEffect(() => {
     if (!isDisabled) {
       dispatch({
-        dynamicType: `${storeRef}-${productId}`,
+        dynamicType: [storeRef, productId],
         payload: getInventory(productId, query)
       });
     }
@@ -223,7 +223,7 @@ const useOnPageInstances = ({
   return ({ offset, perPage }) => {
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${productId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, productId],
         [RHSM_API_QUERY_SET_TYPES.OFFSET]: offset,
         [RHSM_API_QUERY_SET_TYPES.LIMIT]: perPage
       }
@@ -280,7 +280,7 @@ const useOnColumnSortInstances = ({
 
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${productId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, productId],
         [RHSM_API_QUERY_SET_TYPES.DIRECTION]: updatedDirection,
         [RHSM_API_QUERY_SET_TYPES.SORT]: updatedSortColumn
       }

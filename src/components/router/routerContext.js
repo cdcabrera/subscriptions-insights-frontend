@@ -215,12 +215,12 @@ const useSearchParams = ({
  * @returns {*|string}
  */
 const useSetRouteDetail = ({
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
+  useSelector: useAliasSelector = storeHooks.reactRedux.useDynamicSelector,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDynamicDispatch,
   windowLocation: aliasWindowLocation = window.location
 } = {}) => {
   const dispatch = useAliasDispatch();
-  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  const { config: updatedPath } = useAliasSelector(reduxTypes.app.SET_PRODUCT);
   const { pathname: productPath } = aliasWindowLocation;
 
   useEffect(() => {

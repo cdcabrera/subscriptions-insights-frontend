@@ -144,7 +144,7 @@ const useOnPageSubscriptions = ({
   return ({ offset, perPage }) => {
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${productId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, productId],
         [RHSM_API_QUERY_SET_TYPES.OFFSET]: offset,
         [RHSM_API_QUERY_SET_TYPES.LIMIT]: perPage
       }
@@ -201,7 +201,7 @@ const useOnColumnSortSubscriptions = ({
 
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${productId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, productId],
         [RHSM_API_QUERY_SET_TYPES.DIRECTION]: updatedDirection,
         [RHSM_API_QUERY_SET_TYPES.SORT]: updatedSortColumn
       }

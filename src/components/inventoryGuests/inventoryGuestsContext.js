@@ -58,7 +58,7 @@ const useSelectorGuests = (
   const session = useAliasSession();
   const query = useAliasProductInventoryQuery({ options: { overrideId: id } });
   const { columnCountAndWidths, filters, settings } = useAliasParseFiltersSettings();
-  const response = useAliasSelectorsResponse(`${storeRef}-${id}`);
+  const response = useAliasSelectorsResponse([[storeRef, id]]);
   const { pending, cancelled, data, ...restResponse } = response;
   const updatedPending = pending || cancelled || false;
   let parsedData;
@@ -112,7 +112,7 @@ const useGetGuestsInventory = (
 
   useShallowCompareEffect(() => {
     dispatch({
-      dynamicType: `${storeRef}-${id}`,
+      dynamicType: [storeRef, id],
       payload: getInventory(id, query)
     });
   }, [id, query]);
@@ -153,11 +153,11 @@ const useOnScroll = (
   useUnmount(() => {
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_GUESTS}-${id}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_GUESTS, id],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0
       },
       {
-        dynamicType: `${storeRef}-${id}`,
+        dynamicType: [storeRef, id],
         __hardReset: true
       }
     ]);

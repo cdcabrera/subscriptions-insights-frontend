@@ -48,8 +48,8 @@ const GraphCardChartLegend = ({
 
   const dispatch = useAliasDispatch();
   const [invertedLegendItem, ...legendItems] = useAliasSelectors([
-    `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-inverted`,
-    ...datum.dataSets.map(({ id }) => `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-${id}`)
+    [reduxTypes.graph.SET_GRAPH_LEGEND, viewId, 'inverted'],
+    ...datum.dataSets.map(({ id }) => [reduxTypes.graph.SET_GRAPH_LEGEND, viewId, id])
   ]);
 
   useMount(() => {
@@ -78,7 +78,7 @@ const GraphCardChartLegend = ({
     const updatedToggle = chart.toggle(id);
 
     dispatch({
-      dynamicType: `${reduxTypes.graph.SET_GRAPH_LEGEND}-${viewId}-${id}`,
+      dynamicType: [reduxTypes.graph.SET_GRAPH_LEGEND, viewId, id],
       id: `${viewId}-${id}`,
       value: updatedToggle
     });

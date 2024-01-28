@@ -46,19 +46,19 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0,
         [RHSM_API_QUERY_TYPES.DIRECTION]: undefined,
         [RHSM_API_QUERY_TYPES.SORT]: undefined
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, viewId],
         [RHSM_API_QUERY_TYPES.OFFSET]: 0,
         [RHSM_API_QUERY_TYPES.DIRECTION]: undefined,
         [RHSM_API_QUERY_TYPES.SORT]: undefined
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY, viewId],
         [RHSM_API_QUERY_SET_TYPES.BILLING_PROVIDER]: value
       }
     ]);

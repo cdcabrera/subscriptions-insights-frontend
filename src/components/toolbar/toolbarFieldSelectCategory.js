@@ -126,7 +126,7 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     dispatch([
       {
-        dynamicType: `${reduxTypes.toolbar.SET_FILTER_TYPE}-${viewId}`,
+        dynamicType: [reduxTypes.toolbar.SET_FILTER_TYPE, viewId],
         currentFilter: value
       }
     ]);
@@ -150,7 +150,7 @@ const useSelectCategoryOptions = ({
   useSelector: useAliasSelector = storeHooks.reactRedux.useDynamicSelector
 } = {}) => {
   const { viewId } = useAliasProduct();
-  const { currentFilter: updatedValue } = useAliasSelector(`${reduxTypes.toolbar.SET_FILTER_TYPE}-${viewId}`, {});
+  const { currentFilter: updatedValue } = useAliasSelector([reduxTypes.toolbar.SET_FILTER_TYPE, viewId], {});
   const { filters = [] } = useAliasProductToolbarConfig();
 
   let initialValue;

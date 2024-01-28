@@ -48,9 +48,9 @@ const useProductQueryFactory = (
 ) => {
   const { [queryType]: initialQuery, productId, viewId } = useAliasProductViewContext();
   const [queryOverride, queryProduct, queryView] = useAliasSelectors([
-    `${selectorContext}-${overrideId}`,
-    `${selectorContext}-${productId}`,
-    `${selectorContext}-${viewId}`
+    [selectorContext, overrideId],
+    [selectorContext, productId],
+    [selectorContext, viewId]
   ]);
 
   return {

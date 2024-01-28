@@ -58,23 +58,23 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     dispatch([
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_INSTANCES, viewId],
         __resetHard: true
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_GUESTS}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_GUESTS, viewId],
         __resetHard: true
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_INVENTORY_SUBSCRIPTIONS, viewId],
         __resetHard: true
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY_GRAPH}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY_GRAPH, viewId],
         __resetHard: true
       },
       {
-        dynamicType: `${reduxTypes.query.SET_QUERY}-${viewId}`,
+        dynamicType: [reduxTypes.query.SET_QUERY, viewId],
         __resetHard: true
       },
       {
@@ -111,9 +111,10 @@ const ToolbarFieldGroupVariant = ({
   useToolbarFieldOptions: useAliasToolbarFieldOptions
 }) => {
   const { productGroup } = useAliasProduct();
-  const updatedValue = useAliasSelector(({ view }) => view?.product?.variant?.[productGroup], null);
+  const { [productGroup]: updatedValue } = useAliasSelector(reduxTypes.app.SET_PRODUCT_VARIANT);
   const onSelect = useAliasOnSelect();
   const options = useAliasToolbarFieldOptions();
+
   const updatedOptions = options.map(option => ({
     ...option,
     selected: (updatedValue && option.value === updatedValue) || option?.selected
@@ -185,7 +186,7 @@ ToolbarFieldGroupVariant.defaultProps = {
   t: translate,
   useOnSelect,
   useProduct,
-  useSelector: storeHooks.reactRedux.useSelector,
+  useSelector: storeHooks.reactRedux.useDynamicSelector,
   useToolbarFieldOptions
 };
 
