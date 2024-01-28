@@ -44,7 +44,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
       }
 
       return (
-        <ProductViewContext.Provider value={config} key={`product_${productId}`}>
+        <ProductViewContext.Provider value={config} key={`product_${productGroup}`}>
           <PageMessages>
             <BannerMessages />
           </PageMessages>
@@ -83,7 +83,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
     };
 
     return updated(firstMatch);
-  }, [firstMatch, t]);
+  }, [firstMatch, productGroup, t]);
 
   return (
     (productGroup && (
