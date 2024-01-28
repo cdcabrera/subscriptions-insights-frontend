@@ -68,7 +68,7 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
  * @param {Function} options.useSelector
  * @returns {*}
  */
-const useDynamicSelector = (selector, value = null, { equality, useSelector: useAliasSelector = useSelector } = {}) => {
+const useDynamicSelector = (selector, value = {}, { equality, useSelector: useAliasSelector = useSelector } = {}) => {
   let updatedSelector = selector;
 
   if (Array.isArray(selector)) {
@@ -112,6 +112,11 @@ const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAlia
         ...selector,
         selector: ({ dynamic }) => dynamic?.[selector.selector]
       };
+    }
+
+    if (Array.isArray(selector)) {
+      const updatedSelector = selector.join('-');
+      return ({ dynamic }) => dynamic?.[updatedSelector];
     }
 
     if (typeof selector === 'string') {
