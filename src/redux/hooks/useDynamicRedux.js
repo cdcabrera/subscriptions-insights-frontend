@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector, useSelectors, useSelectorsResponse } from './useReactRedux';
+import { helpers } from '../../common/helpers';
 
 /**
  * State hooks for both dynamic, and standard, dispatch and selectors.
@@ -7,6 +8,8 @@ import { useDispatch, useSelector, useSelectors, useSelectorsResponse } from './
  * @memberof Hooks
  * @module UseDynamicReactRedux
  */
+
+const joinSelector = helpers.memo(selector => selector?.join('-'), { cacheLimit: 100 });
 
 /**
  * Wrapper for useReactRedux hook useDispatch, store.dispatch. Look for a "dynamicType" on useDispatch.
@@ -27,7 +30,7 @@ const useDynamicDispatch = ({ useDispatch: useAliasDispatch = useDispatch } = {}
         updatedActionValue.map(action => {
           if ('dynamicType' in action) {
             const { dynamicType, ...updatedAction } = action;
-            const updatedDynamicType = (Array.isArray(dynamicType) && dynamicType.join('-')) || dynamicType;
+            const updatedDynamicType = (Array.isArray(dynamicType) && joinSelector(dynamicType)) || dynamicType;
 
             if (updatedAction.payload) {
               return {
@@ -74,7 +77,7 @@ const useDynamicSelector = (selector, value = null, { equality, useSelector: use
 
   if (Array.isArray(selector)) {
     updatedValue ??= {};
-    updatedSelector = ({ dynamic }) => dynamic?.[selector.join('-')];
+    updatedSelector = ({ dynamic }) => dynamic?.[joinSelector(selector)];
   }
 
   if (typeof selector === 'string') {
@@ -103,10 +106,10 @@ const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAlia
   updatedSelectors = updatedSelectors.map(selector => {
     if (Array.isArray(selector.selector)) {
       const { selector: arrSelector, ...restSelector } = selector;
-      const updatedSelector = arrSelector.join('-');
+      // const updatedSelector = arrSelector.join('-');
       return {
         ...restSelector,
-        selector: ({ dynamic }) => dynamic?.[updatedSelector]
+        selector: ({ dynamic }) => dynamic?.[joinSelector(arrSelector)]
       };
     }
 
@@ -118,8 +121,8 @@ const useDynamicSelectors = (selectors, value, { equality, useSelectors: useAlia
     }
 
     if (Array.isArray(selector)) {
-      const updatedSelector = selector.join('-');
-      return ({ dynamic }) => dynamic?.[updatedSelector];
+      // const updatedSelector = selector.join('-');
+      return ({ dynamic }) => dynamic?.[joinSelector(selector)];
     }
 
     if (typeof selector === 'string') {
