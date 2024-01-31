@@ -1,8 +1,7 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { useSelector as useReactReduxSelector } from 'react-redux';
+import { useSelector as useReactReduxSelector, useStore } from 'react-redux';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
-import { store } from '../store';
 import { helpers } from '../../common';
 
 /**
@@ -68,7 +67,11 @@ const deepEqual = helpers.memo((...args) => _isEqual(...args), { cacheLimit: 50 
  *
  * @returns {Function}
  */
-const useDispatch = () => dispatchEvent => store.dispatch(dispatchEvent);
+const useDispatch = () => {
+  const store = useStore();
+  const dispatch = event => store.dispatch(event);
+  return dispatchEvent => dispatch(dispatchEvent);
+};
 
 /**
  * Wrapper for Redux hook, useSelector. Applies test mode and a fallback value.

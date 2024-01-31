@@ -31,9 +31,9 @@ const notificationsOptions = {
  * @type {Array}
  */
 const reduxMiddleware = [
+  multiActionMiddleware,
   thunkMiddleware,
   statusMiddleware(),
-  multiActionMiddleware,
   promiseMiddleware,
   actionRecordMiddleware({
     id: process.env.REACT_APP_UI_LOGGER_ID,
