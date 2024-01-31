@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { useSelector as useReactReduxSelector, shallowEqual } from 'react-redux';
+import { useSelector as useReactReduxSelector } from 'react-redux';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { store } from '../store';
@@ -39,6 +39,16 @@ const createSimpleSelector = (selectors, callback) => {
 
   return helpers.memo(selector);
 };
+
+/**
+ * Shallow equal comparison. Is argument A mostly equal to argument B.
+ *
+ * @param {object} args
+ * @param {object|Array} args.A
+ * @param {object|Array} args.B
+ * @returns {boolean}
+ */
+const shallowEqual = (...args) => helpers.isShallowEqual(...args);
 
 /**
  * Deep equal comparison with extended memoized cache. Is argument A equal to argument B.

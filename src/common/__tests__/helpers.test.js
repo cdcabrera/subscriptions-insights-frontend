@@ -89,6 +89,22 @@ describe('Helpers', () => {
     expect(helpers.isPromise(() => 'lorem')).toBe(false);
   });
 
+  it('should determine shallow object, array equals', () => {
+    expect(helpers.isShallowEqual(['lorem', 'ipsum'], ['lorem', 'ipsum'])).toBe(true);
+    expect(helpers.isShallowEqual(['lorem', 'ipsum'], ['ipsum', 'lorem'])).toBe(false);
+
+    expect(helpers.isShallowEqual({ a: 'dolor', b: 'sit' }, { b: 'sit', a: 'dolor' })).toBe(true);
+    expect(helpers.isShallowEqual({ a: 'dolor', b: 'sit' }, { a: 'sit', b: 'dolor' })).toBe(false);
+
+    const obj = { a: 'dolor', b: 'sit' };
+    expect(helpers.isShallowEqual(['lorem', obj], ['lorem', obj])).toBe(true);
+    expect(helpers.isShallowEqual(['lorem', obj], ['lorem', { a: 'dolor', b: 'sit' }])).toBe(false);
+
+    const arr = ['lorem', 'ipsum'];
+    expect(helpers.isShallowEqual({ a: 'dolor', b: arr }, { a: 'dolor', b: arr })).toBe(true);
+    expect(helpers.isShallowEqual({ a: 'dolor', b: arr }, { a: 'dolor', b: ['lorem', 'ipsum'] })).toBe(false);
+  });
+
   it('should memoize function return values with memo', () => {
     const testArr = [];
     const testMemoReturnValue = helpers.memo(

@@ -57,6 +57,32 @@ const isDate = date => Object.prototype.toString.call(date) === '[object Date]';
 const isPromise = obj => /^\[object (Promise|Async|AsyncFunction)]/.test(Object.prototype.toString.call(obj));
 
 /**
+ * Shallow object and array equality
+ *
+ * @param {object|Array} a
+ * @param {object|Array} b
+ * @returns {boolean}
+ */
+const isShallowEqual = (a, b) => {
+  if (a === b) {
+    return true;
+  }
+
+  if (!(a instanceof Object) || !(b instanceof Object)) {
+    return false;
+  }
+
+  const AKeys = Object.keys(a);
+  const BKeys = Object.keys(b);
+
+  if (AKeys.length !== BKeys.length) {
+    return false;
+  }
+
+  return AKeys.findIndex(AKey => a[AKey] !== b[AKey]) <= -1;
+};
+
+/**
  * Generate a consistent hash
  * String hash generator based from, https://gist.github.com/jlevy/c246006675becc446360a798e2b2d781
  *
@@ -443,6 +469,7 @@ const helpers = {
   generateId,
   isDate,
   isPromise,
+  isShallowEqual,
   memo,
   noop,
   noopPromise,
