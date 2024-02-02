@@ -88,7 +88,7 @@ const PLATFORM_API_EXPORT_POST_TYPES = {
  */
 const PLATFORM_API_EXPORT_RESPONSE_TYPES = {
   EXPIRES_AT: 'expires_at',
-  ID: 'ID',
+  ID: 'id',
   STATUS: 'status'
 };
 

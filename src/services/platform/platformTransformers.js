@@ -17,7 +17,7 @@ import { helpers } from '../../common';
 const exports = response => {
   const updatedResponse = [];
   const {
-    [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data = [],
+    [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: id,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: status
   } = response || {};
