@@ -3,10 +3,11 @@ import { rbacConfig } from '../../config';
 import { axiosServiceCall } from '../common/serviceConfig';
 import { platformSchemas } from './platformSchemas';
 import { platformTransformers } from './platformTransformers';
-import { helpers } from '../../common';
+import { helpers, downloadHelpers } from '../../common';
 import {
   platformConstants,
-  PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES
+  PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES,
+  PLATFORM_API_EXPORT_STATUS_TYPES
 } from './platformConstants';
 
 /**
@@ -109,67 +110,6 @@ const hideGlobalFilter = async (isHidden = true) => {
 };
 
 /**
- * @api {post} /api/export/v1/exports
- * @apiDescription Create an export
- *
- * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
- *
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *       "name": "string",
- *       "created_at": "2024-01-24T16:20:31.229Z",
- *       "completed_at": "2024-01-24T16:20:31.229Z",
- *       "expires_at": "2024-01-24T16:20:31.229Z",
- *       "format": "json",
- *       "status": "partial",
- *       "sources": [
- *         {
- *           "application": "subscriptions",
- *           "resource": "instances",
- *           "filters": {},
- *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "status": "partial"
- *         }
- *       ]
- *     }
- *
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 500 Internal Server Error
- *     {
- *     }
- */
-/**
- * Post to create an export.
- *
- * @param {object} data JSON data to submit
- * @param {object} options
- * @param {boolean} options.cancel
- * @param {string} options.cancelId
- * @returns {Promise<*>}
- */
-const postExport = (data = {}, options = {}) => {
-  const {
-    cache = false,
-    cancel = true,
-    cancelId,
-    schema = [platformSchemas.exports],
-    transform = [platformTransformers.exports]
-  } = options;
-  return axiosServiceCall({
-    method: 'post',
-    url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
-    data,
-    cache,
-    cancel,
-    cancelId,
-    schema,
-    transform
-  });
-};
-
-/**
  * @api {get} /api/export/v1/exports/:id
  * @apiDescription Get an export by id
  *
@@ -204,22 +144,29 @@ const getExport = (id, options = {}) => {
   const { cache = false, cancel = true, cancelId } = options;
   return axiosServiceCall({
     url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
+    responseType: 'blob',
     cache,
     cancel,
     cancelId
-  });
+  }).then(
+    success =>
+      (helpers.TEST_MODE && success.data) ||
+      downloadHelpers.downloadData(success.data, `swatch_report_${id}.tar.gz`, 'application/gzip')
+  );
 };
 
 /**
+ * @apiMock {DelayResponse} 2000
+ * @apiMock {RandomSuccess}
  * @api {get} /api/export/v1/exports
- * @apiDescription Create multiple exports
+ * @apiDescription Get multiple, or a single, export status
  *
  * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       data: [
+ *       "data": [
  *         {
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
  *           "name": "string",
@@ -235,6 +182,49 @@ const getExport = (id, options = {}) => {
  *               "filters": {},
  *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
  *               "status": "partial"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "string",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "completed",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "completed"
+ *             }
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": [
+ *         {
+ *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "string",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "completed",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "instances",
+ *               "filters": {},
+ *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "completed"
  *             }
  *           ]
  *         },
@@ -341,13 +331,95 @@ const getExportStatus = (id, params = {}, options = {}) => {
   });
 };
 
+/**
+ * @apiMock {ForceStatus} 202
+ * @api {post} /api/export/v1/exports
+ * @apiDescription Create an export
+ *
+ * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 202 OK
+ *     {
+ *       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *       "name": "string",
+ *       "created_at": "2024-01-24T16:20:31.229Z",
+ *       "completed_at": "2024-01-24T16:20:31.229Z",
+ *       "expires_at": "2024-01-24T16:20:31.229Z",
+ *       "format": "json",
+ *       "status": "partial",
+ *       "sources": [
+ *         {
+ *           "application": "subscriptions",
+ *           "resource": "instances",
+ *           "filters": {},
+ *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *           "status": "partial"
+ *         }
+ *       ]
+ *     }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *     }
+ */
+/**
+ * Post to create an export.
+ *
+ * @param {object} data JSON data to submit
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
+const postExport = (data = {}, options = {}) => {
+  const {
+    cache = false,
+    cancel = true,
+    cancelId,
+    poll = {
+      pollInterval: 10000,
+      validate: response => {
+        if (Array.isArray(response.data)) {
+          if (
+            response.data.find(
+              ({ status }) =>
+                status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+                status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+                status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+            )
+          ) {
+            return false;
+          }
+          return true;
+        }
+        return false;
+      }
+    },
+    schema = [platformSchemas.exports],
+    transform = [platformTransformers.exports]
+  } = options;
+  return axiosServiceCall({
+    method: 'post',
+    url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+    data,
+    cache,
+    cancel,
+    cancelId,
+    poll,
+    schema,
+    transform
+  });
+};
+
 const platformServices = {
+  getExport,
+  getExportStatus,
   getUser,
   getUserPermissions,
   hideGlobalFilter,
-  postExport,
-  getExport,
-  getExportStatus
+  postExport
 };
 
 /**
@@ -358,10 +430,10 @@ helpers.browserExpose({ platformServices });
 export {
   platformServices as default,
   platformServices,
+  getExport,
+  getExportStatus,
   getUser,
   getUserPermissions,
   hideGlobalFilter,
-  postExport,
-  getExport,
-  getExportStatus
+  postExport
 };

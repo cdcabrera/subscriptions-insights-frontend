@@ -17,6 +17,13 @@ import { serviceHelpers } from './helpers';
 const globalXhrTimeout = Number.parseInt(process.env.REACT_APP_AJAX_TIMEOUT, 10) || 60000;
 
 /**
+ * Set Axios polling default.
+ *
+ * @type {number}
+ */
+const globalPollInterval = Number.parseInt(process.env.REACT_APP_AJAX_POLL_INTERVAL, 10) || 10000;
+
+/**
  * Cache Axios service call cancel tokens.
  *
  * @type {object}
@@ -34,7 +41,7 @@ const globalResponseCache = new LRUCache({
   updateAgeOnGet: true
 });
 
-// ToDo: consider another way of hashing cacheIDs. base64 could get a little large depending on settings, i.e. md5
+// ToDo: review using a function for pollInterval, scenario expanding the poll
 /**
  * Set Axios configuration. This includes response schema validation and caching.
  * Call platform "getUser" auth method, and apply service config. Service configuration
@@ -48,6 +55,7 @@ const globalResponseCache = new LRUCache({
  * @param {boolean} config.cancel
  * @param {string} config.cancelId
  * @param {object} config.params
+ * @param {{ location: Function|string, validate: Function, pollInterval: number }|Function} config.poll
  * @param {Array} config.schema
  * @param {Array} config.transform
  * @param {string|Function} config.url
@@ -55,11 +63,17 @@ const globalResponseCache = new LRUCache({
  * @param {string} options.cancelledMessage
  * @param {object} options.responseCache
  * @param {number} options.xhrTimeout
+ * @param {number} options.pollInterval
  * @returns {Promise<*>}
  */
 const axiosServiceCall = async (
   config = {},
-  { cancelledMessage = 'cancelled request', responseCache = globalResponseCache, xhrTimeout = globalXhrTimeout } = {}
+  {
+    cancelledMessage = 'cancelled request',
+    responseCache = globalResponseCache,
+    xhrTimeout = globalXhrTimeout,
+    pollInterval = globalPollInterval
+  } = {}
 ) => {
   const updatedConfig = {
     timeout: xhrTimeout,
@@ -171,6 +185,48 @@ const axiosServiceCall = async (
         const updatedResponse = { ...response };
         responseCache.set(cacheId, updatedResponse);
         return updatedResponse;
+      },
+      response => Promise.reject(response)
+    );
+  }
+
+  if (typeof updatedConfig.poll === 'function' || typeof updatedConfig.poll?.validate === 'function') {
+    axiosInstance.interceptors.response.use(
+      async response => {
+        const updatedResponse = { ...response, pollResponse: [] };
+
+        // passed conversions, allow future updates by passing original poll config
+        const updatedPoll = {
+          ...updatedConfig.poll,
+          __retryCount: updatedConfig.poll.__retryCount ?? 0, // internal counter passed towards validate
+          location: updatedConfig.poll.location || updatedConfig.url, // a url, or callback that returns a url to poll the put/posted url
+          validate: updatedConfig.poll.validate || updatedConfig.poll, // only required param, a function, validate status in prep for next
+          pollInterval: updatedConfig.poll.pollInterval || pollInterval // a number, the setTimeout interval
+        };
+
+        if (updatedPoll.validate(updatedResponse, updatedPoll.__retryCount)) {
+          return updatedResponse;
+        }
+
+        let tempLocation = updatedPoll.location;
+        if (typeof tempLocation === 'function') {
+          tempLocation = await tempLocation.call(null, updatedResponse, updatedPoll.__retryCount);
+        }
+
+        return new Promise(resolve => {
+          window.setTimeout(async () => {
+            const output = await axiosServiceCall({
+              ...config,
+              method: 'get',
+              data: undefined,
+              url: tempLocation,
+              cache: false,
+              poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
+            });
+
+            resolve(output);
+          }, updatedPoll.pollInterval);
+        });
       },
       response => Promise.reject(response)
     );

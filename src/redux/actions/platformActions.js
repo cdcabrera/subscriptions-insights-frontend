@@ -59,7 +59,7 @@ const createExport =
   dispatch =>
     dispatch({
       type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(data)
+      payload: platformServices.postExport(data)
     });
 
 /**

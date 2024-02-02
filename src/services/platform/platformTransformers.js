@@ -17,16 +17,16 @@ import { helpers } from '../../common';
 const exports = response => {
   const updatedResponse = [];
   const {
-    [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data = [],
+    [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: id,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: status
   } = response || {};
 
-  if (data) {
+  if (Array.isArray(data)) {
     updatedResponse.push(
       ...data.map(({ id: exportId, status: exportStatus }) => ({ id: exportId, status: exportStatus }))
     );
-  } else {
+  } else if (id && status) {
     updatedResponse.push({
       id,
       status
