@@ -1,6 +1,8 @@
 import axios, { CancelToken } from 'axios';
 import { LRUCache } from 'lru-cache';
+import _cloneDeep from 'lodash/cloneDeep';
 import { serviceHelpers } from './helpers';
+import { helpers } from '../../common/helpers';
 
 /**
  * Axios config for cancelling, caching, and emulated service calls.
@@ -15,6 +17,13 @@ import { serviceHelpers } from './helpers';
  * @type {number}
  */
 const globalXhrTimeout = Number.parseInt(process.env.REACT_APP_AJAX_TIMEOUT, 10) || 60000;
+
+/**
+ * Set Axios polling default.
+ *
+ * @type {number}
+ */
+const globalPollInterval = Number.parseInt(process.env.REACT_APP_AJAX_POLL_INTERVAL, 10) || 10000;
 
 /**
  * Cache Axios service call cancel tokens.
@@ -34,7 +43,7 @@ const globalResponseCache = new LRUCache({
   updateAgeOnGet: true
 });
 
-// ToDo: consider another way of hashing cacheIDs. base64 could get a little large depending on settings, i.e. md5
+// ToDo: review using a function for pollInterval, scenario expanding the poll
 /**
  * Set Axios configuration. This includes response schema validation and caching.
  * Call platform "getUser" auth method, and apply service config. Service configuration
@@ -48,6 +57,8 @@ const globalResponseCache = new LRUCache({
  * @param {boolean} config.cancel
  * @param {string} config.cancelId
  * @param {object} config.params
+ * @param {{ location: Function|string, validate: Function, pollInterval: number,
+ *     pollResponse: boolean, status: Function }|Function} config.poll
  * @param {Array} config.schema
  * @param {Array} config.transform
  * @param {string|Function} config.url
@@ -55,11 +66,17 @@ const globalResponseCache = new LRUCache({
  * @param {string} options.cancelledMessage
  * @param {object} options.responseCache
  * @param {number} options.xhrTimeout
+ * @param {number} options.pollInterval
  * @returns {Promise<*>}
  */
 const axiosServiceCall = async (
   config = {},
-  { cancelledMessage = 'cancelled request', responseCache = globalResponseCache, xhrTimeout = globalXhrTimeout } = {}
+  {
+    cancelledMessage = 'cancelled request',
+    responseCache = globalResponseCache,
+    xhrTimeout = globalXhrTimeout,
+    pollInterval = globalPollInterval
+  } = {}
 ) => {
   const updatedConfig = {
     timeout: xhrTimeout,
@@ -128,11 +145,13 @@ const axiosServiceCall = async (
         const updatedResponse = { ...response };
         const { data, error: normalizeError } = serviceHelpers.passDataToCallback(
           successTransform,
-          updatedResponse.data,
-          updatedResponse.config
+          _cloneDeep(updatedResponse.data),
+          _cloneDeep(updatedResponse.config)
         );
 
-        if (!normalizeError) {
+        if (normalizeError) {
+          console.warn(normalizeError);
+        } else {
           updatedResponse.data = data;
         }
 
@@ -150,11 +169,13 @@ const axiosServiceCall = async (
 
         const { data, error: normalizeError } = serviceHelpers.passDataToCallback(
           errorTransform,
-          updatedResponse?.data || updatedResponse?.message,
-          updatedResponse.config
+          (updatedResponse?.data && _cloneDeep(updatedResponse.data)) || updatedResponse?.message,
+          _cloneDeep(updatedResponse.config)
         );
 
-        if (!normalizeError) {
+        if (normalizeError) {
+          console.warn(normalizeError);
+        } else {
           updatedResponse.response = { ...updatedResponse, data };
         }
 
@@ -170,6 +191,251 @@ const axiosServiceCall = async (
       response => {
         const updatedResponse = { ...response };
         responseCache.set(cacheId, updatedResponse);
+        return updatedResponse;
+      },
+      response => Promise.reject(response)
+    );
+  }
+
+  if (typeof updatedConfig.poll === 'function' || typeof updatedConfig.poll?.validate === 'function') {
+    axiosInstance.interceptors.response.use(
+      async response => {
+        const updatedResponse = { ...response };
+        const callbackResponse = _cloneDeep(updatedResponse);
+
+        // passed conversions, allow future updates by passing original poll config
+        const updatedPoll = {
+          ...updatedConfig.poll,
+          // internal counter passed towards validate
+          __retryCount: updatedConfig.poll.__retryCount ?? 0,
+          // a url, or callback that returns a url to poll the put/posted url
+          location: updatedConfig.poll.location || updatedConfig.url,
+          // only required param, a function, validate status in prep for next
+          validate: updatedConfig.poll.validate || updatedConfig.poll,
+          // a number, the setTimeout interval
+          pollInterval: updatedConfig.poll.pollInterval || pollInterval
+        };
+
+        let validated = true;
+
+        try {
+          validated = await updatedPoll.validate.call(null, callbackResponse, updatedPoll.__retryCount);
+        } catch (err) {
+          console.error(err);
+        }
+
+        if (validated) {
+          return updatedResponse;
+        }
+
+        let tempLocation = updatedPoll.location;
+
+        if (typeof tempLocation === 'function') {
+          try {
+            tempLocation = await tempLocation.call(null, callbackResponse, updatedPoll.__retryCount);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
+          try {
+            updatedPoll.status.call(null, callbackResponse, updatedPoll.__retryCount);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        const pollResponse = new Promise((resolve, reject) => {
+          window.setTimeout(async () => {
+            try {
+              const output = await axiosServiceCall({
+                ...config,
+                method: 'get',
+                data: undefined,
+                url: tempLocation,
+                cache: false,
+                poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
+              });
+
+              resolve(output);
+            } catch (e) {
+              reject(e);
+            }
+          }, updatedPoll.pollInterval);
+        }).finally(() => {
+          if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
+            Promise.resolve(pollResponse).then(
+              res => {
+                try {
+                  console.log('>>>>> FINALLY success', res, updatedPoll.__retryCount);
+                  updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+                } catch (err) {
+                  console.error(err);
+                }
+                /*
+                 * console.log('>>>>> FINALLY callbackresponse', callbackResponse);
+                 * console.log('>>>>> FINALLY success', success);
+                 */
+              },
+              res => {
+                try {
+                  console.log('>>>>> FINALLY error', res, updatedPoll.__retryCount);
+                  updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+                } catch (err) {
+                  console.error(err);
+                }
+              }
+            );
+          }
+
+          /*
+           *console.log('>>>>> FINALLY', (async () => pollResponse)());
+           *console.log('>>>>> FINALLY', callbackResponse);
+           *
+           *if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
+           *  try {
+           *    updatedPoll.status.call(null, callbackResponse, updatedPoll.__retryCount);
+           *  } catch (err) {
+           *    console.error(err);
+           *  }
+           *}
+           */
+        });
+
+        if (updatedPoll.chainPollResponse !== false) {
+          return pollResponse;
+        }
+
+        // works, but returns a promise to the status call instead... should probably rename it to avoid confusion
+
+        // like resolver OR make it so you can't call poll unless it is chained... avoid to many options
+        if (typeof updatedPoll.status === 'function') {
+          /*
+           *try {
+           *  /*
+           * const results = await pollResponse;
+           * updatedPoll.status.call(null, results, updatedPoll.__retryCount);
+           * /
+           *  updatedPoll.status.call(null, pollResponse, updatedPoll.__retryCount);
+           *} catch (err) {
+           *  console.error(err);
+           *}
+           */
+          /*
+           *try {
+           *  console.log('>>>>> UNCHAINED INITIAL', updatedResponse, updatedPoll.__retryCount);
+           *  updatedPoll.status.call(null, updatedResponse, updatedPoll.__retryCount);
+           *} catch (err) {
+           *  console.error(err);
+           *}
+           */
+
+          pollResponse.then(
+            resolved => {
+              try {
+                console.log('>>>>> UNCHAINED basic', resolved, updatedPoll.__retryCount);
+                updatedPoll.status.call(null, resolved, undefined, updatedPoll.__retryCount);
+              } catch (err) {
+                console.error(err);
+              }
+            },
+            resolved => {
+              try {
+                console.log('>>>>> UNCHAINED basic error', resolved, updatedPoll.__retryCount);
+                updatedPoll.status.call(
+                  null,
+                  undefined,
+                  { ...resolved, error: true, status: resolved?.response?.status },
+                  updatedPoll.__retryCount
+                );
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          );
+
+          /*
+           *Promise.all([pollResponse]).then(
+           *  ([resolved]) => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED all', resolved, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, resolved, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  },
+           *  ([resolved]) => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED all', resolved, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, undefined, new Error(resolved), updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  }
+           *);
+           */
+
+          /*
+           *Promise.allSettled([pollResponse]).then(([resolved]) => {
+           *  try {
+           *    console.log('>>>>> UNCHAINED all settled', resolved.value, updatedPoll.__retryCount);
+           *    updatedPoll.status.call(
+           *      null,
+           *      resolved.value,
+           *      (resolved?.reason && new Error(resolved.reason)) || undefined,
+           *      updatedPoll.__retryCount
+           *    );
+           *  } catch (err) {
+           *    console.error(err);
+           *  }
+           *});
+           */
+
+          /*
+           *let resolved;
+           *
+           *Promise.resolve(pollResponse)
+           *  .then(
+           *    res => {
+           *      resolved = res;
+           *    },
+           *    res => {
+           *      resolved = res;
+           *    }
+           *  )
+           *  .finally(() => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED final', resolved, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, resolved, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  });
+           */
+
+          /*
+           *Promise.resolve(pollResponse).then(
+           *  res => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED success', res, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  },
+           *  res => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED error', res, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  }
+           *);
+           */
+        }
+
         return updatedResponse;
       },
       response => Promise.reject(response)

@@ -4,6 +4,20 @@
  */
 
 /**
+ * Platform Export response data type.
+ *
+ * @type {string}
+ */
+const PLATFORM_API_EXPORT_RESPONSE_DATA = 'data';
+
+/**
+ * Platform Export response meta type.
+ *
+ * @type {string}
+ */
+const PLATFORM_API_EXPORT_RESPONSE_META = 'meta';
+
+/**
  * Platform Export, available application types.
  *
  * @type {{SUBSCRIPTIONS: string}}
@@ -30,6 +44,13 @@ const PLATFORM_API_EXPORT_CONTENT_TYPES = {
   CSV: 'csv',
   JSON: 'json'
 };
+
+/**
+ * Platform Export, export filename prefix
+ *
+ * @type {string}
+ */
+const PLATFORM_API_EXPORT_FILENAME_PREFIX = 'swatch';
 
 /**
  * Platform Export, available status types.
@@ -70,11 +91,13 @@ const PLATFORM_API_EXPORT_POST_TYPES = {
 /**
  * Platform Export, available response types.
  *
- * @type {{STATUS: string, EXPIRES_AT: string, ID: string}}
+ * @type {{STATUS: string, FORMAT: string, EXPIRES_AT: string, ID: string, NAME: string}}
  */
 const PLATFORM_API_EXPORT_RESPONSE_TYPES = {
   EXPIRES_AT: 'expires_at',
-  ID: 'ID',
+  FORMAT: 'format',
+  ID: 'id',
+  NAME: 'name',
   STATUS: 'status'
 };
 
@@ -151,8 +174,11 @@ const PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES = {
 const platformConstants = {
   PLATFORM_API_EXPORT_APPLICATION_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES,
+  PLATFORM_API_EXPORT_FILENAME_PREFIX,
   PLATFORM_API_EXPORT_POST_TYPES,
   PLATFORM_API_EXPORT_RESOURCE_TYPES,
+  PLATFORM_API_EXPORT_RESPONSE_DATA,
+  PLATFORM_API_EXPORT_RESPONSE_META,
   PLATFORM_API_EXPORT_RESPONSE_TYPES,
   PLATFORM_API_EXPORT_SOURCE_TYPES,
   PLATFORM_API_EXPORT_STATUS_TYPES,
@@ -172,8 +198,11 @@ export {
   platformConstants,
   PLATFORM_API_EXPORT_APPLICATION_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES,
+  PLATFORM_API_EXPORT_FILENAME_PREFIX,
   PLATFORM_API_EXPORT_POST_TYPES,
   PLATFORM_API_EXPORT_RESOURCE_TYPES,
+  PLATFORM_API_EXPORT_RESPONSE_DATA,
+  PLATFORM_API_EXPORT_RESPONSE_META,
   PLATFORM_API_EXPORT_RESPONSE_TYPES,
   PLATFORM_API_EXPORT_SOURCE_TYPES,
   PLATFORM_API_EXPORT_STATUS_TYPES,
