@@ -194,7 +194,7 @@ const postExport = (data = {}, options = {}) => {
 /**
  * Get an export after setup.
  *
- * @param {id} id Export ID
+ * @param {string} id Export ID
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
@@ -211,8 +211,69 @@ const getExport = (id, options = {}) => {
 };
 
 /**
+ * @api {get} /api/export/v1/exports
+ * @apiDescription Create multiple exports
+ *
+ * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       data: [
+ *         {
+ *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "string",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "partial",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "instances",
+ *               "filters": {},
+ *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "partial"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "string",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "completed",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "completed"
+ *             }
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       message: "'---' is not valid",
+ *       code: 400
+ *     }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *     }
+ */
+/**
  * @api {get} /api/export/v1/exports/:id/status
- * @apiDescription Create an export
+ * @apiDescription Get a single export
  *
  * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
  *
@@ -250,15 +311,16 @@ const getExport = (id, options = {}) => {
  *     }
  */
 /**
- * Get an export status after setup.
+ * Get multiple export status, or a single status after setup.
  *
- * @param {id} id Export ID
+ * @param {string|undefined|null} id Export ID
+ * @param {object} params
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getExportStatus = (id, options = {}) => {
+const getExportStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
@@ -267,7 +329,10 @@ const getExportStatus = (id, options = {}) => {
     transform = [platformTransformers.exports]
   } = options;
   return axiosServiceCall({
-    url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT_STATUS.replace('{0}', id),
+    url:
+      (id && process.env.REACT_APP_SERVICES_PLATFORM_EXPORT_STATUS.replace('{0}', id)) ||
+      process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+    params,
     cache,
     cancel,
     cancelId,

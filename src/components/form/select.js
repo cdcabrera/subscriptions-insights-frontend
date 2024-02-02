@@ -453,7 +453,7 @@ const Select = ({
             splitButtonVariant
           })}
         >
-          {(!splitButtonVariant && placeholder) || (!SplitButtonVariant && ariaLabel)}
+          {toggleIcon || (!splitButtonVariant && placeholder) || (!SplitButtonVariant && ariaLabel)}
         </DropdownToggle>
       }
       dropdownItems={
