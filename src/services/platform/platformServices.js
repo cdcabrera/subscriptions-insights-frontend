@@ -109,13 +109,14 @@ const hideGlobalFilter = async (isHidden = true) => {
 };
 
 /**
+ * @apiMock {ForceStatus} 202
  * @api {post} /api/export/v1/exports
  * @apiDescription Create an export
  *
  * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
  *
  * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
+ *     HTTP/1.1 202 OK
  *     {
  *       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
  *       "name": "string",
@@ -154,6 +155,23 @@ const postExport = (data = {}, options = {}) => {
     cache = false,
     cancel = true,
     cancelId,
+    poll = {
+      location: (response, retryCount) => {
+        console.log('>>>>>>> LOCATION', retryCount);
+        console.log('>>>>>>> LOCATION', response);
+        return process.env.REACT_APP_SERVICES_PLATFORM_EXPORT;
+      },
+      validate: (response, retryCount) => {
+        console.log('>>>>>>>>>>> VALIDATE', retryCount);
+        console.log('>>>>>>>>>>> VALIDATE', response);
+        return retryCount >= 3;
+      },
+      next: (response, retryCount) => {
+        console.log('>>>>>>> NEXT', retryCount);
+        console.log('>>>>>>> NEXT', response);
+        return `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${response?.data?.[0]?.id}`;
+      }
+    },
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports]
   } = options;
@@ -164,9 +182,17 @@ const postExport = (data = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    poll,
     schema,
     transform
-  });
+  }).then(
+    success => {
+      console.log('>>>>>>>>>> SUCCESS', success);
+    },
+    err => {
+      console.log('>>>>>>>>>> ERROR', err);
+    }
+  );
 };
 
 /**
@@ -219,7 +245,7 @@ const getExport = (id, options = {}) => {
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       data: [
+ *       "data": [
  *         {
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
  *           "name": "string",
