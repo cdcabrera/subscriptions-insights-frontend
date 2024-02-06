@@ -181,6 +181,7 @@ const postExport = (data = {}, options = {}) => {
         return retryCount >= 3;
       },
       next: response => Promise.all([getExport(response?.data?.[0]?.id), getExport(response?.data?.[1]?.id)]),
+      nextWORKS2: response => Promise.all([getExport(response?.data?.[0]?.id), getExport(response?.data?.[1]?.id)]),
       nextWORKS: (response, retryCount) => {
         console.log('>>>>>>> NEXT', retryCount);
         console.log('>>>>>>> NEXT', response);
@@ -202,8 +203,9 @@ const postExport = (data = {}, options = {}) => {
     schema,
     transform
   }).then(
-    success => {
-      console.log('>>>>>>>>>> SUCCESS', success);
+    (success, a, b, c) => {
+      console.log('>>>>>>>>>> SUCCESS', success, a, b, c);
+      return success;
     },
     err => {
       console.log('>>>>>>>>>> ERROR', err);

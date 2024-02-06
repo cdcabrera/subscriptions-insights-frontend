@@ -191,12 +191,6 @@ const axiosServiceCall = async (
     );
   }
 
-  // const isPollLocation =
-  // typeof updatedConfig.poll?.location === 'string' || typeof updatedConfig.poll?.location === 'function';
-  // const isPollValidate =
-  //  typeof updatedConfig.poll?.validate === 'string' || typeof updatedConfig.poll?.validate === 'function';
-
-  // if (typeof updatedConfig.poll === 'function' || (isPollLocation && isPollValidate)) {
   if (typeof updatedConfig.poll === 'function' || typeof updatedConfig.poll?.validate === 'function') {
     axiosInstance.interceptors.response.use(
       async response => {
@@ -207,34 +201,19 @@ const axiosServiceCall = async (
         const updatedPoll = {
           __retryCount: updatedConfig.poll.__retryCount ?? 0, // internal counter passed towards validate
           location: updatedConfig.poll.location || updatedConfig.url, // a url, or callback that returns a url to poll the put/posted url
-          next: updatedConfig.poll.next || Function.prototype, // url or callback that returns a url to get "next"
+          next: updatedConfig.poll.next, // url or callback that returns a url to get "next"
           validate: updatedConfig.poll.validate || updatedConfig.poll // only required param, a function, validate status in prep for next
         };
 
         if (updatedPoll.validate(updatedResponse, updatedPoll.__retryCount)) {
+          console.log('>>>>> RESOLVE 000', updatedResponse);
           // temp conversions
+          /*
           let tempNext = updatedPoll.next;
           if (typeof tempNext === 'function') {
             tempNext = await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
           }
-          /*
-          if (typeof tempNext === 'string') {
-            await axiosServiceCall({
-              // ...config,
-              // transform: undefined,
-              // schema: undefined,
-              method: 'get',
-              // data: undefined,
-              url: tempNext,
-              cache: false
-              // poll: undefined
-            });
-          }
-          */
 
-          // if (typeof tempNext === 'function' || helpers.isPromise(tempNext)) {
-          // await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
-          // } else {
           if (typeof tempNext === 'string') {
             await axiosServiceCall({
               method: 'get',
@@ -244,6 +223,35 @@ const axiosServiceCall = async (
           }
 
           return updatedResponse;
+           */
+
+          const tempNext = updatedPoll.next;
+
+          // you can return them if you want, doesn't work out so great for downloads associated with the next
+          console.log('>>>>> RESOLVE 001', updatedResponse);
+          if (typeof tempNext === 'string') {
+            axiosServiceCall({
+              method: 'get',
+              url: tempNext,
+              cache: false
+            });
+            /*
+            return axiosServiceCall({
+              method: 'get',
+              url: tempNext,
+              cache: false
+            });
+             */
+          }
+
+          console.log('>>>>> RESOLVE 002', updatedResponse);
+          if (typeof tempNext === 'function' || helpers.isPromise(tempNext)) {
+            // return tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
+            tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
+          }
+
+          console.log('>>>>> RESOLVE 003', updatedResponse);
+          return updatedResponse;
         }
 
         let tempLocation = updatedPoll.location;
@@ -251,6 +259,24 @@ const axiosServiceCall = async (
           tempLocation = await tempLocation.call(null, updatedResponse, updatedPoll.__retryCount);
         }
 
+        const retTimerPromise = new Promise(resolve => {
+          window.setTimeout(async () => {
+            const output = await axiosServiceCall({
+              ...config,
+              method: 'get',
+              data: undefined,
+              url: tempLocation,
+              cache: false,
+              poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
+            });
+
+            resolve(output);
+          }, pollInterval);
+        });
+
+        return retTimerPromise;
+
+        /*
         window.setTimeout(async () => {
           const output = await axiosServiceCall({
             ...config,
@@ -267,6 +293,7 @@ const axiosServiceCall = async (
         }, pollInterval);
 
         return updatedResponse;
+        */
       },
       response => Promise.reject(response)
     );
