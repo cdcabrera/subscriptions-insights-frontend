@@ -22,16 +22,18 @@ const exports = response => {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: status
   } = response || {};
 
-  if (data) {
+  if (Array.isArray(data)) {
     updatedResponse.push(
       ...data.map(({ id: exportId, status: exportStatus }) => ({ id: exportId, status: exportStatus }))
     );
-  } else {
+  } else if (id && status) {
     updatedResponse.push({
       id,
       status
     });
   }
+
+  console.log('>>>>>>> EXPORT TRANSFORM', typeof response, typeof updatedResponse);
 
   return updatedResponse;
 };

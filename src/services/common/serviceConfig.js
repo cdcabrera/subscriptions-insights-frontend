@@ -17,6 +17,13 @@ import { serviceHelpers } from './helpers';
 const globalXhrTimeout = Number.parseInt(process.env.REACT_APP_AJAX_TIMEOUT, 10) || 60000;
 
 /**
+ * Set Axios polling default.
+ *
+ * @type {number}
+ */
+const globalPollInterval = Number.parseInt(process.env.REACT_APP_AJAX_POLL_INTERVAL, 10) || 10000;
+
+/**
  * Cache Axios service call cancel tokens.
  *
  * @type {object}
@@ -48,6 +55,7 @@ const globalResponseCache = new LRUCache({
  * @param {boolean} config.cancel
  * @param {string} config.cancelId
  * @param {object} config.params
+ * @param {{ location: Function|string, validate: Function, next: Function|string }|Function} config.poll
  * @param {Array} config.schema
  * @param {Array} config.transform
  * @param {string|Function} config.url
@@ -55,11 +63,17 @@ const globalResponseCache = new LRUCache({
  * @param {string} options.cancelledMessage
  * @param {object} options.responseCache
  * @param {number} options.xhrTimeout
+ * @param {number} options.pollInterval
  * @returns {Promise<*>}
  */
 const axiosServiceCall = async (
   config = {},
-  { cancelledMessage = 'cancelled request', responseCache = globalResponseCache, xhrTimeout = globalXhrTimeout } = {}
+  {
+    cancelledMessage = 'cancelled request',
+    responseCache = globalResponseCache,
+    xhrTimeout = globalXhrTimeout,
+    pollInterval = globalPollInterval
+  } = {}
 ) => {
   const updatedConfig = {
     timeout: xhrTimeout,
@@ -170,6 +184,73 @@ const axiosServiceCall = async (
       response => {
         const updatedResponse = { ...response };
         responseCache.set(cacheId, updatedResponse);
+        return updatedResponse;
+      },
+      response => Promise.reject(response)
+    );
+  }
+
+  // const isPollLocation =
+  // typeof updatedConfig.poll?.location === 'string' || typeof updatedConfig.poll?.location === 'function';
+  // const isPollValidate =
+  //  typeof updatedConfig.poll?.validate === 'string' || typeof updatedConfig.poll?.validate === 'function';
+
+  // if (typeof updatedConfig.poll === 'function' || (isPollLocation && isPollValidate)) {
+  if (typeof updatedConfig.poll === 'function' || typeof updatedConfig.poll?.validate === 'function') {
+    axiosInstance.interceptors.response.use(
+      async response => {
+        console.log('>>>> INTERCEPTOR FIRED');
+        const updatedResponse = { ...response, pollResponse: [] };
+
+        // passed conversions
+        const updatedPoll = {
+          __retryCount: updatedConfig.poll.__retryCount ?? 0, // internal counter passed towards validate
+          location: updatedConfig.poll.location || updatedConfig.url, // a url, or callback that returns a url to poll the put/posted url
+          next: updatedConfig.poll.next || Function.prototype, // url or callback that returns a url to get "next"
+          validate: updatedConfig.poll.validate || updatedConfig.poll // only required param, a function, validate status in prep for next
+        };
+
+        // temp conversions
+        let tempNext = updatedPoll.next;
+        if (typeof tempNext === 'function') {
+          tempNext = await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
+        }
+
+        if (updatedPoll.validate(updatedResponse, updatedPoll.__retryCount)) {
+          if (typeof tempNext === 'string') {
+            await axiosServiceCall({
+              ...config,
+              method: 'get',
+              data: undefined,
+              url: tempNext,
+              cache: false,
+              poll: undefined
+            });
+          }
+
+          return updatedResponse;
+        }
+
+        let tempLocation = updatedPoll.location;
+        if (typeof tempLocation === 'function') {
+          tempLocation = await tempLocation.call(null, updatedResponse, updatedPoll.__retryCount);
+        }
+
+        window.setTimeout(async () => {
+          const output = await axiosServiceCall({
+            ...config,
+            method: 'get',
+            data: undefined,
+            url: tempLocation,
+            cache: false,
+            poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
+            // poll: { location: updatedLocation, validate: updatedValidate, _retryCount }
+          });
+          updatedResponse.pollResponse.push(output);
+
+          // console.log('>>>>>>>>>>>>>>>> OUTPUT', updatedResponse.pollResponse);
+        }, pollInterval);
+
         return updatedResponse;
       },
       response => Promise.reject(response)
