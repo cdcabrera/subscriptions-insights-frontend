@@ -1,7 +1,6 @@
 import axios, { CancelToken } from 'axios';
 import { LRUCache } from 'lru-cache';
 import { serviceHelpers } from './helpers';
-import { helpers } from '../../common/helpers';
 
 /**
  * Axios config for cancelling, caching, and emulated service calls.
@@ -42,7 +41,7 @@ const globalResponseCache = new LRUCache({
   updateAgeOnGet: true
 });
 
-// ToDo: consider another way of hashing cacheIDs. base64 could get a little large depending on settings, i.e. md5
+// ToDo: review using a function for pollInterval, scenario expanding the poll
 /**
  * Set Axios configuration. This includes response schema validation and caching.
  * Call platform "getUser" auth method, and apply service config. Service configuration
@@ -56,7 +55,7 @@ const globalResponseCache = new LRUCache({
  * @param {boolean} config.cancel
  * @param {string} config.cancelId
  * @param {object} config.params
- * @param {{ location: Function|string, validate: Function, next: Function|string }|Function} config.poll
+ * @param {{ location: Function|string, validate: Function, pollInterval: number }|Function} config.poll
  * @param {Array} config.schema
  * @param {Array} config.transform
  * @param {string|Function} config.url
@@ -194,63 +193,18 @@ const axiosServiceCall = async (
   if (typeof updatedConfig.poll === 'function' || typeof updatedConfig.poll?.validate === 'function') {
     axiosInstance.interceptors.response.use(
       async response => {
-        console.log('>>>> INTERCEPTOR FIRED');
         const updatedResponse = { ...response, pollResponse: [] };
 
-        // passed conversions
+        // passed conversions, allow future updates by passing original poll config
         const updatedPoll = {
+          ...updatedConfig.poll,
           __retryCount: updatedConfig.poll.__retryCount ?? 0, // internal counter passed towards validate
           location: updatedConfig.poll.location || updatedConfig.url, // a url, or callback that returns a url to poll the put/posted url
-          next: updatedConfig.poll.next, // url or callback that returns a url to get "next"
-          validate: updatedConfig.poll.validate || updatedConfig.poll // only required param, a function, validate status in prep for next
+          validate: updatedConfig.poll.validate || updatedConfig.poll, // only required param, a function, validate status in prep for next
+          pollInterval: updatedConfig.poll.pollInterval || pollInterval // a number, the setTimeout interval
         };
 
         if (updatedPoll.validate(updatedResponse, updatedPoll.__retryCount)) {
-          console.log('>>>>> RESOLVE 000', updatedResponse);
-          // temp conversions
-          /*
-          let tempNext = updatedPoll.next;
-          if (typeof tempNext === 'function') {
-            tempNext = await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
-          }
-
-          if (typeof tempNext === 'string') {
-            await axiosServiceCall({
-              method: 'get',
-              url: tempNext,
-              cache: false
-            });
-          }
-
-          return updatedResponse;
-           */
-
-          const tempNext = updatedPoll.next;
-
-          // you can return them if you want, doesn't work out so great for downloads associated with the next
-          console.log('>>>>> RESOLVE 001', updatedResponse);
-          if (typeof tempNext === 'string') {
-            axiosServiceCall({
-              method: 'get',
-              url: tempNext,
-              cache: false
-            });
-            /*
-            return axiosServiceCall({
-              method: 'get',
-              url: tempNext,
-              cache: false
-            });
-             */
-          }
-
-          console.log('>>>>> RESOLVE 002', updatedResponse);
-          if (typeof tempNext === 'function' || helpers.isPromise(tempNext)) {
-            // return tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
-            tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
-          }
-
-          console.log('>>>>> RESOLVE 003', updatedResponse);
           return updatedResponse;
         }
 
@@ -259,7 +213,7 @@ const axiosServiceCall = async (
           tempLocation = await tempLocation.call(null, updatedResponse, updatedPoll.__retryCount);
         }
 
-        const retTimerPromise = new Promise(resolve => {
+        return new Promise(resolve => {
           window.setTimeout(async () => {
             const output = await axiosServiceCall({
               ...config,
@@ -271,29 +225,8 @@ const axiosServiceCall = async (
             });
 
             resolve(output);
-          }, pollInterval);
+          }, updatedPoll.pollInterval);
         });
-
-        return retTimerPromise;
-
-        /*
-        window.setTimeout(async () => {
-          const output = await axiosServiceCall({
-            ...config,
-            method: 'get',
-            data: undefined,
-            url: tempLocation,
-            cache: false,
-            poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
-            // poll: { location: updatedLocation, validate: updatedValidate, _retryCount }
-          });
-          updatedResponse.pollResponse.push(output);
-
-          // console.log('>>>>>>>>>>>>>>>> OUTPUT', updatedResponse.pollResponse);
-        }, pollInterval);
-
-        return updatedResponse;
-        */
       },
       response => Promise.reject(response)
     );
