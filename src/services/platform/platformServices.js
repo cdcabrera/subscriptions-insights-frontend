@@ -141,6 +141,20 @@ const hideGlobalFilter = async (isHidden = true) => {
  *     {
  *     }
  */
+
+const getExport = (id, options = {}) => {
+  const { cache = false, cancel = true, cancelId } = options;
+  return axiosServiceCall({
+    url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
+    responseType: 'blob',
+    cache,
+    cancel,
+    cancelId
+  }).then(success => {
+    console.log('>>>>>>>> GET EXPORT', success.data);
+  });
+};
+
 /**
  * Post to create an export.
  *
@@ -156,20 +170,22 @@ const postExport = (data = {}, options = {}) => {
     cancel = true,
     cancelId,
     poll = {
-      location: (response, retryCount) => {
-        console.log('>>>>>>> LOCATION', retryCount);
-        console.log('>>>>>>> LOCATION', response);
-        return process.env.REACT_APP_SERVICES_PLATFORM_EXPORT;
-      },
+      // location: (response, retryCount) => {
+      //  console.log('>>>>>>> LOCATION', retryCount);
+      //  console.log('>>>>>>> LOCATION', response);
+      //  return process.env.REACT_APP_SERVICES_PLATFORM_EXPORT;
+      // },
       validate: (response, retryCount) => {
         console.log('>>>>>>>>>>> VALIDATE', retryCount);
         console.log('>>>>>>>>>>> VALIDATE', response);
         return retryCount >= 3;
       },
-      next: (response, retryCount) => {
+      next: response => Promise.all([getExport(response?.data?.[0]?.id), getExport(response?.data?.[1]?.id)]),
+      nextWORKS: (response, retryCount) => {
         console.log('>>>>>>> NEXT', retryCount);
         console.log('>>>>>>> NEXT', response);
         return `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${response?.data?.[0]?.id}`;
+        // return (a, b) => console.log('>>>>> NEXT');
       }
     },
     schema = [platformSchemas.exports],
@@ -226,15 +242,6 @@ const postExport = (data = {}, options = {}) => {
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getExport = (id, options = {}) => {
-  const { cache = false, cancel = true, cancelId } = options;
-  return axiosServiceCall({
-    url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
-    cache,
-    cancel,
-    cancelId
-  });
-};
 
 /**
  * @api {get} /api/export/v1/exports

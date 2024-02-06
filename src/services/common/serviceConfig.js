@@ -1,6 +1,7 @@
 import axios, { CancelToken } from 'axios';
 import { LRUCache } from 'lru-cache';
 import { serviceHelpers } from './helpers';
+import { helpers } from '../../common/helpers';
 
 /**
  * Axios config for cancelling, caching, and emulated service calls.
@@ -210,21 +211,35 @@ const axiosServiceCall = async (
           validate: updatedConfig.poll.validate || updatedConfig.poll // only required param, a function, validate status in prep for next
         };
 
-        // temp conversions
-        let tempNext = updatedPoll.next;
-        if (typeof tempNext === 'function') {
-          tempNext = await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
-        }
-
         if (updatedPoll.validate(updatedResponse, updatedPoll.__retryCount)) {
+          // temp conversions
+          let tempNext = updatedPoll.next;
+          if (typeof tempNext === 'function') {
+            tempNext = await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
+          }
+          /*
           if (typeof tempNext === 'string') {
             await axiosServiceCall({
-              ...config,
+              // ...config,
+              // transform: undefined,
+              // schema: undefined,
               method: 'get',
-              data: undefined,
+              // data: undefined,
               url: tempNext,
-              cache: false,
-              poll: undefined
+              cache: false
+              // poll: undefined
+            });
+          }
+          */
+
+          // if (typeof tempNext === 'function' || helpers.isPromise(tempNext)) {
+          // await tempNext.call(null, updatedResponse, updatedPoll.__retryCount);
+          // } else {
+          if (typeof tempNext === 'string') {
+            await axiosServiceCall({
+              method: 'get',
+              url: tempNext,
+              cache: false
             });
           }
 
