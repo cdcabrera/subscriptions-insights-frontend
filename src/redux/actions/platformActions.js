@@ -51,15 +51,19 @@ const authorizeUser = appName => dispatch =>
 /**
  * Create an export for download.
  *
+ * @param {string} id State layer identifier
  * @param {object} data
  * @returns {Function}
  */
 const createExport =
-  (data = {}) =>
+  (id, data = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.postExport(data)
+      payload: platformServices.postExport(data),
+      meta: {
+        id
+      }
     });
 
 /**

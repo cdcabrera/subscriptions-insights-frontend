@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductInventoryHostsQuery, useProductQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import { PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES } from '../../services/platform/platformConstants';
-import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+// import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -51,16 +51,48 @@ const useOnSelect = ({
 
       // apply existing query data...
       const data = { ...inventoryQuery, format: value, name: `swatch-${viewId}-${productId}` };
-      return createExport(data)(dispatch);
+      return createExport(productId, data)(dispatch);
     },
     [createExport, dispatch, inventoryQuery, productId, viewId]
   );
 };
 
+/**
+ * Poll data for pending results.
+ *
+ * @param {object} options
+ * @param {number} options.pollInterval
+ * @param {Function} options.useSelector
+ * @param {Function} options.useTimeout
+ * @returns {Function}
+ */
+const usePoll = ({
+  pollInterval = helpers.EXPORT_POLL_INTERVAL,
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector,
+  useTimeout: useAliasTimeout = useTimeout
+} = {}) => {
+  const updatedScans = useAliasSelector(({ scans }) => scans?.view?.data?.[apiTypes.API_RESPONSE_SCANS_RESULTS], []);
+  const { update } = useAliasTimeout(() => {
+    const filteredScans = updatedScans.filter(
+      ({ [apiTypes.API_RESPONSE_SCAN_MOST_RECENT]: mostRecent }) =>
+        mostRecent?.status === 'created' || mostRecent?.status === 'pending' || mostRecent?.status === 'running'
+    );
+
+    return filteredScans.length > 0;
+  }, pollInterval);
+
+  return update;
+};
+
 /*
  * get all status
- * const useGetStatus = ({ getStatus = reduxActions.platform.getExportStatus } = {}) => {};
  */
+const useGetStatus = ({ getStatus = reduxActions.platform.getExportStatus } = {}) => {
+  useEffect(() => {
+    getStatus();
+  });
+  return
+};
 
 /**
  * Display a unit of measure (uom) field with options.
@@ -78,23 +110,28 @@ const ToolbarFieldExport = ({
   options,
   position,
   t,
+  useGetStatus: useAliasGetStatus,
   useOnSelect: useAliasOnSelect,
   useProductQuery: useAliasProductQuery
 }) => {
-  const { [RHSM_API_QUERY_SET_TYPES.UOM]: updatedValue } = useAliasProductQuery();
+  // const { [RHSM_API_QUERY_SET_TYPES.UOM]: updatedValue } = useAliasProductQuery();
+  useAliasGetStatus();
   const onSelect = useAliasOnSelect();
 
-  const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
+  // const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));
 
   // useEffect - notifications about current status
+  useEffect(() => {
+
+  }, []);
 
   return (
     <Select
       isDropdownButton
       aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
       onSelect={onSelect}
-      options={updatedOptions}
-      selectedOptions={updatedValue}
+      options={options}
+      // selectedOptions={updatedValue}
       placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
       position={position}
       data-test="toolbarFieldExport"
@@ -120,6 +157,7 @@ ToolbarFieldExport.propTypes = {
   ),
   position: PropTypes.string,
   t: PropTypes.func,
+  useGetStatus: PropTypes.func,
   useOnSelect: PropTypes.func,
   useProductQuery: PropTypes.func
 };
@@ -127,14 +165,14 @@ ToolbarFieldExport.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, t: Function, isFilter: boolean, options: Array, useProductQuery: Function,
+ * @type {{useOnSelect: Function, t: Function, options: Array, useProductQuery: Function,
  *     position: string}}
  */
 ToolbarFieldExport.defaultProps = {
-  isFilter: false,
   options: toolbarFieldOptions,
   position: SelectPosition.left,
   t: translate,
+  useGetStatus,
   useOnSelect,
   useProductQuery
 };
