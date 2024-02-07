@@ -46,6 +46,13 @@ const PLATFORM_API_EXPORT_CONTENT_TYPES = {
 };
 
 /**
+ * Platform Export, export filename prefix
+ *
+ * @type {string}
+ */
+const PLATFORM_API_EXPORT_FILENAME_PREFIX = 'swatch';
+
+/**
  * Platform Export, available status types.
  *
  * @type {{COMPLETED: string, FAILED: string, RUNNING: string, PARTIAL: string, PENDING: string}}
@@ -84,11 +91,13 @@ const PLATFORM_API_EXPORT_POST_TYPES = {
 /**
  * Platform Export, available response types.
  *
- * @type {{STATUS: string, EXPIRES_AT: string, ID: string}}
+ * @type {{STATUS: string, FORMAT: string, EXPIRES_AT: string, ID: string, NAME: string}}
  */
 const PLATFORM_API_EXPORT_RESPONSE_TYPES = {
   EXPIRES_AT: 'expires_at',
+  FORMAT: 'format',
   ID: 'id',
+  NAME: 'name',
   STATUS: 'status'
 };
 
@@ -165,6 +174,7 @@ const PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES = {
 const platformConstants = {
   PLATFORM_API_EXPORT_APPLICATION_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES,
+  PLATFORM_API_EXPORT_FILENAME_PREFIX,
   PLATFORM_API_EXPORT_POST_TYPES,
   PLATFORM_API_EXPORT_RESOURCE_TYPES,
   PLATFORM_API_EXPORT_RESPONSE_DATA,
@@ -188,6 +198,7 @@ export {
   platformConstants,
   PLATFORM_API_EXPORT_APPLICATION_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES,
+  PLATFORM_API_EXPORT_FILENAME_PREFIX,
   PLATFORM_API_EXPORT_POST_TYPES,
   PLATFORM_API_EXPORT_RESOURCE_TYPES,
   PLATFORM_API_EXPORT_RESPONSE_DATA,

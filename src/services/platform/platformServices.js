@@ -169,7 +169,7 @@ const getExport = (id, options = {}) => {
  *       "data": [
  *         {
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "name": "string",
+ *           "name": "swatch-productId-1234",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -187,7 +187,7 @@ const getExport = (id, options = {}) => {
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "string",
+ *           "name": "swatch-productId-6789",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -212,7 +212,7 @@ const getExport = (id, options = {}) => {
  *       "data": [
  *         {
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "name": "string",
+ *          "name": "swatch-productId-1234",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -230,7 +230,7 @@ const getExport = (id, options = {}) => {
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "string",
+ *           "name": "swatch-productId-6789",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -243,6 +243,24 @@ const getExport = (id, options = {}) => {
  *               "filters": {},
  *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
  *               "status": "completed"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "unknown-export",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "pending",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "pending"
  *             }
  *           ]
  *         }
@@ -315,6 +333,24 @@ const getExportStatus = (id, params = {}, options = {}) => {
     cache = false,
     cancel = true,
     cancelId,
+    poll = {
+      pollInterval: 10000,
+      validate: response => {
+        if (
+          !Array.isArray(response?.data?.data) ||
+          response?.data?.data?.find(
+            ({ status }) =>
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+          )
+        ) {
+          return false;
+        }
+
+        return true;
+      }
+    },
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports]
   } = options;
@@ -326,6 +362,7 @@ const getExportStatus = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    poll,
     schema,
     transform
   });
@@ -381,20 +418,20 @@ const postExport = (data = {}, options = {}) => {
     poll = {
       pollInterval: 10000,
       validate: response => {
-        if (Array.isArray(response.data)) {
-          if (
-            response.data.find(
-              ({ status }) =>
-                status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-                status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-                status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-            )
-          ) {
-            return false;
-          }
-          return true;
+        console.log('>>>>>>>>>> RESPONSE.data', response.data);
+        if (
+          !Array.isArray(response?.data?.data) ||
+          response?.data?.data?.find(
+            ({ status }) =>
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+          )
+        ) {
+          return false;
         }
-        return false;
+
+        return true;
       }
     },
     schema = [platformSchemas.exports],

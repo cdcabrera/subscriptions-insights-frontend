@@ -5,6 +5,8 @@ import {
 } from '@redhat-cloud-services/frontend-components-notifications';
 import { platformTypes } from '../types';
 import { platformServices } from '../../services/platform/platformServices';
+import { translate } from '../../components/i18n/i18nHelpers';
+import { helpers } from '../../common';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -51,15 +53,20 @@ const authorizeUser = appName => dispatch =>
 /**
  * Create an export for download.
  *
+ * @param {string} id State layer identifier
  * @param {object} data
  * @returns {Function}
  */
 const createExport =
-  (data = {}) =>
+  (id, data = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.postExport(data)
+      payload: platformServices.postExport(data),
+      meta: {
+        id,
+        data
+      }
     });
 
 /**

@@ -370,9 +370,16 @@ const Select = ({
    *
    * @event onDropdownSelect
    * @param {object} event
+   * @param a
+   * @param b
+   * @param c
    * @param {string} titleSelection
    */
-  const onDropdownSelect = (event, titleSelection) => {
+  const onDropdownSelect = (event, titleSelection, a, b, c) => {
+    console.log('>>>> DROPDOWN SELECT', isDropdownButton, event);
+    console.log('>>>> DROPDOWN SELECT', titleSelection);
+    console.log('>>>> DROPDOWN SELECT', a, b, c);
+
     const updatedOptions = options;
     const optionsIndex = updatedOptions.findIndex(
       option =>
@@ -380,6 +387,23 @@ const Select = ({
         event.currentTarget.querySelector('[data-title]')?.getAttribute('data-title') === option.title ||
         event.currentTarget.innerText === option.title
     );
+
+    console.log('>>>>> DROPDOWN SELECT', optionsIndex);
+
+    /*
+     *if (
+     *  updatedOptions[optionsIndex].isDisabledAllowEvent === false &&
+     *  updatedOptions[optionsIndex].isDisabled === true
+     *) {
+     *  console.log('>>>>> DROPDOWN SELECT, DISABLED OPTION');
+     *  return;
+     *}
+     */
+
+    if (updatedOptions[optionsIndex].isDisabled === true) {
+      console.log('>>>>> DROPDOWN SELECT, DISABLED OPTION');
+      return;
+    }
 
     updatedOptions[optionsIndex].selected =
       variant === SelectVariant.single ? true : !updatedOptions[optionsIndex].selected;
@@ -402,7 +426,15 @@ const Select = ({
     const mockTarget = {
       id,
       name: name || id,
-      value: mockUpdatedOptions[optionsIndex].value,
+      // value: mockUpdatedOptions[optionsIndex].value,
+      value: !updatedOptions[optionsIndex].isDisabledAllowEvent ? mockUpdatedOptions[optionsIndex].value : undefined,
+      /*
+       * value:
+       *         updatedOptions[optionsIndex].isDisabledAllowEvent === false
+       *           ? mockUpdatedOptions[optionsIndex].value
+       *           : undefined,
+       */
+      isDisabled: updatedOptions[optionsIndex].isDisabledAllowEvent === true,
       selected: (variant === SelectVariant.single && mockUpdatedOptions[optionsIndex]) || _cloneDeep(updateSelected),
       selectedIndex: optionsIndex,
       type: `select-${(variant === SelectVariant.single && 'one') || 'multiple'}`,
@@ -425,7 +457,7 @@ const Select = ({
 
     onSelect({ ...mockEvent }, optionsIndex, mockUpdatedOptions);
 
-    if (variant === SelectVariant.single) {
+    if (variant === SelectVariant.single && !updatedOptions[optionsIndex].isDisabledAllowEvent) {
       setIsExpanded(false);
     }
   };
@@ -459,9 +491,16 @@ const Select = ({
       dropdownItems={
         options?.map(option => (
           <DropdownItem
+            className={(option.isDisabledAllowEvent === true && 'pf-m-disabled') || ''}
             onClick={onDropdownSelect}
             key={window.btoa(`${option.title}-${option.value}`)}
             id={window.btoa(`${option.title}-${option.value}`)}
+            isDisabled={option.isDisabled === true}
+            /*
+             * isAriaDisabled={option.isDisabled === true}
+             * isDisabled={option.isDisabledAllowEvent === true || option.isDisabled === true}
+             * isAriaDisabled={option.isDisabledAllowEvent === true || option.isDisabled === true}
+             */
             data-value={(_isPlainObject(option.value) && JSON.stringify([option.value])) || option.value}
             data-title={option.title}
             data-description={option.description}
@@ -511,6 +550,12 @@ const Select = ({
           key={window.btoa(`${option.title}-${option.value}`)}
           id={window.btoa(`${option.title}-${option.value}`)}
           value={option.title}
+          isDisabled={option.isDisabled === true}
+          isAriaDisabled={option.isDisabled === true}
+          /*
+           * isDisabled={option.isDisabledAllowEvent === false && option.isDisabled === true}
+           * isAriaDisabled={option.isDisabledAllowEvent === true || option.isDisabled === true}
+           */
           data-value={(_isPlainObject(option.value) && JSON.stringify([option.value])) || option.value}
           data-title={option.title}
           data-description={option.description}
@@ -559,6 +604,8 @@ Select.propTypes = {
       PropTypes.shape({
         description: PropTypes.any,
         selected: PropTypes.bool,
+        isDisabled: PropTypes.bool,
+        isDisabledAllowEvent: PropTypes.bool,
         title: PropTypes.any,
         value: PropTypes.any.isRequired
       })
@@ -566,6 +613,8 @@ Select.propTypes = {
     PropTypes.shape({
       description: PropTypes.any,
       selected: PropTypes.bool,
+      isDisabledAllowEvent: PropTypes.bool,
+      isDisabled: PropTypes.bool,
       title: PropTypes.any,
       value: PropTypes.any.isRequired
     }),

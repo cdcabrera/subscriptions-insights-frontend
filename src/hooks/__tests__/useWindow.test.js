@@ -1,7 +1,11 @@
 import React from 'react';
-import { windowHooks, useResizeObserver } from '../useWindow';
+import { windowHooks, useResizeObserver, useTimeout } from '../useWindow';
 
 describe('useWindow', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
   it('should return specific properties', () => {
     expect(windowHooks).toMatchSnapshot('specific properties');
   });
@@ -37,5 +41,15 @@ describe('useWindow', () => {
     expect(mockUnobserve).toHaveBeenCalledTimes(1);
 
     spy.mockClear();
+  });
+
+  it('should apply a hook for useTimeout', async () => {
+    const mockCallback = jest.fn();
+    const mockSetTimeout = jest.spyOn(global, 'setTimeout');
+    const { result } = await renderHook(() => useTimeout(mockCallback));
+
+    expect(mockSetTimeout).toHaveBeenCalledTimes(2);
+    expect(mockCallback).toHaveBeenCalledTimes(1);
+    expect(result).toMatchSnapshot('timeout');
   });
 });
