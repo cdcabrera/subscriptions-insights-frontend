@@ -1,6 +1,8 @@
 import axios, { CancelToken } from 'axios';
 import { LRUCache } from 'lru-cache';
+import _cloneDeep from 'lodash/cloneDeep';
 import { serviceHelpers } from './helpers';
+import { helpers } from '../../common/helpers';
 
 /**
  * Axios config for cancelling, caching, and emulated service calls.
@@ -142,11 +144,15 @@ const axiosServiceCall = async (
         const updatedResponse = { ...response };
         const { data, error: normalizeError } = serviceHelpers.passDataToCallback(
           successTransform,
-          updatedResponse.data,
-          updatedResponse.config
+          _cloneDeep(updatedResponse.data),
+          _cloneDeep(updatedResponse.config)
         );
 
-        if (!normalizeError) {
+        if (normalizeError) {
+          if (!helpers.PROD_MODE) {
+            console.error(normalizeError);
+          }
+        } else {
           updatedResponse.data = data;
         }
 
@@ -164,11 +170,15 @@ const axiosServiceCall = async (
 
         const { data, error: normalizeError } = serviceHelpers.passDataToCallback(
           errorTransform,
-          updatedResponse?.data || updatedResponse?.message,
-          updatedResponse.config
+          (updatedResponse?.data && _cloneDeep(updatedResponse.data)) || updatedResponse?.message,
+          _cloneDeep(updatedResponse.config)
         );
 
-        if (!normalizeError) {
+        if (normalizeError) {
+          if (!helpers.PROD_MODE) {
+            console.error(normalizeError);
+          }
+        } else {
           updatedResponse.response = { ...updatedResponse, data };
         }
 
@@ -194,6 +204,7 @@ const axiosServiceCall = async (
     axiosInstance.interceptors.response.use(
       async response => {
         const updatedResponse = { ...response, pollResponse: [] };
+        const callbackResponse = _cloneDeep(updatedResponse);
 
         // passed conversions, allow future updates by passing original poll config
         const updatedPoll = {
@@ -204,13 +215,13 @@ const axiosServiceCall = async (
           pollInterval: updatedConfig.poll.pollInterval || pollInterval // a number, the setTimeout interval
         };
 
-        if (updatedPoll.validate(updatedResponse, updatedPoll.__retryCount)) {
+        if (updatedPoll.validate(callbackResponse, updatedPoll.__retryCount)) {
           return updatedResponse;
         }
 
         let tempLocation = updatedPoll.location;
         if (typeof tempLocation === 'function') {
-          tempLocation = await tempLocation.call(null, updatedResponse, updatedPoll.__retryCount);
+          tempLocation = await tempLocation.call(null, callbackResponse, updatedPoll.__retryCount);
         }
 
         return new Promise(resolve => {
