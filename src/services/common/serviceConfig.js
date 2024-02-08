@@ -58,7 +58,7 @@ const globalResponseCache = new LRUCache({
  * @param {string} config.cancelId
  * @param {object} config.params
  * @param {{ location: Function|string, validate: Function, pollInterval: number,
- *     pollResponse: boolean}|Function} config.poll
+ *     pollResponse: boolean, status: Function }|Function} config.poll
  * @param {Array} config.schema
  * @param {Array} config.transform
  * @param {string|Function} config.url
@@ -150,9 +150,7 @@ const axiosServiceCall = async (
         );
 
         if (normalizeError) {
-          if (!helpers.PROD_MODE) {
-            console.error(normalizeError);
-          }
+          console.warn(normalizeError);
         } else {
           updatedResponse.data = data;
         }
@@ -176,9 +174,7 @@ const axiosServiceCall = async (
         );
 
         if (normalizeError) {
-          if (!helpers.PROD_MODE) {
-            console.error(normalizeError);
-          }
+          console.warn(normalizeError);
         } else {
           updatedResponse.response = { ...updatedResponse, data };
         }
@@ -210,19 +206,44 @@ const axiosServiceCall = async (
         // passed conversions, allow future updates by passing original poll config
         const updatedPoll = {
           ...updatedConfig.poll,
-          __retryCount: updatedConfig.poll.__retryCount ?? 0, // internal counter passed towards validate
-          location: updatedConfig.poll.location || updatedConfig.url, // a url, or callback that returns a url to poll the put/posted url
-          validate: updatedConfig.poll.validate || updatedConfig.poll, // only required param, a function, validate status in prep for next
-          pollInterval: updatedConfig.poll.pollInterval || pollInterval // a number, the setTimeout interval
+          // internal counter passed towards validate
+          __retryCount: updatedConfig.poll.__retryCount ?? 0,
+          // a url, or callback that returns a url to poll the put/posted url
+          location: updatedConfig.poll.location || updatedConfig.url,
+          // only required param, a function, validate status in prep for next
+          validate: updatedConfig.poll.validate || updatedConfig.poll,
+          // a number, the setTimeout interval
+          pollInterval: updatedConfig.poll.pollInterval || pollInterval
         };
 
-        if (updatedPoll.validate(callbackResponse, updatedPoll.__retryCount)) {
+        let validated = true;
+
+        try {
+          validated = await updatedPoll.validate(callbackResponse, updatedPoll.__retryCount);
+        } catch (err) {
+          console.error(err);
+        }
+
+        if (validated) {
           return updatedResponse;
         }
 
         let tempLocation = updatedPoll.location;
+
         if (typeof tempLocation === 'function') {
-          tempLocation = await tempLocation.call(null, callbackResponse, updatedPoll.__retryCount);
+          try {
+            tempLocation = await tempLocation.call(null, callbackResponse, updatedPoll.__retryCount);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        if (typeof updatedPoll.status === 'function') {
+          try {
+            updatedPoll.status.call(null, callbackResponse, updatedPoll.__retryCount);
+          } catch (err) {
+            console.error(err);
+          }
         }
 
         const pollResponse = new Promise(resolve => {
@@ -244,8 +265,6 @@ const axiosServiceCall = async (
           return pollResponse;
         }
 
-        // return the poll response promise as part of the response...
-        updatedResponse.pollResponse = pollResponse;
         return updatedResponse;
       },
       response => Promise.reject(response)
