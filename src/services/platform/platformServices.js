@@ -152,7 +152,11 @@ const getExport = (id, options = {}) => {
   }).then(
     success =>
       (helpers.TEST_MODE && success.data) ||
-      downloadHelpers.downloadData(success.data, `swatch_report_${id}.tar.gz`, 'application/gzip')
+      downloadHelpers.downloadData({
+        data: success.data,
+        fileName: `swatch_report_${id}.tar.gz`,
+        fileType: 'application/gzip'
+      })
   );
 };
 
@@ -189,6 +193,110 @@ const getExport = (id, options = {}) => {
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
  *           "name": "swatch-rhel-for-x86-els-payg",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "completed",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "completed"
+ *             }
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": [
+ *         {
+ *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "swatch-RHEL for x86",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "partial",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "instances",
+ *               "filters": {},
+ *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "pending"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "swatch-rhel-for-x86-els-payg",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "partial",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "pending"
+ *             }
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": [
+ *         {
+ *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "swatch-RHEL for x86",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "completed",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "instances",
+ *               "filters": {},
+ *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "completed"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "swatch-rhel-for-x86-els-payg",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "completed",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "completed"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "unknown-export",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -272,7 +380,8 @@ const getExportStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
-    cancelId = 'export-status',
+    // cancelId = 'export-status',
+    cancelId,
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports],
     ...restOptions
@@ -290,75 +399,6 @@ const getExportStatus = (id, params = {}, options = {}) => {
     transform
   });
 };
-
-const getExportStatusWORKS = (id, params = {}, options = {}) => {
-  const {
-    cache = false,
-    cancel = true,
-    cancelId = 'export-status',
-    poll = {
-      // chainPollResponse: false,
-      pollInterval: 2000,
-      validate: response => {
-        if (
-          !Array.isArray(response?.data?.data) ||
-          response?.data?.data?.find(
-            ({ status }) =>
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-          )
-        ) {
-          return false;
-        }
-        return true;
-      }
-    },
-    schema = [platformSchemas.exports],
-    transform = [platformTransformers.exports],
-    ...restOptions
-  } = options;
-  return axiosServiceCall({
-    ...restOptions,
-    url:
-      (id && process.env.REACT_APP_SERVICES_PLATFORM_EXPORT_STATUS.replace('{0}', id)) ||
-      process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
-    params,
-    cache,
-    cancel,
-    cancelId,
-    poll,
-    schema,
-    transform
-  });
-};
-/*
-const getExportPollStatus = (id, params = {}, options = {}) => {
-  const updatedOptions = {
-    ...options,
-    poll: {
-      pollInterval: 2000,
-      validate: response => {
-        if (
-          !Array.isArray(response?.data?.data) ||
-          response?.data?.data?.find(
-            ({ status }) =>
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-          )
-        ) {
-          return false;
-        }
-
-        return true;
-      }
-    }
-  };
-
-  return getExportStatus(id, params, updatedOptions);
-};
-*/
 
 /**
  * @apiMock {ForceStatus} 202
@@ -406,49 +446,22 @@ const postExport = (data = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
-    cancelId = 'export-status',
-    poll = {
-      pollInterval: 2000,
-      validate: response => {
-        console.log('>>>>>>>>>> RESPONSE.data', response.data);
-        if (
-          !Array.isArray(response?.data?.data) ||
-          response?.data?.data?.find(
-            ({ status }) =>
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-          )
-        ) {
-          return false;
-        }
-
-        return true;
-      }
-    },
+    cancelId, // = 'export-status',
     schema = [platformSchemas.exports],
-    transform = [platformTransformers.exports]
+    transform = [platformTransformers.exports],
+    ...restOptions
   } = options;
   return axiosServiceCall({
+    ...restOptions,
     method: 'post',
     url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
     data,
     cache,
     cancel,
     cancelId,
-    poll,
     schema,
     transform
   });
-  /*
-   * .then(
-   *  () => {
-   *    console.log('>>> RET export status');
-   *    return getExportStatus();
-   *  },
-   *  err => Promise.reject(err)
-   * );
-   */
 };
 
 const platformServices = {

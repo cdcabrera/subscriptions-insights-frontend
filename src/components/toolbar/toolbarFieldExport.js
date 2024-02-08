@@ -13,7 +13,7 @@ import {
 // import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 import { platformTypes } from '../../redux/types';
-import { platformServices } from '../../services/platform/platformServices';
+import { getExport, platformServices } from '../../services/platform/platformServices';
 
 /**
  * A standalone export select/dropdown filter.
@@ -125,6 +125,35 @@ const useOnSelect = ({
                *}
                */
             }
+          }
+        },
+        {
+          type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+          payload: platformServices.getExportStatus(
+            undefined,
+            {},
+            {
+              poll: {
+                pollInterval: 2000,
+                validate: response => {
+                  if (
+                    !Array.isArray(response?.data?.data) ||
+                    response?.data?.data?.find(
+                      ({ status: dataStatus }) =>
+                        dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+                        dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+                        dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+                    )
+                  ) {
+                    return false;
+                  }
+                  return true;
+                }
+              }
+            }
+          ),
+          meta: {
+            id: 'poll'
           }
         }
       ]);
@@ -244,6 +273,28 @@ const useGetAllExportStatus = ({
       }
     ]);
   });
+
+  useEffect(() => {
+    if (poll?.fulfilled) {
+      console.log('>>>> DATA DOWNLOAD');
+
+      dispatch(
+        poll.data.data.map(({ id }) => ({
+          type: 'DATA_DOWNLOADS',
+          payload: platformServices.getExport(id)
+        }))
+      );
+
+      /*
+       *dispatch({
+       *  type: 'DATA_DOWNLOADS',
+       *  // data: poll.data.data
+       *  // payload: Promise.all(dispatch(poll.data.data.map(({ id }) => platformServices.getExport(id))))
+       *  payload: Promise.resolve(dispatch(poll.data.data.map(({ id }) => {platformServices.getExport(id))))
+       *});
+       */
+    }
+  }, [dispatch, poll?.fulfilled]);
 
   // const isPending = isTherePendingData or undefined;
 
