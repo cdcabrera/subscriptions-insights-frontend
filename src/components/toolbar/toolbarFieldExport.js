@@ -53,24 +53,7 @@ const useOnSelect = ({
   const inventoryQuery = useAliasProductInventoryQuery();
 
   return useCallback(
-    ({ value = null, ...rest } = {}, a, b, c) => {
-      console.log('>>>>>>>>>>> REST', rest);
-      console.log('>>>>>>>>>>> REST', a, b, c);
-
-      if (!value) {
-        console.log('>>>>> NO VALUE SELECT', value, rest);
-        dispatch(
-          reduxActions.platform.addNotification({
-            variant: 'info',
-            title: 'pending',
-            description: translate('curiosity-optin.notificationsSuccessDescription'),
-            dismissable: true,
-            autoDismiss: true
-          })
-        );
-        return;
-      }
-
+    ({ value = null } = {}) => {
       const sources = [];
       sources.push({
         application: 'subscriptions',
@@ -89,16 +72,42 @@ const useOnSelect = ({
           productId
         }
       });
-      // const data = { format: value, name: `${EXPORT_PREFIX}-${viewId}-${productId}`, sources };
+
       const data = { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources };
-      // return createExport(productId, data)(dispatch);
+
       dispatch([
         {
           type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-          payload: platformServices.postExport(data),
+          payload: platformServices.postExport(data, {
+            poll: {
+              pollInterval: 2000,
+              status: response => {
+                dispatch({
+                  type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+                  payload: Promise.resolve(response),
+                  meta: {
+                    id: 'status'
+                  }
+                });
+              },
+              validate: response => {
+                if (
+                  !Array.isArray(response?.data?.data) ||
+                  response?.data?.data?.find(
+                    ({ status: dataStatus }) =>
+                      dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+                      dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+                      dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+                  )
+                ) {
+                  return false;
+                }
+                return true;
+              }
+            }
+          }),
           meta: {
-            id: 'status',
-            data,
+            id: 'poll',
             notifications: {
               rejected: {
                 variant: 'danger',
@@ -113,47 +122,15 @@ const useOnSelect = ({
                 description: translate('curiosity-optin.notificationsSuccessDescription'),
                 dismissable: true,
                 autoDismiss: true
-              }
-              /*
-               *,
-               *fulfilled: {
-               *variant: 'success',
-               *title: 'fulfilled',
-               *description: translate('curiosity-optin.notificationsSuccessDescription'),
-               *dismissable: true,
-               *autoDismiss: true
-               *}
-               */
-            }
-          }
-        },
-        {
-          type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-          payload: platformServices.getExportStatus(
-            undefined,
-            {},
-            {
-              poll: {
-                pollInterval: 2000,
-                validate: response => {
-                  if (
-                    !Array.isArray(response?.data?.data) ||
-                    response?.data?.data?.find(
-                      ({ status: dataStatus }) =>
-                        dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-                        dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-                        dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-                    )
-                  ) {
-                    return false;
-                  }
-                  return true;
-                }
+              },
+              fulfilled: {
+                variant: 'success',
+                title: 'fulfilled',
+                description: translate('curiosity-optin.notificationsSuccessDescription'),
+                dismissable: true,
+                autoDismiss: true
               }
             }
-          ),
-          meta: {
-            id: 'poll'
           }
         }
       ]);
@@ -162,39 +139,9 @@ const useOnSelect = ({
   );
 };
 
-/**
- * Poll data for pending results.
- *
- * @param {object} options
- * @param {number} options.pollInterval
- * @param {Function} options.useSelector
- * @param {Function} options.useTimeout
- * @returns {Function}
- */
-/**
- *const usePoll = ({
- *pollInterval = helpers.EXPORT_POLL_INTERVAL,
- *useSelector: useAliasSelector = storeHooks.reactRedux.useSelector,
- *useTimeout: useAliasTimeout = useTimeout
- *} = {}) => {
- *const updatedScans = useAliasSelector(({ scans }) => scans?.view?.data?.[apiTypes.API_RESPONSE_SCANS_RESULTS], []);
- *const { update } = useAliasTimeout(() => {
- *  const filteredScans = updatedScans.filter(
- *    ({ [apiTypes.API_RESPONSE_SCAN_MOST_RECENT]: mostRecent }) =>
- *      mostRecent?.status === 'created' || mostRecent?.status === 'pending' || mostRecent?.status === 'running'
- *  );
- *
- *  return filteredScans.length > 0;
- *}, pollInterval);
- *
- *return update;
- *};
- */
-
 /*
  * get all status
  */
-
 const useGetAllExportStatus = ({
   useProduct: useAliasProduct = useProduct,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
@@ -206,42 +153,10 @@ const useGetAllExportStatus = ({
     { id: 'status', selector: ({ app }) => app?.exports?.status },
     { id: 'poll', selector: ({ app }) => app?.exports?.poll }
   ]);
-  /*
-   * const { error, pending = true, fulfilled, data } = useAliasSelector(({ app }) => app?.exports?.status, {});
-   * const { error, pending = true, fulfilled, data } = useAliasSelector(({ app }) => app?.exports?.poll, {});
-   */
-  /*
-   *const {
-   *  error,
-   *  pending = true,
-   *  fulfilled,
-   *  data
-   *} = useAliasSelector([({ app }) => app?.exports?.status, ({ app }) => app?.exports?.poll], {});
-   */
   const dispatch = useAliasDispatch();
 
   useMount(() => {
-    /*
-     * initial, no poll... we need to establish a data trail to activate the notifications... to then fire the poll...
-     * scenario... user leaves and returns getStatus()(dispatch);
-     */
-    /*
-     *dispatch({
-     *  type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-     *  payload: platformServices.getExportStatus(),
-     *  meta: {
-     *    id: 'status'
-     *  }
-     *});
-     */
     dispatch([
-      {
-        type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-        payload: platformServices.getExportStatus(undefined, {}, { cancelId: 'exportStatus' }),
-        meta: {
-          id: 'status'
-        }
-      },
       {
         type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
         payload: platformServices.getExportStatus(
@@ -249,6 +164,19 @@ const useGetAllExportStatus = ({
           {},
           {
             poll: {
+              status: response => {
+                console.log('>>>> MOUNT status', response);
+                /*
+                 *dispatch({
+                 *  type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+                 *  payload: platformServices.getExportStatus(undefined, {}, { cancelId: 'exportStatus' }),
+                 *  meta: {
+                 *    id: 'status'
+                 *  }
+                 *});
+                 */
+              },
+              chainPollResponse: false,
               pollInterval: 2000,
               validate: response => {
                 if (
@@ -273,62 +201,6 @@ const useGetAllExportStatus = ({
       }
     ]);
   });
-
-  /*
-   *useEffect(() => {
-   *  if (poll?.fulfilled) {
-   *    console.log('>>>> DATA DOWNLOAD');
-   *
-   *    dispatch(
-   *      poll.data.data.map(({ id }) => ({
-   *        type: 'DATA_DOWNLOADS',
-   *        payload: platformServices.getExport(id)
-   *      }))
-   *    );
-   *  }
-   *}, [dispatch, poll?.fulfilled]);
-   */
-
-  // const isPending = isTherePendingData or undefined;
-
-  /*
-   *useEffect(() => {
-   *  // set the poll if there is pending data
-   *  if (isPending) {
-   *    const poll = {
-   *      pollInterval: 2000,
-   *      validate: response => {
-   *        if (
-   *          !Array.isArray(response?.data?.data) ||
-   *          response?.data?.data?.find(
-   *            ({ status }) =>
-   *              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-   *              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-   *              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-   *          )
-   *        ) {
-   *          return false;
-   *        }
-   *        return true;
-   *      }
-   *    };
-   *
-   *    dispatch({
-   *      type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-   *      payload: platformServices.getExportStatus(undefined, {}, { poll }),
-   *      meta: {
-   *        id: 'poll'
-   *      }
-   *    });
-   *  }
-   *}, [dispatch, isPending]);
-   *
-   */
-
-  /*
-   * console.log('>>>>>>>>>>>>>> FINAL status', { error, pending, fulfilled, data });
-   * console.log('>>>>>>>>>>>>>> FINAL status', poll, status);
-   */
 
   const isPolling = (poll.pending && poll.pending === true) || false;
   const isProductPolling =
@@ -369,20 +241,6 @@ const useGetAllExportStatus = ({
   );
 
   useEffect(() => {
-    /*
-    if (productsCompleted.length || productsPolling.length) {
-      dispatch(
-        reduxActions.platform.addNotification({
-          variant: 'info',
-          title: 'Downloads are available',
-          description: `${(productsPolling.length && `Pending ${productsPolling.length}`) || ''} ${(productsCompleted.length && `Completed ${productsCompleted.length}`) || ''}`,
-          dismissable: true,
-          autoDismiss: true
-        })
-      );
-    }
-    */
-
     if (productsCompleted.length) {
       dispatch(
         reduxActions.platform.addNotification({
@@ -428,32 +286,19 @@ const ToolbarFieldExport = ({
    * useSelectorsResponse: useAliasSelectorsResponse
    */
 }) => {
-  const { isProductPolling: pending = false, productFormatsPolling = [] } = useGetAllExportStatus();
+  // const { isProductPolling: pending = false, productFormatsPolling = [] } = useGetAllExportStatus();
+  const pending = false;
+  const productFormatsPolling = [];
   console.log('>>>>>>>>>>>>> EXPORT FIELD OUT', pending, productFormatsPolling);
-  /*
-   * const { productId } = useAliasProduct();
-   * const { pending, responses } = useAliasSelectorsResponse([
-   * const { pending, responses } = useAliasSelectorsResponse([
-   * { id: 'export', selector: ({ app }) => app?.exports?.[productId] }
-   *  { id: 'export', selector: ({ app }) => app?.exports?.status }
-   * ]);
-   */
-  // const pending = false;
 
-  // const updatedValue = undefined; // responses?.id?.export?.meta?.data?.format;
 
-  // const { [RHSM_API_QUERY_SET_TYPES.UOM]: updatedValue } = useAliasProductQuery();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
-    // title: (pending && option.value === updatedValue && 'Loading...') || option.title,
     title: (pending && productFormatsPolling.includes(option.value) && 'Loading...') || option.title,
-    selected: pending && productFormatsPolling.includes(option.value), // option.value === updatedValue,
-    // isLoading: option.value === updatedValue,
-    isDisabledAllowEvent: pending && productFormatsPolling.includes(option.value) // option.value === updatedValue
+    selected: pending && productFormatsPolling.includes(option.value),
+    isDisabled: pending && productFormatsPolling.includes(option.value)
   }));
-
-  console.log('>>>>>>>>>>>>> EXPORT FIELD', updatedOptions);
 
   return (
     <Select
@@ -461,12 +306,10 @@ const ToolbarFieldExport = ({
       aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
       onSelect={onSelect}
       options={updatedOptions}
-      // selectedOptions={updatedValue}
       placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
       position={position}
       data-test="toolbarFieldExport"
       toggleIcon={<ExportIcon />}
-      // variant={SelectVariant.checkbox}
       buttonVariant={SelectButtonVariant.plain}
     />
   );
