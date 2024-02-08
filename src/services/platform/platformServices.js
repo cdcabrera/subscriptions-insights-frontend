@@ -7,7 +7,8 @@ import { helpers, downloadHelpers } from '../../common';
 import {
   platformConstants,
   PLATFORM_API_RESPONSE_USER_PERMISSION_TYPES as USER_PERMISSION_TYPES,
-  PLATFORM_API_EXPORT_STATUS_TYPES
+  PLATFORM_API_EXPORT_STATUS_TYPES,
+  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX
 } from './platformConstants';
 
 /**
@@ -169,7 +170,7 @@ const getExport = (id, options = {}) => {
  *       "data": [
  *         {
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-productId-1234",
+ *           "name": "swatch-RHEL for x86",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -181,13 +182,13 @@ const getExport = (id, options = {}) => {
  *               "resource": "instances",
  *               "filters": {},
  *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "partial"
+ *               "status": "pending"
  *             }
  *           ]
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-productId-6789",
+ *           "name": "swatch-rhel-for-x86-els-payg",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -212,7 +213,50 @@ const getExport = (id, options = {}) => {
  *       "data": [
  *         {
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *          "name": "swatch-productId-1234",
+ *           "name": "swatch-RHEL for x86",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "partial",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "instances",
+ *               "filters": {},
+ *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "pending"
+ *             }
+ *           ]
+ *         },
+ *         {
+ *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "swatch-rhel-for-x86-els-payg",
+ *           "created_at": "2024-01-24T16:20:31.229Z",
+ *           "completed_at": "2024-01-24T16:20:31.229Z",
+ *           "expires_at": "2024-01-24T16:20:31.229Z",
+ *           "format": "json",
+ *           "status": "partial",
+ *           "sources": [
+ *             {
+ *               "application": "subscriptions",
+ *               "resource": "subscriptions",
+ *               "filters": {},
+ *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
+ *               "status": "pending"
+ *             }
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": [
+ *         {
+ *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+ *           "name": "swatch-RHEL for x86",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -230,7 +274,7 @@ const getExport = (id, options = {}) => {
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-productId-6789",
+ *           "name": "swatch-rhel-for-x86-els-payg",
  *           "created_at": "2024-01-24T16:20:31.229Z",
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
@@ -253,7 +297,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "pending",
+ *           "status": "partial",
  *           "sources": [
  *             {
  *               "application": "subscriptions",
@@ -289,7 +333,7 @@ const getExport = (id, options = {}) => {
  *     HTTP/1.1 200 OK
  *     {
  *       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *       "name": "string",
+ *       "name": "swatch-RHEL for x86",
  *       "created_at": "2024-01-24T16:20:31.229Z",
  *       "completed_at": "2024-01-24T16:20:31.229Z",
  *       "expires_at": "2024-01-24T16:20:31.229Z",
@@ -301,7 +345,7 @@ const getExport = (id, options = {}) => {
  *           "resource": "instances",
  *           "filters": {},
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "status": "partial"
+ *           "status": "pending"
  *         }
  *       ]
  *     }
@@ -332,9 +376,30 @@ const getExportStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
+    cancelId = 'export-status',
+    schema = [platformSchemas.exports],
+    transform = [platformTransformers.exports],
+    ...restOptions
+  } = options;
+  return axiosServiceCall({
+    ...restOptions,
+    url:
+      (id && process.env.REACT_APP_SERVICES_PLATFORM_EXPORT_STATUS.replace('{0}', id)) ||
+      process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+    params,
+    cache,
+    cancel,
     cancelId,
-    poll = {
-      pollInterval: 10000,
+    schema,
+    transform
+  });
+};
+/*
+const getExportPollStatus = (id, params = {}, options = {}) => {
+  const updatedOptions = {
+    ...options,
+    poll: {
+      pollInterval: 2000,
       validate: response => {
         if (
           !Array.isArray(response?.data?.data) ||
@@ -350,23 +415,12 @@ const getExportStatus = (id, params = {}, options = {}) => {
 
         return true;
       }
-    },
-    schema = [platformSchemas.exports],
-    transform = [platformTransformers.exports]
-  } = options;
-  return axiosServiceCall({
-    url:
-      (id && process.env.REACT_APP_SERVICES_PLATFORM_EXPORT_STATUS.replace('{0}', id)) ||
-      process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
-    params,
-    cache,
-    cancel,
-    cancelId,
-    poll,
-    schema,
-    transform
-  });
+    }
+  };
+
+  return getExportStatus(id, params, updatedOptions);
 };
+*/
 
 /**
  * @apiMock {ForceStatus} 202
@@ -379,7 +433,7 @@ const getExportStatus = (id, params = {}, options = {}) => {
  *     HTTP/1.1 202 OK
  *     {
  *       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *       "name": "string",
+ *       "name": "swatch-RHEL for x86",
  *       "created_at": "2024-01-24T16:20:31.229Z",
  *       "completed_at": "2024-01-24T16:20:31.229Z",
  *       "expires_at": "2024-01-24T16:20:31.229Z",
@@ -391,7 +445,7 @@ const getExportStatus = (id, params = {}, options = {}) => {
  *           "resource": "instances",
  *           "filters": {},
  *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "status": "partial"
+ *           "status": "pending"
  *         }
  *       ]
  *     }
@@ -414,9 +468,9 @@ const postExport = (data = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
-    cancelId,
+    cancelId = 'export-status',
     poll = {
-      pollInterval: 10000,
+      pollInterval: 2000,
       validate: response => {
         console.log('>>>>>>>>>> RESPONSE.data', response.data);
         if (
@@ -448,6 +502,15 @@ const postExport = (data = {}, options = {}) => {
     schema,
     transform
   });
+  /*
+   * .then(
+   *  () => {
+   *    console.log('>>> RET export status');
+   *    return getExportStatus();
+   *  },
+   *  err => Promise.reject(err)
+   * );
+   */
 };
 
 const platformServices = {

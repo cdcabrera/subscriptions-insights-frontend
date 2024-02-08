@@ -91,7 +91,10 @@ const getExportStatus =
   dispatch =>
     dispatch({
       type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(id)
+      payload: platformServices.getExportStatus(id),
+      meta: {
+        id: id || 'status'
+      }
     });
 
 /**

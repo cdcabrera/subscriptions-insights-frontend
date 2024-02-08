@@ -47,7 +47,7 @@ const useOnSelect = ({
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
 } = {}) => {
-  const { viewId, productId } = useAliasProduct();
+  const { productId } = useAliasProduct();
   const dispatch = useAliasDispatch();
   const inventoryQuery = useAliasProductInventoryQuery();
 
@@ -88,14 +88,15 @@ const useOnSelect = ({
           productId
         }
       });
-      const data = { format: value, name: `${EXPORT_PREFIX}-${viewId}-${productId}`, sources };
+      // const data = { format: value, name: `${EXPORT_PREFIX}-${viewId}-${productId}`, sources };
+      const data = { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources };
       // return createExport(productId, data)(dispatch);
       dispatch([
         {
           type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
           payload: platformServices.postExport(data),
           meta: {
-            id: productId,
+            id: 'status',
             data,
             notifications: {
               rejected: {
@@ -106,12 +107,13 @@ const useOnSelect = ({
                 autoDismiss: true
               },
               pending: {
-                variant: 'success',
+                variant: 'info',
                 title: 'pending',
                 description: translate('curiosity-optin.notificationsSuccessDescription'),
                 dismissable: true,
                 autoDismiss: true
-              },
+              }
+              /*,
               fulfilled: {
                 variant: 'success',
                 title: 'fulfilled',
@@ -119,12 +121,13 @@ const useOnSelect = ({
                 dismissable: true,
                 autoDismiss: true
               }
+              */
             }
           }
         }
       ]);
     },
-    [createExport, dispatch, inventoryQuery, productId, viewId]
+    [dispatch, inventoryQuery, productId]
   );
 };
 
@@ -160,13 +163,28 @@ const useOnSelect = ({
 /*
  * get all status
  */
-/**
- *const useGetStatus = ({ getStatus = reduxActions.platform.getExportStatus } = {}) => {
- *useMount(() => {
- *  getStatus();
- *});
- *};
- */
+
+const useGetAllExportStatus = ({
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  getStatus = reduxActions.platform.getExportStatus,
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+} = {}) => {
+  const { error, pending, fulfilled, data } = useAliasSelector(({ app }) => app?.exports?.status, {});
+  const dispatch = useAliasDispatch();
+
+  useMount(() => {
+    // initial, no poll... we need to establish a data trail to activate the notifications... to then fire the poll... scenario... user leaves and returns
+    getStatus()(dispatch);
+  });
+
+  console.log('>>>>>>>>>>>>>>', { error, pending, fulfilled, data });
+  return {
+    error,
+    fulfilled,
+    pending,
+    data
+  };
+};
 
 /**
  * Display a unit of measure (uom) field with options.
@@ -189,9 +207,12 @@ const ToolbarFieldExport = ({
   useProduct: useAliasProduct,
   useSelectorsResponse: useAliasSelectorsResponse
 }) => {
+  useGetAllExportStatus();
+
   const { productId } = useAliasProduct();
   const { pending, responses } = useAliasSelectorsResponse([
-    { id: 'export', selector: ({ app }) => app?.exports?.[productId] }
+    // { id: 'export', selector: ({ app }) => app?.exports?.[productId] }
+    { id: 'export', selector: ({ app }) => app?.exports?.status }
   ]);
   const updatedValue = responses?.id?.export?.meta?.data?.format;
   // const { [RHSM_API_QUERY_SET_TYPES.UOM]: updatedValue } = useAliasProductQuery();
