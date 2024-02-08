@@ -15,7 +15,13 @@ import { helpers } from '../../common';
  * @module PlatformTransformers
  */
 
-const exports = (response, config) => {
+/**
+ * Parse platform export response.
+ *
+ * @param {object} response
+ * @returns {object}
+ */
+const exports = response => {
   const updatedResponse = { data: [] };
   const {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data,
@@ -24,6 +30,17 @@ const exports = (response, config) => {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: name,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: status
   } = response || {};
+
+  const getProductId = str => {
+    const updatedStr = str;
+    const attemptId = updatedStr?.replace(`${EXPORT_PREFIX}-`, '')?.trim();
+
+    if (attemptId === updatedStr) {
+      return undefined;
+    }
+
+    return attemptId;
+  };
 
   if (Array.isArray(data)) {
     updatedResponse.data.push(
@@ -37,19 +54,24 @@ const exports = (response, config) => {
             [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: exportId,
             [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName,
             [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: exportStatus
-          }) => ({ format: exportFormat, id: exportId, name: exportName, status: exportStatus })
+          }) => ({
+            format: exportFormat,
+            id: exportId,
+            name: exportName,
+            status: exportStatus,
+            productId: getProductId(exportName)
+          })
         )
     );
-  } else if (id && name && status) {
+  } else if (id && status && new RegExp(`^${EXPORT_PREFIX}`, 'i').test(name)) {
     updatedResponse.data.push({
       format,
       id,
       name,
+      productId: getProductId(name),
       status
     });
   }
-
-  console.log('>>>>>>>>>> META', config);
 
   return updatedResponse;
 };
