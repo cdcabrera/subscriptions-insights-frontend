@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useMount, useUnmount } from 'react-use';
@@ -61,7 +61,7 @@ const useOnSelect = ({
         console.log('>>>>> NO VALUE SELECT', value, rest);
         dispatch(
           reduxActions.platform.addNotification({
-            variant: 'success',
+            variant: 'info',
             title: 'pending',
             description: translate('curiosity-optin.notificationsSuccessDescription'),
             dismissable: true,
@@ -274,27 +274,20 @@ const useGetAllExportStatus = ({
     ]);
   });
 
-  useEffect(() => {
-    if (poll?.fulfilled) {
-      console.log('>>>> DATA DOWNLOAD');
-
-      dispatch(
-        poll.data.data.map(({ id }) => ({
-          type: 'DATA_DOWNLOADS',
-          payload: platformServices.getExport(id)
-        }))
-      );
-
-      /*
-       *dispatch({
-       *  type: 'DATA_DOWNLOADS',
-       *  // data: poll.data.data
-       *  // payload: Promise.all(dispatch(poll.data.data.map(({ id }) => platformServices.getExport(id))))
-       *  payload: Promise.resolve(dispatch(poll.data.data.map(({ id }) => {platformServices.getExport(id))))
-       *});
-       */
-    }
-  }, [dispatch, poll?.fulfilled]);
+  /*
+   *useEffect(() => {
+   *  if (poll?.fulfilled) {
+   *    console.log('>>>> DATA DOWNLOAD');
+   *
+   *    dispatch(
+   *      poll.data.data.map(({ id }) => ({
+   *        type: 'DATA_DOWNLOADS',
+   *        payload: platformServices.getExport(id)
+   *      }))
+   *    );
+   *  }
+   *}, [dispatch, poll?.fulfilled]);
+   */
 
   // const isPending = isTherePendingData or undefined;
 
@@ -366,11 +359,48 @@ const useGetAllExportStatus = ({
     productFormatsPolling.push(FIELD_TYPES.CSV);
   }
 
+  const productsPolling = useMemo(
+    () => (isPolling && status?.data?.meta?.pending) || [],
+    [isPolling, status?.data?.meta?.pending]
+  );
+  const productsCompleted = useMemo(
+    () => (!isPolling && status?.data?.meta?.completed) || [],
+    [isPolling, status?.data?.meta?.completed]
+  );
+
+  useEffect(() => {
+    /*
+    if (productsCompleted.length || productsPolling.length) {
+      dispatch(
+        reduxActions.platform.addNotification({
+          variant: 'info',
+          title: 'Downloads are available',
+          description: `${(productsPolling.length && `Pending ${productsPolling.length}`) || ''} ${(productsCompleted.length && `Completed ${productsCompleted.length}`) || ''}`,
+          dismissable: true,
+          autoDismiss: true
+        })
+      );
+    }
+    */
+
+    if (productsCompleted.length) {
+      dispatch(
+        reduxActions.platform.addNotification({
+          variant: 'info',
+          title: 'Downloads are available',
+          description: `${productsCompleted.length} data exports have completed`,
+          dismissable: true,
+          autoDismiss: false
+        })
+      );
+    }
+  }, [dispatch, productsCompleted]);
+
   return {
     isPolling,
     isProductPolling,
     productFormatsPolling,
-    productsPolling: (isPolling && status?.data?.meta?.pending) || []
+    productsPolling
   };
 };
 
