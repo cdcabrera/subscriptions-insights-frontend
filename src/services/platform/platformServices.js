@@ -193,110 +193,6 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
- *         }
- *       ]
- *     }
- *
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "data": [
- *         {
- *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-RHEL for x86",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "instances",
- *               "filters": {},
- *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
- *         },
- *         {
- *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-rhel-for-x86-els-payg",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
- *         }
- *       ]
- *     }
- *
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "data": [
- *         {
- *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-RHEL for x86",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "instances",
- *               "filters": {},
- *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
- *         },
- *         {
- *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-rhel-for-x86-els-payg",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
- *         },
- *         {
- *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "unknown-export",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
  *           "status": "partial",
  *           "sources": [
  *             {
@@ -390,6 +286,48 @@ const getExportStatus = (id, params = {}, options = {}) => {
     cache,
     cancel,
     cancelId,
+    schema,
+    transform
+  });
+};
+
+const getExportStatusWORKS = (id, params = {}, options = {}) => {
+  const {
+    cache = false,
+    cancel = true,
+    cancelId = 'export-status',
+    poll = {
+      // chainPollResponse: false,
+      pollInterval: 2000,
+      validate: response => {
+        if (
+          !Array.isArray(response?.data?.data) ||
+          response?.data?.data?.find(
+            ({ status }) =>
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+          )
+        ) {
+          return false;
+        }
+        return true;
+      }
+    },
+    schema = [platformSchemas.exports],
+    transform = [platformTransformers.exports],
+    ...restOptions
+  } = options;
+  return axiosServiceCall({
+    ...restOptions,
+    url:
+      (id && process.env.REACT_APP_SERVICES_PLATFORM_EXPORT_STATUS.replace('{0}', id)) ||
+      process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+    params,
+    cache,
+    cancel,
+    cancelId,
+    poll,
     schema,
     transform
   });

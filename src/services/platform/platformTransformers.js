@@ -1,6 +1,7 @@
 import { rbacConfig } from '../../config';
 import {
   platformConstants,
+  PLATFORM_API_EXPORT_STATUS_TYPES,
   PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
   PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES as OPERATION_TYPES,
   PLATFORM_API_RESPONSE_USER_PERMISSION_RESOURCE_TYPES as RESOURCE_TYPES
@@ -22,7 +23,7 @@ import { helpers } from '../../common';
  * @returns {object}
  */
 const exports = response => {
-  const updatedResponse = { data: [] };
+  const updatedResponse = { data: [], meta: {} };
   const {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.FORMAT]: format,
@@ -42,28 +43,62 @@ const exports = response => {
     return attemptId;
   };
 
+  const getProductStatus = str => {
+    const updatedStr = str;
+    let updatedStatus = PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
+
+    if (
+      updatedStr === PLATFORM_API_EXPORT_STATUS_TYPES.FAILED ||
+      updatedStr === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETED
+    ) {
+      updatedStatus = updatedStr;
+    }
+
+    return updatedStatus;
+  };
+
   if (Array.isArray(data)) {
-    updatedResponse.data.push(
-      ...data
-        .filter(({ [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName }) =>
-          new RegExp(`^${EXPORT_PREFIX}`, 'i').test(exportName)
-        )
-        .map(
-          ({
-            [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.FORMAT]: exportFormat,
-            [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: exportId,
-            [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName,
-            [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: exportStatus
-          }) => ({
+    const filteredAndFormatted = data
+      .filter(({ [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName }) =>
+        new RegExp(`^${EXPORT_PREFIX}`, 'i').test(exportName)
+      )
+      .map(
+        ({
+          [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.FORMAT]: exportFormat,
+          [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: exportId,
+          [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName,
+          [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: exportStatus
+        }) => {
+          const productId = getProductId(exportName);
+          const focusedStatus = getProductStatus(exportStatus);
+
+          updatedResponse.meta[focusedStatus] ??= new Set();
+          updatedResponse.meta[focusedStatus].add(productId);
+
+          updatedResponse.meta[exportFormat] ??= new Set();
+          updatedResponse.meta[exportFormat].add(productId);
+
+          return {
             format: exportFormat,
             id: exportId,
             name: exportName,
             status: exportStatus,
-            productId: getProductId(exportName)
-          })
-        )
-    );
+            productId
+          };
+        }
+      );
+
+    updatedResponse.data.push(...filteredAndFormatted);
   } else if (id && status && new RegExp(`^${EXPORT_PREFIX}`, 'i').test(name)) {
+    const productId = getProductId(name);
+    const focusedStatus = getProductStatus(status);
+
+    updatedResponse.meta[focusedStatus] ??= new Set();
+    updatedResponse.meta[focusedStatus].add(productId);
+
+    updatedResponse.meta[format] ??= new Set();
+    updatedResponse.meta[format].add(productId);
+
     updatedResponse.data.push({
       format,
       id,
@@ -72,6 +107,10 @@ const exports = response => {
       status
     });
   }
+
+  Object.entries(updatedResponse.meta).forEach(([key, value]) => {
+    updatedResponse.meta[key] = Array.from(value);
+  });
 
   return updatedResponse;
 };

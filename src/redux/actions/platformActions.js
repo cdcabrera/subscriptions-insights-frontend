@@ -83,19 +83,29 @@ const getExport = (id = null) => ({
 /**
  * Get an export download package status.
  *
- * @param {string} id
  * @returns {Function}
  */
-const getExportStatus =
-  (id = null) =>
-  dispatch =>
-    dispatch({
-      type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(id),
-      meta: {
-        id: id || 'status'
-      }
-    });
+const getExportStatus = () => dispatch =>
+  dispatch({
+    type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+    payload: platformServices.getExportStatus(),
+    meta: {
+      id: 'status'
+    }
+  });
+
+/*
+const getExportPollStatus =
+  () =>
+    dispatch =>
+      dispatch({
+        type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+        payload: platformServices.getExportStatus(,, { poll: {} }),
+        meta: {
+          id: 'status'
+        }
+      });
+ */
 
 /**
  * Hide platform global filter.

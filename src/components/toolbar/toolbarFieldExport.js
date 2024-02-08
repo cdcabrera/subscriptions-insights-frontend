@@ -7,7 +7,8 @@ import { useProduct, useProductInventoryHostsQuery, useProductQuery } from '../p
 import { Select, SelectPosition, SelectButtonVariant, SelectVariant } from '../form/select';
 import {
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
-  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX
+  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
+  PLATFORM_API_EXPORT_STATUS_TYPES
 } from '../../services/platform/platformConstants';
 // import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
@@ -113,15 +114,16 @@ const useOnSelect = ({
                 dismissable: true,
                 autoDismiss: true
               }
-              /*,
-              fulfilled: {
-                variant: 'success',
-                title: 'fulfilled',
-                description: translate('curiosity-optin.notificationsSuccessDescription'),
-                dismissable: true,
-                autoDismiss: true
-              }
-              */
+              /*
+               *,
+               *fulfilled: {
+               *variant: 'success',
+               *title: 'fulfilled',
+               *description: translate('curiosity-optin.notificationsSuccessDescription'),
+               *dismissable: true,
+               *autoDismiss: true
+               *}
+               */
             }
           }
         }
@@ -165,24 +167,159 @@ const useOnSelect = ({
  */
 
 const useGetAllExportStatus = ({
+  useProduct: useAliasProduct = useProduct,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   getStatus = reduxActions.platform.getExportStatus,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 } = {}) => {
-  const { error, pending, fulfilled, data } = useAliasSelector(({ app }) => app?.exports?.status, {});
+  const { productId } = useAliasProduct();
+  const { poll = {}, status = {} } = useAliasSelectors([
+    { id: 'status', selector: ({ app }) => app?.exports?.status },
+    { id: 'poll', selector: ({ app }) => app?.exports?.poll }
+  ]);
+  /*
+   * const { error, pending = true, fulfilled, data } = useAliasSelector(({ app }) => app?.exports?.status, {});
+   * const { error, pending = true, fulfilled, data } = useAliasSelector(({ app }) => app?.exports?.poll, {});
+   */
+  /*
+   *const {
+   *  error,
+   *  pending = true,
+   *  fulfilled,
+   *  data
+   *} = useAliasSelector([({ app }) => app?.exports?.status, ({ app }) => app?.exports?.poll], {});
+   */
   const dispatch = useAliasDispatch();
 
   useMount(() => {
-    // initial, no poll... we need to establish a data trail to activate the notifications... to then fire the poll... scenario... user leaves and returns
-    getStatus()(dispatch);
+    /*
+     * initial, no poll... we need to establish a data trail to activate the notifications... to then fire the poll...
+     * scenario... user leaves and returns getStatus()(dispatch);
+     */
+    /*
+     *dispatch({
+     *  type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+     *  payload: platformServices.getExportStatus(),
+     *  meta: {
+     *    id: 'status'
+     *  }
+     *});
+     */
+    dispatch([
+      {
+        type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+        payload: platformServices.getExportStatus(undefined, {}, { cancelId: 'exportStatus' }),
+        meta: {
+          id: 'status'
+        }
+      },
+      {
+        type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+        payload: platformServices.getExportStatus(
+          undefined,
+          {},
+          {
+            poll: {
+              pollInterval: 2000,
+              validate: response => {
+                if (
+                  !Array.isArray(response?.data?.data) ||
+                  response?.data?.data?.find(
+                    ({ status: dataStatus }) =>
+                      dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+                      dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+                      dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+                  )
+                ) {
+                  return false;
+                }
+                return true;
+              }
+            }
+          }
+        ),
+        meta: {
+          id: 'poll'
+        }
+      }
+    ]);
   });
 
-  console.log('>>>>>>>>>>>>>>', { error, pending, fulfilled, data });
+  // const isPending = isTherePendingData or undefined;
+
+  /*
+   *useEffect(() => {
+   *  // set the poll if there is pending data
+   *  if (isPending) {
+   *    const poll = {
+   *      pollInterval: 2000,
+   *      validate: response => {
+   *        if (
+   *          !Array.isArray(response?.data?.data) ||
+   *          response?.data?.data?.find(
+   *            ({ status }) =>
+   *              status === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
+   *              status === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
+   *              status === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
+   *          )
+   *        ) {
+   *          return false;
+   *        }
+   *        return true;
+   *      }
+   *    };
+   *
+   *    dispatch({
+   *      type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
+   *      payload: platformServices.getExportStatus(undefined, {}, { poll }),
+   *      meta: {
+   *        id: 'poll'
+   *      }
+   *    });
+   *  }
+   *}, [dispatch, isPending]);
+   *
+   */
+
+  /*
+   * console.log('>>>>>>>>>>>>>> FINAL status', { error, pending, fulfilled, data });
+   * console.log('>>>>>>>>>>>>>> FINAL status', poll, status);
+   */
+
+  const isPolling = (poll.pending && poll.pending === true) || false;
+  const isProductPolling =
+    (isPolling &&
+      Array.isArray(status?.data?.meta?.pending) &&
+      status.data.meta.pending.findIndex(value => value === productId) > -1) ||
+    false;
+
+  const productFormatsPolling = [];
+
+  const isProductJsonPolling =
+    (isProductPolling &&
+      Array.isArray(status?.data?.meta?.json) &&
+      status.data.meta.json.findIndex(value => value === productId) > -1) ||
+    false;
+
+  if (isProductJsonPolling) {
+    productFormatsPolling.push(FIELD_TYPES.JSON);
+  }
+
+  const isProductCsvPolling =
+    (isProductPolling &&
+      Array.isArray(status?.data?.meta?.csv) &&
+      status.data.meta.csv.findIndex(value => value === productId) > -1) ||
+    false;
+
+  if (isProductCsvPolling) {
+    productFormatsPolling.push(FIELD_TYPES.CSV);
+  }
+
   return {
-    error,
-    fulfilled,
-    pending,
-    data
+    isPolling,
+    isProductPolling,
+    productFormatsPolling,
+    productsPolling: (isPolling && status?.data?.meta?.pending) || []
   };
 };
 
@@ -204,25 +341,35 @@ const ToolbarFieldExport = ({
   position,
   t,
   useOnSelect: useAliasOnSelect,
-  useProduct: useAliasProduct,
-  useSelectorsResponse: useAliasSelectorsResponse
+  useProduct: useAliasProduct
+  /*
+   * useSelectors: useAliasSelectors
+   * useSelectorsResponse: useAliasSelectorsResponse
+   */
 }) => {
-  useGetAllExportStatus();
+  const { isProductPolling: pending = false, productFormatsPolling = [] } = useGetAllExportStatus();
+  console.log('>>>>>>>>>>>>> EXPORT FIELD OUT', pending, productFormatsPolling);
+  /*
+   * const { productId } = useAliasProduct();
+   * const { pending, responses } = useAliasSelectorsResponse([
+   * const { pending, responses } = useAliasSelectorsResponse([
+   * { id: 'export', selector: ({ app }) => app?.exports?.[productId] }
+   *  { id: 'export', selector: ({ app }) => app?.exports?.status }
+   * ]);
+   */
+  // const pending = false;
 
-  const { productId } = useAliasProduct();
-  const { pending, responses } = useAliasSelectorsResponse([
-    // { id: 'export', selector: ({ app }) => app?.exports?.[productId] }
-    { id: 'export', selector: ({ app }) => app?.exports?.status }
-  ]);
-  const updatedValue = responses?.id?.export?.meta?.data?.format;
+  // const updatedValue = undefined; // responses?.id?.export?.meta?.data?.format;
+
   // const { [RHSM_API_QUERY_SET_TYPES.UOM]: updatedValue } = useAliasProductQuery();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
-    title: (pending && option.value === updatedValue && 'Loading...') || option.title,
-    selected: pending && option.value === updatedValue,
+    // title: (pending && option.value === updatedValue && 'Loading...') || option.title,
+    title: (pending && productFormatsPolling.includes(option.value) && 'Loading...') || option.title,
+    selected: pending && productFormatsPolling.includes(option.value), // option.value === updatedValue,
     // isLoading: option.value === updatedValue,
-    isDisabledAllowEvent: pending && option.value === updatedValue
+    isDisabledAllowEvent: pending && productFormatsPolling.includes(option.value) // option.value === updatedValue
   }));
 
   console.log('>>>>>>>>>>>>> EXPORT FIELD', updatedOptions);
@@ -260,8 +407,8 @@ ToolbarFieldExport.propTypes = {
   position: PropTypes.string,
   t: PropTypes.func,
   useOnSelect: PropTypes.func,
-  useProduct: PropTypes.func,
-  useSelectorsResponse: PropTypes.func
+  useProduct: PropTypes.func
+  // useSelectorsResponse: PropTypes.func
 };
 
 /**
@@ -274,8 +421,8 @@ ToolbarFieldExport.defaultProps = {
   position: SelectPosition.left,
   t: translate,
   useOnSelect,
-  useProduct,
-  useSelectorsResponse: storeHooks.reactRedux.useSelectorsResponse
+  useProduct
+  // useSelectorsResponse: storeHooks.reactRedux.useSelectorsResponse
 };
 
 export { ToolbarFieldExport as default, ToolbarFieldExport, toolbarFieldOptions, useOnSelect };

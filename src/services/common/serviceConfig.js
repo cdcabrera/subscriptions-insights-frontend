@@ -57,7 +57,8 @@ const globalResponseCache = new LRUCache({
  * @param {boolean} config.cancel
  * @param {string} config.cancelId
  * @param {object} config.params
- * @param {{ location: Function|string, validate: Function, pollInterval: number }|Function} config.poll
+ * @param {{ location: Function|string, validate: Function, pollInterval: number,
+ *     pollResponse: boolean}|Function} config.poll
  * @param {Array} config.schema
  * @param {Array} config.transform
  * @param {string|Function} config.url
@@ -203,7 +204,7 @@ const axiosServiceCall = async (
   if (typeof updatedConfig.poll === 'function' || typeof updatedConfig.poll?.validate === 'function') {
     axiosInstance.interceptors.response.use(
       async response => {
-        const updatedResponse = { ...response, pollResponse: [] };
+        const updatedResponse = { ...response };
         const callbackResponse = _cloneDeep(updatedResponse);
 
         // passed conversions, allow future updates by passing original poll config
@@ -224,7 +225,7 @@ const axiosServiceCall = async (
           tempLocation = await tempLocation.call(null, callbackResponse, updatedPoll.__retryCount);
         }
 
-        return new Promise(resolve => {
+        const pollResponse = new Promise(resolve => {
           window.setTimeout(async () => {
             const output = await axiosServiceCall({
               ...config,
@@ -238,6 +239,14 @@ const axiosServiceCall = async (
             resolve(output);
           }, updatedPoll.pollInterval);
         });
+
+        if (updatedPoll.chainPollResponse !== false) {
+          return pollResponse;
+        }
+
+        // return the poll response promise as part of the response...
+        updatedResponse.pollResponse = pollResponse;
+        return updatedResponse;
       },
       response => Promise.reject(response)
     );
