@@ -370,16 +370,9 @@ const Select = ({
    *
    * @event onDropdownSelect
    * @param {object} event
-   * @param a
-   * @param b
-   * @param c
    * @param {string} titleSelection
    */
-  const onDropdownSelect = (event, titleSelection, a, b, c) => {
-    console.log('>>>> DROPDOWN SELECT', isDropdownButton, event);
-    console.log('>>>> DROPDOWN SELECT', titleSelection);
-    console.log('>>>> DROPDOWN SELECT', a, b, c);
-
+  const onDropdownSelect = (event, titleSelection) => {
     const updatedOptions = options;
     const optionsIndex = updatedOptions.findIndex(
       option =>
@@ -388,20 +381,8 @@ const Select = ({
         event.currentTarget.innerText === option.title
     );
 
-    console.log('>>>>> DROPDOWN SELECT', optionsIndex);
-
-    /*
-     *if (
-     *  updatedOptions[optionsIndex].isDisabledAllowEvent === false &&
-     *  updatedOptions[optionsIndex].isDisabled === true
-     *) {
-     *  console.log('>>>>> DROPDOWN SELECT, DISABLED OPTION');
-     *  return;
-     *}
-     */
-
     if (updatedOptions[optionsIndex].isDisabled === true) {
-      console.log('>>>>> DROPDOWN SELECT, DISABLED OPTION');
+      console.log('>>>> DROPDOWN DISABLED');
       return;
     }
 
@@ -426,14 +407,7 @@ const Select = ({
     const mockTarget = {
       id,
       name: name || id,
-      // value: mockUpdatedOptions[optionsIndex].value,
       value: !updatedOptions[optionsIndex].isDisabledAllowEvent ? mockUpdatedOptions[optionsIndex].value : undefined,
-      /*
-       * value:
-       *         updatedOptions[optionsIndex].isDisabledAllowEvent === false
-       *           ? mockUpdatedOptions[optionsIndex].value
-       *           : undefined,
-       */
       isDisabled: updatedOptions[optionsIndex].isDisabledAllowEvent === true,
       selected: (variant === SelectVariant.single && mockUpdatedOptions[optionsIndex]) || _cloneDeep(updateSelected),
       selectedIndex: optionsIndex,
@@ -496,11 +470,7 @@ const Select = ({
             key={window.btoa(`${option.title}-${option.value}`)}
             id={window.btoa(`${option.title}-${option.value}`)}
             isDisabled={option.isDisabled === true}
-            /*
-             * isAriaDisabled={option.isDisabled === true}
-             * isDisabled={option.isDisabledAllowEvent === true || option.isDisabled === true}
-             * isAriaDisabled={option.isDisabledAllowEvent === true || option.isDisabled === true}
-             */
+            // isAriaDisabled={option.isDisabled === true}
             data-value={(_isPlainObject(option.value) && JSON.stringify([option.value])) || option.value}
             data-title={option.title}
             data-description={option.description}
@@ -547,15 +517,11 @@ const Select = ({
     >
       {options?.map(option => (
         <PfSelectOption
+          className={(option.isDisabledAllowEvent === true && 'pf-m-disabled') || ''}
           key={window.btoa(`${option.title}-${option.value}`)}
           id={window.btoa(`${option.title}-${option.value}`)}
           value={option.title}
           isDisabled={option.isDisabled === true}
-          isAriaDisabled={option.isDisabled === true}
-          /*
-           * isDisabled={option.isDisabledAllowEvent === false && option.isDisabled === true}
-           * isAriaDisabled={option.isDisabledAllowEvent === true || option.isDisabled === true}
-           */
           data-value={(_isPlainObject(option.value) && JSON.stringify([option.value])) || option.value}
           data-title={option.title}
           data-description={option.description}
