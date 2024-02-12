@@ -78,6 +78,11 @@ const exports = response => {
           updatedResponse.meta[exportFormat] ??= new Set();
           updatedResponse.meta[exportFormat].add(productId);
 
+          if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
+            updatedResponse.meta.pollingFormats ??= new Set();
+            updatedResponse.meta.pollingFormats.add(exportFormat);
+          }
+
           return {
             format: exportFormat,
             id: exportId,
@@ -98,6 +103,11 @@ const exports = response => {
 
     updatedResponse.meta[format] ??= new Set();
     updatedResponse.meta[format].add(productId);
+
+    if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
+      updatedResponse.meta.pollingFormats ??= new Set();
+      updatedResponse.meta.pollingFormats.add(format);
+    }
 
     updatedResponse.data.push({
       format,

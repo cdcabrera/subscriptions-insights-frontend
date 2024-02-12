@@ -56,12 +56,24 @@ const appReducer = (state = initialState, action) => {
 
       return state;
 
+    case platformTypes.UPDATE_PLATFORM_EXPORT_POLL:
+      return reduxHelpers.setStateProp(
+        'exports',
+        {
+          poll: action.data
+        },
+        {
+          state,
+          initialState
+        }
+      );
+
     default:
       return reduxHelpers.generatedPromiseActionReducer(
         [
           { ref: 'locale', type: appTypes.USER_LOCALE },
           { ref: 'optin', type: [appTypes.DELETE_USER_OPTIN, appTypes.GET_USER_OPTIN, appTypes.UPDATE_USER_OPTIN] },
-          { ref: 'exports', type: platformTypes.GET_PLATFORM_EXPORT_STATUS },
+          { ref: 'exports', type: platformTypes.SET_PLATFORM_EXPORT_STATUS },
           { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }
         ],
         state,

@@ -238,7 +238,7 @@ const axiosServiceCall = async (
           }
         }
 
-        if (typeof updatedPoll.status === 'function') {
+        if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
           try {
             updatedPoll.status.call(null, callbackResponse, updatedPoll.__retryCount);
           } catch (err) {
@@ -263,6 +263,19 @@ const axiosServiceCall = async (
 
         if (updatedPoll.chainPollResponse !== false) {
           return pollResponse;
+        }
+
+        // works, but returns a promise to the status call instead... should probably rename it to avoid confusion
+
+        // like resolver OR make it so you can't call poll unless it is chained... avoid to many options
+        if (typeof updatedPoll.status === 'function') {
+          try {
+            // const results = await pollResponse;
+            // updatedPoll.status.call(null, results, updatedPoll.__retryCount);
+            updatedPoll.status.call(null, pollResponse, updatedPoll.__retryCount);
+          } catch (err) {
+            console.error(err);
+          }
         }
 
         return updatedResponse;
