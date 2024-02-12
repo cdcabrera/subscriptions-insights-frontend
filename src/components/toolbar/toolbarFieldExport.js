@@ -74,9 +74,11 @@ const useExport = ({
          *  meta: response.data.meta
          * },
          */
-        // meta: {
-        //  id: 'poll'
-        // }
+        /*
+         * meta: {
+         *  id: 'poll'
+         * }
+         */
       });
     },
     [dispatch]
@@ -109,16 +111,19 @@ const useExport = ({
    */
   const validate = useCallback(response => {
     if (
-      !Array.isArray(response?.data?.data) ||
-      response?.data?.data?.find(
-        ({ status: dataStatus }) =>
-          dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING ||
-          dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PARTIAL ||
-          dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.RUNNING
-      )
+      typeof response?.data?.data?.isAnythingPending !== 'boolean' ||
+      response?.data?.data?.isAnythingPending === true
     ) {
       return false;
     }
+    /*
+     * if (
+     *  !Array.isArray(response?.data?.data?.status) ||
+     *  response?.data?.data?.status?.find(dataStatus => dataStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
+     * ) {
+     *  return false;
+     * }
+     */
     return true;
   }, []);
 
@@ -267,6 +272,9 @@ const useExportStatus = ({
 
   const isPolling = status.pending === true || false;
 
+  // const isProductPolling = (isPolling)
+
+  /*
   const isProductPolling =
     (isPolling &&
       Array.isArray(poll?.meta?.pending) &&
@@ -277,11 +285,12 @@ const useExportStatus = ({
   if (isPolling && Array.isArray(poll?.meta?.pollingFormats)) {
     pollingFormats.push(...poll.meta.pollingFormats);
   }
+  */
 
   return {
     isPolling,
-    isProductPolling,
-    pollingFormats
+    isProductPolling: undefined,
+    pollingFormats: undefined
   };
 };
 

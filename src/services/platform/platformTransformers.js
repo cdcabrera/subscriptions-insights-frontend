@@ -23,7 +23,7 @@ import { helpers } from '../../common';
  * @returns {object}
  */
 const exports = response => {
-  const updatedResponse = { data: [], meta: {} };
+  const updatedResponse = { data: {}, meta: {} };
   const {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data,
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.FORMAT]: format,
@@ -58,11 +58,11 @@ const exports = response => {
   };
 
   if (Array.isArray(data)) {
-    const filteredAndFormatted = data
+    data
       .filter(({ [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName }) =>
         new RegExp(`^${EXPORT_PREFIX}`, 'i').test(exportName)
       )
-      .map(
+      .forEach(
         ({
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.FORMAT]: exportFormat,
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: exportId,
@@ -72,13 +72,52 @@ const exports = response => {
           const productId = getProductId(exportName);
           const focusedStatus = getProductStatus(exportStatus);
 
+          if (updatedResponse.data.isAnythingPending !== true) {
+            updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
+          }
+
+          // updatedResponse.data.status ??= [];
+          // updatedResponse.data.status.push(focusedStatus);
+
+          updatedResponse.data[productId] ??= [];
+          updatedResponse.data[productId].push({
+            format: exportFormat,
+            id: exportId,
+            name: exportName,
+            status: focusedStatus
+          });
+
+          /*
+          updatedResponse.data[productId].format ??= [];
+          updatedResponse.data[productId].format.push(exportFormat);
+
+          updatedResponse.data[productId].id ??= [];
+          updatedResponse.data[productId].id.push(exportId);
+
+          updatedResponse.data[productId] = {
+            format: exportFormat,
+            id: exportId,
+            name: exportName,
+            status: focusedStatus
+          };
+           */
+        }
+          /*
+          const productId = getProductId(exportName);
+          const focusedStatus = getProductStatus(exportStatus);
+
+          updatedResponse.meta[productId] = {
+            status: focusedStatus,
+            format: exportFormat
+          };
+
           updatedResponse.meta[focusedStatus] ??= new Set();
           updatedResponse.meta[focusedStatus].add(productId);
 
-          updatedResponse.meta[exportFormat] ??= new Set();
-          updatedResponse.meta[exportFormat].add(productId);
-
           if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
+            updatedResponse.meta[exportFormat] ??= new Set();
+            updatedResponse.meta[exportFormat].add(productId);
+
             updatedResponse.meta.pollingFormats ??= new Set();
             updatedResponse.meta.pollingFormats.add(exportFormat);
           }
@@ -91,20 +130,52 @@ const exports = response => {
             productId
           };
         }
+        */
       );
 
-    updatedResponse.data.push(...filteredAndFormatted);
+    // updatedResponse.data.push(...filteredAndFormatted);
   } else if (id && status && new RegExp(`^${EXPORT_PREFIX}`, 'i').test(name)) {
+    const productId = getProductId(name);
+    const focusedStatus = getProductStatus(status);
+
+    // updatedResponse.data.status ??= [];
+    // updatedResponse.data.status.push(focusedStatus);
+    if (updatedResponse.data.isAnythingPending !== true) {
+      updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
+    }
+
+    updatedResponse.data[productId] ??= [];
+    updatedResponse.data[productId].push({
+      format,
+      id,
+      name,
+      status: focusedStatus
+    });
+
+    /*
+    updatedResponse.data[productId] = {
+      format,
+      id,
+      name,
+      status: focusedStatus
+    };
+    */
+    /*
     const productId = getProductId(name);
     const focusedStatus = getProductStatus(status);
 
     updatedResponse.meta[focusedStatus] ??= new Set();
     updatedResponse.meta[focusedStatus].add(productId);
 
-    updatedResponse.meta[format] ??= new Set();
-    updatedResponse.meta[format].add(productId);
+    updatedResponse.meta[productId] = {
+      status: focusedStatus,
+      format
+    };
 
     if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
+      updatedResponse.meta[format] ??= new Set();
+      updatedResponse.meta[format].add(productId);
+
       updatedResponse.meta.pollingFormats ??= new Set();
       updatedResponse.meta.pollingFormats.add(format);
     }
@@ -116,11 +187,13 @@ const exports = response => {
       productId: getProductId(name),
       status
     });
+    */
   }
 
-  Object.entries(updatedResponse.meta).forEach(([key, value]) => {
-    updatedResponse.meta[key] = Array.from(value);
-  });
+  // Object.entries(updatedResponse.meta).forEach(([key, value]) => {
+  //  updatedResponse.meta[key] = Array.from(value);
+  // });
+  console.log('>>>>>>>>>>> TRANSFORMER', updatedResponse);
 
   return updatedResponse;
 };

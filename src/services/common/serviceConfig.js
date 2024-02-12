@@ -219,7 +219,7 @@ const axiosServiceCall = async (
         let validated = true;
 
         try {
-          validated = await updatedPoll.validate(callbackResponse, updatedPoll.__retryCount);
+          validated = await updatedPoll.validate.call(null, callbackResponse, updatedPoll.__retryCount);
         } catch (err) {
           console.error(err);
         }
@@ -259,6 +259,44 @@ const axiosServiceCall = async (
 
             resolve(output);
           }, updatedPoll.pollInterval);
+        }).finally(() => {
+          if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
+            Promise.resolve(pollResponse).then(
+              res => {
+                try {
+                  console.log('>>>>> FINALLY success', res, updatedPoll.__retryCount);
+                  updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+                } catch (err) {
+                  console.error(err);
+                }
+                /*
+                 * console.log('>>>>> FINALLY callbackresponse', callbackResponse);
+                 * console.log('>>>>> FINALLY success', success);
+                 */
+              },
+              res => {
+                try {
+                  console.log('>>>>> FINALLY error', res, updatedPoll.__retryCount);
+                  updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+                } catch (err) {
+                  console.error(err);
+                }
+              }
+            );
+          }
+
+          /*
+           *console.log('>>>>> FINALLY', (async () => pollResponse)());
+           *console.log('>>>>> FINALLY', callbackResponse);
+           *
+           *if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
+           *  try {
+           *    updatedPoll.status.call(null, callbackResponse, updatedPoll.__retryCount);
+           *  } catch (err) {
+           *    console.error(err);
+           *  }
+           *}
+           */
         });
 
         if (updatedPoll.chainPollResponse !== false) {
@@ -270,8 +308,10 @@ const axiosServiceCall = async (
         // like resolver OR make it so you can't call poll unless it is chained... avoid to many options
         if (typeof updatedPoll.status === 'function') {
           try {
-            // const results = await pollResponse;
-            // updatedPoll.status.call(null, results, updatedPoll.__retryCount);
+            /*
+             * const results = await pollResponse;
+             * updatedPoll.status.call(null, results, updatedPoll.__retryCount);
+             */
             updatedPoll.status.call(null, pollResponse, updatedPoll.__retryCount);
           } catch (err) {
             console.error(err);
