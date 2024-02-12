@@ -135,7 +135,8 @@ const useExport = ({
         updatedOptions.poll = {
           pollInterval,
           status: statusPoll,
-          validate
+          validate,
+          chainPollResponse: false
         };
       }
 
