@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
+import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
@@ -46,16 +47,29 @@ const useExportStatus = ({
 } = {}) => {
   // const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
-  const { status = {}, poll = {} } = useAliasSelectors([
+  const {
+    mount = {},
+    status = {},
+    poll = {}
+  } = useAliasSelectors([
+    { id: 'mount', selector: ({ app }) => app?.exports?.mount },
     { id: 'status', selector: ({ app }) => app?.exports?.status },
     { id: 'poll', selector: ({ app }) => app?.exports?.poll }
   ]);
 
   // return useMemo(() => {
-  const isPolling = status.pending === true || poll?.data?.isAnythingPending === true || false;
-  const isError = status.error === true || poll.error === true || false;
-  const errorMessage = (status.error && status.message) || (poll.error && poll.message) || undefined;
-  const isCompleted = poll?.data?.isAnythingPending === false || false;
+  const isPolling =
+    mount.pending === true || status.pending === true || poll?.data?.isAnythingPending === true || undefined;
+  const isError = mount.error === true || status.error === true || poll.error === true || undefined;
+  const errorMessage =
+    (mount.error && mount.message) || (status.error && status.message) || (poll.error && poll.message) || undefined;
+  const isCompleted =
+    mount?.data?.data?.isAnythingPending === false ||
+    status?.data?.data?.isAnythingPending === false ||
+    poll?.data?.isAnythingPending === false ||
+    undefined;
+
+  const isMountCompleted = mount?.data?.data?.isAnythingPending === false || undefined;
 
   const productPollingFormats = [];
   let isProductPolling = false;
@@ -76,6 +90,7 @@ const useExportStatus = ({
     errorMessage,
     isCompleted,
     isError,
+    isMountCompleted,
     isPolling,
     isProductPolling,
     productPollingFormats
@@ -136,8 +151,8 @@ const useExport = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useExportStatus: useAliasExportStatus = useExportStatus
 } = {}) => {
-  const { isPolling, isProductPolling, isCompleted, isError, errorMessage } = useAliasExportStatus();
-  console.log('>>>> USE EXPORT', isPolling, isCompleted);
+  const { isPolling, isProductPolling, isCompleted, isError, isMountCompleted, errorMessage } = useAliasExportStatus();
+  console.log('>>>> USE EXPORT', isPolling, isCompleted, isProductPolling);
 
   const dispatch = useAliasDispatch();
   const pollInterval = 2000;
@@ -170,8 +185,8 @@ const useExport = ({
         reduxActions.platform.removeNotification('swatch-export'),
         reduxActions.platform.addNotification({
           id: 'swatch-export',
-          variant: 'success',
-          title: 'fulfilled',
+          variant: isMountCompleted === true ? 'info' : 'success',
+          title: 'Downloads available',
           description: translate('curiosity-optin.notificationsSuccessDescription'),
           dismissable: true,
           autoDismiss: true
@@ -181,29 +196,29 @@ const useExport = ({
           data: undefined
         }
       ]);
-
-      return;
     }
 
-    if (isPolling === true) {
-      console.log('>>>>>>>>> EXPORT STATUS', isCompleted);
-      dispatch([
-        reduxActions.platform.removeNotification('swatch-export'),
-        reduxActions.platform.addNotification({
-          id: 'swatch-export',
-          variant: 'info',
-          title: 'pending',
-          description: (isProductPolling && 'This product is polling') || 'A product is polling',
-          dismissable: true,
-          autoDismiss: true
-        }),
-        {
-          type: platformTypes.UPDATE_PLATFORM_EXPORT_POLL,
-          data: undefined
-        }
-      ]);
-    }
-  }, [dispatch, isCompleted, isError, isPolling, isProductPolling, errorMessage]);
+    /*
+     *if (isPolling === true) {
+     *  console.log('>>>>>>>>> EXPORT STATUS', isCompleted);
+     *  dispatch([
+     *    reduxActions.platform.removeNotification('swatch-export'),
+     *    reduxActions.platform.addNotification({
+     *      id: 'swatch-export',
+     *      variant: 'info',
+     *      title: 'pending',
+     *      description: (isProductPolling && 'This product is polling') || 'A product is polling',
+     *      dismissable: true,
+     *      autoDismiss: true
+     *    }),
+     *    {
+     *      type: platformTypes.UPDATE_PLATFORM_EXPORT_POLL,
+     *      data: undefined
+     *    }
+     *  ]);
+     *}
+     */
+  }, [dispatch, isCompleted, isError, isMountCompleted, errorMessage]);
 
   /**
    * A polling response status dispatch
@@ -259,33 +274,6 @@ const useExport = ({
             meta: {
               id: 'status'
             }
-            /*
-             *meta: {
-             *  id: 'status',
-             *  notifications: {
-             *    rejected: {
-             *      variant: 'danger',
-             *      title: 'error',
-             *      description: translate('curiosity-optin.notificationsErrorDescription'),
-             *      dismissable: true,
-             *      autoDismiss: true
-             *    },
-             *    pending: {
-             *      variant: 'info',
-             *      title: 'pending',
-             *      description: translate('curiosity-optin.notificationsSuccessDescription'),
-             *      dismissable: true,
-             *      autoDismiss: true
-             *    },
-             *    fulfilled: {
-             *      variant: 'success',
-             *      title: 'fulfilled',
-             *      description: translate('curiosity-optin.notificationsSuccessDescription'),
-             *      dismissable: true,
-             *      autoDismiss: true
-             *    }
-             *  }
-             */
           }
         ]);
       }
@@ -337,30 +325,7 @@ const useExport = ({
           type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
           payload: getStatus(undefined, {}, updatedOptions),
           meta: {
-            id: 'poll',
-            notifications: {
-              rejected: {
-                variant: 'danger',
-                title: 'error',
-                description: translate('curiosity-optin.notificationsErrorDescription'),
-                dismissable: true,
-                autoDismiss: true
-              },
-              pending: {
-                variant: 'info',
-                title: 'pending',
-                description: translate('curiosity-optin.notificationsSuccessDescription'),
-                dismissable: true,
-                autoDismiss: true
-              },
-              fulfilled: {
-                variant: 'success',
-                title: 'fulfilled',
-                description: translate('curiosity-optin.notificationsSuccessDescription'),
-                dismissable: true,
-                autoDismiss: true
-              }
-            }
+            id: 'mount'
           }
         }
       ]);
@@ -441,6 +406,12 @@ const ToolbarFieldExport = ({
     selected: isProductPolling && productPollingFormats.includes(option.value),
     isDisabled: isProductPolling && productPollingFormats.includes(option.value)
   }));
+
+  const checkExport = useExport();
+
+  useMount(() => {
+    checkExport();
+  });
 
   return (
     <Select
