@@ -60,7 +60,7 @@ const appReducer = (state = initialState, action) => {
       return reduxHelpers.setStateProp(
         'exports',
         {
-          poll: action.data
+          poll: action.poll
         },
         {
           state,

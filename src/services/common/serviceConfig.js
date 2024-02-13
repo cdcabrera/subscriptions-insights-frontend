@@ -246,18 +246,22 @@ const axiosServiceCall = async (
           }
         }
 
-        const pollResponse = new Promise(resolve => {
+        const pollResponse = new Promise((resolve, reject) => {
           window.setTimeout(async () => {
-            const output = await axiosServiceCall({
-              ...config,
-              method: 'get',
-              data: undefined,
-              url: tempLocation,
-              cache: false,
-              poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
-            });
+            try {
+              const output = await axiosServiceCall({
+                ...config,
+                method: 'get',
+                data: undefined,
+                url: tempLocation,
+                cache: false,
+                poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
+              });
 
-            resolve(output);
+              resolve(output);
+            } catch (e) {
+              reject(e);
+            }
           }, updatedPoll.pollInterval);
         }).finally(() => {
           if (updatedPoll.chainPollResponse !== false && typeof updatedPoll.status === 'function') {
@@ -308,39 +312,128 @@ const axiosServiceCall = async (
         // like resolver OR make it so you can't call poll unless it is chained... avoid to many options
         if (typeof updatedPoll.status === 'function') {
           /*
-          try {
-            /*
-             * const results = await pollResponse;
-             * updatedPoll.status.call(null, results, updatedPoll.__retryCount);
-             * /
-            updatedPoll.status.call(null, pollResponse, updatedPoll.__retryCount);
-          } catch (err) {
-            console.error(err);
-          }
-          */
+           *try {
+           *  /*
+           * const results = await pollResponse;
+           * updatedPoll.status.call(null, results, updatedPoll.__retryCount);
+           * /
+           *  updatedPoll.status.call(null, pollResponse, updatedPoll.__retryCount);
+           *} catch (err) {
+           *  console.error(err);
+           *}
+           */
+          /*
+           *try {
+           *  console.log('>>>>> UNCHAINED INITIAL', updatedResponse, updatedPoll.__retryCount);
+           *  updatedPoll.status.call(null, updatedResponse, updatedPoll.__retryCount);
+           *} catch (err) {
+           *  console.error(err);
+           *}
+           */
 
-          Promise.resolve(pollResponse).then(
-            res => {
+          pollResponse.then(
+            resolved => {
               try {
-                console.log('>>>>> UNCHAINED success', res, updatedPoll.__retryCount);
-                updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+                console.log('>>>>> UNCHAINED basic', resolved, updatedPoll.__retryCount);
+                updatedPoll.status.call(null, resolved, undefined, updatedPoll.__retryCount);
               } catch (err) {
                 console.error(err);
               }
-              /*
-               * console.log('>>>>> FINALLY callbackresponse', callbackResponse);
-               * console.log('>>>>> FINALLY success', success);
-               */
             },
-            res => {
+            resolved => {
               try {
-                console.log('>>>>> UNCHAINED error', res, updatedPoll.__retryCount);
-                updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+                console.log('>>>>> UNCHAINED basic error', resolved, updatedPoll.__retryCount);
+                updatedPoll.status.call(
+                  null,
+                  undefined,
+                  { ...resolved, error: true, status: resolved?.response?.status },
+                  updatedPoll.__retryCount
+                );
               } catch (err) {
                 console.error(err);
               }
             }
           );
+
+          /*
+           *Promise.all([pollResponse]).then(
+           *  ([resolved]) => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED all', resolved, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, resolved, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  },
+           *  ([resolved]) => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED all', resolved, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, undefined, new Error(resolved), updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  }
+           *);
+           */
+
+          /*
+           *Promise.allSettled([pollResponse]).then(([resolved]) => {
+           *  try {
+           *    console.log('>>>>> UNCHAINED all settled', resolved.value, updatedPoll.__retryCount);
+           *    updatedPoll.status.call(
+           *      null,
+           *      resolved.value,
+           *      (resolved?.reason && new Error(resolved.reason)) || undefined,
+           *      updatedPoll.__retryCount
+           *    );
+           *  } catch (err) {
+           *    console.error(err);
+           *  }
+           *});
+           */
+
+          /*
+           *let resolved;
+           *
+           *Promise.resolve(pollResponse)
+           *  .then(
+           *    res => {
+           *      resolved = res;
+           *    },
+           *    res => {
+           *      resolved = res;
+           *    }
+           *  )
+           *  .finally(() => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED final', resolved, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, resolved, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  });
+           */
+
+          /*
+           *Promise.resolve(pollResponse).then(
+           *  res => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED success', res, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  },
+           *  res => {
+           *    try {
+           *      console.log('>>>>> UNCHAINED error', res, updatedPoll.__retryCount);
+           *      updatedPoll.status.call(null, res, updatedPoll.__retryCount);
+           *    } catch (err) {
+           *      console.error(err);
+           *    }
+           *  }
+           *);
+           */
         }
 
         return updatedResponse;
