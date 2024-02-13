@@ -128,11 +128,13 @@ const axiosServiceCall = async (
         const updatedResponse = { ...response };
         const { data, error: normalizeError } = serviceHelpers.passDataToCallback(
           successTransform,
-          updatedResponse.data,
-          updatedResponse.config
+          serviceHelpers.memoClone(updatedResponse.data),
+          serviceHelpers.memoClone(updatedResponse.config)
         );
 
-        if (!normalizeError) {
+        if (normalizeError) {
+          console.warn(normalizeError);
+        } else {
           updatedResponse.data = data;
         }
 
@@ -150,11 +152,13 @@ const axiosServiceCall = async (
 
         const { data, error: normalizeError } = serviceHelpers.passDataToCallback(
           errorTransform,
-          updatedResponse?.data || updatedResponse?.message,
-          updatedResponse.config
+          serviceHelpers.memoClone(updatedResponse?.data || updatedResponse?.message),
+          serviceHelpers.memoClone(updatedResponse.config)
         );
 
-        if (!normalizeError) {
+        if (normalizeError) {
+          console.warn(normalizeError);
+        } else {
           updatedResponse.response = { ...updatedResponse, data };
         }
 
