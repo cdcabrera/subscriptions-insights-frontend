@@ -82,6 +82,7 @@ const axiosServiceCall = async (
     updatedConfig.cacheId = cacheId;
   }
 
+  // apply cancel configuration
   if (updatedConfig.cancel === true) {
     const cancelTokensId =
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
@@ -96,6 +97,7 @@ const axiosServiceCall = async (
     delete updatedConfig.cancel;
   }
 
+  // if cached response return
   if (updatedConfig.cacheResponse === true) {
     const cachedResponse = responseCache.get(cacheId);
 
@@ -112,14 +114,17 @@ const axiosServiceCall = async (
     }
   }
 
+  // if schema transform, add before standard transform
   if (updatedConfig.schema) {
     responseTransformers.push(updatedConfig.schema);
   }
 
+  // add response transformers
   if (updatedConfig.transform) {
     responseTransformers.push(updatedConfig.transform);
   }
 
+  // apply response transformers
   responseTransformers.forEach(([successTransform, errorTransform]) => {
     const transformers = [undefined, response => Promise.reject(response)];
 
@@ -169,6 +174,7 @@ const axiosServiceCall = async (
     axiosInstance.interceptors.response.use(...transformers);
   });
 
+  // apply a response to cache
   if (updatedConfig.cacheResponse === true) {
     axiosInstance.interceptors.response.use(
       response => {
@@ -180,6 +186,7 @@ const axiosServiceCall = async (
     );
   }
 
+  // use a function instead of a url-string, receive service emulated output (for implementation consistency)
   if (typeof updatedConfig.url === 'function') {
     const emulateCallback = updatedConfig.url;
     updatedConfig.url = '/emulated';
