@@ -5,8 +5,10 @@ import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import {
+  PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
-  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX
+  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
+  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES
 } from '../../services/platform/platformConstants';
 import { translate } from '../i18n/i18n';
 
@@ -68,8 +70,8 @@ const useOnSelect = ({
     ({ value = null } = {}) => {
       const sources = [
         {
-          application: 'subscriptions',
-          resource: 'subscriptions',
+          application: APP_TYPES.SUBSCRIPTIONS,
+          resource: RESOURCE_TYPES.SUBSCRIPTIONS,
           filters: {
             ...inventoryQuery,
             productId
