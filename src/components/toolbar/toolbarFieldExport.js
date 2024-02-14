@@ -265,4 +265,11 @@ ToolbarFieldExport.defaultProps = {
   useOnSelect
 };
 
-export { ToolbarFieldExport as default, ToolbarFieldExport, toolbarFieldOptions, useOnSelect };
+export {
+  ToolbarFieldExport as default,
+  ToolbarFieldExport,
+  toolbarFieldOptions,
+  useExport,
+  useExportStatus,
+  useOnSelect
+};
