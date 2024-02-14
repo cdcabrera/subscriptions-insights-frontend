@@ -127,7 +127,11 @@ const useExport = ({
         return getExport(id)(dispatch);
       }
 
-      return getExportStatus(updatedOptions)(dispatch);
+      if (isPolling === undefined) {
+        return getExportStatus(updatedOptions)(dispatch);
+      }
+
+      return undefined;
     },
     [createExport, dispatch, getExport, getExportStatus, isPolling, validate]
   );
@@ -179,6 +183,7 @@ const useOnSelect = ({
  * @param {Array} props.options
  * @param {string} props.position
  * @param {Function} props.t
+ * @param {Function} props.useExport
  * @param {Function} props.useExportStatus
  * @param {Function} props.useOnSelect
  * @returns {React.ReactNode}
