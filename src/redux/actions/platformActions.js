@@ -49,10 +49,54 @@ const authorizeUser = appName => dispatch =>
   });
 
 /**
+ * Get a specific export download package.
+ *
+ * @param {string} id
+ * @returns {Function}
+ */
+const getExport = id => dispatch =>
+  dispatch({
+    type: platformTypes.GET_PLATFORM_EXPORT,
+    payload: platformServices.getExport(id)
+  });
+
+/**
+ * Return a "dispatch ready" export poll status check.
+ *
+ * @param {Function} dispatch
+ * @returns {Function}
+ */
+const setExportStatus =
+  dispatch =>
+  (success = {}, error) =>
+    dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      payload: Promise.resolve(error || success)
+    });
+
+/**
+ * Get a specific, or all, export status.
+ *
+ * @param {string} id
+ * @param {object} options Apply polling options
+ * @returns {Function}
+ */
+const getExportStatus =
+  (id, options = {}) =>
+  dispatch =>
+    dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      payload: platformServices.getExportStatus(id, undefined, {
+        ...options,
+        poll: { ...options.poll, status: setExportStatus(dispatch) }
+      })
+    });
+
+/**
  * Create an export for download.
  *
  * @param {object} data
- * @param {object} options Polling options
+ * @param {object} options Apply polling options
  * @returns {Function}
  */
 const createExport =
@@ -60,7 +104,10 @@ const createExport =
   dispatch =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.postExport(data, options)
+      payload: platformServices.postExport(data, {
+        ...options,
+        poll: { ...options.poll, status: setExportStatus(dispatch) }
+      })
     });
 
 /**
@@ -71,7 +118,8 @@ const createExport =
  * @param {object} options Polling options
  * @returns {Function}
  */
-const createGetExport = (id = null, data, options = {}) =>
+const createGetExport =
+  (id = null, data, options = {}) =>
   dispatch => {
     if (data) {
       return dispatch([
@@ -114,20 +162,6 @@ const createGetExport = (id = null, data, options = {}) =>
   };
 
 /**
- * Get an export download package status.
- *
- * @param {string} id
- * @returns {Function}
- */
-const getExportStatus =
-  (id = null) =>
-  dispatch =>
-    dispatch({
-      type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(id)
-    });
-
-/**
  * Hide platform global filter.
  *
  * @param {boolean} isHidden
@@ -144,6 +178,8 @@ const platformActions = {
   clearNotifications,
   authorizeUser,
   createExport,
+  getExport,
+  setExportStatus,
   getExportStatus,
   hideGlobalFilter
 };
@@ -156,6 +192,8 @@ export {
   clearNotifications,
   authorizeUser,
   createExport,
+  getExport,
+  setExportStatus,
   getExportStatus,
   hideGlobalFilter
 };
