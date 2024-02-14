@@ -29,10 +29,11 @@ const PLATFORM_API_EXPORT_APPLICATION_TYPES = {
 /**
  * Platform Export, available resource types for related application types.
  *
- * @type {{INSTANCES: string}}
+ * @type {{SUBSCRIPTIONS: string, INSTANCES: string}}
  */
 const PLATFORM_API_EXPORT_RESOURCE_TYPES = {
-  INSTANCES: 'instances'
+  INSTANCES: 'instances',
+  SUBSCRIPTIONS: 'subscriptions'
 };
 
 /**
