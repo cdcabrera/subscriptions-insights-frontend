@@ -8,7 +8,8 @@ import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
   PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
-  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES
+  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES,
+  PLATFORM_API_EXPORT_STATUS_TYPES
 } from '../../services/platform/platformConstants';
 import { translate } from '../i18n/i18n';
 
@@ -33,36 +34,119 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
 /**
  * Aggregated export status
  *
+ * @param {object} options
+ * @param {Function} options.useProduct
+ * @param {Function} options.useSelector
  * @returns {{isPolling: boolean, isError: boolean, isProductPolling: boolean, isMountCompleted: boolean,
  *     errorMessage: undefined, productPollingFormats: Array<any>, isCompleted: boolean}}
  */
-const useExportStatus = () => ({
-  errorMessage: undefined,
-  isCompleted: false,
-  isError: false,
-  isMountCompleted: false,
-  isPolling: false,
-  isProductPolling: false,
-  productPollingFormats: []
-});
+const useExportStatus = ({
+  useProduct: useAliasProduct = useProduct,
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const { data = {} } = useAliasSelector(({ app }) => app?.exports);
+
+  const isPolling = data?.data?.isAnythingPending === true || undefined;
+  const isCompleted = data?.data?.isAnythingPending === false || undefined;
+  const productPollingFormats = [];
+  let isProductPolling = false;
+
+  if (isPolling) {
+    const pollingResults = (data?.data?.[productId] || [])
+      .filter(({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
+      .map(({ format: productFormat }) => productFormat);
+
+    productPollingFormats.push(...pollingResults);
+
+    if (pollingResults.length) {
+      isProductPolling = true;
+    }
+  }
+
+  return {
+    isCompleted,
+    isPolling,
+    isProductPolling,
+    productPollingFormats
+  };
+};
+
+/**
+ * Apply a centralized export hook for, post/put, polling status, and download.
+ *
+ * @param {object} options
+ * @param {Function} options.createExport
+ * @param {Function} options.getExport
+ * @param {Function} options.getExportStatus
+ * @param {Function} options.useDispatch
+ * @param {Function} options.useExportStatus
+ * @returns {Function}
+ */
+const useExport = ({
+  createExport = reduxActions.platform.createExport,
+  getExport = reduxActions.platform.getExport,
+  getExportStatus = reduxActions.platform.getExportStatus,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useExportStatus: useAliasExportStatus = useExportStatus
+} = {}) => {
+  const dispatch = useAliasDispatch();
+  const { isPolling } = useAliasExportStatus();
+
+  /**
+   * A polling response validator
+   *
+   * @type {Function}
+   */
+  const validate = useCallback(response => {
+    if (
+      typeof response?.data?.data?.isAnythingPending !== 'boolean' ||
+      response?.data?.data?.isAnythingPending === true
+    ) {
+      return false;
+    }
+    return true;
+  }, []);
+
+  return useCallback(
+    ({ id, data } = {}) => {
+      const updatedOptions = {};
+
+      if (!isPolling) {
+        updatedOptions.poll = {
+          validate
+        };
+      }
+
+      if (data) {
+        return createExport(data, updatedOptions)(dispatch);
+      }
+
+      if (id) {
+        return getExport(id)(dispatch);
+      }
+
+      return getExportStatus()(dispatch);
+    },
+    [createExport, dispatch, getExport, getExportStatus, isPolling, validate]
+  );
+};
 
 /**
  * On select update export.
  *
  * @param {object} options
- * @param {Function} options.createExport
- * @param {Function} options.useDispatch
+ * @param {Function} options.useExport
  * @param {Function} options.useProduct
  * @param {Function} options.useProductInventoryQuery
  * @returns {Function}
  */
 const useOnSelect = ({
-  createExport = reduxActions.platform.createExport,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useExport: useAliasExport = useExport,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
 } = {}) => {
-  const dispatch = useAliasDispatch();
+  const createExport = useAliasExport();
   const { productId } = useAliasProduct();
   const inventoryQuery = useAliasProductInventoryQuery();
 
@@ -80,9 +164,9 @@ const useOnSelect = ({
       ];
 
       const data = { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources };
-      createExport({ data })(dispatch);
+      createExport({ data });
     },
-    [createExport, dispatch, inventoryQuery, productId]
+    [createExport, inventoryQuery, productId]
   );
 };
 
