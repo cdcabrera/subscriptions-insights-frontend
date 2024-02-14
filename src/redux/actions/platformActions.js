@@ -52,26 +52,69 @@ const authorizeUser = appName => dispatch =>
  * Create an export for download.
  *
  * @param {object} data
+ * @param {object} options Polling options
  * @returns {Function}
  */
 const createExport =
-  (data = {}) =>
+  (data = {}, options = {}) =>
   dispatch =>
     dispatch({
-      type: platformTypes.GET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(data)
+      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      payload: platformServices.postExport(data, options),
+      meta: {
+        id: 'status'
+      }
     });
 
 /**
- * Get an export download packaged response.
+ * Submit, get a status, or get a file for an export.
  *
- * @param {string} id
+ * @param {string|undefined|null} id
+ * @param {object} data
+ * @param {object} options Polling options
  * @returns {Function}
  */
-const getExport = (id = null) => ({
-  type: platformTypes.GET_PLATFORM_EXPORT,
-  payload: platformServices.getExport(id)
-});
+const createGetExport = (id = null, data, options = {}) =>
+  dispatch => {
+    if (data) {
+      return dispatch([
+        {
+          type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+          payload: platformServices.postExport(data, options),
+          meta: {
+            id: 'status'
+          }
+        }
+      ]);
+    }
+
+    if (id) {
+      return dispatch({
+        type: platformTypes.GET_PLATFORM_EXPORT,
+        payload: platformServices.getExport(id),
+        meta: {
+          id: 'download',
+          notifications: {
+            rejected: {
+              variant: 'danger',
+              title: 'error',
+              // description: translate('curiosity-optin.notificationsErrorDescription'),
+              dismissable: true,
+              autoDismiss: true
+            }
+          }
+        }
+      });
+    }
+
+    return dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      payload: platformServices.getExportStatus(undefined, {}, options),
+      meta: {
+        id: 'initial'
+      }
+    });
+  };
 
 /**
  * Get an export download package status.
@@ -104,7 +147,6 @@ const platformActions = {
   clearNotifications,
   authorizeUser,
   createExport,
-  getExport,
   getExportStatus,
   hideGlobalFilter
 };
@@ -117,7 +159,6 @@ export {
   clearNotifications,
   authorizeUser,
   createExport,
-  getExport,
   getExportStatus,
   hideGlobalFilter
 };
