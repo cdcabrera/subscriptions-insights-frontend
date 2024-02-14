@@ -311,6 +311,7 @@
     "label_category_physical": "Physical",
     "label_category_virtual": "Virtual",
     "label_export_csv": "Export to CSV",
+    "label_export_loading": "Loading...",
     "label_export_json": "Export to JSON",
     "label_filter": "Filter by",
     "label_filter_billing_provider": "Purchased through",
