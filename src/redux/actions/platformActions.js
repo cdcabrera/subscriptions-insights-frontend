@@ -71,7 +71,7 @@ const setExportStatus =
   (success = {}, error) =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: Promise.resolve(error || success)
+      payload: (error && Promise.reject(error)) || Promise.resolve(success)
     });
 
 /**
@@ -109,57 +109,6 @@ const createExport =
         poll: { ...options.poll, status: setExportStatus(dispatch) }
       })
     });
-
-/**
- * Submit, get a status, or get a file for an export.
- *
- * @param {string|undefined|null} id
- * @param {object} data
- * @param {object} options Polling options
- * @returns {Function}
- */
-const createGetExport =
-  (id = null, data, options = {}) =>
-  dispatch => {
-    if (data) {
-      return dispatch([
-        {
-          type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-          payload: platformServices.postExport(data, options),
-          meta: {
-            id: 'status'
-          }
-        }
-      ]);
-    }
-
-    if (id) {
-      return dispatch({
-        type: platformTypes.GET_PLATFORM_EXPORT,
-        payload: platformServices.getExport(id),
-        meta: {
-          id: 'download',
-          notifications: {
-            rejected: {
-              variant: 'danger',
-              title: 'error',
-              // description: translate('curiosity-optin.notificationsErrorDescription'),
-              dismissable: true,
-              autoDismiss: true
-            }
-          }
-        }
-      });
-    }
-
-    return dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(undefined, {}, options),
-      meta: {
-        id: 'initial'
-      }
-    });
-  };
 
 /**
  * Hide platform global filter.
