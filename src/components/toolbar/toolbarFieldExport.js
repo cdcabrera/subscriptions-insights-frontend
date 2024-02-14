@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
+import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import {
@@ -47,16 +48,19 @@ const useExportStatus = () => ({
  * On select update export.
  *
  * @param {object} options
- * @param {Function} options.useExport
+ * @param {Function} options.createExport
+ * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
+ * @param {Function} options.useProductInventoryQuery
  * @returns {Function}
  */
 const useOnSelect = ({
-  useExport: useAliasExport = () => Function.prototype,
+  createExport = reduxActions.platform.createExport,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct,
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
 } = {}) => {
-  const createExport = useAliasExport();
+  const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
   const inventoryQuery = useAliasProductInventoryQuery();
 
@@ -74,9 +78,9 @@ const useOnSelect = ({
       ];
 
       const data = { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources };
-      createExport({ data });
+      createExport({ data })(dispatch);
     },
-    [createExport, inventoryQuery, productId]
+    [createExport, dispatch, inventoryQuery, productId]
   );
 };
 

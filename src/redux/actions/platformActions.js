@@ -60,10 +60,7 @@ const createExport =
   dispatch =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.postExport(data, options),
-      meta: {
-        id: 'status'
-      }
+      payload: platformServices.postExport(data, options)
     });
 
 /**
