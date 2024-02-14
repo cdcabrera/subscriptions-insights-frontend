@@ -77,16 +77,15 @@ const setExportStatus =
 /**
  * Get a specific, or all, export status.
  *
- * @param {string} id
  * @param {object} options Apply polling options
  * @returns {Function}
  */
 const getExportStatus =
-  (id, options = {}) =>
+  (options = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(id, undefined, {
+      payload: platformServices.getExportStatus(undefined, undefined, {
         ...options,
         poll: { ...options.poll, status: setExportStatus(dispatch) }
       })
