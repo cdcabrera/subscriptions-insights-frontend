@@ -32,6 +32,12 @@ const exports = response => {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: status
   } = response || {};
 
+  /**
+   * Pull a product id from an export name. Fallback filtering for product identifiers.
+   *
+   * @param {string} str
+   * @returns {undefined|string}
+   */
   const getProductId = str => {
     const updatedStr = str;
     const attemptId = updatedStr?.replace(`${EXPORT_PREFIX}-`, '')?.trim();
@@ -43,7 +49,13 @@ const exports = response => {
     return attemptId;
   };
 
-  const getProductStatus = str => {
+  /**
+   * Get a refined export status
+   *
+   * @param {string} str
+   * @returns {string}
+   */
+  const getStatus = str => {
     const updatedStr = str;
     let updatedStatus = PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
 
@@ -55,6 +67,32 @@ const exports = response => {
     }
 
     return updatedStatus;
+  };
+
+  /**
+   * Restructures export response to allow for product identifiers.
+   *
+   * @param {object} params
+   * @param {string} params.exportName
+   * @param {string} params.exportStatus
+   * @param {string} params.exportFormat
+   * @param {string} params.exportId
+   */
+  const restructureResponse = ({ exportName, exportStatus, exportFormat, exportId } = {}) => {
+    const productId = getProductId(exportName);
+    const focusedStatus = getStatus(exportStatus);
+
+    if (updatedResponse.data.isAnythingPending !== true) {
+      updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
+    }
+
+    updatedResponse.data[productId] ??= [];
+    updatedResponse.data[productId].push({
+      format: exportFormat,
+      id: exportId,
+      name: exportName,
+      status: focusedStatus
+    });
   };
 
   if (Array.isArray(data)) {
@@ -69,37 +107,11 @@ const exports = response => {
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName,
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: exportStatus
         }) => {
-          const productId = getProductId(exportName);
-          const focusedStatus = getProductStatus(exportStatus);
-
-          if (updatedResponse.data.isAnythingPending !== true) {
-            updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
-          }
-
-          updatedResponse.data[productId] ??= [];
-          updatedResponse.data[productId].push({
-            format: exportFormat,
-            id: exportId,
-            name: exportName,
-            status: focusedStatus
-          });
+          restructureResponse({ exportName, exportStatus, exportFormat, exportId });
         }
       );
   } else if (id && status && new RegExp(`^${EXPORT_PREFIX}`, 'i').test(name)) {
-    const productId = getProductId(name);
-    const focusedStatus = getProductStatus(status);
-
-    if (updatedResponse.data.isAnythingPending !== true) {
-      updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
-    }
-
-    updatedResponse.data[productId] ??= [];
-    updatedResponse.data[productId].push({
-      format,
-      id,
-      name,
-      status: focusedStatus
-    });
+    restructureResponse({ exportName: name, exportStatus: status, exportFormat: format, exportId: id });
   }
 
   return updatedResponse;
