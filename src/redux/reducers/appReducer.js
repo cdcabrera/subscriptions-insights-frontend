@@ -56,18 +56,6 @@ const appReducer = (state = initialState, action) => {
 
       return state;
 
-    case platformTypes.UPDATE_PLATFORM_EXPORT_POLL:
-      return reduxHelpers.setStateProp(
-        'exports',
-        {
-          poll: action.poll
-        },
-        {
-          state,
-          initialState
-        }
-      );
-
     default:
       return reduxHelpers.generatedPromiseActionReducer(
         [
