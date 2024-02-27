@@ -111,19 +111,6 @@ function pollingRetryLimit(timeLimit, timeInterval, minimumRetries) {
  */
 pollingRetryLimit.memoize = memo(pollingRetryLimit);
 
-/*
-const retryLimit = memo((timeLimit, timeInterval, timeLimitDefault, minimumRetries = 1) => {
-  const updatedRetries =
-    (timeLimit >= timeInterval && Number.parseInt((timeLimit || 0) / (timeInterval || 0), 10)) || timeLimitDefault;
-
-  if (Number.isNaN(updatedRetries) || updatedRetries === Infinity || typeof updatedRetries !== 'number') {
-    return minimumRetries;
-  }
-
-  return updatedRetries;
-});
-*/
-
 /**
  * A callback for schema validation, and after-the-fact casing adjustments.
  *

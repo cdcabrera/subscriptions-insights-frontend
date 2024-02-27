@@ -1,4 +1,4 @@
-import { serviceHelpers } from '../helpers';
+import { pollingRetryLimit, serviceHelpers } from '../helpers';
 
 describe('Service Helpers', () => {
   it('should have specific functions', () => {
@@ -65,6 +65,26 @@ describe('Service Helpers', () => {
         { dolor: 'sit' }
       )
     ).toMatchSnapshot('passDataToCallback, error');
+  });
+
+  it('should support a polling retry limit calculation', () => {
+    expect(pollingRetryLimit.memoize).toBeDefined();
+
+    expect({
+      exact: pollingRetryLimit(100, 100, 1),
+      limitLessThanInterval: pollingRetryLimit(10, 100, 1),
+      limitGreaterThanInterval: pollingRetryLimit(100, 10, 1),
+      limitUndefined: pollingRetryLimit(undefined, 100, 1),
+      intervalUndefined: pollingRetryLimit(100, undefined, 1)
+    }).toMatchSnapshot('retry limits');
+
+    expect({
+      exact: pollingRetryLimit(100, 100, 0),
+      limitLessThanInterval: pollingRetryLimit(10, 100, 0),
+      limitGreaterThanInterval: pollingRetryLimit(100, 10, 0),
+      limitUndefined: pollingRetryLimit(undefined, 100, 0),
+      intervalUndefined: pollingRetryLimit(100, undefined, 0)
+    }).toMatchSnapshot('retry limits, zero');
   });
 
   it('should attempt to apply a Joi schema to a response', () => {

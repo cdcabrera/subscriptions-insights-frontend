@@ -23,10 +23,32 @@ exports[`Service Helpers should have specific functions: serviceHelpers 1`] = `
 {
   "camelCase": [Function],
   "generateHash": [Function],
+  "memo": [Function],
   "memoClone": [Function],
   "passDataToCallback": [Function],
+  "pollingRetryLimit": [Function],
   "schemaResponse": [Function],
   "timeoutFunctionCancel": [Function],
+}
+`;
+
+exports[`Service Helpers should support a polling retry limit calculation: retry limits 1`] = `
+{
+  "exact": 1,
+  "intervalUndefined": 1,
+  "limitGreaterThanInterval": 10,
+  "limitLessThanInterval": 1,
+  "limitUndefined": 1,
+}
+`;
+
+exports[`Service Helpers should support a polling retry limit calculation: retry limits, zero 1`] = `
+{
+  "exact": 1,
+  "intervalUndefined": 0,
+  "limitGreaterThanInterval": 10,
+  "limitLessThanInterval": 0,
+  "limitUndefined": 0,
 }
 `;
 

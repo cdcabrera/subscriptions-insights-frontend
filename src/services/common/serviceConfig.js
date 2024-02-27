@@ -251,6 +251,7 @@ const axiosServiceCall = async (
       async response => {
         const updatedResponse = { ...response };
         const callbackResponse = serviceHelpers.memoClone(updatedResponse);
+        const updatedPollInterval = updatedConfig.poll.pollInterval || pollInterval;
 
         // passed config, allow future updates by passing modified poll config
         const updatedPoll = {
@@ -260,13 +261,13 @@ const axiosServiceCall = async (
           // only required param, a function, validate status in prep for next
           validate: updatedConfig.poll.validate || updatedConfig.poll,
           // a number, the setTimeout interval
-          pollInterval: updatedConfig.poll.pollInterval || pollInterval,
+          pollInterval: updatedPollInterval,
           // internal counter passed towards validate
           __retryCount: updatedConfig.poll.__retryCount ?? 0,
           // internal limit on number of polling retries, aka avoid runaway timers with broken service responses
           __retryLimit:
             updatedConfig.poll.__retryLimit ??
-            serviceHelpers.pollingRetryLimit.memoize(pollTimeout, this.pollInterval, 1)
+            serviceHelpers.pollingRetryLimit.memoize(pollTimeout, updatedPollInterval, 1)
         };
 
         let validated;
