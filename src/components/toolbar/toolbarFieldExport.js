@@ -46,10 +46,10 @@ const useExportStatus = ({
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
 } = {}) => {
   const { productId } = useAliasProduct();
-  const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
+  const { data = {}, error } = useAliasSelector(({ app }) => app?.exports, {});
 
-  const isPolling = data?.data?.isAnythingPending === true || undefined;
-  const isCompleted = data?.data?.isAnythingPending === false || undefined;
+  const isPolling = (!error && data?.data?.isAnythingPending === true) || undefined;
+  const isCompleted = (!error && data?.data?.isAnythingPending === false) || undefined;
   const productPollingFormats = [];
   let isProductPolling = false;
 
@@ -110,7 +110,9 @@ const useExport = ({
 
       if (!isPolling) {
         updatedOptions.poll = {
-          validate
+          validate,
+          pollTimeout: 4000,
+          pollInterval: 2000
         };
       }
 

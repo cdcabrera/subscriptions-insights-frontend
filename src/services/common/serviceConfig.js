@@ -68,11 +68,12 @@ const globalResponseCache = new LRUCache({
  * @param {Array} config.transform
  * @param {string|Function} config.url
  * @param {object} options
- * @param {string} options.cancelledMessage
- * @param {object} options.responseCache
- * @param {number} options.xhrTimeout
- * @param {number} options.pollInterval
- * @param {number} options.pollTimeout
+ * @param {string} options.cancelledMessage General request cancelled messaging
+ * @param {object} options.responseCache A cache object, currently leverages LRUcache
+ * @param {number} options.xhrTimeout A request timeout
+ * @param {number} options.pollInterval A millisecond polling interval
+ * @param {number} options.pollTimeout A polling timeout to prevent runaway polling, calculated by dividing
+ *     timeout by interval. Any division that equates to a zero result indicates polling does not stop.
  * @returns {Promise<*>}
  */
 const axiosServiceCall = async (
@@ -252,6 +253,7 @@ const axiosServiceCall = async (
         const updatedResponse = { ...response };
         const callbackResponse = serviceHelpers.memoClone(updatedResponse);
         const updatedPollInterval = updatedConfig.poll.pollInterval || pollInterval;
+        const updatedPollTimeout = updatedConfig.poll.pollTimeout || pollTimeout;
 
         // passed config, allow future updates by passing modified poll config
         const updatedPoll = {
@@ -267,7 +269,7 @@ const axiosServiceCall = async (
           // internal limit on number of polling retries, aka avoid runaway timers with broken service responses
           __retryLimit:
             updatedConfig.poll.__retryLimit ??
-            serviceHelpers.pollingRetryLimit.memoize(pollTimeout, updatedPollInterval, 1)
+            serviceHelpers.pollingRetryLimit.memoize(updatedPollTimeout, updatedPollInterval, 1)
         };
 
         let validated;
@@ -292,6 +294,17 @@ const axiosServiceCall = async (
             console.error(err);
             tempLocation = updatedConfig.url;
           }
+        }
+
+        if (updatedPoll.__retryLimit !== 0 && updatedPoll.__retryCount >= updatedPoll.__retryLimit) {
+          const timeoutMessage = 'timeout exceeded';
+
+          return Promise.reject({ // eslint-disable-line
+            ...new Error(timeoutMessage),
+            // cancelled: true,
+            ...updatedResponse,
+            message: timeoutMessage
+          });
         }
 
         const pollResponse = new Promise((resolve, reject) => {

@@ -252,67 +252,6 @@ const getExport = (id, options = {}) => {
  *       ]
  *     }
  *
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "data": [
- *         {
- *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-RHEL for x86",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "instances",
- *               "filters": {},
- *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
- *         },
- *         {
- *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "swatch-rhel-for-x86-els-payg",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
- *         },
- *         {
- *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *           "name": "unknown-export",
- *           "created_at": "2024-01-24T16:20:31.229Z",
- *           "completed_at": "2024-01-24T16:20:31.229Z",
- *           "expires_at": "2024-01-24T16:20:31.229Z",
- *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
- *         }
- *       ]
- *     }
- *
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Bad Request
  *     {
