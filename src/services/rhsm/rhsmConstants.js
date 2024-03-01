@@ -4,6 +4,18 @@
  */
 
 /**
+ * RHSM path IDs for product groups
+ *
+ * @type {{RHEL: string, RHODS: string, RHACS: string, OPENSHIFT: string}}
+ */
+const RHSM_API_PATH_PRODUCT_GROUP_TYPES = {
+  OPENSHIFT: 'openshift',
+  RHACS: 'rhacs',
+  RHEL: 'rhel',
+  RHODS: 'rhods'
+};
+
+/**
  * RHSM path IDs for product RHEL variants.
  *
  * @type {{RHEL_ARM: string, RHEL_X86_SAP: string, RHEL_IBM_Z: string, RHEL_IBM_POWER: string, RHEL_X86: string,
@@ -244,8 +256,10 @@ const RHSM_API_RESPONSE_BILLING_PROVIDER_TYPES = {
   AWS: 'aws',
   // GCP: 'gcp',
   AZURE: 'azure'
-  // ORACLE: 'oracle',
-  // NONE: ''
+  /*
+   * ORACLE: 'oracle',
+   * NONE: ''
+   */
 };
 
 /**
@@ -431,8 +445,8 @@ const RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES = {
 /**
  * RHSM constants.
  *
- * @type {{RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES: {GRANULARITY: string, USAGE: string, CATEGORY: string,
- *     END_DATE: string, SLA: string, START_DATE: string, BILLING_PROVIDER: string, USE_RUNNING_TOTALS_FORMAT: string,
+ * @type {{RHSM_API_QUERY_SET_TALLY_CAPACITY_TYPES: {GRANULARITY: string, USAGE: string, CATEGORY: string, END_DATE:
+ *     string, SLA: string, START_DATE: string, BILLING_PROVIDER: string, USE_RUNNING_TOTALS_FORMAT: string,
  *     BILLING_CATEGORY: string}, RHSM_API_RESPONSE_DATA: string, RHSM_API_RESPONSE_SUBSCRIPTIONS_META_TYPES: {PRODUCT:
  *     string, SUBSCRIPTION_TYPE: string, COUNT: string}, RHSM_API_PATH_PRODUCT_VARIANT_SATELLITE_TYPES:
  *     {SATELLITE_SERVER: string, SATELLITE_CAPSULE: string}, RHSM_API_PATH_METRIC_TYPES: {CORES: string,
@@ -442,9 +456,10 @@ const RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES = {
  *     string, BILLING_ACCOUNT_ID: string, CATEGORY: string, SUBSCRIPTION_MANAGER_ID: string, INVENTORY_ID: string,
  *     NUMBER_OF_GUESTS: string, BILLING_PROVIDER: string, DISPLAY_NAME: string, CLOUD_PROVIDER: string, INSTANCE_ID:
  *     string, LAST_SEEN: string}, RHSM_API_RESPONSE_SLA_TYPES: {PREMIUM: string, SELF: string, NONE: string, STANDARD:
- *     string}, RHSM_API_RESPONSE_META_TYPES: {PRODUCT: string, COUNT: string}, RHSM_API_RESPONSE_ERRORS_CODE_TYPES:
- *     {GENERIC: string, OPTIN: string}, RHSM_API_QUERY_GRANULARITY_TYPES: {WEEKLY: string, QUARTERLY: string, DAILY:
- *     string, MONTHLY: string}, RHSM_API_RESPONSE_UOM_TYPES: {CORES: string, SOCKETS: string},
+ *     string}, RHSM_API_PATH_PRODUCT_GROUP_TYPES: {RHEL: string, RHODS: string, RHACS: string, OPENSHIFT: string},
+ *     RHSM_API_RESPONSE_META_TYPES: {PRODUCT: string, COUNT: string}, RHSM_API_RESPONSE_ERRORS_CODE_TYPES: {GENERIC:
+ *     string, OPTIN: string}, RHSM_API_QUERY_GRANULARITY_TYPES: {WEEKLY: string, QUARTERLY: string, DAILY: string,
+ *     MONTHLY: string}, RHSM_API_RESPONSE_UOM_TYPES: {CORES: string, SOCKETS: string},
  *     RHSM_API_PATH_PRODUCT_VARIANT_RHEL_TYPES: {RHEL_ARM: string, RHEL_X86_SAP: string, RHEL_IBM_Z: string,
  *     RHEL_IBM_POWER: string, RHEL_X86: string, RHEL_X86_EUS: string, RHEL_X86_HA: string, RHEL_X86_RS: string},
  *     RHSM_API_RESPONSE_SUBSCRIPTIONS_DATA_TYPES: {BILLING_ACCOUNT_ID: string, QUANTITY: string,
@@ -484,6 +499,7 @@ const RHSM_INTERNAL_PRODUCT_DISPLAY_TYPES = {
  *     DEVELOPMENT: string, PRODUCTION: string}}}
  */
 const rhsmConstants = {
+  RHSM_API_PATH_PRODUCT_GROUP_TYPES,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_PATH_PRODUCT_VARIANT_RHEL_TYPES,
   RHSM_API_PATH_PRODUCT_VARIANT_SATELLITE_TYPES,
@@ -524,6 +540,7 @@ const rhsmConstants = {
 export {
   rhsmConstants as default,
   rhsmConstants,
+  RHSM_API_PATH_PRODUCT_GROUP_TYPES,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_PATH_PRODUCT_VARIANT_RHEL_TYPES,
   RHSM_API_PATH_PRODUCT_VARIANT_SATELLITE_TYPES,

@@ -8,6 +8,7 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import moment from 'moment';
 import {
   RHSM_API_PATH_METRIC_TYPES,
+  RHSM_API_PATH_PRODUCT_GROUP_TYPES,
   RHSM_API_PATH_PRODUCT_TYPES,
   RHSM_API_QUERY_GRANULARITY_TYPES as GRANULARITY_TYPES,
   RHSM_API_QUERY_INVENTORY_SORT_DIRECTION_TYPES as SORT_DIRECTION_TYPES,
@@ -41,7 +42,7 @@ import { translate } from '../components/i18n/i18n';
  *
  * @type {string}
  */
-const productGroup = 'openshift';
+const productGroup = RHSM_API_PATH_PRODUCT_GROUP_TYPES.OPENSHIFT;
 
 /**
  * Product ID. The identifier used when querying the API.

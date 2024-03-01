@@ -12,6 +12,12 @@ exports[`RHSM Constants should have specific properties: all exported constants 
     "TRANSFER_GIBIBYTES": "Transfer-gibibytes",
     "VCPUS": "vCPUs",
   },
+  "RHSM_API_PATH_PRODUCT_GROUP_TYPES": {
+    "OPENSHIFT": "openshift",
+    "RHACS": "rhacs",
+    "RHEL": "rhel",
+    "RHODS": "rhods",
+  },
   "RHSM_API_PATH_PRODUCT_TYPES": {
     "OPENSHIFT": "OpenShift Container Platform",
     "OPENSHIFT_DEDICATED_METRICS": "OpenShift-dedicated-metrics",
@@ -278,6 +284,12 @@ exports[`RHSM Constants should have specific properties: all exported constants 
       "STORAGE_GIBIBYTE_MONTHS": "Storage-gibibyte-months",
       "TRANSFER_GIBIBYTES": "Transfer-gibibytes",
       "VCPUS": "vCPUs",
+    },
+    "RHSM_API_PATH_PRODUCT_GROUP_TYPES": {
+      "OPENSHIFT": "openshift",
+      "RHACS": "rhacs",
+      "RHEL": "rhel",
+      "RHODS": "rhods",
     },
     "RHSM_API_PATH_PRODUCT_TYPES": {
       "OPENSHIFT": "OpenShift Container Platform",
@@ -546,6 +558,12 @@ exports[`RHSM Constants should have specific properties: all exported constants 
       "STORAGE_GIBIBYTE_MONTHS": "Storage-gibibyte-months",
       "TRANSFER_GIBIBYTES": "Transfer-gibibytes",
       "VCPUS": "vCPUs",
+    },
+    "RHSM_API_PATH_PRODUCT_GROUP_TYPES": {
+      "OPENSHIFT": "openshift",
+      "RHACS": "rhacs",
+      "RHEL": "rhel",
+      "RHODS": "rhods",
     },
     "RHSM_API_PATH_PRODUCT_TYPES": {
       "OPENSHIFT": "OpenShift Container Platform",
@@ -818,6 +836,12 @@ exports[`RHSM Constants should have specific properties: specific constants 1`] 
     "STORAGE_GIBIBYTE_MONTHS": "Storage-gibibyte-months",
     "TRANSFER_GIBIBYTES": "Transfer-gibibytes",
     "VCPUS": "vCPUs",
+  },
+  "RHSM_API_PATH_PRODUCT_GROUP_TYPES": {
+    "OPENSHIFT": "openshift",
+    "RHACS": "rhacs",
+    "RHEL": "rhel",
+    "RHODS": "rhods",
   },
   "RHSM_API_PATH_PRODUCT_TYPES": {
     "OPENSHIFT": "OpenShift Container Platform",

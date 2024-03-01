@@ -62,6 +62,191 @@ const getApiVersion = (options = {}) => {
 };
 
 /**
+ * @apiMock {DelayResponse} 250
+ * @apiMock {RandomSuccess}
+ * @api {get} /api/rhsm-subscriptions/v1/config/rhel Get RHSM RHEL configuration data
+ * @apiDescription Retrieve configuration data.
+ *
+ * @apiSuccessExample {json} ALL variants, Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "variants": [
+ *           "RHEL for ARM",
+ *           "RHEL for IBM Power",
+ *           "RHEL for IBM z",
+ *           "RHEL for x86",
+ *           "rhel-for-x86-eus",
+ *           "rhel-for-x86-ha",
+ *           "rhel-for-x86-rs",
+ *           "rhel-for-sap-x86",
+ *           "rhel-for-x86-els-payg",
+ *           "Satellite Capsule",
+ *           "Satellite Server"
+ *         ]
+ *       },
+ *       "meta": {
+ *       }
+ *     }
+ *
+ * @apiSuccessExample {json} x86 variants, Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "variants": [
+ *           "RHEL for x86",
+ *           "rhel-for-x86-eus",
+ *           "rhel-for-x86-ha",
+ *           "rhel-for-x86-rs",
+ *           "rhel-for-sap-x86",
+ *           "rhel-for-x86-els-payg"
+ *         ]
+ *       },
+ *       "meta": {
+ *       }
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1006",
+ *            "detail": "Configuration request failure",
+ *            "status": "400",
+ *            "title": "Bad Request"
+ *          }
+ *        ]
+ *     }
+ */
+/**
+ * @apiMock {DelayResponse} 250
+ * @apiMock {RandomSuccess}
+ * @api {get} /api/rhsm-subscriptions/v1/config/openshift Get RHSM OpenShift configuration data
+ * @apiDescription Retrieve configuration data.
+ *
+ * @apiSuccessExample {json} ALL variants, Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "variants": [
+ *           "OpenShift Container Platform",
+ *           "OpenShift-metrics"
+ *           "OpenShift-dedicated-metrics",
+ *           "rosa"
+ *         ]
+ *       },
+ *       "meta": {
+ *       }
+ *     }
+ *
+ * @apiSuccessExample {json} PAYG variants, Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "variants": [
+ *           "OpenShift-metrics"
+ *           "OpenShift-dedicated-metrics"
+ *         ]
+ *       },
+ *       "meta": {
+ *       }
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1006",
+ *            "detail": "Configuration request failure",
+ *            "status": "400",
+ *            "title": "Bad Request"
+ *          }
+ *        ]
+ *     }
+ */
+/**
+ * @apiMock {DelayResponse} 250
+ * @api {get} /api/rhsm-subscriptions/v1/config/rhacs Get RHSM configuration data
+ * @apiDescription Retrieve configuration data.
+ *
+ * @apiSuccessExample {json} No variants, Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "variants": []
+ *       },
+ *       "meta": {
+ *       }
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1006",
+ *            "detail": "Configuration request failure",
+ *            "status": "400",
+ *            "title": "Bad Request"
+ *          }
+ *        ]
+ *     }
+ */
+/**
+ * @apiMock {DelayResponse} 250
+ * @api {get} /api/rhsm-subscriptions/v1/config/rhods Get RHSM configuration data
+ * @apiDescription Retrieve configuration data.
+ *
+ * @apiSuccessExample {json} No variants, Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "variants": []
+ *       },
+ *       "meta": {
+ *       }
+ *     }
+ *
+ * @apiError {Array} errors
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *        "errors": [
+ *          {
+ *            "code": "SUBSCRIPTIONS1006",
+ *            "detail": "Configuration request failure",
+ *            "status": "400",
+ *            "title": "Bad Request"
+ *          }
+ *        ]
+ *     }
+ */
+/**
+ * Get RHSM API product configuration data.
+ *
+ * @param {string|Array} id String ID, a generic product group
+ * @param {object} options
+ * @param {boolean} options.cache
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
+const getConfiguration = (id, options = {}) => {
+  const { cache = false, cancel = true, cancelId } = options;
+  return serviceCall({
+    url: `${process.env.REACT_APP_SERVICES_RHSM_CONFIG}${id}`,
+    cache,
+    cancel,
+    cancelId
+  });
+};
+
+/**
  * @apiMock {DelayResponse} 2000
  * @apiMock {RandomSuccess}
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Sockets Get RHSM graph data
@@ -1944,6 +2129,7 @@ const getSubscriptionsInventory = (id, params = {}, options = {}) => {
 
 const rhsmServices = {
   getApiVersion,
+  getConfiguration,
   getGraphCapacity,
   getGraphTally,
   getInstancesInventory,
@@ -1960,6 +2146,7 @@ export {
   rhsmServices as default,
   rhsmServices,
   getApiVersion,
+  getConfiguration,
   getGraphCapacity,
   getGraphTally,
   getInstancesInventory,
