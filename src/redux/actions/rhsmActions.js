@@ -1,4 +1,4 @@
-import { rhsmTypes } from '../types';
+import { appTypes, rhsmTypes } from '../types';
 import { rhsmServices } from '../../services/rhsm/rhsmServices';
 import { generateChartIds } from '../../components/graphCard/graphCardHelpers';
 
@@ -8,6 +8,21 @@ import { generateChartIds } from '../../components/graphCard/graphCardHelpers';
  * @memberof Actions
  * @module RhsmActions
  */
+
+/**
+ * Get UI configuration settings.
+ *
+ * @param {string} id
+ * @returns {Function}
+ */
+const getUiConfiguration = id => dispatch =>
+  dispatch({
+    type: appTypes.GET_UI_CONFIG,
+    payload: rhsmServices.getConfiguration(id),
+    meta: {
+      // id
+    }
+  });
 
 /**
  * Get a RHSM response from multiple Tally, or Capacity, IDs and metrics.
@@ -116,7 +131,8 @@ const rhsmActions = {
   getGraphMetrics,
   getInstancesInventory,
   getInstancesInventoryGuests,
-  getSubscriptionsInventory
+  getSubscriptionsInventory,
+  getUiConfiguration
 };
 
 export {
@@ -125,5 +141,6 @@ export {
   getGraphMetrics,
   getInstancesInventory,
   getInstancesInventoryGuests,
-  getSubscriptionsInventory
+  getSubscriptionsInventory,
+  getUiConfiguration
 };

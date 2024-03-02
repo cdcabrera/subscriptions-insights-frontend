@@ -64,7 +64,7 @@ const routes = routesConfig.filter(item => !item.disabled);
  * @returns {{configs: *, firstMatch: *, isClosest: boolean, allConfigs: Array}}
  */
 const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.sortedConfigs } = {}) => {
-  const { byAnything, byAnythingPathIds, byAnythingVariants, byProductIdConfigs } = configs();
+  const { byAnything, byAnythingPathIds, byProductIdConfigs } = configs();
   const updatedPathName =
     (/^http/i.test(pathName) && new URL(pathName).pathname) || (typeof pathName === 'string' && pathName) || undefined;
   const trimmedPathName = updatedPathName
@@ -81,12 +81,10 @@ const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.s
   // Fallback attempt, match pathName with the closest string
   const closestStr = trimmedPathName && closest(trimmedPathName, byAnythingPathIds);
   const configsByAnything = byAnything?.[focusedStr || closestStr];
-  const availableVariants = byAnythingVariants?.[focusedStr || closestStr];
 
   return {
     isClosest: !focusedStr,
     allConfigs: Object.values(byProductIdConfigs),
-    availableVariants,
     configs: configsByAnything,
     firstMatch: configsByAnything?.[0]
   };

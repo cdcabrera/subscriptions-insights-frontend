@@ -132,7 +132,7 @@ const getApiVersion = (options = {}) => {
  *       "data": {
  *         "variants": [
  *           "OpenShift Container Platform",
- *           "OpenShift-metrics"
+ *           "OpenShift-metrics",
  *           "OpenShift-dedicated-metrics",
  *           "rosa"
  *         ]
@@ -146,7 +146,7 @@ const getApiVersion = (options = {}) => {
  *     {
  *       "data": {
  *         "variants": [
- *           "OpenShift-metrics"
+ *           "OpenShift-metrics",
  *           "OpenShift-dedicated-metrics"
  *         ]
  *       },

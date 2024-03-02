@@ -12,9 +12,9 @@ import {
 /**
  * Application action, reducer types.
  *
- * @type {{STATUS_4XX: string, USER_LOCALE: string, SET_PRODUCT_VARIANT: string, GET_USER_OPTIN: string,
- *     SET_PRODUCT_VARIANT_QUERY_RESET_ALL: string, UPDATE_USER_OPTIN: string, SET_PRODUCT: string,
- *     STATUS_5XX: string, DELETE_USER_OPTIN: string}}
+ * @type {{GET_UI_CONFIG: string, STATUS_4XX: string, USER_LOCALE: string, SET_PRODUCT_VARIANT: string,
+ *     GET_USER_OPTIN: string, SET_PRODUCT_VARIANT_QUERY_RESET_ALL: string, UPDATE_USER_OPTIN: string, SET_PRODUCT:
+ *     string, STATUS_5XX: string, DELETE_USER_OPTIN: string}}
  */
 const appTypes = {
   STATUS_4XX: '4XX',
@@ -25,7 +25,8 @@ const appTypes = {
   DELETE_USER_OPTIN: 'DELETE_USER_OPTIN',
   GET_USER_OPTIN: 'GET_USER_OPTIN',
   UPDATE_USER_OPTIN: 'UPDATE_USER_OPTIN',
-  USER_LOCALE: 'USER_LOCALE'
+  USER_LOCALE: 'USER_LOCALE',
+  GET_UI_CONFIG: 'GET_UI_CONFIG'
 };
 
 /**

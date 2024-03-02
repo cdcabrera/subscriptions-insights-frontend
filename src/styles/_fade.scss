@@ -1,4 +1,29 @@
 .curiosity {
+  .shrink {
+    // animation:shrinksize .25s linear reverse;
+    position: relative;
+    left: 0;
+    animation:shrinksize .25s linear forwards;
+    transform-origin: 0;
+    // animation-iteration-count: 1;
+    // animation-name: shrinksize;
+    // animation-delay:.25s;
+    // animation-timing-function: linear;
+    //
+    // animation-delay:.25s;
+    // animation-direction: reverse;
+  }
+
+  @keyframes shrinksize {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0);
+      display: none;
+    }
+  }
+
   .blur {
     filter: blur(4px);
   }

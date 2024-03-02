@@ -60,6 +60,7 @@ const appReducer = (state = initialState, action) => {
       return reduxHelpers.generatedPromiseActionReducer(
         [
           { ref: 'locale', type: appTypes.USER_LOCALE },
+          { ref: 'config', type: [appTypes.GET_UI_CONFIG] },
           { ref: 'optin', type: [appTypes.DELETE_USER_OPTIN, appTypes.GET_USER_OPTIN, appTypes.UPDATE_USER_OPTIN] },
           { ref: 'exports', type: platformTypes.SET_PLATFORM_EXPORT_STATUS },
           { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }

@@ -131,7 +131,7 @@ const useRouteDetail = ({
         }
       }
 
-      const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routeConfig;
+      const { allConfigs, configs, firstMatch, isClosest } = routeConfig;
 
       // Set document title, remove pre-baked suffix
       updateDocumentTitle(
@@ -146,7 +146,6 @@ const useRouteDetail = ({
       setDetail({
         _passed: hashPath,
         allConfigs,
-        availableVariants,
         firstMatch,
         errorRoute: routerHelpers.errorRoute,
         isClosest,

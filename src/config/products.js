@@ -50,8 +50,6 @@ const productConfigs = (() => {
  * - byAnything, object of all productGroups, productIds, productPaths, and aliases with lists of their related
  *     configurations
  * - byAnythingPathIds, list of identifiers associated with all productGroups, productIds, productPaths, and aliases
- * - byAnythingVariants, object of all productGroups, productIds, productPaths, and aliases associated with lists
- *     of their related variants
  * - byGroupIdConfigs, object of productGroup properties against an array of associated product configs
  * - byGroupIds, object of productGroup properties against an array of associated productId strings.
  * - byGroupIdVariants, object of productGroup properties against an array of associated product variants
@@ -63,7 +61,7 @@ const productConfigs = (() => {
  *     created because of the overlap with productIds and productGroups, this may be refactored in the future
  *
  * @param {productConfigs} configs
- * @returns {{byGroupIdVariants: {}, byProductPathConfigs: {}, byAnythingVariants: {}, byAnything: {},
+ * @returns {{byGroupIdVariants: {}, byProductPathConfigs: {}, byAnything: {},
  *     byAnythingPathIds: string[], byGroupIdConfigs: {}, byViewIds: {}, byProductIds: any[], byAlias: {},
  *     byGroupIds: {}, byViewIdConfigs: {}, byProductIdConfigs: {}}}
  */
@@ -74,7 +72,6 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
   const productIdConfigs = {};
   const productPathConfigs = {};
   const anything = {};
-  const anythingVariants = {};
   const groupIdConfigs = {};
   const groupedGroupIds = {};
   const groupedVariants = {};
@@ -167,22 +164,13 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
 
   Object.entries(anything).forEach(([key, value]) => {
     anything[key] = Object.values(value);
-    anythingVariants[key] ??= [];
-
-    anything[key].forEach(({ productGroup }) => {
-      if (productGroup) {
-        anythingVariants[key] = Array.from(
-          new Set([...anythingVariants[key], ...groupedVariants[productGroup]])
-        ).sort();
-      }
-    });
   });
 
+  // byAnythingVariants: anythingVariants, this is what's being replaced. at the same time
   return helpers.objFreeze({
     byAlias: productAliases,
     byAnything: anything,
     byAnythingPathIds: Object.keys(anything).sort(),
-    byAnythingVariants: anythingVariants,
     byGroupIdConfigs: groupIdConfigs,
     byGroupIds: groupedGroupIds,
     byGroupIdVariants: groupedVariants,
