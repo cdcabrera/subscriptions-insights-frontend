@@ -42,6 +42,29 @@ const globalResponseCache = new LRUCache({
 });
 
 /**
+ * Filter params for null and undefined values. Related to swatch-2256
+ *
+ * @param {object} config
+ * @returns {object}
+ */
+const filterConfigParams = (config = {}) => {
+  const updatedConfig = { ...config };
+
+  if (updatedConfig.params) {
+    const updatedParams = {};
+    Object.entries(updatedConfig.params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        updatedParams[key] = value;
+      }
+    });
+
+    updatedConfig.params = updatedParams;
+  }
+
+  return updatedConfig;
+};
+
+/**
  * Set Axios configuration. This includes response schema validation and caching.
  * Call platform "getUser" auth method, and apply service config. Service configuration
  * includes the ability to cancel all and specific calls, cache and normalize a response
@@ -64,6 +87,8 @@ const globalResponseCache = new LRUCache({
  * @param {object} options.responseCache
  * @param {number} options.xhrTimeout
  * @param {number} options.pollInterval
+ * @param {object} settings
+ * @param {Function} settings.filterConfigParams
  * @returns {Promise<*>}
  */
 const axiosServiceCall = async (
@@ -73,7 +98,8 @@ const axiosServiceCall = async (
     responseCache = globalResponseCache,
     xhrTimeout = globalXhrTimeout,
     pollInterval = globalPollInterval
-  } = {}
+  } = {},
+  { filterConfigParams: aliasFilterConfigParams = filterConfigParams } = {}
 ) => {
   const updatedConfig = {
     timeout: xhrTimeout,
@@ -124,7 +150,7 @@ const axiosServiceCall = async (
           config: adapterConfig
         });
 
-      return axiosInstance(updatedConfig);
+      return axiosInstance(aliasFilterConfigParams(updatedConfig));
     }
   }
 
@@ -331,7 +357,7 @@ const axiosServiceCall = async (
     );
   }
 
-  return axiosInstance(updatedConfig);
+  return axiosInstance(aliasFilterConfigParams(updatedConfig));
 };
 
 const serviceConfig = {
