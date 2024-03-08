@@ -42,6 +42,13 @@ const globalResponseCache = new LRUCache({
 });
 
 /**
+ * Return an axios instance
+ *
+ * @returns {axios.AxiosInstance}
+ */
+const axiosCreate = () => axios.create();
+
+/**
  * Filter params for null and undefined values. Related to swatch-2256
  *
  * @param {object} config
@@ -88,6 +95,7 @@ const filterConfigParams = (config = {}) => {
  * @param {number} options.xhrTimeout
  * @param {number} options.pollInterval
  * @param {object} settings
+ * @param {object} settings.axiosCreate
  * @param {Function} settings.filterConfigParams
  * @returns {Promise<*>}
  */
@@ -99,7 +107,7 @@ const axiosServiceCall = async (
     xhrTimeout = globalXhrTimeout,
     pollInterval = globalPollInterval
   } = {},
-  { filterConfigParams: aliasFilterConfigParams = filterConfigParams } = {}
+  { axiosCreate: aliasAxiosCreate = axiosCreate, filterConfigParams: aliasFilterConfigParams = filterConfigParams } = {}
 ) => {
   const updatedConfig = {
     timeout: xhrTimeout,
@@ -109,7 +117,7 @@ const axiosServiceCall = async (
     method: config.method || 'get'
   };
   const responseTransformers = [];
-  const axiosInstance = axios.create();
+  const axiosInstance = aliasAxiosCreate();
 
   // don't cache responses if "get" isn't used
   updatedConfig.cacheResponse = updatedConfig.cacheResponse === true && updatedConfig.method === 'get';
