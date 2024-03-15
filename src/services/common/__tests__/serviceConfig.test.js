@@ -53,6 +53,60 @@ describe('ServiceConfig', () => {
     expect(Object.keys(serviceConfig)).toMatchSnapshot('specific props and methods');
   });
 
+  it('should filter configuration params', async () => {
+    expect(
+      serviceConfig.filterConfigParams({ params: { lorem: 'ipsum', dolor: undefined, hello: null } })
+    ).toMatchSnapshot('filtered');
+
+    const adapterOutputUndefined = [];
+
+    const requestUndefined = await returnPromiseAsync(() =>
+      Promise.all([
+        serviceConfig.axiosServiceCall({ url: '/test/all', method: 'get', params: { lorem: 'ipsum' } }),
+        serviceConfig.axiosServiceCall({
+          url: '/test/all',
+          method: 'get',
+          params: { lorem: undefined },
+          adapter: config => {
+            adapterOutputUndefined.push(config);
+            return Promise.resolve({
+              status: 200,
+              data: 'success'
+            });
+          }
+        })
+      ])
+    );
+
+    console.log('>>>>>>>>>>>>');
+    console.log(adapterOutputUndefined);
+    console.log('>>>>>>>>>>>>');
+
+    const requestNull = await returnPromiseAsync(() =>
+      Promise.all([
+        serviceConfig.axiosServiceCall({ url: '/test/all', method: 'get', params: { dolor: 'sit' } }),
+        serviceConfig.axiosServiceCall({ url: '/test/all', method: 'get', params: { dolor: null } })
+      ])
+    );
+
+    expect({
+      requestUndefined:
+        (Array.isArray(requestUndefined) &&
+          requestUndefined.map(({ request, config }) => ({
+            url: request.url,
+            params: config.params
+          }))) ||
+        requestUndefined,
+      requestNull:
+        (Array.isArray(requestNull) &&
+          requestNull.map(({ request, config }) => ({
+            url: request.url,
+            params: config.params
+          }))) ||
+        requestNull
+    }).toMatchSnapshot('undefined, null params');
+  });
+
   it('should handle producing a service call configuration', async () => {
     const config = [];
 

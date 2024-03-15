@@ -49,12 +49,12 @@ const globalResponseCache = new LRUCache({
 const axiosCreate = () => axios.create();
 
 /**
- * Filter params for null and undefined values. Related to swatch-2256
+ * Filter params for null and undefined values.
  *
  * @param {object} config
  * @returns {object}
  */
-const filterConfigParams = (config = {}) => {
+const filterConfigParamsWORKING = (config = {}) => {
   const updatedConfig = { ...config };
 
   if (updatedConfig.params) {
@@ -70,6 +70,8 @@ const filterConfigParams = (config = {}) => {
 
   return updatedConfig;
 };
+
+const filterConfigParams = (config = {}) => config;
 
 /**
  * Set Axios configuration. This includes response schema validation and caching.
@@ -369,7 +371,9 @@ const axiosServiceCall = async (
 };
 
 const serviceConfig = {
+  axiosCreate,
   axiosServiceCall,
+  filterConfigParams,
   globalXhrTimeout,
   globalPollInterval,
   globalCancelTokens,
@@ -379,7 +383,9 @@ const serviceConfig = {
 export {
   serviceConfig as default,
   serviceConfig,
+  axiosCreate,
   axiosServiceCall,
+  filterConfigParams,
   globalXhrTimeout,
   globalPollInterval,
   globalCancelTokens,
