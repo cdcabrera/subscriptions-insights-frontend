@@ -108,43 +108,33 @@ const config = {
       filters: [
         {
           metric: RHSM_API_PATH_METRIC_TYPES.CORES,
-          isOptional: true,
           fill: chartColorBlueLight.value,
           stroke: chartColorBlueDark.value,
           color: chartColorBlueDark.value
-        },
-        {
-          metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
-          isOptional: true,
-          fill: chartColorBlueLight.value,
-          stroke: chartColorBlueDark.value,
-          color: chartColorBlueDark.value
-        },
-        {
-          metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
-          chartType: ChartTypeVariant.threshold,
-          isOptional: true
         },
         {
           metric: RHSM_API_PATH_METRIC_TYPES.CORES,
-          chartType: ChartTypeVariant.threshold,
-          isOptional: true
+          chartType: ChartTypeVariant.threshold
+        }
+      ]
+    },
+    {
+      filters: [
+        {
+          metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+          fill: chartColorBlueLight.value,
+          stroke: chartColorBlueDark.value,
+          color: chartColorBlueDark.value
+        },
+        {
+          metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+          chartType: ChartTypeVariant.threshold
         }
       ]
     }
   ],
   initialGraphSettings: {
-    isCardTitleDescription: true,
-    actions: [
-      {
-        id: RHSM_API_QUERY_SET_TYPES.UOM,
-        position: SelectPosition.right
-      },
-      {
-        id: RHSM_API_QUERY_SET_TYPES.GRANULARITY,
-        position: SelectPosition.right
-      }
-    ]
+    isCardTitleDescription: true
   },
   initialGuestsFilters: [
     {
@@ -235,16 +225,24 @@ const config = {
     },
     {
       metric: RHSM_API_PATH_METRIC_TYPES.CORES,
-      header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
-        translate('curiosity-inventory.header', { context: [uom, productId] }),
-      cell: (data = {}, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) => {
-        const total = data?.[uom];
-        return translate('curiosity-inventory.measurement', {
+      cell: ({ [RHSM_API_PATH_METRIC_TYPES.CORES]: total } = {}) =>
+        translate('curiosity-inventory.measurement', {
           context: (total && 'value') || undefined,
           total,
-          testId: <span data-test={`instances-cell-${uom}`} data-value={`${total}`} />
-        });
-      },
+          testId: <span data-test={`instances-cell-${RHSM_API_PATH_METRIC_TYPES.CORES}`} data-value={`${total}`} />
+        }),
+      isSort: true,
+      isWrap: true,
+      width: 15
+    },
+    {
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      cell: ({ [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: total } = {}) =>
+        translate('curiosity-inventory.measurement', {
+          context: (total && 'value') || undefined,
+          total,
+          testId: <span data-test={`instances-cell-${RHSM_API_PATH_METRIC_TYPES.SOCKETS}`} data-value={`${total}`} />
+        }),
       isSort: true,
       isWrap: true,
       width: 15
@@ -340,6 +338,11 @@ const config = {
   initialToolbarFilters: [
     {
       id: RHSM_API_QUERY_SET_TYPES.SLA
+    },
+    {
+      id: RHSM_API_QUERY_SET_TYPES.GRANULARITY,
+      isSecondary: true,
+      position: SelectPosition.right
     }
   ]
 };
