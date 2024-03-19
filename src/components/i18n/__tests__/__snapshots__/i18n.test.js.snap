@@ -513,8 +513,8 @@ exports[`I18n Component should generate a predictable locale key output snapshot
         "match": "translate('curiosity-inventory.label', { context: 'numberOfGuests', count: numberOfGuests }, [ <PfLabel color="blue" /> ])",
       },
       {
-        "key": "curiosity-inventory.header",
-        "match": "translate('curiosity-inventory.header', { context: [uom, productId] })",
+        "key": "curiosity-inventory.measurement",
+        "match": "translate('curiosity-inventory.measurement', { context: (total && 'value')",
       },
       {
         "key": "curiosity-inventory.measurement",
