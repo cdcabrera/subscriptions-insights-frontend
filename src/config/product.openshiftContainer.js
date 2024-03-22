@@ -101,7 +101,6 @@ const config = {
     [RHSM_API_QUERY_SET_TYPES.LIMIT]: 100,
     [RHSM_API_QUERY_SET_TYPES.OFFSET]: 0
   },
-  initialOption: RHSM_API_QUERY_UOM_TYPES.CORES,
   initialGraphFilters: [
     {
       filters: [
