@@ -5573,23 +5573,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "width": undefined,
             },
             {
-              "content": <Tooltip
-                content="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                distance={15}
-                enableFlip={false}
-                entryDelay={100}
-                exitDelay={0}
-                isNoWrap={false}
-                position="top"
-              >
-                <ChartIcon
-                  aria-label="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                  fill={null}
-                  size="md"
-                  symbol="infinity"
-                  title={null}
-                />
-              </Tooltip>,
+              "content": "t(curiosity-inventory.measurement, {"testId":{"type":"span","key":null,"ref":null,"props":{"data-test":"subscriptions-cell-Sockets","data-value":"undefined"},"_owner":null,"_store":{}}})",
               "dataLabel": "t([curiosity-inventory.header_Sockets,curiosity-inventory.guestsHeader_Sockets], {"context":"OpenShift Container Platform"})",
               "header": [Function],
               "isSort": true,
@@ -5609,8 +5593,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -5755,8 +5740,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -5859,23 +5845,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "width": 10,
             },
             {
-              "content": <Tooltip
-                content="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                distance={15}
-                enableFlip={false}
-                entryDelay={100}
-                exitDelay={0}
-                isNoWrap={false}
-                position="top"
-              >
-                <ChartIcon
-                  aria-label="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                  fill={null}
-                  size="md"
-                  symbol="infinity"
-                  title={null}
-                />
-              </Tooltip>,
+              "content": "t(curiosity-inventory.measurement, {"testId":{"type":"span","key":null,"ref":null,"props":{"data-test":"subscriptions-cell-Sockets","data-value":"undefined"},"_owner":null,"_store":{}}})",
               "dataLabel": "t([curiosity-inventory.header_Sockets,curiosity-inventory.guestsHeader_Sockets], {"context":"RHEL for x86"})",
               "header": [Function],
               "metric": "Sockets",
@@ -5893,8 +5863,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6039,8 +6010,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6185,8 +6157,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6272,8 +6245,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6431,23 +6405,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "width": undefined,
             },
             {
-              "content": <Tooltip
-                content="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                distance={15}
-                enableFlip={false}
-                entryDelay={100}
-                exitDelay={0}
-                isNoWrap={false}
-                position="top"
-              >
-                <ChartIcon
-                  aria-label="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                  fill={null}
-                  size="md"
-                  symbol="infinity"
-                  title={null}
-                />
-              </Tooltip>,
+              "content": "t(curiosity-inventory.measurement, {"testId":{"type":"span","key":null,"ref":null,"props":{"data-test":"subscriptions-cell-Sockets","data-value":"undefined"},"_owner":null,"_store":{}}})",
               "dataLabel": "t([curiosity-inventory.header_Sockets,curiosity-inventory.guestsHeader_Sockets], {"context":"OpenShift Container Platform"})",
               "header": [Function],
               "isSort": true,
@@ -6467,8 +6425,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6613,8 +6572,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6717,23 +6677,7 @@ exports[`Product specific configurations should apply variations in inventory fi
               "width": 10,
             },
             {
-              "content": <Tooltip
-                content="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                distance={15}
-                enableFlip={false}
-                entryDelay={100}
-                exitDelay={0}
-                isNoWrap={false}
-                position="top"
-              >
-                <ChartIcon
-                  aria-label="t(curiosity-inventory.label_has_infinite_quantity, {"context":"Sockets"})"
-                  fill={null}
-                  size="md"
-                  symbol="infinity"
-                  title={null}
-                />
-              </Tooltip>,
+              "content": "t(curiosity-inventory.measurement, {"testId":{"type":"span","key":null,"ref":null,"props":{"data-test":"subscriptions-cell-Sockets","data-value":"undefined"},"_owner":null,"_store":{}}})",
               "dataLabel": "t([curiosity-inventory.header_Sockets,curiosity-inventory.guestsHeader_Sockets], {"context":"RHEL for x86"})",
               "header": [Function],
               "metric": "Sockets",
@@ -6751,8 +6695,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -6897,8 +6842,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -7043,8 +6989,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
@@ -7130,8 +7077,9 @@ exports[`Product specific configurations should apply variations in inventory fi
           ],
           "expandedContent": undefined,
           "row": {
+            "Cores": 2000,
             "billing_provider": "dolor sit",
-            "has_infinite_quantity": true,
+            "hasInfiniteCores": true,
             "loremIpsum": "hello world",
             "next_event_date": "2022-01-01T00:00:00.000Z",
             "product_name": "lorem",
