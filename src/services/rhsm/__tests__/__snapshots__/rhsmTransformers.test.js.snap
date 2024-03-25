@@ -415,6 +415,7 @@ exports[`RHSM Transformers should attempt to parse a subscriptions response: sub
   "data": [
     {
       "Cores": undefined,
+      "hasInfiniteCores": undefined,
       "total_capacity": undefined,
       "uom": "Cores",
     },
@@ -432,6 +433,7 @@ exports[`RHSM Transformers should attempt to parse a subscriptions response: sub
   "data": [
     {
       "Cores": undefined,
+      "hasInfiniteCores": undefined,
       "total_capacity": undefined,
       "uom": "Cores",
     },
@@ -449,11 +451,13 @@ exports[`RHSM Transformers should attempt to parse a subscriptions response: sub
   "data": [
     {
       "Cores": undefined,
+      "hasInfiniteCores": undefined,
       "total_capacity": undefined,
       "uom": "Cores",
     },
     {
       "Sockets": undefined,
+      "hasInfiniteSockets": undefined,
       "total_capacity": undefined,
       "uom": "Sockets",
     },

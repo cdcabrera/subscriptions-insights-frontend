@@ -140,10 +140,10 @@ const rhsmSubscriptions = (response, { params } = {}) => {
     ({
       [SUBSCRIPTIONS_DATA_TYPES.UOM]: uom,
       [SUBSCRIPTIONS_DATA_TYPES.TOTAL_CAPACITY]: totalCapacity,
+      [SUBSCRIPTIONS_DATA_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,
       ...dataResponse
     }) => {
       const updatedData = {
-        [SUBSCRIPTIONS_DATA_TYPES.UOM]: uom,
         [SUBSCRIPTIONS_DATA_TYPES.TOTAL_CAPACITY]: totalCapacity,
         ...dataResponse
       };
@@ -158,6 +158,8 @@ const rhsmSubscriptions = (response, { params } = {}) => {
       }
 
       updatedData[normalizedUomValue] = totalCapacity;
+      updatedData[SUBSCRIPTIONS_DATA_TYPES.UOM] = normalizedUomValue;
+      updatedData[`hasInfinite${normalizedUomValue}`] = hasInfiniteQuantity;
 
       return updatedData;
     }

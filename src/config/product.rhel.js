@@ -322,10 +322,7 @@ const config = {
     },
     {
       metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
-      cell: ({
-        [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,
-        [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: total
-      } = {}) => {
+      cell: ({ hasInfiniteSockets: hasInfiniteQuantity, [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: total } = {}) => {
         if (hasInfiniteQuantity === true) {
           const content = translate(`curiosity-inventory.label`, {
             context: [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY, RHSM_API_PATH_METRIC_TYPES.SOCKETS]
