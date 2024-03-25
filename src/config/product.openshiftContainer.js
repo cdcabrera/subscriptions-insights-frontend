@@ -288,20 +288,42 @@ const config = {
         }),
       isSort: true,
       isWrap: true,
-      width: 20
+      width: 10
     },
     {
-      metric: SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY,
-      header: (data, session, { [INVENTORY_META_TYPES.UOM]: uom } = {}) =>
-        translate('curiosity-inventory.header', { context: ['subscriptions', uom] }),
+      metric: RHSM_API_PATH_METRIC_TYPES.CORES,
       cell: ({
         [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,
-        [SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY]: total,
-        [SUBSCRIPTIONS_INVENTORY_TYPES.UOM]: uom
+        [RHSM_API_PATH_METRIC_TYPES.CORES]: total
       } = {}) => {
         if (hasInfiniteQuantity === true) {
           const content = translate(`curiosity-inventory.label`, {
-            context: [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY, uom]
+            context: [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY, RHSM_API_PATH_METRIC_TYPES.CORES]
+          });
+          return (
+            <Tooltip content={content}>
+              <ChartIcon symbol="infinity" size="md" aria-label={content} />
+            </Tooltip>
+          );
+        }
+        return translate('curiosity-inventory.measurement', {
+          context: (total && 'value') || undefined,
+          total,
+          testId: <span data-test={`subscriptions-cell-${RHSM_API_PATH_METRIC_TYPES.CORES}`} data-value={`${total}`} />
+        });
+      },
+      isSort: true,
+      isWrap: true
+    },
+    {
+      metric: RHSM_API_PATH_METRIC_TYPES.SOCKETS,
+      cell: ({
+        [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY]: hasInfiniteQuantity,
+        [RHSM_API_PATH_METRIC_TYPES.SOCKETS]: total
+      } = {}) => {
+        if (hasInfiniteQuantity === true) {
+          const content = translate(`curiosity-inventory.label`, {
+            context: [SUBSCRIPTIONS_INVENTORY_TYPES.HAS_INFINITE_QUANTITY, RHSM_API_PATH_METRIC_TYPES.SOCKETS]
           });
           return (
             <Tooltip content={content}>
@@ -313,16 +335,12 @@ const config = {
           context: (total && 'value') || undefined,
           total,
           testId: (
-            <span
-              data-test={`subscriptions-cell-${SUBSCRIPTIONS_INVENTORY_TYPES.TOTAL_CAPACITY}`}
-              data-value={`${total}`}
-            />
+            <span data-test={`subscriptions-cell-${RHSM_API_PATH_METRIC_TYPES.SOCKETS}`} data-value={`${total}`} />
           )
         });
       },
       isSort: true,
-      isWrap: true,
-      width: 15
+      isWrap: true
     },
     {
       metric: SUBSCRIPTIONS_INVENTORY_TYPES.NEXT_EVENT_DATE,
