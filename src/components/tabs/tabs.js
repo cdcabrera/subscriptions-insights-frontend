@@ -4,7 +4,7 @@ import { Tabs as PfTabs, Tab, TabTitleText, Grid, GridItem } from '@patternfly/r
 import { helpers } from '../../common';
 
 /**
- * PF tabs with state.
+ * PF tabs with default internal state.
  *
  * @memberof Components
  * @module Tabs
@@ -16,49 +16,27 @@ import { helpers } from '../../common';
  * @param {object} props
  * @param {number} props.defaultActiveTab
  * @param {Array} props.tabs
- * @param {Function} props.onTab
+ * @param {Function} props.onTab A user defined tab handler
  * @param {string} props.className
  * @param {boolean} props.hasOverflowScroll
  * @param {number} props.activeTab
- * @fires onTab
+ * @fires onSelect
  * @returns {React.ReactNode}
  */
 const Tabs = ({ activeTab, defaultActiveTab, tabs, onTab, className, hasOverflowScroll }) => {
-  // const configActiveTab = tabs
-  //  .map(({ active }, index) => ({ active, index }))
-  //  .find(({ active }) => active === true)?.index;
+  // Apply a config driven default or fallback to internal default state.
+  const [updatedActiveTab, setUpdatedActiveTab] = useState(defaultActiveTab);
 
-  // const [updatedActiveTab, setUpdatedActiveTab] = useState(activeTab ?? configActiveTab ?? defaultActiveTab);
-  const [updatedActiveTab, setUpdatedActiveTab] = useState(activeTab ?? defaultActiveTab);
+  // Override internal state, if available. Avoid potential duplicate tab loading by setting directly
+  const currentActiveTab = activeTab ?? updatedActiveTab;
 
-  const confirmActiveTab = () => {
-    if (!tabs?.[updatedActiveTab]) {
-      setUpdatedActiveTab(defaultActiveTab);
-    }
-  };
-
-  confirmActiveTab();
-  // console.log('>>>> active tab', activeTab);
-
-  const updatedTabs = tabs.map(({ active, content, title }, index) => {
-    if (typeof active === 'number') {
-      setUpdatedActiveTab(active);
-    }
-
-    return (
-      <Tab key={title} eventKey={index} title={<TabTitleText>{title}</TabTitleText>}>
-        {content}
-      </Tab>
-    );
-  });
-
-  /*
   const updatedTabs = useMemo(
     () =>
       tabs.map(({ active, content, title }, index) => {
         if (typeof active === 'number') {
-          // setUpdatedActiveTab(active);
+          setUpdatedActiveTab(index);
         }
+
         return (
           <Tab key={title} eventKey={index} title={<TabTitleText>{title}</TabTitleText>}>
             {content}
@@ -67,8 +45,14 @@ const Tabs = ({ activeTab, defaultActiveTab, tabs, onTab, className, hasOverflow
       }),
     [tabs]
   );
-  */
 
+  /**
+   * Set internal state, call user defined callback.
+   *
+   * @event onSelect
+   * @param {object} params
+   * @param {number} params.index
+   */
   const onSelect = ({ index }) => {
     setUpdatedActiveTab(index);
     onTab({ index });
@@ -79,7 +63,7 @@ const Tabs = ({ activeTab, defaultActiveTab, tabs, onTab, className, hasOverflow
       <GridItem span={12}>
         <PfTabs
           className={`curiosity-tabs${(!hasOverflowScroll && '__no-scroll') || ''} ${className || ''}`}
-          activeKey={updatedActiveTab}
+          activeKey={currentActiveTab}
           onSelect={(event, index) => onSelect({ event, index })}
           mountOnEnter
           unmountOnExit
@@ -121,10 +105,10 @@ Tabs.propTypes = {
  * Default props.
  *
  * @type {{tabs: Array, hasOverflowScroll: boolean, onTab: Function, className: string,
- *     defaultActiveTab: number, activeTab: number}}
+ *     defaultActiveTab: number, activeTab: number|undefined}}
  */
 Tabs.defaultProps = {
-  activeTab: null,
+  activeTab: undefined,
   className: '',
   defaultActiveTab: 0,
   hasOverflowScroll: false,
