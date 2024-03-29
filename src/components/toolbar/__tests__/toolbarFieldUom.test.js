@@ -1,7 +1,10 @@
 import React from 'react';
 import { ToolbarFieldUom, toolbarFieldOptions, useOnSelect } from '../toolbarFieldUom';
 import { store } from '../../../redux/store';
-import { RHSM_API_QUERY_UOM_TYPES as UOM_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../../services/rhsm/rhsmConstants';
+import {
+  RHSM_API_PATH_METRIC_TYPES as UOM_TYPES,
+  RHSM_API_QUERY_SET_TYPES
+} from '../../../services/rhsm/rhsmConstants';
 
 describe('ToolbarFieldUom Component', () => {
   let mockDispatch;
@@ -16,7 +19,7 @@ describe('ToolbarFieldUom Component', () => {
 
   it('should render a basic component', async () => {
     const props = {
-      useProductQuery: () => ({ [RHSM_API_QUERY_SET_TYPES.UOM]: UOM_TYPES.SOCKETS })
+      useProductQuery: () => ({ [RHSM_API_QUERY_SET_TYPES.METRIC_ID]: UOM_TYPES.SOCKETS })
     };
     const component = await shallowComponent(<ToolbarFieldUom {...props} />);
 
