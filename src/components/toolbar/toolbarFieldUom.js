@@ -16,6 +16,7 @@ import { translate } from '../i18n/i18n';
 /**
  * Select field options.
  *
+ * @deprecated
  * @type {Array<{title: React.ReactNode, value: string, selected: boolean}>}
  */
 const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
@@ -27,6 +28,7 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
 /**
  * On select update uom.
  *
+ * @deprecated
  * @param {object} options
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
@@ -48,7 +50,7 @@ const useOnSelect = ({
       {
         type: reduxTypes.query.SET_QUERY,
         viewId,
-        filter: RHSM_API_QUERY_SET_TYPES.UOM,
+        filter: RHSM_API_QUERY_SET_TYPES.METRIC_ID,
         value
       }
     ]);
@@ -80,7 +82,7 @@ const ToolbarFieldUom = ({
   useOnSelect: useAliasOnSelect,
   useProductQuery: useAliasProductQuery
 }) => {
-  const { [RHSM_API_QUERY_SET_TYPES.UOM]: updatedValue } = useAliasProductQuery();
+  const { [RHSM_API_QUERY_SET_TYPES.METRIC_ID]: updatedValue } = useAliasProductQuery();
   const onSelect = useAliasOnSelect();
 
   const updatedOptions = options.map(option => ({ ...option, selected: option.value === updatedValue }));

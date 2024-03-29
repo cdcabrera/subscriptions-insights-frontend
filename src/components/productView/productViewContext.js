@@ -207,70 +207,11 @@ const useProductToolbarQuery = ({
  * Get a filtered product configuration context.
  *
  * @param {object} options
- * @param {Function} options.useProductQuery
  * @param {Function} options.useProductViewContext
  * @returns {object}
  */
-const useProductContext = ({
-  useProductQuery: useAliasProductQuery = useProductQuery,
-  useProductViewContext: useAliasProductViewContext = useProductViewContext
-} = {}) => {
-  const { [RHSM_API_QUERY_SET_TYPES.UOM]: uomFilter } = useAliasProductQuery();
-  const {
-    initialGraphFilters = [],
-    initialInventoryFilters = [],
-    initialSubscriptionsInventoryFilters = [],
-    productContextFilterUom,
-    ...config
-  } = useAliasProductViewContext();
-
-  const applyUomFilter = useCallback(() => {
-    if (productContextFilterUom === true) {
-      const filterFilters = ({ id, metric, isOptional }) => {
-        if (!isOptional) {
-          return true;
-        }
-        return new RegExp(uomFilter, 'i').test(metric) || new RegExp(uomFilter, 'i').test(id);
-      };
-
-      /**
-       * Allowing nested filters beside normal filters we take the quick path, just run the loop twice.
-       * Make sure to set "isOptional" false when it comes to nested filters in the event someone
-       * combined a config setting in the subsequent loop.
-       */
-      const updatedGraphFilters = _cloneDeep(initialGraphFilters)
-        .map(({ filters, ...rest }) => ({
-          ...rest,
-          filters: filters.filter(filterFilters),
-          isOptional: false
-        }))
-        .filter(filterFilters);
-
-      return {
-        ...config,
-        initialGraphFilters: updatedGraphFilters,
-        initialInventoryFilters: initialInventoryFilters.filter(filterFilters),
-        initialSubscriptionsInventoryFilters: initialSubscriptionsInventoryFilters.filter(filterFilters)
-      };
-    }
-
-    return {
-      ...config,
-      initialGraphFilters,
-      initialInventoryFilters,
-      initialSubscriptionsInventoryFilters
-    };
-  }, [
-    config,
-    initialGraphFilters,
-    initialInventoryFilters,
-    initialSubscriptionsInventoryFilters,
-    productContextFilterUom,
-    uomFilter
-  ]);
-
-  return applyUomFilter();
-};
+const useProductContext = ({ useProductViewContext: useAliasProductViewContext = useProductViewContext } = {}) =>
+  useAliasProductViewContext();
 
 /**
  * Return product identifiers.
