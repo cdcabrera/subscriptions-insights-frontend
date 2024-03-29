@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxTypes, storeHooks } from '../../redux';
 import { useProduct, useProductQuery } from '../productView/productViewContext';
 import { Select, SelectPosition } from '../form/select';
-import { RHSM_API_QUERY_UOM_TYPES as FIELD_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { RHSM_API_PATH_METRIC_TYPES as FIELD_TYPES, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -55,8 +55,13 @@ const useOnSelect = ({
 };
 
 /**
+ * ToDo: Review removing this deprecated component
+ */
+/**
  * Display a unit of measure (uom) field with options.
+ * This field is deprecated, but has been temporarily aligned with displaying metric identifiers.
  *
+ * @deprecated
  * @fires onSelect
  * @param {object} props
  * @param {boolean} props.isFilter
