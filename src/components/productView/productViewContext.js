@@ -1,8 +1,7 @@
-import React, { useCallback, useContext } from 'react';
-import _cloneDeep from 'lodash/cloneDeep';
+import React, { useContext } from 'react';
 import { reduxHelpers } from '../../redux/common';
 import { storeHooks } from '../../redux/hooks';
-import { rhsmConstants, RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
+import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common/helpers';
 
 /**

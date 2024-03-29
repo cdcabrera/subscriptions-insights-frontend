@@ -155,18 +155,48 @@ exports[`ToolbarFieldSelectCategory Component should export select options: tool
     "options": [
       {
         "selected": false,
-        "title": "t(curiosity-toolbar.label_uom, {"context":"cores"})",
-        "value": "cores",
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Cores"})",
+        "value": "Cores",
       },
       {
         "selected": false,
-        "title": "t(curiosity-toolbar.label_uom, {"context":"sockets"})",
-        "value": "sockets",
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Sockets"})",
+        "value": "Sockets",
+      },
+      {
+        "selected": false,
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Core-seconds"})",
+        "value": "Core-seconds",
+      },
+      {
+        "selected": false,
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Instance-hours"})",
+        "value": "Instance-hours",
+      },
+      {
+        "selected": false,
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Storage-gibibytes"})",
+        "value": "Storage-gibibytes",
+      },
+      {
+        "selected": false,
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Storage-gibibyte-months"})",
+        "value": "Storage-gibibyte-months",
+      },
+      {
+        "selected": false,
+        "title": "t(curiosity-toolbar.label_uom, {"context":"Transfer-gibibytes"})",
+        "value": "Transfer-gibibytes",
+      },
+      {
+        "selected": false,
+        "title": "t(curiosity-toolbar.label_uom, {"context":"vCPUs"})",
+        "value": "vCPUs",
       },
     ],
     "selected": false,
-    "title": "t(curiosity-toolbar.label_filter, {"context":"uom"})",
-    "value": "uom",
+    "title": "t(curiosity-toolbar.label, {"context":"filter"})",
+    "value": undefined,
   },
   {
     "component": [Function],

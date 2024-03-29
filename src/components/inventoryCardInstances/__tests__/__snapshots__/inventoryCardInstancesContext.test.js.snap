@@ -8,7 +8,9 @@ exports[`InventoryCardInstancesContext should apply custom actions: custom actio
     />
   </ToolbarItem>,
   <ToolbarItem>
-    hello world
+    <Uom
+      isFilter={false}
+    />
   </ToolbarItem>,
 ]
 `;

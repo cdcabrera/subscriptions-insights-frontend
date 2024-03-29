@@ -366,7 +366,7 @@ const RHSM_API_QUERY_SET_INVENTORY_TYPES = {
   END_DATE: 'ending',
   LIMIT: 'limit',
   OFFSET: 'offset',
-  METRIC_ID: 'METRIC_ID',
+  METRIC_ID: 'metric_id',
   SLA: 'sla',
   SORT: 'sort',
   START_DATE: 'beginning',

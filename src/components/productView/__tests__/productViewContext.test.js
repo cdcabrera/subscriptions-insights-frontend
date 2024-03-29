@@ -16,7 +16,6 @@ import {
   useProductToolbarConfig
 } from '../productViewContext';
 import { rhsmConstants } from '../../../services/rhsm/rhsmConstants';
-import { config as openshiftContainerConfig } from '../../../config/product.openshiftContainer';
 
 describe('ProductViewContext', () => {
   it('should return specific properties', () => {

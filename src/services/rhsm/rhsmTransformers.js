@@ -132,7 +132,9 @@ const rhsmSubscriptions = response => {
         ...dataResponse
       };
 
-      const normalizedMetricId = RHSM_API_PATH_METRIC_TYPES.find(value => new RegExp(value, 'i').test(metricId));
+      const normalizedMetricId = Object.values(RHSM_API_PATH_METRIC_TYPES).find(value =>
+        new RegExp(value, 'i').test(metricId)
+      );
       updatedData[normalizedMetricId] = totalCapacity;
       updatedData[SUBSCRIPTIONS_DATA_TYPES.METRIC_ID] = normalizedMetricId;
       updatedData[`hasInfinite${normalizedMetricId}`] = hasInfiniteQuantity;
