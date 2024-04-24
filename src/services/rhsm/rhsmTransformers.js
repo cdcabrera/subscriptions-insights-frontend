@@ -222,6 +222,8 @@ const rhsmSubscriptions = (response, { params } = {}) => {
  * @returns {object}
  */
 const rhsmTallyCapacity = (response, { _isCapacity, params } = {}) => {
+  console.log('>>>>>>>>>>>>> RESPONSE 001', response);
+
   const updatedResponse = {};
   const { [rhsmConstants.RHSM_API_RESPONSE_DATA]: data = [], [rhsmConstants.RHSM_API_RESPONSE_META]: meta = {} } =
     response || {};
@@ -289,6 +291,8 @@ const rhsmTallyCapacity = (response, { _isCapacity, params } = {}) => {
     totalMonthlyHasData: meta?.[TALLY_CAPACITY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_CAPACITY_META_TYPES.HAS_DATA],
     totalMonthlyValue: meta?.[TALLY_CAPACITY_META_TYPES.TOTAL_MONTHLY]?.[TALLY_CAPACITY_META_TYPES.VALUE]
   };
+
+  console.log('>>>>>>>>>>>>> RESPONSE 001', updatedResponse);
 
   return updatedResponse;
 };

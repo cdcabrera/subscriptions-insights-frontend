@@ -76,6 +76,8 @@ const ChartElements = ({ chartTypeDefaults }) => {
     );
   }
 
+  console.log('>>>>>', yAxisProps);
+
   /**
    * Generate X Axis
    */
@@ -91,6 +93,21 @@ const ChartElements = ({ chartTypeDefaults }) => {
 
     xAxis = <ChartAxis {...updatedXAxisProps} animate={false} />;
   }
+
+  /*
+  if (Object.keys(xAxisProps).length && Array.isArray(xAxisProps?.tickValues) && xAxisProps.tickValues.length) {
+    const updatedXAxisProps = {
+      ...xAxisProps
+    };
+
+    if (updatedXAxisProps.label) {
+      const AxisLabelComponent = chartAxisLabel({ axis: 'x' });
+      updatedXAxisProps.axisLabelComponent = <AxisLabelComponent />;
+    }
+
+    xAxis = <ChartAxis {...updatedXAxisProps} animate={false} />;
+  }
+   */
 
   /**
    * Generate Y Axis

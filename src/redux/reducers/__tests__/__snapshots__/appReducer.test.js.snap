@@ -430,7 +430,14 @@ exports[`UserReducer should handle specific http status types: http status 4XX 4
 {
   "result": {
     "auth": {},
-    "errors": {},
+    "errors": {
+      "data": [
+        "SUBSCRIPTIONS1004",
+      ],
+      "error": true,
+      "errorMessage": "Request failed with status code 400",
+      "status": 400,
+    },
     "exports": {},
     "locale": {},
     "optin": {},

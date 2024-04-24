@@ -1,7 +1,9 @@
 {
   "curiosity-auth": {
     "pending": "Authenticating...",
-    "maintenanceCopy": "We are currently undergoing scheduled maintenance and will be back shortly. Thank you for your patience."
+    "maintenanceCopy": "We are currently undergoing scheduled maintenance and will be back shortly. Thank you for your patience.",
+    "generalError": "<0>Data retrieval might be temporarily interrupted. Please try again.</0><0>If the problem persists, please wait 24 hours and try again.</0>",
+    "generalError_title": "Something went wrong"
   },
   "curiosity-banner": {},
   "curiosity-graph": {

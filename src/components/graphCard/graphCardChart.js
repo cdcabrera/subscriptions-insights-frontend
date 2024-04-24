@@ -67,6 +67,28 @@ const GraphCardChart = ({
     };
   }
 
+  let victoryFailed = false;
+  const attempt = () => {
+    let output;
+
+    try {
+      output = (
+        <Chart
+          {...graphCardHelpers.generateExtendedChartSettings({ settings, granularity })}
+          dataSets={dataSets}
+          chartLegend={({ chart, datum }) => <GraphCardChartLegend chart={chart} datum={datum} />}
+          chartTooltip={({ datum }) => <GraphCardChartTooltip datum={datum} />}
+        />
+      );
+    } catch (e) {
+      victoryFailed = true;
+    }
+
+    return output;
+  };
+
+  const goVictory = (!pending && attempt()) || null;
+
   return (
     <Card isPlain className="curiosity-card curiosity-graph-card curiosity-usage-graph">
       <CardHeader className="curiosity-card__header" {...cardHeaderProps}>
@@ -79,16 +101,9 @@ const GraphCardChart = ({
       </CardHeader>
       <MinHeight key="bodyMinHeight">
         <CardBody className="curiosity-card__body">
-          <div className={(error && 'blur') || (pending && 'fadein') || ''}>
+          <div className={(error && 'blur') || (victoryFailed && 'blur') || (pending && 'fadein') || ''}>
             {pending && <Loader variant="graph" />}
-            {!pending && (
-              <Chart
-                {...graphCardHelpers.generateExtendedChartSettings({ settings, granularity })}
-                dataSets={dataSets}
-                chartLegend={({ chart, datum }) => <GraphCardChartLegend chart={chart} datum={datum} />}
-                chartTooltip={({ datum }) => <GraphCardChartTooltip datum={datum} />}
-              />
-            )}
+            {goVictory}
           </div>
         </CardBody>
       </MinHeight>

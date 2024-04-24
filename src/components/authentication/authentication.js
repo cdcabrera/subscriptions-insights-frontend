@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BinocularsIcon } from '@patternfly/react-icons';
+import { BinocularsIcon, UnknownIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { routerHelpers } from '../router';
@@ -52,11 +52,19 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
       return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
     }
 
-    if (
-      (errorCodes && errorCodes.includes(rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN)) ||
-      errorStatus === 418
-    ) {
+    if (errorCodes?.includes(rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN) || errorStatus === 418) {
       return <OptinView />;
+    }
+
+    if (errorStatus >= 500) {
+      return (
+        <MessageView
+          pageTitle="&nbsp;"
+          title={t('curiosity-auth.generalError', { context: ['title'] })}
+          message={t('curiosity-auth.generalError', undefined, [<p />])}
+          icon={UnknownIcon}
+        />
+      );
     }
 
     return (
