@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import { fireEvent, queries, render, screen } from '@testing-library/react';
 import { prettyDOM } from '@testing-library/dom';
-import { act } from 'react-dom/test-utils';
 import * as pfReactCoreComponents from '@patternfly/react-core';
 import * as pfReactChartComponents from '@patternfly/react-charts';
 import * as reactRedux from 'react-redux';
@@ -173,8 +172,8 @@ global.screenRender = {
  *
  * @param {React.ReactNode} testComponent
  * @param {object} options
- * @param {boolean} options.includeInstanceRef The component includes an instance ref for class components. If the component instance
- *     includes functions, they are wrapped in "act" for convenience.
+ * @param {boolean} options.includeInstanceRef The component includes an instance ref for class components. If the
+ *     component instance includes functions, they are wrapped in "act" for convenience.
  * @returns {HTMLElement}
  */
 global.renderComponent = (testComponent, options = {}) => {
@@ -282,7 +281,8 @@ global.renderComponent = (testComponent, options = {}) => {
  *
  * @param {Function} useHook
  * @param {object} options
- * @param {boolean} options.includeInstanceContext The hook result, if it includes functions, is wrapped in "act" for convenience.
+ * @param {boolean} options.includeInstanceContext The hook result, if it includes functions, is wrapped
+ *     in "act" for convenience.
  * @param {object} options.state An object representing a mock Redux store's state.
  * @returns {*}
  */
@@ -413,9 +413,14 @@ global.shallowComponent = async testComponent => {
 };
 
 // ToDo: revisit squashing log and group messaging, redux leaks log messaging
+
 // ToDo: revisit squashing PF4 "popper" alerts
+
 // ToDo: revisit squashing PF4 "validateDOMNesting" select alerts
+
 // ToDo: revisit squashing PF4 "validateDOMNesting" table alerts
+
+// TODO: review the import `act` from react warning after updating. message still appears after correction?
 /*
  * For applying a global Jest "beforeAll", based on
  * - consoledot/platform console messaging
@@ -443,6 +448,14 @@ beforeAll(() => {
   interceptConsoleMessaging(error, (message, ...args) => {
     if (/(Invalid prop|Failed prop type)/gi.test(message)) {
       throw new Error(message);
+    }
+
+    // ignore React 18.3 warnings
+    if (
+      new RegExp('Import `act` from `react`', 'gi').test(message) ||
+      new RegExp('Support for defaultProps will', 'gi').test(message)
+    ) {
+      return false;
     }
 
     // ignore SVG and other xml

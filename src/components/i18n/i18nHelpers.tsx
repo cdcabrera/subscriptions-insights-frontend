@@ -2,6 +2,7 @@ import React from 'react';
 import i18next from 'i18next';
 import { Trans } from 'react-i18next';
 import { helpers } from '../../common/helpers';
+import { type LocaleKeys } from '../../types/i18n';
 
 /**
  * @memberof i18n
@@ -166,7 +167,8 @@ const setI18nTestElement = ({ defaultTestId, testId }) => {
  * Apply a string towards a key. Optional replacement values and component/nodes.
  * See, https://react.i18next.com/
  *
- * @param {string|Array} translateKey A key reference, or an array of a primary key with fallback keys.
+ * @param {LocaleKeys | LocaleKeys[]} translateKey A key reference, or an array of a primary key with
+ *     fallback keys.
  * @param {string|object|Array} values
  *     - A default string if the key can't be found.
  *     - An object with i18next settings. i.e. "{ context: Array|string, testId: boolean|string|React.ReactNode }"
@@ -179,12 +181,12 @@ const setI18nTestElement = ({ defaultTestId, testId }) => {
  * @param {Function} settings.noopTranslate
  * @param {Function} settings.parseContext
  * @param {Function} settings.parseTranslateKey
- * @returns {string|React.ReactNode}
+ * @returns {React.ReactNode}
  */
 const translate = (
-  translateKey,
-  values = null,
-  components,
+  translateKey: LocaleKeys | LocaleKeys[],
+  values?: undefined | string | { [key: string]: string } | { [key: string]: string }[],
+  components?: any,
   {
     i18next: aliasI18next = i18next,
     isDebug = helpers.TEST_MODE,
@@ -193,7 +195,7 @@ const translate = (
     parseTranslateKey: aliasParseTranslateKey = parseTranslateKey
   } = {}
 ) => {
-  const updatedValues = values || {};
+  const updatedValues: any = values || {};
   const baseUpdatedTranslateKey = aliasParseTranslateKey(translateKey);
   let updatedTranslateKey = baseUpdatedTranslateKey;
   let TestElement;
