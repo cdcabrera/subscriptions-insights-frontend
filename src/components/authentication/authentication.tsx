@@ -29,13 +29,13 @@ interface AuthenticationProps {
  * @param {Function} props.useGetAuthorization
  * @returns {React.ReactNode}
  */
-const Authentication = ({
+const Authentication: React.FC<AuthenticationProps> = ({
   appName = routerHelpers.appName,
   children,
   isDisabled = helpers.UI_DISABLED,
   t = translate,
   useGetAuthorization: useAliasGetAuthorization = useGetAuthorization
-}: AuthenticationProps) => {
+}) => {
   const { pending, data = {} }: any = useAliasGetAuthorization();
   const { authorized = {}, errorCodes, errorStatus } = data;
   const { [appName]: isAuthorized } = authorized;
