@@ -8,7 +8,7 @@ import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
 import { MessageView } from '../messageView/messageView';
 import { OptinView } from '../optinView/optinView';
-import { translate } from '../i18n/i18n';
+import { translate, localeKeys } from '../i18n/i18n';
 import { AuthenticationContext, useGetAuthorization } from './authenticationContext';
 
 /**
@@ -26,7 +26,7 @@ import { AuthenticationContext, useGetAuthorization } from './authenticationCont
  * @param {string} props.appName
  * @param {React.ReactNode} props.children
  * @param {boolean} props.isDisabled
- * @param {Function} props.t
+ * @param {translate} props.t
  * @param {Function} props.useGetAuthorization
  * @returns {React.ReactNode}
  */
@@ -34,6 +34,7 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
   const { pending, data = {} } = useAliasGetAuthorization();
   const { authorized = {}, errorCodes, errorStatus } = data;
   const { [appName]: isAuthorized } = authorized;
+  console.log('>>>>> localeKeys', localeKeys.titleRhel);
 
   const renderContent = () => {
     if (isDisabled) {

@@ -4,7 +4,7 @@ import { useMount } from 'react-use';
 import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications';
 import { reduxActions, storeHooks } from './redux';
 import { I18n } from './components/i18n/i18n';
-import Authentication from './components/authentication/authentication';
+import { Authentication } from './components/authentication/authentication';
 import { helpers } from './common';
 import { Loader } from './components/loader/loader';
 const ProductView = React.lazy(() => import('./components/productView/productView'));
