@@ -20,7 +20,7 @@ import { helpers } from '../../common';
  * @param {object} props
  * @param {React.ReactNode} props.children
  * @param {React.ReactNode|Function} props.icon
- * @param {string} props.message
+ * @param {any} props.message
  * @param {string} props.pageTitle
  * @param {string} props.title
  * @returns {React.ReactNode}

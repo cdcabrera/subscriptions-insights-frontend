@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BinocularsIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
@@ -11,13 +10,13 @@ import { OptinView } from '../optinView/optinView';
 import { translate } from '../i18n/i18n';
 import { AuthenticationContext, useGetAuthorization } from './authenticationContext';
 
-/**
- * Authentication component wrapper.
- *
- * @memberof Components
- * @module Authentication
- * @property {module} AuthenticationContext
- */
+interface AuthenticationProps {
+  appName?: string;
+  children: React.ReactNode;
+  isDisabled?: boolean;
+  t?: typeof translate;
+  useGetAuthorization?: typeof useGetAuthorization;
+}
 
 /**
  * An authentication pass-through component.
@@ -26,12 +25,18 @@ import { AuthenticationContext, useGetAuthorization } from './authenticationCont
  * @param {string} props.appName
  * @param {React.ReactNode} props.children
  * @param {boolean} props.isDisabled
- * @param {Function} props.t
+ * @param {translate} props.t
  * @param {Function} props.useGetAuthorization
  * @returns {React.ReactNode}
  */
-const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization: useAliasGetAuthorization }) => {
-  const { pending, data = {} } = useAliasGetAuthorization();
+const Authentication = ({
+  appName = routerHelpers.appName,
+  children,
+  isDisabled = helpers.UI_DISABLED,
+  t = translate,
+  useGetAuthorization: useAliasGetAuthorization = useGetAuthorization
+}: AuthenticationProps) => {
+  const { pending, data = {} }: any = useAliasGetAuthorization();
   const { authorized = {}, errorCodes, errorStatus } = data;
   const { [appName]: isAuthorized } = authorized;
 
@@ -39,7 +44,7 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
     if (isDisabled) {
       return (
         <MessageView>
-          <Maintenance description={t('curiosity-auth.maintenanceCopy', '...')} />
+          <Maintenance description={t('curiosity-auth.maintenanceCopy', '...') as string} />
         </MessageView>
       );
     }
@@ -69,29 +74,4 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
   return <AuthenticationContext.Provider value={data}>{renderContent()}</AuthenticationContext.Provider>;
 };
 
-/**
- * Prop types.
- *
- * @type {{useGetAuthorization: Function, children: React.ReactNode, appName: string, isDisabled: boolean}}
- */
-Authentication.propTypes = {
-  appName: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  isDisabled: PropTypes.bool,
-  t: PropTypes.func,
-  useGetAuthorization: PropTypes.func
-};
-
-/**
- * Default props.
- *
- * @type {{useGetAuthorization: Function, t: Function, appName: string, isDisabled: boolean}}
- */
-Authentication.defaultProps = {
-  appName: routerHelpers.appName,
-  isDisabled: helpers.UI_DISABLED,
-  t: translate,
-  useGetAuthorization
-};
-
-export { Authentication as default, Authentication };
+export { Authentication as default, Authentication, type AuthenticationProps };

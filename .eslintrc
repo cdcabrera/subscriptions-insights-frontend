@@ -12,6 +12,20 @@
     "plugin:jest/recommended",
     "plugin:jsdoc/recommended"
   ],
+  "overrides": [
+    {
+      "files": ["**/*.tsx", "**/*.ts"],
+      "extends": [],
+      "parser": "@typescript-eslint/parser",
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "rules": {
+        "import/prefer-default-export": 0,
+        "react/require-default-props": 0
+      }
+    }
+  ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 2022
@@ -27,6 +41,11 @@
   ],
   "settings": {
     "import/external-module-folders": ["public"],
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    },
     "jsdoc": {
       "preferredTypes": {
         "delete": "delete",
