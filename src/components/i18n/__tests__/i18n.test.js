@@ -13,7 +13,7 @@ import { I18n } from '../i18n';
  * @param {Array} params.list
  * @returns {Array}
  */
-const getTranslationKeys = ({ files = './src/**/!(*.test|*.spec).@(js|jsx)', list = ['t', 'translate'] }) => {
+const getTranslationKeys = ({ files = './src/**/!(*.test|*.spec).@(js|jsx|ts|tsx)', list = ['t', 'translate'] }) => {
   const keys = [];
   const updatedFiles = globSync(files);
 

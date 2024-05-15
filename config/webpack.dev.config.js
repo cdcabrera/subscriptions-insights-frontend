@@ -8,12 +8,14 @@ const {
 } = require('weldable/lib/packages');
 
 module.exports = ({ SRC_DIR, MOCK_PORT } = {}) => ({
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx']
+  },
   module: {
     rules: [
       {
-        test: /\.(jsx|js)?$/,
+        test: /\.(tsx|ts|js)?$/,
         include: [SRC_DIR],
-        // use: [babelLoaderResolve]
         use: [tsLoaderResolve]
       },
       {
