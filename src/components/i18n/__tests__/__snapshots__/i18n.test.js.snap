@@ -16,7 +16,7 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     ],
   },
   {
-    "file": "src/components/authentication/authentication.js",
+    "file": "src/components/authentication/authentication.tsx",
     "keys": [
       {
         "key": "curiosity-auth.maintenanceCopy",
@@ -93,7 +93,7 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     ],
   },
   {
-    "file": "src/components/i18n/i18nHelpers.js",
+    "file": "src/components/i18n/i18nHelpers.tsx",
     "keys": [
       {
         "key": "",

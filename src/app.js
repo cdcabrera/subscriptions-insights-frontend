@@ -5,7 +5,7 @@ import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-
 import { reduxActions, storeHooks } from './redux';
 import { I18n } from './components/i18n/i18n';
 import { Router } from './components/router';
-import Authentication from './components/authentication/authentication';
+import { Authentication } from './components/authentication/authentication';
 import { helpers } from './common';
 
 /**
