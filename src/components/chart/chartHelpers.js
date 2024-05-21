@@ -263,6 +263,7 @@ const generateTooltipData = ({ content = helpers.noop, dataSets = [] } = {}) => 
  * @returns {{tickFormat: Function, tickValues: *}}
  */
 const generateXAxisProps = ({
+  chartWidth,
   dataSet = {},
   maxX,
   xAxisLabelIncrement,
@@ -287,12 +288,13 @@ const generateXAxisProps = ({
 
   if (typeof xAxisTickFormat === 'function') {
     axisProps.tickFormat = tick => {
+      console.log('>>>>> TICK FORMAT width', tick, chartWidth);
       const tickIndex = axisProps.tickValues.indexOf(tick);
       const previousItem = { ...data[axisProps.tickValues[tickIndex - 1]] };
       const nextItem = { ...data[axisProps.tickValues[tickIndex + 1]] };
       const item = { ...data[tick] };
 
-      return xAxisTickFormat({ tick, previousItem, item, nextItem, maxX });
+      return xAxisTickFormat({ tick, previousItem, item, nextItem, maxX, chartWidth });
     };
   }
 
@@ -375,6 +377,7 @@ const generateYAxisProps = ({ dataSets = [], maxY, yAxisPropDefaults = {}, yAxis
  * @returns {{xAxisProps: object, yAxisProps: Array}}
  */
 const generateAxisProps = ({
+  chartWidth,
   dataSets = [],
   individualMaxY = {},
   maxX,
@@ -439,6 +442,7 @@ const generateAxisProps = ({
 
   return {
     xAxisProps: generateXAxisProps({
+      chartWidth,
       dataSet: xAxisDataSet,
       maxX,
       xAxisLabelIncrement,

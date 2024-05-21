@@ -234,16 +234,19 @@ const getTooltipDate = ({ date, granularity } = {}) => {
  * @param {string} params.granularity See enum of RHSM_API_QUERY_GRANULARITY_TYPES
  * @param {number|string} params.tick
  * @param {Date} params.previousDate
+ * @param params.chartWidth
  * @returns {string|undefined}
  */
-const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {}) => {
+const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate, chartWidth } = {}) => {
   if (!date || !granularity) {
     return undefined;
   }
 
   if (typeof callback === 'function') {
-    return callback({ callback, date, granularity, tick, previousDate });
+    return callback({ callback, date, granularity, tick, previousDate, chartWidth });
   }
+
+  console.log('>>>>> TICK FORMAT', chartWidth);
 
   const momentDate = moment.utc(date);
   const isNewYear =
@@ -254,7 +257,11 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {
     case GRANULARITY_TYPES.QUARTERLY:
       formattedDate = isNewYear
         ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
-        : momentDate.format(dateHelpers.timestampQuarterFormats.short);
+        : momentDate.format(
+            chartWidth < 1300
+              ? dateHelpers.timestampQuarterFormats.yearShort
+              : dateHelpers.timestampQuarterFormats.short
+          );
 
       formattedDate = formattedDate.replace(/\s/, '\n');
       break;
@@ -314,13 +321,14 @@ const yAxisTickFormat = ({ callback, tick } = {}) => {
 const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
   ...settings,
   xAxisLabelIncrement: settings?.xAxisLabelIncrement ?? getChartXAxisLabelIncrement(granularity),
-  xAxisTickFormat: ({ item, previousItem, tick }) =>
+  xAxisTickFormat: ({ item, previousItem, tick, ...rest }) =>
     xAxisTickFormat({
       callback: settings?.xAxisTickFormat,
       tick,
       date: item.date,
       previousDate: previousItem.date,
-      granularity
+      granularity,
+      ...rest
     }),
   yAxisTickFormat: ({ tick }) =>
     yAxisTickFormat({
