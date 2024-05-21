@@ -234,24 +234,40 @@ const getTooltipDate = ({ date, granularity } = {}) => {
  * @param {string} params.granularity See enum of RHSM_API_QUERY_GRANULARITY_TYPES
  * @param {number|string} params.tick
  * @param {Date} params.previousDate
+ * @param params.chartWidth
  * @returns {string|undefined}
  */
-const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate } = {}) => {
+const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate, nextDate, chartWidth, data } = {}) => {
   if (!date || !granularity) {
     return undefined;
   }
 
   if (typeof callback === 'function') {
-    return callback({ callback, date, granularity, tick, previousDate });
+    return callback({ callback, date, granularity, tick, previousDate, chartWidth });
   }
+
+  console.log('>>>>> TICK data', data);
 
   const momentDate = moment.utc(date);
   const isNewYear =
-    tick !== 0 && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(previousDate).year(), 10);
+    previousDate && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(previousDate).year(), 10);
   let formattedDate;
 
   switch (granularity) {
     case GRANULARITY_TYPES.QUARTERLY:
+      if (chartWidth < 940) {
+        // return momentDate.format("MMM 'YY");
+        // return momentDate.format("MMM 'YY");
+        // return momentDate.format(dateHelpers.timestampQuarterFormats.yearShort).replace(/\s/, '\n');
+        // return Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(previousDate).year(), 10) && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(nextDate).year(), 10)
+        //  ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
+        //  : momentDate.format(dateHelpers.timestampQuarterFormats.short);
+
+        return nextDate && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(nextDate).year(), 10)
+          ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort).replace(/\s/, '\n')
+          : momentDate.format(dateHelpers.timestampQuarterFormats.short).replace(/\s/, '\n');
+      }
+
       formattedDate = isNewYear
         ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
         : momentDate.format(dateHelpers.timestampQuarterFormats.short);
@@ -314,13 +330,15 @@ const yAxisTickFormat = ({ callback, tick } = {}) => {
 const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
   ...settings,
   xAxisLabelIncrement: settings?.xAxisLabelIncrement ?? getChartXAxisLabelIncrement(granularity),
-  xAxisTickFormat: ({ item, previousItem, tick }) =>
+  xAxisTickFormat: ({ item, previousItem, nextItem, tick, ...rest }) =>
     xAxisTickFormat({
       callback: settings?.xAxisTickFormat,
       tick,
       date: item.date,
       previousDate: previousItem.date,
-      granularity
+      nextDate: nextItem.date,
+      granularity,
+      ...rest
     }),
   yAxisTickFormat: ({ tick }) =>
     yAxisTickFormat({
