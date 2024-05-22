@@ -7,12 +7,55 @@ exports[`PlatformActions Should return a dispatch object for the hideGlobalFilte
 }
 `;
 
-exports[`PlatformActions Should return response content for getExport method: dispatch object 1`] = `
+exports[`PlatformActions Should return response content for createExport method: dispatch object 1`] = `
 [
   [
     {
+      "meta": {
+        "notifications": {
+          "pending": {
+            "dismissable": true,
+            "id": "swatch-create-export",
+            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"title"})",
+          },
+          "rejected": {
+            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+            "dismissable": true,
+            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+            "variant": "warning",
+          },
+        },
+      },
       "payload": Promise {},
-      "type": "GET_PLATFORM_EXPORT",
+      "type": "SET_PLATFORM_EXPORT_CREATE",
+    },
+  ],
+]
+`;
+
+exports[`PlatformActions Should return response content for getExistingExports method: dispatch object 1`] = `
+[
+  [
+    {
+      "meta": {
+        "id": "global",
+        "notifications": {
+          "pending": {
+            "description": "t(curiosity-toolbar.notifications_export_pending, {"context":"descriptionGlobal"})",
+            "dismissable": true,
+            "id": "swatch-global-export",
+            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"titleGlobal"})",
+          },
+          "rejected": {
+            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+            "dismissable": true,
+            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+            "variant": "warning",
+          },
+        },
+      },
+      "payload": Promise {},
+      "type": "SET_PLATFORM_EXPORT_STATUS",
     },
   ],
 ]
@@ -22,6 +65,9 @@ exports[`PlatformActions Should return response content for setExportStatus meth
 [
   [
     {
+      "meta": {
+        "id": undefined,
+      },
       "payload": Promise {},
       "type": "SET_PLATFORM_EXPORT_STATUS",
     },

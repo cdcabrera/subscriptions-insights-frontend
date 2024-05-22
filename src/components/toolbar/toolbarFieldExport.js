@@ -3,19 +3,18 @@ import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
-import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
   PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
-  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES,
-  PLATFORM_API_EXPORT_STATUS_TYPES
+  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES
 } from '../../services/platform/platformConstants';
 import { translate } from '../i18n/i18n';
 
 /**
- * A standalone export select/dropdown filter.
+ * A standalone export select/dropdown filter and download hooks.
  *
  * @memberof Toolbar
  * @module ToolbarFieldExport
@@ -37,99 +36,73 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  *
  * @param {object} options
  * @param {Function} options.useProduct
- * @param {Function} options.useSelector
- * @returns {{isPolling: boolean, isProductPolling: boolean, productPollingFormats: Array<string>,
- *     isCompleted: boolean}}
+ * @param {Function} options.useSelectors
+ * @returns {{isProductPending: boolean, productPendingFormats: Array<string>}}
  */
 const useExportStatus = ({
   useProduct: useAliasProduct = useProduct,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 } = {}) => {
   const { productId } = useAliasProduct();
-  const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
+  const [product, global] = useAliasSelectors([
+    ({ app }) => app?.exports?.[productId],
+    ({ app }) => app?.exports?.global
+  ]);
 
-  const isPolling = data?.data?.isAnythingPending === true || undefined;
-  const isCompleted = data?.data?.isAnythingPending === false || undefined;
-  const productPollingFormats = [];
-  let isProductPolling = false;
+  const pendingProductFormats = [];
+  const isProductPending =
+    product?.data?.data?.products?.[productId]?.isPending ||
+    global?.data?.data?.products?.[productId]?.isPending ||
+    false;
 
-  if (isPolling && Array.isArray(data?.data?.[productId])) {
-    const pollingResults = data?.data?.[productId]
-      .filter(({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
-      .map(({ format: productFormat }) => productFormat);
-
-    productPollingFormats.push(...pollingResults);
-
-    if (pollingResults.length) {
-      isProductPolling = true;
-    }
+  if (isProductPending) {
+    const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
+    pendingProductFormats.push(
+      ...Array.from(
+        new Set([
+          ...convert(product?.data?.data?.products?.[productId]?.pending),
+          ...convert(global?.data?.data?.products?.[productId]?.pending)
+        ])
+      )
+    );
   }
 
   return {
-    isCompleted,
-    isPolling,
-    isProductPolling,
-    productPollingFormats
+    isProductPending,
+    pendingProductFormats
   };
 };
 
 /**
- * Apply a centralized export hook for, post/put, polling status, and download.
+ * Apply an export hook for a post with download, and a global polling status with download.
  *
  * @param {object} options
  * @param {Function} options.createExport
- * @param {Function} options.getExport
- * @param {Function} options.getExportStatus
+ * @param {Function} options.getExistingExports
  * @param {Function} options.useDispatch
- * @param {Function} options.useExportStatus
- * @returns {Function}
+ * @returns {{getExport: Function, createExport: Function, checkExports: Function}}
  */
 const useExport = ({
-  createExport = reduxActions.platform.createExport,
-  getExport = reduxActions.platform.getExport,
-  getExportStatus = reduxActions.platform.getExportStatus,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useExportStatus: useAliasExportStatus = useExportStatus
+  createExport: createAliasExport = reduxActions.platform.createExport,
+  getExistingExports: getAliasExistingExports = reduxActions.platform.getExistingExports,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
-  const { isPolling } = useAliasExportStatus();
 
   /**
-   * A polling response validator
-   *
-   * @type {Function}
+   * Get a global export status. Sets polling if any pending indicators are found.
    */
-  const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
+  const checkExports = useCallback(() => getAliasExistingExports()(dispatch), [dispatch, getAliasExistingExports]);
 
   /**
-   * Create, or get, an export while detecting, or setting up, polling
+   * Create an export then download. Automatically sets up polling until the file(s) are ready.
    */
-  return useCallback(
-    ({ id, data } = {}) => {
-      const updatedOptions = {};
+  const createExport = useCallback((id, data) => createAliasExport(id, data)(dispatch), [createAliasExport, dispatch]);
 
-      if (!isPolling) {
-        updatedOptions.poll = {
-          validate
-        };
-      }
-
-      if (data) {
-        return createExport(data, updatedOptions)(dispatch);
-      }
-
-      if (id) {
-        return getExport(id)(dispatch);
-      }
-
-      if (isPolling === undefined) {
-        return getExportStatus(updatedOptions)(dispatch);
-      }
-
-      return undefined;
-    },
-    [createExport, dispatch, getExport, getExportStatus, isPolling, validate]
-  );
+  return {
+    checkExports,
+    createExport
+  };
 };
 
 /**
@@ -138,17 +111,17 @@ const useExport = ({
  * @param {object} options
  * @param {Function} options.useExport
  * @param {Function} options.useProduct
- * @param {Function} options.useProductInventoryQuery
+ * @param {Function} options.useProductExportQuery
  * @returns {Function}
  */
 const useOnSelect = ({
   useExport: useAliasExport = useExport,
   useProduct: useAliasProduct = useProduct,
-  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
+  useProductExportQuery: useAliasProductExportQuery = useProductExportQuery
 } = {}) => {
-  const createExport = useAliasExport();
+  const { createExport } = useAliasExport();
   const { productId } = useAliasProduct();
-  const inventoryQuery = useAliasProductInventoryQuery();
+  const exportQuery = useAliasProductExportQuery();
 
   return ({ value = null } = {}) => {
     const sources = [
@@ -156,19 +129,17 @@ const useOnSelect = ({
         application: APP_TYPES.SUBSCRIPTIONS,
         resource: RESOURCE_TYPES.SUBSCRIPTIONS,
         filters: {
-          ...inventoryQuery,
-          productId
+          ...exportQuery
         }
       }
     ];
 
-    const data = { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources };
-    createExport({ data });
+    createExport(productId, { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources });
   };
 };
 
 /**
- * Display an export/download field with options.
+ * Display an export/download field with options. Check and download available exports.
  *
  * @fires onSelect
  * @param {object} props
@@ -188,26 +159,27 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
-  const { isProductPolling, productPollingFormats = [] } = useAliasExportStatus();
-  const checkExport = useAliasExport();
+  const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
+  const { checkExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isProductPolling &&
-        productPollingFormats?.includes(option.value) &&
+      (isProductPending &&
+        pendingProductFormats?.includes(option.value) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isProductPolling && productPollingFormats?.includes(option.value),
-    isDisabled: isProductPolling && productPollingFormats?.includes(option.value)
+    selected: isProductPending && pendingProductFormats?.includes(option.value),
+    isDisabled: isProductPending && pendingProductFormats?.includes(option.value)
   }));
 
   useMount(() => {
-    checkExport();
+    checkExports();
   });
 
   return (
     <Select
+      title={t('curiosity-toolbar.placeholder', { context: 'export' })}
       isDropdownButton
       aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
       onSelect={onSelect}
