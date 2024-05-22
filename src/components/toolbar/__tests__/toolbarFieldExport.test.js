@@ -53,7 +53,7 @@ describe('ToolbarFieldExport Component', () => {
     const options = {
       useExport: () => jest.fn(),
       useProduct: () => ({ viewId: 'loremIpsum' }),
-      useProductInventoryQuery: () => ({})
+      useProductExportQuery: () => ({})
     };
 
     const onSelect = useOnSelect(options);
