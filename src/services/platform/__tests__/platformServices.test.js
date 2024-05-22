@@ -30,16 +30,17 @@ describe('PlatformServices', () => {
   });
 
   it('should export a specific number of methods and classes', () => {
-    expect(Object.keys(platformServices)).toHaveLength(6);
+    expect(Object.keys(platformServices)).toHaveLength(7);
   });
 
   it('should have specific methods', () => {
     expect(platformServices.getUser).toBeDefined();
     expect(platformServices.getUserPermissions).toBeDefined();
     expect(platformServices.hideGlobalFilter).toBeDefined();
-    expect(platformServices.postExport).toBeDefined();
+    expect(platformServices.deleteExport).toBeDefined();
     expect(platformServices.getExport).toBeDefined();
     expect(platformServices.getExportStatus).toBeDefined();
+    expect(platformServices.postExport).toBeDefined();
   });
 
   /**

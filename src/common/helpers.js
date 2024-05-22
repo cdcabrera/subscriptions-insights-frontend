@@ -399,6 +399,13 @@ const UI_LOGGER_ID = process.env.REACT_APP_UI_LOGGER_ID || 'GUI';
 const UI_LOGGER_FILE = process.env.REACT_APP_UI_LOGGER_FILE || 'debug_log_{0}.json';
 
 /**
+ * UI export download file name. Extension is handled at the service level.
+ *
+ * @type {string}
+ */
+const UI_EXPORT_FILENAME = process.env.REACT_APP_UI_EXPORT_FILENAME || 'swatch_report_{0}';
+
+/**
  * UI packaged application name.
  * See dotenv config files for updating.
  *
@@ -476,6 +483,7 @@ const helpers = {
   UI_DISPLAY_NAME,
   UI_DISPLAY_CONFIG_NAME,
   UI_DISPLAY_START_NAME,
+  UI_EXPORT_FILENAME,
   UI_LINK_CONTACT_US,
   UI_LINK_LEARN_MORE,
   UI_LINK_REPORT_ACCURACY_RECOMMENDATIONS,

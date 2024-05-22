@@ -4743,6 +4743,7 @@ Default props.
     * [~useProductInventoryHostsConfig(options)](#ProductView.module_ProductViewContext..useProductInventoryHostsConfig) ⇒ <code>Object</code>
     * [~useProductInventorySubscriptionsConfig(options)](#ProductView.module_ProductViewContext..useProductInventorySubscriptionsConfig) ⇒ <code>Object</code>
     * [~useProductToolbarConfig(options)](#ProductView.module_ProductViewContext..useProductToolbarConfig) ⇒ <code>Object</code>
+    * [~useProductExportQuery(options)](#ProductView.module_ProductViewContext..useProductExportQuery) ⇒ <code>Object</code>
 
 <a name="ProductView.module_ProductViewContext..DEFAULT_CONTEXT"></a>
 
@@ -5085,6 +5086,32 @@ Return primary toolbar configuration.
     <td>options</td><td><code>object</code></td>
     </tr><tr>
     <td>options.useProductContext</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="ProductView.module_ProductViewContext..useProductExportQuery"></a>
+
+### ProductViewContext~useProductExportQuery(options) ⇒ <code>Object</code>
+Return an export query for subscriptions.
+
+**Kind**: inner method of [<code>ProductViewContext</code>](#ProductView.module_ProductViewContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.schemaCheck</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.useProductToolbarQuery</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.options</td><td><code>object</code></td>
     </tr>  </tbody>
 </table>
 
@@ -6686,7 +6713,7 @@ On select update export.
     </tr><tr>
     <td>options.useProduct</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useProductInventoryQuery</td><td><code>function</code></td>
+    <td>options.useProductExportQuery</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 

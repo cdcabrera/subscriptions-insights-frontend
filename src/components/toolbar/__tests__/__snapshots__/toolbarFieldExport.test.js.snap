@@ -41,7 +41,8 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
 {
   "isCompleted": undefined,
   "isPolling": undefined,
-  "isProductPolling": false,
+  "isProductPolling": undefined,
+  "productCompletedFormats": [],
   "productPollingFormats": [],
 }
 `;
@@ -50,7 +51,8 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
 {
   "isCompleted": undefined,
   "isPolling": undefined,
-  "isProductPolling": false,
+  "isProductPolling": undefined,
+  "productCompletedFormats": [],
   "productPollingFormats": [],
 }
 `;
@@ -60,6 +62,7 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
   "isCompleted": undefined,
   "isPolling": true,
   "isProductPolling": true,
+  "productCompletedFormats": [],
   "productPollingFormats": [
     "dolorSit",
   ],
@@ -68,11 +71,6 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
 
 exports[`ToolbarFieldExport Component should export select options: toolbarFieldOptions 1`] = `
 [
-  {
-    "selected": false,
-    "title": "t(curiosity-toolbar.label_export, {"context":"csv"})",
-    "value": "csv",
-  },
   {
     "selected": false,
     "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
@@ -86,44 +84,48 @@ exports[`ToolbarFieldExport Component should handle updating export through redu
 exports[`ToolbarFieldExport Component should handle updating export through redux state with hook: dispatch, hook 1`] = `[]`;
 
 exports[`ToolbarFieldExport Component should render a basic component: basic 1`] = `
-<Select
-  aria-label="t(curiosity-toolbar.placeholder, {"context":"export"})"
-  ariaLabel="Select option"
-  buttonVariant="plain"
-  className=""
-  data-test="toolbarFieldExport"
-  direction="down"
-  id="generatedid-"
-  isDisabled={false}
-  isDropdownButton={true}
-  isFlipEnabled={false}
-  isInline={true}
-  isToggleText={true}
-  maxHeight={null}
-  name={null}
-  onSelect={[Function]}
-  onSplitButton={[Function]}
-  options={
-    [
-      {
-        "isDisabled": false,
-        "selected": false,
-        "title": "t(curiosity-toolbar.label_export, {"context":"csv"})",
-        "value": "csv",
-      },
-      {
-        "isDisabled": false,
-        "selected": false,
-        "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
-        "value": "json",
-      },
-    ]
-  }
-  placeholder="t(curiosity-toolbar.placeholder, {"context":"export"})"
-  position="left"
-  selectedOptions={null}
-  splitButtonVariant={null}
-  toggleIcon={<ExportIcon />}
-  variant="single"
-/>
+<Tooltip
+  content="t(curiosity-toolbar.placeholder, {"context":"export"})"
+  distance={15}
+  enableFlip={false}
+  entryDelay={100}
+  exitDelay={0}
+  isNoWrap={false}
+  position="top"
+>
+  <Select
+    aria-label="t(curiosity-toolbar.placeholder, {"context":"export"})"
+    ariaLabel="Select option"
+    buttonVariant="plain"
+    className=""
+    data-test="toolbarFieldExport"
+    direction="down"
+    id="generatedid-"
+    isDisabled={false}
+    isDropdownButton={true}
+    isFlipEnabled={false}
+    isInline={true}
+    isToggleText={true}
+    maxHeight={null}
+    name={null}
+    onSelect={[Function]}
+    onSplitButton={[Function]}
+    options={
+      [
+        {
+          "isDisabled": undefined,
+          "selected": undefined,
+          "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
+          "value": "json",
+        },
+      ]
+    }
+    placeholder="t(curiosity-toolbar.placeholder, {"context":"export"})"
+    position="left"
+    selectedOptions={null}
+    splitButtonVariant={null}
+    toggleIcon={<ExportIcon />}
+    variant="single"
+  />
+</Tooltip>
 `;

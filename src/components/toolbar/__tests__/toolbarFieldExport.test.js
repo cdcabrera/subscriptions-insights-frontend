@@ -53,7 +53,7 @@ describe('ToolbarFieldExport Component', () => {
     const options = {
       useExport: () => jest.fn(),
       useProduct: () => ({ viewId: 'loremIpsum' }),
-      useProductInventoryQuery: () => ({})
+      useProductExportQuery: () => ({})
     };
 
     const onSelect = useOnSelect(options);
@@ -110,7 +110,7 @@ describe('ToolbarFieldExport Component', () => {
                 data: {
                   isAnythingPending: false,
                   loremIpsum: {
-                    status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETED,
+                    status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE,
                     format: 'dolorSit'
                   }
                 }
