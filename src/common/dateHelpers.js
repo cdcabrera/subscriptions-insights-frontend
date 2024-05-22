@@ -16,10 +16,7 @@ const getCurrentDate = () => {
   if (helpers.TEST_MODE) {
     return new Date(new Date('2019-07-20').setUTCHours(0, 0, 0, 0));
   }
-  if (helpers.DEV_MODE && process.env.REACT_APP_DEBUG_DEFAULT_DATETIME) {
-    return new Date(new Date(process.env.REACT_APP_DEBUG_DEFAULT_DATETIME).setUTCHours(0, 0, 0, 0));
-  }
-  return new Date();
+  return new Date(new Date('2023-10-01T15:34:37.000Z').setUTCHours(0, 0, 0, 0));
 };
 
 /**
