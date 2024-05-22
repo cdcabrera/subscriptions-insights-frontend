@@ -302,6 +302,7 @@ Download the debug log file.
     * [~UI_LOCALE_DEFAULT_DESC](#Helpers.module_General..UI_LOCALE_DEFAULT_DESC) : <code>string</code>
     * [~UI_LOGGER_ID](#Helpers.module_General..UI_LOGGER_ID) : <code>string</code>
     * [~UI_LOGGER_FILE](#Helpers.module_General..UI_LOGGER_FILE) : <code>string</code>
+    * [~UI_EXPORT_FILENAME](#Helpers.module_General..UI_EXPORT_FILENAME) : <code>string</code>
     * [~UI_NAME](#Helpers.module_General..UI_NAME) : <code>string</code>
     * [~UI_PATH](#Helpers.module_General..UI_PATH) : <code>string</code>
     * [~UI_VERSION](#Helpers.module_General..UI_VERSION) : <code>string</code>
@@ -534,6 +535,12 @@ See dotenv config files for updating.
 
 ### General~UI\_LOGGER\_FILE : <code>string</code>
 UI state logging file name.
+
+**Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
+<a name="Helpers.module_General..UI_EXPORT_FILENAME"></a>
+
+### General~UI\_EXPORT\_FILENAME : <code>string</code>
+UI export download file name. Extension is handled at the service level.
 
 **Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
 <a name="Helpers.module_General..UI_NAME"></a>
