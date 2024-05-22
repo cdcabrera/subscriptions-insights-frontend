@@ -241,6 +241,20 @@ const axiosServiceCall = async (
       async response => {
         const updatedResponse = { ...response };
         const callbackResponse = serviceHelpers.memoClone(updatedResponse);
+        const updatedLocation = { url: undefined, config: undefined };
+
+        if (
+          !updatedConfig.poll.location ||
+          typeof updatedConfig.poll.location === 'string' ||
+          typeof updatedConfig.poll.location === 'function'
+        ) {
+          updatedLocation.url = updatedConfig.poll.location || updatedConfig.url;
+        }
+
+        if (updatedConfig.poll.location?.url) {
+          updatedLocation.url = updatedConfig.poll.location.url;
+          updatedLocation.config = updatedConfig.poll.location.config;
+        }
 
         // passed config, allow future updates by passing modified poll config
         const updatedPoll = {
@@ -248,7 +262,7 @@ const axiosServiceCall = async (
           // internal counter passed towards validate
           __retryCount: updatedConfig.poll.__retryCount ?? 0,
           // a url, or callback that returns a url to poll the put/posted url
-          location: updatedConfig.poll.location || updatedConfig.url,
+          location: updatedLocation,
           // only required param, a function, validate status in prep for next
           validate: updatedConfig.poll.validate || updatedConfig.poll,
           // a number, the setTimeout interval
@@ -268,14 +282,14 @@ const axiosServiceCall = async (
           return updatedResponse;
         }
 
-        let tempLocation = updatedPoll.location;
+        let tempLocationUrl = updatedPoll.location.url;
 
-        if (typeof tempLocation === 'function') {
+        if (typeof tempLocationUrl === 'function') {
           try {
-            tempLocation = await tempLocation.call(null, callbackResponse, updatedPoll.__retryCount);
+            tempLocationUrl = await tempLocationUrl.call(null, callbackResponse, updatedPoll.__retryCount);
           } catch (err) {
             console.error(err);
-            tempLocation = updatedConfig.url;
+            tempLocationUrl = updatedConfig.url;
           }
         }
 
@@ -284,9 +298,10 @@ const axiosServiceCall = async (
             try {
               const output = await axiosServiceCall({
                 ...config,
+                ...updatedPoll.location.config,
                 method: 'get',
                 data: undefined,
-                url: tempLocation,
+                url: tempLocationUrl,
                 cache: false,
                 poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
               });
