@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
-import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
+import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import { Tooltip } from '../tooltip/tooltip';
 import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
   PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
-  PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES as EXPORT_FILTER_TYPES,
   PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES,
   PLATFORM_API_EXPORT_STATUS_TYPES
 } from '../../services/platform/platformConstants';
@@ -140,17 +139,17 @@ const useExport = ({
  * @param {object} options
  * @param {Function} options.useExport
  * @param {Function} options.useProduct
- * @param {Function} options.useProductInventoryQuery
+ * @param {Function} options.useProductExportQuery
  * @returns {Function}
  */
 const useOnSelect = ({
   useExport: useAliasExport = useExport,
   useProduct: useAliasProduct = useProduct,
-  useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery
+  useProductExportQuery: useAliasProductExportQuery = useProductExportQuery
 } = {}) => {
   const createExport = useAliasExport();
   const { productId } = useAliasProduct();
-  const inventoryQuery = useAliasProductInventoryQuery();
+  const exportQuery = useAliasProductExportQuery();
 
   return ({ value = null } = {}) => {
     const sources = [
@@ -158,8 +157,7 @@ const useOnSelect = ({
         application: APP_TYPES.SUBSCRIPTIONS,
         resource: RESOURCE_TYPES.SUBSCRIPTIONS,
         filters: {
-          ...inventoryQuery,
-          [EXPORT_FILTER_TYPES.PRODUCT_ID]: productId
+          ...exportQuery
         }
       }
     ];

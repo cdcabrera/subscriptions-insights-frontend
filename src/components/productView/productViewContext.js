@@ -315,20 +315,20 @@ const useProductToolbarConfig = ({ useProductContext: useAliasProductContext = u
  * @param {object} options
  * @param {Function} options.useProduct
  * @param {object} options.schemaCheck
- * @param {Function} options.useProductInventoryHostsQuery
+ * @param {Function} options.useProductToolbarQuery
  * @param {object} options.options
  * @returns {{}}
  */
 const useProductExportQuery = ({
   useProduct: useAliasProduct = useProduct,
   schemaCheck = platformConstants.PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES,
-  useProductInventoryHostsQuery: useAliasProductInventoryHostsQuery = useProductInventoryHostsQuery,
+  useProductToolbarQuery: useAliasProductToolbarQuery = useProductToolbarQuery,
   options
 } = {}) => {
   const { productId } = useAliasProduct();
   return reduxHelpers.setApiQuery(
     {
-      ...useAliasProductInventoryHostsQuery({ options }),
+      ...useAliasProductToolbarQuery({ options }),
       [platformConstants.PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES.PRODUCT_ID]: productId
     },
     schemaCheck

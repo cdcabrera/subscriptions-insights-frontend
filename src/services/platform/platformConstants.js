@@ -98,7 +98,7 @@ const PLATFORM_API_EXPORT_POST_TYPES = {
 const PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES = {
   BILLING_PROVIDER: 'billing_provider',
   BILLING_ACCOUNT_ID: 'billing_account_id',
-  CATEGORY: 'CATEGORY',
+  CATEGORY: 'category',
   METRIC_ID: 'metric_id',
   PRODUCT_ID: 'product_id',
   SLA: 'sla',
