@@ -78,7 +78,6 @@ const Chart = ({
         dataSets: toggledDataSets
       });
 
-      console.log('>>>> chartwidth', chartWidth);
       const { maxX, maxY } = chartHelpers.generateMaxXY({ dataSets: toggledDataSets });
       const { individualMaxY } = chartHelpers.generateMaxXY({ dataSets });
       const { xAxisProps, yAxisProps } = chartHelpers.generateAxisProps({

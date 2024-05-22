@@ -235,6 +235,34 @@ exports[`GraphCardHelpers xAxisTickFormat should produce consistent x axis tick 
     "Apr",
     "Jul",
   ],
+  "quarterlySmallGraph": [
+    "Jul",
+    "Oct
+2014",
+    "Jan",
+    "Apr",
+    "Jul",
+    "Oct
+2015",
+    "Jan",
+    "Apr",
+    "Jul",
+    "Oct
+2016",
+    "Jan",
+    "Apr",
+    "Jul",
+    "Oct
+2017",
+    "Jan",
+    "Apr",
+    "Jul",
+    "Oct
+2018",
+    "Jan",
+    "Apr",
+    "Jul",
+  ],
   "weekly": [
     "Apr 21",
     "Apr 28",

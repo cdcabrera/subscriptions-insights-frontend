@@ -230,14 +230,15 @@ const getTooltipDate = ({ date, granularity } = {}) => {
  *
  * @param {object} params
  * @param {Function} params.callback
+ * @param {number} params.chartWidth
  * @param {Date} params.date
  * @param {string} params.granularity See enum of RHSM_API_QUERY_GRANULARITY_TYPES
- * @param {number|string} params.tick
+ * @param {Date} params.nextDate
  * @param {Date} params.previousDate
- * @param params.chartWidth
+ * @param {number|string} params.tick
  * @returns {string|undefined}
  */
-const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate, nextDate, chartWidth, data } = {}) => {
+const xAxisTickFormat = ({ callback, chartWidth, date, granularity, nextDate, previousDate, tick } = {}) => {
   if (!date || !granularity) {
     return undefined;
   }
@@ -246,36 +247,30 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate, next
     return callback({ callback, date, granularity, tick, previousDate, chartWidth });
   }
 
-  console.log('>>>>> TICK data', data);
-
   const momentDate = moment.utc(date);
-  const isNewYear =
+  const isNewYearStart =
     previousDate && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(previousDate).year(), 10);
   let formattedDate;
 
   switch (granularity) {
     case GRANULARITY_TYPES.QUARTERLY:
       if (chartWidth < 940) {
-        // return momentDate.format("MMM 'YY");
-        // return momentDate.format("MMM 'YY");
-        // return momentDate.format(dateHelpers.timestampQuarterFormats.yearShort).replace(/\s/, '\n');
-        // return Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(previousDate).year(), 10) && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(nextDate).year(), 10)
-        //  ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
-        //  : momentDate.format(dateHelpers.timestampQuarterFormats.short);
+        const isNewYearEnd =
+          nextDate && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(nextDate).year(), 10);
 
-        return nextDate && Number.parseInt(momentDate.year(), 10) !== Number.parseInt(moment.utc(nextDate).year(), 10)
-          ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort).replace(/\s/, '\n')
-          : momentDate.format(dateHelpers.timestampQuarterFormats.short).replace(/\s/, '\n');
+        formattedDate = isNewYearEnd
+          ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
+          : momentDate.format(dateHelpers.timestampQuarterFormats.short);
+      } else {
+        formattedDate = isNewYearStart
+          ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
+          : momentDate.format(dateHelpers.timestampQuarterFormats.short);
       }
-
-      formattedDate = isNewYear
-        ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
-        : momentDate.format(dateHelpers.timestampQuarterFormats.short);
 
       formattedDate = formattedDate.replace(/\s/, '\n');
       break;
     case GRANULARITY_TYPES.MONTHLY:
-      formattedDate = isNewYear
+      formattedDate = isNewYearStart
         ? momentDate.format(dateHelpers.timestampMonthFormats.yearShort)
         : momentDate.format(dateHelpers.timestampMonthFormats.short);
 
@@ -284,7 +279,7 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate, next
     case GRANULARITY_TYPES.WEEKLY:
     case GRANULARITY_TYPES.DAILY:
     default:
-      formattedDate = isNewYear
+      formattedDate = isNewYearStart
         ? momentDate.format(dateHelpers.timestampDayFormats.yearShort)
         : momentDate.format(dateHelpers.timestampDayFormats.short);
 
@@ -330,15 +325,15 @@ const yAxisTickFormat = ({ callback, tick } = {}) => {
 const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
   ...settings,
   xAxisLabelIncrement: settings?.xAxisLabelIncrement ?? getChartXAxisLabelIncrement(granularity),
-  xAxisTickFormat: ({ item, previousItem, nextItem, tick, ...rest }) =>
+  xAxisTickFormat: ({ chartWidth, item, nextItem, previousItem, tick }) =>
     xAxisTickFormat({
       callback: settings?.xAxisTickFormat,
+      chartWidth,
       tick,
       date: item.date,
-      previousDate: previousItem.date,
       nextDate: nextItem.date,
-      granularity,
-      ...rest
+      previousDate: previousItem.date,
+      granularity
     }),
   yAxisTickFormat: ({ tick }) =>
     yAxisTickFormat({
