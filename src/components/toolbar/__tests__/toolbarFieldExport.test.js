@@ -36,7 +36,7 @@ describe('ToolbarFieldExport Component', () => {
   it('should handle updating export through redux state with component', () => {
     const props = {
       useOnSelect: () => jest.fn(),
-      useExport: () => jest.fn()
+      useExport: () => ({ checkExports: jest.fn() })
     };
 
     const component = renderComponent(<ToolbarFieldExport {...props} />);
@@ -51,9 +51,9 @@ describe('ToolbarFieldExport Component', () => {
 
   it('should handle updating export through redux state with hook', () => {
     const options = {
-      useExport: () => jest.fn(),
+      useExport: () => ({ createExport: jest.fn() }),
       useProduct: () => ({ viewId: 'loremIpsum' }),
-      useProductInventoryQuery: () => ({})
+      useProductExportQuery: () => ({})
     };
 
     const onSelect = useOnSelect(options);
@@ -80,19 +80,27 @@ describe('ToolbarFieldExport Component', () => {
         useProduct: () => ({
           productId: 'loremIpsum'
         }),
-        useSelector: () => ({
-          data: {
+        useSelectors: () => [
+          {
             data: {
-              isAnythingPending: true,
-              loremIpsum: [
-                {
-                  status: PLATFORM_API_EXPORT_STATUS_TYPES.PENDING,
-                  format: 'dolorSit'
+              data: {
+                products: {
+                  loremIpsum: {
+                    isCompleted: false,
+                    isPending: true,
+                    completed: [],
+                    pending: [
+                      {
+                        status: PLATFORM_API_EXPORT_STATUS_TYPES.PENDING,
+                        format: 'dolorSit'
+                      }
+                    ]
+                  }
                 }
-              ]
+              }
             }
           }
-        })
+        ]
       })
     );
     await unmountPolling();
@@ -103,21 +111,31 @@ describe('ToolbarFieldExport Component', () => {
         useProduct: () => ({
           productId: 'loremIpsum'
         }),
-        useSelector: () => ({
-          app: {
-            exports: {
-              data: {
+        useSelectors: () => [
+          {
+            app: {
+              exports: {
                 data: {
-                  isAnythingPending: false,
-                  loremIpsum: {
-                    status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETED,
-                    format: 'dolorSit'
+                  data: {
+                    products: {
+                      loremIpsum: {
+                        isCompleted: true,
+                        isPending: false,
+                        completed: [
+                          {
+                            status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE,
+                            format: 'dolorSit'
+                          }
+                        ],
+                        pending: []
+                      }
+                    }
                   }
                 }
               }
             }
           }
-        })
+        ]
       })
     );
     await unmountCompleted();
@@ -126,68 +144,40 @@ describe('ToolbarFieldExport Component', () => {
 
   it('should aggregate export service calls', async () => {
     // confirm attempt at creating an export
-    const createExport = jest.fn().mockImplementation(
+    const mockServiceCreateExport = jest.fn().mockImplementation(
       (...args) =>
         dispatch =>
           dispatch(...args)
     );
-    const { result: create, unmount: unmountCreate } = await renderHook(() =>
+    const {
+      result: { createExport },
+      unmount: unmountCreate
+    } = await renderHook(() =>
       useExport({
-        createExport
+        createExport: mockServiceCreateExport
       })
     );
-    create({ data: { lorem: 'ipsum' } });
+    createExport('mock-product-id', { data: { lorem: 'ipsum' } });
     await unmountCreate();
-    expect(createExport).toHaveBeenCalledTimes(1);
-    expect(createExport.mock.calls).toMatchSnapshot('createExport');
+    expect(mockServiceCreateExport).toHaveBeenCalledTimes(1);
+    expect(mockServiceCreateExport.mock.calls).toMatchSnapshot('createExport');
 
-    // confirm attempt at getting an export
-    const getExport = jest.fn().mockImplementation(
+    // confirm attempt at getting an existing export status
+    const mockServiceGetExistingExports = jest.fn().mockImplementation(
       (...args) =>
         dispatch =>
           dispatch(...args)
     );
-    const { result: get, unmount: unmountGet } = await renderHook(() =>
+    const {
+      result: { checkExports },
+      unmount: unmountStatus
+    } = await renderHook(() =>
       useExport({
-        getExport
+        getExistingExports: mockServiceGetExistingExports
       })
     );
-    get({ id: 'dolorSit' });
-    await unmountGet();
-    expect(getExport).toHaveBeenCalledTimes(1);
-    expect(getExport.mock.calls).toMatchSnapshot('getExport');
-
-    // confirm attempt at getting an export status
-    const getExportStatus = jest.fn().mockImplementation(
-      (...args) =>
-        dispatch =>
-          dispatch(...args)
-    );
-    const { result: status, unmount: unmountStatus } = await renderHook(() =>
-      useExport({
-        getExportStatus
-      })
-    );
-    status();
+    checkExports();
     await unmountStatus();
-    expect(getExportStatus).toHaveBeenCalledTimes(1);
-    expect(getExportStatus.mock.calls).toMatchSnapshot('getStatus');
-
-    // confirm attempt at getting an export status when there is already polling
-    const getExportStatusAgain = jest.fn().mockImplementation(
-      (...args) =>
-        dispatch =>
-          dispatch(...args)
-    );
-    const { result: statusAgain, unmount: unmountStatusAgain } = await renderHook(() =>
-      useExport({
-        getExportStatus: getExportStatusAgain,
-        useExportStatus: () => ({ isPolling: true })
-      })
-    );
-    statusAgain();
-    await unmountStatusAgain();
-    expect(getExportStatusAgain).toHaveBeenCalledTimes(0);
-    expect(getExportStatusAgain.mock.calls).toMatchSnapshot('getStatus, existing polling');
+    expect(mockServiceGetExistingExports).toHaveBeenCalledTimes(1);
   });
 });
