@@ -255,13 +255,13 @@ const xAxisTickFormat = ({ callback, date, granularity, tick, previousDate, char
 
   switch (granularity) {
     case GRANULARITY_TYPES.QUARTERLY:
+      if (chartWidth < 940) {
+        return momentDate.format(dateHelpers.timestampQuarterFormats.yearShort).replace(/\s/, '\n');
+      }
+
       formattedDate = isNewYear
         ? momentDate.format(dateHelpers.timestampQuarterFormats.yearShort)
-        : momentDate.format(
-            chartWidth < 1300
-              ? dateHelpers.timestampQuarterFormats.yearShort
-              : dateHelpers.timestampQuarterFormats.short
-          );
+        : momentDate.format(dateHelpers.timestampQuarterFormats.short);
 
       formattedDate = formattedDate.replace(/\s/, '\n');
       break;
