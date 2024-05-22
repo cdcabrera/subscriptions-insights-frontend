@@ -294,9 +294,13 @@ const generateXAxisProps = ({
       const nextItem = { ...data[axisProps.tickValues[tickIndex + 1]] };
       const item = { ...data[tick] };
 
-      return xAxisTickFormat({ tick, previousItem, item, nextItem, maxX, chartWidth });
+      return xAxisTickFormat({ tick, previousItem, item, nextItem, maxX, chartWidth, data });
     };
   }
+
+  // if (chartWidth < 940) {
+  // axisProps.style = { axisLabel: { fontSize: '0.5rem' } };
+  // }
 
   return axisProps;
 };
