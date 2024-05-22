@@ -5,10 +5,12 @@ import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductInventoryHostsQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
+import { Tooltip } from '../tooltip/tooltip';
 import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
   PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
+  PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES as EXPORT_FILTER_TYPES,
   PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES,
   PLATFORM_API_EXPORT_STATUS_TYPES
 } from '../../services/platform/platformConstants';
@@ -157,7 +159,7 @@ const useOnSelect = ({
         resource: RESOURCE_TYPES.SUBSCRIPTIONS,
         filters: {
           ...inventoryQuery,
-          productId
+          [EXPORT_FILTER_TYPES.PRODUCT_ID]: productId
         }
       }
     ];
@@ -207,17 +209,19 @@ const ToolbarFieldExport = ({
   });
 
   return (
-    <Select
-      isDropdownButton
-      aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
-      onSelect={onSelect}
-      options={updatedOptions}
-      placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
-      position={position}
-      data-test="toolbarFieldExport"
-      toggleIcon={<ExportIcon />}
-      buttonVariant={SelectButtonVariant.plain}
-    />
+    <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPolling && 'loading'] })}>
+      <Select
+        isDropdownButton
+        aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
+        onSelect={onSelect}
+        options={updatedOptions}
+        placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
+        position={position}
+        data-test="toolbarFieldExport"
+        toggleIcon={<ExportIcon />}
+        buttonVariant={SelectButtonVariant.plain}
+      />
+    </Tooltip>
   );
 };
 
