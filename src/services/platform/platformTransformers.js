@@ -86,13 +86,30 @@ const exports = response => {
       updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
     }
 
-    updatedResponse.data[productId] ??= [];
-    updatedResponse.data[productId].push({
+    const updatedExportData = {
       format: exportFormat,
       id: exportId,
       name: exportName,
+      productId,
       status: focusedStatus
-    });
+    };
+
+    updatedResponse.data.pending ??= [];
+    updatedResponse.data.completed ??= [];
+    updatedResponse.data[productId] ??= {};
+    updatedResponse.data[productId].pending ??= [];
+    updatedResponse.data[productId].completed ??= [];
+
+    if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
+      updatedResponse.data.pending.push(updatedExportData);
+      updatedResponse.data[productId].pending.push(updatedExportData);
+    } else if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE) {
+      updatedResponse.data.completed.push(updatedExportData);
+      updatedResponse.data[productId].completed.push(updatedExportData);
+    }
+
+    // updatedResponse.data[productId] ??= [];
+    // updatedResponse.data[productId].push(updatedExportData);
   };
 
   if (Array.isArray(data)) {

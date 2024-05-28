@@ -173,10 +173,18 @@ const deleteExport = (id, options = {}) => {
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
+ * @param {string} options.fileName
+ * @param {string} options.fileType
  * @returns {Promise<*>}
  */
 const getExport = (id, options = {}) => {
-  const { cache = false, cancel = true, cancelId } = options;
+  const {
+    cache = false,
+    cancel = true,
+    cancelId,
+    fileName = `swatch_report_${id}.tar.gz`,
+    fileType = 'application/gzip'
+  } = options;
   return axiosServiceCall({
     url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
     responseType: 'blob',
@@ -189,8 +197,8 @@ const getExport = (id, options = {}) => {
         (helpers.TEST_MODE && success.data) ||
         downloadHelpers.downloadData({
           data: success.data,
-          fileName: `swatch_report_${id}.tar.gz`,
-          fileType: 'application/gzip'
+          fileName,
+          fileType
         })
     )
     .then(() => deleteExport(id));

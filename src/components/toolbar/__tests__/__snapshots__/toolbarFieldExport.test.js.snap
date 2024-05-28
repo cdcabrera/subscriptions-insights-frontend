@@ -41,7 +41,8 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
 {
   "isCompleted": undefined,
   "isPolling": undefined,
-  "isProductPolling": false,
+  "isProductPolling": undefined,
+  "productCompletedFormats": [],
   "productPollingFormats": [],
 }
 `;
@@ -50,7 +51,8 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
 {
   "isCompleted": undefined,
   "isPolling": undefined,
-  "isProductPolling": false,
+  "isProductPolling": undefined,
+  "productCompletedFormats": [],
   "productPollingFormats": [],
 }
 `;
@@ -60,6 +62,7 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
   "isCompleted": undefined,
   "isPolling": true,
   "isProductPolling": true,
+  "productCompletedFormats": [],
   "productPollingFormats": [
     "dolorSit",
   ],
@@ -110,8 +113,8 @@ exports[`ToolbarFieldExport Component should render a basic component: basic 1`]
     options={
       [
         {
-          "isDisabled": false,
-          "selected": false,
+          "isDisabled": undefined,
+          "selected": undefined,
           "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
           "value": "json",
         },
