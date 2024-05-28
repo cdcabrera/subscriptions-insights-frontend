@@ -177,16 +177,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "instances",
- *               "filters": {},
- *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
+ *           "status": "partial"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -195,16 +186,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
+ *           "status": "complete"
  *         }
  *       ]
  *     }
@@ -220,16 +202,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "instances",
- *               "filters": {},
- *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
+ *           "status": "partial"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -238,16 +211,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
+ *           "status": "partial"
  *         }
  *       ]
  *     }
@@ -263,16 +227,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "instances",
- *               "filters": {},
- *               "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
+ *           "status": "complete"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -281,16 +236,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "completed",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "completed"
- *             }
- *           ]
+ *           "status": "complete"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -299,16 +245,7 @@ const getExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial",
- *           "sources": [
- *             {
- *               "application": "subscriptions",
- *               "resource": "subscriptions",
- *               "filters": {},
- *               "id": "x123456-5717-4562-b3fc-2c963f66afa6",
- *               "status": "pending"
- *             }
- *           ]
+ *           "status": "partial"
  *         }
  *       ]
  *     }
@@ -340,16 +277,7 @@ const getExport = (id, options = {}) => {
  *       "completed_at": "2024-01-24T16:20:31.229Z",
  *       "expires_at": "2024-01-24T16:20:31.229Z",
  *       "format": "json",
- *       "status": "partial",
- *       "sources": [
- *         {
- *           "application": "subscriptions",
- *           "resource": "instances",
- *           "filters": {},
- *           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
- *           "status": "pending"
- *         }
- *       ]
+ *       "status": "partial"
  *     }
  *
  * @apiErrorExample {json} Error-Response:
@@ -398,6 +326,10 @@ const getExportStatus = (id, params = {}, options = {}) => {
   });
 };
 
+/**
+ * Note: 202 status appears to be only response that returns a sources list, OR it's variable depending on
+ *     partial/pending status.
+ */
 /**
  * @apiMock {ForceStatus} 202
  * @api {post} /api/export/v1/exports

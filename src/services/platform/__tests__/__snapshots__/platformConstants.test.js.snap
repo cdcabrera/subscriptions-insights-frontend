@@ -43,7 +43,7 @@ exports[`Platform Constants should have specific properties: all exported consta
     "RESOURCE": "resource",
   },
   "PLATFORM_API_EXPORT_STATUS_TYPES": {
-    "COMPLETED": "completed",
+    "COMPLETE": "complete",
     "FAILED": "failed",
     "PARTIAL": "partial",
     "PENDING": "pending",
@@ -117,7 +117,7 @@ exports[`Platform Constants should have specific properties: all exported consta
       "RESOURCE": "resource",
     },
     "PLATFORM_API_EXPORT_STATUS_TYPES": {
-      "COMPLETED": "completed",
+      "COMPLETE": "complete",
       "FAILED": "failed",
       "PARTIAL": "partial",
       "PENDING": "pending",
@@ -192,7 +192,7 @@ exports[`Platform Constants should have specific properties: all exported consta
       "RESOURCE": "resource",
     },
     "PLATFORM_API_EXPORT_STATUS_TYPES": {
-      "COMPLETED": "completed",
+      "COMPLETE": "complete",
       "FAILED": "failed",
       "PARTIAL": "partial",
       "PENDING": "pending",
@@ -271,7 +271,7 @@ exports[`Platform Constants should have specific properties: specific constants 
     "RESOURCE": "resource",
   },
   "PLATFORM_API_EXPORT_STATUS_TYPES": {
-    "COMPLETED": "completed",
+    "COMPLETE": "complete",
     "FAILED": "failed",
     "PARTIAL": "partial",
     "PENDING": "pending",

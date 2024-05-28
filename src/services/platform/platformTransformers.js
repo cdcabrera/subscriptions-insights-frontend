@@ -61,7 +61,7 @@ const exports = response => {
 
     if (
       updatedStr === PLATFORM_API_EXPORT_STATUS_TYPES.FAILED ||
-      updatedStr === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETED
+      updatedStr === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE
     ) {
       updatedStatus = updatedStr;
     }

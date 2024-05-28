@@ -56,11 +56,11 @@ const PLATFORM_API_EXPORT_FILENAME_PREFIX = 'swatch';
 /**
  * Platform Export, available status types.
  *
- * @type {{COMPLETED: string, FAILED: string, RUNNING: string, PARTIAL: string, PENDING: string}}
+ * @type {{COMPLETE: string, FAILED: string, RUNNING: string, PARTIAL: string, PENDING: string}}
  */
 const PLATFORM_API_EXPORT_STATUS_TYPES = {
   FAILED: 'failed',
-  COMPLETED: 'completed',
+  COMPLETE: 'complete',
   PARTIAL: 'partial',
   PENDING: 'pending',
   RUNNING: 'running'

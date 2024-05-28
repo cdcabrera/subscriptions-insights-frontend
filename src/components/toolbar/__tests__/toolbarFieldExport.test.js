@@ -110,7 +110,7 @@ describe('ToolbarFieldExport Component', () => {
                 data: {
                   isAnythingPending: false,
                   loremIpsum: {
-                    status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETED,
+                    status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE,
                     format: 'dolorSit'
                   }
                 }
