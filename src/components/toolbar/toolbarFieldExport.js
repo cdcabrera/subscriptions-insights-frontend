@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
-import { useMount } from 'react-use';
+import { useMount, useShallowCompareEffect } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
@@ -51,17 +51,24 @@ const useExportStatus = ({
 
   const isPolling = data?.data?.isAnythingPending === true || undefined;
   const isCompleted = data?.data?.isAnythingPending === false || undefined;
+  const productCompletedFormats = [];
   const productPollingFormats = [];
-  let isProductPolling = false;
+  let isProductPolling = data?.data ? false : undefined;
 
-  if (isPolling && Array.isArray(data?.data?.[productId])) {
-    const pollingResults = data?.data?.[productId]
+  if (Array.isArray(data?.data?.[productId])) {
+    const productCompletedResults = data?.data?.[productId].filter(
+      ({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE
+    );
+
+    productCompletedFormats.push(...productCompletedResults);
+
+    const pendingProductResults = data?.data?.[productId]
       .filter(({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
       .map(({ format: productFormat }) => productFormat);
 
-    productPollingFormats.push(...pollingResults);
+    productPollingFormats.push(...pendingProductResults);
 
-    if (pollingResults.length) {
+    if (pendingProductResults.length) {
       isProductPolling = true;
     }
   }
@@ -70,6 +77,7 @@ const useExportStatus = ({
     isCompleted,
     isPolling,
     isProductPolling,
+    productCompletedFormats,
     productPollingFormats
   };
 };
@@ -93,7 +101,7 @@ const useExport = ({
   useExportStatus: useAliasExportStatus = useExportStatus
 } = {}) => {
   const dispatch = useAliasDispatch();
-  const { isPolling } = useAliasExportStatus();
+  const { isProductPolling } = useAliasExportStatus();
 
   /**
    * A polling response validator
@@ -109,7 +117,7 @@ const useExport = ({
     ({ id, data } = {}) => {
       const updatedOptions = {};
 
-      if (!isPolling) {
+      if (!isProductPolling) {
         updatedOptions.poll = {
           validate
         };
@@ -123,13 +131,13 @@ const useExport = ({
         return getExport(id)(dispatch);
       }
 
-      if (isPolling === undefined) {
+      if (isProductPolling === undefined) {
         return getExportStatus(updatedOptions)(dispatch);
       }
 
       return undefined;
     },
-    [createExport, dispatch, getExport, getExportStatus, isPolling, validate]
+    [createExport, dispatch, getExport, getExportStatus, isProductPolling, validate]
   );
 };
 
@@ -188,8 +196,8 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
-  const { isProductPolling, productPollingFormats = [] } = useAliasExportStatus();
-  const checkExport = useAliasExport();
+  const { isProductPolling, productCompletedFormats = [], productPollingFormats = [] } = useAliasExportStatus();
+  const checkGetExport = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
@@ -203,8 +211,14 @@ const ToolbarFieldExport = ({
   }));
 
   useMount(() => {
-    checkExport();
+    checkGetExport();
   });
+
+  useShallowCompareEffect(() => {
+    productCompletedFormats.forEach(({ id }) => {
+      checkGetExport({ id });
+    });
+  }, [productCompletedFormats]);
 
   return (
     <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPolling && 'loading'] })}>

@@ -109,6 +109,42 @@ const hideGlobalFilter = async (isHidden = true) => {
 };
 
 /**
+ * @apiMock {ForceStatus} 202
+ * @api {delete} /api/export/v1/exports/:id
+ * @apiDescription Create an export
+ *
+ * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 202 OK
+ *     {}
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *     }
+ */
+/**
+ * Delete an export. Useful for clean up. Helps avoid having to deal with export lists and most recent exports.
+ *
+ * @param {string} id ID of export to delete
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
+const deleteExport = (id, options = {}) => {
+  const { cache = false, cancel = false, cancelId } = options;
+  return axiosServiceCall({
+    url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
+    method: 'delete',
+    cache,
+    cancel,
+    cancelId
+  });
+};
+
+/**
  * @api {get} /api/export/v1/exports/:id
  * @apiDescription Get an export by id
  *
@@ -147,15 +183,17 @@ const getExport = (id, options = {}) => {
     cache,
     cancel,
     cancelId
-  }).then(
-    success =>
-      (helpers.TEST_MODE && success.data) ||
-      downloadHelpers.downloadData({
-        data: success.data,
-        fileName: `swatch_report_${id}.tar.gz`,
-        fileType: 'application/gzip'
-      })
-  );
+  })
+    .then(
+      success =>
+        (helpers.TEST_MODE && success.data) ||
+        downloadHelpers.downloadData({
+          data: success.data,
+          fileName: `swatch_report_${id}.tar.gz`,
+          fileType: 'application/gzip'
+        })
+    )
+    .then(() => deleteExport(id));
 };
 
 /**
@@ -395,6 +433,7 @@ const postExport = (data = {}, options = {}) => {
 };
 
 const platformServices = {
+  deleteExport,
   getExport,
   getExportStatus,
   getUser,
@@ -411,6 +450,7 @@ helpers.browserExpose({ platformServices });
 export {
   platformServices as default,
   platformServices,
+  deleteExport,
   getExport,
   getExportStatus,
   getUser,
