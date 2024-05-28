@@ -253,6 +253,7 @@ page or wait the "maxAge".
     * [~PLATFORM_API_EXPORT_STATUS_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_EXPORT_STATUS_TYPES) : <code>Object</code>
     * [~PLATFORM_API_EXPORT_SOURCE_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_EXPORT_SOURCE_TYPES) : <code>Object</code>
     * [~PLATFORM_API_EXPORT_POST_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_EXPORT_POST_TYPES) : <code>Object</code>
+    * [~PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES) : <code>Object</code>
     * [~PLATFORM_API_EXPORT_RESPONSE_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_EXPORT_RESPONSE_TYPES) : <code>Object</code>
     * [~PLATFORM_API_RESPONSE_USER_ENTITLEMENTS](#Platform.module_PlatformConstants..PLATFORM_API_RESPONSE_USER_ENTITLEMENTS) : <code>string</code>
     * [~PLATFORM_API_RESPONSE_USER_ENTITLEMENTS_APP_TYPES](#Platform.module_PlatformConstants..PLATFORM_API_RESPONSE_USER_ENTITLEMENTS_APP_TYPES) : <code>Object</code>
@@ -313,6 +314,12 @@ Platform Export, available response, POST source types.
 
 ### PlatformConstants~PLATFORM\_API\_EXPORT\_POST\_TYPES : <code>Object</code>
 Platform Export, available POST types.
+
+**Kind**: inner constant of [<code>PlatformConstants</code>](#Platform.module_PlatformConstants)  
+<a name="Platform.module_PlatformConstants..PLATFORM_API_EXPORT_POST_SUBSCRIPTIONS_FILTER_TYPES"></a>
+
+### PlatformConstants~PLATFORM\_API\_EXPORT\_POST\_SUBSCRIPTIONS\_FILTER\_TYPES : <code>Object</code>
+Platform Export, available SUBSCRIPTION FILTER POST types.
 
 **Kind**: inner constant of [<code>PlatformConstants</code>](#Platform.module_PlatformConstants)  
 <a name="Platform.module_PlatformConstants..PLATFORM_API_EXPORT_RESPONSE_TYPES"></a>
