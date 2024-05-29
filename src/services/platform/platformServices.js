@@ -180,7 +180,7 @@ const deleteExport = (id, options = {}) => {
 const getExport = (id, options = {}) => {
   const {
     cache = false,
-    cancel = true,
+    cancel = false,
     cancelId,
     fileName = `swatch_report_${id}`,
     fileType = 'application/gzip'
@@ -352,7 +352,6 @@ const getExportStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
-    // cancelId = 'export-status',
     cancelId,
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports],
@@ -421,7 +420,7 @@ const getExportStatus = (id, params = {}, options = {}) => {
 const postExport = (data = {}, options = {}) => {
   const {
     cache = false,
-    cancel = true,
+    cancel = false,
     cancelId, // = 'export-status',
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports],
