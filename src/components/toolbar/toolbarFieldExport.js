@@ -10,8 +10,7 @@ import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
   PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
-  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES,
-  PLATFORM_API_EXPORT_STATUS_TYPES
+  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES
 } from '../../services/platform/platformConstants';
 import { translate } from '../i18n/i18n';
 
@@ -49,57 +48,63 @@ const useExportStatus = ({
   const { productId } = useAliasProduct();
   const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
 
-  const isPolling = data?.data?.isAnythingPending === true || undefined;
-  const isCompleted = data?.data?.isAnythingPending === false || undefined;
-  const allCompletedFormats = [];
+  /*
+   * const isPolling = data?.data?.isAnythingPending === true || undefined;
+   * const isCompleted = data?.data?.isAnythingPending === false || undefined;
+   */
+  const isPending = data?.data?.isAnythingPending;
+  const isCompleted = data?.data?.isAnythingCompleted;
+  const allCompletedIds = [];
   const productCompletedFormats = [];
-  const productPollingFormats = [];
+  const productPendingFormats = [];
   // let isProductPolling = data?.data ? false : undefined;
-  let isProductPolling = false;
+  let isProductPending = false;
 
-  if (Array.isArray(data?.data?.completed)) {
-    allCompletedFormats.push(...data.data.completed);
+  if (isCompleted && Array.isArray(data?.data?.completed)) {
+    allCompletedIds.push(...data.data.completed.map(({ id }) => id));
   }
 
-  if (Array.isArray(data?.data?.[productId]?.completed)) {
-    productCompletedFormats.push(...data.data[productId].completed);
+  if (isCompleted && Array.isArray(data?.data?.products?.[productId]?.completed)) {
+    productCompletedFormats.push(...data.data.products[productId].completed);
   }
 
-  if (Array.isArray(data?.data?.[productId]?.pending)) {
-    productPollingFormats.push(...data.data[productId].pending.map(({ format: productFormat }) => productFormat));
+  if (isPending && Array.isArray(data?.data?.products?.[productId]?.pending)) {
+    productPendingFormats.push(
+      ...data.data.products[productId].pending.map(({ format: productFormat }) => productFormat)
+    );
 
-    if (productPollingFormats.length) {
-      isProductPolling = true;
+    if (productPendingFormats.length) {
+      isProductPending = true;
     }
   }
 
   /*
-  if (Array.isArray(data?.data?.[productId])) {
-    const productCompletedResults = data?.data?.[productId].filter(
-      ({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE
-    );
-
-    productCompletedFormats.push(...productCompletedResults);
-
-    const pendingProductResults = data?.data?.[productId]
-      .filter(({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
-      .map(({ format: productFormat }) => productFormat);
-
-    productPollingFormats.push(...pendingProductResults);
-
-    if (pendingProductResults.length) {
-      isProductPolling = true;
-    }
-  }
-  */
+   *if (Array.isArray(data?.data?.[productId])) {
+   *  const productCompletedResults = data?.data?.[productId].filter(
+   *    ({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE
+   *  );
+   *
+   *  productCompletedFormats.push(...productCompletedResults);
+   *
+   *  const pendingProductResults = data?.data?.[productId]
+   *    .filter(({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
+   *    .map(({ format: productFormat }) => productFormat);
+   *
+   *  productPollingFormats.push(...pendingProductResults);
+   *
+   *  if (pendingProductResults.length) {
+   *    isProductPolling = true;
+   *  }
+   *}
+   */
 
   return {
-    allCompletedFormats,
+    allCompletedIds,
     isCompleted,
-    isPolling,
-    isProductPolling,
+    isPending,
+    isProductPending,
     productCompletedFormats,
-    productPollingFormats
+    productPendingFormats
   };
 };
 
@@ -122,44 +127,90 @@ const useExport = ({
   useExportStatus: useAliasExportStatus = useExportStatus
 } = {}) => {
   const dispatch = useAliasDispatch();
-  const { isPolling } = useAliasExportStatus();
+  const { isPending } = useAliasExportStatus();
 
   /**
    * A polling response validator
    *
    * @type {Function}
    */
-  const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
+  const validate = useCallback(response => {
+    console.log('>>>> VALIDATOR', response);
+    return response?.data?.data?.isAnythingPending === false;
+  }, []);
 
   /**
    * Create, or get, an export while detecting, or setting up, polling
    */
-  return useCallback(
-    ({ id, data } = {}) => {
+  const create = useCallback(
+    data => {
       const updatedOptions = {};
 
-      if (!isPolling) {
+      if (!isPending) {
         updatedOptions.poll = {
           validate
         };
       }
 
-      if (data) {
-        return createExport(data, updatedOptions)(dispatch);
-      }
-
-      if (id) {
-        return getExport(id)(dispatch);
-      }
-
-      if (isPolling === undefined) {
-        return getExportStatus(updatedOptions)(dispatch);
-      }
-
-      return undefined;
+      createExport(data, updatedOptions)(dispatch);
     },
-    [createExport, dispatch, getExport, getExportStatus, isPolling, validate]
+    [createExport, dispatch, isPending, validate]
   );
+
+  /**
+   * Create, or get, an export while detecting, or setting up, polling
+   */
+  const check = useCallback(() => {
+    const updatedOptions = {};
+
+    if (!isPending) {
+      updatedOptions.poll = {
+        validate
+      };
+    }
+
+    getExportStatus(updatedOptions)(dispatch);
+  }, [dispatch, getExportStatus, isPending, validate]);
+
+  /**
+   * Create, or get, an export while detecting, or setting up, polling
+   */
+  const getById = useCallback(id => getExport(id)(dispatch), [dispatch, getExport]);
+
+  return {
+    checkExport: check,
+    createExport: create,
+    getExport: getById
+  };
+
+  /*
+   *return useCallback(
+   *  ({ id, data } = {}) => {
+   *    const updatedOptions = {};
+   *
+   *    if (!isPending) {
+   *      updatedOptions.poll = {
+   *        validate
+   *      };
+   *    }
+   *
+   *    if (data) {
+   *      return createExport(data, updatedOptions)(dispatch);
+   *    }
+   *
+   *    if (id) {
+   *      return getExport(id)(dispatch);
+   *    }
+   *
+   *    if (isPending) {
+   *      return getExportStatus(updatedOptions)(dispatch);
+   *    }
+   *
+   *    return undefined;
+   *  },
+   *  [createExport, dispatch, getExport, getExportStatus, isPending, validate]
+   *);
+   */
 };
 
 /**
@@ -176,7 +227,7 @@ const useOnSelect = ({
   useProduct: useAliasProduct = useProduct,
   useProductExportQuery: useAliasProductExportQuery = useProductExportQuery
 } = {}) => {
-  const createExport = useAliasExport();
+  const { createExport } = useAliasExport();
   const { productId } = useAliasProduct();
   const exportQuery = useAliasProductExportQuery();
 
@@ -191,8 +242,7 @@ const useOnSelect = ({
       }
     ];
 
-    const data = { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources };
-    createExport({ data });
+    createExport({ format: value, name: `${EXPORT_PREFIX}-${productId}`, sources });
   };
 };
 
@@ -217,32 +267,32 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
-  const { isProductPolling, allCompletedFormats = [], productPollingFormats = [] } = useAliasExportStatus();
-  const checkGetExport = useAliasExport();
+  const { isProductPending, allCompletedIds = [], productPendingFormats = [] } = useAliasExportStatus();
+  const { checkExport, getExport } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isProductPolling &&
-        productPollingFormats?.includes(option.value) &&
+      (isProductPending &&
+        productPendingFormats?.includes(option.value) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isProductPolling && productPollingFormats?.includes(option.value),
-    isDisabled: isProductPolling && productPollingFormats?.includes(option.value)
+    selected: isProductPending && productPendingFormats?.includes(option.value),
+    isDisabled: isProductPending && productPendingFormats?.includes(option.value)
   }));
 
   useMount(() => {
-    checkGetExport();
+    checkExport();
   });
 
   useShallowCompareEffect(() => {
-    allCompletedFormats.forEach(({ id }) => {
-      checkGetExport({ id });
+    allCompletedIds.forEach(id => {
+      getExport(id);
     });
-  }, [allCompletedFormats]);
+  }, [allCompletedIds]);
 
   return (
-    <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPolling && 'loading'] })}>
+    <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPending && 'loading'] })}>
       <Select
         isDropdownButton
         aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}

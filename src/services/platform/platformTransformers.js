@@ -32,6 +32,12 @@ const exports = response => {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]: status
   } = response || {};
 
+  updatedResponse.data.isAnythingPending = false;
+  updatedResponse.data.isAnythingCompleted = false;
+  updatedResponse.data.pending ??= [];
+  updatedResponse.data.completed ??= [];
+  updatedResponse.data.products = {};
+
   /**
    * Pull a product id from an export name. Fallback filtering for product identifiers.
    *
@@ -82,10 +88,6 @@ const exports = response => {
     const productId = getProductId(exportName);
     const focusedStatus = getStatus(exportStatus);
 
-    if (updatedResponse.data.isAnythingPending !== true) {
-      updatedResponse.data.isAnythingPending = focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING;
-    }
-
     const updatedExportData = {
       format: exportFormat,
       id: exportId,
@@ -94,22 +96,17 @@ const exports = response => {
       status: focusedStatus
     };
 
-    updatedResponse.data.pending ??= [];
-    updatedResponse.data.completed ??= [];
-    updatedResponse.data[productId] ??= {};
-    updatedResponse.data[productId].pending ??= [];
-    updatedResponse.data[productId].completed ??= [];
+    updatedResponse.data.products[productId] ??= {};
+    updatedResponse.data.products[productId].pending ??= [];
+    updatedResponse.data.products[productId].completed ??= [];
 
     if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
       updatedResponse.data.pending.push(updatedExportData);
-      updatedResponse.data[productId].pending.push(updatedExportData);
+      updatedResponse.data.products[productId].pending.push(updatedExportData);
     } else if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE) {
       updatedResponse.data.completed.push(updatedExportData);
-      updatedResponse.data[productId].completed.push(updatedExportData);
+      updatedResponse.data.products[productId].completed.push(updatedExportData);
     }
-
-    // updatedResponse.data[productId] ??= [];
-    // updatedResponse.data[productId].push(updatedExportData);
   };
 
   if (Array.isArray(data)) {
@@ -130,6 +127,9 @@ const exports = response => {
   } else if (id && status && new RegExp(`^${EXPORT_PREFIX}`, 'i').test(name)) {
     restructureResponse({ exportName: name, exportStatus: status, exportFormat: format, exportId: id });
   }
+
+  updatedResponse.data.isAnythingPending = updatedResponse.data.pending.length > 0;
+  updatedResponse.data.isAnythingCompleted = updatedResponse.data.completed.length > 0;
 
   return updatedResponse;
 };
