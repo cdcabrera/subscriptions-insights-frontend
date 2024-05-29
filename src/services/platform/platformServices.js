@@ -182,7 +182,7 @@ const getExport = (id, options = {}) => {
     cache = false,
     cancel = true,
     cancelId,
-    fileName = `swatch_report_${id}.tar.gz`,
+    fileName = `swatch_report_${id}`,
     fileType = 'application/gzip'
   } = options;
   return axiosServiceCall({
@@ -197,7 +197,7 @@ const getExport = (id, options = {}) => {
         (helpers.TEST_MODE && success.data) ||
         downloadHelpers.downloadData({
           data: success.data,
-          fileName,
+          fileName: `${fileName}.tar.gz`,
           fileType
         })
     )

@@ -52,12 +52,13 @@ const authorizeUser = appName => dispatch =>
  * Get a specific export download package.
  *
  * @param {string} id
+ * @param {string} fileName
  * @returns {Function}
  */
-const getExport = id => dispatch =>
+const getExport = (id, fileName) => dispatch =>
   dispatch({
     type: platformTypes.GET_PLATFORM_EXPORT,
-    payload: platformServices.getExport(id)
+    payload: platformServices.getExport(id, { fileName })
   });
 
 /**
