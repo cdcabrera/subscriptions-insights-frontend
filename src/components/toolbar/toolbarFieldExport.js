@@ -47,13 +47,16 @@ const useExportStatus = ({
   useProduct: useAliasProduct = useProduct,
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
 } = {}) => {
-  const [isPendingNotification, setIsPendingNotification] = useState(false);
-  const [isCompletedNotification, setIsCompletedNotification] = useState(false);
+  /*
+   * const [isPendingNotification, setIsPendingNotification] = useState(false);
+   * const [isCompletedNotification, setIsCompletedNotification] = useState(false);
+   */
   const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
   const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
 
   const isPending = data?.data?.isAnythingPending;
+  const pendingDownloads = data?.data?.pending;
   const isCompleted = data?.data?.isAnythingCompleted;
   const allCompletedIds = [];
   const productPendingFormats = [];
@@ -73,45 +76,45 @@ const useExportStatus = ({
     }
   }
 
-  useEffect(() => {
-    if (!isPendingNotification && isPending) {
+  useShallowCompareEffect(() => {
+    if (isPending) {
       dispatch([
         reduxActions.platform.removeNotification('swatch-downloads-pending'),
         reduxActions.platform.addNotification({
           id: 'swatch-downloads-pending',
           variant: 'info',
-          title: 'pending',
-          description: 'pending',
+          title: 'Generating reports in progress',
+          description: `${pendingDownloads.length} reports are being generated.`,
           dismissable: false,
           autoDismiss: false
         })
       ]);
-      setIsPendingNotification(true);
-    } else if (isPendingNotification && !isPending) {
+    } else {
       dispatch([reduxActions.platform.removeNotification('swatch-downloads-pending')]);
-      setIsPendingNotification(false);
     }
-  }, [dispatch, isPending, isPendingNotification]);
+  }, [dispatch, isPending, pendingDownloads]);
 
-  useEffect(() => {
-    if (!isCompletedNotification && isCompleted) {
-      dispatch([
-        reduxActions.platform.removeNotification('swatch-downloads-completed'),
-        reduxActions.platform.addNotification({
-          id: 'swatch-downloads-completed',
-          variant: 'success',
-          title: 'fulfilled',
-          description: 'fulfilled',
-          dismissable: true,
-          autoDismiss: true
-        })
-      ]);
-      setIsCompletedNotification(true);
-    } else if (isCompletedNotification && !isCompleted) {
-      dispatch([reduxActions.platform.removeNotification('swatch-downloads-completed')]);
-      setIsCompletedNotification(false);
-    }
-  }, [dispatch, isCompleted, isCompletedNotification]);
+  /*
+   *useEffect(() => {
+   *  if (!isCompletedNotification && isCompleted) {
+   *    dispatch([
+   *      reduxActions.platform.removeNotification('swatch-downloads-completed'),
+   *      reduxActions.platform.addNotification({
+   *        id: 'swatch-downloads-completed',
+   *        variant: 'success',
+   *        title: 'fulfilled',
+   *        description: 'fulfilled',
+   *        dismissable: true,
+   *        autoDismiss: true
+   *      })
+   *    ]);
+   *    setIsCompletedNotification(true);
+   *  } else if (isCompletedNotification && !isCompleted) {
+   *    dispatch([reduxActions.platform.removeNotification('swatch-downloads-completed')]);
+   *    setIsCompletedNotification(false);
+   *  }
+   *}, [dispatch, isCompleted, isCompletedNotification]);
+   */
 
   return {
     allCompletedIds,
@@ -188,7 +191,23 @@ const useExport = ({
   /**
    * Get an export by identifier
    */
-  const getExport = useCallback(id => getAliasExport(id)(dispatch), [dispatch, getAliasExport]);
+  const getExport = useCallback(
+    id => {
+      dispatch([
+        getAliasExport(id),
+        reduxActions.platform.removeNotification(id),
+        reduxActions.platform.addNotification({
+          id,
+          variant: 'success',
+          title: `Downloading report ${id}`,
+          // description: `Downloading report ${id}`,
+          dismissable: true,
+          autoDismiss: true
+        })
+      ]);
+    },
+    [dispatch, getAliasExport]
+  );
 
   return {
     checkExports,
@@ -274,14 +293,6 @@ const ToolbarFieldExport = ({
       getExport(id);
     });
   }, [allCompletedIds]);
-
-  reduxActions.platform.addNotification({
-    variant: 'info',
-    title: 'pending',
-    description: 'pending',
-    dismissable: true,
-    autoDismiss: true
-  });
 
   return (
     <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPending && 'loading'] })}>
