@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useMount, useShallowCompareEffect } from 'react-use';
@@ -36,15 +36,20 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  * Aggregated export status
  *
  * @param {object} options
+ * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
  * @param {Function} options.useSelector
  * @returns {{isProductPending: boolean, productPendingFormats: Array<string>, allCompletedIds: Array<string>,
  *     isPending: boolean, isCompleted: boolean}}
  */
 const useExportStatus = ({
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct,
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
 } = {}) => {
+  const [isPendingNotification, setIsPendingNotification] = useState(false);
+  const [isCompletedNotification, setIsCompletedNotification] = useState(false);
+  const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
   const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
 
@@ -68,27 +73,45 @@ const useExportStatus = ({
     }
   }
 
-  if (isPending) {
-    console.log('>>>> TOAST PENDING');
-    reduxActions.platform.addNotification({
-      variant: 'info',
-      title: 'pending',
-      description: 'pending',
-      dismissable: true,
-      autoDismiss: true
-    });
-  }
+  useEffect(() => {
+    if (!isPendingNotification && isPending) {
+      dispatch([
+        reduxActions.platform.removeNotification('swatch-downloads-pending'),
+        reduxActions.platform.addNotification({
+          id: 'swatch-downloads-pending',
+          variant: 'info',
+          title: 'pending',
+          description: 'pending',
+          dismissable: false,
+          autoDismiss: false
+        })
+      ]);
+      setIsPendingNotification(true);
+    } else if (isPendingNotification && !isPending) {
+      dispatch([reduxActions.platform.removeNotification('swatch-downloads-pending')]);
+      setIsPendingNotification(false);
+    }
+  }, [dispatch, isPending, isPendingNotification]);
 
-  if (isCompleted) {
-    console.log('>>>> TOAST COMPLETED');
-    reduxActions.platform.addNotification({
-      variant: 'success',
-      title: 'fulfilled',
-      description: 'fulfilled',
-      dismissable: true,
-      autoDismiss: true
-    });
-  }
+  useEffect(() => {
+    if (!isCompletedNotification && isCompleted) {
+      dispatch([
+        reduxActions.platform.removeNotification('swatch-downloads-completed'),
+        reduxActions.platform.addNotification({
+          id: 'swatch-downloads-completed',
+          variant: 'success',
+          title: 'fulfilled',
+          description: 'fulfilled',
+          dismissable: true,
+          autoDismiss: true
+        })
+      ]);
+      setIsCompletedNotification(true);
+    } else if (isCompletedNotification && !isCompleted) {
+      dispatch([reduxActions.platform.removeNotification('swatch-downloads-completed')]);
+      setIsCompletedNotification(false);
+    }
+  }, [dispatch, isCompleted, isCompletedNotification]);
 
   return {
     allCompletedIds,
