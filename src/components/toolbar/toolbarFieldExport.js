@@ -68,6 +68,28 @@ const useExportStatus = ({
     }
   }
 
+  if (isPending) {
+    console.log('>>>> TOAST PENDING');
+    reduxActions.platform.addNotification({
+      variant: 'info',
+      title: 'pending',
+      description: 'pending',
+      dismissable: true,
+      autoDismiss: true
+    });
+  }
+
+  if (isCompleted) {
+    console.log('>>>> TOAST COMPLETED');
+    reduxActions.platform.addNotification({
+      variant: 'success',
+      title: 'fulfilled',
+      description: 'fulfilled',
+      dismissable: true,
+      autoDismiss: true
+    });
+  }
+
   return {
     allCompletedIds,
     isCompleted,
@@ -229,6 +251,14 @@ const ToolbarFieldExport = ({
       getExport(id);
     });
   }, [allCompletedIds]);
+
+  reduxActions.platform.addNotification({
+    variant: 'info',
+    title: 'pending',
+    description: 'pending',
+    dismissable: true,
+    autoDismiss: true
+  });
 
   return (
     <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPending && 'loading'] })}>
