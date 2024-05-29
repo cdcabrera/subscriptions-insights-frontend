@@ -15,7 +15,7 @@ import {
 import { translate } from '../i18n/i18n';
 
 /**
- * A standalone export select/dropdown filter.
+ * A standalone export select/dropdown filter and download hooks.
  *
  * @memberof Toolbar
  * @module ToolbarFieldExport
@@ -38,8 +38,8 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  * @param {object} options
  * @param {Function} options.useProduct
  * @param {Function} options.useSelector
- * @returns {{isPolling: boolean, isProductPolling: boolean, productPollingFormats: Array<string>,
- *     isCompleted: boolean}}
+ * @returns {{isProductPending: boolean, productPendingFormats: Array<string>, allCompletedIds: Array<string>,
+ *     isPending: boolean, isCompleted: boolean}}
  */
 const useExportStatus = ({
   useProduct: useAliasProduct = useProduct,
@@ -48,24 +48,14 @@ const useExportStatus = ({
   const { productId } = useAliasProduct();
   const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
 
-  /*
-   * const isPolling = data?.data?.isAnythingPending === true || undefined;
-   * const isCompleted = data?.data?.isAnythingPending === false || undefined;
-   */
   const isPending = data?.data?.isAnythingPending;
   const isCompleted = data?.data?.isAnythingCompleted;
   const allCompletedIds = [];
-  const productCompletedFormats = [];
   const productPendingFormats = [];
-  // let isProductPolling = data?.data ? false : undefined;
   let isProductPending = false;
 
   if (isCompleted && Array.isArray(data?.data?.completed)) {
     allCompletedIds.push(...data.data.completed.map(({ id }) => id));
-  }
-
-  if (isCompleted && Array.isArray(data?.data?.products?.[productId]?.completed)) {
-    productCompletedFormats.push(...data.data.products[productId].completed);
   }
 
   if (isPending && Array.isArray(data?.data?.products?.[productId]?.pending)) {
@@ -78,32 +68,11 @@ const useExportStatus = ({
     }
   }
 
-  /*
-   *if (Array.isArray(data?.data?.[productId])) {
-   *  const productCompletedResults = data?.data?.[productId].filter(
-   *    ({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE
-   *  );
-   *
-   *  productCompletedFormats.push(...productCompletedResults);
-   *
-   *  const pendingProductResults = data?.data?.[productId]
-   *    .filter(({ status: productStatus }) => productStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING)
-   *    .map(({ format: productFormat }) => productFormat);
-   *
-   *  productPollingFormats.push(...pendingProductResults);
-   *
-   *  if (pendingProductResults.length) {
-   *    isProductPolling = true;
-   *  }
-   *}
-   */
-
   return {
     allCompletedIds,
     isCompleted,
     isPending,
     isProductPending,
-    productCompletedFormats,
     productPendingFormats
   };
 };
@@ -117,12 +86,12 @@ const useExportStatus = ({
  * @param {Function} options.getExportStatus
  * @param {Function} options.useDispatch
  * @param {Function} options.useExportStatus
- * @returns {Function}
+ * @returns {{getExport: Function, createExport: Function, checkExports: Function}}
  */
 const useExport = ({
-  createExport = reduxActions.platform.createExport,
-  getExport = reduxActions.platform.getExport,
-  getExportStatus = reduxActions.platform.getExportStatus,
+  createExport: createAliasExport = reduxActions.platform.createExport,
+  getExport: getAliasExport = reduxActions.platform.getExport,
+  getExportStatus: getAliasExportStatus = reduxActions.platform.getExportStatus,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useExportStatus: useAliasExportStatus = useExportStatus
 } = {}) => {
@@ -134,15 +103,13 @@ const useExport = ({
    *
    * @type {Function}
    */
-  const validate = useCallback(response => {
-    console.log('>>>> VALIDATOR', response);
-    return response?.data?.data?.isAnythingPending === false;
-  }, []);
+  const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
 
   /**
-   * Create, or get, an export while detecting, or setting up, polling
+   * Setup, or create, an export. And setup polling if there are NOT any pending status indicators, the Validator will
+   * resolve automatically.
    */
-  const create = useCallback(
+  const createExport = useCallback(
     data => {
       const updatedOptions = {};
 
@@ -152,15 +119,16 @@ const useExport = ({
         };
       }
 
-      createExport(data, updatedOptions)(dispatch);
+      createAliasExport(data, updatedOptions)(dispatch);
     },
-    [createExport, dispatch, isPending, validate]
+    [createAliasExport, dispatch, isPending, validate]
   );
 
   /**
-   * Create, or get, an export while detecting, or setting up, polling
+   * Check export status. And setup polling if there are NOT any pending status indicators, the Validator will
+   * resolve automatically.
    */
-  const check = useCallback(() => {
+  const checkExports = useCallback(() => {
     const updatedOptions = {};
 
     if (!isPending) {
@@ -169,48 +137,19 @@ const useExport = ({
       };
     }
 
-    getExportStatus(updatedOptions)(dispatch);
-  }, [dispatch, getExportStatus, isPending, validate]);
+    getAliasExportStatus(updatedOptions)(dispatch);
+  }, [dispatch, getAliasExportStatus, isPending, validate]);
 
   /**
-   * Create, or get, an export while detecting, or setting up, polling
+   * Get an export by identifier
    */
-  const getById = useCallback(id => getExport(id)(dispatch), [dispatch, getExport]);
+  const getExport = useCallback(id => getAliasExport(id)(dispatch), [dispatch, getAliasExport]);
 
   return {
-    checkExport: check,
-    createExport: create,
-    getExport: getById
+    checkExports,
+    createExport,
+    getExport
   };
-
-  /*
-   *return useCallback(
-   *  ({ id, data } = {}) => {
-   *    const updatedOptions = {};
-   *
-   *    if (!isPending) {
-   *      updatedOptions.poll = {
-   *        validate
-   *      };
-   *    }
-   *
-   *    if (data) {
-   *      return createExport(data, updatedOptions)(dispatch);
-   *    }
-   *
-   *    if (id) {
-   *      return getExport(id)(dispatch);
-   *    }
-   *
-   *    if (isPending) {
-   *      return getExportStatus(updatedOptions)(dispatch);
-   *    }
-   *
-   *    return undefined;
-   *  },
-   *  [createExport, dispatch, getExport, getExportStatus, isPending, validate]
-   *);
-   */
 };
 
 /**
@@ -247,7 +186,7 @@ const useOnSelect = ({
 };
 
 /**
- * Display an export/download field with options.
+ * Display an export/download field with options. Check and download available exports.
  *
  * @fires onSelect
  * @param {object} props
@@ -268,7 +207,7 @@ const ToolbarFieldExport = ({
   useOnSelect: useAliasOnSelect
 }) => {
   const { isProductPending, allCompletedIds = [], productPendingFormats = [] } = useAliasExportStatus();
-  const { checkExport, getExport } = useAliasExport();
+  const { checkExports, getExport } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
@@ -282,7 +221,7 @@ const ToolbarFieldExport = ({
   }));
 
   useMount(() => {
-    checkExport();
+    checkExports();
   });
 
   useShallowCompareEffect(() => {
