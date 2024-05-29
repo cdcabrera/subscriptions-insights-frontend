@@ -91,10 +91,6 @@ const useExportStatus = ({
             context: ['export', 'pending', 'title'],
             count: pendingDownloads.length
           }),
-          // description: t('curiosity-toolbar.notifications', {
-          //  context: ['export', 'pending', 'description'],
-          //   count: pendingDownloads.length
-          // }),
           dismissable: false,
           autoDismiss: false
         })

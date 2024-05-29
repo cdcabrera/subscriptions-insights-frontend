@@ -351,7 +351,7 @@ const getExport = (id, options = {}) => {
 const getExportStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
-    cancel = true,
+    cancel = false,
     cancelId,
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports],
@@ -421,7 +421,7 @@ const postExport = (data = {}, options = {}) => {
   const {
     cache = false,
     cancel = false,
-    cancelId, // = 'export-status',
+    cancelId,
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports],
     ...restOptions
