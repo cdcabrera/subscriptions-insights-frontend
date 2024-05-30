@@ -5,6 +5,7 @@ import {
 } from '@redhat-cloud-services/frontend-components-notifications';
 import { platformTypes } from '../types';
 import { platformServices } from '../../services/platform/platformServices';
+import { translate } from '../../components/i18n/i18n';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -51,16 +52,27 @@ const authorizeUser = appName => dispatch =>
 /**
  * Get a specific export download package.
  *
- * @param {string} id
- * @param {string} fileName
+ * @param {Array} idList
  * @returns {Function}
  */
-const getExport = (id, fileName) => dispatch =>
+const getExport = idList => dispatch =>
   dispatch({
-    type: platformTypes.GET_PLATFORM_EXPORT,
-    payload: platformServices.getExport(id, { fileName })
+    type: platformTypes.SET_PLATFORM_EXPORT_DOWNLOAD,
+    payload: platformServices.getExports(idList)
   });
-
+/*
+ *const updatedId = (Array.isArray(downloads) && downloads) || [downloads];
+ *const multiDispatch = [];
+ *
+ *updatedId.forEach(({ id, fileName }) => {
+ *  multiDispatch.push({
+ *    type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+ *    payload: platformServices.getExport(id, { fileName })
+ *  });
+ *});
+ *
+ *return Promise.all(dispatch(multiDispatch));
+ */
 /**
  * Return a "dispatch ready" export poll status check.
  *
@@ -100,15 +112,42 @@ const getExportStatus =
  * @returns {Function}
  */
 const createExport =
-  (data = {}, options = {}) =>
-  dispatch =>
-    dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.postExport(data, {
-        ...options,
-        poll: { ...options.poll, status: setExportStatus(dispatch) }
+  (id, data = {}, options = {}) =>
+  dispatch => {
+    // const generatedId = helpers.generateHash(data);
+    dispatch(removeNotification('swatch-downloads-pending'));
+
+    dispatch([
+      {
+        type: platformTypes.SET_PLATFORM_EXPORT_CREATE,
+        payload: platformServices.postExport(data, {
+          ...options,
+          poll: {
+            ...options.poll,
+            status: (successResponse, ...args) => {
+              console.log('>>> export success', successResponse);
+
+              dispatch(addNotification({ title: 'hello world' }));
+              setExportStatus(dispatch)(successResponse, ...args);
+            }
+          }
+        }),
+        meta: {
+          id
+        }
+      },
+      addNotification({
+        id: 'swatch-downloads-pending',
+        variant: 'info',
+        title: translate('curiosity-toolbar.notifications', {
+          context: ['export', 'pending', 'title'],
+          count: 1
+        }),
+        dismissable: true,
+        autoDismiss: false
       })
-    });
+    ]);
+  };
 
 /**
  * Hide platform global filter.

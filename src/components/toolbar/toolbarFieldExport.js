@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useMount, useShallowCompareEffect } from 'react-use';
@@ -50,6 +50,7 @@ const useExportStatus = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct,
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
+  // useSelector: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
   /*
    * const [isPendingNotification, setIsPendingNotification] = useState(false);
@@ -58,9 +59,13 @@ const useExportStatus = ({
   const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
   const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
+  // const { data: response = [] } = useAliasSelectorsResponse(({ app }) => app?.exports);
+  // const data = response?.[0] || {};
+
+  console.log('>>>> export response status', data);
 
   const isPending = data?.data?.isAnythingPending;
-  const pendingDownloads = data?.data?.pending;
+  const pendingDownloads = data?.data?.pending || [];
   const isCompleted = data?.data?.isAnythingCompleted;
   const allCompletedDownloads = [];
   const productPendingFormats = [];
@@ -80,10 +85,15 @@ const useExportStatus = ({
     }
   }
 
-  useShallowCompareEffect(() => {
+  console.log('>>>> export HOOK EXPORT STATUS', isPending, isProductPending);
+
+  /*
+  useEffect(() => {
     if (isPending) {
+      console.log('>>>> export PENDING NEW FIRED');
+      dispatch(reduxActions.platform.removeNotification('swatch-downloads-pending'));
+
       dispatch([
-        reduxActions.platform.removeNotification('swatch-downloads-pending'),
         reduxActions.platform.addNotification({
           id: 'swatch-downloads-pending',
           variant: 'info',
@@ -91,14 +101,16 @@ const useExportStatus = ({
             context: ['export', 'pending', 'title'],
             count: pendingDownloads.length
           }),
-          dismissable: false,
+          dismissable: true,
           autoDismiss: false
         })
       ]);
     } else {
+      console.log('>>>> export PENDING REMOVE FIRED');
       dispatch([reduxActions.platform.removeNotification('swatch-downloads-pending')]);
     }
-  }, [dispatch, isPending, pendingDownloads]);
+  }, [dispatch, isPending, pendingDownloads.length, t]);
+   */
 
   return {
     allCompletedDownloads,
@@ -140,39 +152,41 @@ const useExport = ({
   const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
 
   /**
-   * Setup, or create, an export. And setup polling if there are NOT any pending status indicators, the Validator will
-   * resolve automatically.
-   */
-  const createExport = useCallback(
-    data => {
-      const updatedOptions = {};
-
-      if (!isPending) {
-        updatedOptions.poll = {
-          validate
-        };
-      }
-
-      createAliasExport(data, updatedOptions)(dispatch);
-    },
-    [createAliasExport, dispatch, isPending, validate]
-  );
-
-  /**
    * Check export status. And setup polling if there are NOT any pending status indicators, the Validator will
    * resolve automatically.
    */
   const checkExports = useCallback(() => {
-    const updatedOptions = {};
+    getAliasExportStatus({ poll: { validate } })(dispatch);
+  }, [dispatch, getAliasExportStatus, validate]);
 
-    if (!isPending) {
-      updatedOptions.poll = {
-        validate
-      };
-    }
+  /**
+   * Setup, or create, an export. And setup polling if there are NOT any pending status indicators, the Validator will
+   * resolve automatically.
+   */
+  const createExport = useCallback(
+    (id, data) => {
+      // dispatch(reduxActions.platform.removeNotification('swatch-downloads-pending'));
 
-    getAliasExportStatus(updatedOptions)(dispatch);
-  }, [dispatch, getAliasExportStatus, isPending, validate]);
+      dispatch([
+        // createAliasExport(data, { poll: { validate } }),
+        createAliasExport(id, data)
+        /*
+        reduxActions.platform.addNotification({
+          id: 'swatch-downloads-pending',
+          variant: 'info',
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'pending', 'title'],
+            count: 1
+          }),
+          dismissable: true,
+          autoDismiss: false
+        })
+         */
+      ]);
+      // window.setTimeout(() => checkExports(), 1000);
+    },
+    [createAliasExport, dispatch]
+  );
 
   /**
    * Get an export by identifier
@@ -181,24 +195,35 @@ const useExport = ({
    * @param {string} productId
    */
   const getExport = useCallback(
-    (id, productId) => {
-      const fileName = `${getCurrentDate().toLocaleDateString('fr-CA')}_swatch_report_${_snakeCase(productId)}`;
+    downloadList => {
+      if (!downloadList.length) {
+        return;
+      }
+
+      const updatedDownloadList = downloadList.map(({ id, productId }) => ({
+        id,
+        options: {
+          fileName: `${getCurrentDate().toLocaleDateString('fr-CA')}_swatch_report_${_snakeCase(productId)}`
+        }
+      }));
+
       dispatch([
-        getAliasExport(id, fileName),
-        reduxActions.platform.removeNotification(id),
+        getAliasExport(updatedDownloadList)
+        /*
+        reduxActions.platform.removeNotification('downloadlist'),
         reduxActions.platform.addNotification({
-          id,
+          id: 'downloadList',
           variant: 'success',
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'completed', 'title']
           }),
           description: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'description'],
-            fileName
+            context: ['export', 'completed', 'description']
           }),
           dismissable: true,
           autoDismiss: true
         })
+         */
       ]);
     },
     [dispatch, getAliasExport, t]
@@ -240,7 +265,7 @@ const useOnSelect = ({
       }
     ];
 
-    createExport({ format: value, name: `${EXPORT_PREFIX}-${productId}`, sources });
+    createExport(productId, { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources });
   };
 };
 
@@ -265,7 +290,12 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
-  const { isProductPending, allCompletedDownloads = [], productPendingFormats = [] } = useAliasExportStatus();
+  const {
+    isPending,
+    isProductPending,
+    allCompletedDownloads = [],
+    productPendingFormats = []
+  } = useAliasExportStatus();
   const { checkExports, getExport } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
@@ -283,26 +313,32 @@ const ToolbarFieldExport = ({
     checkExports();
   });
 
+  /*
   useShallowCompareEffect(() => {
-    allCompletedDownloads.forEach(({ id, productId }) => {
-      getExport(id, productId);
-    });
-  }, [allCompletedDownloads]);
+    if (!isPending && allCompletedDownloads.length) {
+      getExport(allCompletedDownloads);
+    }
+    /*
+     *allCompletedDownloads.forEach(({ id, productId }) => {
+     *  getExport(id, productId);
+     *});
+     * /
+  }, [allCompletedDownloads, isPending]);
+  */
 
   return (
-    <Tooltip content={t('curiosity-toolbar.placeholder', { context: ['export', isProductPending && 'loading'] })}>
-      <Select
-        isDropdownButton
-        aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
-        onSelect={onSelect}
-        options={updatedOptions}
-        placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
-        position={position}
-        data-test="toolbarFieldExport"
-        toggleIcon={<ExportIcon />}
-        buttonVariant={SelectButtonVariant.plain}
-      />
-    </Tooltip>
+    <Select
+      title={t('curiosity-toolbar.placeholder', { context: 'export' })}
+      isDropdownButton
+      aria-label={t('curiosity-toolbar.placeholder', { context: 'export' })}
+      onSelect={onSelect}
+      options={updatedOptions}
+      placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
+      position={position}
+      data-test="toolbarFieldExport"
+      toggleIcon={<ExportIcon />}
+      buttonVariant={SelectButtonVariant.plain}
+    />
   );
 };
 

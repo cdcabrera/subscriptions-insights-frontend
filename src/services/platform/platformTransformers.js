@@ -89,6 +89,7 @@ const exports = response => {
     const focusedStatus = getStatus(exportStatus);
 
     const updatedExportData = {
+      fileName: productId,
       format: exportFormat,
       id: exportId,
       name: exportName,

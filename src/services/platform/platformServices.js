@@ -134,7 +134,7 @@ const hideGlobalFilter = async (isHidden = true) => {
  * @returns {Promise<*>}
  */
 const deleteExport = (id, options = {}) => {
-  const { cache = false, cancel = false, cancelId } = options;
+  const { cache = false, cancel = true, cancelId } = options;
   return axiosServiceCall({
     url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
     method: 'delete',
@@ -142,66 +142,6 @@ const deleteExport = (id, options = {}) => {
     cancel,
     cancelId
   });
-};
-
-/**
- * @api {get} /api/export/v1/exports/:id
- * @apiDescription Get an export by id
- *
- * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
- *
- * @apiSuccessExample {zip} Success-Response:
- *     HTTP/1.1 200 OK
- *     Success
- *
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 400 Bad Request
- *     {
- *       message: "'---' is not a valid export UUID",
- *       code: 400
- *     }
- *
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 500 Internal Server Error
- *     {
- *     }
- */
-/**
- * Get an export after setup.
- *
- * @param {string} id Export ID
- * @param {object} options
- * @param {boolean} options.cancel
- * @param {string} options.cancelId
- * @param {string} options.fileName
- * @param {string} options.fileType
- * @returns {Promise<*>}
- */
-const getExport = (id, options = {}) => {
-  const {
-    cache = false,
-    cancel = false,
-    cancelId,
-    fileName = `swatch_report_${id}`,
-    fileType = 'application/gzip'
-  } = options;
-  return axiosServiceCall({
-    url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
-    responseType: 'blob',
-    cache,
-    cancel,
-    cancelId
-  })
-    .then(
-      success =>
-        (helpers.TEST_MODE && success.data) ||
-        downloadHelpers.downloadData({
-          data: success.data,
-          fileName: `${fileName}.tar.gz`,
-          fileType
-        })
-    )
-    .then(() => deleteExport(id));
 };
 
 /**
@@ -351,7 +291,7 @@ const getExport = (id, options = {}) => {
 const getExportStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
-    cancel = false,
+    cancel = true,
     cancelId,
     schema = [platformSchemas.exports],
     transform = [platformTransformers.exports],
@@ -371,6 +311,72 @@ const getExportStatus = (id, params = {}, options = {}) => {
   });
 };
 
+/**
+ * @api {get} /api/export/v1/exports/:id
+ * @apiDescription Get an export by id
+ *
+ * Reference [EXPORTS API](https://github.com/RedHatInsights/export-service-go/blob/main/static/spec/openapi.yaml)
+ *
+ * @apiSuccessExample {zip} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     Success
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       message: "'---' is not a valid export UUID",
+ *       code: 400
+ *     }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *     }
+ */
+/**
+ * Get an export after setup.
+ *
+ * @param {string} id Export ID
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @param {string} options.fileName
+ * @param {string} options.fileType
+ * @returns {Promise<*>}
+ */
+const getExport = (id, options = {}) => {
+  const {
+    cache = false,
+    cancel = true,
+    cancelId,
+    fileName = `swatch_report_${id}`,
+    fileType = 'application/gzip'
+  } = options;
+  return axiosServiceCall({
+    url: `${process.env.REACT_APP_SERVICES_PLATFORM_EXPORT}/${id}`,
+    responseType: 'blob',
+    cache,
+    cancel,
+    cancelId
+  })
+    .then(
+      success =>
+        (helpers.TEST_MODE && success.data) ||
+        downloadHelpers.downloadData({
+          data: success.data,
+          fileName: `${fileName}.tar.gz`,
+          fileType
+        })
+    )
+    .then(() => deleteExport(id));
+};
+
+const getExports = async () => Promise.reject();
+/*
+ * await Promise.all(idList.map(({ id, options }) => getExport(id, options)));
+ * await Promise.all(idList.map(({ id }) => deleteExport(id)));
+ * return getExportStatus();
+ */
 /**
  * Note: 202 status appears to be only response that returns a sources list, OR it's variable depending on
  *     partial/pending status.
@@ -417,17 +423,60 @@ const getExportStatus = (id, params = {}, options = {}) => {
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const postExport = (data = {}, options = {}) => {
+const postExport = async (data = {}, options = {}) => {
   const {
     cache = false,
     cancel = false,
     cancelId,
+    poll,
     schema = [platformSchemas.exports],
-    transform = [platformTransformers.exports],
+    transform = [],
     ...restOptions
   } = options;
-  return axiosServiceCall({
+
+  let downloadId;
+  const postResponse = await axiosServiceCall({
     ...restOptions,
+    poll: {
+      location: {
+        url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+        config: {
+          cache: false,
+          cancel: false,
+          schema: [platformSchemas.exports],
+          transform: [platformTransformers.exports]
+        },
+        ...poll?.location
+      },
+      status: (successResponse, ...args) => {
+        if (typeof poll.status === 'function') {
+          /*
+          const foundDownload = response?.data?.data?.completed.find(
+            ({ id }) => downloadId !== undefined && id === downloadId
+          );
+
+          const updatedSuccessResponse = {
+            data: {
+
+            }
+          };
+          */
+          poll.status.call(null, successResponse, ...args);
+        }
+      },
+      validate: response => {
+        const foundDownload = response?.data?.data?.completed.find(
+          ({ id }) => downloadId !== undefined && id === downloadId
+        );
+
+        if (foundDownload) {
+          getExport(foundDownload.id);
+        }
+
+        return foundDownload !== undefined;
+      },
+      ...poll
+    },
     method: 'post',
     url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
     data,
@@ -437,11 +486,15 @@ const postExport = (data = {}, options = {}) => {
     schema,
     transform
   });
+  // }).then(response => getExport(response.data.id));
+  downloadId = postResponse.data.id;
+  return postResponse;
 };
 
 const platformServices = {
   deleteExport,
   getExport,
+  getExports,
   getExportStatus,
   getUser,
   getUserPermissions,
@@ -459,6 +512,7 @@ export {
   platformServices,
   deleteExport,
   getExport,
+  getExports,
   getExportStatus,
   getUser,
   getUserPermissions,
