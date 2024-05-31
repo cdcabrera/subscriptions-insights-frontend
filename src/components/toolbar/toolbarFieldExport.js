@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
-import { useMount, useShallowCompareEffect } from 'react-use';
-import _snakeCase from 'lodash/snakeCase';
+import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
-import { Tooltip } from '../tooltip/tooltip';
 import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
@@ -14,7 +12,6 @@ import {
   PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES
 } from '../../services/platform/platformConstants';
 import { translate } from '../i18n/i18n';
-import { getCurrentDate } from '../../common/dateHelpers';
 
 /**
  * A standalone export select/dropdown filter and download hooks.
@@ -40,8 +37,7 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  * @param {object} options
  * @param {Function} options.useProduct
  * @param {Function} options.useSelectors
- * @returns {{isProductPending: boolean, productPendingFormats: Array<string>,
- *     allCompletedDownloads: Array<{ id: string, productId: string }>, isPending: boolean, isCompleted: boolean}}
+ * @returns {{isProductPending: boolean, productPendingFormats: Array<string>}}
  */
 const useExportStatus = ({
   useProduct: useAliasProduct = useProduct,
@@ -58,12 +54,6 @@ const useExportStatus = ({
     product?.data?.data?.products?.[productId]?.isPending ||
     global?.data?.data?.products?.[productId]?.isPending ||
     false;
-  const isProductCompleted =
-    product?.data?.data?.products?.[productId]?.isCompleted ||
-    global?.data?.data?.products?.[productId]?.isCompleted ||
-    false;
-  const isGlobalPending = global?.data?.data?.isPending || false;
-  const isGlobalCompleted = !global?.data?.data?.isPending && global?.data?.data?.isCompleted;
 
   if (isProductPending) {
     const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
@@ -77,105 +67,14 @@ const useExportStatus = ({
     );
   }
 
-  /*
-   *const pendingFormats = [];
-   *let isPending = false;
-   *if (Array.isArray(global?.data?.data?.products?.[productId]?.pending)) {
-   *  pendingFormats.push(
-   *    ...global.data.data.products[productId].pending.map(({ format: productFormat }) => productFormat)
-   *  );
-   *
-   *  if (pendingFormats.length) {
-   *    isPending = true;
-   *  }
-   *} else if (Array.isArray(product?.data?.data?.products?.[productId]?.pending)) {
-   *  pendingFormats.push(
-   *    ...product.data.data.products[productId].pending.map(({ format: productFormat }) => productFormat)
-   *  );
-   *
-   *  if (pendingFormats.length) {
-   *    isPending = true;
-   *  }
-   *}
-   */
-
   return {
-    isGlobalCompleted,
-    isGlobalPending,
-    isProductCompleted,
     isProductPending,
     pendingProductFormats
   };
 };
 
-const useExportNotifications = ({
-  addNotification = reduxActions.platform.addNotification,
-  removeNotification = reduxActions.platform.removeNotification,
-  t = translate,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useProduct: useAliasProduct = useProduct,
-  useExportStatus: useAliasExportStatus = useExportStatus
-} = {}) => {
-  const dispatch = useAliasDispatch();
-  const { productId } = useAliasProduct();
-  const { isGlobalCompleted, isGlobalPending, isProductCompleted, isProductPending } = useAliasExportStatus();
-
-  setTimeout(() => {
-    if (isProductPending || isGlobalPending) {
-      dispatch(removeNotification('swatch-downloads-pending'));
-      dispatch(
-        addNotification({
-          id: 'swatch-downloads-pending',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'pending', 'title'],
-            count: 1
-          }),
-          dismissable: true,
-          autoDismiss: true
-        })
-      );
-    }
-
-    if (!isProductPending && isProductCompleted) {
-      dispatch(removeNotification(`swatch-downloads-product-${productId}`));
-      dispatch(
-        addNotification({
-          id: `swatch-downloads-product-${productId}`,
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'title', productId]
-          }),
-          description: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'description']
-          }),
-          dismissable: true,
-          autoDismiss: true
-        })
-      );
-    }
-
-    if (!isGlobalPending && isGlobalCompleted) {
-      dispatch(removeNotification('swatch-downloads-global'));
-      dispatch(
-        addNotification({
-          id: 'swatch-downloads-global',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'title'],
-            count: 1
-          }),
-          description: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'description'],
-            count: 1
-          }),
-          dismissable: true,
-          autoDismiss: true
-        })
-      );
-    }
-  });
-};
-
 /**
- * Apply an export hook for post and download, and a global polling status.
+ * Apply an export hook for a post with download, and a global polling status with download.
  *
  * @param {object} options
  * @param {Function} options.createExport
@@ -189,13 +88,6 @@ const useExport = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
-
-  /**
-   * A polling response validator
-   *
-   * @type {Function}
-   */
-  // const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
 
   /**
    * Get a global export status. Sets polling if any pending indicators are found.

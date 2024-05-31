@@ -371,8 +371,15 @@ const getExport = (id, options = {}) => {
     .then(() => deleteExport(id));
 };
 
-const getExports = async () => Promise.reject();
-
+/**
+ * Convenience wrapper for setting up global export status with status polling, and download with clean-up.
+ *
+ * @param {object} params
+ * @param {object} options
+ * @param {boolean} options.cancel
+ * @param {string} options.cancelId
+ * @returns {Promise<*>}
+ */
 const getExistingExports = (params = {}, options = {}) => {
   const {
     cache = false,
@@ -389,19 +396,8 @@ const getExistingExports = (params = {}, options = {}) => {
     poll: {
       location: {
         url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
-        // config: {
-        //  cache: false,
-        //  cancel: false,
-        //  schema: [platformSchemas.exports],
-        //  transform: [platformTransformers.exports]
-        // },
         ...poll?.location
       },
-      // status: (...args) => {
-      //  if (typeof poll.status === 'function') {
-      //    poll.status.call(null, ...args);
-      //  }
-      // },//
       validate: response => {
         const isCompleted = !response?.data?.data?.isAnythingPending && response?.data?.data?.isAnythingCompleted;
         const completedResults = response?.data?.data?.completed;
@@ -424,11 +420,6 @@ const getExistingExports = (params = {}, options = {}) => {
   });
 };
 
-/*
- * await Promise.all(idList.map(({ id, options }) => getExport(id, options)));
- * await Promise.all(idList.map(({ id }) => deleteExport(id)));
- * return getExportStatus();
- */
 /**
  * Note: 202 status appears to be only response that returns a sources list, OR it's variable depending on
  *     partial/pending status.
@@ -467,7 +458,7 @@ const getExistingExports = (params = {}, options = {}) => {
  *     }
  */
 /**
- * Post to create an export.
+ * Convenience wrapper for posting to create an export with status polling, and download with clean-up.
  *
  * @param {object} data JSON data to submit
  * @param {object} options
@@ -502,17 +493,6 @@ const postExport = async (data = {}, options = {}) => {
       },
       status: (successResponse, ...args) => {
         if (typeof poll.status === 'function') {
-          /*
-          const foundDownload = response?.data?.data?.completed.find(
-            ({ id }) => downloadId !== undefined && id === downloadId
-          );
-
-          const updatedSuccessResponse = {
-            data: {
-
-            }
-          };
-          */
           poll.status.call(null, successResponse, ...args);
         }
       },
@@ -539,7 +519,7 @@ const postExport = async (data = {}, options = {}) => {
     schema,
     transform
   });
-  // }).then(response => getExport(response.data.id));
+
   downloadId = postResponse.data.id;
   return postResponse;
 };
@@ -548,7 +528,6 @@ const platformServices = {
   deleteExport,
   getExistingExports,
   getExport,
-  getExports,
   getExportStatus,
   getUser,
   getUserPermissions,
@@ -567,7 +546,6 @@ export {
   deleteExport,
   getExistingExports,
   getExport,
-  getExports,
   getExportStatus,
   getUser,
   getUserPermissions,

@@ -91,7 +91,6 @@ const exports = response => {
     const focusedStatus = getStatus(exportStatus);
 
     const updatedExportData = {
-      // fileName: `${dateHelpers.getCurrentDate().toLocaleDateString('fr-CA')}_swatch_report_${_snakeCase(productId)}`,
       fileName: `${moment(dateHelpers.getCurrentDate()).format('YYYYMMDD_HHmmss')}_${helpers.UI_EXPORT_FILENAME.replace('{0}', _snakeCase(productId))}`,
       format: exportFormat,
       id: exportId,
