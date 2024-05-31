@@ -1,6 +1,6 @@
-import promiseMiddleware from 'redux-promise-middleware';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux';
 import moxios from 'moxios';
+import { promiseMiddleware } from '../../middleware';
 import { platformActions, setExportStatus } from '../platformActions';
 import { appReducer } from '../../reducers';
 
@@ -43,20 +43,11 @@ describe('PlatformActions', () => {
     });
   });
 
-  it('Should return response content for createExport method', done => {
-    const store = generateStore();
-    const dispatcher = platformActions.createExport();
-
-    dispatcher(store.dispatch).then(() => {
-      const response = store.getState().app;
-      expect(response.exports.fulfilled).toBe(true);
-      done();
-    });
-  });
-
-  it('Should return response content for getExport method', () => {
+  it('Should return response content for createExport method', () => {
     const mockDispatch = jest.fn();
-    platformActions.getExport()(mockDispatch);
+    platformActions.createExport(undefined, undefined, {
+      poll: { location: undefined, status: undefined, validate: undefined }
+    })(mockDispatch);
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 
@@ -66,15 +57,10 @@ describe('PlatformActions', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 
-  it('Should return response content for getExportStatus method', done => {
-    const store = generateStore();
-    const dispatcher = platformActions.getExportStatus();
-
-    dispatcher(store.dispatch).then(() => {
-      const response = store.getState().app;
-      expect(response.exports.fulfilled).toBe(true);
-      done();
-    });
+  it('Should return response content for getExistingExports method', () => {
+    const mockDispatch = jest.fn();
+    platformActions.getExistingExports()(mockDispatch);
+    expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 
   it('Should return a dispatch object for the hideGlobalFilter method', () => {
