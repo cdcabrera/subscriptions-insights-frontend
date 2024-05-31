@@ -279,6 +279,7 @@ const axiosServiceCall = async (
         }
 
         if (validated === true) {
+          // allow one last status call, or in scenarios where validation happens before polling
           if (typeof updatedPoll.status === 'function') {
             try {
               updatedPoll.status.call(null, callbackResponse, undefined, updatedPoll.__retryCount);
