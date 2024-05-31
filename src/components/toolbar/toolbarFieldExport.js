@@ -53,15 +53,21 @@ const useExportStatus = ({
     ({ app }) => app?.exports?.global
   ]);
 
-  const pendingFormats = [];
-  const isPending =
+  const pendingProductFormats = [];
+  const isProductPending =
     product?.data?.data?.products?.[productId]?.isPending ||
     global?.data?.data?.products?.[productId]?.isPending ||
     false;
+  const isProductCompleted =
+    product?.data?.data?.products?.[productId]?.isCompleted ||
+    global?.data?.data?.products?.[productId]?.isCompleted ||
+    false;
+  const isGlobalPending = global?.data?.data?.isPending || false;
+  const isGlobalCompleted = !global?.data?.data?.isPending && global?.data?.data?.isCompleted;
 
-  if (isPending) {
+  if (isProductPending) {
     const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
-    pendingFormats.push(
+    pendingProductFormats.push(
       ...Array.from(
         new Set([
           ...convert(product?.data?.data?.products?.[productId]?.pending),
@@ -94,9 +100,78 @@ const useExportStatus = ({
    */
 
   return {
-    isPending,
-    pendingFormats
+    isGlobalCompleted,
+    isGlobalPending,
+    isProductCompleted,
+    isProductPending,
+    pendingProductFormats
   };
+};
+
+const useExportNotifications = ({
+  addNotification = reduxActions.platform.addNotification,
+  removeNotification = reduxActions.platform.removeNotification,
+  t = translate,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useProduct: useAliasProduct = useProduct,
+  useExportStatus: useAliasExportStatus = useExportStatus
+} = {}) => {
+  const dispatch = useAliasDispatch();
+  const { productId } = useAliasProduct();
+  const { isGlobalCompleted, isGlobalPending, isProductCompleted, isProductPending } = useAliasExportStatus();
+
+  setTimeout(() => {
+    if (isProductPending || isGlobalPending) {
+      dispatch(removeNotification('swatch-downloads-pending'));
+      dispatch(
+        addNotification({
+          id: 'swatch-downloads-pending',
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'pending', 'title'],
+            count: 1
+          }),
+          dismissable: true,
+          autoDismiss: true
+        })
+      );
+    }
+
+    if (!isProductPending && isProductCompleted) {
+      dispatch(removeNotification(`swatch-downloads-product-${productId}`));
+      dispatch(
+        addNotification({
+          id: `swatch-downloads-product-${productId}`,
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'title', productId]
+          }),
+          description: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'description']
+          }),
+          dismissable: true,
+          autoDismiss: true
+        })
+      );
+    }
+
+    if (!isGlobalPending && isGlobalCompleted) {
+      dispatch(removeNotification('swatch-downloads-global'));
+      dispatch(
+        addNotification({
+          id: 'swatch-downloads-global',
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'title'],
+            count: 1
+          }),
+          description: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'description'],
+            count: 1
+          }),
+          dismissable: true,
+          autoDismiss: true
+        })
+      );
+    }
+  });
 };
 
 /**
@@ -192,18 +267,18 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
-  const { isPending, pendingFormats = [] } = useAliasExportStatus();
+  const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
   const { checkExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isPending &&
-        pendingFormats?.includes(option.value) &&
+      (isProductPending &&
+        pendingProductFormats?.includes(option.value) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isPending && pendingFormats?.includes(option.value),
-    isDisabled: isPending && pendingFormats?.includes(option.value)
+    selected: isProductPending && pendingProductFormats?.includes(option.value),
+    isDisabled: isProductPending && pendingProductFormats?.includes(option.value)
   }));
 
   useMount(() => {
