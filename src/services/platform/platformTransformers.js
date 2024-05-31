@@ -1,3 +1,5 @@
+import moment from 'moment';
+import _snakeCase from 'lodash/snakeCase';
 import { rbacConfig } from '../../config';
 import {
   platformConstants,
@@ -6,7 +8,7 @@ import {
   PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES as OPERATION_TYPES,
   PLATFORM_API_RESPONSE_USER_PERMISSION_RESOURCE_TYPES as RESOURCE_TYPES
 } from './platformConstants';
-import { helpers } from '../../common';
+import { helpers, dateHelpers } from '../../common';
 
 /**
  * Transform export responses. Combines multiple exports, or a single export,
@@ -89,7 +91,8 @@ const exports = response => {
     const focusedStatus = getStatus(exportStatus);
 
     const updatedExportData = {
-      fileName: productId,
+      // fileName: `${dateHelpers.getCurrentDate().toLocaleDateString('fr-CA')}_swatch_report_${_snakeCase(productId)}`,
+      fileName: `${moment(dateHelpers.getCurrentDate()).format('YYYYMMDD_HHmmss')}_${helpers.UI_EXPORT_FILENAME.replace('{0}', _snakeCase(productId))}`,
       format: exportFormat,
       id: exportId,
       name: exportName,

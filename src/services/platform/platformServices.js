@@ -407,7 +407,7 @@ const getExistingExports = (params = {}, options = {}) => {
         const completedResults = response?.data?.data?.completed;
 
         if (isCompleted && completedResults.length > 0) {
-          Promise.all(completedResults.map(({ id }) => getExport(id)));
+          Promise.all(completedResults.map(({ id, fileName }) => getExport(id, { fileName })));
         }
 
         return isCompleted;
@@ -522,7 +522,8 @@ const postExport = async (data = {}, options = {}) => {
         );
 
         if (foundDownload) {
-          getExport(foundDownload.id);
+          const { id, fileName } = foundDownload;
+          getExport(id, { fileName });
         }
 
         return foundDownload !== undefined;

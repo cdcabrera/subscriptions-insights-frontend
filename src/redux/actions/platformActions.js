@@ -100,7 +100,7 @@ const setExportStatus =
 const getExportStatus =
   (options = {}) =>
   dispatch => {
-    dispatch(removeNotification('swatch-downloads-pending'));
+    // dispatch(removeNotification('swatch-downloads-pending'));
 
     dispatch([
       {
@@ -126,24 +126,29 @@ const getExportStatus =
             }
           }
         })
-      },
-      addNotification({
-        id: 'swatch-downloads-pending',
-        title: translate('curiosity-toolbar.notifications', {
-          context: ['export', 'pending', 'title'],
-          count: 1
-        }),
-        dismissable: true,
-        autoDismiss: true
-      })
+      }
+      /*
+       *,
+       *addNotification({
+       *id: 'swatch-downloads-pending',
+       *title: translate('curiosity-toolbar.notifications', {
+       *  context: ['export', 'pending', 'title'],
+       *  count: 1
+       *}),
+       *dismissable: true,
+       *autoDismiss: true
+       *})
+       */
     ]);
   };
 
 const getExistingExports =
   (options = {}) =>
   dispatch => {
-    // const generatedId = helpers.generateHash(data);
-    // dispatch(removeNotification('swatch-global-export'));
+    /*
+     * const generatedId = helpers.generateHash(data);
+     * dispatch(removeNotification('swatch-global-export'));
+     */
 
     dispatch([
       {
@@ -153,21 +158,37 @@ const getExistingExports =
           poll: {
             ...options.poll,
             status: (successResponse, ...args) => {
-              /*
-              console.log('>>> export success', successResponse);
-              if (!successResponse?.data?.data?.isAnythingPending) {
-                dispatch(removeNotification('swatch-global-export'));
-              }
-
               if (!successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted) {
+                dispatch(removeNotification('swatch-global-export'));
                 dispatch(
                   addNotification({
                     id: 'swatch-global-export',
-                    variant: 'success',
-                    title: `Product reports ready, ${successResponse?.data?.data.completed.length}`
+                    title: translate('curiosity-toolbar.notifications', {
+                      context: ['export', 'completed', 'titleGlobal']
+                    }),
+                    description: translate('curiosity-toolbar.notifications', {
+                      context: ['export', 'completed', 'descriptionGlobal']
+                    }),
+                    dismissable: true
+                    // title: `Product reports ready, ${successResponse?.data?.data.completed.length}`
                   })
                 );
               }
+
+              /*
+               *console.log('>>> export success', successResponse);
+               *
+               *
+               *if (!successResponse?.data?.data?.isAnythingPending &&
+               *successResponse?.data?.data?.isAnythingCompleted) {
+               *  dispatch(
+               *    addNotification({
+               *      id: 'swatch-global-export',
+               *      variant: 'success',
+               *      title: `Product reports ready, ${successResponse?.data?.data.completed.length}`
+               *    })
+               *  );
+               *}
                */
 
               setExportStatus(dispatch)('global', successResponse, ...args);
@@ -175,19 +196,42 @@ const getExistingExports =
           }
         }),
         meta: {
-          id: 'global'
+          id: 'global',
+          notifications: {
+            rejected: {
+              variant: 'warning',
+              title: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'error', 'title']
+              }),
+              description: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'error', 'description']
+              }),
+              dismissable: true
+            },
+            pending: {
+              id: 'swatch-global-export',
+              title: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'pending', 'titleGlobal']
+              }),
+              description: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'pending', 'descriptionGlobal']
+              }),
+              dismissable: true
+            }
+          }
         }
       }
-      /*,
-      addNotification({
-        id: 'swatch-global-export',
-        title: translate('curiosity-toolbar.notifications', {
-          context: ['export', 'pending', 'title'],
-          count: 1
-        }),
-        dismissable: true,
-        autoDismiss: true
-      })
+      /*
+       *,
+       *addNotification({
+       *id: 'swatch-global-export',
+       *title: translate('curiosity-toolbar.notifications', {
+       *  context: ['export', 'pending', 'title'],
+       *  count: 1
+       *}),
+       *dismissable: true,
+       *autoDismiss: true
+       *})
        */
     ]);
   };
@@ -203,8 +247,10 @@ const getExistingExports =
 const createExport =
   (id, data = {}, options = {}) =>
   dispatch => {
-    // const generatedId = helpers.generateHash(data);
-    // dispatch(removeNotification('swatch-global-export'));
+    /*
+     * const generatedId = helpers.generateHash(data);
+     * dispatch(removeNotification('swatch-global-export'));
+     */
 
     dispatch([
       {
@@ -214,16 +260,36 @@ const createExport =
           poll: {
             ...options.poll,
             status: (successResponse, ...args) => {
+              if (
+                !successResponse?.data?.data?.products?.[id]?.isPending &&
+                successResponse?.data?.data?.products?.[id]?.isCompleted
+              ) {
+                dispatch(removeNotification('swatch-create-export'));
+                dispatch(
+                  addNotification({
+                    variant: 'success',
+                    id: 'swatch-create-export',
+                    title: translate('curiosity-toolbar.notifications', {
+                      context: ['export', 'completed', 'title']
+                    }),
+                    description: translate('curiosity-toolbar.notifications', {
+                      context: ['export', 'completed', 'description'],
+                      fileName: successResponse?.data?.data?.products?.[id]?.completed?.[0]?.fileName
+                    }),
+                    dismissable: true
+                  })
+                );
+              }
               /*
-              console.log('>>> export success', successResponse);
-              if (!successResponse?.data?.data?.isAnythingPending) {
-                dispatch(removeNotification('swatch-global-export'));
-              }
-
-              if (successResponse?.data?.data?.products?.[id]?.isCompleted) {
-                dispatch(addNotification({ variant: 'success', title: `Product report ready, ${id}` }));
-              }
-              */
+               *console.log('>>> export success', successResponse);
+               *if (!successResponse?.data?.data?.isAnythingPending) {
+               *  dispatch(removeNotification('swatch-global-export'));
+               *}
+               *
+               *if (successResponse?.data?.data?.products?.[id]?.isCompleted) {
+               *  dispatch(addNotification({ variant: 'success', title: `Product report ready, ${id}` }));
+               *}
+               */
               setExportStatus(dispatch)(id, successResponse, ...args);
             }
           }
@@ -231,24 +297,38 @@ const createExport =
         meta: {
           notifications: {
             rejected: {
-              variant: 'danger',
-              title: translate('curiosity-optin.notificationsErrorTitle', { appName: helpers.UI_DISPLAY_NAME }),
-              description: translate('curiosity-optin.notificationsErrorDescription'),
+              variant: 'warning',
+              title: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'error', 'title']
+              }),
+              description: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'error', 'description']
+              }),
+              dismissable: true
+            },
+            pending: {
+              id: 'swatch-create-export',
+              title: translate('curiosity-toolbar.notifications', {
+                context: ['export', 'pending', 'title', id]
+              }),
+              // description: translate('curiosity-toolbar.notifications', {
+              //  context: ['export', 'pending', 'description']
+              // }),
               dismissable: true
             }
           }
         }
       }
       /*
-      addNotification({
-        id: 'swatch-global-export',
-        title: translate('curiosity-toolbar.notifications', {
-          context: ['export', 'pending', 'title'],
-          count: 1
-        }),
-        dismissable: true,
-        autoDismiss: false
-      })
+       *addNotification({
+       *  id: 'swatch-global-export',
+       *  title: translate('curiosity-toolbar.notifications', {
+       *    context: ['export', 'pending', 'title'],
+       *    count: 1
+       *  }),
+       *  dismissable: true,
+       *  autoDismiss: false
+       *})
        */
     ]);
   };
