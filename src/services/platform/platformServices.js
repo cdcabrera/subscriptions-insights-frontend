@@ -399,14 +399,14 @@ const getExistingExports = (params = {}, options = {}) => {
         ...poll?.location
       },
       validate: response => {
-        const isCompleted = !response?.data?.data?.isAnythingPending && response?.data?.data?.isAnythingCompleted;
+        const isAnythingPending = response?.data?.data?.isAnythingPending;
         const completedResults = response?.data?.data?.completed;
 
-        if (isCompleted && completedResults.length > 0) {
+        if (!isAnythingPending && completedResults.length > 0) {
           Promise.all(completedResults.map(({ id, fileName }) => getExport(id, { fileName })));
         }
 
-        return isCompleted;
+        return !isAnythingPending;
       },
       ...poll
     },
