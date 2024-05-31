@@ -243,7 +243,6 @@ const axiosServiceCall = async (
         const callbackResponse = serviceHelpers.memoClone(updatedResponse);
         const updatedLocation = { url: undefined, config: undefined };
 
-        // updatedConfig.poll.location || updatedConfig.url,
         if (
           !updatedConfig.poll.location ||
           typeof updatedConfig.poll.location === 'string' ||

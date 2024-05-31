@@ -492,7 +492,7 @@ const postExport = async (data = {}, options = {}) => {
         ...poll?.location
       },
       status: (successResponse, ...args) => {
-        if (typeof poll.status === 'function') {
+        if (typeof poll?.status === 'function') {
           poll.status.call(null, successResponse, ...args);
         }
       },
