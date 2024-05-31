@@ -399,14 +399,14 @@ const getExistingExports = (params = {}, options = {}) => {
         ...poll?.location
       },
       validate: response => {
-        const isCompleted = !response?.data?.data?.isAnythingPending && response?.data?.data?.isAnythingCompleted;
+        const isAnythingPending = response?.data?.data?.isAnythingPending;
         const completedResults = response?.data?.data?.completed;
 
-        if (isCompleted && completedResults.length > 0) {
+        if (!isAnythingPending && completedResults.length > 0) {
           Promise.all(completedResults.map(({ id, fileName }) => getExport(id, { fileName })));
         }
 
-        return isCompleted;
+        return !isAnythingPending;
       },
       ...poll
     },
@@ -458,7 +458,7 @@ const getExistingExports = (params = {}, options = {}) => {
  *     }
  */
 /**
- * Convenience wrapper for posting to create an export with status polling, and download with clean-up.
+ * Convenience wrapper for posting to create an export with status polling, then performing a download with clean-up.
  *
  * @param {object} data JSON data to submit
  * @param {object} options
@@ -481,6 +481,7 @@ const postExport = async (data = {}, options = {}) => {
   const postResponse = await axiosServiceCall({
     ...restOptions,
     poll: {
+      ...poll,
       location: {
         url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
         config: {
@@ -507,8 +508,7 @@ const postExport = async (data = {}, options = {}) => {
         }
 
         return foundDownload !== undefined;
-      },
-      ...poll
+      }
     },
     method: 'post',
     url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,

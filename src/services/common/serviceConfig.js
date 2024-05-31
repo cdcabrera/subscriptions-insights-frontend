@@ -256,12 +256,12 @@ const axiosServiceCall = async (
           updatedLocation.config = updatedConfig.poll.location.config;
         }
 
-        // passed config, allow future updates by passing modified poll config
+        // passed config, allow future updates by passing a modified poll config into a setTimeout
         const updatedPoll = {
           ...updatedConfig.poll,
-          // internal counter passed towards validate
-          __retryCount: updatedConfig.poll.__retryCount ?? 0,
-          // a url, or callback that returns a url to poll the put/posted url
+          // internal counter passed towards validate and status
+          __retryCount: updatedConfig.poll.__retryCount ?? -1,
+          // url, or function callback that returns a url string to poll the put/posted url
           location: updatedLocation,
           // only required param, a function, validate status in prep for next
           validate: updatedConfig.poll.validate || updatedConfig.poll,
@@ -294,7 +294,7 @@ const axiosServiceCall = async (
         }
 
         const pollResponse = new Promise((resolve, reject) => {
-          window.setTimeout(async () => {
+          const setupPoll = async retryCount => {
             try {
               const output = await axiosServiceCall({
                 ...config,
@@ -303,14 +303,27 @@ const axiosServiceCall = async (
                 data: undefined,
                 url: tempLocationUrl,
                 cache: false,
-                poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount + 1 }
+                poll: { ...updatedPoll, __retryCount: retryCount }
               });
 
               resolve(output);
             } catch (e) {
               reject(e);
             }
-          }, updatedPoll.pollInterval);
+          };
+
+          if (updatedPoll.__retryCount < 0) {
+            if (typeof updatedPoll.status === 'function') {
+              try {
+                updatedPoll.status.call(null, undefined, undefined, updatedPoll.__retryCount);
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          }
+
+          updatedPoll.__retryCount += 1;
+          window.setTimeout(async () => setupPoll(updatedPoll.__retryCount), updatedPoll.pollInterval);
         });
 
         // either apply a status resolver for up-to-date responses or chain poll-response to the response
