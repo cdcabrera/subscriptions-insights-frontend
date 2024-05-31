@@ -78,13 +78,13 @@ const useExportStatus = ({
  *
  * @param {object} options
  * @param {Function} options.createExport
- * @param {Function} options.getExportStatus
+ * @param {Function} options.getExistingExports
  * @param {Function} options.useDispatch
  * @returns {{getExport: Function, createExport: Function, checkExports: Function}}
  */
 const useExport = ({
   createExport: createAliasExport = reduxActions.platform.createExport,
-  getExportStatus: getAliasExportStatus = reduxActions.platform.getExistingExports,
+  getExistingExports: getAliasExistingExports = reduxActions.platform.getExistingExports,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
@@ -92,7 +92,7 @@ const useExport = ({
   /**
    * Get a global export status. Sets polling if any pending indicators are found.
    */
-  const checkExports = useCallback(() => getAliasExportStatus()(dispatch), [dispatch, getAliasExportStatus]);
+  const checkExports = useCallback(() => getAliasExistingExports()(dispatch), [dispatch, getAliasExistingExports]);
 
   /**
    * Create an export then download. Automatically sets up polling until the file(s) are ready.

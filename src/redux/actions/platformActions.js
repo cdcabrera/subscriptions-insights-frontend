@@ -51,30 +51,6 @@ const authorizeUser = appName => dispatch =>
   });
 
 /**
- * Get a specific export download package.
- *
- * @param {Array} idList
- * @returns {Function}
- */
-const getExport = idList => dispatch =>
-  dispatch({
-    type: platformTypes.SET_PLATFORM_EXPORT_DOWNLOAD,
-    payload: platformServices.getExports(idList)
-  });
-/*
- *const updatedId = (Array.isArray(downloads) && downloads) || [downloads];
- *const multiDispatch = [];
- *
- *updatedId.forEach(({ id, fileName }) => {
- *  multiDispatch.push({
- *    type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
- *    payload: platformServices.getExport(id, { fileName })
- *  });
- *});
- *
- *return Promise.all(dispatch(multiDispatch));
- */
-/**
  * Return a "dispatch ready" export poll status check.
  *
  * @param {Function} dispatch
@@ -92,64 +68,14 @@ const setExportStatus =
     });
 
 /**
- * Get a specific, or all, export status.
+ * Create an export status poll with download, and toast notifications.
  *
  * @param {object} options Apply polling options
  * @returns {Function}
  */
-const getExportStatus =
-  (options = {}) =>
-  dispatch => {
-    // dispatch(removeNotification('swatch-downloads-pending'));
-
-    dispatch([
-      {
-        type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-        payload: platformServices.getExportStatus(undefined, undefined, {
-          ...options,
-          poll: {
-            ...options.poll,
-            // status: (...args) => setExportStatus(dispatch)('global', ...args)
-            status: (successResponse, ...args) => {
-              console.log('>>> export success', successResponse);
-              if (!successResponse?.data?.data?.isAnythingPending) {
-                dispatch(removeNotification('swatch-downloads-pending'));
-              }
-
-              if (!successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted) {
-                dispatch(
-                  addNotification({ title: `Product reports ready, ${successResponse?.data?.data.completed.length}` })
-                );
-              }
-
-              setExportStatus(dispatch)('global', successResponse, ...args);
-            }
-          }
-        })
-      }
-      /*
-       *,
-       *addNotification({
-       *id: 'swatch-downloads-pending',
-       *title: translate('curiosity-toolbar.notifications', {
-       *  context: ['export', 'pending', 'title'],
-       *  count: 1
-       *}),
-       *dismissable: true,
-       *autoDismiss: true
-       *})
-       */
-    ]);
-  };
-
 const getExistingExports =
   (options = {}) =>
   dispatch => {
-    /*
-     * const generatedId = helpers.generateHash(data);
-     * dispatch(removeNotification('swatch-global-export'));
-     */
-
     dispatch([
       {
         type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
@@ -170,26 +96,9 @@ const getExistingExports =
                       context: ['export', 'completed', 'descriptionGlobal']
                     }),
                     dismissable: true
-                    // title: `Product reports ready, ${successResponse?.data?.data.completed.length}`
                   })
                 );
               }
-
-              /*
-               *console.log('>>> export success', successResponse);
-               *
-               *
-               *if (!successResponse?.data?.data?.isAnythingPending &&
-               *successResponse?.data?.data?.isAnythingCompleted) {
-               *  dispatch(
-               *    addNotification({
-               *      id: 'swatch-global-export',
-               *      variant: 'success',
-               *      title: `Product reports ready, ${successResponse?.data?.data.completed.length}`
-               *    })
-               *  );
-               *}
-               */
 
               setExportStatus(dispatch)('global', successResponse, ...args);
             }
@@ -221,25 +130,13 @@ const getExistingExports =
           }
         }
       }
-      /*
-       *,
-       *addNotification({
-       *id: 'swatch-global-export',
-       *title: translate('curiosity-toolbar.notifications', {
-       *  context: ['export', 'pending', 'title'],
-       *  count: 1
-       *}),
-       *dismissable: true,
-       *autoDismiss: true
-       *})
-       */
     ]);
   };
 
 /**
- * Create an export for download.
+ * Create an export for download with toast notifications.
  *
- * @param id
+ * @param {string} id
  * @param {object} data
  * @param {object} options Apply polling options
  * @returns {Function}
@@ -247,11 +144,6 @@ const getExistingExports =
 const createExport =
   (id, data = {}, options = {}) =>
   dispatch => {
-    /*
-     * const generatedId = helpers.generateHash(data);
-     * dispatch(removeNotification('swatch-global-export'));
-     */
-
     dispatch([
       {
         type: platformTypes.SET_PLATFORM_EXPORT_CREATE,
@@ -280,16 +172,7 @@ const createExport =
                   })
                 );
               }
-              /*
-               *console.log('>>> export success', successResponse);
-               *if (!successResponse?.data?.data?.isAnythingPending) {
-               *  dispatch(removeNotification('swatch-global-export'));
-               *}
-               *
-               *if (successResponse?.data?.data?.products?.[id]?.isCompleted) {
-               *  dispatch(addNotification({ variant: 'success', title: `Product report ready, ${id}` }));
-               *}
-               */
+
               setExportStatus(dispatch)(id, successResponse, ...args);
             }
           }
@@ -311,25 +194,11 @@ const createExport =
               title: translate('curiosity-toolbar.notifications', {
                 context: ['export', 'pending', 'title', id]
               }),
-              // description: translate('curiosity-toolbar.notifications', {
-              //  context: ['export', 'pending', 'description']
-              // }),
               dismissable: true
             }
           }
         }
       }
-      /*
-       *addNotification({
-       *  id: 'swatch-global-export',
-       *  title: translate('curiosity-toolbar.notifications', {
-       *    context: ['export', 'pending', 'title'],
-       *    count: 1
-       *  }),
-       *  dismissable: true,
-       *  autoDismiss: false
-       *})
-       */
     ]);
   };
 
@@ -350,9 +219,7 @@ const platformActions = {
   clearNotifications,
   authorizeUser,
   createExport,
-  getExport,
   setExportStatus,
-  getExportStatus,
   getExistingExports,
   hideGlobalFilter
 };
@@ -365,9 +232,7 @@ export {
   clearNotifications,
   authorizeUser,
   createExport,
-  getExport,
   setExportStatus,
-  getExportStatus,
   getExistingExports,
   hideGlobalFilter
 };
