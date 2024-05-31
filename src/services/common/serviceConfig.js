@@ -279,6 +279,14 @@ const axiosServiceCall = async (
         }
 
         if (validated === true) {
+          if (typeof updatedPoll.status === 'function') {
+            try {
+              updatedPoll.status.call(null, callbackResponse, undefined, updatedPoll.__retryCount);
+            } catch (err) {
+              console.error(err);
+            }
+          }
+
           return updatedResponse;
         }
 

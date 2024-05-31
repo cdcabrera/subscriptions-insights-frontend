@@ -82,8 +82,25 @@ const getExistingExports =
         poll: {
           ...options.poll,
           status: (successResponse, ...args) => {
-            if (!successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted) {
-              dispatch(removeNotification('swatch-global-export'));
+            console.log('>>>> SUCCESS', successResponse);
+            dispatch(removeNotification('swatch-global-export'));
+
+            if (successResponse?.data?.data?.isAnythingPending) {
+              console.log('>>>> SUCCESS 001', successResponse);
+              dispatch(
+                addNotification({
+                  id: 'swatch-global-export',
+                  title: translate('curiosity-toolbar.notifications', {
+                    context: ['export', 'pending', 'titleGlobal']
+                  }),
+                  description: translate('curiosity-toolbar.notifications', {
+                    context: ['export', 'pending', 'descriptionGlobal']
+                  }),
+                  dismissable: true
+                })
+              );
+            } else if (successResponse?.data?.data?.isAnythingCompleted) {
+              console.log('>>>> SUCCESS 002', successResponse);
               dispatch(
                 addNotification({
                   id: 'swatch-global-export',
@@ -97,6 +114,8 @@ const getExistingExports =
                 })
               );
             }
+
+            console.log('>>>> SUCCESS 003', successResponse);
 
             setExportStatus(dispatch)('global', successResponse, ...args);
           }
@@ -115,7 +134,7 @@ const getExistingExports =
             }),
             dismissable: true
           },
-          pending: {
+          pendingStash: {
             id: 'swatch-global-export',
             title: translate('curiosity-toolbar.notifications', {
               context: ['export', 'pending', 'titleGlobal']
@@ -152,11 +171,11 @@ const createExport =
               !successResponse?.data?.data?.products?.[id]?.isPending &&
               successResponse?.data?.data?.products?.[id]?.isCompleted
             ) {
-              dispatch(removeNotification('swatch-create-export'));
+              dispatch(removeNotification(`swatch-create-export-${id}`));
               dispatch(
                 addNotification({
                   variant: 'success',
-                  id: 'swatch-create-export',
+                  id: `swatch-create-export-${id}`,
                   title: translate('curiosity-toolbar.notifications', {
                     context: ['export', 'completed', 'title']
                   }),
@@ -186,7 +205,7 @@ const createExport =
             dismissable: true
           },
           pending: {
-            id: 'swatch-create-export',
+            id: `swatch-create-export-${id}`,
             title: translate('curiosity-toolbar.notifications', {
               context: ['export', 'pending', 'title', id]
             }),
