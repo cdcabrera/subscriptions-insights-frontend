@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
-import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
@@ -50,10 +49,7 @@ const useExportStatus = ({
   ]);
 
   const pendingProductFormats = [];
-  const isProductPending =
-    product?.data?.data?.products?.[productId]?.isPending ||
-    global?.data?.data?.products?.[productId]?.isPending ||
-    false;
+  const isProductPending = product?.isPending || global?.data?.data?.products?.[productId]?.isPending || false;
 
   if (isProductPending) {
     const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
@@ -146,7 +142,6 @@ const useOnSelect = ({
  * @param {Array} props.options
  * @param {string} props.position
  * @param {Function} props.t
- * @param {Function} props.useExport
  * @param {Function} props.useExportStatus
  * @param {Function} props.useOnSelect
  * @returns {React.ReactNode}
@@ -155,27 +150,25 @@ const ToolbarFieldExport = ({
   options,
   position,
   t,
-  useExport: useAliasExport,
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
   const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
-  const { checkExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isProductPending &&
-        pendingProductFormats?.includes(option.value) &&
+      (((isProductPending && !pendingProductFormats?.length) ||
+        (isProductPending && pendingProductFormats?.includes(option.value))) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isProductPending && pendingProductFormats?.includes(option.value),
-    isDisabled: isProductPending && pendingProductFormats?.includes(option.value)
+    selected:
+      (isProductPending && !pendingProductFormats?.length) ||
+      (isProductPending && pendingProductFormats?.includes(option.value)),
+    isDisabled:
+      (isProductPending && !pendingProductFormats?.length) ||
+      (isProductPending && pendingProductFormats?.includes(option.value))
   }));
-
-  useMount(() => {
-    checkExports();
-  });
 
   return (
     <Select
@@ -196,8 +189,7 @@ const ToolbarFieldExport = ({
 /**
  * Prop types.
  *
- * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, useExport: Function,
- *     position: string}}
+ * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, position: string}}
  */
 ToolbarFieldExport.propTypes = {
   options: PropTypes.arrayOf(
@@ -209,7 +201,6 @@ ToolbarFieldExport.propTypes = {
   ),
   position: PropTypes.string,
   t: PropTypes.func,
-  useExport: PropTypes.func,
   useExportStatus: PropTypes.func,
   useOnSelect: PropTypes.func
 };
@@ -217,14 +208,12 @@ ToolbarFieldExport.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, useExport: Function,
- *     position: string}}
+ * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, position: string}}
  */
 ToolbarFieldExport.defaultProps = {
   options: toolbarFieldOptions,
   position: SelectPosition.left,
   t: translate,
-  useExport,
   useExportStatus,
   useOnSelect
 };
