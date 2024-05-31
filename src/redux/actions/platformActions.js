@@ -6,7 +6,6 @@ import {
 import { platformTypes } from '../types';
 import { platformServices } from '../../services/platform/platformServices';
 import { translate } from '../../components/i18n/i18n';
-import { helpers } from '../../common';
 
 /**
  * Platform service wrappers for dispatch, state update.
