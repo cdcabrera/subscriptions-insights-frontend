@@ -161,7 +161,7 @@ recreate the core component.
 <dd><p>A standalone Display Name input filter.</p>
 </dd>
 <dt><a href="#Toolbar.module_ToolbarFieldExport">ToolbarFieldExport</a></dt>
-<dd><p>A standalone export select/dropdown filter.</p>
+<dd><p>A standalone export select/dropdown filter and download hooks.</p>
 </dd>
 <dt><a href="#Toolbar.module_ToolbarFieldGranularity">ToolbarFieldGranularity</a></dt>
 <dd><p>A standalone Granularity select filter.</p>
@@ -6618,14 +6618,15 @@ On enter submit value, on type submit value, and on esc ignore (clear value at c
 <a name="Toolbar.module_ToolbarFieldExport"></a>
 
 ## ToolbarFieldExport
-A standalone export select/dropdown filter.
+A standalone export select/dropdown filter and download hooks.
 
 
 * [ToolbarFieldExport](#Toolbar.module_ToolbarFieldExport)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldExport..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
     * [~useExportStatus(options)](#Toolbar.module_ToolbarFieldExport..useExportStatus) ⇒ <code>Object</code>
-    * [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>function</code>
-        * [~validate](#Toolbar.module_ToolbarFieldExport..useExport..validate) : <code>function</code>
+    * [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>Object</code>
+        * [~checkExports](#Toolbar.module_ToolbarFieldExport..useExport..checkExports)
+        * [~createExport](#Toolbar.module_ToolbarFieldExport..useExport..createExport)
     * [~useOnSelect(options)](#Toolbar.module_ToolbarFieldExport..useOnSelect) ⇒ <code>function</code>
     * [~ToolbarFieldExport(props)](#Toolbar.module_ToolbarFieldExport..ToolbarFieldExport) ⇒ <code>React.ReactNode</code>
         * [.propTypes](#Toolbar.module_ToolbarFieldExport..ToolbarFieldExport.propTypes) : <code>Object</code>
@@ -6655,14 +6656,14 @@ Aggregated export status
     </tr><tr>
     <td>options.useProduct</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useSelector</td><td><code>function</code></td>
+    <td>options.useSelectors</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Toolbar.module_ToolbarFieldExport..useExport"></a>
 
-### ToolbarFieldExport~useExport(options) ⇒ <code>function</code>
-Apply a centralized export hook for, post/put, polling status, and download.
+### ToolbarFieldExport~useExport(options) ⇒ <code>Object</code>
+Apply an export hook for a post with download, and a global polling status with download.
 
 **Kind**: inner method of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport)  
 <table>
@@ -6677,20 +6678,27 @@ Apply a centralized export hook for, post/put, polling status, and download.
     </tr><tr>
     <td>options.createExport</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.getExport</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.getExportStatus</td><td><code>function</code></td>
+    <td>options.getExistingExports</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useDispatch</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useExportStatus</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 
-<a name="Toolbar.module_ToolbarFieldExport..useExport..validate"></a>
 
-#### useExport~validate : <code>function</code>
-A polling response validator
+* [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>Object</code>
+    * [~checkExports](#Toolbar.module_ToolbarFieldExport..useExport..checkExports)
+    * [~createExport](#Toolbar.module_ToolbarFieldExport..useExport..createExport)
+
+<a name="Toolbar.module_ToolbarFieldExport..useExport..checkExports"></a>
+
+#### useExport~checkExports
+Get a global export status. Sets polling if any pending indicators are found.
+
+**Kind**: inner constant of [<code>useExport</code>](#Toolbar.module_ToolbarFieldExport..useExport)  
+<a name="Toolbar.module_ToolbarFieldExport..useExport..createExport"></a>
+
+#### useExport~createExport
+Create an export then download. Automatically sets up polling until the file(s) are ready.
 
 **Kind**: inner constant of [<code>useExport</code>](#Toolbar.module_ToolbarFieldExport..useExport)  
 <a name="Toolbar.module_ToolbarFieldExport..useOnSelect"></a>
@@ -6720,7 +6728,7 @@ On select update export.
 <a name="Toolbar.module_ToolbarFieldExport..ToolbarFieldExport"></a>
 
 ### ToolbarFieldExport~ToolbarFieldExport(props) ⇒ <code>React.ReactNode</code>
-Display an export/download field with options.
+Display an export/download field with options. Check and download available exports.
 
 **Kind**: inner method of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport)  
 **Emits**: [<code>onSelect</code>](#event_onSelect)  

@@ -65,10 +65,9 @@ Platform service wrappers for dispatch, state update.
     * [~removeNotification(id)](#Actions.module_PlatformActions..removeNotification) ⇒ <code>\*</code>
     * [~clearNotifications()](#Actions.module_PlatformActions..clearNotifications) ⇒ <code>\*</code>
     * [~authorizeUser(appName)](#Actions.module_PlatformActions..authorizeUser) ⇒ <code>function</code>
-    * [~getExport(id)](#Actions.module_PlatformActions..getExport) ⇒ <code>function</code>
     * [~setExportStatus(dispatch)](#Actions.module_PlatformActions..setExportStatus) ⇒ <code>function</code>
-    * [~getExportStatus(options)](#Actions.module_PlatformActions..getExportStatus) ⇒ <code>function</code>
-    * [~createExport(data, options)](#Actions.module_PlatformActions..createExport) ⇒ <code>function</code>
+    * [~getExistingExports(options)](#Actions.module_PlatformActions..getExistingExports) ⇒ <code>function</code>
+    * [~createExport(id, data, options)](#Actions.module_PlatformActions..createExport) ⇒ <code>function</code>
     * [~hideGlobalFilter(isHidden)](#Actions.module_PlatformActions..hideGlobalFilter) ⇒ <code>Object</code>
 
 <a name="Actions.module_PlatformActions..addNotification"></a>
@@ -131,24 +130,6 @@ Get an emulated and combined API response from the platforms "getUser" and "getU
     </tr>  </tbody>
 </table>
 
-<a name="Actions.module_PlatformActions..getExport"></a>
-
-### PlatformActions~getExport(id) ⇒ <code>function</code>
-Get a specific export download package.
-
-**Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>id</td><td><code>string</code></td>
-    </tr>  </tbody>
-</table>
-
 <a name="Actions.module_PlatformActions..setExportStatus"></a>
 
 ### PlatformActions~setExportStatus(dispatch) ⇒ <code>function</code>
@@ -167,10 +148,10 @@ Return a "dispatch ready" export poll status check.
     </tr>  </tbody>
 </table>
 
-<a name="Actions.module_PlatformActions..getExportStatus"></a>
+<a name="Actions.module_PlatformActions..getExistingExports"></a>
 
-### PlatformActions~getExportStatus(options) ⇒ <code>function</code>
-Get a specific, or all, export status.
+### PlatformActions~getExistingExports(options) ⇒ <code>function</code>
+Create an export status poll with download, and toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>
@@ -188,8 +169,8 @@ Get a specific, or all, export status.
 
 <a name="Actions.module_PlatformActions..createExport"></a>
 
-### PlatformActions~createExport(data, options) ⇒ <code>function</code>
-Create an export for download.
+### PlatformActions~createExport(id, data, options) ⇒ <code>function</code>
+Create an export for download with toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>
@@ -200,6 +181,8 @@ Create an export for download.
   </thead>
   <tbody>
 <tr>
+    <td>id</td><td><code>string</code></td><td></td>
+    </tr><tr>
     <td>data</td><td><code>object</code></td><td></td>
     </tr><tr>
     <td>options</td><td><code>object</code></td><td><p>Apply polling options</p>
