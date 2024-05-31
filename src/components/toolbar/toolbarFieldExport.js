@@ -38,201 +38,103 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  * Aggregated export status
  *
  * @param {object} options
- * @param {Function} options.t
- * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
- * @param {Function} options.useSelector
+ * @param {Function} options.useSelectors
  * @returns {{isProductPending: boolean, productPendingFormats: Array<string>,
  *     allCompletedDownloads: Array<{ id: string, productId: string }>, isPending: boolean, isCompleted: boolean}}
  */
 const useExportStatus = ({
-  t = translate,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
-  // useSelector: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 } = {}) => {
-  /*
-   * const [isPendingNotification, setIsPendingNotification] = useState(false);
-   * const [isCompletedNotification, setIsCompletedNotification] = useState(false);
-   */
-  const dispatch = useAliasDispatch();
   const { productId } = useAliasProduct();
-  const { data = {} } = useAliasSelector(({ app }) => app?.exports, {});
-  // const { data: response = [] } = useAliasSelectorsResponse(({ app }) => app?.exports);
-  // const data = response?.[0] || {};
+  const [product, global] = useAliasSelectors([
+    ({ app }) => app?.exports?.[productId],
+    ({ app }) => app?.exports?.global
+  ]);
 
-  console.log('>>>> export response status', data);
+  const pendingFormats = [];
+  const isPending =
+    product?.data?.data?.products?.[productId]?.isPending ||
+    global?.data?.data?.products?.[productId]?.isPending ||
+    false;
 
-  const isPending = data?.data?.isAnythingPending;
-  const pendingDownloads = data?.data?.pending || [];
-  const isCompleted = data?.data?.isAnythingCompleted;
-  const allCompletedDownloads = [];
-  const productPendingFormats = [];
-  let isProductPending = false;
-
-  if (isCompleted && Array.isArray(data?.data?.completed)) {
-    allCompletedDownloads.push(...data.data.completed);
-  }
-
-  if (isPending && Array.isArray(data?.data?.products?.[productId]?.pending)) {
-    productPendingFormats.push(
-      ...data.data.products[productId].pending.map(({ format: productFormat }) => productFormat)
+  if (isPending) {
+    const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
+    pendingFormats.push(
+      ...Array.from(
+        new Set([
+          ...convert(product?.data?.data?.products?.[productId]?.pending),
+          ...convert(global?.data?.data?.products?.[productId]?.pending)
+        ])
+      )
     );
-
-    if (productPendingFormats.length) {
-      isProductPending = true;
-    }
   }
-
-  console.log('>>>> export HOOK EXPORT STATUS', isPending, isProductPending);
 
   /*
-  useEffect(() => {
-    if (isPending) {
-      console.log('>>>> export PENDING NEW FIRED');
-      dispatch(reduxActions.platform.removeNotification('swatch-downloads-pending'));
-
-      dispatch([
-        reduxActions.platform.addNotification({
-          id: 'swatch-downloads-pending',
-          variant: 'info',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'pending', 'title'],
-            count: pendingDownloads.length
-          }),
-          dismissable: true,
-          autoDismiss: false
-        })
-      ]);
-    } else {
-      console.log('>>>> export PENDING REMOVE FIRED');
-      dispatch([reduxActions.platform.removeNotification('swatch-downloads-pending')]);
-    }
-  }, [dispatch, isPending, pendingDownloads.length, t]);
+   *const pendingFormats = [];
+   *let isPending = false;
+   *if (Array.isArray(global?.data?.data?.products?.[productId]?.pending)) {
+   *  pendingFormats.push(
+   *    ...global.data.data.products[productId].pending.map(({ format: productFormat }) => productFormat)
+   *  );
+   *
+   *  if (pendingFormats.length) {
+   *    isPending = true;
+   *  }
+   *} else if (Array.isArray(product?.data?.data?.products?.[productId]?.pending)) {
+   *  pendingFormats.push(
+   *    ...product.data.data.products[productId].pending.map(({ format: productFormat }) => productFormat)
+   *  );
+   *
+   *  if (pendingFormats.length) {
+   *    isPending = true;
+   *  }
+   *}
    */
 
   return {
-    allCompletedDownloads,
-    isCompleted,
     isPending,
-    isProductPending,
-    productPendingFormats
+    pendingFormats
   };
 };
 
 /**
- * Apply a centralized export hook for, post/put, polling status, and download.
+ * Apply an export hook for post and download, and a global polling status.
  *
  * @param {object} options
  * @param {Function} options.createExport
- * @param {Function} options.getExport
  * @param {Function} options.getExportStatus
- * @param {Function} options.t
  * @param {Function} options.useDispatch
- * @param {Function} options.useExportStatus
  * @returns {{getExport: Function, createExport: Function, checkExports: Function}}
  */
 const useExport = ({
   createExport: createAliasExport = reduxActions.platform.createExport,
-  getExport: getAliasExport = reduxActions.platform.getExport,
-  getExportStatus: getAliasExportStatus = reduxActions.platform.getExportStatus,
-  t = translate,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useExportStatus: useAliasExportStatus = useExportStatus
+  getExportStatus: getAliasExportStatus = reduxActions.platform.getExistingExports,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
-  const { isPending } = useAliasExportStatus();
 
   /**
    * A polling response validator
    *
    * @type {Function}
    */
-  const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
+  // const validate = useCallback(response => response?.data?.data?.isAnythingPending === false, []);
 
   /**
-   * Check export status. And setup polling if there are NOT any pending status indicators, the Validator will
-   * resolve automatically.
+   * Get a global export status. Sets polling if any pending indicators are found.
    */
-  const checkExports = useCallback(() => {
-    getAliasExportStatus({ poll: { validate } })(dispatch);
-  }, [dispatch, getAliasExportStatus, validate]);
+  const checkExports = useCallback(() => getAliasExportStatus()(dispatch), [dispatch, getAliasExportStatus]);
 
   /**
-   * Setup, or create, an export. And setup polling if there are NOT any pending status indicators, the Validator will
-   * resolve automatically.
+   * Create an export then download. Automatically sets up polling until the file(s) are ready.
    */
-  const createExport = useCallback(
-    (id, data) => {
-      // dispatch(reduxActions.platform.removeNotification('swatch-downloads-pending'));
-
-      dispatch([
-        // createAliasExport(data, { poll: { validate } }),
-        createAliasExport(id, data)
-        /*
-        reduxActions.platform.addNotification({
-          id: 'swatch-downloads-pending',
-          variant: 'info',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'pending', 'title'],
-            count: 1
-          }),
-          dismissable: true,
-          autoDismiss: false
-        })
-         */
-      ]);
-      // window.setTimeout(() => checkExports(), 1000);
-    },
-    [createAliasExport, dispatch]
-  );
-
-  /**
-   * Get an export by identifier
-   *
-   * @param {string} id
-   * @param {string} productId
-   */
-  const getExport = useCallback(
-    downloadList => {
-      if (!downloadList.length) {
-        return;
-      }
-
-      const updatedDownloadList = downloadList.map(({ id, productId }) => ({
-        id,
-        options: {
-          fileName: `${getCurrentDate().toLocaleDateString('fr-CA')}_swatch_report_${_snakeCase(productId)}`
-        }
-      }));
-
-      dispatch([
-        getAliasExport(updatedDownloadList)
-        /*
-        reduxActions.platform.removeNotification('downloadlist'),
-        reduxActions.platform.addNotification({
-          id: 'downloadList',
-          variant: 'success',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'title']
-          }),
-          description: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'description']
-          }),
-          dismissable: true,
-          autoDismiss: true
-        })
-         */
-      ]);
-    },
-    [dispatch, getAliasExport, t]
-  );
+  const createExport = useCallback((id, data) => createAliasExport(id, data)(dispatch), [createAliasExport, dispatch]);
 
   return {
     checkExports,
-    createExport,
-    getExport
+    createExport
   };
 };
 
@@ -290,41 +192,23 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
-  const {
-    isPending,
-    isProductPending,
-    allCompletedDownloads = [],
-    productPendingFormats = []
-  } = useAliasExportStatus();
-  const { checkExports, getExport } = useAliasExport();
+  const { isPending, pendingFormats = [] } = useAliasExportStatus();
+  const { checkExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isProductPending &&
-        productPendingFormats?.includes(option.value) &&
+      (isPending &&
+        pendingFormats?.includes(option.value) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isProductPending && productPendingFormats?.includes(option.value),
-    isDisabled: isProductPending && productPendingFormats?.includes(option.value)
+    selected: isPending && pendingFormats?.includes(option.value),
+    isDisabled: isPending && pendingFormats?.includes(option.value)
   }));
 
   useMount(() => {
     checkExports();
   });
-
-  /*
-  useShallowCompareEffect(() => {
-    if (!isPending && allCompletedDownloads.length) {
-      getExport(allCompletedDownloads);
-    }
-    /*
-     *allCompletedDownloads.forEach(({ id, productId }) => {
-     *  getExport(id, productId);
-     *});
-     * /
-  }, [allCompletedDownloads, isPending]);
-  */
 
   return (
     <Select

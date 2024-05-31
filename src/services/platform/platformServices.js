@@ -372,6 +372,58 @@ const getExport = (id, options = {}) => {
 };
 
 const getExports = async () => Promise.reject();
+
+const getExistingExports = (params = {}, options = {}) => {
+  const {
+    cache = false,
+    cancel = true,
+    cancelId = 'all-exports',
+    poll,
+    schema = [platformSchemas.exports],
+    transform = [platformTransformers.exports],
+    ...restOptions
+  } = options;
+
+  return axiosServiceCall({
+    ...restOptions,
+    poll: {
+      location: {
+        url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+        // config: {
+        //  cache: false,
+        //  cancel: false,
+        //  schema: [platformSchemas.exports],
+        //  transform: [platformTransformers.exports]
+        // },
+        ...poll?.location
+      },
+      // status: (...args) => {
+      //  if (typeof poll.status === 'function') {
+      //    poll.status.call(null, ...args);
+      //  }
+      // },//
+      validate: response => {
+        const isCompleted = !response?.data?.data?.isAnythingPending && response?.data?.data?.isAnythingCompleted;
+        const completedResults = response?.data?.data?.completed;
+
+        if (isCompleted && completedResults.length > 0) {
+          Promise.all(completedResults.map(({ id }) => getExport(id)));
+        }
+
+        return isCompleted;
+      },
+      ...poll
+    },
+    url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
+    params,
+    cache,
+    cancel,
+    cancelId,
+    schema,
+    transform
+  });
+};
+
 /*
  * await Promise.all(idList.map(({ id, options }) => getExport(id, options)));
  * await Promise.all(idList.map(({ id }) => deleteExport(id)));
@@ -493,6 +545,7 @@ const postExport = async (data = {}, options = {}) => {
 
 const platformServices = {
   deleteExport,
+  getExistingExports,
   getExport,
   getExports,
   getExportStatus,
@@ -511,6 +564,7 @@ export {
   platformServices as default,
   platformServices,
   deleteExport,
+  getExistingExports,
   getExport,
   getExports,
   getExportStatus,

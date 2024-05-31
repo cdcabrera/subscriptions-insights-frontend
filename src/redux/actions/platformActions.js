@@ -81,10 +81,13 @@ const getExport = idList => dispatch =>
  */
 const setExportStatus =
   dispatch =>
-  (success = {}, error) =>
+  (id, success = {}, error) =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: (error && Promise.reject(error)) || Promise.resolve(success)
+      payload: (error && Promise.reject(error)) || Promise.resolve(success),
+      meta: {
+        id
+      }
     });
 
 /**
@@ -95,18 +98,99 @@ const setExportStatus =
  */
 const getExportStatus =
   (options = {}) =>
-  dispatch =>
-    dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExportStatus(undefined, undefined, {
-        ...options,
-        poll: { ...options.poll, status: setExportStatus(dispatch) }
+  dispatch => {
+    dispatch(removeNotification('swatch-downloads-pending'));
+
+    dispatch([
+      {
+        type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+        payload: platformServices.getExportStatus(undefined, undefined, {
+          ...options,
+          poll: {
+            ...options.poll,
+            // status: (...args) => setExportStatus(dispatch)('global', ...args)
+            status: (successResponse, ...args) => {
+              console.log('>>> export success', successResponse);
+              if (!successResponse?.data?.data?.isAnythingPending) {
+                dispatch(removeNotification('swatch-downloads-pending'));
+              }
+
+              if (!successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted) {
+                dispatch(
+                  addNotification({ title: `Product reports ready, ${successResponse?.data?.data.completed.length}` })
+                );
+              }
+
+              setExportStatus(dispatch)('global', successResponse, ...args);
+            }
+          }
+        })
+      },
+      addNotification({
+        id: 'swatch-downloads-pending',
+        title: translate('curiosity-toolbar.notifications', {
+          context: ['export', 'pending', 'title'],
+          count: 1
+        }),
+        dismissable: true,
+        autoDismiss: true
       })
-    });
+    ]);
+  };
+
+const getExistingExports =
+  (options = {}) =>
+  dispatch => {
+    // const generatedId = helpers.generateHash(data);
+    dispatch(removeNotification('swatch-global-export'));
+
+    dispatch([
+      {
+        type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+        payload: platformServices.getExistingExports(undefined, {
+          ...options,
+          poll: {
+            ...options.poll,
+            status: (successResponse, ...args) => {
+              console.log('>>> export success', successResponse);
+              if (!successResponse?.data?.data?.isAnythingPending) {
+                dispatch(removeNotification('swatch-global-export'));
+              }
+
+              if (!successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted) {
+                dispatch(
+                  addNotification({
+                    id: 'swatch-global-export',
+                    variant: 'success',
+                    title: `Product reports ready, ${successResponse?.data?.data.completed.length}`
+                  })
+                );
+              }
+
+              setExportStatus(dispatch)('global', successResponse, ...args);
+            }
+          }
+        }),
+        meta: {
+          id: 'global'
+        }
+      },
+      addNotification({
+        id: 'swatch-global-export',
+        title: translate('curiosity-toolbar.notifications', {
+          context: ['export', 'pending', 'title'],
+          count: 1
+        }),
+        dismissable: true,
+        autoDismiss: true
+      })
+    ]);
+  };
 
 /**
  * Create an export for download.
  *
+ * @param id
  * @param {object} data
  * @param {object} options Apply polling options
  * @returns {Function}
@@ -115,7 +199,7 @@ const createExport =
   (id, data = {}, options = {}) =>
   dispatch => {
     // const generatedId = helpers.generateHash(data);
-    dispatch(removeNotification('swatch-downloads-pending'));
+    dispatch(removeNotification('swatch-global-export'));
 
     dispatch([
       {
@@ -126,19 +210,21 @@ const createExport =
             ...options.poll,
             status: (successResponse, ...args) => {
               console.log('>>> export success', successResponse);
+              if (!successResponse?.data?.data?.isAnythingPending) {
+                dispatch(removeNotification('swatch-global-export'));
+              }
 
-              dispatch(addNotification({ title: 'hello world' }));
-              setExportStatus(dispatch)(successResponse, ...args);
+              if (successResponse?.data?.data?.products?.[id]?.isCompleted) {
+                dispatch(addNotification({ variant: 'success', title: `Product report ready, ${id}` }));
+              }
+
+              setExportStatus(dispatch)(id, successResponse, ...args);
             }
           }
-        }),
-        meta: {
-          id
-        }
+        })
       },
       addNotification({
-        id: 'swatch-downloads-pending',
-        variant: 'info',
+        id: 'swatch-global-export',
         title: translate('curiosity-toolbar.notifications', {
           context: ['export', 'pending', 'title'],
           count: 1
@@ -169,6 +255,7 @@ const platformActions = {
   getExport,
   setExportStatus,
   getExportStatus,
+  getExistingExports,
   hideGlobalFilter
 };
 
@@ -183,5 +270,6 @@ export {
   getExport,
   setExportStatus,
   getExportStatus,
+  getExistingExports,
   hideGlobalFilter
 };

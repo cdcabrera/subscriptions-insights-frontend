@@ -132,6 +132,11 @@ const exports = response => {
   updatedResponse.data.isAnythingPending = updatedResponse.data.pending.length > 0;
   updatedResponse.data.isAnythingCompleted = updatedResponse.data.completed.length > 0;
 
+  Object.entries(updatedResponse.data.products).forEach(([productId, { pending, completed }]) => {
+    updatedResponse.data.products[productId].isPending = pending.length > 0;
+    updatedResponse.data.products[productId].isCompleted = completed.length > 0;
+  });
+
   return updatedResponse;
 };
 
