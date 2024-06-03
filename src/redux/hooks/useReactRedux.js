@@ -121,10 +121,10 @@ const useSelectors = (
       idMultiSelectorResponse[id] = listMultiSelectorResponse[index];
     });
 
-    return idMultiSelectorResponse;
+    return idMultiSelectorResponse || {};
   }
 
-  return listMultiSelectorResponse;
+  return listMultiSelectorResponse || [];
 };
 
 /**
@@ -174,7 +174,7 @@ const useSelectorsResponse = (selectors, { useSelectors: useAliasSelectors = use
   updatedSelectorResponse.forEach(response => {
     const id = (!isSelectorResponseArray && response?.[0]) || null;
 
-    const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response;
+    const updatedResponse = (isSelectorResponseArray && response) || response?.[1] || response || {};
     const isServiceResponse =
       typeof updatedResponse.cancelled === 'boolean' ||
       typeof updatedResponse.error === 'boolean' ||

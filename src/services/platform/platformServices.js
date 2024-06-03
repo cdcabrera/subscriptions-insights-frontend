@@ -481,6 +481,7 @@ const postExport = async (data = {}, options = {}) => {
   const postResponse = await axiosServiceCall({
     ...restOptions,
     poll: {
+      ...poll,
       location: {
         url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
         config: {
@@ -492,6 +493,8 @@ const postExport = async (data = {}, options = {}) => {
         ...poll?.location
       },
       status: (successResponse, ...args) => {
+        console.log('>>>> STATUS, successResponse', successResponse, ...args);
+
         if (typeof poll?.status === 'function') {
           poll.status.call(null, successResponse, ...args);
         }
@@ -502,13 +505,13 @@ const postExport = async (data = {}, options = {}) => {
         );
 
         if (foundDownload) {
+          console.log('>>>>> VALIDATED', foundDownload);
           const { id, fileName } = foundDownload;
           getExport(id, { fileName });
         }
 
         return foundDownload !== undefined;
-      },
-      ...poll
+      }
     },
     method: 'post',
     url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,

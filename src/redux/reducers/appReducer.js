@@ -55,13 +55,47 @@ const appReducer = (state = initialState, action) => {
       }
 
       return state;
-
+    // case reduxHelpers.PENDING_ACTION(platformTypes.SET_PLATFORM_EXPORT_CREATE):
+      // console.log('>>>> action', action);
+      /*
+      return reduxHelpers.setStateProp(
+        'exports',
+        {
+          [action.meta.id]: {
+            pending: true,
+            fulfilled: false,
+            error: false
+          }
+        },
+        {
+          reset: false
+        }
+      );
+      */
+      // return state;
+    case platformTypes.SET_PLATFORM_EXPORT_STATUS:
+      return reduxHelpers.setStateProp(
+        'exports',
+        {
+          [action.id]: {
+            isPending: action.isPending,
+            pending: action.pending
+          }
+        },
+        {
+          state,
+          initialState
+        }
+      );
     default:
       return reduxHelpers.generatedPromiseActionReducer(
         [
           { ref: 'locale', type: appTypes.USER_LOCALE },
           { ref: 'optin', type: [appTypes.DELETE_USER_OPTIN, appTypes.GET_USER_OPTIN, appTypes.UPDATE_USER_OPTIN] },
-          { ref: 'exports', type: platformTypes.SET_PLATFORM_EXPORT_STATUS },
+          // {
+          //  ref: 'exports',
+          //  type: [platformTypes.SET_PLATFORM_EXPORT_STATUS]
+          // },
           { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }
         ],
         state,

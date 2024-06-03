@@ -41,17 +41,28 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  */
 const useExportStatus = ({
   useProduct: useAliasProduct = useProduct,
+  // useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectorsResponse
   useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 } = {}) => {
   const { productId } = useAliasProduct();
-  const [product, global] = useAliasSelectors([
-    ({ app }) => app?.exports?.[productId],
-    ({ app }) => app?.exports?.global
-  ]);
+  // const { data } = useAliasSelectors([({ app }) => app?.exports?.[productId], ({ app }) => app?.exports?.global]);
+
+  // const [product, global] = data || [];
+
+  const data = useAliasSelectors([({ app }) => app?.exports?.[productId], ({ app }) => app?.exports?.global]);
+  const [product, global] = data || [];
+
+  /*
+   * const [product, global] = useAliasSelectors([
+   *  ({ app }) => app?.exports?.[productId],
+   *  ({ app }) => app?.exports?.global
+   * ]);
+   */
 
   const pendingProductFormats = [];
   const isProductPending =
-    product?.data?.data?.products?.[productId]?.isPending ||
+    product?.isPending ||
+    // product?.data?.data?.products?.[productId]?.isPending ||
     global?.data?.data?.products?.[productId]?.isPending ||
     false;
 
@@ -66,6 +77,14 @@ const useExportStatus = ({
       )
     );
   }
+
+  console.log(
+    '>>>>> HOOK STATUS',
+    isProductPending,
+    // product?.pending,
+    // product?.data?.data?.products?.[productId]?.isPending,
+    global?.data?.data?.products?.[productId]?.isPending
+  );
 
   return {
     isProductPending,
@@ -159,23 +178,31 @@ const ToolbarFieldExport = ({
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
+  // const [selectedOptions, setSelectedOptions] = useState([]);
   const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
   const { checkExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
+  //
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isProductPending &&
-        pendingProductFormats?.includes(option.value) &&
+      (((isProductPending && !pendingProductFormats?.length) ||
+        (isProductPending && pendingProductFormats?.includes(option.value))) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isProductPending && pendingProductFormats?.includes(option.value),
-    isDisabled: isProductPending && pendingProductFormats?.includes(option.value)
+    selected:
+      (isProductPending && !pendingProductFormats?.length) ||
+      (isProductPending && pendingProductFormats?.includes(option.value)),
+    isDisabled:
+      (isProductPending && !pendingProductFormats?.length) ||
+      (isProductPending && pendingProductFormats?.includes(option.value))
   }));
 
   useMount(() => {
-    checkExports();
+    // checkExports();
   });
+
+  console.log('>>>> pending', isProductPending, pendingProductFormats);
 
   return (
     <Select
