@@ -333,30 +333,79 @@ const generateExtendedChartSettings = ({ settings, granularity } = {}) => ({
  * Get either the current or last date available data.
  *
  * @param {object} params
- * @param {Array} params.data
+ * @param {Array<object|Array>} params.data
  * @param {boolean} params.isCurrent
  * @returns {{date: string, hasData: boolean, value: number}}
  */
 const getMetricTotalCurrentOrLastData = helpers.memo(
-  ({ data, isCurrent = false } = {}) => {
-    const {
-      date: currentDate,
-      hasData: currentHasData,
-      y: currentValue
-    } = data.find(({ isCurrentDate }) => isCurrentDate === true) || {};
-    const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
+  // ({ data, isCurrent = false } = {}) => {
+  ({ data } = {}) => {
+    const isMultipleDataSets = data.filter(chartData => Array.isArray(chartData)).length > 0;
+    const updatedDataSets = (isMultipleDataSets && data) || [data];
+    // console.log('>>>>>>', isMultipleDataResponses, data);
+    /*
+     *const {
+     *  date: currentDate,
+     *  hasData: currentHasData,
+     *  y: currentValue
+     *} = data.find(({ isCurrentDate }) => isCurrentDate === true) || {};
+     *const { date: lastDate, hasData: lastHasData, y: lastValue } = data[data.length - 1] || {};
+     *
+     *const date = isCurrent ? currentDate : lastDate;
+     *const hasData = isCurrent ? currentHasData : lastHasData;
+     *const value = isCurrent ? currentValue : lastValue;
+     */
 
-    const date = isCurrent ? currentDate : lastDate;
-    const hasData = isCurrent ? currentHasData : lastHasData;
-    const value = isCurrent ? currentValue : lastValue;
+    const totals = {
+      date: new Set(),
+      hasData: [],
+      value: undefined
+    };
+
+    console.log('>>> getMetricTotalCurrentOrLastData 001', updatedDataSets);
+
+    updatedDataSets.forEach(dataSet => {
+      const currentData = dataSet.find(({ isCurrentDate }) => isCurrentDate === true);
+      const isCurrentData = currentData !== undefined;
+      const { date: lastDate, hasData: lastHasData, y: lastValue } = dataSet[dataSet.length - 1] || {};
+
+      console.log('>>>>>>> getMetricTotalCurrentOrLastData INTERNAL', currentData);
+
+      const date = isCurrentData ? currentData.date : lastDate;
+      const hasData = isCurrentData ? currentData.hasData : lastHasData;
+      const value = isCurrentData ? currentData.y : lastValue;
+
+      totals.date.add(date);
+      totals.hasData.push(hasData);
+
+      if (!totals.value) {
+        if (updatedDataSets.length > 1) {
+          totals.value = value || 0;
+        } else {
+          totals.value = value;
+        }
+      } else {
+        totals.value += value || 0;
+      }
+    });
+
+    if (Array.from(totals.date).length > 1) {
+      return {
+        date: undefined,
+        hasData: undefined,
+        value: undefined
+      };
+    }
+
+    console.log('>>> getMetricTotalCurrentOrLastData 002', Array.from(totals.date), totals.hasData, totals.value);
 
     return {
-      date,
-      hasData,
-      value
+      date: Array.from(totals.date)[0],
+      hasData: totals.hasData.filter(value => value === true).length > 0,
+      value: totals.value
     };
   },
-  { cacheLimit: 3 }
+  { cacheLimit: 5 }
 );
 
 /**
@@ -393,7 +442,7 @@ const getDailyMonthlyTotals = helpers.memo(
       monthlyValue
     };
   },
-  { cacheLimit: 3 }
+  { cacheLimit: 5 }
 );
 
 /**
@@ -404,11 +453,59 @@ const getDailyMonthlyTotals = helpers.memo(
  * @returns {{capacityData: object, tallyData: object}}
  */
 const getPrepaidTallyCapacity = helpers.memo(
-  ({ data = [] } = {}) => ({
-    capacityData: data.find(({ chartType }) => new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))?.data,
-    tallyData: data.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data
-  }),
+  ({ data = [] } = {}) => {
+    console.log('>>> prepaid pre, data', data);
+    return {
+      capacityData: data.find(({ chartType }) => new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))?.data,
+      tallyData: data.find(({ id }) => new RegExp(CATEGORY_TYPES.PREPAID, 'i').test(id))?.data
+    };
+  },
   { cacheLimit: 3 }
+);
+
+/*
+ *const getSortedTallyCapacity = helpers.memo(
+ *  ({ data = [] } = {}) => ({
+ *    capacityData: data.filter(({ chartType }) => new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)),
+ *    tallyData: data.filter(({ chartType }) => !new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))
+ *  }),
+ *  { cacheLimit: 5 }
+ *);
+ */
+
+/**
+ * Breakout data into Capacity, Tally groups for future consumption. Assume a single Capacity data set and
+ * multiple Tally data sets.
+ *
+ * @param {object} params
+ * @param {Array} params.data
+ * @returns {{capacityData: object, tallyData: object}}
+ */
+const groupTallyCapacityData = helpers.memo(
+  ({ data = {}, allData = [] } = {}) => {
+    const updatedData = { capacityData: undefined, tallyData: undefined };
+    const isDataCapacityData = new RegExp(ChartTypeVariant.threshold, 'i').test(data.chartType);
+
+    if (isDataCapacityData) {
+      updatedData.capacityData = data?.data;
+      updatedData.tallyData = allData
+        .filter(({ chartType }) => !new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))
+        .map(({ data }) => data);
+    } else {
+      updatedData.capacityData = allData.find(({ chartType }) =>
+        new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
+      )?.data;
+      updatedData.tallyData = data?.data;
+    }
+
+    return updatedData;
+    /*
+     * capacityData: data.filter(({ chartType }) => new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)),
+     * tallyData: data.filter(({ chartType }) => !new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))
+     * };
+     */
+  },
+  { cacheLimit: 5 }
 );
 
 /**
@@ -423,6 +520,12 @@ const getPrepaidTallyCapacity = helpers.memo(
  */
 const getRemainingCapacity = helpers.memo(
   ({ capacityData = [], tallyData = [], isCurrent = false } = {}) => {
+    /*
+     * const isMultipleTallyDataResponses = tallyData.filter(({ chartType }) => typeof chartType === 'string').length >
+     * 0;
+     */
+    console.log('>>>> REMAINING CAPACITY', capacityData, tallyData);
+
     const { hasData: capacityHasData, value: capacityValue } = getMetricTotalCurrentOrLastData({
       data: capacityData,
       isCurrent
@@ -431,6 +534,10 @@ const getRemainingCapacity = helpers.memo(
       data: tallyData,
       isCurrent
     });
+
+    console.log('>>> REMAINING CAPACITY 002', capacityHasData, capacityValue);
+    console.log('>>> REMAINING CAPACITY 003', tallyHasData, tallyValue);
+
     const response = {
       remainingCapacityHasData: capacityHasData && tallyHasData,
       remainingCapacity: null
@@ -446,7 +553,7 @@ const getRemainingCapacity = helpers.memo(
 
     return response;
   },
-  { cacheLimit: 3 }
+  { cacheLimit: 5 }
 );
 
 /**
@@ -484,7 +591,7 @@ const getRemainingOverage = helpers.memo(
 
     return response;
   },
-  { cacheLimit: 3 }
+  { cacheLimit: 5 }
 );
 
 const graphCardHelpers = {
@@ -499,6 +606,7 @@ const graphCardHelpers = {
   getRemainingCapacity,
   getRemainingOverage,
   getTooltipDate,
+  groupTallyCapacityData,
   xAxisTickFormat,
   yAxisTickFormat
 };
@@ -517,6 +625,7 @@ export {
   getRemainingCapacity,
   getRemainingOverage,
   getTooltipDate,
+  groupTallyCapacityData,
   xAxisTickFormat,
   yAxisTickFormat
 };
