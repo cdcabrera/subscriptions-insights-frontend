@@ -1,6 +1,7 @@
 import React from 'react';
-import _cloneDeep from 'lodash/cloneDeep';
-import { useChartContext, useToggleData } from './chartContext';
+import PropTypes from 'prop-types';
+import { useChartContext, useDataSets, useToggleData } from './chartContext';
+import { helpers } from '../../common';
 
 /**
  * @memberof Chart
@@ -10,19 +11,28 @@ import { useChartContext, useToggleData } from './chartContext';
 /**
  * Wrapper for rendering an HTML based legend.
  *
+ * @param {object} options
+ * @param {Function} options.useChartContext
+ * @param {Function} options.useDataSets
+ * @param {Function} options.useToggleData
  * @returns {React.ReactNode}
  */
-const ChartLegend = () => {
-  const { dataSetsToggle, getIsToggled, onHide, onRevert, onToggle } = useToggleData();
-  const { chartSettings = {} } = useChartContext();
-  const { chartLegend, dataSets, padding = {}, xAxisProps = {} } = chartSettings;
+const ChartLegend = ({
+  useChartContext: useAliasChartContext,
+  useDataSets: useAliasDataSets,
+  useToggleData: useAliasToggleData
+} = {}) => {
+  const { chartSettings = {} } = useAliasChartContext();
+  const { chartLegend, padding = {}, xAxisProps = {} } = chartSettings;
+  const updatedDataSets = useAliasDataSets();
+  const { dataSetsToggle, getIsToggled, onHide, onRevert, onToggle } = useAliasToggleData();
 
   if (!chartLegend) {
     return null;
   }
 
   const legendProps = {
-    datum: { dataSets: _cloneDeep(dataSets) },
+    datum: { dataSets: helpers.memoClone(updatedDataSets) },
     chart: {
       dataSetsToggle,
       hide: onHide,
@@ -49,11 +59,19 @@ const ChartLegend = () => {
 /**
  * Prop types.
  */
-ChartLegend.propTypes = {};
+ChartLegend.propTypes = {
+  useChartContext: PropTypes.func,
+  useDataSets: PropTypes.func,
+  useToggleData: PropTypes.func
+};
 
 /**
  * Default props.
  */
-ChartLegend.defaultProps = {};
+ChartLegend.defaultProps = {
+  useChartContext,
+  useDataSets,
+  useToggleData
+};
 
 export { ChartLegend as default, ChartLegend };

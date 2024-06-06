@@ -6,6 +6,7 @@ import { ChartElements } from './chartElements';
 import { ChartLegend } from './chartLegend';
 import { chartHelpers, ChartTypeVariant } from './chartHelpers';
 import { useResizeObserver } from '../../hooks/useWindow';
+import { helpers } from '../../common/helpers';
 
 /**
  * PF Charts/Victory area, and line, charts generator.
@@ -28,6 +29,7 @@ import { useResizeObserver } from '../../hooks/useWindow';
  * @param {React.ReactNode|Function} props.chartLegend
  * @param {React.ReactNode|Function} props.chartTooltip
  * @param {Array} props.dataSets
+ * @param {Function} props.onUpdate
  * @param {object} props.padding
  * @param {string} props.themeColor
  * @param {React.ReactNode|Function} props.xAxisChartLabel
@@ -44,6 +46,7 @@ const Chart = ({
   chartLegend,
   chartTooltip,
   dataSets,
+  onUpdate,
   padding,
   themeColor,
   xAxisChartLabel,
@@ -117,6 +120,7 @@ const Chart = ({
         isMultiYAxis,
         maxX,
         maxY: (isMultiYAxis && individualMaxY) || maxY,
+        onUpdate,
         padding: updatedPadding,
         themeColor,
         tooltipDataSetLookUp
@@ -138,6 +142,7 @@ const Chart = ({
     chartWidth,
     dataSets,
     dataSetsToggle,
+    onUpdate,
     padding,
     setContext,
     themeColor,
@@ -207,6 +212,7 @@ Chart.propTypes = {
       yAxisUseDataSet: PropTypes.bool
     })
   ),
+  onUpdate: PropTypes.func,
   padding: PropTypes.shape({
     bottom: PropTypes.number,
     left: PropTypes.number,
@@ -236,6 +242,7 @@ Chart.defaultProps = {
   chartLegend: null,
   chartTooltip: null,
   dataSets: [],
+  onUpdate: helpers.noop,
   padding: {
     bottom: 75,
     left: 55,
