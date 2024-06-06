@@ -166,11 +166,11 @@ const config = {
       {
         header: () =>
           translate('curiosity-graph.cardHeadingMetric', {
-            context: ['remainingCapacity', 'rhel'],
+            context: ['remainingCapacity'],
             testId: 'graphRemainingCapacityCard-header'
           }),
-        body: ({ dataSets = [], display = {} } = {}) => {
-          console.log('>>>>>> DATASETS', dataSets, display);
+        body: ({ display = {} } = {}) => {
+          console.log('>>>>>> DATASETS', display);
           return translate(
             'curiosity-graph.cardBodyMetric',
             {

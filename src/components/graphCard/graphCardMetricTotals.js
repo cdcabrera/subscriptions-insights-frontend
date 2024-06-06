@@ -9,6 +9,7 @@ import { toolbarFieldOptions as toolbarFieldMonthlyOptions } from '../toolbar/to
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { graphCardHelpers } from './graphCardHelpers';
 import { helpers } from '../../common';
+// import { useToggleData } from '../chart/chartContext';
 
 /**
  * @memberof GraphCard
@@ -31,11 +32,15 @@ const GraphCardMetricTotals = ({
   useMetricsSelector: useAliasMetricsSelector,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
+  // const { dataSetsToggle } = useToggleData();
   const { settings = {} } = useAliasGraphCardContext();
   const query = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets: dataByList = [] } = useAliasMetricsSelector();
 
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = query;
+
+  // NOTE: grouped totals working, oddity in how to get what graph facets are being displayed
+  // console.log('>>>> chart OUTPUT', dataSetsToggle);
 
   /**
    * Note: 20240605, Originally, metric cards were targeted at "on-demand" displays, they've been expanded to include
@@ -91,6 +96,8 @@ const GraphCardMetricTotals = ({
         });
       });
        */
+      globalDisplay.remainingCapacity = updatedDataSets?.[0]?.display?.globalRemainingCapacity;
+      globalDisplay.remainingCapacityHasData = updatedDataSets?.[0]?.display?.globalRemainingCapacityHasData;
 
       return helpers.setImmutableData({ dataSets: updatedDataSets, display: globalDisplay }, { isClone: true });
     });

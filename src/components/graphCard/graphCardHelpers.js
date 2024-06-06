@@ -483,14 +483,16 @@ const getPrepaidTallyCapacity = helpers.memo(
  */
 const groupTallyCapacityData = helpers.memo(
   ({ data = {}, allData = [] } = {}) => {
-    const updatedData = { capacityData: undefined, tallyData: undefined };
+    const updatedData = { capacityData: undefined, tallyData: undefined, allTallyData: undefined };
     const isDataCapacityData = new RegExp(ChartTypeVariant.threshold, 'i').test(data.chartType);
+
+    updatedData.allTallyData = allData
+      .filter(({ chartType }) => !new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))
+      .map(({ data: chartData }) => chartData);
 
     if (isDataCapacityData) {
       updatedData.capacityData = data?.data;
-      updatedData.tallyData = allData
-        .filter(({ chartType }) => !new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))
-        .map(({ data: chartData }) => chartData);
+      updatedData.tallyData = updatedData.allTallyData;
     } else {
       updatedData.capacityData = allData.find(({ chartType }) =>
         new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
@@ -519,29 +521,40 @@ const groupTallyCapacityData = helpers.memo(
  * @returns {{remainingCapacityHasData: boolean, remainingCapacity: number}}
  */
 const getRemainingCapacity = helpers.memo(
-  ({ capacityData = [], tallyData = [], isCurrent = false } = {}) => {
+  ({ allTallyData = [], capacityData = [], tallyData = [] } = {}) => {
     /*
      * const isMultipleTallyDataResponses = tallyData.filter(({ chartType }) => typeof chartType === 'string').length >
      * 0;
      */
     console.log('>>>> REMAINING CAPACITY', capacityData, tallyData);
 
+    const { hasData: allTallyHasData, value: allTallyValue } = getMetricTotalCurrentOrLastData({
+      data: allTallyData
+    });
     const { hasData: capacityHasData, value: capacityValue } = getMetricTotalCurrentOrLastData({
-      data: capacityData,
-      isCurrent
+      data: capacityData
     });
     const { hasData: tallyHasData, value: tallyValue } = getMetricTotalCurrentOrLastData({
-      data: tallyData,
-      isCurrent
+      data: tallyData
     });
 
     console.log('>>> REMAINING CAPACITY 002', capacityHasData, capacityValue);
     console.log('>>> REMAINING CAPACITY 003', tallyHasData, tallyValue);
 
     const response = {
+      globalRemainingCapacityHasData: capacityHasData && allTallyHasData,
+      globalRemainingCapacity: null,
       remainingCapacityHasData: capacityHasData && tallyHasData,
       remainingCapacity: null
     };
+
+    if (response.globalRemainingCapacityHasData) {
+      response.globalRemainingCapacity = Number.parseInt(capacityValue, 10) - Number.parseInt(allTallyValue, 10) || 0;
+
+      if (!(response.globalRemainingCapacity >= 0)) {
+        response.globalRemainingCapacity = 0;
+      }
+    }
 
     if (response.remainingCapacityHasData) {
       response.remainingCapacity = Number.parseInt(capacityValue, 10) - Number.parseInt(tallyValue, 10) || 0;
