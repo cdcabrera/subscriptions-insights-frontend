@@ -490,7 +490,7 @@ const groupTallyCapacityData = helpers.memo(
       updatedData.capacityData = data?.data;
       updatedData.tallyData = allData
         .filter(({ chartType }) => !new RegExp(ChartTypeVariant.threshold, 'i').test(chartType))
-        .map(({ data }) => data);
+        .map(({ data: chartData }) => chartData);
     } else {
       updatedData.capacityData = allData.find(({ chartType }) =>
         new RegExp(ChartTypeVariant.threshold, 'i').test(chartType)
