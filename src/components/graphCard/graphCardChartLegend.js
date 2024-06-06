@@ -42,6 +42,7 @@ const GraphCardChartLegend = ({
   useSelectors: useAliasSelectors,
   useProduct: useAliasProduct
 }) => {
+  console.log('>>>> GraphCardChartLegend', chart.dataSetsToggle);
   const { settings = {} } = useAliasGraphCardContext();
   const { productLabel, viewId } = useAliasProduct();
   const { isDisabledLegendClick } = settings;

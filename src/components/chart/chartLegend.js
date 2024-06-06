@@ -13,7 +13,7 @@ import { useChartContext, useToggleData } from './chartContext';
  * @returns {React.ReactNode}
  */
 const ChartLegend = () => {
-  const { getIsToggled, onHide, onRevert, onToggle } = useToggleData();
+  const { dataSetsToggle, getIsToggled, onHide, onRevert, onToggle } = useToggleData();
   const { chartSettings = {} } = useChartContext();
   const { chartLegend, dataSets, padding = {}, xAxisProps = {} } = chartSettings;
 
@@ -24,6 +24,7 @@ const ChartLegend = () => {
   const legendProps = {
     datum: { dataSets: _cloneDeep(dataSets) },
     chart: {
+      dataSetsToggle,
       hide: onHide,
       revert: onRevert,
       toggle: onToggle,

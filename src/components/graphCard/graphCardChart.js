@@ -85,7 +85,10 @@ const GraphCardChart = ({
               <Chart
                 {...graphCardHelpers.generateExtendedChartSettings({ settings, granularity })}
                 dataSets={dataSets}
-                chartLegend={({ chart, datum }) => <GraphCardChartLegend chart={chart} datum={datum} />}
+                chartLegend={({ chart, datum }) => {
+                  console.log('>>>> DATUM', datum);
+                  return <GraphCardChartLegend chart={chart} datum={datum} />;
+                }}
                 chartTooltip={({ datum }) => <GraphCardChartTooltip datum={datum} />}
               />
             )}

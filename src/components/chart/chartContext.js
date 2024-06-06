@@ -87,8 +87,13 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
    */
   const getIsToggled = useCallback(id => dataSetsToggle?.[id] || false, [dataSetsToggle]);
 
+  const getAllToggled = useCallback(() => dataSetsToggle, [dataSetsToggle]);
+
+  console.log('>>>> CHART CONTEXT HOOK', dataSetsToggle);
+
   return {
     ...{ dataSetsToggle },
+    getAllToggled,
     onHide,
     onRevert,
     onToggle,

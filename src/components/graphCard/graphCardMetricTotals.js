@@ -9,7 +9,7 @@ import { toolbarFieldOptions as toolbarFieldMonthlyOptions } from '../toolbar/to
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { graphCardHelpers } from './graphCardHelpers';
 import { helpers } from '../../common';
-// import { useToggleData } from '../chart/chartContext';
+import { useToggleData } from '../chart/chartContext';
 
 /**
  * @memberof GraphCard
