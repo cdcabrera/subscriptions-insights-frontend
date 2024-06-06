@@ -161,6 +161,40 @@ const config = {
         id: RHSM_API_QUERY_SET_TYPES.GRANULARITY,
         position: SelectPosition.right
       }
+    ],
+    cards: [
+      {
+        header: () =>
+          translate('curiosity-graph.cardHeadingMetric', {
+            context: ['remainingCapacity', 'rhel'],
+            testId: 'graphRemainingCapacityCard-header'
+          }),
+        body: ({ dataSets = [], display = {} } = {}) => {
+          console.log('>>>>>> DATASETS', dataSets, display);
+          return translate(
+            'curiosity-graph.cardBodyMetric',
+            {
+              context: ['total', display?.remainingCapacityHasData && 'rhel'],
+              testId: 'graphRemainingCapacityCard-body',
+              total: helpers
+                .numberDisplay(display?.remainingCapacity)
+                ?.format({
+                  average: true,
+                  mantissa: 2,
+                  trimMantissa: true,
+                  lowPrecision: false
+                })
+                ?.toUpperCase()
+            },
+            [<strong title={display?.remainingCapacity} aria-label={display?.remainingCapacity} />]
+          );
+        },
+        footer: ({ display = {} } = {}) =>
+          translate('curiosity-graph.cardFooterMetric', {
+            date: moment.utc(display?.dailyDate).format(dateHelpers.timestampUTCTimeFormats.yearTimeShort),
+            testId: 'graphRemainingCapacityCard-footer'
+          })
+      }
     ]
   },
   initialGuestsFilters: [

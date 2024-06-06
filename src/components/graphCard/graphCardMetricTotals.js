@@ -5,7 +5,7 @@ import _camelCase from 'lodash/camelCase';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
 import { useGraphCardContext, useMetricsSelector } from './graphCardContext';
 import { Loader, SkeletonSize } from '../loader/loader';
-import { toolbarFieldOptions } from '../toolbar/toolbarFieldRangedMonthly';
+import { toolbarFieldOptions as toolbarFieldMonthlyOptions } from '../toolbar/toolbarFieldRangedMonthly';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { graphCardHelpers } from './graphCardHelpers';
 import { helpers } from '../../common';
@@ -36,36 +36,65 @@ const GraphCardMetricTotals = ({
   const { pending, error, fulfilled, dataSets: dataByList = [] } = useAliasMetricsSelector();
 
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = query;
-  const { isCurrent: isSelectedMonthCurrent } =
-    toolbarFieldOptions.find(
+
+  /**
+   * Note: 20240605, Originally, metric cards were targeted at "on-demand" displays, they've been expanded to include
+   * "annual" subs. Regardless of either product display we can still use the "on-demand" options list to determine
+   * if "startDate" is "current" since it uses similar params to the "past 30 days" in "annual" displays.
+   */
+  const { isCurrent: isSelectedDateCurrent } =
+    toolbarFieldMonthlyOptions.find(
       option => option.title === startDate || option.value.startDate.toISOString() === startDate
     ) || {};
 
   if (settings?.isMetricDisplay && settings?.cards?.length) {
-    const metricDisplayPassedData = helpers.setImmutableData(
-      {
-        dataSets: dataByList.map(dataSet => {
-          const { id: chartId, metric: metricId } = dataSet || {};
-          return {
-            ...dataSet,
-            display: {
-              ...graphCardHelpers.getDailyMonthlyTotals({ dataSet, isCurrent: isSelectedMonthCurrent }),
-              ...graphCardHelpers.getRemainingCapacity({
-                ...graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList }),
-                isCurrent: isSelectedMonthCurrent
-              }),
-              ...graphCardHelpers.getRemainingOverage({
-                ...graphCardHelpers.getPrepaidTallyCapacity({ data: dataByList }),
-                isCurrent: isSelectedMonthCurrent
-              }),
-              chartId,
-              metricId
-            }
-          };
-        })
-      },
-      { isClone: true }
-    );
+    const preCalculateMetricCardData = helpers.memo(dataSets => {
+      const globalDisplay = {};
+      const updatedDataSets = dataSets.map(dataSet => {
+        const { id: chartId, metric: metricId } = dataSet || {};
+        return {
+          ...dataSet,
+          display: {
+            ...graphCardHelpers.getDailyMonthlyTotals({ dataSet, isCurrent: isSelectedDateCurrent }),
+            ...graphCardHelpers.getRemainingCapacity({
+              ...graphCardHelpers.groupTallyCapacityData({ data: dataSet, allData: dataSets }),
+              isCurrent: isSelectedDateCurrent
+            }),
+            ...graphCardHelpers.getRemainingOverage({
+              ...graphCardHelpers.groupTallyCapacityData({ data: dataSet, allData: dataSets }),
+              isCurrent: isSelectedDateCurrent
+            }),
+            chartId,
+            metricId
+          }
+        };
+      });
+
+      console.log('>>>>>> precal', updatedDataSets);
+
+      /*
+      updatedDataSets.forEach(({ display }) => {
+        Object.entries(display).forEach(([key, value]) => {
+          if (value === null || value === undefined) {
+            globalDisplay[key] ??= value;
+            return;
+          }
+
+          if (typeof value === 'number' && !Number.isNaN(value)) {
+            globalDisplay[key] ??= 0;
+            globalDisplay[key] += value;
+            globalDisplay.chartId ??= [];
+            globalDisplay.chartId.push(display.chartId);
+            globalDisplay.metricId ??= [];
+            globalDisplay.metricId.push(display.metricId);
+          }
+        });
+      });
+       */
+
+      return helpers.setImmutableData({ dataSets: updatedDataSets, display: globalDisplay }, { isClone: true });
+    });
+    const metricDisplayPassedData = preCalculateMetricCardData(dataByList);
 
     return (
       <div
