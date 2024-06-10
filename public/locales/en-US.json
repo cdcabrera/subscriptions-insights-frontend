@@ -57,7 +57,7 @@
     "cardHeadingMetric_remainingCapacity": "Remaining capacity",
     "cardBodyMetric": "{{context}}",
     "cardBodyMetric_total": "No data",
-    "cardBodyMetric_total_rhel": "<0>{{total}}</0> hours",
+    "cardBodyMetric_total_rhel": "<0>{{total}}</0> Sockets",
     "cardBodyMetric_total_Cores": "<0>{{total}}</0> vCPU hours",
     "cardBodyMetric_total_Cores_OpenShift-dedicated-metrics": "$t(curiosity-graph.cardBodyMetric_total_Cores_OpenShift-metrics)",
     "cardBodyMetric_total_Cores_OpenShift-metrics": "<0>{{total}}</0> Core hours",

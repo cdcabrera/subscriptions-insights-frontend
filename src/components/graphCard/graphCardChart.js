@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -11,7 +11,7 @@ import {
   ToolbarGroup
 } from '@patternfly/react-core';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
-import { useGraphCardActions, useGraphCardContext, useGetMetrics } from './graphCardContext';
+import { useGraphCardActions, useGraphCardContext, useGetMetrics, useChartDataSets } from './graphCardContext';
 import { graphCardHelpers } from './graphCardHelpers';
 import { Chart } from '../chart/chart';
 import { GraphCardChartLegend } from './graphCardChartLegend';
@@ -30,8 +30,10 @@ import { translate } from '../i18n/i18n';
 /**
  * A chart/graph card.
  *
+ * @fires onChartUpdate
  * @param {object} props
  * @param {Function} props.t
+ * @param {Function} props.useChartDataSets
  * @param {Function} props.useGetMetrics
  * @param {Function} props.useGraphCardActions
  * @param {Function} props.useGraphCardContext
@@ -40,19 +42,44 @@ import { translate } from '../i18n/i18n';
  */
 const GraphCardChart = ({
   t,
+  useChartDataSets: useAliasChartDataSets,
   useGetMetrics: useAliasGetMetrics,
   useGraphCardActions: useAliasGraphCardActions,
   useGraphCardContext: useAliasGraphCardContext,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
+  // const [, setChartDataSets] = useAliasChartDataSets();
   const updatedActionDisplay = useAliasGraphCardActions();
-  const { settings = {} } = useAliasGraphCardContext();
+  const { settings = {}, dataSets: other } = useAliasGraphCardContext();
   const { stringId } = settings;
 
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
   const { pending, error, dataSets = [] } = useAliasGetMetrics();
 
   const cardHeaderProps = {};
+
+  /**
+   * Set chart mutated dataSets
+   *
+   * @event onChartUpdate
+   * @param {Array} updatedDataSets
+   * @returns {void}
+   */
+  const onChartUpdate = updatedDataSets => {
+    console.log('>>>> graph card dataset', settings, other, updatedDataSets);
+    // return setChartDataSets(updatedDataSets);
+  };
+  /*
+  const onChartUpdate = useCallback(
+    updatedDataSets => {
+      console.log('>>>> graph card chart update', updatedDataSets);
+      return setChartDataSets(prevState =>
+        prevState.length ? prevState.map((_, index) => updatedDataSets[index]) : updatedDataSets
+      );
+    },
+    [setChartDataSets]
+  );
+  */
 
   if (updatedActionDisplay) {
     cardHeaderProps.actions = {
@@ -85,10 +112,8 @@ const GraphCardChart = ({
               <Chart
                 {...graphCardHelpers.generateExtendedChartSettings({ settings, granularity })}
                 dataSets={dataSets}
-                chartLegend={({ chart, datum }) => {
-                  console.log('>>>> DATUM', datum);
-                  return <GraphCardChartLegend chart={chart} datum={datum} />;
-                }}
+                onUpdate={({ datum }) => onChartUpdate(datum)}
+                chartLegend={({ chart, datum }) => <GraphCardChartLegend chart={chart} datum={datum} />}
                 chartTooltip={({ datum }) => <GraphCardChartTooltip datum={datum} />}
               />
             )}
@@ -107,6 +132,7 @@ const GraphCardChart = ({
  */
 GraphCardChart.propTypes = {
   t: PropTypes.func,
+  useChartDataSets: PropTypes.func,
   useGetMetrics: PropTypes.func,
   useGraphCardActions: PropTypes.func,
   useGraphCardContext: PropTypes.func,
@@ -121,6 +147,7 @@ GraphCardChart.propTypes = {
  */
 GraphCardChart.defaultProps = {
   t: translate,
+  useChartDataSets,
   useGetMetrics,
   useGraphCardActions,
   useGraphCardContext,

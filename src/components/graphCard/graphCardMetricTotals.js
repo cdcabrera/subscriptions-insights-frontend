@@ -4,16 +4,17 @@ import { Card, CardBody, CardFooter, CardHeader, CardTitle, Title } from '@patte
 import _camelCase from 'lodash/camelCase';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
 import { useGraphCardContext, useMetricsSelector } from './graphCardContext';
+import { useGraphCardStateContext } from './graphCardChartStateContext';
 import { Loader, SkeletonSize } from '../loader/loader';
 import { toolbarFieldOptions as toolbarFieldMonthlyOptions } from '../toolbar/toolbarFieldRangedMonthly';
 import { RHSM_API_QUERY_SET_TYPES } from '../../services/rhsm/rhsmConstants';
 import { graphCardHelpers } from './graphCardHelpers';
 import { helpers } from '../../common';
-import { useToggleData } from '../chart/chartContext';
 
 /**
  * @memberof GraphCard
  * @module GraphCardMetricTotals
+ * @property {module} GraphCardMetricTotalsContext
  */
 
 /**
@@ -28,19 +29,22 @@ import { useToggleData } from '../chart/chartContext';
  */
 const GraphCardMetricTotals = ({
   children,
+  useGraphCardStateContext: useAliasGraphCardStateContext,
   useGraphCardContext: useAliasGraphCardContext,
   useMetricsSelector: useAliasMetricsSelector,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery
 }) => {
-  // const { dataSetsToggle } = useToggleData();
+  const [chartDataSets, setChartDataSets] = useState([]);
+  // const [chartDataSets] = useAliasChartDataSets();
   const { settings = {} } = useAliasGraphCardContext();
+  const { dataSets = {} } = useAliasGraphCardStateContext();
   const query = useAliasProductGraphTallyQuery();
   const { pending, error, fulfilled, dataSets: dataByList = [] } = useAliasMetricsSelector();
 
   const { [RHSM_API_QUERY_SET_TYPES.START_DATE]: startDate } = query;
 
   // NOTE: grouped totals working, oddity in how to get what graph facets are being displayed
-  // console.log('>>>> chart OUTPUT', dataSetsToggle);
+  console.log('>>>> context OUTPUT', chartDataSets, dataSets?.[0]);
 
   /**
    * Note: 20240605, Originally, metric cards were targeted at "on-demand" displays, they've been expanded to include
@@ -167,6 +171,7 @@ const GraphCardMetricTotals = ({
  */
 GraphCardMetricTotals.propTypes = {
   children: PropTypes.node,
+  useChartDataSets: PropTypes.func,
   useGraphCardContext: PropTypes.func,
   useMetricsSelector: PropTypes.func,
   useProductGraphTallyQuery: PropTypes.func
@@ -179,6 +184,7 @@ GraphCardMetricTotals.propTypes = {
  */
 GraphCardMetricTotals.defaultProps = {
   children: null,
+  useChartDataSets,
   useGraphCardContext,
   useMetricsSelector,
   useProductGraphTallyQuery
