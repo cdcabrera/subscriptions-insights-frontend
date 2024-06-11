@@ -338,6 +338,10 @@
     "label_groupVariant_RHEL for IBM z": "RHEL for IBM z",
     "label_groupVariant_RHEL for x86": "RHEL for x86",
     "label_groupVariant_rhel-for-x86-els-payg": "RHEL for x86 ELS On-Demand",
+    "label_groupVariant_rhel-for-x86-els-payg": "RHEL for x86 ELS On-Demand for Third Party Linux Migration",
+
+    "label_groupVariant_rhel-for-x86-els-payg-addon": "RHEL for x86 ELS On-Demand",
+    "label_groupVariant_rhel-for-x86-els-payg-addon": "Red Hat Enterprise Linux for Third Party Linux Migration with Extended Life Cycle Support (On-Demand, Monthly Production Support)",
     "label_groupVariant_rhel-for-x86-eus": "RHEL for x86 EUS",
     "label_groupVariant_rhel-for-x86-ha": "RHEL for x86 HA",
     "label_groupVariant_rhel-for-x86-rs": "RHEL for x86 Resilient Storage",
