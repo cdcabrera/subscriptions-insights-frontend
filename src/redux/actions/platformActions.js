@@ -53,17 +53,22 @@ const authorizeUser = appName => dispatch =>
  * Return a "dispatch ready" export poll status check.
  *
  * @param {string} id
- * @param {boolean} isPending
- * @param {Array} pending
+ * @param {object} params
+ * @param {Array} params.completed
+ * @param {boolean} params.isPending
+ * @param {Array} params.pending
  * @returns {Function}
  */
-const setExportStatus = (id, isPending, pending) => dispatch =>
-  dispatch({
-    type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-    id,
-    isPending,
-    pending
-  });
+const setExportStatus =
+  (id, { completed, isPending, pending } = {}) =>
+  dispatch =>
+    dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      id,
+      completed,
+      isPending,
+      pending
+    });
 
 /**
  * Create an export status poll with download, and toast notifications.
@@ -80,7 +85,46 @@ const getExistingExports =
         ...options,
         poll: {
           ...options.poll,
-          status: (successResponse, ...args) => {
+          status: successResponse => {
+            console.log('>>>> STATUS FOR EXISTING EXPORTS');
+
+            const isCompleted =
+              !successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted;
+            const isPending =
+              successResponse?.data?.data?.isAnythingPending && !successResponse?.data?.data?.isAnythingCompleted;
+            const completed = successResponse?.data?.data?.completed;
+            const pending = successResponse?.data?.data?.pending;
+
+            if (isCompleted) {
+              if (completed.length) {
+                console.log(
+                  '>>>> YOU HAVE 10 COMPLETED DOWNLOAD REPORTS AVAILABLE. DO YOU WANT TO DOWNLOAD THEM? YES, NO'
+                );
+                // we do confirmation button with the "id" of
+              }
+
+              /*
+               *dispatch(removeNotification(`swatch-create-export-global`));
+               *dispatch(
+               *  addNotification({
+               *    variant: 'success',
+               *    id: `swatch-create-export-global`,
+               *    title: translate('curiosity-toolbar.notifications', {
+               *      context: ['export', 'completed', 'title']
+               *    }),
+               *    description: translate('curiosity-toolbar.notifications', {
+               *      context: ['export', 'completed', 'description'],
+               *      count: successResponse?.data?.data?.completed?.length
+               *    }),
+               *    dismissable: true
+               *  })
+               *);
+               */
+            }
+
+            setExportStatus('global', { completed, isPending, pending })(dispatch);
+          },
+          statusOLD: (successResponse, ...args) => {
             console.log('>>>>>>>>>>>>> GLOBAL STATUS', successResponse);
             if (successResponse?.data?.data?.isAnythingPending) {
               console.log('>>>>>>>>>>>>> GLOBAL STATUS PENDING', successResponse);
