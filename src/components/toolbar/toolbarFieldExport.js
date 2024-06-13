@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
+import { useMount } from 'react-use';
 import { reduxActions, storeHooks } from '../../redux';
 import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
@@ -142,6 +143,7 @@ const useOnSelect = ({
  * @param {Array} props.options
  * @param {string} props.position
  * @param {Function} props.t
+ * @param {Function} props.useExport
  * @param {Function} props.useExportStatus
  * @param {Function} props.useOnSelect
  * @returns {React.ReactNode}
@@ -150,10 +152,12 @@ const ToolbarFieldExport = ({
   options,
   position,
   t,
+  useExport: useAliasExport,
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
   const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
+  const { checkExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
@@ -169,6 +173,10 @@ const ToolbarFieldExport = ({
       (isProductPending && !pendingProductFormats?.length) ||
       (isProductPending && pendingProductFormats?.includes(option.value))
   }));
+
+  useMount(() => {
+    checkExports();
+  });
 
   return (
     <Select
@@ -189,7 +197,8 @@ const ToolbarFieldExport = ({
 /**
  * Prop types.
  *
- * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, position: string}}
+ * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, useExport: Function,
+ *     position: string}}
  */
 ToolbarFieldExport.propTypes = {
   options: PropTypes.arrayOf(
@@ -201,6 +210,7 @@ ToolbarFieldExport.propTypes = {
   ),
   position: PropTypes.string,
   t: PropTypes.func,
+  useExport: PropTypes.func,
   useExportStatus: PropTypes.func,
   useOnSelect: PropTypes.func
 };
@@ -208,12 +218,14 @@ ToolbarFieldExport.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, position: string}}
+ * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, useExport: Function,
+ *     position: string}}
  */
 ToolbarFieldExport.defaultProps = {
   options: toolbarFieldOptions,
   position: SelectPosition.left,
   t: translate,
+  useExport,
   useExportStatus,
   useOnSelect
 };
