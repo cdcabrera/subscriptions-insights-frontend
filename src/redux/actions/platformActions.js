@@ -98,7 +98,7 @@ const getExistingExports =
             if (isCompleted) {
               if (completed.length) {
                 console.log(
-                  '>>>> YOU HAVE 10 COMPLETED DOWNLOAD REPORTS AVAILABLE. DO YOU WANT TO DOWNLOAD THEM? YES, NO'
+                  `>>>> YOU HAVE ${completed.length} COMPLETED DOWNLOAD REPORTS AVAILABLE. DO YOU WANT TO DOWNLOAD THEM? YES, NO`
                 );
                 // we do confirmation button with the "id" of
               }
