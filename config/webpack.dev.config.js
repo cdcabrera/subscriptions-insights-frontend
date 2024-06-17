@@ -1,5 +1,4 @@
 const {
-  // babelLoaderResolve,
   cssLoaderResolve,
   sassLoaderResolve,
   tsLoaderResolve,
@@ -13,7 +12,6 @@ module.exports = ({ SRC_DIR, MOCK_PORT } = {}) => ({
       {
         test: /\.(jsx|js)?$/,
         include: [SRC_DIR],
-        // use: [babelLoaderResolve]
         use: [tsLoaderResolve]
       },
       {
