@@ -163,7 +163,7 @@ const deleteExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial"
+ *           "status": "pending"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -188,7 +188,7 @@ const deleteExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial"
+ *           "status": "pending"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -197,7 +197,7 @@ const deleteExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial"
+ *           "status": "pending"
  *         }
  *       ]
  *     }
@@ -288,7 +288,7 @@ const deleteExport = (id, options = {}) => {
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getExportStatus = (id, params = {}, options = {}) => {
+const getExistingExportsStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
@@ -374,13 +374,14 @@ const getExport = (id, options = {}) => {
 /**
  * Convenience wrapper for setting up global export status with status polling, and download with clean-up.
  *
+ * @param {Array<{id: string, fileName: string}>} idList A list of export IDs to finish
  * @param {object} params
  * @param {object} options
  * @param {boolean} options.cancel
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getExistingExports = (params = {}, options = {}) => {
+const getExistingExports = (idList, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
@@ -399,14 +400,16 @@ const getExistingExports = (params = {}, options = {}) => {
         ...poll?.location
       },
       validate: response => {
-        const isCompleted = !response?.data?.data?.isAnythingPending && response?.data?.data?.isAnythingCompleted;
         const completedResults = response?.data?.data?.completed;
+        const isIdListCompleted =
+          idList.filter(({ id }) => completedResults.find(({ id: completedId }) => completedId === id) !== undefined)
+            .length === idList.length;
 
-        if (isCompleted && completedResults.length > 0) {
-          Promise.all(completedResults.map(({ id, fileName }) => getExport(id, { fileName })));
+        if (isIdListCompleted && completedResults.length > 0) {
+          Promise.all(idList.map(({ id, fileName }) => getExport(id, { fileName })));
         }
 
-        return isCompleted;
+        return isIdListCompleted;
       },
       ...poll
     },
@@ -458,7 +461,7 @@ const getExistingExports = (params = {}, options = {}) => {
  *     }
  */
 /**
- * Convenience wrapper for posting to create an export with status polling, and download with clean-up.
+ * Convenience wrapper for posting to create an export with status polling, then performing a download with clean-up.
  *
  * @param {object} data JSON data to submit
  * @param {object} options
@@ -481,6 +484,7 @@ const postExport = async (data = {}, options = {}) => {
   const postResponse = await axiosServiceCall({
     ...restOptions,
     poll: {
+      ...poll,
       location: {
         url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
         config: {
@@ -507,8 +511,7 @@ const postExport = async (data = {}, options = {}) => {
         }
 
         return foundDownload !== undefined;
-      },
-      ...poll
+      }
     },
     method: 'post',
     url: process.env.REACT_APP_SERVICES_PLATFORM_EXPORT,
@@ -527,8 +530,8 @@ const postExport = async (data = {}, options = {}) => {
 const platformServices = {
   deleteExport,
   getExistingExports,
+  getExistingExportsStatus,
   getExport,
-  getExportStatus,
   getUser,
   getUserPermissions,
   hideGlobalFilter,
@@ -545,8 +548,8 @@ export {
   platformServices,
   deleteExport,
   getExistingExports,
+  getExistingExportsStatus,
   getExport,
-  getExportStatus,
   getUser,
   getUserPermissions,
   hideGlobalFilter,
