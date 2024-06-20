@@ -163,7 +163,7 @@ const deleteExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial"
+ *           "status": "pending"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -188,7 +188,7 @@ const deleteExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial"
+ *           "status": "pending"
  *         },
  *         {
  *           "id": "x123456-5717-4562-b3fc-2c963f66afa6",
@@ -197,7 +197,7 @@ const deleteExport = (id, options = {}) => {
  *           "completed_at": "2024-01-24T16:20:31.229Z",
  *           "expires_at": "2024-01-24T16:20:31.229Z",
  *           "format": "json",
- *           "status": "partial"
+ *           "status": "pending"
  *         }
  *       ]
  *     }
@@ -288,7 +288,7 @@ const deleteExport = (id, options = {}) => {
  * @param {string} options.cancelId
  * @returns {Promise<*>}
  */
-const getExportStatus = (id, params = {}, options = {}) => {
+const getExistingExportsStatus = (id, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
@@ -374,6 +374,7 @@ const getExport = (id, options = {}) => {
 /**
  * Convenience wrapper for setting up global export status with status polling, and download with clean-up.
  *
+ * @param {Array<{id: string, fileName: string}>} idList A list of export IDs to finish
  * @param {object} params
  * @param {object} options
  * @param {boolean} options.cancel
@@ -381,7 +382,7 @@ const getExport = (id, options = {}) => {
  * @returns {Promise<*>}
  */
 // deleteExistingExports
-const getExistingExports = (params = {}, options = {}) => {
+const getExistingExports = (idList, params = {}, options = {}) => {
   const {
     cache = false,
     cancel = true,
@@ -400,14 +401,21 @@ const getExistingExports = (params = {}, options = {}) => {
         ...poll?.location
       },
       validate: response => {
-        const isAnythingPending = response?.data?.data?.isAnythingPending;
+        // const isAnythingPending = response?.data?.data?.isAnythingPending;
         const completedResults = response?.data?.data?.completed;
+        const isIdListCompleted =
+          idList.filter(({ id }) => completedResults.find(({ id: completedId }) => completedId === id) !== undefined)
+            .length === idList.length;
 
-        if (!isAnythingPending && completedResults.length > 0) {
-          Promise.all(completedResults.map(({ id, fileName }) => getExport(id, { fileName })));
+        console.log('>>>>> COMPLETED LIST', completedResults, isIdListCompleted);
+
+        // if (!isAnythingPending && completedResults.length > 0) {
+        if (isIdListCompleted && completedResults.length > 0) {
+          Promise.all(idList.map(({ id, fileName }) => getExport(id, { fileName })));
         }
 
-        return !isAnythingPending;
+        return isIdListCompleted;
+        // return !isAnythingPending;
       },
       ...poll
     },
@@ -528,8 +536,8 @@ const postExport = async (data = {}, options = {}) => {
 const platformServices = {
   deleteExport,
   getExistingExports,
+  getExistingExportsStatus,
   getExport,
-  getExportStatus,
   getUser,
   getUserPermissions,
   hideGlobalFilter,
@@ -546,8 +554,8 @@ export {
   platformServices,
   deleteExport,
   getExistingExports,
+  getExistingExportsStatus,
   getExport,
-  getExportStatus,
   getUser,
   getUserPermissions,
   hideGlobalFilter,

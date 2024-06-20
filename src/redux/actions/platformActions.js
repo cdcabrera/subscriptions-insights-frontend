@@ -1,11 +1,14 @@
+import React from 'react';
 import {
   addNotification as RcsAddNotification,
   removeNotification as RcsRemoveNotification,
   clearNotifications as RcsClearNotifications
 } from '@redhat-cloud-services/frontend-components-notifications';
+import { Button } from '@patternfly/react-core';
 import { platformTypes } from '../types';
-import { platformServices } from '../../services/platform/platformServices';
+import { getExport, platformServices } from '../../services/platform/platformServices';
 import { translate } from '../../components/i18n/i18n';
+import { helpers } from '../../common';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -73,19 +76,46 @@ const setExportStatus =
 /**
  * Create an export status poll with download, and toast notifications.
  *
+ * @param {Array} existingExports
  * @param {object} options Apply polling options
  * @returns {Function}
  */
 const getExistingExports =
-  (options = {}) =>
+  (existingExports, options = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExistingExports(undefined, {
+      payload: platformServices.getExistingExports(existingExports, undefined, {
         ...options,
         poll: {
           ...options.poll,
-          status: successResponse => {
+          statusWorksish: successResponse => {
+            const updatedExistingExports = existingExports.map(({ id }) => id);
+            // .sort((a, b) => a.localeCompare(b));
+            const completed = successResponse?.data?.data?.completed.map(({ id }) => id);
+            // .sort((a, b) => a.localeCompare(b));
+            const isExistingExportsComplete =
+              updatedExistingExports.filter(id => completed.includes(id)).length === updatedExistingExports.length;
+
+            // if (helpers.generateHash(updatedExistingExports) === helpers.generateHash(completed)) {
+            if (isExistingExportsComplete) {
+              dispatch(
+                addNotification({
+                  variant: 'success',
+                  id: `swatch-create-export-global`,
+                  title: translate('curiosity-toolbar.notifications', {
+                    context: ['export', 'completed', 'title']
+                  }),
+                  description: translate('curiosity-toolbar.notifications', {
+                    context: ['export', 'completed', 'description'],
+                    count: successResponse?.data?.data?.completed?.length
+                  }),
+                  dismissable: true
+                })
+              );
+            }
+          },
+          statusDISABLE: successResponse => {
             console.log('>>>> STATUS FOR EXISTING EXPORTS');
 
             const isCompleted =
@@ -122,17 +152,11 @@ const getExistingExports =
                */
             }
 
-            setExportStatus('global', { completed, isPending, pending })(dispatch);
-          },
-          statusOLD: (successResponse, ...args) => {
-            console.log('>>>>>>>>>>>>> GLOBAL STATUS', successResponse);
-            if (successResponse?.data?.data?.isAnythingPending) {
-              console.log('>>>>>>>>>>>>> GLOBAL STATUS PENDING', successResponse);
-            } else if (successResponse?.data?.data?.isAnythingCompleted) {
-              console.log('>>>>>>>>>>>>> GLOBAL STATUS COMPLETED', successResponse);
-            }
-
-            setExportStatus(dispatch)('global', successResponse, ...args);
+            setExportStatus('global', {
+              completed,
+              isPending,
+              pending
+            })(dispatch);
           }
         }
       }),
@@ -148,10 +172,130 @@ const getExistingExports =
               context: ['export', 'error', 'description']
             }),
             dismissable: true
+          },
+          pending: {
+            variant: 'info',
+            title: 'Continuing reports download',
+            dismissable: true
+          },
+          fulfilled: {
+            variant: 'success',
+            title: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'completed', 'titleGlobal'],
+              count: existingExports.length
+            }),
+            description: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'completed', 'descriptionGlobal'],
+              count: existingExports.length
+            }),
+            dismissable: true
           }
         }
       }
     });
+
+const removeExistingExports = existingExports => dispatch =>
+  dispatch({
+    type: 'DELETE_EXPORT',
+    payload: Promise.all(existingExports.map(({ id }) => platformServices.deleteExport(id))),
+    meta: {
+      id: 'global',
+      notifications: {
+        rejected: {
+          variant: 'warning',
+          title: translate('curiosity-toolbar.notifications', {
+            context: ['export', 'error', 'title']
+          }),
+          description: translate('curiosity-toolbar.notifications', {
+            context: ['export', 'error', 'description']
+          }),
+          dismissable: true
+        }
+      }
+    }
+  });
+
+const getExistingExportsStatus =
+  (options = {}) =>
+  dispatch => {
+    const onYes = allResults => {
+      dispatch(removeNotification(`swatch-exports-status`));
+      getExistingExports(allResults)(dispatch);
+    };
+    const onNo = allResults => {
+      dispatch(removeNotification(`swatch-exports-status`));
+      removeExistingExports(allResults)(dispatch);
+    };
+
+    return dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      payload: platformServices.getExistingExportsStatus(undefined, options),
+      meta: {
+        id: 'global',
+        notifications: {
+          rejected: {
+            variant: 'warning',
+            title: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'title']
+            }),
+            description: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'description']
+            }),
+            dismissable: true
+          },
+          fulfilled: successResponse => {
+            const isCompleted =
+              !successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted;
+            const isPending =
+              successResponse?.data?.data?.isAnythingPending && !successResponse?.data?.data?.isAnythingCompleted;
+            const isAnythingAvailable = isCompleted || isPending || false;
+
+            const completed = successResponse?.data?.data?.completed || [];
+            const pending = successResponse?.data?.data?.pending || [];
+            const totalResults = completed.length + pending.length;
+
+            if (isAnythingAvailable && totalResults) {
+              return {
+                variant: 'info',
+                id: `swatch-exports-status`,
+                title: `${totalResults} existing reports are available`,
+                description: (
+                  <div aria-live="polite">
+                    {(pending.length && `${pending.length} pending`) || ''}{' '}
+                    {(pending.length && completed.length && 'and') || ''}{' '}
+                    {(completed.length && `${completed.length} completed`) || ''} reports are available. Would you like
+                    to continue, and download them?
+                    <p style={{ paddingTop: '1em' }}>
+                      <Button
+                        data-test="optinButtonSubmit"
+                        variant="primary"
+                        onClick={() => onYes([...completed, ...pending])}
+                        autoFocus
+                      >
+                        Yes
+                      </Button>{' '}
+                      <Button
+                        data-test="optinButtonSubmit"
+                        variant="plain"
+                        onClick={() => onNo([...completed, ...pending])}
+                      >
+                        No
+                      </Button>
+                    </p>
+                  </div>
+                ),
+                autoDismiss: false,
+                dismissable: false
+              };
+            }
+
+            delete this.fulfilled;
+            return {};
+          }
+        }
+      }
+    });
+  };
 
 /**
  * Create an export for download with toast notifications.
@@ -243,6 +387,7 @@ const platformActions = {
   createExport,
   setExportStatus,
   getExistingExports,
+  getExistingExportsStatus,
   hideGlobalFilter
 };
 
@@ -256,5 +401,6 @@ export {
   createExport,
   setExportStatus,
   getExistingExports,
+  getExistingExportsStatus,
   hideGlobalFilter
 };

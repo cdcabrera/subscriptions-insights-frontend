@@ -77,19 +77,28 @@ const useExportStatus = ({
  * @param {Function} options.createExport
  * @param {Function} options.getExistingExports
  * @param {Function} options.useDispatch
- * @returns {{getExport: Function, createExport: Function, checkExports: Function}}
+ * @returns {{createExport: Function, checkAllExports: Function, getAllExports: Function}}
  */
 const useExport = ({
   createExport: createAliasExport = reduxActions.platform.createExport,
   getExistingExports: getAliasExistingExports = reduxActions.platform.getExistingExports,
+  getExistingExportsStatus: getAliasExistingExportsStatus = reduxActions.platform.getExistingExportsStatus,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
 
   /**
+   * Get a global export status. Pre-step for polling.
+   */
+  const checkAllExports = useCallback(
+    () => getAliasExistingExportsStatus()(dispatch),
+    [dispatch, getAliasExistingExportsStatus]
+  );
+
+  /**
    * Get a global export status. Sets polling if any pending indicators are found.
    */
-  const checkExports = useCallback(() => getAliasExistingExports()(dispatch), [dispatch, getAliasExistingExports]);
+  const getAllExports = useCallback(() => getAliasExistingExports()(dispatch), [dispatch, getAliasExistingExports]);
 
   /**
    * Create an export then download. Automatically sets up polling until the file(s) are ready.
@@ -97,8 +106,9 @@ const useExport = ({
   const createExport = useCallback((id, data) => createAliasExport(id, data)(dispatch), [createAliasExport, dispatch]);
 
   return {
-    checkExports,
-    createExport
+    checkAllExports,
+    createExport,
+    getAllExports
   };
 };
 
@@ -157,7 +167,7 @@ const ToolbarFieldExport = ({
   useOnSelect: useAliasOnSelect
 }) => {
   const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
-  const { checkExports } = useAliasExport();
+  const { checkAllExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
@@ -175,7 +185,7 @@ const ToolbarFieldExport = ({
   }));
 
   useMount(() => {
-    checkExports();
+    checkAllExports();
   });
 
   return (

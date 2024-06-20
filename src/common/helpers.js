@@ -89,6 +89,7 @@ const generateHash = anyValue => {
               return value;
             }
           )) ||
+        (Array.isArray(anyValue) && [...anyValue].sort((a, [b]) => a.localeCompare(b))) ||
         `${typeof anyValue}${anyValue?.toString() || anyValue}`
     })
   );
