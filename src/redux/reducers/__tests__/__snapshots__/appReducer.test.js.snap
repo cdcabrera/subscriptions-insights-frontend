@@ -65,14 +65,7 @@ exports[`UserReducer should handle all defined error types: rejected types SET_P
   "result": {
     "auth": {},
     "errors": {},
-    "exports": {
-      "error": true,
-      "errorMessage": "MESSAGE",
-      "fulfilled": false,
-      "meta": {},
-      "pending": false,
-      "status": 0,
-    },
+    "exports": {},
     "locale": {},
     "optin": {},
   },
@@ -221,26 +214,7 @@ exports[`UserReducer should handle all defined fulfilled types: fulfilled types 
   "result": {
     "auth": {},
     "errors": {},
-    "exports": {
-      "data": {
-        "permissions": [],
-        "test": "success",
-        "user": {
-          "identity": {
-            "user": {
-              "is_org_admin": true,
-            },
-          },
-        },
-      },
-      "date": null,
-      "error": false,
-      "errorMessage": "",
-      "fulfilled": true,
-      "meta": {},
-      "pending": false,
-      "status": 0,
-    },
+    "exports": {},
     "locale": {},
     "optin": {},
   },
@@ -374,13 +348,7 @@ exports[`UserReducer should handle all defined pending types: pending types SET_
   "result": {
     "auth": {},
     "errors": {},
-    "exports": {
-      "error": false,
-      "errorMessage": "",
-      "fulfilled": false,
-      "meta": {},
-      "pending": true,
-    },
+    "exports": {},
     "locale": {},
     "optin": {},
   },
@@ -423,6 +391,24 @@ exports[`UserReducer should handle all defined pending types: pending types USER
     "optin": {},
   },
   "type": "USER_LOCALE_PENDING",
+}
+`;
+
+exports[`UserReducer should handle specific defined types: defined type SET_PLATFORM_EXPORT_STATUS 1`] = `
+{
+  "result": {
+    "auth": {},
+    "errors": {},
+    "exports": {
+      "test_id": {
+        "isPending": true,
+        "pending": [],
+      },
+    },
+    "locale": {},
+    "optin": {},
+  },
+  "type": "SET_PLATFORM_EXPORT_STATUS",
 }
 `;
 

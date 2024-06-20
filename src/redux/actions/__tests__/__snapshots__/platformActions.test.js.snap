@@ -10,25 +10,30 @@ exports[`PlatformActions Should return a dispatch object for the hideGlobalFilte
 exports[`PlatformActions Should return response content for createExport method: dispatch object 1`] = `
 [
   [
-    {
-      "meta": {
-        "notifications": {
-          "pending": {
-            "dismissable": true,
-            "id": "swatch-create-export",
-            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"title"})",
-          },
-          "rejected": {
-            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
-            "variant": "warning",
+    [
+      [Function],
+      {
+        "meta": {
+          "id": undefined,
+          "notifications": {
+            "pending": {
+              "dismissable": true,
+              "id": "swatch-create-export-undefined",
+              "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"title"})",
+              "variant": "info",
+            },
+            "rejected": {
+              "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+              "dismissable": true,
+              "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+              "variant": "warning",
+            },
           },
         },
+        "payload": Promise {},
+        "type": "SET_PLATFORM_EXPORT_CREATE",
       },
-      "payload": Promise {},
-      "type": "SET_PLATFORM_EXPORT_CREATE",
-    },
+    ],
   ],
 ]
 `;
@@ -38,13 +43,17 @@ exports[`PlatformActions Should return response content for getExistingExports m
   [
     {
       "meta": {
-        "id": "global",
         "notifications": {
-          "pending": {
-            "description": "t(curiosity-toolbar.notifications_export_pending, {"context":"descriptionGlobal"})",
+          "fulfilled": {
+            "description": "t(curiosity-toolbar.notifications_export_completed, {"context":"descriptionGlobal","count":0})",
             "dismissable": true,
-            "id": "swatch-global-export",
-            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"titleGlobal"})",
+            "title": "t(curiosity-toolbar.notifications_export_completed, {"context":"titleGlobal","count":0})",
+            "variant": "success",
+          },
+          "pending": {
+            "dismissable": true,
+            "title": "Continuing reports download",
+            "variant": "info",
           },
           "rejected": {
             "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
@@ -61,14 +70,56 @@ exports[`PlatformActions Should return response content for getExistingExports m
 ]
 `;
 
-exports[`PlatformActions Should return response content for setExportStatus method: dispatch object 1`] = `
+exports[`PlatformActions Should return response content for getExistingExportsStatus method: dispatch object 1`] = `
 [
   [
     {
       "meta": {
-        "id": undefined,
+        "notifications": {
+          "rejected": {
+            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+            "dismissable": true,
+            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+            "variant": "warning",
+          },
+        },
       },
       "payload": Promise {},
+      "type": "SET_PLATFORM_EXPORT_STATUS",
+    },
+  ],
+]
+`;
+
+exports[`PlatformActions Should return response content for removeExistingExports method: dispatch object 1`] = `
+[
+  [
+    {
+      "meta": {
+        "notifications": {
+          "rejected": {
+            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+            "dismissable": true,
+            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+            "variant": "warning",
+          },
+        },
+      },
+      "payload": Promise {},
+      "type": "DELETE_EXPORT",
+    },
+  ],
+]
+`;
+
+exports[`PlatformActions Should return response content for setExportStatus method: dispatch object 1`] = `
+[
+  [
+    {
+      "completed": [],
+      "id": undefined,
+      "isPending": false,
+      "pending": [],
       "type": "SET_PLATFORM_EXPORT_STATUS",
     },
   ],

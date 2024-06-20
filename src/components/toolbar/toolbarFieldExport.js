@@ -36,32 +36,24 @@ const toolbarFieldOptions = Object.values(FIELD_TYPES).map(type => ({
  *
  * @param {object} options
  * @param {Function} options.useProduct
- * @param {Function} options.useSelectors
+ * @param {Function} options.useSelector
  * @returns {{isProductPending: boolean, productPendingFormats: Array<string>}}
  */
 const useExportStatus = ({
   useProduct: useAliasProduct = useProduct,
-  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
+  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
 } = {}) => {
   const { productId } = useAliasProduct();
-  const [product, global] = useAliasSelectors([
-    ({ app }) => app?.exports?.[productId],
-    ({ app }) => app?.exports?.global
-  ]);
+  const { isPending, pending } = useAliasSelector(({ app }) => app?.exports?.[productId], {});
 
   const pendingProductFormats = [];
-  const isProductPending = product?.isPending || global?.data?.data?.products?.[productId]?.isPending || false;
+  const isProductPending = isPending || false;
 
   if (isProductPending) {
-    const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
-    pendingProductFormats.push(
-      ...Array.from(
-        new Set([
-          ...convert(product?.data?.data?.products?.[productId]?.pending),
-          ...convert(global?.data?.data?.products?.[productId]?.pending)
-        ])
-      )
-    );
+    const pendingList = pending;
+    if (Array.isArray(pendingList)) {
+      pendingProductFormats.push(...pendingList.map(({ format: productFormat }) => productFormat));
+    }
   }
 
   return {

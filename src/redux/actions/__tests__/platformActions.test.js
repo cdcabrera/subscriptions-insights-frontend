@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux';
 import moxios from 'moxios';
 import { promiseMiddleware } from '../../middleware';
-import { platformActions, setExportStatus } from '../platformActions';
+import { platformActions } from '../platformActions';
 import { appReducer } from '../../reducers';
 
 describe('PlatformActions', () => {
@@ -51,19 +51,31 @@ describe('PlatformActions', () => {
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 
-  it('Should return response content for setExportStatus method', () => {
+  it('Should return response content for getExistingExports method', () => {
     const mockDispatch = jest.fn();
-    setExportStatus(mockDispatch)();
+    platformActions.getExistingExports([])(mockDispatch);
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 
-  it('Should return response content for getExistingExports method', () => {
+  it('Should return response content for getExistingExportsStatus method', () => {
     const mockDispatch = jest.fn();
-    platformActions.getExistingExports()(mockDispatch);
+    platformActions.getExistingExportsStatus()(mockDispatch);
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 
   it('Should return a dispatch object for the hideGlobalFilter method', () => {
     expect(platformActions.hideGlobalFilter()).toMatchSnapshot('dispatch object');
+  });
+
+  it('Should return response content for removeExistingExports method', () => {
+    const mockDispatch = jest.fn();
+    platformActions.removeExistingExports([])(mockDispatch);
+    expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
+  });
+
+  it('Should return response content for setExportStatus method', () => {
+    const mockDispatch = jest.fn();
+    platformActions.setExportStatus()(mockDispatch);
+    expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 });

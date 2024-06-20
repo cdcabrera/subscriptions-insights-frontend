@@ -6,9 +6,8 @@ import {
 } from '@redhat-cloud-services/frontend-components-notifications';
 import { Button } from '@patternfly/react-core';
 import { platformTypes } from '../types';
-import { getExport, platformServices } from '../../services/platform/platformServices';
+import { platformServices } from '../../services/platform/platformServices';
 import { translate } from '../../components/i18n/i18n';
-import { helpers } from '../../common';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -88,7 +87,6 @@ const getExistingExports =
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
       payload: platformServices.getExistingExports(existingExports, undefined, options),
       meta: {
-        id: 'global',
         notifications: {
           rejected: {
             variant: 'warning',
@@ -132,7 +130,6 @@ const removeExistingExports = existingExports => dispatch =>
     type: 'DELETE_EXPORT',
     payload: Promise.all(existingExports.map(({ id }) => platformServices.deleteExport(id))),
     meta: {
-      id: 'global',
       notifications: {
         rejected: {
           variant: 'warning',
@@ -219,7 +216,6 @@ const getExistingExportsStatus =
         return successResponse;
       }),
       meta: {
-        id: 'global',
         notifications: {
           rejected: {
             variant: 'warning',
@@ -325,10 +321,11 @@ const platformActions = {
   clearNotifications,
   authorizeUser,
   createExport,
-  setExportStatus,
   getExistingExports,
   getExistingExportsStatus,
-  hideGlobalFilter
+  hideGlobalFilter,
+  removeExistingExports,
+  setExportStatus
 };
 
 export {
@@ -339,8 +336,9 @@ export {
   clearNotifications,
   authorizeUser,
   createExport,
-  setExportStatus,
   getExistingExports,
   getExistingExportsStatus,
-  hideGlobalFilter
+  hideGlobalFilter,
+  removeExistingExports,
+  setExportStatus
 };

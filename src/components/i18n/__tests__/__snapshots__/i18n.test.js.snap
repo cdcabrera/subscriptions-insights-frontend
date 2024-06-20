@@ -914,11 +914,19 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     "keys": [
       {
         "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'completed', 'titleGlobal'] })",
+        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
       },
       {
         "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'completed', 'descriptionGlobal'] })",
+        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'completed', 'titleGlobal'], count: existingExports.length })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'completed', 'descriptionGlobal'], count: existingExports.length })",
       },
       {
         "key": "curiosity-toolbar.notifications",
@@ -930,11 +938,11 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       },
       {
         "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'pending', 'titleGlobal'] })",
+        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
       },
       {
         "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'pending', 'descriptionGlobal'] })",
+        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
       },
       {
         "key": "curiosity-toolbar.notifications",
@@ -1211,6 +1219,14 @@ exports[`I18n Component should have locale keys that exist in the default langua
   {
     "file": "src/config/product.satellite.js",
     "key": "curiosity-inventory.label",
+  },
+  {
+    "file": "src/redux/actions/platformActions.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/redux/actions/platformActions.js",
+    "key": "curiosity-toolbar.notifications",
   },
   {
     "file": "src/redux/actions/platformActions.js",

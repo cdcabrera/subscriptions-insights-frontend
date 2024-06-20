@@ -36,7 +36,7 @@ describe('ToolbarFieldExport Component', () => {
   it('should handle updating export through redux state with component', () => {
     const props = {
       useOnSelect: () => jest.fn(),
-      useExport: () => ({ checkExports: jest.fn() })
+      useExport: () => ({ checkAllExports: jest.fn() })
     };
 
     const component = renderComponent(<ToolbarFieldExport {...props} />);
@@ -80,27 +80,15 @@ describe('ToolbarFieldExport Component', () => {
         useProduct: () => ({
           productId: 'loremIpsum'
         }),
-        useSelectors: () => [
-          {
-            data: {
-              data: {
-                products: {
-                  loremIpsum: {
-                    isCompleted: false,
-                    isPending: true,
-                    completed: [],
-                    pending: [
-                      {
-                        status: PLATFORM_API_EXPORT_STATUS_TYPES.PENDING,
-                        format: 'dolorSit'
-                      }
-                    ]
-                  }
-                }
-              }
+        useSelector: () => ({
+          isPending: true,
+          pending: [
+            {
+              status: PLATFORM_API_EXPORT_STATUS_TYPES.PENDING,
+              format: 'dolorSit'
             }
-          }
-        ]
+          ]
+        })
       })
     );
     await unmountPolling();
@@ -111,31 +99,10 @@ describe('ToolbarFieldExport Component', () => {
         useProduct: () => ({
           productId: 'loremIpsum'
         }),
-        useSelectors: () => [
-          {
-            app: {
-              exports: {
-                data: {
-                  data: {
-                    products: {
-                      loremIpsum: {
-                        isCompleted: true,
-                        isPending: false,
-                        completed: [
-                          {
-                            status: PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE,
-                            format: 'dolorSit'
-                          }
-                        ],
-                        pending: []
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ]
+        useSelector: () => ({
+          isPending: false,
+          pending: []
+        })
       })
     );
     await unmountCompleted();
@@ -163,21 +130,21 @@ describe('ToolbarFieldExport Component', () => {
     expect(mockServiceCreateExport.mock.calls).toMatchSnapshot('createExport');
 
     // confirm attempt at getting an existing export status
-    const mockServiceGetExistingExports = jest.fn().mockImplementation(
+    const mockServiceGetExistingExportsStatus = jest.fn().mockImplementation(
       (...args) =>
         dispatch =>
           dispatch(...args)
     );
     const {
-      result: { checkExports },
+      result: { checkAllExports },
       unmount: unmountStatus
     } = await renderHook(() =>
       useExport({
-        getExistingExports: mockServiceGetExistingExports
+        getExistingExportsStatus: mockServiceGetExistingExportsStatus
       })
     );
-    checkExports();
+    checkAllExports();
     await unmountStatus();
-    expect(mockServiceGetExistingExports).toHaveBeenCalledTimes(1);
+    expect(mockServiceGetExistingExportsStatus).toHaveBeenCalledTimes(1);
   });
 });
