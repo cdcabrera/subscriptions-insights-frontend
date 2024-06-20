@@ -64,7 +64,7 @@ const authorizeUser = appName => dispatch =>
  * @returns {Function}
  */
 const setExportStatus =
-  (id, { completed, isPending, pending } = {}) =>
+  (id, { completed = [], isPending = false, pending = [] } = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
@@ -248,7 +248,7 @@ const createExport =
   (id, data = {}, options = {}) =>
   dispatch =>
     dispatch([
-      setExportStatus(id, true, []),
+      setExportStatus(id, { isPending: true }),
       {
         type: platformTypes.SET_PLATFORM_EXPORT_CREATE,
         payload: platformServices.postExport(data, {
@@ -278,7 +278,7 @@ const createExport =
                 );
               }
 
-              setExportStatus(id, isPending, pending)(dispatch);
+              setExportStatus(id, { isPending, pending })(dispatch);
             }
           }
         }),
