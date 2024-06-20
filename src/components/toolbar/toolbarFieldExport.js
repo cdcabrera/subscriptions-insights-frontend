@@ -50,10 +50,7 @@ const useExportStatus = ({
   ]);
 
   const pendingProductFormats = [];
-  const isProductPending =
-    product?.data?.data?.products?.[productId]?.isPending ||
-    global?.data?.data?.products?.[productId]?.isPending ||
-    false;
+  const isProductPending = product?.isPending || global?.data?.data?.products?.[productId]?.isPending || false;
 
   if (isProductPending) {
     const convert = arr => (Array.isArray(arr) && arr.map(({ format: productFormat }) => productFormat)) || [];
@@ -78,21 +75,24 @@ const useExportStatus = ({
  *
  * @param {object} options
  * @param {Function} options.createExport
- * @param {Function} options.getExistingExports
+ * @param {Function} options.getExistingExportsStatus
  * @param {Function} options.useDispatch
- * @returns {{getExport: Function, createExport: Function, checkExports: Function}}
+ * @returns {{createExport: Function, checkAllExports: Function, getAllExports: Function}}
  */
 const useExport = ({
   createExport: createAliasExport = reduxActions.platform.createExport,
-  getExistingExports: getAliasExistingExports = reduxActions.platform.getExistingExports,
+  getExistingExportsStatus: getAliasExistingExportsStatus = reduxActions.platform.getExistingExportsStatus,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
 
   /**
-   * Get a global export status. Sets polling if any pending indicators are found.
+   * Get a global export status. Pre-step for polling.
    */
-  const checkExports = useCallback(() => getAliasExistingExports()(dispatch), [dispatch, getAliasExistingExports]);
+  const checkAllExports = useCallback(
+    () => getAliasExistingExportsStatus()(dispatch),
+    [dispatch, getAliasExistingExportsStatus]
+  );
 
   /**
    * Create an export then download. Automatically sets up polling until the file(s) are ready.
@@ -100,7 +100,7 @@ const useExport = ({
   const createExport = useCallback((id, data) => createAliasExport(id, data)(dispatch), [createAliasExport, dispatch]);
 
   return {
-    checkExports,
+    checkAllExports,
     createExport
   };
 };
@@ -160,21 +160,25 @@ const ToolbarFieldExport = ({
   useOnSelect: useAliasOnSelect
 }) => {
   const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
-  const { checkExports } = useAliasExport();
+  const { checkAllExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
     title:
-      (isProductPending &&
-        pendingProductFormats?.includes(option.value) &&
+      (((isProductPending && !pendingProductFormats?.length) ||
+        (isProductPending && pendingProductFormats?.includes(option.value))) &&
         t('curiosity-toolbar.label', { context: ['export', 'loading'] })) ||
       option.title,
-    selected: isProductPending && pendingProductFormats?.includes(option.value),
-    isDisabled: isProductPending && pendingProductFormats?.includes(option.value)
+    selected:
+      (isProductPending && !pendingProductFormats?.length) ||
+      (isProductPending && pendingProductFormats?.includes(option.value)),
+    isDisabled:
+      (isProductPending && !pendingProductFormats?.length) ||
+      (isProductPending && pendingProductFormats?.includes(option.value))
   }));
 
   useMount(() => {
-    checkExports();
+    checkAllExports();
   });
 
   return (
