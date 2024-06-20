@@ -6625,7 +6625,7 @@ A standalone export select/dropdown filter and download hooks.
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldExport..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
     * [~useExportStatus(options)](#Toolbar.module_ToolbarFieldExport..useExportStatus) ⇒ <code>Object</code>
     * [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>Object</code>
-        * [~checkExports](#Toolbar.module_ToolbarFieldExport..useExport..checkExports)
+        * [~checkAllExports](#Toolbar.module_ToolbarFieldExport..useExport..checkAllExports)
         * [~createExport](#Toolbar.module_ToolbarFieldExport..useExport..createExport)
     * [~useOnSelect(options)](#Toolbar.module_ToolbarFieldExport..useOnSelect) ⇒ <code>function</code>
     * [~ToolbarFieldExport(props)](#Toolbar.module_ToolbarFieldExport..ToolbarFieldExport) ⇒ <code>React.ReactNode</code>
@@ -6656,7 +6656,7 @@ Aggregated export status
     </tr><tr>
     <td>options.useProduct</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useSelectors</td><td><code>function</code></td>
+    <td>options.useSelector</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 
@@ -6678,7 +6678,7 @@ Apply an export hook for a post with download, and a global polling status with 
     </tr><tr>
     <td>options.createExport</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.getExistingExports</td><td><code>function</code></td>
+    <td>options.getExistingExportsStatus</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useDispatch</td><td><code>function</code></td>
     </tr>  </tbody>
@@ -6686,13 +6686,13 @@ Apply an export hook for a post with download, and a global polling status with 
 
 
 * [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>Object</code>
-    * [~checkExports](#Toolbar.module_ToolbarFieldExport..useExport..checkExports)
+    * [~checkAllExports](#Toolbar.module_ToolbarFieldExport..useExport..checkAllExports)
     * [~createExport](#Toolbar.module_ToolbarFieldExport..useExport..createExport)
 
-<a name="Toolbar.module_ToolbarFieldExport..useExport..checkExports"></a>
+<a name="Toolbar.module_ToolbarFieldExport..useExport..checkAllExports"></a>
 
-#### useExport~checkExports
-Get a global export status. Sets polling if any pending indicators are found.
+#### useExport~checkAllExports
+Get a global export status. Pre-step for polling.
 
 **Kind**: inner constant of [<code>useExport</code>](#Toolbar.module_ToolbarFieldExport..useExport)  
 <a name="Toolbar.module_ToolbarFieldExport..useExport..createExport"></a>

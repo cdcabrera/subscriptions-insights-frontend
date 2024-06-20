@@ -427,9 +427,9 @@ Emulated service calls for platform globals.
     * [~getUserPermissions(appName, options)](#Platform.module_PlatformServices..getUserPermissions) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~hideGlobalFilter(isHidden)](#Platform.module_PlatformServices..hideGlobalFilter) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~deleteExport(id, options)](#Platform.module_PlatformServices..deleteExport) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [~getExportStatus(id, params, options)](#Platform.module_PlatformServices..getExportStatus) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [~getExistingExportsStatus(id, params, options)](#Platform.module_PlatformServices..getExistingExportsStatus) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~getExport(id, options)](#Platform.module_PlatformServices..getExport) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [~getExistingExports(params, options)](#Platform.module_PlatformServices..getExistingExports) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [~getExistingExports(idList, params, options)](#Platform.module_PlatformServices..getExistingExports) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [~postExport(data, options)](#Platform.module_PlatformServices..postExport) ⇒ <code>Promise.&lt;\*&gt;</code>
 
 <a name="Platform.module_PlatformServices..getUser"></a>
@@ -513,9 +513,9 @@ Delete an export. Useful for clean up. Helps avoid having to deal with export li
     </tr>  </tbody>
 </table>
 
-<a name="Platform.module_PlatformServices..getExportStatus"></a>
+<a name="Platform.module_PlatformServices..getExistingExportsStatus"></a>
 
-### PlatformServices~getExportStatus(id, params, options) ⇒ <code>Promise.&lt;\*&gt;</code>
+### PlatformServices~getExistingExportsStatus(id, params, options) ⇒ <code>Promise.&lt;\*&gt;</code>
 Get multiple export status, or a single status after setup.
 
 **Kind**: inner method of [<code>PlatformServices</code>](#Platform.module_PlatformServices)  
@@ -571,32 +571,35 @@ Get an export after setup.
 
 <a name="Platform.module_PlatformServices..getExistingExports"></a>
 
-### PlatformServices~getExistingExports(params, options) ⇒ <code>Promise.&lt;\*&gt;</code>
+### PlatformServices~getExistingExports(idList, params, options) ⇒ <code>Promise.&lt;\*&gt;</code>
 Convenience wrapper for setting up global export status with status polling, and download with clean-up.
 
 **Kind**: inner method of [<code>PlatformServices</code>](#Platform.module_PlatformServices)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Description</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>params</td><td><code>object</code></td>
+    <td>idList</td><td><code>Array.&lt;{id: string, fileName: string}&gt;</code></td><td><p>A list of export IDs to finish</p>
+</td>
     </tr><tr>
-    <td>options</td><td><code>object</code></td>
+    <td>params</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>options.cancel</td><td><code>boolean</code></td>
+    <td>options</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>options.cancelId</td><td><code>string</code></td>
+    <td>options.cancel</td><td><code>boolean</code></td><td></td>
+    </tr><tr>
+    <td>options.cancelId</td><td><code>string</code></td><td></td>
     </tr>  </tbody>
 </table>
 
 <a name="Platform.module_PlatformServices..postExport"></a>
 
 ### PlatformServices~postExport(data, options) ⇒ <code>Promise.&lt;\*&gt;</code>
-Convenience wrapper for posting to create an export with status polling, and download with clean-up.
+Convenience wrapper for posting to create an export with status polling, then performing a download with clean-up.
 
 **Kind**: inner method of [<code>PlatformServices</code>](#Platform.module_PlatformServices)  
 <table>

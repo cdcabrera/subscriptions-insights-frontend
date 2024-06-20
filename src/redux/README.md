@@ -65,8 +65,10 @@ Platform service wrappers for dispatch, state update.
     * [~removeNotification(id)](#Actions.module_PlatformActions..removeNotification) ⇒ <code>\*</code>
     * [~clearNotifications()](#Actions.module_PlatformActions..clearNotifications) ⇒ <code>\*</code>
     * [~authorizeUser(appName)](#Actions.module_PlatformActions..authorizeUser) ⇒ <code>function</code>
-    * [~setExportStatus(dispatch)](#Actions.module_PlatformActions..setExportStatus) ⇒ <code>function</code>
-    * [~getExistingExports(options)](#Actions.module_PlatformActions..getExistingExports) ⇒ <code>function</code>
+    * [~setExportStatus(id, params)](#Actions.module_PlatformActions..setExportStatus) ⇒ <code>function</code>
+    * [~getExistingExports(existingExports, options)](#Actions.module_PlatformActions..getExistingExports) ⇒ <code>function</code>
+    * [~removeExistingExports(existingExports)](#Actions.module_PlatformActions..removeExistingExports) ⇒ <code>function</code>
+    * [~getExistingExportsStatus(options)](#Actions.module_PlatformActions..getExistingExportsStatus) ⇒ <code>function</code>
     * [~createExport(id, data, options)](#Actions.module_PlatformActions..createExport) ⇒ <code>function</code>
     * [~hideGlobalFilter(isHidden)](#Actions.module_PlatformActions..hideGlobalFilter) ⇒ <code>Object</code>
 
@@ -132,8 +134,9 @@ Get an emulated and combined API response from the platforms "getUser" and "getU
 
 <a name="Actions.module_PlatformActions..setExportStatus"></a>
 
-### PlatformActions~setExportStatus(dispatch) ⇒ <code>function</code>
-Return a "dispatch ready" export poll status check.
+### PlatformActions~setExportStatus(id, params) ⇒ <code>function</code>
+Return a "dispatch ready" export poll status check. Helps keep components up-to-date by providing a common state
+updated from other action calls.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>
@@ -144,14 +147,22 @@ Return a "dispatch ready" export poll status check.
   </thead>
   <tbody>
 <tr>
-    <td>dispatch</td><td><code>function</code></td>
+    <td>id</td><td><code>string</code></td>
+    </tr><tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.completed</td><td><code>Array</code></td>
+    </tr><tr>
+    <td>params.isPending</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>params.pending</td><td><code>Array</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Actions.module_PlatformActions..getExistingExports"></a>
 
-### PlatformActions~getExistingExports(options) ⇒ <code>function</code>
-Create an export status poll with download, and toast notifications.
+### PlatformActions~getExistingExports(existingExports, options) ⇒ <code>function</code>
+Get all existing exports, if pending poll, and when complete download. Includes toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>
@@ -162,15 +173,54 @@ Create an export status poll with download, and toast notifications.
   </thead>
   <tbody>
 <tr>
+    <td>existingExports</td><td><code>Array</code></td><td></td>
+    </tr><tr>
     <td>options</td><td><code>object</code></td><td><p>Apply polling options</p>
 </td>
+    </tr>  </tbody>
+</table>
+
+<a name="Actions.module_PlatformActions..removeExistingExports"></a>
+
+### PlatformActions~removeExistingExports(existingExports) ⇒ <code>function</code>
+Remove all existing exports. Includes toast notifications.
+
+**Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>existingExports</td><td><code>Array.&lt;{id: string}&gt;</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Actions.module_PlatformActions..getExistingExportsStatus"></a>
+
+### PlatformActions~getExistingExportsStatus(options) ⇒ <code>function</code>
+Get a status from any existing exports. Display a confirmation for downloading, or ignoring, the exports.
+Includes toast notifications.
+
+**Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Actions.module_PlatformActions..createExport"></a>
 
 ### PlatformActions~createExport(id, data, options) ⇒ <code>function</code>
-Create an export for download with toast notifications.
+Create an export for download. Includes toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>
