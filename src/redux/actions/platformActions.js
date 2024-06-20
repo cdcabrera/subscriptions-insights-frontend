@@ -169,7 +169,55 @@ const getExistingExportsStatus =
 
     return dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExistingExportsStatus(undefined, options),
+      payload: platformServices.getExistingExportsStatus(undefined, options).then(successResponse => {
+        const isCompleted =
+          !successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted;
+        const isPending =
+          successResponse?.data?.data?.isAnythingPending && !successResponse?.data?.data?.isAnythingCompleted;
+        const isAnythingAvailable = isCompleted || isPending || false;
+
+        const completed = successResponse?.data?.data?.completed || [];
+        const pending = successResponse?.data?.data?.pending || [];
+        const totalResults = completed.length + pending.length;
+
+        if (isAnythingAvailable && totalResults) {
+          dispatch(
+            addNotification({
+              id: `swatch-exports-status`,
+              title: `${totalResults} existing reports are available`,
+              description: (
+                <div aria-live="polite">
+                  {(pending.length && `${pending.length} pending`) || ''}{' '}
+                  {(pending.length && completed.length && 'and') || ''}{' '}
+                  {(completed.length && `${completed.length} completed`) || ''} reports are available. Would you like to
+                  continue, and download?
+                  <p style={{ paddingTop: '1em' }}>
+                    <Button
+                      data-test="optinButtonSubmit"
+                      variant="primary"
+                      onClick={() => onYes([...completed, ...pending])}
+                      autoFocus
+                    >
+                      Yes
+                    </Button>{' '}
+                    <Button
+                      data-test="optinButtonSubmit"
+                      variant="plain"
+                      onClick={() => onNo([...completed, ...pending])}
+                    >
+                      No
+                    </Button>
+                  </p>
+                </div>
+              ),
+              autoDismiss: false,
+              dismissable: false
+            })
+          );
+        }
+
+        return successResponse;
+      }),
       meta: {
         id: 'global',
         notifications: {
@@ -182,55 +230,6 @@ const getExistingExportsStatus =
               context: ['export', 'error', 'description']
             }),
             dismissable: true
-          },
-          fulfilled: successResponse => {
-            const isCompleted =
-              !successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted;
-            const isPending =
-              successResponse?.data?.data?.isAnythingPending && !successResponse?.data?.data?.isAnythingCompleted;
-            const isAnythingAvailable = isCompleted || isPending || false;
-
-            const completed = successResponse?.data?.data?.completed || [];
-            const pending = successResponse?.data?.data?.pending || [];
-            const totalResults = completed.length + pending.length;
-
-            if (isAnythingAvailable && totalResults) {
-              return {
-                variant: 'info',
-                id: `swatch-exports-status`,
-                title: `${totalResults} existing reports are available`,
-                description: (
-                  <div aria-live="polite">
-                    {(pending.length && `${pending.length} pending`) || ''}{' '}
-                    {(pending.length && completed.length && 'and') || ''}{' '}
-                    {(completed.length && `${completed.length} completed`) || ''} reports are available. Would you like
-                    to continue, and download them?
-                    <p style={{ paddingTop: '1em' }}>
-                      <Button
-                        data-test="optinButtonSubmit"
-                        variant="primary"
-                        onClick={() => onYes([...completed, ...pending])}
-                        autoFocus
-                      >
-                        Yes
-                      </Button>{' '}
-                      <Button
-                        data-test="optinButtonSubmit"
-                        variant="plain"
-                        onClick={() => onNo([...completed, ...pending])}
-                      >
-                        No
-                      </Button>
-                    </p>
-                  </div>
-                ),
-                autoDismiss: false,
-                dismissable: false
-              };
-            }
-
-            delete this.fulfilled;
-            return {};
           }
         }
       }
@@ -297,6 +296,7 @@ const createExport =
               dismissable: true
             },
             pending: {
+              variant: 'info',
               id: `swatch-create-export-${id}`,
               title: translate('curiosity-toolbar.notifications', {
                 context: ['export', 'pending', 'title', id]
