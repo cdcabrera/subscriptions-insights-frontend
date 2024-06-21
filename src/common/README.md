@@ -30,6 +30,7 @@
     * [~setStartOfDay(date)](#Helpers.module_Dates..setStartOfDay) ⇒ <code>Date</code>
     * [~setEndOfMonth(date)](#Helpers.module_Dates..setEndOfMonth) ⇒ <code>Date</code>
     * [~setRangedDateTime(params)](#Helpers.module_Dates..setRangedDateTime) ⇒ <code>Object</code>
+    * [~setMillisecondsFromDate(params)](#Helpers.module_Dates..setMillisecondsFromDate) ⇒ <code>Date</code>
     * [~getRangedDateTime(granularity)](#Helpers.module_Dates..getRangedDateTime) ⇒ <code>Object</code>
     * [~getRangedMonthDateTime(month, defaultLocale)](#Helpers.module_Dates..getRangedMonthDateTime) ⇒ <code>Object</code> \| <code>\*</code> \| <code>undefined</code>
 
@@ -193,6 +194,29 @@ Set a date range based on a granularity type.
     </tr>  </tbody>
 </table>
 
+<a name="Helpers.module_Dates..setMillisecondsFromDate"></a>
+
+### Dates~setMillisecondsFromDate(params) ⇒ <code>Date</code>
+Set milliseconds from date. Defaults to internal current date.
+
+**Kind**: inner method of [<code>Dates</code>](#Helpers.module_Dates)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td><td></td>
+    </tr><tr>
+    <td>params.date</td><td><code>Date</code></td><td><p>The date to add milliseconds towards. Defaults to current date.</p>
+</td>
+    </tr><tr>
+    <td>params.ms</td><td><code>number</code></td><td></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Helpers.module_Dates..getRangedDateTime"></a>
 
 ### Dates~getRangedDateTime(granularity) ⇒ <code>Object</code>
@@ -282,6 +306,9 @@ Download the debug log file.
     * [~PROD_MODE](#Helpers.module_General..PROD_MODE) : <code>boolean</code>
     * [~REVIEW_MODE](#Helpers.module_General..REVIEW_MODE) : <code>boolean</code>
     * [~TEST_MODE](#Helpers.module_General..TEST_MODE) : <code>boolean</code>
+    * [~CONFIG_EXPORT_EXPIRE](#Helpers.module_General..CONFIG_EXPORT_EXPIRE) : <code>string</code>
+    * [~CONFIG_EXPORT_FILENAME](#Helpers.module_General..CONFIG_EXPORT_FILENAME) : <code>string</code>
+    * [~CONFIG_EXPORT_SERVICE_NAME_PREFIX](#Helpers.module_General..CONFIG_EXPORT_SERVICE_NAME_PREFIX) : <code>string</code>
     * [~UI_DEPLOY_PATH_PREFIX](#Helpers.module_General..UI_DEPLOY_PATH_PREFIX) : <code>string</code>
     * [~UI_DEPLOY_PATH_LINK_PREFIX](#Helpers.module_General..UI_DEPLOY_PATH_LINK_PREFIX) : <code>string</code>
     * [~UI_DISABLED](#Helpers.module_General..UI_DISABLED) : <code>boolean</code>
@@ -302,7 +329,6 @@ Download the debug log file.
     * [~UI_LOCALE_DEFAULT_DESC](#Helpers.module_General..UI_LOCALE_DEFAULT_DESC) : <code>string</code>
     * [~UI_LOGGER_ID](#Helpers.module_General..UI_LOGGER_ID) : <code>string</code>
     * [~UI_LOGGER_FILE](#Helpers.module_General..UI_LOGGER_FILE) : <code>string</code>
-    * [~UI_EXPORT_FILENAME](#Helpers.module_General..UI_EXPORT_FILENAME) : <code>string</code>
     * [~UI_NAME](#Helpers.module_General..UI_NAME) : <code>string</code>
     * [~UI_PATH](#Helpers.module_General..UI_PATH) : <code>string</code>
     * [~UI_VERSION](#Helpers.module_General..UI_VERSION) : <code>string</code>
@@ -399,6 +425,24 @@ Associated with using the NPM script "start:proxy". See dotenv config files for 
 ### General~TEST\_MODE : <code>boolean</code>
 Is test mode active.
 Associated with running unit tests. See dotenv config files for activation.
+
+**Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
+<a name="Helpers.module_General..CONFIG_EXPORT_EXPIRE"></a>
+
+### General~CONFIG\_EXPORT\_EXPIRE : <code>string</code>
+CONFIG export download file expiration.
+
+**Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
+<a name="Helpers.module_General..CONFIG_EXPORT_FILENAME"></a>
+
+### General~CONFIG\_EXPORT\_FILENAME : <code>string</code>
+CONFIG export download file name. Extension is handled at the service level.
+
+**Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
+<a name="Helpers.module_General..CONFIG_EXPORT_SERVICE_NAME_PREFIX"></a>
+
+### General~CONFIG\_EXPORT\_SERVICE\_NAME\_PREFIX : <code>string</code>
+CONFIG export "post" download name prefix, for consistency.
 
 **Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
 <a name="Helpers.module_General..UI_DEPLOY_PATH_PREFIX"></a>
@@ -535,12 +579,6 @@ See dotenv config files for updating.
 
 ### General~UI\_LOGGER\_FILE : <code>string</code>
 UI state logging file name.
-
-**Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
-<a name="Helpers.module_General..UI_EXPORT_FILENAME"></a>
-
-### General~UI\_EXPORT\_FILENAME : <code>string</code>
-UI export download file name. Extension is handled at the service level.
 
 **Kind**: inner constant of [<code>General</code>](#Helpers.module_General)  
 <a name="Helpers.module_General..UI_NAME"></a>

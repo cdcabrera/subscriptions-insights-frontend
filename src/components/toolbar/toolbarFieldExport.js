@@ -8,10 +8,12 @@ import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
-  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
-  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES
+  PLATFORM_API_EXPORT_RESOURCE_TYPES as RESOURCE_TYPES,
+  PLATFORM_API_EXPORT_POST_TYPES as POST_TYPES,
+  PLATFORM_API_EXPORT_SOURCE_TYPES as SOURCE_TYPES
 } from '../../services/platform/platformConstants';
 import { translate } from '../i18n/i18n';
+import { dateHelpers, helpers } from '../../common';
 
 /**
  * A standalone export select/dropdown filter and download hooks.
@@ -118,15 +120,24 @@ const useOnSelect = ({
   return ({ value = null } = {}) => {
     const sources = [
       {
-        application: APP_TYPES.SUBSCRIPTIONS,
-        resource: RESOURCE_TYPES.SUBSCRIPTIONS,
-        filters: {
+        [SOURCE_TYPES.APPLICATION]: APP_TYPES.SUBSCRIPTIONS,
+        [SOURCE_TYPES.RESOURCE]: RESOURCE_TYPES.SUBSCRIPTIONS,
+        [SOURCE_TYPES.FILTERS]: {
           ...exportQuery
         }
       }
     ];
 
-    createExport(productId, { format: value, name: `${EXPORT_PREFIX}-${productId}`, sources });
+    createExport(productId, {
+      [POST_TYPES.EXPIRES_AT]: dateHelpers
+        .setMillisecondsFromDate({
+          ms: helpers.CONFIG_EXPORT_EXPIRE
+        })
+        .toISOString(),
+      [POST_TYPES.FORMAT]: value,
+      [POST_TYPES.NAME]: `${helpers.CONFIG_EXPORT_SERVICE_NAME_PREFIX}-${productId}`,
+      [POST_TYPES.SOURCES]: sources
+    });
   };
 };
 

@@ -4,7 +4,6 @@ import { rbacConfig } from '../../config';
 import {
   platformConstants,
   PLATFORM_API_EXPORT_STATUS_TYPES,
-  PLATFORM_API_EXPORT_FILENAME_PREFIX as EXPORT_PREFIX,
   PLATFORM_API_RESPONSE_USER_PERMISSION_OPERATION_TYPES as OPERATION_TYPES,
   PLATFORM_API_RESPONSE_USER_PERMISSION_RESOURCE_TYPES as RESOURCE_TYPES
 } from './platformConstants';
@@ -48,7 +47,7 @@ const exports = response => {
    */
   const getProductId = str => {
     const updatedStr = str;
-    const attemptId = updatedStr?.replace(`${EXPORT_PREFIX}-`, '')?.trim();
+    const attemptId = updatedStr?.replace(`${helpers.CONFIG_EXPORT_SERVICE_NAME_PREFIX}-`, '')?.trim();
 
     if (attemptId === updatedStr) {
       return undefined;
@@ -91,7 +90,7 @@ const exports = response => {
     const focusedStatus = getStatus(exportStatus);
 
     const updatedExportData = {
-      fileName: `${moment.utc(dateHelpers.getCurrentDate()).format('YYYYMMDD_HHmmss')}_${helpers.UI_EXPORT_FILENAME.replace('{0}', _snakeCase(productId))}`,
+      fileName: `${moment.utc(dateHelpers.getCurrentDate()).format('YYYYMMDD_HHmmss')}_${helpers.CONFIG_EXPORT_FILENAME.replace('{0}', _snakeCase(productId))}`,
       format: exportFormat,
       id: exportId,
       name: exportName,
@@ -115,7 +114,7 @@ const exports = response => {
   if (Array.isArray(data)) {
     data
       .filter(({ [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]: exportName }) =>
-        new RegExp(`^${EXPORT_PREFIX}`, 'i').test(exportName)
+        new RegExp(`^${helpers.CONFIG_EXPORT_SERVICE_NAME_PREFIX}`, 'i').test(exportName)
       )
       .forEach(
         ({
@@ -127,7 +126,7 @@ const exports = response => {
           restructureResponse({ exportName, exportStatus, exportFormat, exportId });
         }
       );
-  } else if (id && status && new RegExp(`^${EXPORT_PREFIX}`, 'i').test(name)) {
+  } else if (id && status && new RegExp(`^${helpers.CONFIG_EXPORT_SERVICE_NAME_PREFIX}`, 'i').test(name)) {
     restructureResponse({ exportName: name, exportStatus: status, exportFormat: format, exportId: id });
   }
 

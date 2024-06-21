@@ -18,7 +18,7 @@ describe('Platform Transformers', () => {
 
     const parsedSingle = platformTransformers.exports({
       [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]:
-        `${platformConstants.PLATFORM_API_EXPORT_FILENAME_PREFIX}-${rhsmConstants.RHSM_API_PATH_PRODUCT_TYPES.RHEL_X86}`,
+        `${helpers.CONFIG_EXPORT_SERVICE_NAME_PREFIX}-${rhsmConstants.RHSM_API_PATH_PRODUCT_TYPES.RHEL_X86}`,
       [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.EXPIRES_AT]: '2019-07-14T00:00:00Z',
       [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: '0123456789',
       [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]:
@@ -29,7 +29,7 @@ describe('Platform Transformers', () => {
       [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: [
         {
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.NAME]:
-            `${platformConstants.PLATFORM_API_EXPORT_FILENAME_PREFIX}-${rhsmConstants.RHSM_API_PATH_PRODUCT_TYPES.RHEL_X86}`,
+            `${helpers.CONFIG_EXPORT_SERVICE_NAME_PREFIX}-${rhsmConstants.RHSM_API_PATH_PRODUCT_TYPES.RHEL_X86}`,
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.EXPIRES_AT]: '2019-07-14T00:00:00Z',
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.ID]: '0123456789',
           [platformConstants.PLATFORM_API_EXPORT_RESPONSE_TYPES.STATUS]:
