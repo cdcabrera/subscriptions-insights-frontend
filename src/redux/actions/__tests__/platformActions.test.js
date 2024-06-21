@@ -69,13 +69,7 @@ describe('PlatformActions', () => {
 
   it('Should return response content for removeExistingExports method', () => {
     const mockDispatch = jest.fn();
-    platformActions.removeExistingExports([])(mockDispatch);
-    expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
-  });
-
-  it('Should return response content for setExportStatus method', () => {
-    const mockDispatch = jest.fn();
-    platformActions.setExportStatus()(mockDispatch);
+    platformActions.deleteExistingExports([])(mockDispatch);
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch object');
   });
 });
