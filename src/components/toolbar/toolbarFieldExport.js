@@ -74,6 +74,7 @@ const useExportStatus = ({
  * @param {Function} options.getExistingExportsStatus
  * @param {Function} options.deleteExistingExports
  * @param {Function} options.removeNotification
+ * @param {Function} options.t
  * @param {Function} options.useDispatch
  * @param {Function} options.useSelectorsResponse
  */
@@ -83,6 +84,7 @@ const useExistingExports = ({
   getExistingExportsStatus: getAliasExistingExportsStatus = reduxActions.platform.getExistingExportsStatus,
   deleteExistingExports: deleteAliasExistingExports = reduxActions.platform.deleteExistingExports,
   removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
+  t = translate,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
@@ -126,28 +128,40 @@ const useExistingExports = ({
       dispatch(
         addAliasNotification({
           id: `swatch-exports-status`,
-          title: `${totalResults} existing reports are available`,
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'title', 'existing'],
+            count: totalResults
+          }),
           description: (
             <div aria-live="polite">
-              {(pending.length && `${pending.length} pending`) || ''}{' '}
-              {(pending.length && completed.length && 'and') || ''}{' '}
-              {(completed.length && `${completed.length} completed`) || ''} reports are available. Would you like to
-              continue, and download?
+              {t('curiosity-toolbar.notifications', {
+                context: [
+                  'export',
+                  'completed',
+                  'description',
+                  'existing',
+                  completed.length && 'completed',
+                  pending.length && 'pending'
+                ],
+                count: totalResults,
+                completed: completed.length,
+                pending: pending.length
+              })}
               <p style={{ paddingTop: '1em' }}>
                 <Button
-                  data-test="optinButtonSubmit"
+                  data-test="exportButtonConfirm"
                   variant="primary"
                   onClick={() => onConfirmYes([...completed, ...pending])}
                   autoFocus
                 >
-                  Yes
+                  {t('curiosity-toolbar.button', { context: 'yes' })}
                 </Button>{' '}
                 <Button
-                  data-test="optinButtonSubmit"
+                  data-test="exportButtonConfirm"
                   variant="plain"
                   onClick={() => onConfirmNo([...completed, ...pending])}
                 >
-                  No
+                  {t('curiosity-toolbar.button', { context: 'no' })}
                 </Button>
               </p>
             </div>
@@ -170,7 +184,8 @@ const useExistingExports = ({
     onConfirmNo,
     onConfirmYes,
     pending,
-    removeAliasNotification
+    removeAliasNotification,
+    t
   ]);
 };
 
