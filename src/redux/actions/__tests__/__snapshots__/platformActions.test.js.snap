@@ -10,30 +10,27 @@ exports[`PlatformActions Should return a dispatch object for the hideGlobalFilte
 exports[`PlatformActions Should return response content for createExport method: dispatch object 1`] = `
 [
   [
-    [
-      [Function],
-      {
-        "meta": {
-          "id": undefined,
-          "notifications": {
-            "pending": {
-              "dismissable": true,
-              "id": "swatch-create-export-undefined",
-              "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"title"})",
-              "variant": "info",
-            },
-            "rejected": {
-              "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
-              "dismissable": true,
-              "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
-              "variant": "warning",
-            },
+    {
+      "meta": {
+        "id": undefined,
+        "notifications": {
+          "pending": {
+            "dismissable": true,
+            "id": "swatch-create-export-undefined",
+            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"title"})",
+            "variant": "info",
+          },
+          "rejected": {
+            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+            "dismissable": true,
+            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+            "variant": "warning",
           },
         },
-        "payload": Promise {},
-        "type": "SET_PLATFORM_EXPORT_CREATE",
       },
-    ],
+      "payload": Promise {},
+      "type": "SET_PLATFORM_EXPORT_CREATE",
+    },
   ],
 ]
 `;
@@ -52,7 +49,7 @@ exports[`PlatformActions Should return response content for getExistingExports m
           },
           "pending": {
             "dismissable": true,
-            "title": "Continuing reports download",
+            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"titleGlobal"})",
             "variant": "info",
           },
           "rejected": {
@@ -64,7 +61,7 @@ exports[`PlatformActions Should return response content for getExistingExports m
         },
       },
       "payload": Promise {},
-      "type": "SET_PLATFORM_EXPORT_STATUS",
+      "type": "GET_PLATFORM_EXPORT_EXISTING",
     },
   ],
 ]
@@ -85,7 +82,7 @@ exports[`PlatformActions Should return response content for getExistingExportsSt
         },
       },
       "payload": Promise {},
-      "type": "SET_PLATFORM_EXPORT_STATUS",
+      "type": "SET_PLATFORM_EXPORT_EXISTING_STATUS",
     },
   ],
 ]
@@ -106,21 +103,7 @@ exports[`PlatformActions Should return response content for removeExistingExport
         },
       },
       "payload": Promise {},
-      "type": "DELETE_EXPORT",
-    },
-  ],
-]
-`;
-
-exports[`PlatformActions Should return response content for setExportStatus method: dispatch object 1`] = `
-[
-  [
-    {
-      "completed": [],
-      "id": undefined,
-      "isPending": false,
-      "pending": [],
-      "type": "SET_PLATFORM_EXPORT_STATUS",
+      "type": "DELETE_PLATFORM_EXPORT_EXISTING",
     },
   ],
 ]

@@ -1,10 +1,8 @@
-import React from 'react';
 import {
   addNotification as RcsAddNotification,
   removeNotification as RcsRemoveNotification,
   clearNotifications as RcsClearNotifications
 } from '@redhat-cloud-services/frontend-components-notifications';
-import { Button } from '@patternfly/react-core';
 import { platformTypes } from '../types';
 import { platformServices } from '../../services/platform/platformServices';
 import { translate } from '../../components/i18n/i18n';
@@ -52,28 +50,6 @@ const authorizeUser = appName => dispatch =>
   });
 
 /**
- * Return a "dispatch ready" export poll status check. Helps keep components up-to-date by providing a common state
- * updated from other action calls.
- *
- * @param {string} id
- * @param {object} params
- * @param {Array} params.completed
- * @param {boolean} params.isPending
- * @param {Array} params.pending
- * @returns {Function}
- */
-const setExportStatus =
-  (id, { completed = [], isPending = false, pending = [] } = {}) =>
-  dispatch =>
-    dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      id,
-      completed,
-      isPending,
-      pending
-    });
-
-/**
  * Get all existing exports, if pending poll, and when complete download. Includes toast notifications.
  *
  * @param {Array} existingExports
@@ -84,7 +60,7 @@ const getExistingExports =
   (existingExports, options = {}) =>
   dispatch =>
     dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
+      type: platformTypes.GET_PLATFORM_EXPORT_EXISTING,
       payload: platformServices.getExistingExports(existingExports, undefined, options),
       meta: {
         notifications: {
@@ -100,7 +76,9 @@ const getExistingExports =
           },
           pending: {
             variant: 'info',
-            title: 'Continuing reports download',
+            title: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'pending', 'titleGlobal']
+            }),
             dismissable: true
           },
           fulfilled: {
@@ -120,14 +98,14 @@ const getExistingExports =
     });
 
 /**
- * Remove all existing exports. Includes toast notifications.
+ * Delete all existing exports. Includes toast notifications.
  *
  * @param {Array<{ id: string }>} existingExports
  * @returns {Function}
  */
-const removeExistingExports = existingExports => dispatch =>
+const deleteExistingExports = existingExports => dispatch =>
   dispatch({
-    type: 'DELETE_EXPORT',
+    type: platformTypes.DELETE_PLATFORM_EXPORT_EXISTING,
     payload: Promise.all(existingExports.map(({ id }) => platformServices.deleteExport(id))),
     meta: {
       notifications: {
@@ -154,67 +132,10 @@ const removeExistingExports = existingExports => dispatch =>
  */
 const getExistingExportsStatus =
   (options = {}) =>
-  dispatch => {
-    const onYes = allResults => {
-      dispatch(removeNotification(`swatch-exports-status`));
-      getExistingExports(allResults)(dispatch);
-    };
-    const onNo = allResults => {
-      dispatch(removeNotification(`swatch-exports-status`));
-      removeExistingExports(allResults)(dispatch);
-    };
-
-    return dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_STATUS,
-      payload: platformServices.getExistingExportsStatus(undefined, options).then(successResponse => {
-        const isCompleted =
-          !successResponse?.data?.data?.isAnythingPending && successResponse?.data?.data?.isAnythingCompleted;
-        const isPending =
-          successResponse?.data?.data?.isAnythingPending && !successResponse?.data?.data?.isAnythingCompleted;
-        const isAnythingAvailable = isCompleted || isPending || false;
-
-        const completed = successResponse?.data?.data?.completed || [];
-        const pending = successResponse?.data?.data?.pending || [];
-        const totalResults = completed.length + pending.length;
-
-        if (isAnythingAvailable && totalResults) {
-          dispatch(
-            addNotification({
-              id: `swatch-exports-status`,
-              title: `${totalResults} existing reports are available`,
-              description: (
-                <div aria-live="polite">
-                  {(pending.length && `${pending.length} pending`) || ''}{' '}
-                  {(pending.length && completed.length && 'and') || ''}{' '}
-                  {(completed.length && `${completed.length} completed`) || ''} reports are available. Would you like to
-                  continue, and download?
-                  <p style={{ paddingTop: '1em' }}>
-                    <Button
-                      data-test="optinButtonSubmit"
-                      variant="primary"
-                      onClick={() => onYes([...completed, ...pending])}
-                      autoFocus
-                    >
-                      Yes
-                    </Button>{' '}
-                    <Button
-                      data-test="optinButtonSubmit"
-                      variant="plain"
-                      onClick={() => onNo([...completed, ...pending])}
-                    >
-                      No
-                    </Button>
-                  </p>
-                </div>
-              ),
-              autoDismiss: false,
-              dismissable: false
-            })
-          );
-        }
-
-        return successResponse;
-      }),
+  dispatch =>
+    dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_EXISTING_STATUS,
+      payload: platformServices.getExistingExportsStatus(undefined, options),
       meta: {
         notifications: {
           rejected: {
@@ -230,7 +151,6 @@ const getExistingExportsStatus =
         }
       }
     });
-  };
 
 /**
  * Create an export for download. Includes toast notifications.
@@ -243,66 +163,33 @@ const getExistingExportsStatus =
 const createExport =
   (id, data = {}, options = {}) =>
   dispatch =>
-    dispatch([
-      setExportStatus(id, { isPending: true }),
-      {
-        type: platformTypes.SET_PLATFORM_EXPORT_CREATE,
-        payload: platformServices.postExport(data, {
-          ...options,
-          poll: {
-            ...options.poll,
-            status: successResponse => {
-              const isCompleted = successResponse?.data?.data?.products?.[id]?.isCompleted;
-              const isPending = !isCompleted;
-              const pending = successResponse?.data?.data?.products?.[id]?.pending || [];
-
-              if (isCompleted) {
-                dispatch(removeNotification(`swatch-create-export-${id}`));
-                dispatch(
-                  addNotification({
-                    variant: 'success',
-                    id: `swatch-create-export-${id}`,
-                    title: translate('curiosity-toolbar.notifications', {
-                      context: ['export', 'completed', 'title']
-                    }),
-                    description: translate('curiosity-toolbar.notifications', {
-                      context: ['export', 'completed', 'description'],
-                      fileName: successResponse?.data?.data?.products?.[id]?.completed?.[0]?.fileName
-                    }),
-                    dismissable: true
-                  })
-                );
-              }
-
-              setExportStatus(id, { isPending, pending })(dispatch);
-            }
-          }
-        }),
-        meta: {
-          id,
-          notifications: {
-            rejected: {
-              variant: 'warning',
-              title: translate('curiosity-toolbar.notifications', {
-                context: ['export', 'error', 'title']
-              }),
-              description: translate('curiosity-toolbar.notifications', {
-                context: ['export', 'error', 'description']
-              }),
-              dismissable: true
-            },
-            pending: {
-              variant: 'info',
-              id: `swatch-create-export-${id}`,
-              title: translate('curiosity-toolbar.notifications', {
-                context: ['export', 'pending', 'title', id]
-              }),
-              dismissable: true
-            }
+    dispatch({
+      type: platformTypes.SET_PLATFORM_EXPORT_CREATE,
+      payload: platformServices.postExport(data, options),
+      meta: {
+        id,
+        notifications: {
+          rejected: {
+            variant: 'warning',
+            title: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'title']
+            }),
+            description: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'description']
+            }),
+            dismissable: true
+          },
+          pending: {
+            variant: 'info',
+            id: `swatch-create-export-${id}`,
+            title: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'pending', 'title', id]
+            }),
+            dismissable: true
           }
         }
       }
-    ]);
+    });
 
 /**
  * Hide platform global filter.
@@ -321,11 +208,10 @@ const platformActions = {
   clearNotifications,
   authorizeUser,
   createExport,
+  deleteExistingExports,
   getExistingExports,
   getExistingExportsStatus,
-  hideGlobalFilter,
-  removeExistingExports,
-  setExportStatus
+  hideGlobalFilter
 };
 
 export {
@@ -336,9 +222,8 @@ export {
   clearNotifications,
   authorizeUser,
   createExport,
+  deleteExistingExports,
   getExistingExports,
   getExistingExportsStatus,
-  hideGlobalFilter,
-  removeExistingExports,
-  setExportStatus
+  hideGlobalFilter
 };
