@@ -181,6 +181,7 @@ const useExistingExports = ({
  * @param {Function} options.addNotification
  * @param {Function} options.createExport
  * @param {Function} options.removeNotification
+ * @param {Function} options.t
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
  * @returns {Function}
@@ -225,7 +226,7 @@ const useExport = ({
       }
 
       dispatch({
-        type: reduxTypes.platformTypes.SET_PLATFORM_EXPORT_STATUS,
+        type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
         id: productId,
         isPending,
         pending
@@ -238,7 +239,7 @@ const useExport = ({
     (id, data) => {
       dispatch([
         {
-          type: reduxTypes.platformTypes.SET_PLATFORM_EXPORT_STATUS,
+          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
           id,
           isPending: true
         },

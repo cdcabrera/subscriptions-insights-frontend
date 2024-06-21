@@ -76,7 +76,9 @@ const getExistingExports =
           },
           pending: {
             variant: 'info',
-            title: 'Continuing reports download',
+            title: translate('curiosity-toolbar.notifications', {
+              context: ['export', 'pending', 'titleGlobal']
+            }),
             dismissable: true
           },
           fulfilled: {
