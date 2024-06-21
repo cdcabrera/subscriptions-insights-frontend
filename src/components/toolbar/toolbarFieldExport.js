@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useMount } from 'react-use';
-import { reduxActions, storeHooks } from '../../redux';
+import { Button } from '@patternfly/react-core';
+import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
 import {
@@ -65,42 +66,191 @@ const useExportStatus = ({
 };
 
 /**
- * Apply an export hook for a post with download, and a global polling status with download.
+ * Apply an existing exports hook for user abandoned reports. Allow bulk polling status with download.
  *
  * @param {object} options
- * @param {Function} options.createExport
+ * @param {Function} options.addNotification
+ * @param {Function} options.getExistingExports
  * @param {Function} options.getExistingExportsStatus
+ * @param {Function} options.deleteExistingExports
+ * @param {Function} options.removeNotification
  * @param {Function} options.useDispatch
- * @returns {{createExport: Function, checkAllExports: Function, getAllExports: Function}}
+ * @param {Function} options.useSelectorsResponse
  */
-const useExport = ({
-  createExport: createAliasExport = reduxActions.platform.createExport,
+const useExistingExports = ({
+  addNotification: addAliasNotification = reduxActions.platform.addNotification,
+  getExistingExports: getAliasExistingExports = reduxActions.platform.getExistingExports,
   getExistingExportsStatus: getAliasExistingExportsStatus = reduxActions.platform.getExistingExportsStatus,
-  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
+  deleteExistingExports: deleteAliasExistingExports = reduxActions.platform.deleteExistingExports,
+  removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
+  const [isConfirmation, setIsConfirmation] = useState(false);
   const dispatch = useAliasDispatch();
+  const { data, fulfilled } = useAliasSelectorsResponse(({ app }) => app?.exportsExisting);
+  const { completed = [], isAnythingPending, isAnythingCompleted, pending = [] } = data?.[0]?.data || {};
 
-  /**
-   * Get a global export status. Pre-step for polling.
-   */
-  const checkAllExports = useCallback(
-    () => getAliasExistingExportsStatus()(dispatch),
-    [dispatch, getAliasExistingExportsStatus]
+  const onConfirmYes = useCallback(
+    allResults => {
+      dispatch(removeAliasNotification(`swatch-exports-status`));
+      getAliasExistingExports(allResults)(dispatch);
+    },
+    [dispatch, getAliasExistingExports, removeAliasNotification]
   );
 
-  /**
-   * Create an export then download. Automatically sets up polling until the file(s) are ready.
-   */
-  const createExport = useCallback((id, data) => createAliasExport(id, data)(dispatch), [createAliasExport, dispatch]);
+  const onConfirmNo = useCallback(
+    allResults => {
+      dispatch(removeAliasNotification(`swatch-exports-status`));
+      deleteAliasExistingExports(allResults)(dispatch);
+    },
+    [dispatch, deleteAliasExistingExports, removeAliasNotification]
+  );
 
-  return {
-    checkAllExports,
-    createExport
-  };
+  useMount(() => {
+    if (!isConfirmation) {
+      getAliasExistingExportsStatus()(dispatch);
+    }
+  });
+
+  useEffect(() => {
+    if (!fulfilled || isConfirmation) {
+      return;
+    }
+
+    const isAnythingAvailable = isAnythingPending || isAnythingCompleted || false;
+    const totalResults = completed.length + pending.length;
+
+    if (isAnythingAvailable && totalResults) {
+      dispatch(removeAliasNotification(`swatch-exports-status`));
+      dispatch(
+        addAliasNotification({
+          id: `swatch-exports-status`,
+          title: `${totalResults} existing reports are available`,
+          description: (
+            <div aria-live="polite">
+              {(pending.length && `${pending.length} pending`) || ''}{' '}
+              {(pending.length && completed.length && 'and') || ''}{' '}
+              {(completed.length && `${completed.length} completed`) || ''} reports are available. Would you like to
+              continue, and download?
+              <p style={{ paddingTop: '1em' }}>
+                <Button
+                  data-test="optinButtonSubmit"
+                  variant="primary"
+                  onClick={() => onConfirmYes([...completed, ...pending])}
+                  autoFocus
+                >
+                  Yes
+                </Button>{' '}
+                <Button
+                  data-test="optinButtonSubmit"
+                  variant="plain"
+                  onClick={() => onConfirmNo([...completed, ...pending])}
+                >
+                  No
+                </Button>
+              </p>
+            </div>
+          ),
+          autoDismiss: false,
+          dismissable: false
+        })
+      );
+
+      setIsConfirmation(true);
+    }
+  }, [
+    addAliasNotification,
+    completed,
+    dispatch,
+    fulfilled,
+    isAnythingCompleted,
+    isAnythingPending,
+    isConfirmation,
+    onConfirmNo,
+    onConfirmYes,
+    pending,
+    removeAliasNotification
+  ]);
 };
 
 /**
- * On select update export.
+ * Apply an export hook for an export post. The service automatically sets up polling, then force downloads the file.
+ *
+ * @param {object} options
+ * @param {Function} options.addNotification
+ * @param {Function} options.createExport
+ * @param {Function} options.removeNotification
+ * @param {Function} options.useDispatch
+ * @param {Function} options.useProduct
+ * @returns {Function}
+ */
+const useExport = ({
+  addNotification: addAliasNotification = reduxActions.platform.addNotification,
+  createExport: createAliasExport = reduxActions.platform.createExport,
+  removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
+  t = translate,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useProduct: useAliasProduct = useProduct
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const dispatch = useAliasDispatch();
+
+  /**
+   * A polling status callback on export create.
+   *
+   * @type {Function}
+   */
+  const statusCallback = useCallback(
+    successResponse => {
+      const { completed = [], isCompleted, pending = [] } = successResponse?.data?.data?.products?.[productId] || {};
+      const isPending = !isCompleted;
+
+      if (isCompleted) {
+        dispatch(removeAliasNotification(`swatch-create-export-${productId}`));
+        dispatch(
+          addAliasNotification({
+            variant: 'success',
+            id: `swatch-create-export-${productId}`,
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'completed', 'title']
+            }),
+            description: t('curiosity-toolbar.notifications', {
+              context: ['export', 'completed', 'description'],
+              fileName: completed?.[0]?.fileName
+            }),
+            dismissable: true
+          })
+        );
+      }
+
+      dispatch({
+        type: reduxTypes.platformTypes.SET_PLATFORM_EXPORT_STATUS,
+        id: productId,
+        isPending,
+        pending
+      });
+    },
+    [addAliasNotification, dispatch, productId, removeAliasNotification, t]
+  );
+
+  return useCallback(
+    (id, data) => {
+      dispatch([
+        {
+          type: reduxTypes.platformTypes.SET_PLATFORM_EXPORT_STATUS,
+          id,
+          isPending: true
+        },
+        createAliasExport(id, data, { poll: { status: statusCallback } })
+      ]);
+    },
+    [createAliasExport, dispatch, statusCallback]
+  );
+};
+
+/**
+ * On select create/post an export.
  *
  * @param {object} options
  * @param {Function} options.useExport
@@ -113,9 +263,9 @@ const useOnSelect = ({
   useProduct: useAliasProduct = useProduct,
   useProductExportQuery: useAliasProductExportQuery = useProductExportQuery
 } = {}) => {
-  const { createExport } = useAliasExport();
   const { productId } = useAliasProduct();
   const exportQuery = useAliasProductExportQuery();
+  const createExport = useAliasExport();
 
   return ({ value = null } = {}) => {
     const sources = [
@@ -149,7 +299,7 @@ const useOnSelect = ({
  * @param {Array} props.options
  * @param {string} props.position
  * @param {Function} props.t
- * @param {Function} props.useExport
+ * @param {Function} props.useExistingExports
  * @param {Function} props.useExportStatus
  * @param {Function} props.useOnSelect
  * @returns {React.ReactNode}
@@ -158,12 +308,11 @@ const ToolbarFieldExport = ({
   options,
   position,
   t,
-  useExport: useAliasExport,
+  useExistingExports: useAliasExistingExports,
   useExportStatus: useAliasExportStatus,
   useOnSelect: useAliasOnSelect
 }) => {
   const { isProductPending, pendingProductFormats = [] } = useAliasExportStatus();
-  const { checkAllExports } = useAliasExport();
   const onSelect = useAliasOnSelect();
   const updatedOptions = options.map(option => ({
     ...option,
@@ -180,9 +329,7 @@ const ToolbarFieldExport = ({
       (isProductPending && pendingProductFormats?.includes(option.value))
   }));
 
-  useMount(() => {
-    checkAllExports();
-  });
+  useAliasExistingExports();
 
   return (
     <Select
@@ -203,7 +350,7 @@ const ToolbarFieldExport = ({
 /**
  * Prop types.
  *
- * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, useExport: Function,
+ * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, useExistingExports: Function,
  *     position: string}}
  */
 ToolbarFieldExport.propTypes = {
@@ -216,7 +363,7 @@ ToolbarFieldExport.propTypes = {
   ),
   position: PropTypes.string,
   t: PropTypes.func,
-  useExport: PropTypes.func,
+  useExistingExports: PropTypes.func,
   useExportStatus: PropTypes.func,
   useOnSelect: PropTypes.func
 };
@@ -224,14 +371,14 @@ ToolbarFieldExport.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, useExport: Function,
+ * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, useExistingExports: Function,
  *     position: string}}
  */
 ToolbarFieldExport.defaultProps = {
   options: toolbarFieldOptions,
   position: SelectPosition.left,
   t: translate,
-  useExport,
+  useExistingExports,
   useExportStatus,
   useOnSelect
 };
@@ -241,6 +388,7 @@ export {
   ToolbarFieldExport,
   toolbarFieldOptions,
   useExport,
+  useExistingExports,
   useExportStatus,
   useOnSelect
 };

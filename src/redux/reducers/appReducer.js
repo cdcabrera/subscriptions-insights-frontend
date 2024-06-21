@@ -14,12 +14,13 @@ import { reduxHelpers } from '../common';
  * Initial state.
  *
  * @private
- * @type {{auth: {}, exports: {}, optin: {}, locale: {}, errors: {}}}
+ * @type {{auth: {}, exports: {}, exportsExisting: {}, optin: {}, locale: {}, errors: {}}}
  */
 const initialState = {
   auth: {},
   errors: {},
   exports: {},
+  exportsExisting: {},
   locale: {},
   optin: {}
 };
@@ -74,6 +75,7 @@ const appReducer = (state = initialState, action) => {
         [
           { ref: 'locale', type: appTypes.USER_LOCALE },
           { ref: 'optin', type: [appTypes.DELETE_USER_OPTIN, appTypes.GET_USER_OPTIN, appTypes.UPDATE_USER_OPTIN] },
+          { ref: 'exportsExisting', type: platformTypes.SET_PLATFORM_EXPORT_EXISTING_STATUS },
           { ref: 'auth', type: platformTypes.PLATFORM_USER_AUTH }
         ],
         state,
