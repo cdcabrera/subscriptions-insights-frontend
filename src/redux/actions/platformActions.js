@@ -5,7 +5,6 @@ import {
 } from '@redhat-cloud-services/frontend-components-notifications';
 import { platformTypes } from '../types';
 import { platformServices } from '../../services/platform/platformServices';
-import { translate } from '../../components/i18n/i18n';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -20,7 +19,12 @@ import { translate } from '../../components/i18n/i18n';
  * @param {object} data
  * @returns {*}
  */
-const addNotification = data => RcsAddNotification(data);
+const addNotification = data => dispatch => {
+  if (data.id) {
+    dispatch(RcsRemoveNotification(data.id));
+  }
+  return dispatch(RcsAddNotification(data));
+};
 
 /**
  * Remove a platform plugin toast notification.
@@ -28,14 +32,14 @@ const addNotification = data => RcsAddNotification(data);
  * @param {string} id
  * @returns {*}
  */
-const removeNotification = id => RcsRemoveNotification(id);
+const removeNotification = id => dispatch => dispatch(RcsRemoveNotification(id));
 
 /**
  * Clear all platform plugin toast notifications.
  *
  * @returns {*}
  */
-const clearNotifications = () => RcsClearNotifications();
+const clearNotifications = () => dispatch => dispatch(RcsClearNotifications());
 
 /**
  * Get an emulated and combined API response from the platforms "getUser" and "getUserPermissions" global methods.
@@ -53,47 +57,17 @@ const authorizeUser = appName => dispatch =>
  * Get all existing exports, if pending poll, and when complete download. Includes toast notifications.
  *
  * @param {Array} existingExports
- * @param {object} options Apply polling options
+ * @param {object} notifications Apply notification options
  * @returns {Function}
  */
 const getExistingExports =
-  (existingExports, options = {}) =>
+  (existingExports, notifications = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.GET_PLATFORM_EXPORT_EXISTING,
-      payload: platformServices.getExistingExports(existingExports, undefined, options),
+      payload: platformServices.getExistingExports(existingExports),
       meta: {
-        notifications: {
-          rejected: {
-            variant: 'warning',
-            title: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'error', 'title']
-            }),
-            description: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'error', 'description']
-            }),
-            dismissable: true
-          },
-          pending: {
-            variant: 'info',
-            title: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'pending', 'titleGlobal']
-            }),
-            dismissable: true
-          },
-          fulfilled: {
-            variant: 'success',
-            title: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'completed', 'titleGlobal'],
-              count: existingExports.length
-            }),
-            description: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'completed', 'descriptionGlobal'],
-              count: existingExports.length
-            }),
-            dismissable: true
-          }
-        }
+        notifications
       }
     });
 
@@ -101,25 +75,15 @@ const getExistingExports =
  * Delete all existing exports. Includes toast notifications.
  *
  * @param {Array<{ id: string }>} existingExports
+ * @param {object} notifications
  * @returns {Function}
  */
-const deleteExistingExports = existingExports => dispatch =>
+const deleteExistingExports = (existingExports, notifications) => dispatch =>
   dispatch({
     type: platformTypes.DELETE_PLATFORM_EXPORT_EXISTING,
     payload: Promise.all(existingExports.map(({ id }) => platformServices.deleteExport(id))),
     meta: {
-      notifications: {
-        rejected: {
-          variant: 'warning',
-          title: translate('curiosity-toolbar.notifications', {
-            context: ['export', 'error', 'title']
-          }),
-          description: translate('curiosity-toolbar.notifications', {
-            context: ['export', 'error', 'description']
-          }),
-          dismissable: true
-        }
-      }
+      notifications
     }
   });
 
@@ -127,30 +91,17 @@ const deleteExistingExports = existingExports => dispatch =>
  * Get a status from any existing exports. Display a confirmation for downloading, or ignoring, the exports.
  * Includes toast notifications.
  *
- * @param {object} options
+ * @param {object} notifications
  * @returns {Function}
  */
-const getExistingExportsStatus =
-  (options = {}) =>
-  dispatch =>
-    dispatch({
-      type: platformTypes.SET_PLATFORM_EXPORT_EXISTING_STATUS,
-      payload: platformServices.getExistingExportsStatus(undefined, options),
-      meta: {
-        notifications: {
-          rejected: {
-            variant: 'warning',
-            title: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'error', 'title']
-            }),
-            description: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'error', 'description']
-            }),
-            dismissable: true
-          }
-        }
-      }
-    });
+const getExistingExportsStatus = notifications => dispatch =>
+  dispatch({
+    type: platformTypes.SET_PLATFORM_EXPORT_EXISTING_STATUS,
+    payload: platformServices.getExistingExportsStatus(),
+    meta: {
+      notifications
+    }
+  });
 
 /**
  * Create an export for download. Includes toast notifications.
@@ -158,36 +109,18 @@ const getExistingExportsStatus =
  * @param {string} id
  * @param {object} data
  * @param {object} options Apply polling options
+ * @param {object} notifications
  * @returns {Function}
  */
 const createExport =
-  (id, data = {}, options = {}) =>
+  (id, data = {}, options = {}, notifications = {}) =>
   dispatch =>
     dispatch({
       type: platformTypes.SET_PLATFORM_EXPORT_CREATE,
       payload: platformServices.postExport(data, options),
       meta: {
         id,
-        notifications: {
-          rejected: {
-            variant: 'warning',
-            title: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'error', 'title']
-            }),
-            description: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'error', 'description']
-            }),
-            dismissable: true
-          },
-          pending: {
-            variant: 'info',
-            id: `swatch-create-export-${id}`,
-            title: translate('curiosity-toolbar.notifications', {
-              context: ['export', 'pending', 'title', id]
-            }),
-            dismissable: true
-          }
-        }
+        notifications
       }
     });
 

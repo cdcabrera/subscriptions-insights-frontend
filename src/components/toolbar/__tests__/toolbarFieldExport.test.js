@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ToolbarFieldExport,
   toolbarFieldOptions,
+  useExistingExports,
   useExport,
   useExportStatus,
   useOnSelect
@@ -11,9 +12,21 @@ import { PLATFORM_API_EXPORT_STATUS_TYPES } from '../../../services/platform/pla
 
 describe('ToolbarFieldExport Component', () => {
   let mockDispatch;
+  let mockService;
 
   beforeEach(() => {
-    mockDispatch = jest.spyOn(store, 'dispatch').mockImplementation((type, data) => ({ type, data }));
+    mockDispatch = jest
+      .spyOn(store, 'dispatch')
+      .mockImplementation(
+        type =>
+          (Array.isArray(type) && type.map(value => (typeof value === 'function' && value.toString()) || value)) || type
+      );
+
+    mockService = jest.fn().mockImplementation(
+      (...args) =>
+        dispatch =>
+          dispatch(...args)
+    );
   });
 
   afterEach(() => {
@@ -22,7 +35,7 @@ describe('ToolbarFieldExport Component', () => {
 
   it('should render a basic component', async () => {
     const props = {
-      useExport: () => jest.fn()
+      useExistingExports: () => jest.fn()
     };
     const component = await shallowComponent(<ToolbarFieldExport {...props} />);
 
@@ -33,10 +46,11 @@ describe('ToolbarFieldExport Component', () => {
     expect(toolbarFieldOptions).toMatchSnapshot('toolbarFieldOptions');
   });
 
-  it('should handle updating export through redux state with component', () => {
+  it('should handle updating export through redux action with component', () => {
+    const mockOnSelect = jest.fn();
     const props = {
-      useOnSelect: () => jest.fn(),
-      useExport: () => ({ checkAllExports: jest.fn() })
+      useOnSelect: () => mockOnSelect,
+      useExistingExports: () => jest.fn()
     };
 
     const component = renderComponent(<ToolbarFieldExport {...props} />);
@@ -46,12 +60,13 @@ describe('ToolbarFieldExport Component', () => {
     const inputMenuItem = component.find('a.pf-v5-c-dropdown__menu-item');
     component.fireEvent.click(inputMenuItem);
 
-    expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, component');
+    expect(mockOnSelect).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle updating export through redux state with hook', () => {
+  it('should handle updating export through redux action with hook', () => {
+    const mockExport = jest.fn();
     const options = {
-      useExport: () => ({ createExport: jest.fn() }),
+      useExport: () => mockExport,
       useProduct: () => ({ viewId: 'loremIpsum' }),
       useProductExportQuery: () => ({})
     };
@@ -61,7 +76,7 @@ describe('ToolbarFieldExport Component', () => {
     onSelect({
       value: 'dolor sit'
     });
-    expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, hook');
+    expect(mockExport.mock.calls).toMatchSnapshot('dispatch, hook');
   });
 
   it('should aggregate export status, polling status with a hook', async () => {
@@ -109,42 +124,30 @@ describe('ToolbarFieldExport Component', () => {
     expect(completed).toMatchSnapshot('status, completed');
   });
 
-  it('should aggregate export service calls', async () => {
-    // confirm attempt at creating an export
-    const mockServiceCreateExport = jest.fn().mockImplementation(
-      (...args) =>
-        dispatch =>
-          dispatch(...args)
-    );
-    const {
-      result: { createExport },
-      unmount: unmountCreate
-    } = await renderHook(() =>
-      useExport({
-        createExport: mockServiceCreateExport
-      })
-    );
+  it('should allow export service calls', async () => {
+    const { result: createExport, unmount } = await renderHook(() => useExport({ createExport: mockService }));
     createExport('mock-product-id', { data: { lorem: 'ipsum' } });
-    await unmountCreate();
-    expect(mockServiceCreateExport).toHaveBeenCalledTimes(1);
-    expect(mockServiceCreateExport.mock.calls).toMatchSnapshot('createExport');
 
-    // confirm attempt at getting an existing export status
-    const mockServiceGetExistingExportsStatus = jest.fn().mockImplementation(
-      (...args) =>
-        dispatch =>
-          dispatch(...args)
-    );
-    const {
-      result: { checkAllExports },
-      unmount: unmountStatus
-    } = await renderHook(() =>
-      useExport({
-        getExistingExportsStatus: mockServiceGetExistingExportsStatus
-      })
-    );
-    checkAllExports();
-    await unmountStatus();
-    expect(mockServiceGetExistingExportsStatus).toHaveBeenCalledTimes(1);
+    await unmount();
+    expect(mockService).toHaveBeenCalledTimes(1);
+    expect(mockDispatch.mock.results).toMatchSnapshot('createExport');
+  });
+
+  it('should allow export service calls on existing exports', async () => {
+    const { unmount } = await renderHook((...args) => {
+      useExistingExports({
+        getExistingExports: mockService,
+        getExistingExportsStatus: mockService,
+        deleteExistingExports: mockService,
+        useSelectorsResponse: () => ({
+          data: [{ data: { isAnythingPending: true, pending: [{ lorem: 'ipsum' }] } }],
+          fulfilled: true
+        }),
+        ...args?.[0]
+      });
+    });
+
+    await unmount();
+    expect(mockDispatch.mock.results).toMatchSnapshot('existingExports');
   });
 });

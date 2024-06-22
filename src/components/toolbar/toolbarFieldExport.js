@@ -52,11 +52,8 @@ const useExportStatus = ({
   const pendingProductFormats = [];
   const isProductPending = isPending || false;
 
-  if (isProductPending) {
-    const pendingList = pending;
-    if (Array.isArray(pendingList)) {
-      pendingProductFormats.push(...pendingList.map(({ format: productFormat }) => productFormat));
-    }
+  if (isProductPending && Array.isArray(pending)) {
+    pendingProductFormats.push(...pending.map(({ format: productFormat }) => productFormat));
   }
 
   return {
@@ -95,23 +92,64 @@ const useExistingExports = ({
 
   const onConfirmYes = useCallback(
     allResults => {
-      dispatch(removeAliasNotification(`swatch-exports-status`));
-      getAliasExistingExports(allResults)(dispatch);
+      dispatch(removeAliasNotification('swatch-exports-status'));
+
+      getAliasExistingExports(allResults, {
+        rejected: {
+          variant: 'warning',
+          title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
+          description: t('curiosity-toolbar.notifications', {
+            context: ['export', 'error', 'description']
+          }),
+          dismissable: true
+        },
+        pending: {
+          variant: 'info',
+          title: t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'titleGlobal'] }),
+          dismissable: true
+        },
+        fulfilled: {
+          variant: 'success',
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'titleGlobal'],
+            count: allResults.length
+          }),
+          description: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'descriptionGlobal'],
+            count: allResults.length
+          }),
+          dismissable: true
+        }
+      })(dispatch);
     },
-    [dispatch, getAliasExistingExports, removeAliasNotification]
+    [dispatch, getAliasExistingExports, removeAliasNotification, t]
   );
 
   const onConfirmNo = useCallback(
     allResults => {
-      dispatch(removeAliasNotification(`swatch-exports-status`));
-      deleteAliasExistingExports(allResults)(dispatch);
+      dispatch(removeAliasNotification('swatch-exports-status'));
+      deleteAliasExistingExports(allResults, {
+        rejected: {
+          variant: 'warning',
+          title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
+          description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
+          dismissable: true
+        }
+      })(dispatch);
     },
-    [dispatch, deleteAliasExistingExports, removeAliasNotification]
+    [dispatch, deleteAliasExistingExports, removeAliasNotification, t]
   );
 
   useMount(() => {
     if (!isConfirmation) {
-      getAliasExistingExportsStatus()(dispatch);
+      getAliasExistingExportsStatus({
+        rejected: {
+          variant: 'warning',
+          title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
+          description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
+          dismissable: true
+        }
+      })(dispatch);
     }
   });
 
@@ -124,52 +162,49 @@ const useExistingExports = ({
     const totalResults = completed.length + pending.length;
 
     if (isAnythingAvailable && totalResults) {
-      dispatch(removeAliasNotification(`swatch-exports-status`));
-      dispatch(
-        addAliasNotification({
-          id: `swatch-exports-status`,
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'title', 'existing'],
-            count: totalResults
-          }),
-          description: (
-            <div aria-live="polite">
-              {t('curiosity-toolbar.notifications', {
-                context: [
-                  'export',
-                  'completed',
-                  'description',
-                  'existing',
-                  completed.length && 'completed',
-                  pending.length && 'pending'
-                ],
-                count: totalResults,
-                completed: completed.length,
-                pending: pending.length
-              })}
-              <p style={{ paddingTop: '1em' }}>
-                <Button
-                  data-test="exportButtonConfirm"
-                  variant="primary"
-                  onClick={() => onConfirmYes([...completed, ...pending])}
-                  autoFocus
-                >
-                  {t('curiosity-toolbar.button', { context: 'yes' })}
-                </Button>{' '}
-                <Button
-                  data-test="exportButtonConfirm"
-                  variant="plain"
-                  onClick={() => onConfirmNo([...completed, ...pending])}
-                >
-                  {t('curiosity-toolbar.button', { context: 'no' })}
-                </Button>
-              </p>
-            </div>
-          ),
-          autoDismiss: false,
-          dismissable: false
-        })
-      );
+      addAliasNotification({
+        id: `swatch-exports-status`,
+        title: t('curiosity-toolbar.notifications', {
+          context: ['export', 'completed', 'title', 'existing'],
+          count: totalResults
+        }),
+        description: (
+          <div aria-live="polite">
+            {t('curiosity-toolbar.notifications', {
+              context: [
+                'export',
+                'completed',
+                'description',
+                'existing',
+                completed.length && 'completed',
+                pending.length && 'pending'
+              ],
+              count: totalResults,
+              completed: completed.length,
+              pending: pending.length
+            })}
+            <p style={{ paddingTop: '1em' }}>
+              <Button
+                data-test="exportButtonConfirm"
+                variant="primary"
+                onClick={() => onConfirmYes([...completed, ...pending])}
+                autoFocus
+              >
+                {t('curiosity-toolbar.button', { context: 'yes' })}
+              </Button>{' '}
+              <Button
+                data-test="exportButtonConfirm"
+                variant="plain"
+                onClick={() => onConfirmNo([...completed, ...pending])}
+              >
+                {t('curiosity-toolbar.button', { context: 'no' })}
+              </Button>
+            </p>
+          </div>
+        ),
+        autoDismiss: false,
+        dismissable: false
+      })(dispatch);
 
       setIsConfirmation(true);
     }
@@ -195,7 +230,6 @@ const useExistingExports = ({
  * @param {object} options
  * @param {Function} options.addNotification
  * @param {Function} options.createExport
- * @param {Function} options.removeNotification
  * @param {Function} options.t
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
@@ -204,7 +238,6 @@ const useExistingExports = ({
 const useExport = ({
   addNotification: addAliasNotification = reduxActions.platform.addNotification,
   createExport: createAliasExport = reduxActions.platform.createExport,
-  removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
   t = translate,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct
@@ -223,21 +256,18 @@ const useExport = ({
       const isPending = !isCompleted;
 
       if (isCompleted) {
-        dispatch(removeAliasNotification(`swatch-create-export-${productId}`));
-        dispatch(
-          addAliasNotification({
-            variant: 'success',
-            id: `swatch-create-export-${productId}`,
-            title: t('curiosity-toolbar.notifications', {
-              context: ['export', 'completed', 'title']
-            }),
-            description: t('curiosity-toolbar.notifications', {
-              context: ['export', 'completed', 'description'],
-              fileName: completed?.[0]?.fileName
-            }),
-            dismissable: true
-          })
-        );
+        addAliasNotification({
+          variant: 'success',
+          id: `swatch-create-export-${productId}`,
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'title']
+          }),
+          description: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'description'],
+            fileName: completed?.[0]?.fileName
+          }),
+          dismissable: true
+        })(dispatch);
       }
 
       dispatch({
@@ -247,21 +277,44 @@ const useExport = ({
         pending
       });
     },
-    [addAliasNotification, dispatch, productId, removeAliasNotification, t]
+    [addAliasNotification, dispatch, productId, t]
   );
 
   return useCallback(
     (id, data) => {
-      dispatch([
+      dispatch({
+        type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+        id,
+        isPending: true
+      });
+
+      createAliasExport(
+        id,
+        data,
+        { poll: { status: statusCallback } },
         {
-          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
-          id,
-          isPending: true
-        },
-        createAliasExport(id, data, { poll: { status: statusCallback } })
-      ]);
+          rejected: {
+            variant: 'warning',
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'title']
+            }),
+            description: t('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'description']
+            }),
+            dismissable: true
+          },
+          pending: {
+            variant: 'info',
+            id: `swatch-create-export-${id}`,
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'pending', 'title', id]
+            }),
+            dismissable: true
+          }
+        }
+      )(dispatch);
     },
-    [createAliasExport, dispatch, statusCallback]
+    [createAliasExport, dispatch, statusCallback, t]
   );
 };
 

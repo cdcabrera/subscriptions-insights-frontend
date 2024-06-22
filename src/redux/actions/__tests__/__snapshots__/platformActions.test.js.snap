@@ -13,20 +13,7 @@ exports[`PlatformActions Should return response content for createExport method:
     {
       "meta": {
         "id": undefined,
-        "notifications": {
-          "pending": {
-            "dismissable": true,
-            "id": "swatch-create-export-undefined",
-            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"title"})",
-            "variant": "info",
-          },
-          "rejected": {
-            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
-            "variant": "warning",
-          },
-        },
+        "notifications": {},
       },
       "payload": Promise {},
       "type": "SET_PLATFORM_EXPORT_CREATE",
@@ -40,25 +27,7 @@ exports[`PlatformActions Should return response content for getExistingExports m
   [
     {
       "meta": {
-        "notifications": {
-          "fulfilled": {
-            "description": "t(curiosity-toolbar.notifications_export_completed, {"context":"descriptionGlobal","count":0})",
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_completed, {"context":"titleGlobal","count":0})",
-            "variant": "success",
-          },
-          "pending": {
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"titleGlobal"})",
-            "variant": "info",
-          },
-          "rejected": {
-            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
-            "variant": "warning",
-          },
-        },
+        "notifications": {},
       },
       "payload": Promise {},
       "type": "GET_PLATFORM_EXPORT_EXISTING",
@@ -72,14 +41,7 @@ exports[`PlatformActions Should return response content for getExistingExportsSt
   [
     {
       "meta": {
-        "notifications": {
-          "rejected": {
-            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
-            "variant": "warning",
-          },
-        },
+        "notifications": undefined,
       },
       "payload": Promise {},
       "type": "SET_PLATFORM_EXPORT_EXISTING_STATUS",
@@ -93,14 +55,7 @@ exports[`PlatformActions Should return response content for removeExistingExport
   [
     {
       "meta": {
-        "notifications": {
-          "rejected": {
-            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
-            "dismissable": true,
-            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
-            "variant": "warning",
-          },
-        },
+        "notifications": undefined,
       },
       "payload": Promise {},
       "type": "DELETE_PLATFORM_EXPORT_EXISTING",

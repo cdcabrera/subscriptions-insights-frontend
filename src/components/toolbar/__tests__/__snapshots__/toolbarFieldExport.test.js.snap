@@ -1,18 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ToolbarFieldExport Component should aggregate export service calls: createExport 1`] = `
-[
-  [
-    "mock-product-id",
-    {
-      "data": {
-        "lorem": "ipsum",
-      },
-    },
-  ],
-]
-`;
-
 exports[`ToolbarFieldExport Component should aggregate export status, polling status with a hook: status, basic 1`] = `
 {
   "isProductPending": false,
@@ -36,6 +23,87 @@ exports[`ToolbarFieldExport Component should aggregate export status, polling st
 }
 `;
 
+exports[`ToolbarFieldExport Component should allow export service calls on existing exports: existingExports 1`] = `
+[
+  {
+    "type": "return",
+    "value": {
+      "rejected": {
+        "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+        "dismissable": true,
+        "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+        "variant": "warning",
+      },
+    },
+  },
+  {
+    "type": "return",
+    "value": {
+      "payload": "swatch-exports-status",
+      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/REMOVE_NOTIFICATION",
+    },
+  },
+  {
+    "type": "return",
+    "value": {
+      "payload": {
+        "autoDismiss": false,
+        "description": <div
+          aria-live="polite"
+        >
+          t(curiosity-toolbar.notifications_export_completed_description_existing, {"context":"pending","count":1,"completed":0,"pending":1})
+          <p
+            style={
+              {
+                "paddingTop": "1em",
+              }
+            }
+          >
+            <Button
+              autoFocus={true}
+              data-test="exportButtonConfirm"
+              onClick={[Function]}
+              variant="primary"
+            >
+              t(curiosity-toolbar.button, {"context":"yes"})
+            </Button>
+             
+            <Button
+              data-test="exportButtonConfirm"
+              onClick={[Function]}
+              variant="plain"
+            >
+              t(curiosity-toolbar.button, {"context":"no"})
+            </Button>
+          </p>
+        </div>,
+        "dismissable": false,
+        "id": "swatch-exports-status",
+        "title": "t(curiosity-toolbar.notifications_export_completed_title, {"context":"existing","count":1})",
+      },
+      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION",
+    },
+  },
+]
+`;
+
+exports[`ToolbarFieldExport Component should allow export service calls: createExport 1`] = `
+[
+  {
+    "type": "return",
+    "value": {
+      "id": "mock-product-id",
+      "isPending": true,
+      "type": "SET_PLATFORM_EXPORT_STATUS",
+    },
+  },
+  {
+    "type": "return",
+    "value": "mock-product-id",
+  },
+]
+`;
+
 exports[`ToolbarFieldExport Component should export select options: toolbarFieldOptions 1`] = `
 [
   {
@@ -46,25 +114,60 @@ exports[`ToolbarFieldExport Component should export select options: toolbarField
 ]
 `;
 
-exports[`ToolbarFieldExport Component should handle updating export through redux state with component: dispatch, component 1`] = `[]`;
-
-exports[`ToolbarFieldExport Component should handle updating export through redux state with hook: dispatch, hook 1`] = `[]`;
+exports[`ToolbarFieldExport Component should handle updating export through redux action with hook: dispatch, hook 1`] = `
+[
+  [
+    undefined,
+    {
+      "expires_at": "2019-07-21T00:00:00.000Z",
+      "format": "dolor sit",
+      "name": "swatch-undefined",
+      "sources": [
+        {
+          "application": "subscriptions",
+          "filters": {},
+          "resource": "subscriptions",
+        },
+      ],
+    },
+  ],
+]
+`;
 
 exports[`ToolbarFieldExport Component should render a basic component: basic 1`] = `
-<ToolbarFieldExport
+<Select
+  aria-label="t(curiosity-toolbar.placeholder, {"context":"export"})"
+  ariaLabel="Select option"
+  buttonVariant="plain"
+  className=""
+  data-test="toolbarFieldExport"
+  direction="down"
+  id="generatedid-"
+  isDisabled={false}
+  isDropdownButton={true}
+  isFlipEnabled={false}
+  isInline={true}
+  isToggleText={true}
+  maxHeight={null}
+  name={null}
+  onSelect={[Function]}
+  onSplitButton={[Function]}
   options={
     [
       {
+        "isDisabled": false,
         "selected": false,
         "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
         "value": "json",
       },
     ]
   }
+  placeholder="t(curiosity-toolbar.placeholder, {"context":"export"})"
   position="left"
-  t={[Function]}
-  useExport={[Function]}
-  useExportStatus={[Function]}
-  useOnSelect={[Function]}
+  selectedOptions={null}
+  splitButtonVariant={null}
+  title="t(curiosity-toolbar.placeholder, {"context":"export"})"
+  toggleIcon={<ExportIcon />}
+  variant="single"
 />
 `;
