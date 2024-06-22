@@ -341,6 +341,47 @@ exports[`I18n Component should generate a predictable locale key output snapshot
         "match": "translate('curiosity-toolbar.label', { context: ['export', type] })",
       },
       {
+        "key": "curiosity-toolbar.label",
+        "match": "t('curiosity-toolbar.label', { context: ['export', 'loading'] })",
+      },
+      {
+        "key": "curiosity-toolbar.placeholder",
+        "match": "t('curiosity-toolbar.placeholder', { context: 'export' })",
+      },
+      {
+        "key": "curiosity-toolbar.placeholder",
+        "match": "t('curiosity-toolbar.placeholder', { context: 'export' })",
+      },
+      {
+        "key": "curiosity-toolbar.placeholder",
+        "match": "t('curiosity-toolbar.placeholder', { context: 'export' })",
+      },
+    ],
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "keys": [
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'title'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'description'], fileName: completed?.[0]?.fileName })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'title', id] })",
+      },
+      {
         "key": "curiosity-toolbar.notifications",
         "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
       },
@@ -391,42 +432,6 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       {
         "key": "curiosity-toolbar.button",
         "match": "t('curiosity-toolbar.button', { context: 'no' })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'title'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'description'], fileName: completed?.[0]?.fileName })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'title', id] })",
-      },
-      {
-        "key": "curiosity-toolbar.label",
-        "match": "t('curiosity-toolbar.label', { context: ['export', 'loading'] })",
-      },
-      {
-        "key": "curiosity-toolbar.placeholder",
-        "match": "t('curiosity-toolbar.placeholder', { context: 'export' })",
-      },
-      {
-        "key": "curiosity-toolbar.placeholder",
-        "match": "t('curiosity-toolbar.placeholder', { context: 'export' })",
-      },
-      {
-        "key": "curiosity-toolbar.placeholder",
-        "match": "t('curiosity-toolbar.placeholder', { context: 'export' })",
       },
     ],
   },
@@ -1053,79 +1058,79 @@ exports[`I18n Component should have locale keys that exist in the default langua
   },
   {
     "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.button",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.button",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/components/toolbar/toolbarFieldExport.js",
     "key": "curiosity-toolbar.label",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.button",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExportContext.js",
+    "key": "curiosity-toolbar.button",
   },
   {
     "file": "src/components/toolbar/toolbarFieldGranularity.js",

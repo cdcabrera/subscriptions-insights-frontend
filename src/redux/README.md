@@ -65,11 +65,10 @@ Platform service wrappers for dispatch, state update.
     * [~removeNotification(id)](#Actions.module_PlatformActions..removeNotification) ⇒ <code>\*</code>
     * [~clearNotifications()](#Actions.module_PlatformActions..clearNotifications) ⇒ <code>\*</code>
     * [~authorizeUser(appName)](#Actions.module_PlatformActions..authorizeUser) ⇒ <code>function</code>
-    * [~setExportStatus(id, params)](#Actions.module_PlatformActions..setExportStatus) ⇒ <code>function</code>
-    * [~getExistingExports(existingExports, options)](#Actions.module_PlatformActions..getExistingExports) ⇒ <code>function</code>
-    * [~removeExistingExports(existingExports)](#Actions.module_PlatformActions..removeExistingExports) ⇒ <code>function</code>
-    * [~getExistingExportsStatus(options)](#Actions.module_PlatformActions..getExistingExportsStatus) ⇒ <code>function</code>
-    * [~createExport(id, data, options)](#Actions.module_PlatformActions..createExport) ⇒ <code>function</code>
+    * [~getExistingExports(existingExports, notifications)](#Actions.module_PlatformActions..getExistingExports) ⇒ <code>function</code>
+    * [~deleteExistingExports(existingExports, notifications)](#Actions.module_PlatformActions..deleteExistingExports) ⇒ <code>function</code>
+    * [~getExistingExportsStatus(notifications)](#Actions.module_PlatformActions..getExistingExportsStatus) ⇒ <code>function</code>
+    * [~createExport(id, data, options, notifications)](#Actions.module_PlatformActions..createExport) ⇒ <code>function</code>
     * [~hideGlobalFilter(isHidden)](#Actions.module_PlatformActions..hideGlobalFilter) ⇒ <code>Object</code>
 
 <a name="Actions.module_PlatformActions..addNotification"></a>
@@ -132,36 +131,9 @@ Get an emulated and combined API response from the platforms "getUser" and "getU
     </tr>  </tbody>
 </table>
 
-<a name="Actions.module_PlatformActions..setExportStatus"></a>
-
-### PlatformActions~setExportStatus(id, params) ⇒ <code>function</code>
-Return a "dispatch ready" export poll status check. Helps keep components up-to-date by providing a common state
-updated from other action calls.
-
-**Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>id</td><td><code>string</code></td>
-    </tr><tr>
-    <td>params</td><td><code>object</code></td>
-    </tr><tr>
-    <td>params.completed</td><td><code>Array</code></td>
-    </tr><tr>
-    <td>params.isPending</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>params.pending</td><td><code>Array</code></td>
-    </tr>  </tbody>
-</table>
-
 <a name="Actions.module_PlatformActions..getExistingExports"></a>
 
-### PlatformActions~getExistingExports(existingExports, options) ⇒ <code>function</code>
+### PlatformActions~getExistingExports(existingExports, notifications) ⇒ <code>function</code>
 Get all existing exports, if pending poll, and when complete download. Includes toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
@@ -175,15 +147,15 @@ Get all existing exports, if pending poll, and when complete download. Includes 
 <tr>
     <td>existingExports</td><td><code>Array</code></td><td></td>
     </tr><tr>
-    <td>options</td><td><code>object</code></td><td><p>Apply polling options</p>
+    <td>notifications</td><td><code>object</code></td><td><p>Apply notification options</p>
 </td>
     </tr>  </tbody>
 </table>
 
-<a name="Actions.module_PlatformActions..removeExistingExports"></a>
+<a name="Actions.module_PlatformActions..deleteExistingExports"></a>
 
-### PlatformActions~removeExistingExports(existingExports) ⇒ <code>function</code>
-Remove all existing exports. Includes toast notifications.
+### PlatformActions~deleteExistingExports(existingExports, notifications) ⇒ <code>function</code>
+Delete all existing exports. Includes toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>
@@ -195,12 +167,14 @@ Remove all existing exports. Includes toast notifications.
   <tbody>
 <tr>
     <td>existingExports</td><td><code>Array.&lt;{id: string}&gt;</code></td>
+    </tr><tr>
+    <td>notifications</td><td><code>object</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Actions.module_PlatformActions..getExistingExportsStatus"></a>
 
-### PlatformActions~getExistingExportsStatus(options) ⇒ <code>function</code>
+### PlatformActions~getExistingExportsStatus(notifications) ⇒ <code>function</code>
 Get a status from any existing exports. Display a confirmation for downloading, or ignoring, the exports.
 Includes toast notifications.
 
@@ -213,13 +187,13 @@ Includes toast notifications.
   </thead>
   <tbody>
 <tr>
-    <td>options</td><td><code>object</code></td>
+    <td>notifications</td><td><code>object</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Actions.module_PlatformActions..createExport"></a>
 
-### PlatformActions~createExport(id, data, options) ⇒ <code>function</code>
+### PlatformActions~createExport(id, data, options, notifications) ⇒ <code>function</code>
 Create an export for download. Includes toast notifications.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
@@ -237,6 +211,8 @@ Create an export for download. Includes toast notifications.
     </tr><tr>
     <td>options</td><td><code>object</code></td><td><p>Apply polling options</p>
 </td>
+    </tr><tr>
+    <td>notifications</td><td><code>object</code></td><td></td>
     </tr>  </tbody>
 </table>
 
