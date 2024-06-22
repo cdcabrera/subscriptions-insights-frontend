@@ -256,20 +256,18 @@ const useExport = ({
       const isPending = !isCompleted;
 
       if (isCompleted) {
-        dispatch(
-          addAliasNotification({
-            variant: 'success',
-            id: `swatch-create-export-${productId}`,
-            title: t('curiosity-toolbar.notifications', {
-              context: ['export', 'completed', 'title']
-            }),
-            description: t('curiosity-toolbar.notifications', {
-              context: ['export', 'completed', 'description'],
-              fileName: completed?.[0]?.fileName
-            }),
-            dismissable: true
-          })
-        );
+        addAliasNotification({
+          variant: 'success',
+          id: `swatch-create-export-${productId}`,
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'title']
+          }),
+          description: t('curiosity-toolbar.notifications', {
+            context: ['export', 'completed', 'description'],
+            fileName: completed?.[0]?.fileName
+          }),
+          dismissable: true
+        })(dispatch);
       }
 
       dispatch({
@@ -284,38 +282,37 @@ const useExport = ({
 
   return useCallback(
     (id, data) => {
-      dispatch([
+      dispatch({
+        type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+        id,
+        isPending: true
+      });
+
+      createAliasExport(
+        id,
+        data,
+        { poll: { status: statusCallback } },
         {
-          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
-          id,
-          isPending: true
-        },
-        createAliasExport(
-          id,
-          data,
-          { poll: { status: statusCallback } },
-          {
-            rejected: {
-              variant: 'warning',
-              title: t('curiosity-toolbar.notifications', {
-                context: ['export', 'error', 'title']
-              }),
-              description: t('curiosity-toolbar.notifications', {
-                context: ['export', 'error', 'description']
-              }),
-              dismissable: true
-            },
-            pending: {
-              variant: 'info',
-              id: `swatch-create-export-${id}`,
-              title: t('curiosity-toolbar.notifications', {
-                context: ['export', 'pending', 'title', id]
-              }),
-              dismissable: true
-            }
+          rejected: {
+            variant: 'warning',
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'title']
+            }),
+            description: t('curiosity-toolbar.notifications', {
+              context: ['export', 'error', 'description']
+            }),
+            dismissable: true
+          },
+          pending: {
+            variant: 'info',
+            id: `swatch-create-export-${id}`,
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'pending', 'title', id]
+            }),
+            dismissable: true
           }
-        )
-      ]);
+        }
+      )(dispatch);
     },
     [createAliasExport, dispatch, statusCallback, t]
   );
