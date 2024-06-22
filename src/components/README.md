@@ -6715,7 +6715,7 @@ Default props.
 * [ToolbarFieldExportContext](#ToolbarFieldExport.module_ToolbarFieldExportContext)
     * [~useExport(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport) ⇒ <code>function</code>
         * [~statusCallback](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport..statusCallback) : <code>function</code>
-    * [~useExistingExportsConfirmation(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation) ⇒ <code>Object</code>
+    * [~useExistingExportsConfirmation(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation) ⇒ <code>function</code>
     * [~useExistingExports(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExports)
     * [~useExportStatus(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExportStatus) ⇒ <code>Object</code>
 
@@ -6755,7 +6755,7 @@ A polling status callback on export create.
 **Kind**: inner constant of [<code>useExport</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport)  
 <a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation"></a>
 
-### ToolbarFieldExportContext~useExistingExportsConfirmation(options) ⇒ <code>Object</code>
+### ToolbarFieldExportContext~useExistingExportsConfirmation(options) ⇒ <code>function</code>
 User confirmation results when existing exports are detected.
 
 **Kind**: inner method of [<code>ToolbarFieldExportContext</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext)  

@@ -113,7 +113,7 @@ const useExport = ({
  * @param {Function} options.removeNotification
  * @param {Function} options.t
  * @param {Function} options.useDispatch
- * @returns {{onConfirmYes: Function, onConfirmNo: Function}}
+ * @returns {Function}
  */
 const useExistingExportsConfirmation = ({
   deleteExistingExports: deleteAliasExistingExports = reduxActions.platform.deleteExistingExports,
