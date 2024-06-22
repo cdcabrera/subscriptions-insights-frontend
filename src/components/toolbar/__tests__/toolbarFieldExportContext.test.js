@@ -1,8 +1,9 @@
 import {
   useExport,
+  useExportConfirmation,
+  useExportStatus,
   useExistingExports,
-  useExistingExportsConfirmation,
-  useExportStatus
+  useExistingExportsConfirmation
 } from '../toolbarFieldExportContext';
 import { store } from '../../../redux/store';
 import { PLATFORM_API_EXPORT_STATUS_TYPES } from '../../../services/platform/platformConstants';
@@ -28,6 +29,31 @@ describe('ToolbarFieldExport Component', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should expose an export polling status confirmation', async () => {
+    const { result: statusConfirmation, unmount } = await renderHook(() =>
+      useExportConfirmation({
+        useProduct: () => ({ productId: 'loremIpsum' })
+      })
+    );
+
+    statusConfirmation({
+      data: {
+        data: {
+          products: {
+            loremIpsum: {
+              completed: [{ id: 'helloWorld', fileName: 'helloWorldFileName' }],
+              isCompleted: true,
+              pending: [{ id: 'dolorSit', fileName: 'dolorSitFileName' }]
+            }
+          }
+        }
+      }
+    });
+
+    await unmount();
+    expect(mockDispatch.mock.results).toMatchSnapshot('statusConfirmation');
   });
 
   it('should allow export service calls', async () => {

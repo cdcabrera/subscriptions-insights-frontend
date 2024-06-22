@@ -151,3 +151,42 @@ exports[`ToolbarFieldExport Component should allow service calls on user confirm
   ],
 ]
 `;
+
+exports[`ToolbarFieldExport Component should expose an export polling status confirmation: statusConfirmation 1`] = `
+[
+  {
+    "type": "return",
+    "value": {
+      "payload": "swatch-create-export-loremIpsum",
+      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/REMOVE_NOTIFICATION",
+    },
+  },
+  {
+    "type": "return",
+    "value": {
+      "payload": {
+        "description": "t(curiosity-toolbar.notifications_export_completed, {"context":"description","fileName":"helloWorldFileName"})",
+        "dismissable": true,
+        "id": "swatch-create-export-loremIpsum",
+        "title": "t(curiosity-toolbar.notifications_export_completed, {"context":"title"})",
+        "variant": "success",
+      },
+      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION",
+    },
+  },
+  {
+    "type": "return",
+    "value": {
+      "id": "loremIpsum",
+      "isPending": false,
+      "pending": [
+        {
+          "fileName": "dolorSitFileName",
+          "id": "dolorSit",
+        },
+      ],
+      "type": "SET_PLATFORM_EXPORT_STATUS",
+    },
+  },
+]
+`;

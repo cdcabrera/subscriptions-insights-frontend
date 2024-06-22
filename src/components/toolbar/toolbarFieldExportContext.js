@@ -11,19 +11,17 @@ import { translate } from '../i18n/i18n';
  */
 
 /**
- * Apply an export hook for an export post. The service automatically sets up polling, then force downloads the file.
+ * Return a polling status callback. Used when creating an export.
  *
  * @param {object} options
  * @param {Function} options.addNotification
- * @param {Function} options.createExport
  * @param {Function} options.t
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
  * @returns {Function}
  */
-const useExport = ({
+const useExportConfirmation = ({
   addNotification: addAliasNotification = reduxActions.platform.addNotification,
-  createExport: createAliasExport = reduxActions.platform.createExport,
   t = translate,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct
@@ -31,12 +29,7 @@ const useExport = ({
   const { productId } = useAliasProduct();
   const dispatch = useAliasDispatch();
 
-  /**
-   * A polling status callback on export create.
-   *
-   * @type {Function}
-   */
-  const statusCallback = useCallback(
+  return useCallback(
     successResponse => {
       const { completed = [], isCompleted, pending = [] } = successResponse?.data?.data?.products?.[productId] || {};
       const isPending = !isCompleted;
@@ -65,6 +58,26 @@ const useExport = ({
     },
     [addAliasNotification, dispatch, productId, t]
   );
+};
+
+/**
+ * Apply an export hook for an export post. The service automatically sets up polling, then force downloads the file.
+ *
+ * @param {object} options
+ * @param {Function} options.createExport
+ * @param {Function} options.t
+ * @param {Function} options.useDispatch
+ * @param {Function} options.useExportConfirmation
+ * @returns {Function}
+ */
+const useExport = ({
+  createExport: createAliasExport = reduxActions.platform.createExport,
+  t = translate,
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+  useExportConfirmation: useAliasExportConfirmation = useExportConfirmation
+} = {}) => {
+  const statusConfirmation = useAliasExportConfirmation();
+  const dispatch = useAliasDispatch();
 
   return useCallback(
     (id, data) => {
@@ -77,7 +90,7 @@ const useExport = ({
       createAliasExport(
         id,
         data,
-        { poll: { status: statusCallback } },
+        { poll: { status: statusConfirmation } },
         {
           rejected: {
             variant: 'warning',
@@ -100,7 +113,7 @@ const useExport = ({
         }
       )(dispatch);
     },
-    [createAliasExport, dispatch, statusCallback, t]
+    [createAliasExport, dispatch, statusConfirmation, t]
   );
 };
 
@@ -306,9 +319,18 @@ const useExportStatus = ({
 
 const context = {
   useExport,
+  useExportConfirmation,
+  useExportStatus,
   useExistingExports,
-  useExistingExportsConfirmation,
-  useExportStatus
+  useExistingExportsConfirmation
 };
 
-export { context as default, context, useExport, useExistingExports, useExistingExportsConfirmation, useExportStatus };
+export {
+  context as default,
+  context,
+  useExport,
+  useExportConfirmation,
+  useExportStatus,
+  useExistingExports,
+  useExistingExportsConfirmation
+};

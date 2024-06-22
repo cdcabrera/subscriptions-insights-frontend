@@ -6713,11 +6713,37 @@ Default props.
 ## ToolbarFieldExportContext
 
 * [ToolbarFieldExportContext](#ToolbarFieldExport.module_ToolbarFieldExportContext)
+    * [~useExportConfirmation(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExportConfirmation) ⇒ <code>function</code>
     * [~useExport(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport) ⇒ <code>function</code>
-        * [~statusCallback](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport..statusCallback) : <code>function</code>
     * [~useExistingExportsConfirmation(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation) ⇒ <code>function</code>
     * [~useExistingExports(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExports)
     * [~useExportStatus(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExportStatus) ⇒ <code>Object</code>
+
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExportConfirmation"></a>
+
+### ToolbarFieldExportContext~useExportConfirmation(options) ⇒ <code>function</code>
+Return a polling status callback. Used when creating an export.
+
+**Kind**: inner method of [<code>ToolbarFieldExportContext</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.addNotification</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.t</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
 
 <a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExport"></a>
 
@@ -6735,24 +6761,16 @@ Apply an export hook for an export post. The service automatically sets up polli
 <tr>
     <td>options</td><td><code>object</code></td>
     </tr><tr>
-    <td>options.addNotification</td><td><code>function</code></td>
-    </tr><tr>
     <td>options.createExport</td><td><code>function</code></td>
     </tr><tr>
     <td>options.t</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useDispatch</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
+    <td>options.useExportConfirmation</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 
-<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExport..statusCallback"></a>
-
-#### useExport~statusCallback : <code>function</code>
-A polling status callback on export create.
-
-**Kind**: inner constant of [<code>useExport</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport)  
 <a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation"></a>
 
 ### ToolbarFieldExportContext~useExistingExportsConfirmation(options) ⇒ <code>function</code>

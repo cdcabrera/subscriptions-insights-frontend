@@ -133,8 +133,8 @@ const ToolbarFieldExport = ({
 /**
  * Prop types.
  *
- * @type {{useOnSelect: Function, t: Function, useExportStatus: Function, options: Array, useExistingExports: Function,
- *     position: string}}
+ * @type {{useExistingExports: useExistingExports, useOnSelect: Function, t: Function, options: Array, position: string,
+ *     useExportStatus: Function}}
  */
 ToolbarFieldExport.propTypes = {
   options: PropTypes.arrayOf(
@@ -154,8 +154,8 @@ ToolbarFieldExport.propTypes = {
 /**
  * Default props.
  *
- * @type {{useOnSelect: Function, t: translate, useExportStatus: Function, options: Array, useExistingExports: Function,
- *     position: string}}
+ * @type {{useExistingExports: useExistingExports, useOnSelect: Function, t: Function, options: Array, position: string,
+ *     useExportStatus: Function}}
  */
 ToolbarFieldExport.defaultProps = {
   options: toolbarFieldOptions,
