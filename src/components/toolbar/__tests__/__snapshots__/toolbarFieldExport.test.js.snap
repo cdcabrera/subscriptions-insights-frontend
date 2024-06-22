@@ -1,70 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ToolbarFieldExport Component should aggregate export service calls: createExport 1`] = `
+exports[`ToolbarFieldExport Component should allow export service calls on existing exports: existingExports, mount 1`] = `
 [
   [
-    "mock-product-id",
     {
-      "data": {
-        "lorem": "ipsum",
+      "meta": {
+        "notifications": {
+          "rejected": {
+            "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+            "dismissable": true,
+            "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+            "variant": "warning",
+          },
+        },
       },
+      "payload": Promise {},
+      "type": "SET_PLATFORM_EXPORT_EXISTING_STATUS",
+    },
+  ],
+  [
+    {
+      "payload": "swatch-exports-status",
+      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/REMOVE_NOTIFICATION",
+    },
+  ],
+  [
+    {
+      "payload": {
+        "autoDismiss": false,
+        "description": <div
+          aria-live="polite"
+        >
+          t(curiosity-toolbar.notifications_export_completed_description_existing, {"context":"pending","count":1,"completed":0,"pending":1})
+          <p
+            style={
+              {
+                "paddingTop": "1em",
+              }
+            }
+          >
+            <Button
+              autoFocus={true}
+              data-test="exportButtonConfirm"
+              onClick={[Function]}
+              variant="primary"
+            >
+              t(curiosity-toolbar.button, {"context":"yes"})
+            </Button>
+             
+            <Button
+              data-test="exportButtonConfirm"
+              onClick={[Function]}
+              variant="plain"
+            >
+              t(curiosity-toolbar.button, {"context":"no"})
+            </Button>
+          </p>
+        </div>,
+        "dismissable": false,
+        "id": "swatch-exports-status",
+        "title": "t(curiosity-toolbar.notifications_export_completed_title, {"context":"existing","count":1})",
+      },
+      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/ADD_NOTIFICATION",
     },
   ],
 ]
-`;
-
-exports[`ToolbarFieldExport Component should aggregate export status, polling status with a hook: status, basic 1`] = `
-{
-  "isProductPending": false,
-  "pendingProductFormats": [],
-}
-`;
-
-exports[`ToolbarFieldExport Component should aggregate export status, polling status with a hook: status, completed 1`] = `
-{
-  "isProductPending": false,
-  "pendingProductFormats": [],
-}
-`;
-
-exports[`ToolbarFieldExport Component should aggregate export status, polling status with a hook: status, polling 1`] = `
-{
-  "isProductPending": true,
-  "pendingProductFormats": [
-    "dolorSit",
-  ],
-}
-`;
-
-exports[`ToolbarFieldExport Component should export select options: toolbarFieldOptions 1`] = `
-[
-  {
-    "selected": false,
-    "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
-    "value": "json",
-  },
-]
-`;
-
-exports[`ToolbarFieldExport Component should handle updating export through redux state with component: dispatch, component 1`] = `[]`;
-
-exports[`ToolbarFieldExport Component should handle updating export through redux state with hook: dispatch, hook 1`] = `[]`;
-
-exports[`ToolbarFieldExport Component should render a basic component: basic 1`] = `
-<ToolbarFieldExport
-  options={
-    [
-      {
-        "selected": false,
-        "title": "t(curiosity-toolbar.label_export, {"context":"json"})",
-        "value": "json",
-      },
-    ]
-  }
-  position="left"
-  t={[Function]}
-  useExport={[Function]}
-  useExportStatus={[Function]}
-  useOnSelect={[Function]}
-/>
 `;

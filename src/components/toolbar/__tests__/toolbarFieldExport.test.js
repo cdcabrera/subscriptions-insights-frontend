@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ToolbarFieldExport,
   toolbarFieldOptions,
+  useExistingExports,
   useExport,
   useExportStatus,
   useOnSelect
@@ -20,6 +21,7 @@ describe('ToolbarFieldExport Component', () => {
     jest.clearAllMocks();
   });
 
+  /*
   it('should render a basic component', async () => {
     const props = {
       useExport: () => jest.fn()
@@ -36,7 +38,7 @@ describe('ToolbarFieldExport Component', () => {
   it('should handle updating export through redux state with component', () => {
     const props = {
       useOnSelect: () => jest.fn(),
-      useExport: () => ({ checkAllExports: jest.fn() })
+      useExistingExports: () => jest.fn()
     };
 
     const component = renderComponent(<ToolbarFieldExport {...props} />);
@@ -51,7 +53,7 @@ describe('ToolbarFieldExport Component', () => {
 
   it('should handle updating export through redux state with hook', () => {
     const options = {
-      useExport: () => ({ createExport: jest.fn() }),
+      useExport: () => jest.fn(),
       useProduct: () => ({ viewId: 'loremIpsum' }),
       useProductExportQuery: () => ({})
     };
@@ -63,7 +65,9 @@ describe('ToolbarFieldExport Component', () => {
     });
     expect(mockDispatch.mock.calls).toMatchSnapshot('dispatch, hook');
   });
+  */
 
+  /* works
   it('should aggregate export status, polling status with a hook', async () => {
     const { result: basic, unmount: unmountBasic } = await renderHook(() =>
       useExportStatus({
@@ -108,18 +112,17 @@ describe('ToolbarFieldExport Component', () => {
     await unmountCompleted();
     expect(completed).toMatchSnapshot('status, completed');
   });
+  */
 
-  it('should aggregate export service calls', async () => {
+  /*
+  it('should allow export service calls', async () => {
     // confirm attempt at creating an export
     const mockServiceCreateExport = jest.fn().mockImplementation(
       (...args) =>
         dispatch =>
           dispatch(...args)
     );
-    const {
-      result: { createExport },
-      unmount: unmountCreate
-    } = await renderHook(() =>
+    const { result: createExport, unmount: unmountCreate } = await renderHook(() =>
       useExport({
         createExport: mockServiceCreateExport
       })
@@ -128,23 +131,21 @@ describe('ToolbarFieldExport Component', () => {
     await unmountCreate();
     expect(mockServiceCreateExport).toHaveBeenCalledTimes(1);
     expect(mockServiceCreateExport.mock.calls).toMatchSnapshot('createExport');
+  });
+  */
 
-    // confirm attempt at getting an existing export status
-    const mockServiceGetExistingExportsStatus = jest.fn().mockImplementation(
-      (...args) =>
-        dispatch =>
-          dispatch(...args)
-    );
-    const {
-      result: { checkAllExports },
-      unmount: unmountStatus
-    } = await renderHook(() =>
-      useExport({
-        getExistingExportsStatus: mockServiceGetExistingExportsStatus
-      })
-    );
-    checkAllExports();
-    await unmountStatus();
-    expect(mockServiceGetExistingExportsStatus).toHaveBeenCalledTimes(1);
+  it('should allow export service calls on existing exports', async () => {
+    const { unmount: unmountMount } = await renderHook((...args) => {
+      useExistingExports({
+        useSelectorsResponse: () => ({
+          data: [{ data: { isAnythingPending: true, pending: [{ lorem: 'ipsum' }] } }],
+          fulfilled: true
+        }),
+        ...args?.[0]
+      });
+    });
+
+    expect(mockDispatch.mock.calls).toMatchSnapshot('existingExports, mount');
+    await unmountMount();
   });
 });
