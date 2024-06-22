@@ -342,6 +342,42 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       },
       {
         "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'titleGlobal'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'titleGlobal'], count: allResults.length })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'descriptionGlobal'], count: allResults.length })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
         "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'title', 'existing'], count: totalResults })",
       },
       {
@@ -363,6 +399,18 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       {
         "key": "curiosity-toolbar.notifications",
         "match": "t('curiosity-toolbar.notifications', { context: ['export', 'completed', 'description'], fileName: completed?.[0]?.fileName })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
+      },
+      {
+        "key": "curiosity-toolbar.notifications",
+        "match": "t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'title', id] })",
       },
       {
         "key": "curiosity-toolbar.label",
@@ -934,59 +982,6 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     ],
   },
   {
-    "file": "src/redux/actions/platformActions.js",
-    "keys": [
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'pending', 'titleGlobal'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'completed', 'titleGlobal'], count: existingExports.length })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'completed', 'descriptionGlobal'], count: existingExports.length })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] })",
-      },
-      {
-        "key": "curiosity-toolbar.notifications",
-        "match": "translate('curiosity-toolbar.notifications', { context: ['export', 'pending', 'title', id] })",
-      },
-    ],
-  },
-  {
     "file": "src/redux/actions/userActions.js",
     "keys": [
       {
@@ -1066,11 +1061,59 @@ exports[`I18n Component should have locale keys that exist in the default langua
   },
   {
     "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
     "key": "curiosity-toolbar.button",
   },
   {
     "file": "src/components/toolbar/toolbarFieldExport.js",
     "key": "curiosity-toolbar.button",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
+  },
+  {
+    "file": "src/components/toolbar/toolbarFieldExport.js",
+    "key": "curiosity-toolbar.notifications",
   },
   {
     "file": "src/components/toolbar/toolbarFieldExport.js",
@@ -1263,54 +1306,6 @@ exports[`I18n Component should have locale keys that exist in the default langua
   {
     "file": "src/config/product.satellite.js",
     "key": "curiosity-inventory.label",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
-  },
-  {
-    "file": "src/redux/actions/platformActions.js",
-    "key": "curiosity-toolbar.notifications",
   },
 ]
 `;
