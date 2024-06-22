@@ -163,6 +163,8 @@ recreate the core component.
 <dt><a href="#Toolbar.module_ToolbarFieldExport">ToolbarFieldExport</a></dt>
 <dd><p>A standalone export select/dropdown filter and download hooks.</p>
 </dd>
+<dt><a href="#ToolbarFieldExport.module_ToolbarFieldExportContext">ToolbarFieldExportContext</a></dt>
+<dd></dd>
 <dt><a href="#Toolbar.module_ToolbarFieldGranularity">ToolbarFieldGranularity</a></dt>
 <dd><p>A standalone Granularity select filter.</p>
 </dd>
@@ -6623,10 +6625,6 @@ A standalone export select/dropdown filter and download hooks.
 
 * [ToolbarFieldExport](#Toolbar.module_ToolbarFieldExport)
     * [~toolbarFieldOptions](#Toolbar.module_ToolbarFieldExport..toolbarFieldOptions) : <code>Array.&lt;{title: React.ReactNode, value: string, selected: boolean}&gt;</code>
-    * [~useExportStatus(options)](#Toolbar.module_ToolbarFieldExport..useExportStatus) ⇒ <code>Object</code>
-    * [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>Object</code>
-        * [~checkAllExports](#Toolbar.module_ToolbarFieldExport..useExport..checkAllExports)
-        * [~createExport](#Toolbar.module_ToolbarFieldExport..useExport..createExport)
     * [~useOnSelect(options)](#Toolbar.module_ToolbarFieldExport..useOnSelect) ⇒ <code>function</code>
     * [~ToolbarFieldExport(props)](#Toolbar.module_ToolbarFieldExport..ToolbarFieldExport) ⇒ <code>React.ReactNode</code>
         * [.propTypes](#Toolbar.module_ToolbarFieldExport..ToolbarFieldExport.propTypes) : <code>Object</code>
@@ -6638,73 +6636,10 @@ A standalone export select/dropdown filter and download hooks.
 Select field options.
 
 **Kind**: inner constant of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport)  
-<a name="Toolbar.module_ToolbarFieldExport..useExportStatus"></a>
-
-### ToolbarFieldExport~useExportStatus(options) ⇒ <code>Object</code>
-Aggregated export status
-
-**Kind**: inner method of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useSelector</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Toolbar.module_ToolbarFieldExport..useExport"></a>
-
-### ToolbarFieldExport~useExport(options) ⇒ <code>Object</code>
-Apply an export hook for a post with download, and a global polling status with download.
-
-**Kind**: inner method of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.createExport</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.getExistingExportsStatus</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-
-* [~useExport(options)](#Toolbar.module_ToolbarFieldExport..useExport) ⇒ <code>Object</code>
-    * [~checkAllExports](#Toolbar.module_ToolbarFieldExport..useExport..checkAllExports)
-    * [~createExport](#Toolbar.module_ToolbarFieldExport..useExport..createExport)
-
-<a name="Toolbar.module_ToolbarFieldExport..useExport..checkAllExports"></a>
-
-#### useExport~checkAllExports
-Get a global export status. Pre-step for polling.
-
-**Kind**: inner constant of [<code>useExport</code>](#Toolbar.module_ToolbarFieldExport..useExport)  
-<a name="Toolbar.module_ToolbarFieldExport..useExport..createExport"></a>
-
-#### useExport~createExport
-Create an export then download. Automatically sets up polling until the file(s) are ready.
-
-**Kind**: inner constant of [<code>useExport</code>](#Toolbar.module_ToolbarFieldExport..useExport)  
 <a name="Toolbar.module_ToolbarFieldExport..useOnSelect"></a>
 
 ### ToolbarFieldExport~useOnSelect(options) ⇒ <code>function</code>
-On select update export.
+On select create/post an export.
 
 **Kind**: inner method of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport)  
 <table>
@@ -6748,7 +6683,7 @@ Display an export/download field with options. Check and download available expo
     </tr><tr>
     <td>props.t</td><td><code>function</code></td>
     </tr><tr>
-    <td>props.useExport</td><td><code>function</code></td>
+    <td>props.useExistingExports</td><td><code>function</code></td>
     </tr><tr>
     <td>props.useExportStatus</td><td><code>function</code></td>
     </tr><tr>
@@ -6773,6 +6708,131 @@ Prop types.
 Default props.
 
 **Kind**: static property of [<code>ToolbarFieldExport</code>](#Toolbar.module_ToolbarFieldExport..ToolbarFieldExport)  
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext"></a>
+
+## ToolbarFieldExportContext
+
+* [ToolbarFieldExportContext](#ToolbarFieldExport.module_ToolbarFieldExportContext)
+    * [~useExport(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport) ⇒ <code>function</code>
+        * [~statusCallback](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport..statusCallback) : <code>function</code>
+    * [~useExistingExportsConfirmation(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation) ⇒ <code>Object</code>
+    * [~useExistingExports(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExports)
+    * [~useExportStatus(options)](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExportStatus) ⇒ <code>Object</code>
+
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExport"></a>
+
+### ToolbarFieldExportContext~useExport(options) ⇒ <code>function</code>
+Apply an export hook for an export post. The service automatically sets up polling, then force downloads the file.
+
+**Kind**: inner method of [<code>ToolbarFieldExportContext</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.addNotification</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.createExport</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.t</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExport..statusCallback"></a>
+
+#### useExport~statusCallback : <code>function</code>
+A polling status callback on export create.
+
+**Kind**: inner constant of [<code>useExport</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext..useExport)  
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExportsConfirmation"></a>
+
+### ToolbarFieldExportContext~useExistingExportsConfirmation(options) ⇒ <code>Object</code>
+User confirmation results when existing exports are detected.
+
+**Kind**: inner method of [<code>ToolbarFieldExportContext</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.deleteExistingExports</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.getExistingExports</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.removeNotification</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.t</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExistingExports"></a>
+
+### ToolbarFieldExportContext~useExistingExports(options)
+Apply an existing exports hook for user abandoned reports. Allow bulk polling status with download.
+
+**Kind**: inner method of [<code>ToolbarFieldExportContext</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.addNotification</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.getExistingExportsStatus</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.t</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useDispatch</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useExistingExportsConfirmation</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useSelectorsResponse</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="ToolbarFieldExport.module_ToolbarFieldExportContext..useExportStatus"></a>
+
+### ToolbarFieldExportContext~useExportStatus(options) ⇒ <code>Object</code>
+Aggregated export status
+
+**Kind**: inner method of [<code>ToolbarFieldExportContext</code>](#ToolbarFieldExport.module_ToolbarFieldExportContext)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>options</td><td><code>object</code></td>
+    </tr><tr>
+    <td>options.useProduct</td><td><code>function</code></td>
+    </tr><tr>
+    <td>options.useSelector</td><td><code>function</code></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Toolbar.module_ToolbarFieldGranularity"></a>
 
 ## ToolbarFieldGranularity
