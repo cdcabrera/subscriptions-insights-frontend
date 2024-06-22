@@ -13,7 +13,7 @@ import {
 } from './toolbarFieldBillingProvider';
 import { ToolbarFieldCategory } from './toolbarFieldCategory';
 import { ToolbarFieldDisplayName } from './toolbarFieldDisplayName';
-import { ToolbarFieldExport } from './toolbarFieldExport';
+import { ToolbarFieldExport } from '../toolbarFieldExport/toolbarFieldExport';
 import { ToolbarFieldGranularity, toolbarFieldOptions as granularityOptions } from './toolbarFieldGranularity';
 import { ToolbarFieldRangedMonthly, toolbarFieldOptions as rangedMonthlyOptions } from './toolbarFieldRangedMonthly';
 import { ToolbarFieldSla, toolbarFieldOptions as slaOptions } from './toolbarFieldSla';
