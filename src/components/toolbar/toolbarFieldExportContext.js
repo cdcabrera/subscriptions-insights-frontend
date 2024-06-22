@@ -124,17 +124,26 @@ const useExistingExportsConfirmation = ({
 } = {}) => {
   const dispatch = useAliasDispatch();
 
-  const onConfirmYes = useCallback(
-    allResults => {
+  return useCallback(
+    (confirmation, allResults) => {
       dispatch(removeAliasNotification('swatch-exports-status'));
 
-      getAliasExistingExports(allResults, {
+      if (confirmation === 'no') {
+        return deleteAliasExistingExports(allResults, {
+          rejected: {
+            variant: 'warning',
+            title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
+            description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
+            dismissable: true
+          }
+        })(dispatch);
+      }
+
+      return getAliasExistingExports(allResults, {
         rejected: {
           variant: 'warning',
           title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
-          description: t('curiosity-toolbar.notifications', {
-            context: ['export', 'error', 'description']
-          }),
+          description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
           dismissable: true
         },
         pending: {
@@ -156,29 +165,8 @@ const useExistingExportsConfirmation = ({
         }
       })(dispatch);
     },
-    [dispatch, getAliasExistingExports, removeAliasNotification, t]
+    [dispatch, deleteAliasExistingExports, getAliasExistingExports, removeAliasNotification, t]
   );
-
-  const onConfirmNo = useCallback(
-    allResults => {
-      dispatch(removeAliasNotification('swatch-exports-status'));
-
-      deleteAliasExistingExports(allResults, {
-        rejected: {
-          variant: 'warning',
-          title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
-          description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
-          dismissable: true
-        }
-      })(dispatch);
-    },
-    [dispatch, deleteAliasExistingExports, removeAliasNotification, t]
-  );
-
-  return {
-    onConfirmNo,
-    onConfirmYes
-  };
 };
 
 /**
@@ -202,7 +190,7 @@ const useExistingExports = ({
 } = {}) => {
   const [isConfirmation, setIsConfirmation] = useState(false);
   const dispatch = useAliasDispatch();
-  const { onConfirmNo, onConfirmYes } = useAliasExistingExportsConfirmation();
+  const onConfirmation = useAliasExistingExportsConfirmation();
   const { data, fulfilled } = useAliasSelectorsResponse(({ app }) => app?.exportsExisting);
   const { completed = [], isAnythingPending, isAnythingCompleted, pending = [] } = data?.[0]?.data || {};
 
@@ -253,7 +241,7 @@ const useExistingExports = ({
               <Button
                 data-test="exportButtonConfirm"
                 variant="primary"
-                onClick={() => onConfirmYes([...completed, ...pending])}
+                onClick={() => onConfirmation('yes', [...completed, ...pending])}
                 autoFocus
               >
                 {t('curiosity-toolbar.button', { context: 'yes' })}
@@ -261,7 +249,7 @@ const useExistingExports = ({
               <Button
                 data-test="exportButtonConfirm"
                 variant="plain"
-                onClick={() => onConfirmNo([...completed, ...pending])}
+                onClick={() => onConfirmation('no', [...completed, ...pending])}
               >
                 {t('curiosity-toolbar.button', { context: 'no' })}
               </Button>
@@ -282,8 +270,7 @@ const useExistingExports = ({
     isAnythingCompleted,
     isAnythingPending,
     isConfirmation,
-    onConfirmNo,
-    onConfirmYes,
+    onConfirmation,
     pending,
     t
   ]);

@@ -103,3 +103,51 @@ exports[`ToolbarFieldExport Component should allow export service calls: createE
   },
 ]
 `;
+
+exports[`ToolbarFieldExport Component should allow service calls on user confirmation: confirmation 1`] = `
+[
+  [
+    [
+      "lorem",
+      "ipsum",
+      "dolor",
+      "sit",
+    ],
+    {
+      "rejected": {
+        "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+        "dismissable": true,
+        "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+        "variant": "warning",
+      },
+    },
+  ],
+  [
+    [
+      "lorem",
+      "ipsum",
+      "dolor",
+      "sit",
+    ],
+    {
+      "fulfilled": {
+        "description": "t(curiosity-toolbar.notifications_export_completed, {"context":"descriptionGlobal","count":4})",
+        "dismissable": true,
+        "title": "t(curiosity-toolbar.notifications_export_completed, {"context":"titleGlobal","count":4})",
+        "variant": "success",
+      },
+      "pending": {
+        "dismissable": true,
+        "title": "t(curiosity-toolbar.notifications_export_pending, {"context":"titleGlobal"})",
+        "variant": "info",
+      },
+      "rejected": {
+        "description": "t(curiosity-toolbar.notifications_export_error, {"context":"description"})",
+        "dismissable": true,
+        "title": "t(curiosity-toolbar.notifications_export_error, {"context":"title"})",
+        "variant": "warning",
+      },
+    },
+  ],
+]
+`;

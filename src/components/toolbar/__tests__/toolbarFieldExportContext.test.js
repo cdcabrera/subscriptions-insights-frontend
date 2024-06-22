@@ -1,4 +1,9 @@
-import { useExistingExports, useExport, useExportStatus } from '../toolbarFieldExportContext';
+import {
+  useExport,
+  useExistingExports,
+  useExistingExportsConfirmation,
+  useExportStatus
+} from '../toolbarFieldExportContext';
 import { store } from '../../../redux/store';
 import { PLATFORM_API_EXPORT_STATUS_TYPES } from '../../../services/platform/platformConstants';
 
@@ -23,6 +28,46 @@ describe('ToolbarFieldExport Component', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should allow export service calls', async () => {
+    const { result: createExport, unmount } = await renderHook(() => useExport({ createExport: mockService }));
+    createExport('mock-product-id', { data: { lorem: 'ipsum' } });
+
+    await unmount();
+    expect(mockService).toHaveBeenCalledTimes(1);
+    expect(mockDispatch.mock.results).toMatchSnapshot('createExport');
+  });
+
+  it('should allow export service calls on existing exports', async () => {
+    const { unmount } = await renderHook((...args) => {
+      useExistingExports({
+        getExistingExports: mockService,
+        getExistingExportsStatus: mockService,
+        deleteExistingExports: mockService,
+        useSelectorsResponse: () => ({
+          data: [{ data: { isAnythingPending: true, pending: [{ lorem: 'ipsum' }] } }],
+          fulfilled: true
+        }),
+        ...args?.[0]
+      });
+    });
+
+    await unmount();
+    expect(mockDispatch.mock.results).toMatchSnapshot('existingExports');
+  });
+
+  it('should allow service calls on user confirmation', async () => {
+    const { result: onConfirmation, unmount } = await renderHook(() =>
+      useExistingExportsConfirmation({
+        deleteExistingExports: mockService,
+        getExistingExports: mockService
+      })
+    );
+    onConfirmation('no', ['lorem', 'ipsum', 'dolor', 'sit']);
+    onConfirmation('yes', ['lorem', 'ipsum', 'dolor', 'sit']);
+    await unmount();
+    expect(mockService.mock.calls).toMatchSnapshot('confirmation');
   });
 
   it('should aggregate export status, polling status with a hook', async () => {
@@ -68,32 +113,5 @@ describe('ToolbarFieldExport Component', () => {
     );
     await unmountCompleted();
     expect(completed).toMatchSnapshot('status, completed');
-  });
-
-  it('should allow export service calls', async () => {
-    const { result: createExport, unmount } = await renderHook(() => useExport({ createExport: mockService }));
-    createExport('mock-product-id', { data: { lorem: 'ipsum' } });
-
-    await unmount();
-    expect(mockService).toHaveBeenCalledTimes(1);
-    expect(mockDispatch.mock.results).toMatchSnapshot('createExport');
-  });
-
-  it('should allow export service calls on existing exports', async () => {
-    const { unmount } = await renderHook((...args) => {
-      useExistingExports({
-        getExistingExports: mockService,
-        getExistingExportsStatus: mockService,
-        deleteExistingExports: mockService,
-        useSelectorsResponse: () => ({
-          data: [{ data: { isAnythingPending: true, pending: [{ lorem: 'ipsum' }] } }],
-          fulfilled: true
-        }),
-        ...args?.[0]
-      });
-    });
-
-    await unmount();
-    expect(mockDispatch.mock.results).toMatchSnapshot('existingExports');
   });
 });
