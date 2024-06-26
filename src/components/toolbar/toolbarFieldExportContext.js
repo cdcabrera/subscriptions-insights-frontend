@@ -37,7 +37,6 @@ const useExportConfirmation = ({
       if (isCompleted) {
         addAliasNotification({
           variant: 'success',
-          id: `swatch-create-export-${productId}`,
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'completed', 'title']
           }),
@@ -104,7 +103,6 @@ const useExport = ({
           },
           pending: {
             variant: 'info',
-            id: `swatch-create-export-${id}`,
             title: t('curiosity-toolbar.notifications', {
               context: ['export', 'pending', 'title', id]
             }),
@@ -230,13 +228,13 @@ const useExistingExports = ({
 
     if (isAnythingAvailable && totalResults) {
       addAliasNotification({
-        id: `swatch-exports-status`,
+        id: 'swatch-exports-status',
         title: t('curiosity-toolbar.notifications', {
           context: ['export', 'completed', 'title', 'existing'],
           count: totalResults
         }),
         description: (
-          <div className="curiosity-vars curiosity-toolbar__export-confirmation" aria-live="polite">
+          <div aria-live="polite">
             {t('curiosity-toolbar.notifications', {
               context: [
                 'export',
@@ -250,7 +248,7 @@ const useExistingExports = ({
               completed: completed.length,
               pending: pending.length
             })}
-            <p>
+            <div style={{ paddingTop: '0.5rem' }}>
               <Button
                 data-test="exportButtonConfirm"
                 variant="primary"
@@ -266,7 +264,7 @@ const useExistingExports = ({
               >
                 {t('curiosity-toolbar.button', { context: 'no' })}
               </Button>
-            </p>
+            </div>
           </div>
         ),
         autoDismiss: false,
