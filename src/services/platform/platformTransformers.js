@@ -8,6 +8,7 @@ import {
   PLATFORM_API_RESPONSE_USER_PERMISSION_RESOURCE_TYPES as RESOURCE_TYPES
 } from './platformConstants';
 import { helpers, dateHelpers } from '../../common';
+import { translate } from '../../components/i18n/i18n';
 
 /**
  * Transform export responses. Combines multiple exports, or a single export,
@@ -38,6 +39,15 @@ const exports = response => {
   updatedResponse.data.pending ??= [];
   updatedResponse.data.completed ??= [];
   updatedResponse.data.products = {};
+
+  /**
+   * Return a product display name
+   *
+   * @param {string} productId
+   * @returns {string|React.ReactNode}
+   */
+  const getProductDisplayShortName = productId =>
+    translate('curiosity-toolbar.label_groupVariant', { context: productId });
 
   /**
    * Pull a product id from an export name. Fallback filtering for product identifiers.
@@ -87,10 +97,11 @@ const exports = response => {
    */
   const restructureResponse = ({ exportName, exportStatus, exportFormat, exportId } = {}) => {
     const productId = getProductId(exportName);
+    const productDisplayName = getProductDisplayShortName(productId);
     const focusedStatus = getStatus(exportStatus);
 
     const updatedExportData = {
-      fileName: `${moment.utc(dateHelpers.getCurrentDate()).format('YYYYMMDD_HHmmss')}_${helpers.CONFIG_EXPORT_FILENAME.replace('{0}', _snakeCase(productId))}`,
+      fileName: `${moment.utc(dateHelpers.getCurrentDate()).format('YYYYMMDD_HHmmss')}_${helpers.CONFIG_EXPORT_FILENAME.replace('{0}', _snakeCase(productDisplayName))}`,
       format: exportFormat,
       id: exportId,
       name: exportName,
