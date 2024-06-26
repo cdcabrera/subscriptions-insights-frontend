@@ -160,7 +160,7 @@ exports[`ToolbarFieldExport Component should expose an export polling status con
       "payload": {
         "description": "t(curiosity-toolbar.notifications_export_completed, {"context":"description","fileName":"helloWorldFileName"})",
         "dismissable": true,
-        "id": "cloud-servicesnotification-17193692391048c2iity8gsj",
+        "id": "generatedid-",
         "title": "t(curiosity-toolbar.notifications_export_completed, {"context":"title"})",
         "variant": "success",
       },

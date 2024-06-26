@@ -74,7 +74,8 @@ Platform service wrappers for dispatch, state update.
 <a name="Actions.module_PlatformActions..addNotification"></a>
 
 ### PlatformActions~addNotification(data) ⇒ <code>\*</code>
-Add a platform plugin toast notification.
+Add a platform plugin toast notification. Generate an id if one doesn't exist. The default generated id is
+random when testing.
 
 **Kind**: inner method of [<code>PlatformActions</code>](#Actions.module_PlatformActions)  
 <table>

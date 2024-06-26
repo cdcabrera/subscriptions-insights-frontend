@@ -5,6 +5,7 @@ import {
 } from '@redhat-cloud-services/frontend-components-notifications';
 import { platformTypes } from '../types';
 import { platformServices } from '../../services/platform/platformServices';
+import { helpers } from '../../common';
 
 /**
  * Platform service wrappers for dispatch, state update.
@@ -14,16 +15,22 @@ import { platformServices } from '../../services/platform/platformServices';
  */
 
 /**
- * Add a platform plugin toast notification.
+ * Add a platform plugin toast notification. Generate an id if one doesn't exist. The default generated id is
+ * random when testing.
  *
  * @param {object} data
  * @returns {*}
  */
 const addNotification = data => dispatch => {
-  if (data.id) {
-    dispatch(RcsRemoveNotification(data.id));
+  const updatedData = { ...data };
+
+  if (updatedData.id) {
+    dispatch(RcsRemoveNotification(updatedData.id));
+  } else {
+    updatedData.id = helpers.generateId();
   }
-  return dispatch(RcsAddNotification(data));
+
+  return dispatch(RcsAddNotification(updatedData));
 };
 
 /**
