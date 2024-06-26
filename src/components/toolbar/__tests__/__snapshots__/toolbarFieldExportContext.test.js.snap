@@ -50,10 +50,15 @@ exports[`ToolbarFieldExport Component should allow export service calls on exist
         "autoDismiss": false,
         "description": <div
           aria-live="polite"
-          className="curiosity-vars curiosity-toolbar__export-confirmation"
         >
           t(curiosity-toolbar.notifications_export_completed_description_existing, {"context":"pending","count":1,"completed":0,"pending":1})
-          <p>
+          <div
+            style={
+              {
+                "paddingTop": "0.5rem",
+              }
+            }
+          >
             <Button
               autoFocus={true}
               data-test="exportButtonConfirm"
@@ -70,7 +75,7 @@ exports[`ToolbarFieldExport Component should allow export service calls on exist
             >
               t(curiosity-toolbar.button, {"context":"no"})
             </Button>
-          </p>
+          </div>
         </div>,
         "dismissable": false,
         "id": "swatch-exports-status",
@@ -152,17 +157,10 @@ exports[`ToolbarFieldExport Component should expose an export polling status con
   {
     "type": "return",
     "value": {
-      "payload": "swatch-create-export-loremIpsum",
-      "type": "@@INSIGHTS-CORE/NOTIFICATIONS/REMOVE_NOTIFICATION",
-    },
-  },
-  {
-    "type": "return",
-    "value": {
       "payload": {
         "description": "t(curiosity-toolbar.notifications_export_completed, {"context":"description","fileName":"helloWorldFileName"})",
         "dismissable": true,
-        "id": "swatch-create-export-loremIpsum",
+        "id": "cloud-servicesnotification-17193692391048c2iity8gsj",
         "title": "t(curiosity-toolbar.notifications_export_completed, {"context":"title"})",
         "variant": "success",
       },
