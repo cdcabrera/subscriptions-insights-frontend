@@ -42,6 +42,20 @@ const globalResponseCache = new LRUCache({
 });
 
 /**
+ * Cancel an axios service call
+ *
+ * @param {string|*} token
+ * @param {object} options
+ * @param {string} options.cancelledMessage
+ * @returns {Promise<void>}
+ */
+const axiosCancelServiceCall = async (token, { cancelledMessage = 'cancelled request' } = {}) => {
+  if (globalCancelTokens[token]) {
+    await globalCancelTokens[token].cancel(cancelledMessage);
+  }
+};
+
+/**
  * Set Axios configuration. This includes response schema validation and caching.
  * Call platform "getUser" auth method, and apply service config. Service configuration
  * includes the ability to cancel all and specific calls, cache and normalize a response
@@ -61,6 +75,7 @@ const globalResponseCache = new LRUCache({
  * @param {string|Function} config.url
  * @param {object} options
  * @param {string} options.cancelledMessage
+ * @param {Function} options.cancelServiceCall
  * @param {object} options.responseCache
  * @param {number} options.xhrTimeout
  * @param {number} options.pollInterval
@@ -70,6 +85,7 @@ const axiosServiceCall = async (
   config = {},
   {
     cancelledMessage = 'cancelled request',
+    cancelServiceCall = axiosCancelServiceCall,
     responseCache = globalResponseCache,
     xhrTimeout = globalXhrTimeout,
     pollInterval = globalPollInterval
@@ -96,13 +112,13 @@ const axiosServiceCall = async (
     updatedConfig.cacheId = cacheId;
   }
 
-  // apply cancel configuration
-  if (updatedConfig.cancel === true) {
+  // apply cancel configuration, if cancel is true cancel previous calls
+  if (updatedConfig.cancel === true || updatedConfig.cancelId) {
     const cancelTokensId =
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
 
-    if (globalCancelTokens[cancelTokensId]) {
-      await globalCancelTokens[cancelTokensId].cancel(cancelledMessage);
+    if (updatedConfig.cancel === true && globalCancelTokens[cancelTokensId]) {
+      await cancelServiceCall(cancelTokensId, { cancelledMessage });
     }
 
     globalCancelTokens[cancelTokensId] = CancelToken.source();
@@ -364,6 +380,7 @@ const axiosServiceCall = async (
 
 const serviceConfig = {
   axiosServiceCall,
+  axiosCancelServiceCall,
   globalXhrTimeout,
   globalPollInterval,
   globalCancelTokens,
@@ -374,6 +391,7 @@ export {
   serviceConfig as default,
   serviceConfig,
   axiosServiceCall,
+  axiosCancelServiceCall,
   globalXhrTimeout,
   globalPollInterval,
   globalCancelTokens,
