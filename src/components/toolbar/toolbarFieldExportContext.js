@@ -15,6 +15,7 @@ import { translate } from '../i18n/i18n';
  *
  * @param {object} options
  * @param {Function} options.addNotification
+ * @param {Function} options.removeNotification
  * @param {Function} options.t
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
@@ -22,6 +23,7 @@ import { translate } from '../i18n/i18n';
  */
 const useExportConfirmation = ({
   addNotification: addAliasNotification = reduxActions.platform.addNotification,
+  removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
   t = translate,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useProduct: useAliasProduct = useProduct
@@ -29,10 +31,25 @@ const useExportConfirmation = ({
   const { productId } = useAliasProduct();
   const dispatch = useAliasDispatch();
 
+  useMount(() => {
+    removeAliasNotification('swatch-exports-individual-status')(dispatch);
+  });
+
   return useCallback(
-    successResponse => {
+    (successResponse, errorResponse, retryCount) => {
       const { completed = [], isCompleted, pending = [] } = successResponse?.data?.data?.products?.[productId] || {};
       const isPending = !isCompleted;
+
+      if (retryCount === -1) {
+        addAliasNotification({
+          id: 'swatch-exports-individual-status',
+          variant: 'info',
+          title: t('curiosity-toolbar.notifications', {
+            context: ['export', 'pending', 'title']
+          }),
+          dismissable: true
+        })(dispatch);
+      }
 
       if (isCompleted) {
         addAliasNotification({
@@ -98,13 +115,6 @@ const useExport = ({
             }),
             description: t('curiosity-toolbar.notifications', {
               context: ['export', 'error', 'description']
-            }),
-            dismissable: true
-          },
-          pending: {
-            variant: 'info',
-            title: t('curiosity-toolbar.notifications', {
-              context: ['export', 'pending', 'title', id]
             }),
             dismissable: true
           }

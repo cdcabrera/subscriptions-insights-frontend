@@ -6739,6 +6739,8 @@ Return a polling status callback. Used when creating an export.
     </tr><tr>
     <td>options.addNotification</td><td><code>function</code></td>
     </tr><tr>
+    <td>options.removeNotification</td><td><code>function</code></td>
+    </tr><tr>
     <td>options.t</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useDispatch</td><td><code>function</code></td>
