@@ -47,12 +47,16 @@ const globalResponseCache = new LRUCache({
  * @param {string|*} token
  * @param {object} options
  * @param {string} options.cancelledMessage
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
 const axiosCancelServiceCall = async (token, { cancelledMessage = 'cancelled request' } = {}) => {
+  let hasFired = false;
   if (globalCancelTokens[token]) {
     await globalCancelTokens[token].cancel(cancelledMessage);
+    hasFired = true;
   }
+
+  return hasFired;
 };
 
 /**
@@ -100,6 +104,7 @@ const axiosServiceCall = async (
   };
   const responseTransformers = [];
   const axiosInstance = axios.create();
+  let hasCancelFired;
 
   // don't cache responses if "get" isn't used
   updatedConfig.cacheResponse = updatedConfig.cacheResponse === true && updatedConfig.method === 'get';
@@ -118,7 +123,7 @@ const axiosServiceCall = async (
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
 
     if (updatedConfig.cancel === true && globalCancelTokens[cancelTokensId]) {
-      await cancelServiceCall(cancelTokensId, { cancelledMessage });
+      hasCancelFired = await cancelServiceCall(cancelTokensId, { cancelledMessage });
     }
 
     globalCancelTokens[cancelTokensId] = CancelToken.source();
@@ -288,6 +293,11 @@ const axiosServiceCall = async (
         let validated;
 
         try {
+          if (hasCancelFired) {
+            // throw new Error(cancelledMessage);
+            console.error(cancelledMessage);
+            return Promise.reject(response);
+          }
           validated = await updatedPoll.validate.call(null, callbackResponse, updatedPoll.__retryCount);
         } catch (err) {
           console.error(err);
