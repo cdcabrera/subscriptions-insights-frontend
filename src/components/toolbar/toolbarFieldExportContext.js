@@ -4,6 +4,7 @@ import { Button } from '@patternfly/react-core';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useProduct } from '../productView/productViewContext';
 import { translate } from '../i18n/i18n';
+import { axiosCancelServiceCall } from '../../services/common/serviceConfig';
 
 /**
  * @memberof ToolbarFieldExport
@@ -95,6 +96,11 @@ const useExport = ({
 } = {}) => {
   const statusConfirmation = useAliasExportConfirmation();
   const dispatch = useAliasDispatch();
+
+  useUnmount(async () => {
+    console.log('>>>> UNMOUNT');
+    await axiosCancelServiceCall('swatch-post-poll');
+  });
 
   return useCallback(
     (id, data) => {

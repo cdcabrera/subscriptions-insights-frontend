@@ -473,7 +473,7 @@ const postExport = async (data = {}, options = {}) => {
   const {
     cache = false,
     cancel = false,
-    cancelId,
+    cancelId = 'swatch-post-poll',
     poll,
     schema = [platformSchemas.exports],
     transform = [],
@@ -490,6 +490,7 @@ const postExport = async (data = {}, options = {}) => {
         config: {
           cache: false,
           cancel: false,
+          cancelId: 'swatch-post-poll',
           schema: [platformSchemas.exports],
           transform: [platformTransformers.exports]
         },

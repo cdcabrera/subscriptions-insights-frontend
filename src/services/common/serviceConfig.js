@@ -28,7 +28,18 @@ const globalPollInterval = Number.parseInt(process.env.REACT_APP_AJAX_POLL_INTER
  *
  * @type {{ [key:string]: { token:unknown, isActive: boolean } }}
  */
-const globalCancelTokens = {};
+// const globalCancelTokens = {};
+
+/**
+ * Cache Axios service call cancel tokens.
+ *
+ * @type {object}
+ */
+const globalCancelTokens = new LRUCache({
+  ttl: 10000,
+  max: 100,
+  updateAgeOnGet: true
+});
 
 /**
  * Cache Axios service call responses.
@@ -44,23 +55,40 @@ const globalResponseCache = new LRUCache({
 /**
  * Cancel an axios service call
  *
- * @param {string|*} token
+ * @param {string} tokenId
  * @param {object} options
  * @param {string} options.cancelledMessage
- * @returns {Promise<boolean>}
+ * @returns {Promise<void>}
  */
-const axiosCancelServiceCall = async (token, { cancelledMessage = 'cancelled request' } = {}) => {
-  let hasFired = false;
-  if (globalCancelTokens[token]) {
-    await globalCancelTokens[token].token.cancel(cancelledMessage);
-    globalCancelTokens[token].isActive = true;
-    hasFired = true;
+const axiosCancelServiceCall = async (tokenId, { cancelledMessage = 'cancelled request' } = {}) => {
+  const cancelToken = globalCancelTokens.get(tokenId);
+
+  if (cancelToken?.source) {
+    await cancelToken.source.cancel(cancelledMessage);
+    globalCancelTokens.set({
+      id: tokenId,
+      source: undefined,
+      isActive: true
+    });
+    console.log('>>>>>> CANCEL SERVICE CALL', tokenId, globalCancelTokens.get(tokenId));
+    /*
+     * cancelToken.delete(tokenId);
+     * globalCancelTokens[token].isActive = true;
+     */
   }
 
-  return hasFired;
+  // return globalCancelTokens[token].isActive;
 };
 
-const axiosIsCancelledServiceCall = token => globalCancelTokens[token].isActive === true;
+const axiosIsCancelledServiceCall = tokenId => {
+  console.log(
+    '>>>>>> STANDALONE CHECK, CANCEL SERVICE CALL',
+    tokenId,
+    globalCancelTokens.get(tokenId),
+    globalCancelTokens.get(tokenId)?.isActive === true
+  );
+  return globalCancelTokens.get(tokenId)?.isActive === true;
+};
 
 /**
  * Set Axios configuration. This includes response schema validation and caching.
@@ -86,6 +114,7 @@ const axiosIsCancelledServiceCall = token => globalCancelTokens[token].isActive 
  * @param {object} options.responseCache
  * @param {number} options.xhrTimeout
  * @param {number} options.pollInterval
+ * @param options.isCancelledServiceCall
  * @returns {Promise<*>}
  */
 const axiosServiceCall = async (
@@ -125,15 +154,52 @@ const axiosServiceCall = async (
     const cancelTokensId =
       updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
 
-    if (updatedConfig.cancel === true && globalCancelTokens[cancelTokensId]) {
+    updatedConfig.cancelId = cancelTokensId;
+    console.log('>>>>>> SETUP CANCEL', cancelTokensId, globalCancelTokens.get(cancelTokensId));
+
+    // cancel the previous call that's similar. for scenarios where multiple api calls are fired repeatedly
+    if (updatedConfig.cancel === true && globalCancelTokens.get(cancelTokensId)) {
       await cancelServiceCall(cancelTokensId, { cancelledMessage });
+
+      globalCancelTokens.set(cancelTokensId, {
+        id: cancelTokensId,
+        isActive: false,
+        source: CancelToken.source()
+      });
+
+      console.log('>>>>>> CANCEL PREVIOUS SERVICE CALL', cancelTokensId, globalCancelTokens.get(cancelTokensId));
+    } else if (updatedConfig.cancelId && isCancelledServiceCall(cancelTokensId)) {
+      console.log('>>>>>> CANCEL EXACT SERVICE CALL', cancelTokensId, globalCancelTokens.get(cancelTokensId));
+
+      updatedConfig.adapter = adapterConfig => {
+        globalCancelTokens.delete(cancelTokensId);
+
+        return Promise.reject({ // eslint-disable-line
+          ...new Error(cancelledMessage),
+          message: cancelledMessage,
+          status: 418,
+          config: adapterConfig
+        });
+      };
+
+      return axiosInstance(updatedConfig);
     }
 
-    globalCancelTokens[cancelTokensId].token = CancelToken.source();
-    globalCancelTokens[cancelTokensId].isActive = false;
-    updatedConfig.cancelToken = globalCancelTokens[cancelTokensId].token;
-
-    delete updatedConfig.cancel;
+    /*
+     *const cancelTokensId =
+     *  updatedConfig.cancelId || serviceHelpers.generateHash({ ...updatedConfig, data: undefined, params: undefined });
+     *
+     *if (updatedConfig.cancel === true && globalCancelTokens[cancelTokensId]) {
+     *  await cancelServiceCall(cancelTokensId, { cancelledMessage });
+     *}
+     *
+     *globalCancelTokens[cancelTokensId] ??= {};
+     *globalCancelTokens[cancelTokensId].token = CancelToken.source();
+     *globalCancelTokens[cancelTokensId].isActive = false;
+     *updatedConfig.cancelToken = globalCancelTokens[cancelTokensId].token.token;
+     *
+     *delete updatedConfig.cancel;
+     */
   }
 
   // if cached response return
@@ -297,11 +363,18 @@ const axiosServiceCall = async (
         let validated;
 
         try {
-          if (isCancelledServiceCall(config.cancelId)) {
-            // throw new Error(cancelledMessage);
+          /*
+           * if (isCancelledServiceCall(config.cancelId)) {
+           * throw new Error(cancelledMessage);
+           *  console.error(cancelledMessage);
+           *  return Promise.reject(response);
+           * }
+           */
+          if (isCancelledServiceCall(updatedConfig.cancelId)) {
             console.error(cancelledMessage);
-            return Promise.reject(response);
+            return Promise.reject(updatedResponse);
           }
+
           validated = await updatedPoll.validate.call(null, callbackResponse, updatedPoll.__retryCount);
         } catch (err) {
           console.error(err);
@@ -350,6 +423,11 @@ const axiosServiceCall = async (
                 console.error(err);
               }
             }
+          }
+
+          if (isCancelledServiceCall(updatedConfig.cancelId)) {
+            console.error(cancelledMessage);
+            reject(updatedResponse);
           }
 
           updatedPoll.__retryCount += 1;
