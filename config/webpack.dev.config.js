@@ -1,8 +1,6 @@
 const {
-  // babelLoaderResolve,
   cssLoaderResolve,
   sassLoaderResolve,
-  tsLoaderResolve,
   EslintWebpackPlugin,
   MiniCssExtractPlugin
 } = require('weldable/lib/packages');
@@ -10,14 +8,6 @@ const {
 module.exports = ({ SRC_DIR, MOCK_PORT } = {}) => ({
   module: {
     rules: [
-      {
-        test: /\.(tsx|ts|js)?$/,
-        include: [SRC_DIR],
-        resolve: {
-          extensions: ['.js', '.ts', '.tsx']
-        },
-        use: [tsLoaderResolve]
-      },
       {
         test: /\.(sa|sc)ss$/i,
         use: [MiniCssExtractPlugin.loader, cssLoaderResolve, sassLoaderResolve]
