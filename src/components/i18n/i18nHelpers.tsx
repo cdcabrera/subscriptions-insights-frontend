@@ -181,7 +181,7 @@ const setI18nTestElement = ({ defaultTestId, testId }) => {
  * @param {Function} settings.noopTranslate
  * @param {Function} settings.parseContext
  * @param {Function} settings.parseTranslateKey
- * @returns {any|React.ReactNode}
+ * @returns {React.ReactNode}
  */
 const translate = (
   translateKey: LocaleKeys | LocaleKeys[],
