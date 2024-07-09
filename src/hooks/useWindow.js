@@ -9,16 +9,6 @@ import { helpers } from '../common';
  */
 
 /**
- * Old skool js to determine global app onload through emulated hook.
- *
- * @returns {Function}
- */
-const useOnload =
-  () =>
-  (target = document.querySelector('.curiosity')) =>
-    target !== null;
-
-/**
  * Apply a resize observer to an element.
  *
  * @param {*} target
@@ -66,8 +56,7 @@ const useResizeObserver = target => {
 };
 
 const windowHooks = {
-  useOnload,
   useResizeObserver
 };
 
-export { windowHooks as default, windowHooks, useOnload, useResizeObserver };
+export { windowHooks as default, windowHooks, useResizeObserver };
