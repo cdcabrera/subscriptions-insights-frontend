@@ -1,7 +1,6 @@
 import React from 'react';
 import { helpers } from '../../common';
-import { GraphCardMetricTotals } from './graphCardMetricTotals';
-import { GraphCardChart } from './graphCardChart';
+import { GraphCardChartState } from './graphCardChartState';
 import { GraphCardContext, useParseFiltersSettings } from './graphCardContext';
 
 /**
@@ -17,6 +16,7 @@ import { GraphCardContext, useParseFiltersSettings } from './graphCardContext';
  * @property {module} GraphCardContext
  * @property {module} GraphCardHelpers
  * @property {module} GraphCardMetricTotals
+ * @property {module} GraphCardState
  */
 
 /**
@@ -39,9 +39,7 @@ const GraphCard = ({
 
   return filtersSettings?.map(filterSetting => (
     <GraphCardContext.Provider key={`graphCard-${filterSetting?.settings?.metrics?.[0]?.id}`} value={filterSetting}>
-      <GraphCardMetricTotals>
-        <GraphCardChart />
-      </GraphCardMetricTotals>
+      <GraphCardChartState />
     </GraphCardContext.Provider>
   ));
 };
