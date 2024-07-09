@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { helpers } from '../../common';
 
 /**
@@ -26,8 +26,36 @@ const ChartContext = React.createContext(DEFAULT_CONTEXT);
 const useChartContext = () => useContext(ChartContext);
 
 /**
- * ToDo: reevaluate this alternative pattern of passing hooks as options, helps testing
+ * Centralized chart component mutated dataSets for callbacks outside of chart context.
+ * Currently, exposes legend toggle, add mutations as necessary.
+ *
+ * @param {object} options
+ * @param {Function} options.useChartContext
+ * @returns {Array<objects>}
  */
+const useDataSets = ({ useChartContext: useAliasChartContext = useChartContext } = {}) => {
+  const { chartSettings = {}, dataSetsToggle: contextDataSetsToggle = [] } = useAliasChartContext();
+  const { dataSets, onUpdate } = chartSettings;
+  const [dataSetsToggle] = contextDataSetsToggle;
+  const [updatedDataSets, setUpdatedDataSets] = useState(dataSets);
+
+  useEffect(() => {
+    setUpdatedDataSets(prevDataState =>
+      prevDataState.map(prevDataSet => ({
+        ...prevDataSet,
+        isDisplayed: !dataSetsToggle[prevDataSet.id]
+      }))
+    );
+  }, [onUpdate, dataSets, dataSetsToggle]);
+
+  useEffect(() => {
+    const updatedDatum = helpers.memoClone(updatedDataSets);
+    onUpdate.call(null, { datum: updatedDatum });
+  }, [onUpdate, updatedDataSets]);
+
+  return updatedDataSets;
+};
+
 /**
  * Track, show, and hide chart data layers.
  *
@@ -87,8 +115,11 @@ const useToggleData = ({ useChartContext: useAliasChartContext = useChartContext
    */
   const getIsToggled = useCallback(id => dataSetsToggle?.[id] || false, [dataSetsToggle]);
 
+  const getAllToggled = useCallback(() => dataSetsToggle, [dataSetsToggle]);
+
   return {
     ...{ dataSetsToggle },
+    getAllToggled,
     onHide,
     onRevert,
     onToggle,
@@ -100,7 +131,8 @@ const context = {
   ChartContext,
   DEFAULT_CONTEXT,
   useChartContext,
+  useDataSets,
   useToggleData
 };
 
-export { context as default, context, ChartContext, DEFAULT_CONTEXT, useChartContext, useToggleData };
+export { context as default, context, ChartContext, DEFAULT_CONTEXT, useChartContext, useDataSets, useToggleData };
