@@ -9,6 +9,38 @@ import { helpers } from '../common';
  */
 
 /**
+ * Apply a global onload
+ *
+ * @param {Element} target
+ * @returns {boolean}
+ */
+const useOnload = (target = document.querySelector('.curiosity')) => {
+  const [isTargetLoaded, setIsTargetLoaded] = useState(true);
+
+  useEffect(() => {
+    let timeout;
+
+    if (target) {
+      console.log('>>>> GLOBAL SETTING ONLOAD', true);
+      // timeout = window.setTimeout(() => {
+      //  setIsTargetLoaded(true);
+      // });
+    } else {
+      console.log('>>>> GLOBAL SETTING ONLOAD', false);
+      timeout = window.setTimeout(() => {
+        setIsTargetLoaded(false);
+      });
+    }
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [target]);
+
+  return isTargetLoaded;
+};
+
+/**
  * Apply a resize observer to an element.
  *
  * @param {*} target
@@ -56,7 +88,8 @@ const useResizeObserver = target => {
 };
 
 const windowHooks = {
+  useOnload,
   useResizeObserver
 };
 
-export { windowHooks as default, windowHooks, useResizeObserver };
+export { windowHooks as default, windowHooks, useOnload, useResizeObserver };

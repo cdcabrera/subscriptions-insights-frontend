@@ -1,14 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMount } from 'react-use';
+import { useMount, useUnmount } from 'react-use';
 import { Button } from '@patternfly/react-core';
 import { reduxActions, reduxTypes, storeHooks } from '../../redux';
 import { useProduct } from '../productView/productViewContext';
 import { translate } from '../i18n/i18n';
+import { useOnload } from '../../hooks/useWindow';
 
 /**
  * @memberof ToolbarFieldExport
  * @module ToolbarFieldExportContext
  */
+
+/**
+ * Global is component mounted. Bypass setState in favor of faster global to determine if app is still loaded.
+ *
+ * @type {boolean}
+ */
+let globalisAppMounted = false;
 
 /**
  * Return a polling status callback. Used when creating an export.
@@ -32,7 +40,22 @@ const useExportConfirmation = ({
   const dispatch = useAliasDispatch();
 
   useMount(() => {
-    removeAliasNotification('swatch-exports-individual-status')(dispatch);
+    console.log('>>>>>>>>> MOUNTED');
+    removeAliasNotification('swatch-exports-individual-pending-status')(dispatch);
+    removeAliasNotification('swatch-exports-individual-success-status')(dispatch);
+  });
+
+  useUnmount(() => {
+    console.log('>>>>>>>>> UNMOUNT');
+    removeAliasNotification('swatch-exports-individual-pending-status')(dispatch);
+    removeAliasNotification('swatch-exports-individual-success-status')(dispatch);
+
+    dispatch({
+      type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+      id: productId,
+      isPending: false,
+      pending: []
+    });
   });
 
   return useCallback(
@@ -40,9 +63,11 @@ const useExportConfirmation = ({
       const { completed = [], isCompleted, pending = [] } = successResponse?.data?.data?.products?.[productId] || {};
       const isPending = !isCompleted;
 
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', isPending);
+
       if (retryCount === -1) {
         addAliasNotification({
-          id: 'swatch-exports-individual-status',
+          id: 'swatch-exports-individual-pending-status',
           variant: 'info',
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'pending', 'title']
@@ -53,6 +78,7 @@ const useExportConfirmation = ({
 
       if (isCompleted) {
         addAliasNotification({
+          id: 'swatch-exports-individual-success-status',
           variant: 'success',
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'completed', 'title']
@@ -125,6 +151,8 @@ const useExport = ({
   );
 };
 
+let globalIsMounted = false;
+
 /**
  * User confirmation results when existing exports are detected.
  *
@@ -134,9 +162,11 @@ const useExport = ({
  * @param {Function} options.removeNotification
  * @param {Function} options.t
  * @param {Function} options.useDispatch
+ * @param options.addNotification
  * @returns {Function}
  */
 const useExistingExportsConfirmation = ({
+  addNotification: addAliasNotification = reduxActions.platform.addNotification,
   deleteExistingExports: deleteAliasExistingExports = reduxActions.platform.deleteExistingExports,
   getExistingExports: getAliasExistingExports = reduxActions.platform.getExistingExports,
   removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
@@ -144,9 +174,20 @@ const useExistingExportsConfirmation = ({
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch
 } = {}) => {
   const dispatch = useAliasDispatch();
+  const output = useOnload();
+
+  useMount(() => {
+    globalIsMounted = true;
+    console.log('>>>>>>> SET MOUNTED EXISTING', globalIsMounted, output);
+  });
+
+  useUnmount(() => {
+    globalIsMounted = false;
+    console.log('>>>>>>> SET UNMOUNTED EXISTING', globalIsMounted, output);
+  });
 
   return useCallback(
-    (confirmation, allResults) => {
+    async (confirmation, allResults) => {
       dispatch(removeAliasNotification('swatch-exports-status'));
 
       if (confirmation === 'no') {
@@ -160,7 +201,7 @@ const useExistingExportsConfirmation = ({
         })(dispatch);
       }
 
-      return getAliasExistingExports(allResults, {
+      const response = await getAliasExistingExports(allResults, {
         rejected: {
           variant: 'warning',
           title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
@@ -171,8 +212,13 @@ const useExistingExportsConfirmation = ({
           variant: 'info',
           title: t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'titleGlobal'] }),
           dismissable: true
-        },
-        fulfilled: {
+        }
+      })(dispatch);
+
+      console.log('>>>> OUTPUT RESPONSE', response);
+
+      if (globalIsMounted && response?.value?.status === 200) {
+        addAliasNotification({
           variant: 'success',
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'completed', 'titleGlobal'],
@@ -183,10 +229,10 @@ const useExistingExportsConfirmation = ({
             count: allResults.length
           }),
           dismissable: true
-        }
-      })(dispatch);
+        })(dispatch);
+      }
     },
-    [dispatch, deleteAliasExistingExports, getAliasExistingExports, removeAliasNotification, t]
+    [addAliasNotification, dispatch, deleteAliasExistingExports, getAliasExistingExports, removeAliasNotification, t]
   );
 };
 
