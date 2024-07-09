@@ -43,6 +43,7 @@ const GraphCardChartLegend = ({
   useProduct: useAliasProduct = useProduct,
   useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 }) => {
+  console.log('>>>> GraphCardChartLegend', chart.dataSetsToggle);
   const { settings = {} } = useAliasGraphCardContext();
   const { productLabel, viewId } = useAliasProduct();
   const { isDisabledLegendClick } = settings;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Card,
   CardBody,
@@ -10,7 +10,7 @@ import {
   ToolbarGroup
 } from '@patternfly/react-core';
 import { useProductGraphTallyQuery } from '../productView/productViewContext';
-import { useGraphCardActions, useGraphCardContext, useGetMetrics } from './graphCardContext';
+import { useGraphCardActions, useGraphCardContext, useGetMetrics, useChartDataSets } from './graphCardContext';
 import { graphCardHelpers } from './graphCardHelpers';
 import { Chart } from '../chart/chart';
 import { GraphCardChartLegend } from './graphCardChartLegend';
@@ -30,8 +30,10 @@ import { translate } from '../i18n/i18n';
 /**
  * A chart/graph card.
  *
+ * @fires onChartUpdate
  * @param {object} props
  * @param {translate} [props.t=translate]
+ * @param {useChartDataSets} [props.useChartDataSets=useChartDataSets]
  * @param {useGetMetrics} [props.useGetMetrics=useGetMetrics]
  * @param {useGraphCardActions} [props.useGraphCardActions=useGraphCardActions]
  * @param {useGraphCardContext} [props.useGraphCardContext=useGraphCardContext]
@@ -40,19 +42,44 @@ import { translate } from '../i18n/i18n';
  */
 const GraphCardChart = ({
   t = translate,
+  useChartDataSets: useAliasChartDataSets = useChartDataSets,
   useGetMetrics: useAliasGetMetrics = useGetMetrics,
   useGraphCardActions: useAliasGraphCardActions = useGraphCardActions,
   useGraphCardContext: useAliasGraphCardContext = useGraphCardContext,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
 }) => {
+  // const [, setChartDataSets] = useAliasChartDataSets();
   const updatedActionDisplay = useAliasGraphCardActions();
-  const { settings = {} } = useAliasGraphCardContext();
+  const { settings = {}, dataSets: other } = useAliasGraphCardContext();
   const { stringId } = settings;
 
   const { [RHSM_API_QUERY_SET_TYPES.GRANULARITY]: granularity } = useAliasProductGraphTallyQuery();
   const { pending, error, message, dataSets = [] } = useAliasGetMetrics();
 
   const cardHeaderProps = {};
+
+  /**
+   * Set chart mutated dataSets
+   *
+   * @event onChartUpdate
+   * @param {Array} updatedDataSets
+   * @returns {void}
+   */
+  const onChartUpdate = updatedDataSets => {
+    console.log('>>>> graph card dataset', settings, other, updatedDataSets);
+    // return setChartDataSets(updatedDataSets);
+  };
+  /*
+  const onChartUpdate = useCallback(
+    updatedDataSets => {
+      console.log('>>>> graph card chart update', updatedDataSets);
+      return setChartDataSets(prevState =>
+        prevState.length ? prevState.map((_, index) => updatedDataSets[index]) : updatedDataSets
+      );
+    },
+    [setChartDataSets]
+  );
+  */
 
   if (updatedActionDisplay) {
     cardHeaderProps.actions = {
@@ -80,14 +107,20 @@ const GraphCardChart = ({
       <MinHeight key="bodyMinHeight">
         <CardBody className="curiosity-card__body">
           {(error && <ErrorMessage message={message} title={t('curiosity-graph.error_title')} />) || (
-            <div className={(pending && 'fadein') || ''}>
+            <div className={(error && 'blur') || (pending && 'fadein') || ''}>
               {pending && <Loader variant="graph" />}
               {!pending && (
                 <Chart
-                  {...graphCardHelpers.generateExtendedChartSettings({ settings, granularity })}
+                  {...graphCardHelpers.generateExtendedChartSettings({
+                    settings,
+                    granularity
+                  })}
                   dataSets={dataSets}
-                  chartLegend={({ chart, datum }) => <GraphCardChartLegend chart={chart} datum={datum} />}
-                  chartTooltip={({ datum }) => <GraphCardChartTooltip datum={datum} />}
+                  onUpdate={({ datum }) => onChartUpdate(datum)}
+                  chartLegend={({ chart, datum }) => <GraphCardChartLegend
+                    chart={chart} datum={datum} />}
+                  chartTooltip={({ datum }) => <GraphCardChartTooltip
+                    datum={datum} />}
                 />
               )}
             </div>
