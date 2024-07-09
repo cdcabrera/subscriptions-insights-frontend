@@ -9,36 +9,14 @@ import { helpers } from '../common';
  */
 
 /**
- * Apply a global onload
+ * Old skool js to determine global app onload through emulated hook.
  *
- * @param {Element} target
- * @returns {boolean}
+ * @returns {Function}
  */
-const useOnload = (target = document.querySelector('.curiosity')) => {
-  const [isTargetLoaded, setIsTargetLoaded] = useState(true);
-
-  useEffect(() => {
-    let timeout;
-
-    if (target) {
-      console.log('>>>> GLOBAL SETTING ONLOAD', true);
-      // timeout = window.setTimeout(() => {
-      //  setIsTargetLoaded(true);
-      // });
-    } else {
-      console.log('>>>> GLOBAL SETTING ONLOAD', false);
-      timeout = window.setTimeout(() => {
-        setIsTargetLoaded(false);
-      });
-    }
-
-    return () => {
-      window.clearTimeout(timeout);
-    };
-  }, [target]);
-
-  return isTargetLoaded;
-};
+const useOnload =
+  () =>
+  (target = document.querySelector('.curiosity')) =>
+    target !== null;
 
 /**
  * Apply a resize observer to an element.

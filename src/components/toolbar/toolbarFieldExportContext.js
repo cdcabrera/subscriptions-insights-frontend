@@ -16,7 +16,7 @@ import { useOnload } from '../../hooks/useWindow';
  *
  * @type {boolean}
  */
-let globalisAppMounted = false;
+const globalisAppMounted = false;
 
 /**
  * Return a polling status callback. Used when creating an export.
@@ -151,7 +151,7 @@ const useExport = ({
   );
 };
 
-let globalIsMounted = false;
+const globalIsMounted = false;
 
 /**
  * User confirmation results when existing exports are detected.
@@ -176,14 +176,14 @@ const useExistingExportsConfirmation = ({
   const dispatch = useAliasDispatch();
   const output = useOnload();
 
+  console.log('>>>>>>> SET GENERAL EXISTING', output(document.querySelector('.curiosity-graph-card')));
+
   useMount(() => {
-    globalIsMounted = true;
-    console.log('>>>>>>> SET MOUNTED EXISTING', globalIsMounted, output);
+    console.log('>>>>>>> SET MOUNTED EXISTING', output(document.querySelector('.curiosity-graph-card')));
   });
 
   useUnmount(() => {
-    globalIsMounted = false;
-    console.log('>>>>>>> SET UNMOUNTED EXISTING', globalIsMounted, output);
+    console.log('>>>>>>> SET UNMOUNTED EXISTING', output(document.querySelector('.curiosity-graph-card')));
   });
 
   return useCallback(
@@ -217,7 +217,7 @@ const useExistingExportsConfirmation = ({
 
       console.log('>>>> OUTPUT RESPONSE', response);
 
-      if (globalIsMounted && response?.value?.status === 200) {
+      if (output(document.querySelector('.curiosity-graph-card')) && response?.value?.status === 200) {
         addAliasNotification({
           variant: 'success',
           title: t('curiosity-toolbar.notifications', {
@@ -232,7 +232,15 @@ const useExistingExportsConfirmation = ({
         })(dispatch);
       }
     },
-    [addAliasNotification, dispatch, deleteAliasExistingExports, getAliasExistingExports, removeAliasNotification, t]
+    [
+      addAliasNotification,
+      dispatch,
+      deleteAliasExistingExports,
+      getAliasExistingExports,
+      removeAliasNotification,
+      t,
+      output
+    ]
   );
 };
 
