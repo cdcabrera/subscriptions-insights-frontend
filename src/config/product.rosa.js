@@ -153,9 +153,9 @@ const config = {
   initialGraphSettings: {
     cards: [
       {
-        header: ({ dataSets = [] } = {}) =>
+        header: () =>
           translate('curiosity-graph.cardHeadingMetric', {
-            context: ['remainingCapacity', dataSets?.[0]?.display?.chartId],
+            context: ['remainingCapacity'],
             testId: 'graphRemainingCapacityCard-header'
           }),
         body: ({ dataSets = [] } = {}) =>

@@ -1586,21 +1586,21 @@ const getGraphTally = (id, params = {}, options = {}) => {
  *         },
  *         {
  *           "date": "2020-07-29T00:00:00Z",
- *           "value": 200,
+ *           "value": 1000000,
  *           "has_data": true,
- *           "has_infinite_quantity": true
+ *           "has_infinite_quantity": false
  *         },
  *         {
  *           "date": "2020-07-30T00:00:00Z",
- *           "value": 200,
+ *           "value": 1000000,
  *           "has_data": true,
- *           "has_infinite_quantity": true
+ *           "has_infinite_quantity": false
  *         },
  *         {
  *           "date": "2020-07-31T00:00:00Z",
- *           "value": 200,
+ *           "value": 1000000,
  *           "has_data": true,
- *           "has_infinite_quantity": true
+ *           "has_infinite_quantity": false
  *         }
  *       ],
  *       "links": {},
