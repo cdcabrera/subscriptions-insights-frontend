@@ -16,13 +16,16 @@ import { useAppLoad } from '../../hooks/useApp';
  *
  * @param {object} options
  * @param {Function} options.addNotification
+ * @param {Function} options.removeNotification
  * @param {Function} options.t
+ * @param {Function} options.useAppLoad
  * @param {Function} options.useDispatch
  * @param {Function} options.useProduct
  * @returns {Function}
  */
 const useExportConfirmation = ({
   addNotification: addAliasNotification = reduxActions.platform.addNotification,
+  removeNotification: removeAliasNotification = reduxActions.platform.removeNotification,
   t = translate,
   useAppLoad: useAliasAppLoad = useAppLoad,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
@@ -33,6 +36,8 @@ const useExportConfirmation = ({
   const confirmAppLoaded = useAliasAppLoad();
 
   useUnmount(() => {
+    // dispatch(removeAliasNotification('swatch-exports-individual-pending-status'));
+    dispatch(removeAliasNotification('swatch-exports-individual-status'));
     dispatch({
       type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
       id: productId,
@@ -52,7 +57,7 @@ const useExportConfirmation = ({
 
       if (retryCount === -1) {
         addAliasNotification({
-          // id: 'swatch-exports-individual-pending-status',
+          id: 'swatch-exports-individual-status',
           variant: 'info',
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'pending', 'title']
@@ -63,7 +68,7 @@ const useExportConfirmation = ({
 
       if (isCompleted) {
         addAliasNotification({
-          // id: 'swatch-exports-individual-success-status',
+          id: 'swatch-exports-individual-status',
           variant: 'success',
           title: t('curiosity-toolbar.notifications', {
             context: ['export', 'completed', 'title']
@@ -170,13 +175,8 @@ const useExistingExportsConfirmation = ({
       }
 
       return getAliasExistingExports(allResults, {
-        rejected: {
-          variant: 'warning',
-          title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
-          description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
-          dismissable: true
-        },
         pending: {
+          id: 'swatch-exports-existing-confirmation',
           variant: 'info',
           title: t('curiosity-toolbar.notifications', { context: ['export', 'pending', 'titleGlobal'] }),
           dismissable: true
@@ -184,6 +184,7 @@ const useExistingExportsConfirmation = ({
       })(dispatch).then(() => {
         if (confirmAppLoaded()) {
           addAliasNotification({
+            id: 'swatch-exports-existing-confirmation',
             variant: 'success',
             title: t('curiosity-toolbar.notifications', {
               context: ['export', 'completed', 'titleGlobal'],
@@ -239,14 +240,7 @@ const useExistingExports = ({
 
   useMount(() => {
     if (!isConfirmation) {
-      getAliasExistingExportsStatus({
-        rejected: {
-          variant: 'warning',
-          title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
-          description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
-          dismissable: true
-        }
-      })(dispatch);
+      getAliasExistingExportsStatus()(dispatch);
     }
   });
 
