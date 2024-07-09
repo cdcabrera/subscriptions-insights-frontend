@@ -57,6 +57,7 @@ import { useResizeObserver } from '../../hooks/useWindow';
  * @param {React.ReactNode|Function} [props.chartLegend]
  * @param {React.ReactNode|Function} [props.chartTooltip]
  * @param {Array<ChartDataSet>} [props.dataSets=[]]
+ * @param {Function} [props.onUpdate]
  * @param {ChartPadding} [props.padding={bottom:75, left:55, right:55, top:50 }]
  * @param {string|ChartThemeColor} [props.themeColor=ChartThemeColor.blue]
  * @param {React.ReactNode|Function} [props.xAxisChartLabel]
@@ -73,6 +74,7 @@ const Chart = ({
   chartLegend,
   chartTooltip,
   dataSets = [],
+  onUpdate,
   padding = {
     bottom: 75,
     left: 55,
@@ -152,6 +154,7 @@ const Chart = ({
         isMultiYAxis,
         maxX,
         maxY: (isMultiYAxis && individualMaxY) || maxY,
+        onUpdate,
         padding: updatedPadding,
         themeColor,
         tooltipDataSetLookUp
@@ -173,6 +176,7 @@ const Chart = ({
     chartWidth,
     dataSets,
     dataSetsToggle,
+    onUpdate,
     padding,
     setContext,
     themeColor,

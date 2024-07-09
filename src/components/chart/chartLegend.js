@@ -1,6 +1,6 @@
 import React from 'react';
-import _cloneDeep from 'lodash/cloneDeep';
-import { useChartContext, useToggleData } from './chartContext';
+import { useChartContext, useDataSets, useToggleData } from './chartContext';
+import { helpers } from '../../common';
 
 /**
  * @memberof Chart
@@ -10,20 +10,30 @@ import { useChartContext, useToggleData } from './chartContext';
 /**
  * Wrapper for rendering an HTML based legend.
  *
+ * @param {object} props
+ * @param {useChartContext} [props.useChartContext=useChartContext]
+ * @param {useDataSets} [props.useDataSets=useDataSets]
+ * @param {useToggleData} [props.useToggleData=useToggleData]
  * @returns {JSX.Element|null}
  */
-const ChartLegend = () => {
-  const { getIsToggled, onHide, onRevert, onToggle } = useToggleData();
-  const { chartSettings = {} } = useChartContext();
-  const { chartLegend, dataSets, padding = {}, xAxisProps = {} } = chartSettings;
+const ChartLegend = ({
+  useChartContext: useAliasChartContext = useChartContext,
+  useDataSets: useAliasDataSets = useDataSets,
+  useToggleData: useAliasToggleData = useToggleData
+} = {}) => {
+  const { chartSettings = {} } = useAliasChartContext();
+  const { chartLegend, padding = {}, xAxisProps = {} } = chartSettings;
+  const updatedDataSets = useAliasDataSets();
+  const { dataSetsToggle, getIsToggled, onHide, onRevert, onToggle } = useAliasToggleData();
 
   if (!chartLegend) {
     return null;
   }
 
   const legendProps = {
-    datum: { dataSets: _cloneDeep(dataSets) },
+    datum: { dataSets: helpers.memoClone(updatedDataSets) },
     chart: {
+      dataSetsToggle,
       hide: onHide,
       revert: onRevert,
       toggle: onToggle,
