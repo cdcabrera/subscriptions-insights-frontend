@@ -166,14 +166,7 @@ const useExistingExportsConfirmation = ({
       dispatch(removeAliasNotification('swatch-exports-status'));
 
       if (confirmation === 'no') {
-        return deleteAliasExistingExports(allResults, {
-          rejected: {
-            variant: 'warning',
-            title: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'title'] }),
-            description: t('curiosity-toolbar.notifications', { context: ['export', 'error', 'description'] }),
-            dismissable: true
-          }
-        })(dispatch);
+        return deleteAliasExistingExports(allResults)(dispatch);
       }
 
       return getAliasExistingExports(allResults, {
