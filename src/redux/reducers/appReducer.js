@@ -70,6 +70,19 @@ const appReducer = (state = initialState, action) => {
           initialState
         }
       );
+    case platformTypes.SET_PLATFORM_EXPORT_RESET:
+      return reduxHelpers.setStateProp(
+        null,
+        {
+          ...state,
+          exports: {},
+          exportsExisting: {}
+        },
+        {
+          state,
+          initialState
+        }
+      );
     default:
       return reduxHelpers.generatedPromiseActionReducer(
         [
