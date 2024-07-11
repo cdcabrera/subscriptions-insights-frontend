@@ -43,7 +43,8 @@ const useExportConfirmation = ({
     (successResponse, errorResponse, retryCount) => {
       const allCompleted = successResponse?.data?.data?.completed || [];
       const { completed = [], isCompleted, pending = [] } = successResponse?.data?.data?.products?.[productId] || {};
-      const isPending = !isCompleted;
+      const isProductPending = !isCompleted;
+      const isAllPending = successResponse?.data?.data?.isAnythingPending || isProductPending || false;
 
       if (!confirmAppLoaded()) {
         return;
@@ -58,6 +59,14 @@ const useExportConfirmation = ({
           }),
           dismissable: true
         })(dispatch);
+
+        dispatch({
+          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+          id: productId,
+          isAllPending,
+          isProductPending,
+          pending
+        });
       }
 
       if (isCompleted) {
@@ -74,14 +83,15 @@ const useExportConfirmation = ({
           }),
           dismissable: true
         })(dispatch);
-      }
 
-      dispatch({
-        type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
-        id: productId,
-        isPending,
-        pending
-      });
+        dispatch({
+          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+          id: productId,
+          isAllPending,
+          isProductPending,
+          pending
+        });
+      }
     },
     [addAliasNotification, confirmAppLoaded, dispatch, productId, t]
   );
@@ -111,7 +121,8 @@ const useExport = ({
       dispatch({
         type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
         id,
-        isPending: true
+        isAllPending: true,
+        isProductPending: true
       });
 
       createAliasExport(
@@ -207,6 +218,40 @@ const useExistingExportsConfirmation = ({
 };
 
 /**
+ * Aggregated export status
+ *
+ * @param {object} options
+ * @param {Function} options.useProduct
+ * @param {Function} options.useSelectors
+ * @returns {{isProductPending: boolean, productPendingFormats: Array<string>}}
+ */
+const useExportStatus = ({
+  useProduct: useAliasProduct = useProduct,
+  useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
+} = {}) => {
+  const { productId } = useAliasProduct();
+  const [isAllPending = false, { isPending, pending } = {}] = useAliasSelectors([
+    ({ app }) => app?.exports?.isAllPending,
+    ({ app }) => app?.exports?.[productId]
+  ]);
+
+  const pendingProductFormats = [];
+  const isProductPending = isPending || false;
+
+  if (isProductPending && Array.isArray(pending)) {
+    pendingProductFormats.push(...pending.map(({ format: productFormat }) => productFormat));
+  }
+
+  return {
+    isAllPending,
+    isProductPending,
+    pendingProductFormats
+  };
+};
+
+let globalHasConfirmationFired = false;
+
+/**
  * Apply an existing exports hook for user abandoned reports. Allow bulk polling status with download.
  *
  * @param {object} options
@@ -217,6 +262,7 @@ const useExistingExportsConfirmation = ({
  * @param {Function} options.useDispatch
  * @param {Function} options.useExistingExportsConfirmation
  * @param {Function} options.useSelectorsResponse
+ * @param options.useExportStatus
  */
 const useExistingExports = ({
   addNotification: addAliasNotification = reduxActions.platform.addNotification,
@@ -225,16 +271,22 @@ const useExistingExports = ({
   t = translate,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useExistingExportsConfirmation: useAliasExistingExportsConfirmation = useExistingExportsConfirmation,
+  // useExportStatus: useAliasExportStatus = useExportStatus,
   useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
 } = {}) => {
-  const [isConfirmation, setIsConfirmation] = useState(false);
   const dispatch = useAliasDispatch();
   const onConfirmation = useAliasExistingExportsConfirmation();
-  const { data, fulfilled } = useAliasSelectorsResponse(({ app }) => app?.exportsExisting);
-  const { completed = [], isAnythingPending, isAnythingCompleted, pending = [] } = data?.[0]?.data || {};
+  // const { isAllPending } = useAliasExportStatus();
+  const { data, pending, fulfilled } = useAliasSelectorsResponse(({ app }) => app?.exportsExisting);
+  const {
+    completed: completedList = [],
+    isAnythingPending,
+    isAnythingCompleted,
+    pending: pendingList = []
+  } = data?.[0]?.data || {};
 
   useMount(() => {
-    if (!isConfirmation) {
+    if (!globalHasConfirmationFired) {
       getAliasExistingExportsStatus()(dispatch);
     }
   });
@@ -245,12 +297,13 @@ const useExistingExports = ({
   });
 
   useEffect(() => {
-    if (!fulfilled || isConfirmation) {
-      return;
-    }
+    // if (isAllPending || (!fulfilled && !pending)) {
+    // if (!globalHasConfirmationFired) {
+    //  return;
+    // }
 
     const isAnythingAvailable = isAnythingPending || isAnythingCompleted || false;
-    const totalResults = completed.length + pending.length;
+    const totalResults = completedList.length + pendingList.length;
 
     if (isAnythingAvailable && totalResults) {
       addAliasNotification({
@@ -267,18 +320,18 @@ const useExistingExports = ({
                 'completed',
                 'description',
                 'existing',
-                completed.length && 'completed',
-                pending.length && 'pending'
+                completedList.length && 'completed',
+                pendingList.length && 'pending'
               ],
               count: totalResults,
-              completed: completed.length,
-              pending: pending.length
+              completed: completedList.length,
+              pending: pendingList.length
             })}
             <div style={{ paddingTop: '0.5rem' }}>
               <Button
                 data-test="exportButtonConfirm"
                 variant="primary"
-                onClick={() => onConfirmation('yes', [...completed, ...pending])}
+                onClick={() => onConfirmation('yes', [...completedList, ...pendingList])}
                 autoFocus
               >
                 {t('curiosity-toolbar.button', { context: 'yes' })}
@@ -286,7 +339,7 @@ const useExistingExports = ({
               <Button
                 data-test="exportButtonCancel"
                 variant="plain"
-                onClick={() => onConfirmation('no', [...completed, ...pending])}
+                onClick={() => onConfirmation('no', [...completedList, ...pendingList])}
               >
                 {t('curiosity-toolbar.button', { context: 'no' })}
               </Button>
@@ -296,49 +349,22 @@ const useExistingExports = ({
         autoDismiss: false,
         dismissable: false
       })(dispatch);
-
-      setIsConfirmation(true);
+      dispatch({ type: reduxTypes.platform.SET_PLATFORM_EXPORT_RESET });
+      globalHasConfirmationFired = true;
     }
   }, [
+    // isAllPending,
     addAliasNotification,
-    completed,
+    completedList,
     dispatch,
     fulfilled,
     isAnythingCompleted,
     isAnythingPending,
-    isConfirmation,
     onConfirmation,
     pending,
+    pendingList,
     t
   ]);
-};
-
-/**
- * Aggregated export status
- *
- * @param {object} options
- * @param {Function} options.useProduct
- * @param {Function} options.useSelector
- * @returns {{isProductPending: boolean, productPendingFormats: Array<string>}}
- */
-const useExportStatus = ({
-  useProduct: useAliasProduct = useProduct,
-  useSelector: useAliasSelector = storeHooks.reactRedux.useSelector
-} = {}) => {
-  const { productId } = useAliasProduct();
-  const { isPending, pending } = useAliasSelector(({ app }) => app?.exports?.[productId], {});
-
-  const pendingProductFormats = [];
-  const isProductPending = isPending || false;
-
-  if (isProductPending && Array.isArray(pending)) {
-    pendingProductFormats.push(...pending.map(({ format: productFormat }) => productFormat));
-  }
-
-  return {
-    isProductPending,
-    pendingProductFormats
-  };
 };
 
 const context = {

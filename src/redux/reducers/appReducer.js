@@ -60,8 +60,10 @@ const appReducer = (state = initialState, action) => {
       return reduxHelpers.setStateProp(
         'exports',
         {
+          ...state.exports,
+          isAllPending: action.isAllPending,
           [action.id]: {
-            isPending: action.isPending,
+            isPending: action.isProductPending,
             pending: action.pending
           }
         },
