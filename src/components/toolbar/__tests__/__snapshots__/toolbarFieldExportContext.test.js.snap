@@ -74,6 +74,9 @@ exports[`ToolbarFieldExport Component should allow export service calls: createE
       {
         "id": "mock-product-id",
         "isPending": true,
+        "pending": {
+          "format": undefined,
+        },
         "type": "SET_PLATFORM_EXPORT_STATUS",
       },
       "dispatch => Promise.resolve(dispatch(...args))",
@@ -117,7 +120,6 @@ exports[`ToolbarFieldExport Component should expose an export polling status con
 [
   [
     [
-      [Function],
       {
         "id": "loremIpsum",
         "isPending": false,
