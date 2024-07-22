@@ -61,7 +61,8 @@ const appReducer = (state = initialState, action) => {
         'exports',
         {
           [action.id]: {
-            ...action
+            ...action,
+            pending: [...((Array.isArray(action.pending) && action.pending) || [action.pending])]
           }
         },
         {
