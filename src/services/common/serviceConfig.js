@@ -278,6 +278,32 @@ const axiosServiceCall = async (
           validated = true;
         }
 
+        if (typeof updatedPoll.status === 'function') {
+          try {
+            // const temp = updatedPoll.location.config;
+            console.log('>>>>>> SERVICE CONFIG, INITIAL STATUS', updatedPoll.__retryCount);
+            await updatedPoll.status.call(null, undefined, updatedPoll.__retryCount);
+            /*
+            const temp = {
+              ...config,
+              ...updatedPoll.location.config,
+              method: 'get',
+              data: undefined,
+              url: updatedPoll.status,
+              cache: false,
+              poll: { __retryCount: updatedPoll.__retryCount }
+              // poll: { ...updatedPoll, __retryCount: updatedPoll.__retryCount }
+            };
+            console.log('>>>>>> SERVICE CONFIG, WORK', temp);
+            // await updatedPoll.status.call(null, callbackResponse, updatedPoll.__retryCount);
+            const temp2 = await axiosServiceCall(temp);
+            console.log('>>>>>> SERVICE CONFIG, WORK', temp2);
+            */
+          } catch (err) {
+            console.warn(err);
+          }
+        }
+
         if (validated === true) {
           return updatedResponse;
         }
@@ -312,6 +338,7 @@ const axiosServiceCall = async (
             }
           };
 
+          /*
           if (updatedPoll.__retryCount < 0) {
             if (typeof updatedPoll.status === 'function') {
               try {
@@ -321,6 +348,7 @@ const axiosServiceCall = async (
               }
             }
           }
+          */
 
           updatedPoll.__retryCount += 1;
           window.setTimeout(async () => setupPoll(updatedPoll.__retryCount), updatedPoll.pollInterval);
@@ -331,7 +359,7 @@ const axiosServiceCall = async (
           pollResponse.then(
             resolved => {
               try {
-                updatedPoll.status.call(null, resolved, undefined, updatedPoll.__retryCount);
+                updatedPoll.status.call(null, resolved, updatedPoll.__retryCount);
               } catch (err) {
                 console.error(err);
               }
@@ -340,7 +368,6 @@ const axiosServiceCall = async (
               try {
                 updatedPoll.status.call(
                   null,
-                  undefined,
                   { ...resolved, error: true, status: resolved?.response?.status },
                   updatedPoll.__retryCount
                 );

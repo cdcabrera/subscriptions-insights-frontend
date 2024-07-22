@@ -24,6 +24,7 @@ import { helpers, dateHelpers } from '../../common';
  * @returns {object}
  */
 const exports = response => {
+  console.log('>>>>>>>>>> TRANSFORM API RESPONSE', response);
   const updatedResponse = { data: {}, meta: {} };
   const {
     [platformConstants.PLATFORM_API_EXPORT_RESPONSE_DATA]: data,
@@ -103,6 +104,7 @@ const exports = response => {
     updatedResponse.data.products[productId].completed ??= [];
 
     if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.PENDING) {
+      console.log('>>>>>>>>>> PENDING TRANSFORM', updatedExportData);
       updatedResponse.data.pending.push(updatedExportData);
       updatedResponse.data.products[productId].pending.push(updatedExportData);
     } else if (focusedStatus === PLATFORM_API_EXPORT_STATUS_TYPES.COMPLETE) {

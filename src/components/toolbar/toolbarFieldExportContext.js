@@ -40,12 +40,12 @@ const useExportConfirmation = ({
   });
 
   return useCallback(
-    (successResponse, errorResponse, retryCount) => {
-      const { completed = [], isCompleted, pending = [] } = successResponse?.data?.data?.products?.[productId] || {};
+    ({ error, data }, retryCount) => {
+      const { completed = [], isCompleted, pending = [] } = data?.data?.products?.[productId] || {};
       const isPending = !isCompleted;
       let notification;
 
-      if (!confirmAppLoaded()) {
+      if (error || !confirmAppLoaded()) {
         return;
       }
 
@@ -79,16 +79,19 @@ const useExportConfirmation = ({
       }
 
       if (notification) {
-        dispatch([
-          addAliasNotification(notification),
-          {
-            type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
-            id: productId,
-            isPending,
-            pending
-          }
-        ]);
+        console.log('>>>>>>>> HOOK DISPATCH', isPending, pending);
+        console.log('>>>>>>>> HOOK DISPATCH', data);
+        dispatch([addAliasNotification(notification)]);
       }
+
+      dispatch([
+        {
+          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+          id: productId,
+          isPending,
+          pending
+        }
+      ]);
     },
     [addAliasNotification, confirmAppLoaded, dispatch, productId, t]
   );
@@ -115,11 +118,13 @@ const useExport = ({
 
   return useCallback(
     (id, data) => {
+      console.log('>>>>>> CREATE EXPORT', id, data);
       dispatch([
         {
           type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
           id,
-          isPending: true
+          isPending: true,
+          pending: { format: data.format }
         },
         createAliasExport(
           id,
@@ -345,6 +350,8 @@ const useExportStatus = ({
   if (isProductPending && Array.isArray(pending)) {
     pendingProductFormats.push(...pending.map(({ format: productFormat }) => productFormat));
   }
+
+  console.log('>>>>>>>>>> FORMATS', pendingProductFormats, pending);
 
   return {
     isProductPending,
