@@ -112,8 +112,6 @@ const ToolbarFieldExport = ({
 
   useAliasExistingExports();
 
-  console.log('>>>>>>>>>>>>>>>> EXPORT COMPONENT', pendingProductFormats, updatedOptions);
-
   return (
     <Select
       title={t('curiosity-toolbar.placeholder', { context: 'export' })}

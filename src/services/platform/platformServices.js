@@ -501,14 +501,12 @@ const postExport = async (data = {}, options = {}) => {
         ...poll?.location
       },
       status: (successResponse, ...args) => {
-        console.log('>>>>>>>>>>>>> API STATUS', successResponse, ...args);
         // FixMe: replace classic querySelector logic for "does the ui wrapper exist?" with external service cancel
         if (document.querySelector('.curiosity') && typeof poll?.status === 'function') {
           poll.status.call(null, successResponse, ...args);
         }
       },
       validate: response => {
-        console.log('>>>>>>>>>>>>> API VALIDATE', response);
         // FixMe: replace classic querySelector logic for "does the ui wrapper exist?" with external service cancel
         if (!document.querySelector('.curiosity')) {
           return true;

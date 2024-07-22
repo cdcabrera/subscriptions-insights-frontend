@@ -43,55 +43,53 @@ const useExportConfirmation = ({
     ({ error, data }, retryCount) => {
       const { completed = [], isCompleted, pending = [] } = data?.data?.products?.[productId] || {};
       const isPending = !isCompleted;
-      let notification;
-
-      if (error || !confirmAppLoaded()) {
-        return;
-      }
-
-      if (retryCount === -1) {
-        notification = {
-          id: 'swatch-exports-individual-status',
-          variant: 'info',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'pending', 'title'],
-            testId: 'exportNotification-individual-pending'
-          }),
-          dismissable: true
-        };
-      }
-
-      if (isCompleted) {
-        notification = {
-          id: 'swatch-exports-individual-status',
-          variant: 'success',
-          title: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'title'],
-            testId: 'exportNotification-individual-completed'
-          }),
-          description: t('curiosity-toolbar.notifications', {
-            context: ['export', 'completed', 'description'],
-            count: completed.length,
-            fileName: completed?.[0]?.fileName
-          }),
-          dismissable: true
-        };
-      }
-
-      if (notification) {
-        console.log('>>>>>>>> HOOK DISPATCH', isPending, pending);
-        console.log('>>>>>>>> HOOK DISPATCH', data);
-        dispatch([addAliasNotification(notification)]);
-      }
-
-      dispatch([
+      const updatedDispatch = [
         {
           type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
           id: productId,
           isPending,
           pending
         }
-      ]);
+      ];
+
+      if (error || !confirmAppLoaded()) {
+        return;
+      }
+
+      if (retryCount === -1) {
+        updatedDispatch.unshift(
+          addAliasNotification({
+            id: 'swatch-exports-individual-status',
+            variant: 'info',
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'pending', 'title'],
+              testId: 'exportNotification-individual-pending'
+            }),
+            dismissable: true
+          })
+        );
+      }
+
+      if (retryCount > -1 && isCompleted) {
+        updatedDispatch.unshift(
+          addAliasNotification({
+            id: 'swatch-exports-individual-status',
+            variant: 'success',
+            title: t('curiosity-toolbar.notifications', {
+              context: ['export', 'completed', 'title'],
+              testId: 'exportNotification-individual-completed'
+            }),
+            description: t('curiosity-toolbar.notifications', {
+              context: ['export', 'completed', 'description'],
+              count: completed.length,
+              fileName: completed?.[0]?.fileName
+            }),
+            dismissable: true
+          })
+        );
+      }
+
+      dispatch(updatedDispatch);
     },
     [addAliasNotification, confirmAppLoaded, dispatch, productId, t]
   );
@@ -118,7 +116,6 @@ const useExport = ({
 
   return useCallback(
     (id, data) => {
-      console.log('>>>>>> CREATE EXPORT', id, data);
       dispatch([
         {
           type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
@@ -350,8 +347,6 @@ const useExportStatus = ({
   if (isProductPending && Array.isArray(pending)) {
     pendingProductFormats.push(...pending.map(({ format: productFormat }) => productFormat));
   }
-
-  console.log('>>>>>>>>>> FORMATS', pendingProductFormats, pending);
 
   return {
     isProductPending,
