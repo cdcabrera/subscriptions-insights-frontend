@@ -118,6 +118,7 @@ exports[`ToolbarFieldRangedMonthly Component should handle selecting an option d
 <Select
   aria-label="t(curiosity-toolbar.placeholder, {"context":"rangedMonthly"})"
   ariaLabel="Select option"
+  buttonContent={null}
   className=""
   data-test="toolbarFieldRangeGranularity"
   direction="down"
@@ -319,6 +320,7 @@ exports[`ToolbarFieldRangedMonthly Component should render a basic component: ba
 <Select
   aria-label="t(curiosity-toolbar.placeholder, {"context":"rangedMonthly"})"
   ariaLabel="Select option"
+  buttonContent={null}
   className=""
   data-test="toolbarFieldRangeGranularity"
   direction="down"

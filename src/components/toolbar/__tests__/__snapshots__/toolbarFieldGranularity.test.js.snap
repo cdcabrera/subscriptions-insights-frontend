@@ -91,6 +91,7 @@ exports[`ToolbarFieldGranularity Component should render a basic component: basi
 <Select
   aria-label="t(curiosity-toolbar.placeholder, {"context":"granularity"})"
   ariaLabel="Select option"
+  buttonContent={null}
   className=""
   data-test="toolbarFieldGranularity"
   direction="down"

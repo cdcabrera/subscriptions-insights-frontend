@@ -31,11 +31,12 @@ import { helpers } from '../../common';
 /**
  * Dropdown split button variants
  *
- * @type {{action: string, checkbox: string}}
+ * @type {{default: string, checkbox: string, action: string}}
  */
 const SplitButtonVariant = {
   action: 'action',
-  checkbox: 'checkbox'
+  checkbox: 'checkbox',
+  default: 'default'
 };
 
 /**
@@ -193,14 +194,24 @@ const formatSelectProps = _memoize(({ isDisabled, placeholder, options } = {}) =
  * @param {object} params
  * @param {boolean} params.isDisabled
  * @param {Array} params.options
+ * @param {React.ReactNode} params.buttonContent
  * @param {string} params.buttonVariant
  * @param {Function} params.onSplitButton
- * @param {string} params.splitButtonCopy
+ * @param {string} params.placeholder
  * @param {string} params.splitButtonVariant
  * @returns {*}
  */
 const formatButtonProps = _memoize(
-  ({ isDisabled, options, buttonVariant, onSplitButton, splitButtonCopy, splitButtonVariant } = {}) => {
+  ({
+    isDisabled,
+    options,
+    buttonContent,
+    buttonVariant,
+    onSplitButton,
+    onToggle,
+    placeholder,
+    splitButtonVariant
+  } = {}) => {
     const buttonVariantPropLookup = {
       default: { toggleVariant: 'default' },
       plain: { isPlain: true, toggleIndicator: null },
@@ -214,7 +225,15 @@ const formatButtonProps = _memoize(
         splitButtonVariant: 'action',
         splitButtonItems: [
           <DropdownToggleAction onClick={onSplitButton} key="toggle-action">
-            {splitButtonCopy}
+            {buttonContent}
+          </DropdownToggleAction>
+        ]
+      },
+      default: {
+        splitButtonVariant: 'default',
+        splitButtonItems: [
+          <DropdownToggleAction onClick={() => onToggle()} key="toggle-action">
+            {buttonContent}
           </DropdownToggleAction>
         ]
       },
@@ -222,11 +241,11 @@ const formatButtonProps = _memoize(
         splitButtonVariant: 'checkbox',
         splitButtonItems: [
           <DropdownToggleCheckbox
-            id={`toggle-action-${splitButtonCopy}`}
+            id={`toggle-action-${placeholder}`}
             key="toggle-action"
             onClick={onSplitButton}
-            aria-label={splitButtonCopy}
-            placeholder={splitButtonCopy}
+            aria-label={placeholder}
+            placeholder={placeholder}
           />
         ]
       }
@@ -273,6 +292,7 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  * @fires onToggle
  * @param {object} props
  * @param {string} props.ariaLabel
+ * @param {React.ReactNode} props.buttonContent
  * @param {string} props.buttonVariant
  * @param {string} props.className
  * @param {string} props.direction
@@ -298,6 +318,7 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  */
 const Select = ({
   ariaLabel,
+  buttonContent,
   buttonVariant,
   className,
   direction,
@@ -451,14 +472,19 @@ const Select = ({
           onToggle={(_event, expanded) => onToggle(expanded)}
           {...formatButtonProps({
             isDisabled,
+            onToggle: () => onToggle(!isExpanded),
             onSplitButton: onUpdatedSplitButton,
             options,
             buttonVariant,
-            splitButtonCopy: placeholder || ariaLabel,
-            splitButtonVariant
+            buttonContent,
+            splitButtonVariant,
+            placeholder: placeholder || ariaLabel
           })}
         >
-          {toggleIcon || (!splitButtonVariant && placeholder) || (!SplitButtonVariant && ariaLabel)}
+          {toggleIcon ||
+            (!splitButtonVariant && buttonContent) ||
+            (!splitButtonVariant && placeholder) ||
+            (!SplitButtonVariant && ariaLabel)}
         </DropdownToggle>
       }
       dropdownItems={
@@ -545,10 +571,11 @@ const Select = ({
  *     ariaLabel: string, onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: number,
  *     buttonVariant: string, name: string, options: Array|object, selectedOptions: Array|number|string,
  *     variant: string, isInline: boolean, id: string, isDisabled: boolean, placeholder: string, position: string,
- *     splitButtonVariant: string, direction: string}}
+ *     buttonContent: React.ReactNode, splitButtonVariant: string, direction: string}}
  */
 Select.propTypes = {
   ariaLabel: PropTypes.string,
+  buttonContent: PropTypes.node,
   buttonVariant: PropTypes.oneOf(Object.values(ButtonVariant)),
   className: PropTypes.string,
   direction: PropTypes.oneOf(Object.values(SelectDirection)),
@@ -602,10 +629,12 @@ Select.propTypes = {
  * @type {{isFlipEnabled: boolean, toggleIcon: null, className: string, onSplitButton: Function, ariaLabel: string,
  *     onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: null, buttonVariant: string,
  *     name: null, options: Array, selectedOptions: null, variant: SelectVariant.single, isInline: boolean, id: string,
- *     isDisabled: boolean, placeholder: string, position: string, splitButtonVariant: null, direction: string}}
+ *     isDisabled: boolean, placeholder: string, position: string, buttonContent: null, splitButtonVariant: null,
+ *     direction: string}}
  */
 Select.defaultProps = {
   ariaLabel: 'Select option',
+  buttonContent: null,
   buttonVariant: ButtonVariant.default,
   className: '',
   direction: SelectDirection.down,
