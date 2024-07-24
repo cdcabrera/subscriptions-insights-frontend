@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ExportIcon } from '@patternfly/react-icons';
 import { useProduct, useProductExportQuery } from '../productView/productViewContext';
 import { useExport, useExistingExports, useExportStatus } from './toolbarFieldExportContext';
-import { Select, SelectPosition, SelectButtonVariant } from '../form/select';
+import { Select, SelectPosition, SelectButtonVariant, SplitButtonVariant } from '../form/select';
 import {
   PLATFORM_API_EXPORT_APPLICATION_TYPES as APP_TYPES,
   PLATFORM_API_EXPORT_CONTENT_TYPES as FIELD_TYPES,
@@ -129,8 +129,13 @@ const ToolbarFieldExport = ({
       placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
       position={position}
       data-test="toolbarFieldExport"
-      toggleIcon={<ExportIcon />}
-      buttonVariant={SelectButtonVariant.plain}
+      buttonVariant={SelectButtonVariant.secondary}
+      splitButtonVariant={SplitButtonVariant.default}
+      splitButtonContent={
+        <React.Fragment>
+          <ExportIcon /> {t('curiosity-toolbar.label', { context: 'export' })}
+        </React.Fragment>
+      }
     />
   );
 };
