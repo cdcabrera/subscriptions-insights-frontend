@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useShallowCompareEffect, useUnmount } from 'react-use';
-import { ButtonVariant as PfButtonVariant } from '@patternfly/react-core';
+import { Button, ButtonVariant as PfButtonVariant } from '@patternfly/react-core';
 import {
   Dropdown,
   DropdownDirection,
@@ -31,11 +31,12 @@ import { helpers } from '../../common';
 /**
  * Dropdown split button variants
  *
- * @type {{action: string, checkbox: string}}
+ * @type {{default: string, checkbox: string, action: string}}
  */
 const SplitButtonVariant = {
   action: 'action',
-  checkbox: 'checkbox'
+  checkbox: 'checkbox',
+  default: 'default'
 };
 
 /**
@@ -195,12 +196,22 @@ const formatSelectProps = _memoize(({ isDisabled, placeholder, options } = {}) =
  * @param {Array} params.options
  * @param {string} params.buttonVariant
  * @param {Function} params.onSplitButton
- * @param {string} params.splitButtonCopy
+ * @param {string} params.placeholder
+ * @param {React.ReactNode} params.splitButtonContent
  * @param {string} params.splitButtonVariant
  * @returns {*}
  */
 const formatButtonProps = _memoize(
-  ({ isDisabled, options, buttonVariant, onSplitButton, splitButtonCopy, splitButtonVariant } = {}) => {
+  ({
+    isDisabled,
+    options,
+    buttonVariant,
+    onSplitButton,
+    onToggle,
+    placeholder,
+    splitButtonContent,
+    splitButtonVariant
+  } = {}) => {
     const buttonVariantPropLookup = {
       default: { toggleVariant: 'default' },
       plain: { isPlain: true, toggleIndicator: null },
@@ -214,7 +225,15 @@ const formatButtonProps = _memoize(
         splitButtonVariant: 'action',
         splitButtonItems: [
           <DropdownToggleAction onClick={onSplitButton} key="toggle-action">
-            {splitButtonCopy}
+            {splitButtonContent}
+          </DropdownToggleAction>
+        ]
+      },
+      default: {
+        splitButtonVariant: 'default',
+        splitButtonItems: [
+          <DropdownToggleAction onClick={() => onToggle()} key="toggle-action">
+            {splitButtonContent}
           </DropdownToggleAction>
         ]
       },
@@ -222,11 +241,11 @@ const formatButtonProps = _memoize(
         splitButtonVariant: 'checkbox',
         splitButtonItems: [
           <DropdownToggleCheckbox
-            id={`toggle-action-${splitButtonCopy}`}
+            id={`toggle-action-${placeholder}`}
             key="toggle-action"
             onClick={onSplitButton}
-            aria-label={splitButtonCopy}
-            placeholder={splitButtonCopy}
+            aria-label={placeholder}
+            placeholder={placeholder}
           />
         ]
       }
@@ -290,6 +309,7 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  * @param {string} props.placeholder
  * @param {string} props.position
  * @param {number|string|Array} props.selectedOptions
+ * @param {React.ReactNode} props.splitButtonContent
  * @param {string} props.splitButtonVariant
  * @param {React.ReactNode|Function} props.toggleIcon
  * @param {string} props.variant
@@ -315,6 +335,7 @@ const Select = ({
   placeholder,
   position,
   selectedOptions,
+  splitButtonContent,
   splitButtonVariant,
   toggleIcon,
   variant,
@@ -451,14 +472,19 @@ const Select = ({
           onToggle={(_event, expanded) => onToggle(expanded)}
           {...formatButtonProps({
             isDisabled,
+            onToggle: () => onToggle(!isExpanded),
             onSplitButton: onUpdatedSplitButton,
             options,
             buttonVariant,
-            splitButtonCopy: placeholder || ariaLabel,
-            splitButtonVariant
+            splitButtonContent,
+            splitButtonVariant,
+            placeholder: placeholder || ariaLabel
           })}
         >
-          {toggleIcon || (!splitButtonVariant && placeholder) || (!SplitButtonVariant && ariaLabel)}
+          {toggleIcon ||
+            (!splitButtonVariant && splitButtonContent) ||
+            (!splitButtonVariant && placeholder) ||
+            (!SplitButtonVariant && ariaLabel)}
         </DropdownToggle>
       }
       dropdownItems={
@@ -545,7 +571,7 @@ const Select = ({
  *     ariaLabel: string, onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: number,
  *     buttonVariant: string, name: string, options: Array|object, selectedOptions: Array|number|string,
  *     variant: string, isInline: boolean, id: string, isDisabled: boolean, placeholder: string, position: string,
- *     splitButtonVariant: string, direction: string}}
+ *     splitButtonContent: React.ReactNode, splitButtonVariant: string, direction: string}}
  */
 Select.propTypes = {
   ariaLabel: PropTypes.string,
@@ -591,6 +617,7 @@ Select.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string]))
   ]),
+  splitButtonContent: PropTypes.node,
   splitButtonVariant: PropTypes.oneOf(Object.values(SplitButtonVariant)),
   toggleIcon: PropTypes.element,
   variant: PropTypes.oneOf([...Object.values(SelectVariant)])
@@ -602,7 +629,8 @@ Select.propTypes = {
  * @type {{isFlipEnabled: boolean, toggleIcon: null, className: string, onSplitButton: Function, ariaLabel: string,
  *     onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: null, buttonVariant: string,
  *     name: null, options: Array, selectedOptions: null, variant: SelectVariant.single, isInline: boolean, id: string,
- *     isDisabled: boolean, placeholder: string, position: string, splitButtonVariant: null, direction: string}}
+ *     isDisabled: boolean, placeholder: string, position: string, splitButtonContent: null, splitButtonVariant: null,
+ *     direction: string}}
  */
 Select.defaultProps = {
   ariaLabel: 'Select option',
@@ -623,6 +651,7 @@ Select.defaultProps = {
   placeholder: 'Select option',
   position: SelectPosition.left,
   selectedOptions: null,
+  splitButtonContent: null,
   splitButtonVariant: null,
   toggleIcon: null,
   variant: SelectVariant.single
