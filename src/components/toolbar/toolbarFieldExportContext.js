@@ -40,14 +40,14 @@ const useExportConfirmation = ({
   });
 
   return useCallback(
-    ({ error, data }, retryCount) => {
-      const { completed = [], isCompleted, pending = [] } = data?.data?.products?.[productId] || {};
-      const isPending = !isCompleted;
+    ({ error, data } = {}, retryCount) => {
+      const { completed = [], isCompleted, isPending, pending = [] } = data?.data?.products?.[productId] || {};
       const updatedDispatch = [
         {
           type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
           id: productId,
-          isPending,
+          // isPending: retryCount === -1 || isPending,
+          isPending: pending.length > 0,
           pending
         }
       ];
@@ -68,6 +68,7 @@ const useExportConfirmation = ({
             dismissable: true
           })
         );
+        // dispatch(updatedDispatch);
       }
 
       if (retryCount > -1 && isCompleted) {
@@ -81,12 +82,13 @@ const useExportConfirmation = ({
             }),
             description: t('curiosity-toolbar.notifications', {
               context: ['export', 'completed', 'description'],
-              count: completed.length,
+              count: completed?.length,
               fileName: completed?.[0]?.fileName
             }),
             dismissable: true
           })
         );
+        // dispatch(updatedDispatch);
       }
 
       dispatch(updatedDispatch);
@@ -344,9 +346,11 @@ const useExportStatus = ({
   const pendingProductFormats = [];
   const isProductPending = isPending || false;
 
-  if (isProductPending && Array.isArray(pending)) {
+  if (Array.isArray(pending)) {
     pendingProductFormats.push(...pending.map(({ format: productFormat }) => productFormat));
   }
+
+  console.log('>>>>> STATUS', productId, isPending, pending, pendingProductFormats);
 
   return {
     isProductPending,
