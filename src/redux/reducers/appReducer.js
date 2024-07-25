@@ -57,12 +57,26 @@ const appReducer = (state = initialState, action) => {
 
       return state;
     case platformTypes.SET_PLATFORM_EXPORT_STATUS:
+      const newPending =
+        (Array.isArray(action.pending) && action.pending) ||
+        (action.pending && [action.pending]) ||
+        state.exports[action.id].pending ||
+        [];
+
+      console.log('>>>>> REDUCER', action.id, newPending);
+
       return reduxHelpers.setStateProp(
         'exports',
         {
           [action.id]: {
-            ...action,
-            pending: [...((Array.isArray(action.pending) && action.pending) || [action.pending])]
+            ...state.exports[action.id],
+            isPending: action.isPending ?? (state.exports[action.id].isPending || false),
+            pending: [
+              ...((Array.isArray(action.pending) && action.pending) ||
+                (action.pending && [action.pending]) ||
+                state.exports[action.id].pending ||
+                [])
+            ]
           }
         },
         {
