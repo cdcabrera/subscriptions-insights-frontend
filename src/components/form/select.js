@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useShallowCompareEffect, useUnmount } from 'react-use';
-import { Button, ButtonVariant as PfButtonVariant } from '@patternfly/react-core';
+import { ButtonVariant as PfButtonVariant } from '@patternfly/react-core';
 import {
   Dropdown,
   DropdownDirection,

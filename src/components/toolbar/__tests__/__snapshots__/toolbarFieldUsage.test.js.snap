@@ -107,6 +107,7 @@ exports[`ToolbarFieldSla Component should render a basic component: basic 1`] = 
   placeholder="t(curiosity-toolbar.placeholder, {"context":"usage"})"
   position="left"
   selectedOptions="Development/Test"
+  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={null}
   variant="single"

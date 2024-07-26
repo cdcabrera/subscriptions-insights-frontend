@@ -121,6 +121,7 @@ exports[`ToolbarFieldGroupVariant Component should render a basic component: bas
     placeholder="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
     position="left"
     selectedOptions={null}
+    splitButtonContent={null}
     splitButtonVariant={null}
     toggleIcon={null}
     variant="single"
@@ -178,6 +179,7 @@ exports[`ToolbarFieldGroupVariant Component should return a standalone component
       placeholder="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
       position="left"
       selectedOptions={null}
+      splitButtonContent={null}
       splitButtonVariant={null}
       toggleIcon={null}
       variant="single"

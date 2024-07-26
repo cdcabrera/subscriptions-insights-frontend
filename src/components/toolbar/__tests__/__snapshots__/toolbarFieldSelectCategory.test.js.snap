@@ -347,6 +347,7 @@ exports[`ToolbarFieldSelectCategory Component should render a basic component: b
   placeholder="t(curiosity-toolbar.placeholder, {"context":"filter"})"
   position="left"
   selectedOptions="sla"
+  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={<FilterIcon />}
   variant="single"

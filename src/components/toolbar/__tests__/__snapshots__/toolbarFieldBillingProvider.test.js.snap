@@ -97,6 +97,7 @@ exports[`ToolbarFieldBillingProvider Component should render a basic component: 
   placeholder="t(curiosity-toolbar.placeholder_billing, {"context":"provider"})"
   position="left"
   selectedOptions="aws"
+  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={null}
   variant="single"

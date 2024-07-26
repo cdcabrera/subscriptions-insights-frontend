@@ -247,6 +247,7 @@ exports[`ToolbarFieldRangedMonthly Component should handle selecting an option d
   placeholder="t(curiosity-toolbar.placeholder, {"context":"rangedMonthly"})"
   position="left"
   selectedOptions={null}
+  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={null}
   variant="single"
@@ -448,6 +449,7 @@ exports[`ToolbarFieldRangedMonthly Component should render a basic component: ba
   placeholder="t(curiosity-toolbar.placeholder, {"context":"rangedMonthly"})"
   position="left"
   selectedOptions={null}
+  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={null}
   variant="single"
