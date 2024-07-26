@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useShallowCompareEffect, useUnmount } from 'react-use';
 import { ButtonVariant as PfButtonVariant } from '@patternfly/react-core';
@@ -374,26 +374,23 @@ const Select = ({
    * @event onSplitButton
    * @param {object} event
    */
-  const onUpdatedSplitButton = useCallback(
-    event => {
-      if (splitButtonAllowDualButtonToggle) {
-        onToggle(!isExpanded);
-      }
+  const onUpdatedSplitButton = event => {
+    if (splitButtonAllowDualButtonToggle) {
+      onToggle(!isExpanded);
+    }
 
-      if (typeof onSplitButton === 'function') {
-        const updatedOptions = _cloneDeep(options);
-        onSplitButton(
-          {
-            ...createMockEvent(event),
-            options: updatedOptions
-          },
-          -1,
-          updatedOptions
-        );
-      }
-    },
-    [isExpanded, onSplitButton, options, splitButtonAllowDualButtonToggle]
-  );
+    if (typeof onSplitButton === 'function') {
+      const updatedOptions = _cloneDeep(options);
+      onSplitButton(
+        {
+          ...createMockEvent(event),
+          options: updatedOptions
+        },
+        -1,
+        updatedOptions
+      );
+    }
+  };
 
   /**
    * Emulate select event object, apply to provided onSelect prop.
