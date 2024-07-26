@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useShallowCompareEffect, useUnmount } from 'react-use';
 import { ButtonVariant as PfButtonVariant } from '@patternfly/react-core';
@@ -202,16 +202,7 @@ const formatSelectProps = _memoize(({ isDisabled, placeholder, options } = {}) =
  * @returns {*}
  */
 const formatButtonProps = _memoize(
-  ({
-    isDisabled,
-    options,
-    buttonContent,
-    buttonVariant,
-    onSplitButton,
-    onToggle,
-    placeholder,
-    splitButtonVariant
-  } = {}) => {
+  ({ isDisabled, options, buttonContent, buttonVariant, onSplitButton, placeholder, splitButtonVariant } = {}) => {
     const buttonVariantPropLookup = {
       default: { toggleVariant: 'default' },
       plain: { isPlain: true, toggleIndicator: null },
@@ -232,7 +223,7 @@ const formatButtonProps = _memoize(
       default: {
         splitButtonVariant: 'default',
         splitButtonItems: [
-          <DropdownToggleAction onClick={() => onToggle()} key="toggle-action">
+          <DropdownToggleAction onClick={onSplitButton} key="toggle-action">
             {buttonContent}
           </DropdownToggleAction>
         ]
@@ -310,6 +301,7 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  * @param {string} props.placeholder
  * @param {string} props.position
  * @param {number|string|Array} props.selectedOptions
+ * @param {boolean} props.splitButtonAllowDualButtonToggle
  * @param {string} props.splitButtonVariant
  * @param {React.ReactNode|Function} props.toggleIcon
  * @param {string} props.variant
@@ -336,6 +328,7 @@ const Select = ({
   placeholder,
   position,
   selectedOptions,
+  splitButtonAllowDualButtonToggle,
   splitButtonVariant,
   toggleIcon,
   variant,
@@ -381,10 +374,26 @@ const Select = ({
    * @event onSplitButton
    * @param {object} event
    */
-  const onUpdatedSplitButton = event => {
-    const updatedOptions = _cloneDeep(options);
-    onSplitButton({ ...createMockEvent(event), options: updatedOptions }, -1, updatedOptions);
-  };
+  const onUpdatedSplitButton = useCallback(
+    event => {
+      if (splitButtonAllowDualButtonToggle) {
+        onToggle(!isExpanded);
+      }
+
+      if (typeof onSplitButton === 'function') {
+        const updatedOptions = _cloneDeep(options);
+        onSplitButton(
+          {
+            ...createMockEvent(event),
+            options: updatedOptions
+          },
+          -1,
+          updatedOptions
+        );
+      }
+    },
+    [isExpanded, onSplitButton, options, splitButtonAllowDualButtonToggle]
+  );
 
   /**
    * Emulate select event object, apply to provided onSelect prop.
@@ -472,7 +481,6 @@ const Select = ({
           onToggle={(_event, expanded) => onToggle(expanded)}
           {...formatButtonProps({
             isDisabled,
-            onToggle: () => onToggle(!isExpanded),
             onSplitButton: onUpdatedSplitButton,
             options,
             buttonVariant,
@@ -571,7 +579,8 @@ const Select = ({
  *     ariaLabel: string, onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: number,
  *     buttonVariant: string, name: string, options: Array|object, selectedOptions: Array|number|string,
  *     variant: string, isInline: boolean, id: string, isDisabled: boolean, placeholder: string, position: string,
- *     buttonContent: React.ReactNode, splitButtonVariant: string, direction: string}}
+ *     buttonContent: React.ReactNode, splitButtonVariant: string, direction: string,
+ *     splitButtonAllowDualButtonToggle: boolean}}
  */
 Select.propTypes = {
   ariaLabel: PropTypes.string,
@@ -618,6 +627,7 @@ Select.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string]))
   ]),
+  splitButtonAllowDualButtonToggle: PropTypes.bool,
   splitButtonVariant: PropTypes.oneOf(Object.values(SplitButtonVariant)),
   toggleIcon: PropTypes.element,
   variant: PropTypes.oneOf([...Object.values(SelectVariant)])
@@ -630,7 +640,7 @@ Select.propTypes = {
  *     onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: null, buttonVariant: string,
  *     name: null, options: Array, selectedOptions: null, variant: SelectVariant.single, isInline: boolean, id: string,
  *     isDisabled: boolean, placeholder: string, position: string, buttonContent: null, splitButtonVariant: null,
- *     direction: string}}
+ *     direction: string, splitButtonAllowDualButtonToggle: boolean}}
  */
 Select.defaultProps = {
   ariaLabel: 'Select option',
@@ -647,11 +657,12 @@ Select.defaultProps = {
   maxHeight: null,
   name: null,
   onSelect: helpers.noop,
-  onSplitButton: helpers.noop,
+  onSplitButton: null,
   options: [],
   placeholder: 'Select option',
   position: SelectPosition.left,
   selectedOptions: null,
+  splitButtonAllowDualButtonToggle: true,
   splitButtonVariant: null,
   toggleIcon: null,
   variant: SelectVariant.single
