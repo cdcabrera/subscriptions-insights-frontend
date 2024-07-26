@@ -81,6 +81,7 @@ exports[`ToolbarFieldGroupVariant Component should render a basic component: bas
   <Select
     aria-label="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
     ariaLabel="Select option"
+    buttonContent={null}
     className=""
     data-test="toolbarFieldGroupVariant"
     direction="down"
@@ -121,7 +122,6 @@ exports[`ToolbarFieldGroupVariant Component should render a basic component: bas
     placeholder="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
     position="left"
     selectedOptions={null}
-    splitButtonContent={null}
     splitButtonVariant={null}
     toggleIcon={null}
     variant="single"
@@ -149,6 +149,7 @@ exports[`ToolbarFieldGroupVariant Component should return a standalone component
     <Select
       aria-label="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
       ariaLabel="Select option"
+      buttonContent={null}
       className=""
       data-test="toolbarFieldGroupVariant"
       direction="down"
@@ -179,7 +180,6 @@ exports[`ToolbarFieldGroupVariant Component should return a standalone component
       placeholder="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
       position="left"
       selectedOptions={null}
-      splitButtonContent={null}
       splitButtonVariant={null}
       toggleIcon={null}
       variant="single"

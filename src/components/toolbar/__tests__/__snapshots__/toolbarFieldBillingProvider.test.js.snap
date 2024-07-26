@@ -62,6 +62,7 @@ exports[`ToolbarFieldBillingProvider Component should render a basic component: 
 <Select
   aria-label="t(curiosity-toolbar.placeholder_billing, {"context":"provider"})"
   ariaLabel="Select option"
+  buttonContent={null}
   className=""
   data-test="toolbarFieldBillingProvider"
   direction="down"
@@ -97,7 +98,6 @@ exports[`ToolbarFieldBillingProvider Component should render a basic component: 
   placeholder="t(curiosity-toolbar.placeholder_billing, {"context":"provider"})"
   position="left"
   selectedOptions="aws"
-  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={null}
   variant="single"

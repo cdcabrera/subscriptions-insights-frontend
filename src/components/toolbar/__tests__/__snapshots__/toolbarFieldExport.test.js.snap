@@ -39,6 +39,13 @@ exports[`ToolbarFieldExport Component should render a basic component: basic 1`]
 <Select
   aria-label="t(curiosity-toolbar.placeholder, {"context":"export"})"
   ariaLabel="Select option"
+  buttonContent={
+    <React.Fragment>
+      <ExportIcon />
+       
+      t(curiosity-toolbar.label, {"context":"export"})
+    </React.Fragment>
+  }
   className=""
   data-test="toolbarFieldExport"
   direction="down"
@@ -65,13 +72,6 @@ exports[`ToolbarFieldExport Component should render a basic component: basic 1`]
   placeholder="t(curiosity-toolbar.placeholder, {"context":"export"})"
   position="left"
   selectedOptions={null}
-  splitButtonContent={
-    <React.Fragment>
-      <ExportIcon />
-       
-      t(curiosity-toolbar.label, {"context":"export"})
-    </React.Fragment>
-  }
   splitButtonVariant={null}
   title="t(curiosity-toolbar.placeholder, {"context":"export"})"
   toggleIcon={null}

@@ -109,6 +109,7 @@ exports[`ToolbarFieldCategory Component should render a basic component: basic 1
 <Select
   aria-label="t(curiosity-toolbar.placeholder, {"context":"category"})"
   ariaLabel="Select option"
+  buttonContent={null}
   className=""
   data-test="toolbarFieldCategory"
   direction="down"
@@ -126,7 +127,6 @@ exports[`ToolbarFieldCategory Component should render a basic component: basic 1
   placeholder="t(curiosity-toolbar.placeholder, {"context":"category"})"
   position="left"
   selectedOptions={null}
-  splitButtonContent={null}
   splitButtonVariant={null}
   toggleIcon={null}
   variant="single"

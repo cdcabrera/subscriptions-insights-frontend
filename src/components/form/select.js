@@ -194,10 +194,10 @@ const formatSelectProps = _memoize(({ isDisabled, placeholder, options } = {}) =
  * @param {object} params
  * @param {boolean} params.isDisabled
  * @param {Array} params.options
+ * @param {React.ReactNode} params.buttonContent
  * @param {string} params.buttonVariant
  * @param {Function} params.onSplitButton
  * @param {string} params.placeholder
- * @param {React.ReactNode} params.splitButtonContent
  * @param {string} params.splitButtonVariant
  * @returns {*}
  */
@@ -205,11 +205,11 @@ const formatButtonProps = _memoize(
   ({
     isDisabled,
     options,
+    buttonContent,
     buttonVariant,
     onSplitButton,
     onToggle,
     placeholder,
-    splitButtonContent,
     splitButtonVariant
   } = {}) => {
     const buttonVariantPropLookup = {
@@ -225,7 +225,7 @@ const formatButtonProps = _memoize(
         splitButtonVariant: 'action',
         splitButtonItems: [
           <DropdownToggleAction onClick={onSplitButton} key="toggle-action">
-            {splitButtonContent}
+            {buttonContent}
           </DropdownToggleAction>
         ]
       },
@@ -233,7 +233,7 @@ const formatButtonProps = _memoize(
         splitButtonVariant: 'default',
         splitButtonItems: [
           <DropdownToggleAction onClick={() => onToggle()} key="toggle-action">
-            {splitButtonContent}
+            {buttonContent}
           </DropdownToggleAction>
         ]
       },
@@ -292,6 +292,7 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  * @fires onToggle
  * @param {object} props
  * @param {string} props.ariaLabel
+ * @param {React.ReactNode} props.buttonContent
  * @param {string} props.buttonVariant
  * @param {string} props.className
  * @param {string} props.direction
@@ -309,7 +310,6 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  * @param {string} props.placeholder
  * @param {string} props.position
  * @param {number|string|Array} props.selectedOptions
- * @param {React.ReactNode} props.splitButtonContent
  * @param {string} props.splitButtonVariant
  * @param {React.ReactNode|Function} props.toggleIcon
  * @param {string} props.variant
@@ -318,6 +318,7 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  */
 const Select = ({
   ariaLabel,
+  buttonContent,
   buttonVariant,
   className,
   direction,
@@ -335,7 +336,6 @@ const Select = ({
   placeholder,
   position,
   selectedOptions,
-  splitButtonContent,
   splitButtonVariant,
   toggleIcon,
   variant,
@@ -476,13 +476,13 @@ const Select = ({
             onSplitButton: onUpdatedSplitButton,
             options,
             buttonVariant,
-            splitButtonContent,
+            buttonContent,
             splitButtonVariant,
             placeholder: placeholder || ariaLabel
           })}
         >
           {toggleIcon ||
-            (!splitButtonVariant && splitButtonContent) ||
+            (!splitButtonVariant && buttonContent) ||
             (!splitButtonVariant && placeholder) ||
             (!SplitButtonVariant && ariaLabel)}
         </DropdownToggle>
@@ -571,10 +571,11 @@ const Select = ({
  *     ariaLabel: string, onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: number,
  *     buttonVariant: string, name: string, options: Array|object, selectedOptions: Array|number|string,
  *     variant: string, isInline: boolean, id: string, isDisabled: boolean, placeholder: string, position: string,
- *     splitButtonContent: React.ReactNode, splitButtonVariant: string, direction: string}}
+ *     buttonContent: React.ReactNode, splitButtonVariant: string, direction: string}}
  */
 Select.propTypes = {
   ariaLabel: PropTypes.string,
+  buttonContent: PropTypes.node,
   buttonVariant: PropTypes.oneOf(Object.values(ButtonVariant)),
   className: PropTypes.string,
   direction: PropTypes.oneOf(Object.values(SelectDirection)),
@@ -617,7 +618,6 @@ Select.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string]))
   ]),
-  splitButtonContent: PropTypes.node,
   splitButtonVariant: PropTypes.oneOf(Object.values(SplitButtonVariant)),
   toggleIcon: PropTypes.element,
   variant: PropTypes.oneOf([...Object.values(SelectVariant)])
@@ -629,11 +629,12 @@ Select.propTypes = {
  * @type {{isFlipEnabled: boolean, toggleIcon: null, className: string, onSplitButton: Function, ariaLabel: string,
  *     onSelect: Function, isToggleText: boolean, isDropdownButton: boolean, maxHeight: null, buttonVariant: string,
  *     name: null, options: Array, selectedOptions: null, variant: SelectVariant.single, isInline: boolean, id: string,
- *     isDisabled: boolean, placeholder: string, position: string, splitButtonContent: null, splitButtonVariant: null,
+ *     isDisabled: boolean, placeholder: string, position: string, buttonContent: null, splitButtonVariant: null,
  *     direction: string}}
  */
 Select.defaultProps = {
   ariaLabel: 'Select option',
+  buttonContent: null,
   buttonVariant: ButtonVariant.default,
   className: '',
   direction: SelectDirection.down,
@@ -651,7 +652,6 @@ Select.defaultProps = {
   placeholder: 'Select option',
   position: SelectPosition.left,
   selectedOptions: null,
-  splitButtonContent: null,
   splitButtonVariant: null,
   toggleIcon: null,
   variant: SelectVariant.single
