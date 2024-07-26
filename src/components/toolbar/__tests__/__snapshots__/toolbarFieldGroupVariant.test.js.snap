@@ -94,7 +94,7 @@ exports[`ToolbarFieldGroupVariant Component should render a basic component: bas
     maxHeight={310}
     name={null}
     onSelect={[Function]}
-    onSplitButton={[Function]}
+    onSplitButton={null}
     options={
       [
         {
@@ -122,6 +122,7 @@ exports[`ToolbarFieldGroupVariant Component should render a basic component: bas
     placeholder="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
     position="left"
     selectedOptions={null}
+    splitButtonAllowDualButtonToggle={true}
     splitButtonVariant={null}
     toggleIcon={null}
     variant="single"
@@ -162,7 +163,7 @@ exports[`ToolbarFieldGroupVariant Component should return a standalone component
       maxHeight={310}
       name={null}
       onSelect={[Function]}
-      onSplitButton={[Function]}
+      onSplitButton={null}
       options={
         [
           {
@@ -180,6 +181,7 @@ exports[`ToolbarFieldGroupVariant Component should return a standalone component
       placeholder="t(curiosity-toolbar.placeholder, {"context":"groupVariant"})"
       position="left"
       selectedOptions={null}
+      splitButtonAllowDualButtonToggle={true}
       splitButtonVariant={null}
       toggleIcon={null}
       variant="single"
