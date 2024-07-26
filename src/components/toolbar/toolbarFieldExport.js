@@ -131,8 +131,6 @@ const ToolbarFieldExport = ({
       placeholder={t('curiosity-toolbar.placeholder', { context: 'export' })}
       position={position}
       data-test="toolbarFieldExport"
-      buttonVariant={SelectButtonVariant.secondary}
-      splitButtonVariant={SplitButtonVariant.default}
       splitButtonContent={
         <React.Fragment>
           <ExportIcon /> {t('curiosity-toolbar.label', { context: 'export' })}
