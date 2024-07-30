@@ -121,7 +121,7 @@ const useExport = ({
           type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
           id,
           isPending: true,
-          pending: { format: data?.[POST_TYPES.FORMAT] }
+          pending: [{ format: data?.[POST_TYPES.FORMAT] }]
         },
         createAliasExport(
           id,
