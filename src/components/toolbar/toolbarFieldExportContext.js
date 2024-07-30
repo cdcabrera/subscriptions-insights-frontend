@@ -42,23 +42,15 @@ const useExportConfirmation = ({
 
   return useCallback(
     ({ error, data } = {}, retryCount) => {
-      const { completed = [], isCompleted, pending = [] } = data?.data?.products?.[productId] || {};
-      const isPending = !isCompleted;
-      const updatedDispatch = [
-        {
-          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
-          id: productId,
-          isPending,
-          pending
-        }
-      ];
+      const { completed = [], isCompleted, isPending, pending = [] } = data?.data?.products?.[productId] || {};
 
       if (error || !confirmAppLoaded()) {
         return;
       }
 
+      // Display pending notification. No data is returned on the initial status response.
       if (retryCount === -1) {
-        updatedDispatch.unshift(
+        dispatch([
           addAliasNotification({
             id: 'swatch-exports-individual-status',
             variant: 'info',
@@ -68,9 +60,21 @@ const useExportConfirmation = ({
             }),
             dismissable: true
           })
-        );
+        ]);
+        return;
       }
 
+      // Dispatch a status regardless of completion
+      const updatedDispatch = [
+        {
+          type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
+          id: productId,
+          isPending,
+          pending
+        }
+      ];
+
+      // Display completed notification
       if (isCompleted) {
         updatedDispatch.unshift(
           addAliasNotification({
@@ -117,6 +121,7 @@ const useExport = ({
 
   return useCallback(
     (id, data) => {
+      console.log('>>>>> DATA', data?.[POST_TYPES.FORMAT]);
       dispatch([
         {
           type: reduxTypes.platform.SET_PLATFORM_EXPORT_STATUS,
@@ -341,6 +346,8 @@ const useExportStatus = ({
 } = {}) => {
   const { productId } = useAliasProduct();
   const { isPending, pending } = useAliasSelector(({ app }) => app?.exports?.[productId], {});
+
+  console.log('>>>> pending', pending);
 
   const pendingProductFormats = [];
   const isProductPending = isPending || false;
