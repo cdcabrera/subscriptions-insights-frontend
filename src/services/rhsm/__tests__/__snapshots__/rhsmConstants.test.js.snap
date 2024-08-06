@@ -227,6 +227,7 @@ exports[`RHSM Constants should have specific properties: all exported constants 
   },
   "RHSM_API_RESPONSE_SUBSCRIPTIONS_META_TYPES": {
     "COUNT": "count",
+    "MEASUREMENTS": "measurements",
     "PRODUCT": "product",
     "SUBSCRIPTION_TYPE": "subscription_type",
   },
@@ -490,6 +491,7 @@ exports[`RHSM Constants should have specific properties: all exported constants 
     },
     "RHSM_API_RESPONSE_SUBSCRIPTIONS_META_TYPES": {
       "COUNT": "count",
+      "MEASUREMENTS": "measurements",
       "PRODUCT": "product",
       "SUBSCRIPTION_TYPE": "subscription_type",
     },
@@ -754,6 +756,7 @@ exports[`RHSM Constants should have specific properties: all exported constants 
     },
     "RHSM_API_RESPONSE_SUBSCRIPTIONS_META_TYPES": {
       "COUNT": "count",
+      "MEASUREMENTS": "measurements",
       "PRODUCT": "product",
       "SUBSCRIPTION_TYPE": "subscription_type",
     },
@@ -1022,6 +1025,7 @@ exports[`RHSM Constants should have specific properties: specific constants 1`] 
   },
   "RHSM_API_RESPONSE_SUBSCRIPTIONS_META_TYPES": {
     "COUNT": "count",
+    "MEASUREMENTS": "measurements",
     "PRODUCT": "product",
     "SUBSCRIPTION_TYPE": "subscription_type",
   },
