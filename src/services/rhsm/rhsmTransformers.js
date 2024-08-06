@@ -103,6 +103,9 @@ const rhsmInstancesGuests = (response, { params, _id } = {}) => {
 };
 
 /**
+ * Note: The "has_infinite_quantity" bool response property applies to ALL measurements!
+ */
+/**
  * Parse RHSM subscriptions response for caching.
  * Attempt to align Instances and Subscriptions responses.
  *

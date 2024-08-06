@@ -413,11 +413,7 @@ exports[`RHSM Transformers should attempt to parse a subscriptions response: sub
 {
   "data": [
     {
-      "Cores": undefined,
-      "hasInfiniteCores": undefined,
-      "has_infinite_quantity": undefined,
-      "metric_id": "Cores",
-      "total_capacity": undefined,
+      "undefined": "Cores",
     },
   ],
   "meta": {
@@ -432,11 +428,7 @@ exports[`RHSM Transformers should attempt to parse a subscriptions response: sub
 {
   "data": [
     {
-      "Cores": undefined,
-      "hasInfiniteCores": undefined,
-      "has_infinite_quantity": undefined,
-      "metric_id": "Cores",
-      "total_capacity": undefined,
+      "undefined": "Cores",
     },
   ],
   "meta": {
@@ -451,18 +443,10 @@ exports[`RHSM Transformers should attempt to parse a subscriptions response: sub
 {
   "data": [
     {
-      "Cores": undefined,
-      "hasInfiniteCores": undefined,
-      "has_infinite_quantity": undefined,
-      "metric_id": "Cores",
-      "total_capacity": undefined,
+      "undefined": "Cores",
     },
     {
-      "Sockets": undefined,
-      "hasInfiniteSockets": undefined,
-      "has_infinite_quantity": undefined,
-      "metric_id": "Sockets",
-      "total_capacity": undefined,
+      "undefined": "Sockets",
     },
   ],
   "meta": {
