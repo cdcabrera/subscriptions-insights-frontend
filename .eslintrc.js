@@ -24,12 +24,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   settings: {
-    'import/external-module-folders': ['public'],
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-      }
-    },
     jsdoc: {
       preferredTypes: {
         delete: 'delete',
@@ -43,6 +37,16 @@ module.exports = {
         forceStatus: 'ForceStatus',
         randomSuccess: 'RandomSuccess'
       }
+    },
+    'import/external-module-folders': ['public'],
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      }
+    },
+    react: {
+      pragma: 'React',
+      version: 'detect'
     }
   },
   globals: {
@@ -56,6 +60,10 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 1,
     '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/no-unused-vars': 0,
+    'no-unused-vars': ['error', { args: 'after-used', ignoreRestSiblings: true }],
+    '@typescript-eslint/no-unused-expressions': 0,
+    'no-unused-expressions': 2,
     'arrow-parens': ['error', 'as-needed'],
     'class-methods-use-this': 1,
     'comma-dangle': 0,
@@ -164,6 +172,7 @@ module.exports = {
         printWidth: 120
       }
     ],
+    'react/display-name': [0, { ignoreTranspilerName: false }],
     'react/forbid-prop-types': 0,
     'react/function-component-definition': [
       2,
@@ -172,6 +181,7 @@ module.exports = {
     'react/jsx-curly-newline': 0,
     'react/jsx-filename-extension': 0,
     'react/jsx-fragments': [1, 'element'],
+    'react/jsx-key': 0,
     'react/jsx-props-no-spreading': 0,
     'react/jsx-one-expression-per-line': 0,
     'react/jsx-no-constructed-context-values': 1,
@@ -198,6 +208,7 @@ module.exports = {
           some: ['nesting', 'id']
         }
       }
-    ]
+    ],
+    'jsx-a11y/no-autofocus': 1
   }
 };

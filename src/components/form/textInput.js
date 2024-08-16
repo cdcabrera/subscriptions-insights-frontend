@@ -98,20 +98,7 @@ class TextInput extends React.Component {
    */
   render() {
     const { updatedValue } = this.state;
-    const {
-      className,
-      id,
-      isDisabled,
-      name,
-      onChange,
-      onClear,
-      onKeyUp,
-      onMouseUp,
-      isReadOnly,
-      type,
-      value,
-      ...props
-    } = this.props;
+    const { className, id, isDisabled, name, isReadOnly, type, value, ...props } = this.props;
     const updatedName = name || helpers.generateId();
     const updatedId = id || updatedName;
 

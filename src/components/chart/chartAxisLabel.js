@@ -21,7 +21,7 @@ import React from 'react';
  */
 const chartAxisLabel =
   ({ axis, index = 0 } = {}) =>
-  ({ x, y, text }) => (
+  ({ y, text }) => (
     <g>
       <foreignObject x={0} y={0} width="100%" height="100%">
         <div

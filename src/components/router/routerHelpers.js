@@ -103,6 +103,7 @@ const importView = component => {
     return React.lazy(() => import(/* webpackExclude: /\.test\.js$/ */ `../${component}.js`));
   }
 
+  // eslint-disable-next-line react/display-name
   return p => <React.Fragment>{JSON.stringify({ ...p, component }, null, 2)}</React.Fragment>;
 };
 
