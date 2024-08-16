@@ -20,9 +20,11 @@
     "target": "esnext"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.js",
-    "src/**/*.jsx"
+    "**.js",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.jsx",
+    "**/*.js",
+    "**/*.json"
   ]
 }

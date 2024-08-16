@@ -10,23 +10,34 @@ import { OptinView } from '../optinView/optinView';
 import { translate } from '../i18n/i18n';
 import { AuthenticationContext, useGetAuthorization } from './authenticationContext';
 
+/**
+ * Authentication component wrapper.
+ *
+ * @memberof Components
+ * @module Authentication
+ * @property {module} AuthenticationContext
+ */
+
+/**
+ * @typedef AuthenticationProps
+ */
 interface AuthenticationProps {
+  /** The application name used to determine authorization */
   appName?: string;
+  /** Children to display on user authorization */
   children: React.ReactNode;
+  /** Disable this component and everything below it */
   isDisabled?: boolean;
+  /** Locale key translations Function */
   t?: typeof translate;
+  /** Aggregated authorization hook, all necessary API calls in a convenient wrapper. */
   useGetAuthorization?: typeof useGetAuthorization;
 }
 
 /**
  * An authentication pass-through component.
  *
- * @param {object} props
- * @param {string} props.appName
- * @param {React.ReactNode} props.children
- * @param {boolean} props.isDisabled
- * @param {translate} props.t
- * @param {Function} props.useGetAuthorization
+ * @param {AuthenticationProps} props
  * @returns {React.ReactNode}
  */
 const Authentication: React.FC<AuthenticationProps> = ({

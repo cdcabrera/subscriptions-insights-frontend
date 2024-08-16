@@ -133,7 +133,6 @@
     "changelog-light": "^2.0.1",
     "cspell": "^8.13.3",
     "eslint": "8.57.0",
-    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-comment-length": "^1.7.3",
     "eslint-plugin-import": "^2.29.1",
