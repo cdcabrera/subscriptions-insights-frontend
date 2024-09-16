@@ -63,7 +63,7 @@ const getApiVersion = (options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 2000
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Sockets Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -258,7 +258,7 @@ const getApiVersion = (options = {}) => {
  */
 /**
  * @apiMock {DelayResponse} 250
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Cores Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -439,7 +439,7 @@ const getApiVersion = (options = {}) => {
  */
 /**
  * @apiMock {DelayResponse} 250
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Managed-nodes Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -619,7 +619,7 @@ const getApiVersion = (options = {}) => {
  *     }
 /**
  * @apiMock {DelayResponse} 1000
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Transfer-gibibytes Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -803,7 +803,7 @@ const getApiVersion = (options = {}) => {
  */
 /**
  * @apiMock {DelayResponse} 250
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Storage-gibibytes Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -987,7 +987,7 @@ const getApiVersion = (options = {}) => {
  */
 /**
  * @apiMock {DelayResponse} 250
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Storage-gibibyte-months Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -1171,7 +1171,7 @@ const getApiVersion = (options = {}) => {
  */
 /**
  * @apiMock {DelayResponse} 250
- * @apiMock {RandomSuccess}
+ * @apiMock {Force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/:metric_id Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *

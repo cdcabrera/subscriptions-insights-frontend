@@ -33,12 +33,21 @@ const BannerMessages = ({
 }) => {
   const bannerMessages = useAliasBannerMessages();
   const removeBannerMessages = useAliasRemoveBannerMessages();
+  const configMessages = [
+    {
+      title: 'Lorem ipsum',
+      message: 'Lorem ipsum dolor sit!'
+    }
+  ];
+  const updatedBannerMessages = [...bannerMessages, ...configMessages];
 
-  if (bannerMessages?.length) {
+  console.log('>>> bannerMessages', updatedBannerMessages);
+
+  if (updatedBannerMessages?.length) {
     return (
       <div className="curiosity-banner-messages">
         <AlertGroup isLiveRegion>
-          {bannerMessages?.map(({ id, message, title, variant = BannerMessageVariant.info }) => {
+          {updatedBannerMessages?.map(({ id, message, title, variant = BannerMessageVariant.info }) => {
             const actionClose = <AlertActionCloseButton onClose={() => removeBannerMessages(id || title)} />;
 
             return (
