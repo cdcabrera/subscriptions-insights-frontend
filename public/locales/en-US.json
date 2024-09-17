@@ -5,9 +5,9 @@
     "maintenance": "...",
     "maintenance_description": "We are currently undergoing scheduled maintenance and will be back shortly. Thank you for your patience.",
     "apiError": "...",
-    "apiError_description": "Data retrieval might be temporarily interrupted. Please try again. If the problem persists, please wait 24 hours and try again.",
-    "apiError_pageTitle": "Subscriptions usage",
-    "apiError_title": "Something went wrong."
+    "apiError_description": "Try refreshing the page. If the problem persists, contact your organization administrator or visit our <0>status page</0> for known outages.",
+    "apiError_pageTitle": "Subscriptions Usage",
+    "apiError_title": "{{appName}} is temporarily unavailable"
   },
   "curiosity-banner": {},
   "curiosity-graph": {

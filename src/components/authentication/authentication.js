@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BinocularsIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
-import { global_danger_color_100 as red } from '@patternfly/react-tokens';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
+import { Button } from '@patternfly/react-core';
 import { routerHelpers } from '../router';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
@@ -71,8 +71,11 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
     if (errorStatus >= 500) {
       return (
         <MessageView
-          title={t('curiosity-auth.apiError', { context: 'title' })}
-          message={t('curiosity-auth.apiError', { context: 'description' })}
+          pageTitle={t('curiosity-auth.apiError', { context: 'pageTitle' })}
+          title={t('curiosity-auth.apiError', { context: 'title', appName: helpers.UI_INTERNAL_NAME })}
+          message={t('curiosity-auth.apiError', { context: 'description' }, [
+            <Button isInline component="a" variant="link" target="_blank" href={helpers.UI_LINK_PLATFORM_STATUS} />
+          ])}
           icon={ExclamationCircleIcon}
         />
       );
