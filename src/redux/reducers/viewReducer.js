@@ -18,6 +18,7 @@ import { RHSM_API_QUERY_SET_TYPES as RHSM_API_QUERY_TYPES } from '../../services
  *     query: {}, inventoryGuestsQuery: {}}}
  */
 const initialState = {
+  api: {},
   query: {},
   graphTallyQuery: {},
   inventoryGuestsQuery: {},
@@ -240,6 +241,30 @@ const viewReducer = (state = initialState, action) => {
           variant: {
             ...state?.product?.variant,
             [action.productGroup]: action.variant
+          }
+        },
+        {
+          state,
+          reset: false
+        }
+      );
+    case '>>> COMPONENT API':
+      const updatedErrors = [...(state?.api?.[action.productId]?.errors || [])];
+      let isDisplayError = false;
+
+      if (action.error === true) {
+        updatedErrors.length = 0;
+        isDisplayError = updatedErrors.length + 1 >= action.apiCount / 3;
+        console.log('>>>>', updatedErrors.length + 1);
+        console.log('>>>>', action.apiCount / 3);
+      }
+
+      return reduxHelpers.setStateProp(
+        'api',
+        {
+          [action.productId]: {
+            isDisplayError,
+            errors: updatedErrors
           }
         },
         {

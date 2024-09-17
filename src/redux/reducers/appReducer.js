@@ -14,9 +14,10 @@ import { reduxHelpers } from '../common';
  * Initial state.
  *
  * @private
- * @type {{auth: {}, exports: {}, exportsExisting: {}, optin: {}, locale: {}, errors: {}}}
+ * @type {{apiErrors: {}, auth: {}, exports: {}, exportsExisting: {}, optin: {}, locale: {}, errors: {}}}
  */
 const initialState = {
+  apiErrors: {},
   auth: {},
   errors: {},
   exports: {},
@@ -35,9 +36,9 @@ const initialState = {
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_4XX):
-      const actionStatus = reduxHelpers.getStatusFromResults(action);
+      const action4xxStatus = reduxHelpers.getStatusFromResults(action);
 
-      if (actionStatus === 401 || actionStatus === 403) {
+      if (action4xxStatus === 401 || action4xxStatus === 403) {
         const errorCodes = _get(reduxHelpers.getDataFromResults(action), [rhsmConstants.RHSM_API_RESPONSE_ERRORS], []);
 
         return reduxHelpers.setStateProp(
@@ -56,6 +57,52 @@ const appReducer = (state = initialState, action) => {
       }
 
       return state;
+      /*
+    case '>>> COMPONENT API':
+      if (action.error === true) {
+        return reduxHelpers.setStateProp(
+          'apiErrors',
+          {
+            estimatedApiCalls: action.estimatedApiCalls,
+
+          },
+          {
+            state,
+            initialState
+          }
+        );
+      }
+      return state;
+      */
+      /*
+    case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_5XX):
+      const action5xxStatus = reduxHelpers.getStatusFromResults(action);
+
+      if (action5xxStatus >= 500) {
+        return reduxHelpers.setStateProp(
+          'apiErrors',
+          {
+            [action.meta.productId || 'all']: {
+              error: true,
+              messages: [
+                ...(state.apiErrors?.[action.meta.productId || 'all']?.messages || []),
+                {
+                  meta: action.meta,
+                  message: reduxHelpers.getMessageFromResults(action),
+                  status: reduxHelpers.getStatusFromResults(action)
+                }
+              ]
+            }
+          },
+          {
+            state,
+            initialState
+          }
+        );
+      }
+
+      return state;
+       */
     case platformTypes.SET_PLATFORM_EXPORT_STATUS:
       return reduxHelpers.setStateProp(
         'exports',

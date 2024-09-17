@@ -132,7 +132,7 @@ const useGetInstancesInventory = ({
   useProductInventoryQuery: useAliasProductInventoryQuery = useProductInventoryHostsQuery,
   useSelector: useAliasSelector = useSelectorInstances
 } = {}) => {
-  const { productId } = useAliasProduct();
+  const { apiCount, productId } = useAliasProduct();
   const query = useAliasProductInventoryQuery();
   const dispatch = useAliasDispatch();
   const response = useAliasSelector();
@@ -142,6 +142,16 @@ const useGetInstancesInventory = ({
       getInventory(productId, query)(dispatch);
     }
   }, [isDisabled, productId, query]);
+
+  useShallowCompareEffect(() => {
+    dispatch({
+      type: '>>> COMPONENT API',
+      error: response.error,
+      component: 'inventoryCard',
+      productId,
+      apiCount
+    });
+  }, [dispatch, response.error]);
 
   return response;
 };

@@ -4031,7 +4031,7 @@ Render a message view, page empty state.
     </tr><tr>
     <td>props.children</td><td><code>React.ReactNode</code></td>
     </tr><tr>
-    <td>props.icon</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>props.icon</td><td><code>React.ReactNode</code></td>
     </tr><tr>
     <td>props.message</td><td><code>string</code></td>
     </tr><tr>
