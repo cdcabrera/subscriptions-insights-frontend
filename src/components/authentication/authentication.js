@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BinocularsIcon } from '@patternfly/react-icons';
+import { BinocularsIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
+import { global_danger_color_100 as red } from '@patternfly/react-tokens';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { routerHelpers } from '../router';
@@ -39,7 +40,7 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
     if (isDisabled) {
       return (
         <MessageView>
-          <Maintenance description={t('curiosity-auth.maintenanceCopy', '...')} />
+          <Maintenance description={t('curiosity-auth.maintenance', { context: 'description' })} />
         </MessageView>
       );
     }
@@ -49,14 +50,32 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
     }
 
     if (pending) {
-      return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
+      return (
+        <MessageView
+          pageTitle="&nbsp;"
+          message={t('curiosity-auth.pending', { context: 'description' })}
+          icon={BinocularsIcon}
+        />
+      );
     }
 
+    // Look for error-codes, bring up OptIn
     if (
       (errorCodes && errorCodes.includes(rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN)) ||
       errorStatus === 418
     ) {
       return <OptinView />;
+    }
+
+    // Make the assumption that if one 5xx error is coming back, all calls are returning 5xx
+    if (errorStatus >= 500) {
+      return (
+        <MessageView
+          title={t('curiosity-auth.apiError', { context: 'title' })}
+          message={t('curiosity-auth.apiError', { context: 'description' })}
+          icon={ExclamationCircleIcon}
+        />
+      );
     }
 
     return (

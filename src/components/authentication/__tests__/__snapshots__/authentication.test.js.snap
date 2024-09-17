@@ -19,7 +19,7 @@ exports[`Authentication Component should allow being disabled: disabled 1`] = `
     title={null}
   >
     <Maintenance
-      description="t(curiosity-auth.maintenanceCopy, ...)"
+      description="t(curiosity-auth.maintenance, {"context":"description"})"
     />
   </MessageView>
 </Context.Provider>
@@ -91,7 +91,7 @@ exports[`Authentication Component should render a component pending: pending 1`]
 >
   <MessageView
     icon={[Function]}
-    message="t(curiosity-auth.pending, ...)"
+    message="t(curiosity-auth.pending, {"context":"description"})"
     pageTitle=" "
     title={null}
   />
