@@ -19,12 +19,37 @@ exports[`I18n Component should generate a predictable locale key output snapshot
     "file": "src/components/authentication/authentication.js",
     "keys": [
       {
-        "key": "curiosity-auth.maintenanceCopy",
-        "match": "t('curiosity-auth.maintenanceCopy', '...')",
+        "key": "curiosity-auth.maintenance",
+        "match": "t('curiosity-auth.maintenance', { context: 'description' })",
       },
       {
         "key": "curiosity-auth.pending",
-        "match": "t('curiosity-auth.pending', '...')",
+        "match": "t('curiosity-auth.pending', { context: 'description' })",
+      },
+    ],
+  },
+  {
+    "file": "src/components/errorMessage/errorMessage.js",
+    "keys": [
+      {
+        "key": "curiosity-view.error",
+        "match": "t('curiosity-view.error', { context: 'debug' })",
+      },
+      {
+        "key": "curiosity-view.error",
+        "match": "t('curiosity-view.error', { context: 'debug' })",
+      },
+      {
+        "key": "curiosity-view.error",
+        "match": "t('curiosity-view.error', { context: 'download' })",
+      },
+      {
+        "key": "curiosity-view.error",
+        "match": "t('curiosity-view.error', { context: 'title', appName: helpers.UI_INTERNAL_NAME })",
+      },
+      {
+        "key": "curiosity-view.error",
+        "match": "t('curiosity-view.error', { context: 'description' }, [ <Button isInline component="a" variant="link" target="_blank" href={helpers.UI_LINK_PLATFORM_STATUS} /> ])",
       },
     ],
   },
@@ -34,6 +59,10 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       {
         "key": "curiosity-graph.cardHeading",
         "match": "t('curiosity-graph.cardHeading', { context: stringId })",
+      },
+      {
+        "key": "curiosity-graph.error_title",
+        "match": "t('curiosity-graph.error_title')",
       },
     ],
   },
@@ -117,6 +146,10 @@ exports[`I18n Component should generate a predictable locale key output snapshot
         "match": "translate('curiosity-inventory.table', { context: ['summary'] })",
       },
       {
+        "key": "curiosity-inventory.error_title",
+        "match": "t('curiosity-inventory.error_title')",
+      },
+      {
         "key": "curiosity-inventory.table",
         "match": "translate('curiosity-inventory.table', { context: ['emptyState', 'title'] })",
       },
@@ -132,6 +165,15 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       {
         "key": "curiosity-inventory.header",
         "match": "translate([\`curiosity-inventory.header\`, \`curiosity-inventory.guestsHeader\`], { context: [metric, productId] })",
+      },
+    ],
+  },
+  {
+    "file": "src/components/inventoryGuests/inventoryGuests.js",
+    "keys": [
+      {
+        "key": "curiosity-inventory.error_title",
+        "match": "t('curiosity-inventory.error_title')",
       },
     ],
   },
@@ -243,7 +285,11 @@ exports[`I18n Component should generate a predictable locale key output snapshot
       },
       {
         "key": "curiosity-view.title",
-        "match": "t(\`curiosity-view.title\`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })",
+        "match": "t('curiosity-view.title', { appName: helpers.UI_DISPLAY_NAME, context: productGroup })",
+      },
+      {
+        "key": "curiosity-view.version",
+        "match": "t('curiosity-view.version', { guiVersion: helpers.UI_VERSION })",
       },
     ],
   },

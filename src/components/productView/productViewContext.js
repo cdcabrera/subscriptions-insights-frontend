@@ -221,8 +221,9 @@ const useProductContext = ({ useProductViewContext: useAliasProductViewContext =
  * @returns {{productLabel, viewId, productId, productGroup, productVariants}}
  */
 const useProduct = ({ useProductViewContext: useAliasProductViewContext = useProductViewContext } = {}) => {
-  const { productGroup, productId, productLabel, productVariants, viewId } = useAliasProductViewContext();
+  const { apiCount, productGroup, productId, productLabel, productVariants, viewId } = useAliasProductViewContext();
   return {
+    apiCount,
     productGroup,
     productId,
     productLabel,

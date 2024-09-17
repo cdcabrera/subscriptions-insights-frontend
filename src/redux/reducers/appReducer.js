@@ -35,9 +35,9 @@ const initialState = {
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case reduxHelpers.HTTP_STATUS_RANGE(appTypes.STATUS_4XX):
-      const actionStatus = reduxHelpers.getStatusFromResults(action);
+      const action4xxStatus = reduxHelpers.getStatusFromResults(action);
 
-      if (actionStatus === 401 || actionStatus === 403) {
+      if (action4xxStatus === 401 || action4xxStatus === 403) {
         const errorCodes = _get(reduxHelpers.getDataFromResults(action), [rhsmConstants.RHSM_API_RESPONSE_ERRORS], []);
 
         return reduxHelpers.setStateProp(

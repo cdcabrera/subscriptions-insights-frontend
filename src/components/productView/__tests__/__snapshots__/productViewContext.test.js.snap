@@ -67,6 +67,7 @@ exports[`ProductViewContext should apply hooks for retrieving specific api queri
 
 exports[`ProductViewContext should apply hooks for retrieving specific config filters and settings: productConfig 1`] = `
 {
+  "apiCount": undefined,
   "productGroup": "loremIpsum",
   "productId": "lorem",
   "productLabel": "labelLorem",
