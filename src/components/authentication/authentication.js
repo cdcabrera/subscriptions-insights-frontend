@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BinocularsIcon } from '@patternfly/react-icons';
+import { BinocularsIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import { Maintenance } from '@redhat-cloud-services/frontend-components/Maintenance';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
+import { Button } from '@patternfly/react-core';
 import { routerHelpers } from '../router';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { helpers } from '../../common';
@@ -39,7 +40,7 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
     if (isDisabled) {
       return (
         <MessageView>
-          <Maintenance description={t('curiosity-auth.maintenanceCopy', '...')} />
+          <Maintenance description={t('curiosity-auth.maintenance', { context: 'description' })} />
         </MessageView>
       );
     }
@@ -49,14 +50,35 @@ const Authentication = ({ appName, children, isDisabled, t, useGetAuthorization:
     }
 
     if (pending) {
-      return <MessageView pageTitle="&nbsp;" message={t('curiosity-auth.pending', '...')} icon={BinocularsIcon} />;
+      return (
+        <MessageView
+          pageTitle="&nbsp;"
+          message={t('curiosity-auth.pending', { context: 'description' })}
+          icon={BinocularsIcon}
+        />
+      );
     }
 
+    // Look for error-codes, bring up OptIn
     if (
       (errorCodes && errorCodes.includes(rhsmConstants.RHSM_API_RESPONSE_ERRORS_CODE_TYPES.OPTIN)) ||
       errorStatus === 418
     ) {
       return <OptinView />;
+    }
+
+    // Make the assumption that if one 5xx error is coming back, all calls are returning 5xx
+    if (errorStatus >= 500) {
+      return (
+        <MessageView
+          pageTitle={t('curiosity-auth.apiError', { context: 'pageTitle' })}
+          title={t('curiosity-auth.apiError', { context: 'title', appName: helpers.UI_INTERNAL_NAME })}
+          message={t('curiosity-auth.apiError', { context: 'description' }, [
+            <Button isInline component="a" variant="link" target="_blank" href={helpers.UI_LINK_PLATFORM_STATUS} />
+          ])}
+          icon={ExclamationCircleIcon}
+        />
+      );
     }
 
     return (

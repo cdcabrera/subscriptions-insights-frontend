@@ -19,7 +19,7 @@ import { helpers } from '../../common';
  *
  * @param {object} props
  * @param {React.ReactNode} props.children
- * @param {React.ReactNode|Function} props.icon
+ * @param {React.ReactNode} props.icon
  * @param {string} props.message
  * @param {string} props.pageTitle
  * @param {string} props.title
@@ -31,7 +31,9 @@ const MessageView = ({ children, icon, message, pageTitle, title }) => (
     <PageSection>
       {children ?? (
         <EmptyState variant={EmptyStateVariant.full} className="fadein">
-          {icon && <EmptyStateIcon icon={icon} />}
+          {(typeof icon === 'function' && <EmptyStateIcon icon={icon} />) ||
+            (icon && <EmptyStateIcon icon={() => icon} />) ||
+            null}
           {title && (
             <Title headingLevel="h2" size="lg">
               {title}

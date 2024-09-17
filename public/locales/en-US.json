@@ -1,7 +1,13 @@
 {
   "curiosity-auth": {
-    "pending": "Authenticating...",
-    "maintenanceCopy": "We are currently undergoing scheduled maintenance and will be back shortly. Thank you for your patience."
+    "pending": "...",
+    "pending_description": "Authenticating...",
+    "maintenance": "...",
+    "maintenance_description": "We are currently undergoing scheduled maintenance and will be back shortly. Thank you for your patience.",
+    "apiError": "...",
+    "apiError_description": "Try refreshing the page. If the problem persists, contact your organization administrator or visit our <0>status page</0> for known outages.",
+    "apiError_pageTitle": "Subscriptions Usage",
+    "apiError_title": "{{appName}} is temporarily unavailable"
   },
   "curiosity-banner": {},
   "curiosity-graph": {
