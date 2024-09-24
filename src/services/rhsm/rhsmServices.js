@@ -1409,6 +1409,7 @@ const getGraphTally = (id, params = {}, options = {}) => {
 
 /**
  * @api {get} /api/rhsm-subscriptions/v1/capacity/products/:product_id/:metric_id Get RHSM graph capacity data
+ * @apiMock {force} 500
  * @apiDescription Retrieve graph capacity data, such as thresholds.
  *
  * Reference [RHSM for capacity params and commands](https://github.com/RedHatInsights/rhsm-subscriptions/blob/main/api/rhsm-subscriptions-api-v1-spec.yaml)

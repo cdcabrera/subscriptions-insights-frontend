@@ -128,7 +128,7 @@ const useGetMetrics = ({
   useProduct: useAliasProduct = useProduct,
   useProductGraphTallyQuery: useAliasProductGraphTallyQuery = useProductGraphTallyQuery
 } = {}) => {
-  const { productId } = useAliasProduct();
+  const { apiCount, productId } = useAliasProduct();
   const query = useAliasProductGraphTallyQuery();
   const dispatch = useAliasDispatch();
   const response = useAliasMetricsSelector();
@@ -144,6 +144,16 @@ const useGetMetrics = ({
     }));
     getGraphMetrics(updatedMetrics, query)(dispatch);
   }, [metrics, productId, query]);
+
+  useShallowCompareEffect(() => {
+    dispatch({
+      type: '>>> COMPONENT API',
+      error: response.error,
+      component: 'graphCard',
+      productId,
+      apiCount
+    });
+  }, [dispatch, response.error]);
 
   return response;
 };

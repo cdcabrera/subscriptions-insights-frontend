@@ -1,9 +1,13 @@
 import React, { useContext } from 'react';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { useMount } from 'react-use';
 import { reduxHelpers } from '../../redux/common';
 import { storeHooks } from '../../redux/hooks';
 import { rhsmConstants } from '../../services/rhsm/rhsmConstants';
 import { platformConstants } from '../../services/platform/platformConstants';
 import { helpers } from '../../common/helpers';
+import { routerHelpers } from '../router';
+import { reduxActions } from '../../redux';
 
 /**
  * @memberof ProductView
@@ -221,8 +225,9 @@ const useProductContext = ({ useProductViewContext: useAliasProductViewContext =
  * @returns {{productLabel, viewId, productId, productGroup, productVariants}}
  */
 const useProduct = ({ useProductViewContext: useAliasProductViewContext = useProductViewContext } = {}) => {
-  const { productGroup, productId, productLabel, productVariants, viewId } = useAliasProductViewContext();
+  const { apiCount, productGroup, productId, productLabel, productVariants, viewId } = useAliasProductViewContext();
   return {
+    apiCount,
     productGroup,
     productId,
     productLabel,
@@ -333,6 +338,33 @@ const useProductExportQuery = ({
     },
     schemaCheck
   );
+};
+
+const useGetApiErrors = ({
+  useSelectorsResponse: useAliasSelectorsResponse = storeHooks.reactRedux.useSelectorsResponse
+} = {}) => {
+  const { data, error, fulfilled, pending, responses } = useAliasSelectorsResponse([
+    {
+      id: 'apiErrors',
+      selector: ({ app }) => (app?.errors?.error === true && app.errors) || { fulfilled: true, data: [] }
+    }
+  ]);
+
+  const [user = {}, app = {}] = (Array.isArray(data.auth) && data.auth) || [];
+  const errorStatus = (error && responses?.id?.errors?.status) || null;
+
+  return {
+    data: {
+      ...user,
+      ...app,
+      locale: data.locale,
+      errorCodes: data.errors,
+      errorStatus
+    },
+    error,
+    fulfilled,
+    pending
+  };
 };
 
 const context = {
