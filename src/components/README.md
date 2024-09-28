@@ -620,7 +620,6 @@ Default props.
 Allow, and return, SVG compatible HTML for axis labels.
 
 **Kind**: inner method of [<code>ChartAxisLabel</code>](#Chart.module_ChartAxisLabel)  
-**Returns**: <code>function</code> - s  
 <table>
   <thead>
     <tr>
@@ -5196,35 +5195,9 @@ On click, update history.
 ## RouterContext
 
 * [RouterContext](#Router.module_RouterContext)
-    * [~useLocation(options)](#Router.module_RouterContext..useLocation) ⇒ <code>Object</code>
     * [~useNavigate(options)](#Router.module_RouterContext..useNavigate) ⇒ <code>function</code>
-    * [~useSetRouteDetail(options)](#Router.module_RouterContext..useSetRouteDetail) ⇒ <code>\*</code> \| <code>string</code>
+    * [~useSetRouteProduct(options)](#Router.module_RouterContext..useSetRouteProduct) ⇒ <code>Object</code>
     * [~useRouteDetail(options)](#Router.module_RouterContext..useRouteDetail) ⇒ <code>Object</code>
-    * [~useSearchParams(options)](#Router.module_RouterContext..useSearchParams) ⇒ <code>Array</code>
-        * [~setSearchParams](#Router.module_RouterContext..useSearchParams..setSearchParams)
-
-<a name="Router.module_RouterContext..useLocation"></a>
-
-### RouterContext~useLocation(options) ⇒ <code>Object</code>
-Combine react-use useLocation with actual window location.
-Focused on exposing replace and href.
-
-**Kind**: inner method of [<code>RouterContext</code>](#Router.module_RouterContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.useLocation</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.windowLocation</td><td><code>*</code></td>
-    </tr>  </tbody>
-</table>
 
 <a name="Router.module_RouterContext..useNavigate"></a>
 
@@ -5243,19 +5216,17 @@ update. Dispatches the same type leveraged by the initialize hook, useSetRouteDe
 <tr>
     <td>options</td><td><code>object</code></td>
     </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
-    </tr><tr>
     <td>options.useLocation</td><td><code>function</code></td>
     </tr><tr>
     <td>options.windowHistory</td><td><code>*</code></td>
     </tr>  </tbody>
 </table>
 
-<a name="Router.module_RouterContext..useSetRouteDetail"></a>
+<a name="Router.module_RouterContext..useSetRouteProduct"></a>
 
-### RouterContext~useSetRouteDetail(options) ⇒ <code>\*</code> \| <code>string</code>
-Initialize and store product path, parameter, in a "state" update parallel to routing.
-We're opting to use "window.location.pathname" directly since it appears to be quicker,
+### RouterContext~useSetRouteProduct(options) ⇒ <code>Object</code>
+Initialize and store a product path, parameter, in a "state" update parallel to variant detail.
+We're opting to use "window.location.pathname" directly because its faster.
 and returns a similar structured value as useParam.
 
 **Kind**: inner method of [<code>RouterContext</code>](#Router.module_RouterContext)  
@@ -5269,23 +5240,22 @@ and returns a similar structured value as useParam.
 <tr>
     <td>options</td><td><code>object</code></td>
     </tr><tr>
-    <td>options.useSelector</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
+    <td>options.disableIsClosestMatch</td><td><code>boolean</code></td>
     </tr><tr>
     <td>options.useLocation</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.windowLocation</td><td><code>*</code></td>
+    <td>options.useSelector</td><td><code>function</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Router.module_RouterContext..useRouteDetail"></a>
 
 ### RouterContext~useRouteDetail(options) ⇒ <code>Object</code>
-Get a route detail from "state". Consume useSetRouteDetail and set basis for product
-configuration context.
+Aggregate display settings and configuration. Get a product route detail.
+Consumes useSetRouteProduct to return a display configuration for use in productView context.
 
 **Kind**: inner method of [<code>RouterContext</code>](#Router.module_RouterContext)  
+**Returns**: <code>Object</code> - }  
 <table>
   <thead>
     <tr>
@@ -5295,65 +5265,12 @@ configuration context.
   <tbody>
 <tr>
     <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.disableIsClosest</td><td><code>boolean</code></td>
     </tr><tr>
     <td>options.t</td><td><code>function</code></td>
     </tr><tr>
     <td>options.useChrome</td><td><code>function</code></td>
     </tr><tr>
-    <td>options.useSelectors</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.useSetRouteDetail</td><td><code>function</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterContext..useSearchParams"></a>
-
-### RouterContext~useSearchParams(options) ⇒ <code>Array</code>
-Search parameter, return
-
-**Kind**: inner method of [<code>RouterContext</code>](#Router.module_RouterContext)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>options</td><td><code>object</code></td>
-    </tr><tr>
-    <td>options.useLocation</td><td><code>function</code></td>
-    </tr><tr>
-    <td>options.windowHistory</td><td><code>*</code></td>
-    </tr>  </tbody>
-</table>
-
-<a name="Router.module_RouterContext..useSearchParams..setSearchParams"></a>
-
-#### useSearchParams~setSearchParams
-Alias returned React Router Dom useSearchParams hook to something expected.
-This hook defaults to merging search objects instead of overwriting them.
-
-**Kind**: inner constant of [<code>useSearchParams</code>](#Router.module_RouterContext..useSearchParams)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th><th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>updatedQuery</td><td><code>object</code></td><td></td>
-    </tr><tr>
-    <td>options</td><td><code>object</code></td><td></td>
-    </tr><tr>
-    <td>options.isMerged</td><td><code>boolean</code></td><td><p>Merge search with existing search, or don&#39;t</p>
-</td>
-    </tr><tr>
-    <td>options.currentSearch</td><td><code>string</code> | <code>*</code></td><td><p>search returned from useLocation</p>
-</td>
+    <td>options.useSetRouteProduct</td><td><code>useSetRouteProduct</code></td>
     </tr>  </tbody>
 </table>
 
@@ -5368,6 +5285,8 @@ This hook defaults to merging search objects instead of overwriting them.
     * [~pathJoin](#Router.module_RouterHelpers..pathJoin) ⇒ <code>string</code>
     * [~dynamicBaseName(params)](#Router.module_RouterHelpers..dynamicBaseName) ⇒ <code>string</code>
     * [~dynamicBasePath(params)](#Router.module_RouterHelpers..dynamicBasePath) ⇒ <code>string</code>
+    * [~dynamicPath(params)](#Router.module_RouterHelpers..dynamicPath) ⇒ <code>string</code>
+    * [~cleanPath(params)](#Router.module_RouterHelpers..cleanPath) ⇒ <code>string</code> \| <code>undefined</code>
 
 <a name="Router.module_RouterHelpers..appName"></a>
 
@@ -5395,7 +5314,9 @@ given the appropriate alias, group, product, and/or path identifiers provided wi
     </tr><tr>
     <td>params.pathName</td><td><code>string</code></td>
     </tr><tr>
-    <td>params.configs</td><td><code>Array</code></td>
+    <td>[params.configs]</td><td><code>Array</code></td>
+    </tr><tr>
+    <td>[params.cleanPath]</td><td><code>cleanPath</code></td>
     </tr>  </tbody>
 </table>
 
@@ -5463,6 +5384,50 @@ App name is defined in dotenv and package.json/insights.appname
 
 ### RouterHelpers~dynamicBasePath(params) ⇒ <code>string</code>
 App basePath. Return a base path.
+
+**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.pathName</td><td><code>string</code></td>
+    </tr><tr>
+    <td>params.appName</td><td><code>string</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Router.module_RouterHelpers..dynamicPath"></a>
+
+### RouterHelpers~dynamicPath(params) ⇒ <code>string</code>
+App basePath. Return a base path.
+
+**Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>params</td><td><code>object</code></td>
+    </tr><tr>
+    <td>params.pathName</td><td><code>string</code></td>
+    </tr><tr>
+    <td>params.appName</td><td><code>string</code></td>
+    </tr>  </tbody>
+</table>
+
+<a name="Router.module_RouterHelpers..cleanPath"></a>
+
+### RouterHelpers~cleanPath(params) ⇒ <code>string</code> \| <code>undefined</code>
+Trim, clean, and remove irrelevant strings to help provide more exact product configuration matches.
 
 **Kind**: inner method of [<code>RouterHelpers</code>](#Router.module_RouterHelpers)  
 <table>
