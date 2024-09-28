@@ -34,7 +34,7 @@ import { ProductViewMissing } from './productViewMissing';
  * @returns {React.ReactNode}
  */
 const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
-  const { disableIsClosest, firstMatch, productGroup } = useAliasRouteDetail();
+  const { disableIsClosestMatch, firstMatch, productGroup } = useAliasRouteDetail();
 
   const renderProduct = useCallback(() => {
     const updated = config => {
@@ -86,7 +86,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
     return updated(firstMatch);
   }, [firstMatch, t]);
 
-  if (disableIsClosest) {
+  if (disableIsClosestMatch) {
     return <ProductViewMissing />;
   }
 
