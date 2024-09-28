@@ -51,7 +51,10 @@ const ProductViewMissing = ({
    * @param {string} path
    * @returns {void}
    */
-  const onNavigate = path => navigate(path);
+  const onNavigate = path => {
+    console.log('>>>> ON NAVIGATE', path);
+    navigate(path);
+  };
 
   return (
     <PageLayout className="curiosity-missing-view">
@@ -66,7 +69,7 @@ const ProductViewMissing = ({
               key={`missingViewCard-${productId}-${helpers.generateId()}`}
               isSelectable
               isSelected={firstMatch.productPath === productPath}
-              onClick={() => onNavigate(productPath)}
+              onClick={() => onNavigate(productId)}
             >
               <CardTitle>
                 <Title headingLevel="h2" size="lg">

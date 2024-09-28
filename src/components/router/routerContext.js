@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
-import { useShallowCompareEffect } from 'react-use';
+import { useShallowCompareEffect, useLocation, useMount } from 'react-use';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 import { storeHooks, reduxTypes } from '../../redux';
 import { translate } from '../i18n/i18n';
-import { useLocation } from '../../hooks/useWindow';
+// import { useLocation } from '../../hooks/useWindow';
+import { useOnSelect as useResetGroupVariant } from '../toolbar/toolbarFieldGroupVariant';
 
 /**
  * @memberof Router
@@ -88,10 +89,10 @@ const useNavigate = ({
       const { firstMatch } = routerHelpers.getRouteConfigByPath({ pathName });
 
       if (firstMatch?.productPath) {
-        dispatch({
-          type: reduxTypes.app.SET_PRODUCT,
-          config: firstMatch?.productPath
-        });
+        // dispatch({
+        //  type: reduxTypes.app.SET_PRODUCT,
+        //  config: firstMatch?.productPath
+        // });
 
         return windowHistory.pushState(
           {},
@@ -124,14 +125,23 @@ const useSetRouteProduct = ({
   disableIsClosestMatch = helpers.DEV_MODE === true,
   /*
    * useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
-   * useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
+   *
    */
+  useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
   useLocation: useAliasLocation = useLocation,
   useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors
 } = {}) => {
+  const resetGroupVariant = useResetGroupVariant();
   const [product, setProduct] = useState({});
   const { pathname: productPath } = useAliasLocation();
   const [productVariant] = useAliasSelectors([({ view }) => view?.product?.variant]);
+
+  useMount(() => {
+    console.log('>>>>> USE SET ROUTE PRODUCT MOUNT', productVariant);
+    if (productVariant) {
+      // resetGroupVariant();
+    }
+  });
   /*
    * const dispatch = useAliasDispatch();
    * const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
