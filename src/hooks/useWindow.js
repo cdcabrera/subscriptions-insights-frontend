@@ -68,7 +68,8 @@ const patchHistoryMethod = method => {
 };
 
 const useLocation = () => {
-  const [location, setLocation] = useState({ ...window.location, _id: helpers.generateHash(window.location) });
+  // const [location, setLocation] = useState({ ...window.location, _id: helpers.generateHash(window.location) });
+  const [location, setLocation] = useState({ ...window.location });
   console.log('>>>> USE LOCATION');
 
   useEffect(() => {
@@ -90,11 +91,11 @@ const useLocation = () => {
     */
 
     const handler = () => {
-      const _id = helpers.generateHash(window.location);
+      // const _id = helpers.generateHash(window.location);
       console.log('>>>> USELOCATION CUSTOM 001', window.location.pathname);
       // if (location._id !== _id) {
       console.log('>>>> USELOCATION CUSTOM 002');
-      setLocation(() => ({ ...window.location, _id }));
+      setLocation(() => ({ ...window.location }));
       // }
     };
 

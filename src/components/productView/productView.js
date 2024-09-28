@@ -98,8 +98,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
         </PageHeader>
         <PageColumns>{renderProduct()}</PageColumns>
       </PageLayout>
-    )) ||
-    null
+    )) || <ProductViewMissing />
   );
 };
 

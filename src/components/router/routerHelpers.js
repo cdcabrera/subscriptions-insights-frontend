@@ -39,43 +39,70 @@ const dynamicBasePath = ({ pathName = window.location.pathname, appName: applica
   pathName.split(applicationName)[0];
 
 /**
+ * App basePath. Return a base path.
+ *
+ * @param {object} params
+ * @param {string} params.pathName
+ * @param {string} params.appName
+ * @returns {string}
+ */
+const dynamicPath = ({ pathName = window.location.pathname, appName: applicationName = helpers.UI_NAME } = {}) =>
+  pathName.split(applicationName)[1];
+
+/**
+ * Trim, clean, and remove irrelevant strings to help provide more exact product configuration matches.
+ *
+ * @param {object} params
+ * @param {string} params.pathName
+ * @param {string} params.appName
+ * @returns {string | undefined}
+ */
+const cleanPath = ({ pathName, appName: applicationName = helpers.UI_NAME } = {}) => {
+  const updatedPathName =
+    (/^http/i.test(pathName) && new URL(pathName).pathname) || (typeof pathName === 'string' && pathName) || undefined;
+
+  return updatedPathName
+    ?.toLowerCase()
+    ?.split('#')?.[0]
+    ?.split('?')?.[0]
+    ?.replace(/^\/*|\/*$/g, '')
+    ?.replace(new RegExp(applicationName, 'i'), '')
+    ?.replace(/\/\//g, '/');
+};
+
+/**
  * Match pre-sorted route config entries with a path, or match with a fallback.
  * This is the primary engine for curiosity routing. It can account for a full window.location.pathname
  * given the appropriate alias, group, product, and/or path identifiers provided with product configuration.
  *
  * @param {object} params
  * @param {string} params.pathName
- * @param {Array} params.configs
+ * @param {Array} [params.configs]
+ * @param {cleanPath} [params.cleanPath]
  * @returns {{configs: *, firstMatch: *, isClosest: boolean, allConfigs: Array}}
  */
-const getRouteConfigByPath = helpers.memo(({ pathName, configs = productConfig.sortedConfigs } = {}) => {
-  const { byAnything, byAnythingPathIds, byAnythingVariants, byProductIdConfigs } = configs();
-  const updatedPathName =
-    (/^http/i.test(pathName) && new URL(pathName).pathname) || (typeof pathName === 'string' && pathName) || undefined;
-  const trimmedPathName = updatedPathName
-    ?.toLowerCase()
-    ?.split('#')?.[0]
-    ?.split('?')?.[0]
-    ?.replace(/^\/*|\/*$/g, '')
-    ?.replace(new RegExp(helpers.UI_DISPLAY_NAME, 'i'), '')
-    ?.replace(/\/\//g, '/');
+const getRouteConfigByPath = helpers.memo(
+  ({ pathName, configs = productConfig.sortedConfigs, cleanPath: aliasCleanPath = cleanPath } = {}) => {
+    const { byAnything, byAnythingPathIds, byAnythingVariants, byProductIdConfigs } = configs();
+    const trimmedPathName = aliasCleanPath({ pathName });
 
-  // Do a known comparison against alias, group, product, path identifiers
-  const focusedStr = byAnythingPathIds.find(value => value.toLowerCase() === trimmedPathName?.split('/')?.pop());
+    // Do a known comparison against alias, group, product, path identifiers
+    const focusedStr = byAnythingPathIds.find(value => value.toLowerCase() === trimmedPathName?.split('/')?.pop());
 
-  // Fallback attempt, match pathName with the closest string
-  const closestStr = trimmedPathName && closest(trimmedPathName, byAnythingPathIds);
-  const configsByAnything = byAnything?.[focusedStr || closestStr];
-  const availableVariants = byAnythingVariants?.[focusedStr || closestStr];
+    // Fallback attempt, match pathName with the closest string
+    const closestStr = trimmedPathName && closest(trimmedPathName, byAnythingPathIds);
+    const configsByAnything = byAnything?.[focusedStr || closestStr];
+    const availableVariants = byAnythingVariants?.[focusedStr || closestStr];
 
-  return {
-    isClosest: !focusedStr,
-    allConfigs: Object.values(byProductIdConfigs),
-    availableVariants,
-    configs: configsByAnything,
-    firstMatch: configsByAnything?.[0]
-  };
-});
+    return {
+      isClosest: !focusedStr,
+      allConfigs: Object.values(byProductIdConfigs),
+      availableVariants,
+      configs: configsByAnything,
+      firstMatch: configsByAnything?.[0]
+    };
+  }
+);
 
 /**
  * Parse search parameters from a string, using a set for "uniqueness"
@@ -125,6 +152,8 @@ const routerHelpers = {
   appName,
   dynamicBaseName,
   dynamicBasePath,
+  dynamicPath,
+  cleanPath,
   getRouteConfigByPath,
   parseSearchParams,
   pathJoin
@@ -136,6 +165,8 @@ export {
   appName,
   dynamicBaseName,
   dynamicBasePath,
+  dynamicPath,
+  cleanPath,
   getRouteConfigByPath,
   parseSearchParams,
   pathJoin
