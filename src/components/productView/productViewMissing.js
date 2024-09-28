@@ -61,11 +61,11 @@ const ProductViewMissing = ({
           {availableProducts?.map(({ productGroup, productId, productPath }) => (
             <Card
               className={`curiosity-card ${
-                (firstMatch.productPath === productPath && 'curiosity-card__selected') || ''
+                (firstMatch?.productPath === productPath && 'curiosity-card__selected') || ''
               }`}
               key={`missingViewCard-${productId}-${helpers.generateId()}`}
               isSelectable
-              isSelected={firstMatch.productPath === productPath}
+              isSelected={firstMatch?.productPath === productPath}
               onClick={() => onNavigate(productPath)}
             >
               <CardTitle>
