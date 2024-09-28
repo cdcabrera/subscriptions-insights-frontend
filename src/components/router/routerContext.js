@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useLocation as useLocationRU } from 'react-use';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { routerHelpers } from './routerHelpers';
 import { helpers } from '../../common/helpers';
 import { storeHooks, reduxTypes } from '../../redux';
 import { translate } from '../i18n/i18n';
+import { useLocation } from '../../hooks/useWindow';
 
 /**
  * @memberof Router
@@ -17,39 +17,50 @@ import { translate } from '../i18n/i18n';
  *
  * @param {object} options
  * @param {Function} options.useLocation
- * @param {*} options.windowLocation
+ * @param options.windowLocation
  * @returns {{_id, search, hash}}
  */
-const useLocation = ({
-  useLocation: useAliasLocation = useLocationRU,
-  windowLocation: aliasWindowLocation = window.location
-} = {}) => {
-  useAliasLocation();
-  const windowLocation = aliasWindowLocation;
-  const [updatedLocation, setUpdatedLocation] = useState({});
-  const forceUpdateLocation = useCallback(() => {
-    const _id = helpers.generateHash(windowLocation);
-    if (updatedLocation?._id !== _id) {
-      setUpdatedLocation({
-        ...windowLocation,
-        _id
-      });
-    }
-  }, [updatedLocation?._id, windowLocation]);
-
-  useEffect(() => {
-    const _id = helpers.generateHash(windowLocation);
-    if (updatedLocation?._id !== _id) {
-      setUpdatedLocation({
-        ...windowLocation,
-        _id,
-        updateLocation: forceUpdateLocation
-      });
-    }
-  }, [forceUpdateLocation, updatedLocation?._id, windowLocation]);
-
-  return updatedLocation;
-};
+/*
+ *const useLocation = ({
+ *  useLocation: useAliasLocation = useLocationRU,
+ *  windowLocation: aliasWindowLocation = window.location
+ *} = {}) => {
+ *  useAliasLocation();
+ *  const windowLocation = aliasWindowLocation;
+ *  const [updatedLocation, setUpdatedLocation] = useState({});
+ *
+ *  useEffect(() => {
+ *    const _id = helpers.generateHash(windowLocation);
+ *    console.log('>>>> USE LOCATION SET ID', updatedLocation?._id, _id);
+ *
+ *    if (updatedLocation?._id !== _id) {
+ *      setUpdatedLocation(() => ({
+ *        ...windowLocation,
+ *        _id,
+ *        updateLocation: Function.prototype
+ *      }));
+ *    }
+ *  }, [updatedLocation?._id, windowLocation, windowLocation.pathname]);
+ *
+ *  console.log('>>>> USE LOCATION', windowLocation.pathname);
+ *  console.log('>>>> USE LOCATION', updatedLocation.pathname);
+ *  return updatedLocation;
+ *};
+ */
+/*
+ *const useLocation = ({ windowLocation: aliasWindowLocation = window.location } = {}) => {
+ *  const output = useWindowLocation();
+ *  console.log('>>>> USE ROUTER LOCATION', output?.pathname);
+ *
+ *  useMount(() => {
+ *    console.log('>>>> MOUNT MOUNT ROUTER LOCATION');
+ *  });
+ *
+ *  useEffect(() => {
+ *    console.log('>>>> MOUNT ROUTER LOCATION');
+ *  }, []);
+ *};
+ */
 
 /**
  * useNavigate wrapper. Leverage useNavigate for a modified router with parallel "state"
@@ -67,8 +78,8 @@ const useNavigate = ({
   windowHistory: aliasWindowHistory = window.history
 } = {}) => {
   const windowHistory = aliasWindowHistory;
-  const { search = '', hash = '' } = useAliasLocation();
   const dispatch = useAliasDispatch();
+  const { search = '', hash = '' } = useAliasLocation();
 
   return useCallback(
     (pathLocation, options) => {
@@ -96,28 +107,28 @@ const useNavigate = ({
 };
 
 /**
- * Initialize and store product path, parameter, in a "state" update parallel to routing.
- * We're opting to use "window.location.pathname" directly since it appears to be quicker,
+ * Initialize and store a product path, parameter, in a "state" update parallel to variant detail.
+ * We're opting to use "window.location.pathname" directly because its faster.
  * and returns a similar structured value as useParam.
  *
  * @param {object} options
  * @param {Function} options.useSelector
  * @param {Function} options.useDispatch
  * @param {Function} options.useLocation
- * @param {*} options.windowLocation
  * @returns {*|string}
  */
-const useSetRouteDetail = ({
+const useSetRouteProduct = ({
   useSelector: useAliasSelector = storeHooks.reactRedux.useSelectors,
   useDispatch: useAliasDispatch = storeHooks.reactRedux.useDispatch,
-  useLocation: useAliasLocation = useLocation,
-  windowLocation: aliasWindowLocation = window.location
+  useLocation: useAliasLocation = useLocation
 } = {}) => {
-  useAliasLocation();
-  const dispatch = useAliasDispatch();
-  const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
-  const { pathname: productPath } = aliasWindowLocation;
+  const { pathname: productPath } = useAliasLocation();
+  // const dispatch = useAliasDispatch();
+  // const [updatedPath] = useAliasSelector([({ view }) => view?.product?.config]);
+  console.log('>>>>>> USE SET ROUTE PRODUCT', productPath);
 
+  return productPath;
+  /*
   useEffect(() => {
     if (productPath && productPath !== updatedPath) {
       dispatch({
@@ -128,40 +139,85 @@ const useSetRouteDetail = ({
   }, [updatedPath, dispatch, productPath]);
 
   return updatedPath;
+  */
 };
 
 /**
- * Get a route detail from "state". Consume useSetRouteDetail and set basis for product
+ * Get a route detail from "state". Consume useSetRouteProduct and set basis for product
  * configuration context.
  *
  * @param {object} options
- * @param {boolean} options.disableIsClosest
+ * @param {boolean} options.disableIsClosestMatch
  * @param {Function} options.t
  * @param {Function} options.useChrome
  * @param {Function} options.useSelectors
- * @param {Function} options.useSetRouteDetail
+ * @param {Function} options.useLocation
  * @returns {{baseName: string, errorRoute: object}}
  */
 const useRouteDetail = ({
-  disableIsClosest = helpers.DEV_MODE === true,
+  disableIsClosestMatch = helpers.DEV_MODE === true,
   t = translate,
   useChrome: useAliasChrome = useChrome,
   useSelectors: useAliasSelectors = storeHooks.reactRedux.useSelectors,
-  useSetRouteDetail: useAliasSetRouteDetail = useSetRouteDetail
+  // useSetRouteProduct: useAliasSetRouteProduct = useSetRouteProduct,
+  useLocation: useAliasLocation = useLocation
 } = {}) => {
-  useAliasSetRouteDetail();
+  const { pathname: productPath } = useAliasLocation();
+  // const productPath = useAliasSetRouteProduct();
+  console.log('>>>>>> USE ROUTE DETAIL', productPath);
   const { getBundleData = helpers.noop, updateDocumentTitle = helpers.noop } = useAliasChrome();
   const bundleData = getBundleData();
-  const [productPath, productVariant] = useAliasSelectors([
-    ({ view }) => view?.product?.config,
-    ({ view }) => view?.product?.variant
-  ]);
+  // const [productVariant] = useAliasSelectors([({ view }) => view?.product?.variant]);
   const [detail, setDetail] = useState({});
 
   useEffect(() => {
-    const updatedVariantPath = productPath;
-    const hashPath = helpers.generateHash({ productPath, productVariant });
+    // Get base configuration match
+    let routeConfig = routerHelpers.getRouteConfigByPath({
+      pathName: productPath
+    });
 
+    /*
+    // Determine variant to display, if any
+    if (productVariant) {
+      const selectedVariant = productVariant?.[routeConfig?.firstMatch?.productGroup];
+
+      if (selectedVariant) {
+        routeConfig = routerHelpers.getRouteConfigByPath({
+          pathName: selectedVariant
+        });
+      }
+    }
+    */
+
+    const { allConfigs, availableVariants, configs, firstMatch, isClosest } = routeConfig;
+
+    // Set document title, remove pre-baked suffix
+    updateDocumentTitle(
+      `${t(`curiosity-view.title`, {
+        appName: helpers.UI_DISPLAY_NAME,
+        context: firstMatch?.productGroup
+      })} - ${helpers.UI_DISPLAY_NAME}${(bundleData?.bundleTitle && ` | ${bundleData?.bundleTitle}`) || ''}`,
+      true
+    );
+
+    // disableIsClosestMatch, firstMatch, productGroup
+    // Set route detail
+    setDetail(() => ({
+      allConfigs,
+      availableVariants,
+      firstMatch,
+      isClosest,
+      productGroup: firstMatch?.productGroup,
+      productConfig: (configs?.length && configs) || [],
+      productPath,
+      // productVariant,
+      disableIsClosestMatch: disableIsClosestMatch && isClosest
+    }));
+
+    // const updatedVariantPath = productPath;
+    // const hashPath = helpers.generateHash({ productPath, productVariant });
+
+    /*
     if (updatedVariantPath && detail?._passed !== hashPath) {
       // Get base configuration match
       let routeConfig = routerHelpers.getRouteConfigByPath({
@@ -202,70 +258,27 @@ const useRouteDetail = ({
         productConfig: (configs?.length && configs) || [],
         productPath,
         productVariant,
-        disableIsClosest: disableIsClosest && isClosest
+        disableIsClosestMatch: disableIsClosestMatch && isClosest
       });
     }
-  }, [bundleData?.bundleTitle, detail?._passed, disableIsClosest, productPath, productVariant, t, updateDocumentTitle]);
+    */
+  }, [
+    bundleData?.bundleTitle,
+    detail?._passed,
+    disableIsClosestMatch,
+    productPath,
+    // productVariant,
+    t,
+    updateDocumentTitle
+  ]);
 
   return detail;
 };
 
-/**
- * Search parameter, return
- *
- * @param {object} options
- * @param {Function} options.useLocation
- * @param {*} options.windowHistory
- * @returns {Array}
- */
-const useSearchParams = ({
-  useLocation: useAliasLocation = useLocation,
-  windowHistory: aliasWindowHistory = window.history
-} = {}) => {
-  const windowHistory = aliasWindowHistory;
-  const { updateLocation, search } = useAliasLocation();
-
-  /**
-   * Alias returned React Router Dom useSearchParams hook to something expected.
-   * This hook defaults to merging search objects instead of overwriting them.
-   *
-   * @param {object} updatedQuery
-   * @param {object} options
-   * @param {boolean} options.isMerged Merge search with existing search, or don't
-   * @param {string|*} options.currentSearch search returned from useLocation
-   */
-  const setSearchParams = useCallback(
-    (updatedQuery, { isMerged = true, currentSearch = search } = {}) => {
-      let updatedSearch = {};
-
-      if (isMerged) {
-        Object.assign(updatedSearch, routerHelpers.parseSearchParams(currentSearch), updatedQuery);
-      } else {
-        updatedSearch = updatedQuery;
-      }
-
-      windowHistory.pushState(
-        {},
-        '',
-        `?${Object.entries(updatedSearch)
-          .map(([key, value]) => `${key}=${value}`)
-          .join('&')}`
-      );
-
-      updateLocation();
-    },
-    [search, updateLocation, windowHistory]
-  );
-
-  return [routerHelpers.parseSearchParams(search), setSearchParams];
-};
-
 const context = {
-  useLocation,
   useNavigate,
   useRouteDetail,
-  useSearchParams,
-  useSetRouteDetail
+  useSetRouteProduct
 };
 
-export { context as default, context, useLocation, useNavigate, useRouteDetail, useSearchParams, useSetRouteDetail };
+export { context as default, context, useNavigate, useRouteDetail, useSetRouteProduct };

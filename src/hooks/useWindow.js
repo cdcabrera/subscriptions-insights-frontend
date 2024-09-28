@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { helpers } from '../common';
 
 /**
@@ -55,8 +55,67 @@ const useResizeObserver = target => {
   return dimensions;
 };
 
+const patchHistoryMethod = method => {
+  const { history } = window;
+  const original = history[method];
+
+  history[method] = function (state, ...args) {
+    const event = new Event(method.toLowerCase());
+    event.state = state;
+    window.dispatchEvent(event);
+    return original.call(this, state, ...args);
+  };
+};
+
+const useLocation = () => {
+  const [location, setLocation] = useState({ ...window.location, _id: helpers.generateHash(window.location) });
+  console.log('>>>> USE LOCATION');
+
+  useEffect(() => {
+    let timeout;
+    console.log('>>>> MOUNT USE LOCATION');
+    patchHistoryMethod('pushState');
+    patchHistoryMethod('replaceState');
+
+    /*
+    const handler = (...args) => {
+      timeout = window.setTimeout(() => {
+        const _id = helpers.generateHash(window.location);
+        if (location._id !== _id) {
+          console.log('>>>> USELOCATION CUSTOM', args);
+          setLocation(() => ({ ...window.location, _id }));
+        }
+      });
+    };
+    */
+
+    const handler = () => {
+      const _id = helpers.generateHash(window.location);
+      console.log('>>>> USELOCATION CUSTOM 001', window.location.pathname);
+      // if (location._id !== _id) {
+      console.log('>>>> USELOCATION CUSTOM 002');
+      setLocation(() => ({ ...window.location, _id }));
+      // }
+    };
+
+    window.addEventListener('popstate', handler);
+    window.addEventListener('pushstate', handler);
+    window.addEventListener('replacestate', handler);
+
+    return () => {
+      window.removeEventListener('popstate', handler);
+      window.removeEventListener('pushState', handler);
+      window.removeEventListener('replaceState', handler);
+      window.clearTimeout(timeout);
+    };
+  }, []);
+
+  return location;
+};
+
 const windowHooks = {
+  useLocation,
   useResizeObserver
 };
 
-export { windowHooks as default, windowHooks, useResizeObserver };
+export { windowHooks as default, windowHooks, useLocation, useResizeObserver };
