@@ -1852,7 +1852,7 @@ const getInstancesInventoryGuests = (id, params = {}, options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 750
- * @apiMock {force} 500
+ * @apiMock {force} 400
  * @api {get} /api/rhsm-subscriptions/v1/instances/products/:product_id Get RHSM instances table/inventory data
  * @apiDescription Retrieve instances table/inventory data.
  *

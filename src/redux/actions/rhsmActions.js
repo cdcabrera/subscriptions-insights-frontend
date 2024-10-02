@@ -45,6 +45,8 @@ const getGraphMetrics =
           id: generatedId,
           productId: id,
           query: { ...query, ...metricQuery },
+          action: 'getGraphMetrics',
+          service: methodService.name,
           notifications: {}
         }
       });
@@ -70,6 +72,8 @@ const getInstancesInventory =
         id,
         productId: id,
         query,
+        action: 'getInstancesInventory',
+        service: rhsmServices.getInstancesInventory.name,
         notifications: {}
       }
     });
@@ -91,6 +95,8 @@ const getInstancesInventoryGuests =
         id,
         productId: id,
         query,
+        action: 'getInstancesInventoryGuests',
+        service: rhsmServices.getInstancesInventoryGuests.name,
         notifications: {}
       }
     });
@@ -112,6 +118,8 @@ const getSubscriptionsInventory =
         id,
         productId: id,
         query,
+        action: 'getSubscriptionsInventory',
+        service: rhsmServices.getSubscriptionsInventory.name,
         notifications: {}
       }
     });
