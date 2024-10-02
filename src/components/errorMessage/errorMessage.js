@@ -34,10 +34,11 @@ import { translate } from '../i18n/i18n';
  */
 const ErrorMessage = ({ message, description, title, t = translate }) => {
   const [isErrorDisplay, setIsErrorDisplay] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState([]);
   const errorStr = (typeof message === 'string' && message) || message?.message;
   const cause = message?.cause && (
     <textarea
+      className="curiosity-error__textarea"
       onScroll={event => {
         const target = event.currentTarget;
         if (target.scrollTop >= target.scrollHeight - target.offsetHeight && !hasScrolled) {
@@ -46,7 +47,6 @@ const ErrorMessage = ({ message, description, title, t = translate }) => {
       }}
       readOnly
       rows="10"
-      style={{ display: 'block', width: '100%', resize: 'vertical', whiteSpace: 'pre-wrap' }}
       value={JSON.stringify([message.cause], null, 2)}
     />
   );
@@ -63,6 +63,7 @@ const ErrorMessage = ({ message, description, title, t = translate }) => {
     <div className="fadein" aria-live="polite">
       {isCauseOrError && (
         <Button
+          className="curiosity-error__link"
           title={t('curiosity-view.error', { context: 'debug' })}
           style={{ float: 'right' }}
           variant="link"
@@ -73,7 +74,12 @@ const ErrorMessage = ({ message, description, title, t = translate }) => {
         </Button>
       )}
       {hasScrolled && isErrorDisplay && isCauseOrError && (
-        <Button className="fadein" variant="link" onClick={() => onDownloadLog()} icon={<ExportIcon />}>
+        <Button
+          className="curiosity-error__link fadein"
+          variant="link"
+          onClick={() => onDownloadLog()}
+          icon={<ExportIcon />}
+        >
           {t('curiosity-view.error', { context: 'download' })}
         </Button>
       )}
