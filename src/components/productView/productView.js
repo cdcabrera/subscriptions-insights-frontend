@@ -97,6 +97,7 @@ const ProductView = ({ t, useRouteDetail: useAliasRouteDetail }) => {
           {t(`curiosity-view.title`, { appName: helpers.UI_DISPLAY_NAME, context: productGroup })}
         </PageHeader>
         <PageColumns>{renderProduct()}</PageColumns>
+        <div className="curiosity-page-section__version">{helpers.UI_VERSION}</div>
       </PageLayout>
     )) ||
     null
