@@ -43,6 +43,7 @@ const getGraphMetrics =
         ),
         meta: {
           id: generatedId,
+          productId: id,
           query: { ...query, ...metricQuery },
           notifications: {}
         }
@@ -67,6 +68,7 @@ const getInstancesInventory =
       payload: rhsmServices.getInstancesInventory(id, query),
       meta: {
         id,
+        productId: id,
         query,
         notifications: {}
       }
@@ -87,6 +89,7 @@ const getInstancesInventoryGuests =
       payload: rhsmServices.getInstancesInventoryGuests(id, query),
       meta: {
         id,
+        productId: id,
         query,
         notifications: {}
       }
@@ -107,6 +110,7 @@ const getSubscriptionsInventory =
       payload: rhsmServices.getSubscriptionsInventory(id, query),
       meta: {
         id,
+        productId: id,
         query,
         notifications: {}
       }

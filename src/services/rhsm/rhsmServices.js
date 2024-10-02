@@ -63,7 +63,7 @@ const getApiVersion = (options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 2000
- * @apiMock {RandomSuccess}
+ * @apiMock {force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/Sockets Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -617,6 +617,7 @@ const getApiVersion = (options = {}) => {
  *         "usage": ""
  *       }
  *     }
+ */
 /**
  * @apiMock {DelayResponse} 1000
  * @apiMock {RandomSuccess}
@@ -1171,7 +1172,7 @@ const getApiVersion = (options = {}) => {
  */
 /**
  * @apiMock {DelayResponse} 250
- * @apiMock {RandomSuccess}
+ * @apiMock {force} 500
  * @api {get} /api/rhsm-subscriptions/v1/tally/products/:product_id/:metric_id Get RHSM graph data
  * @apiDescription Retrieve graph data.
  *
@@ -1409,6 +1410,7 @@ const getGraphTally = (id, params = {}, options = {}) => {
 
 /**
  * @api {get} /api/rhsm-subscriptions/v1/capacity/products/:product_id/:metric_id Get RHSM graph capacity data
+ * @apiMock {force} 500
  * @apiDescription Retrieve graph capacity data, such as thresholds.
  *
  * Reference [RHSM for capacity params and commands](https://github.com/RedHatInsights/rhsm-subscriptions/blob/main/api/rhsm-subscriptions-api-v1-spec.yaml)
@@ -1706,6 +1708,7 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 250
+ * @apiMock {force} 500
  * @api {get} /api/rhsm-subscriptions/v1/instances/:instance_id/guests Get RHSM instances/systems inventory guests data
  * @apiDescription Retrieve instances/systems table/inventory guests data.
  *
@@ -1849,6 +1852,7 @@ const getInstancesInventoryGuests = (id, params = {}, options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 750
+ * @apiMock {force} 500
  * @api {get} /api/rhsm-subscriptions/v1/instances/products/:product_id Get RHSM instances table/inventory data
  * @apiDescription Retrieve instances table/inventory data.
  *
@@ -2010,6 +2014,7 @@ const getInstancesInventory = (id, params = {}, options = {}) => {
 
 /**
  * @apiMock {DelayResponse} 0
+ * @apiMock {force} 500
  * @api {get} /api/rhsm-subscriptions/v2/subscriptions/products/:product_id Get RHSM subscriptions table/inventory data
  * @apiDescription Retrieve subscriptions table/inventory data.
  *
@@ -2095,7 +2100,7 @@ const getInstancesInventory = (id, params = {}, options = {}) => {
  *     {
  *        "errors": [
  *          {
- *            "status": "string",
+ *            "status": "woot",
  *            "code": "string",
  *            "title": "string",
  *            "detail": "string"

@@ -43,6 +43,24 @@ const productConfigs = (() => {
   }
 })()?.map(value => value.config);
 
+const estimateNumberofImmediateApiCalls = config => {
+  let numberOfApiCalls = 0;
+
+  config?.initialGraphFilters.forEach(({ filters }) => {
+    if (filters) {
+      numberOfApiCalls += filters.length || 0;
+    } else {
+      numberOfApiCalls += 1;
+    }
+  });
+
+  if (config.initialInventorySettings || config.initialSubscriptionsInventoryFilters) {
+    numberOfApiCalls += 1;
+  }
+
+  return numberOfApiCalls;
+};
+
 /**
  * Sorted/organized/grouped product configs.
  *
@@ -82,61 +100,63 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
 
   configs?.forEach(config => {
     const { aliases, productGroup, productId, productLabel, productPath, productVariants, viewId } = config;
+    const apiCount = estimateNumberofImmediateApiCalls(config);
+    const updatedConfig = { ...config, apiCount };
 
     if (productGroup && productId) {
       anything[productGroup] ??= {};
-      anything[productGroup][productId] = config;
+      anything[productGroup][productId] = updatedConfig;
     }
 
     if (productId) {
       anything[productId] ??= {};
-      anything[productId][productId] = config;
+      anything[productId][productId] = updatedConfig;
     }
 
     if (productLabel && productId) {
       anything[productLabel] ??= {};
-      anything[productLabel][productId] = config;
+      anything[productLabel][productId] = updatedConfig;
     }
 
     if (productPath && productId) {
       anything[productPath] ??= {};
-      anything[productPath][productId] = config;
+      anything[productPath][productId] = updatedConfig;
     }
 
     aliases?.forEach(alias => {
       if (productId) {
         anything[alias] ??= {};
-        anything[alias][productId] = config;
+        anything[alias][productId] = updatedConfig;
       }
 
       productAliases[alias] ??= [];
-      productAliases[alias].push(config);
+      productAliases[alias].push(updatedConfig);
     });
 
     productVariants?.forEach(variant => {
       if (productId) {
         anything[variant] ??= {};
-        anything[variant][productId] = config;
-        anything[variant][productId] = { ...config, productId: variant };
+        anything[variant][productId] = updatedConfig;
+        anything[variant][productId] = { ...updatedConfig, productId: variant };
       }
 
       productAliases[variant] ??= [];
-      productAliases[variant].push({ ...config, productId: variant });
+      productAliases[variant].push({ ...updatedConfig, productId: variant });
     });
 
     if (productId) {
-      productIdConfigs[productId] = config;
+      productIdConfigs[productId] = updatedConfig;
       productIds.add(productId);
     }
 
     if (productPath) {
       productPathConfigs[productPath] ??= [];
-      productPathConfigs[productPath].push(config);
+      productPathConfigs[productPath].push(updatedConfig);
     }
 
     if (productGroup) {
       groupIdConfigs[productGroup] ??= [];
-      groupIdConfigs[productGroup].push(config);
+      groupIdConfigs[productGroup].push(updatedConfig);
 
       if (Array.isArray(productVariants)) {
         groupedVariants[productGroup] ??= [];
@@ -156,7 +176,7 @@ const sortedProductConfigs = helpers.memo((configs = productConfigs) => {
 
     if (viewId) {
       viewIdConfigs[viewId] ??= [];
-      viewIdConfigs[viewId].push(config);
+      viewIdConfigs[viewId].push(updatedConfig);
     }
 
     if (viewId && productId) {
