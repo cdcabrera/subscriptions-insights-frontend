@@ -57,7 +57,7 @@ const GraphCardChart = ({
 
   if (updatedActionDisplay) {
     cardHeaderProps.actions = {
-      className: `curiosity-card__actions ${(error && 'blur') || ''}`,
+      className: `curiosity-card__actions ${(error && 'hidden') || ''}`,
       actions: (
         <Toolbar className="curiosity-toolbar" collapseListedFiltersBreakpoint="sm">
           <ToolbarContent className="curiosity-toolbar__content">

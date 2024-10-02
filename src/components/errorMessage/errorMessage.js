@@ -11,8 +11,8 @@ import {
   EmptyStateVariant,
   Title
 } from '@patternfly/react-core';
-import { CopyIcon, CogIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
-import { helpers } from '../../common';
+import { ExportIcon, CogIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
+import { helpers, downloadHelpers } from '../../common';
 import { translate } from '../i18n/i18n';
 
 /**
@@ -34,28 +34,51 @@ import { translate } from '../i18n/i18n';
  */
 const ErrorMessage = ({ message, description, title, t = translate }) => {
   const [isErrorDisplay, setIsErrorDisplay] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const errorStr = (typeof message === 'string' && message) || message?.message;
   const cause = message?.cause && (
-    <textarea readOnly rows="10" style={{ width: '100%', resize: 'vertical', whiteSpace: 'pre-wrap' }}>
-      {JSON.stringify([message.cause], null, 2)}
-    </textarea>
+    <textarea
+      onScroll={event => {
+        const target = event.currentTarget;
+        if (target.scrollTop >= target.scrollHeight - target.offsetHeight && !hasScrolled) {
+          setHasScrolled(true);
+        }
+      }}
+      readOnly
+      rows="10"
+      style={{ display: 'block', width: '100%', resize: 'vertical', whiteSpace: 'pre-wrap' }}
+      value={JSON.stringify([message.cause], null, 2)}
+    />
   );
+  const isCauseOrError = (cause || errorStr) && true;
+
+  const onErrorDisplay = () => {
+    setHasScrolled(false);
+    setIsErrorDisplay(!isErrorDisplay);
+  };
+
+  const onDownloadLog = () => downloadHelpers.debugLog();
 
   return (
-    <div>
-      {(cause || errorStr) && (
+    <div className="fadein" aria-live="polite">
+      {isCauseOrError && (
         <Button
           title={t('curiosity-view.error', { context: 'debug' })}
           style={{ float: 'right' }}
           variant="link"
-          onClick={() => setIsErrorDisplay(!isErrorDisplay)}
+          onClick={() => onErrorDisplay()}
         >
           <CogIcon />
           <span className="sr-only">{t('curiosity-view.error', { context: 'debug' })}</span>
         </Button>
       )}
+      {hasScrolled && isErrorDisplay && isCauseOrError && (
+        <Button className="fadein" variant="link" onClick={() => onDownloadLog()} icon={<ExportIcon />}>
+          {t('curiosity-view.error', { context: 'download' })}
+        </Button>
+      )}
       {(isErrorDisplay && (cause || errorStr)) || (
-        <EmptyState variant={EmptyStateVariant.full} className="fadein">
+        <EmptyState variant={EmptyStateVariant.full}>
           <EmptyStateIcon icon={ExclamationCircleIcon} />
           <Title headingLevel="h2" size="lg">
             {title || t('curiosity-view.error', { context: 'title', appName: helpers.UI_INTERNAL_NAME })}

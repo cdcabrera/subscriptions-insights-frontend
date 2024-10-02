@@ -469,8 +469,9 @@
   },
   "curiosity-view": {
     "error": "...",
-    "error_debug": "Debug error",
+    "error_debug": "View error",
     "error_description": "Try refreshing the page. If the problem persists, contact your organization administrator or visit our <0>status page</0> for known outages.",
+    "error_download": "Debug log",
     "error_pageTitle": "Subscriptions Usage",
     "error_title": "{{appName}} is temporarily unavailable",
     "title": "{{appName}}",
