@@ -2659,55 +2659,32 @@ Populate, load, remote locale strings.
     </tr>  </tbody>
 </table>
 
-
-* [i18n](#Components.module_i18n)
-    * [~I18n(props)](#Components.module_i18n..I18n) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_i18n..I18n.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_i18n..I18n.defaultProps) : <code>Object</code>
-
 <a name="Components.module_i18n..I18n"></a>
 
-### i18n~I18n(props) ⇒ <code>React.ReactNode</code>
+### i18n~I18n(props) ⇒ <code>JSX.Element</code>
 Load I18n.
 
 **Kind**: inner method of [<code>i18n</code>](#Components.module_i18n)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.children</td><td><code>React.ReactNode</code></td>
+    <td>props.children</td><td><code>React.ReactNode</code></td><td></td>
     </tr><tr>
-    <td>props.fallbackLng</td><td><code>string</code></td>
+    <td>[props.fallbackLng]</td><td><code>string</code></td><td><code>&quot;process.env.REACT_APP_CONFIG_SERVICE_LOCALES_DEFAULT_LNG&quot;</code></td>
     </tr><tr>
-    <td>props.loadPath</td><td><code>string</code></td>
+    <td>[props.loadPath]</td><td><code>string</code></td><td><code>&quot;process.env.REACT_APP_CONFIG_SERVICE_LOCALES_PATH&quot;</code></td>
     </tr><tr>
-    <td>props.locale</td><td><code>string</code></td>
+    <td>[props.locale]</td><td><code>string</code></td><td><code>null</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~I18n(props)](#Components.module_i18n..I18n) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_i18n..I18n.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_i18n..I18n.defaultProps) : <code>Object</code>
-
-<a name="Components.module_i18n..I18n.propTypes"></a>
-
-#### I18n.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>I18n</code>](#Components.module_i18n..I18n)  
-<a name="Components.module_i18n..I18n.defaultProps"></a>
-
-#### I18n.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>I18n</code>](#Components.module_i18n..I18n)  
 <a name="i18n.module_i18nHelpers"></a>
 
 ## i18nHelpers
