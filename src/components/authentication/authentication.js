@@ -22,11 +22,11 @@ import { AuthenticationContext, useGetAuthorization } from './authenticationCont
  * An authentication pass-through component.
  *
  * @param {object} props
- * @param {string} [props.appName]
+ * @param {string} [props.appName=routerHelpers.appName]
  * @param {React.ReactNode} props.children
- * @param {boolean} [props.isDisabled]
- * @param {translate} [props.t]
- * @param {useGetAuthorization} [props.useGetAuthorization]
+ * @param {boolean} [props.isDisabled=helpers.UI_DISABLED]
+ * @param {translate} [props.t=translate]
+ * @param {useGetAuthorization} [props.useGetAuthorization=useGetAuthorization]
  * @returns {JSX.Element}
  */
 const Authentication = ({

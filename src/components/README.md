@@ -209,57 +209,34 @@ Authentication component wrapper.
     </tr>  </tbody>
 </table>
 
-
-* [Authentication](#Components.module_Authentication)
-    * [~Authentication(props)](#Components.module_Authentication..Authentication) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_Authentication..Authentication.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_Authentication..Authentication.defaultProps) : <code>Object</code>
-
 <a name="Components.module_Authentication..Authentication"></a>
 
-### Authentication~Authentication(props) ⇒ <code>React.ReactNode</code>
+### Authentication~Authentication(props) ⇒ <code>JSX.Element</code>
 An authentication pass-through component.
 
 **Kind**: inner method of [<code>Authentication</code>](#Components.module_Authentication)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.appName</td><td><code>string</code></td>
+    <td>[props.appName]</td><td><code>string</code></td><td><code>&quot;routerHelpers.appName&quot;</code></td>
     </tr><tr>
-    <td>props.children</td><td><code>React.ReactNode</code></td>
+    <td>props.children</td><td><code>React.ReactNode</code></td><td></td>
     </tr><tr>
-    <td>props.isDisabled</td><td><code>boolean</code></td>
+    <td>[props.isDisabled]</td><td><code>boolean</code></td><td><code>helpers.UI_DISABLED</code></td>
     </tr><tr>
-    <td>props.t</td><td><code>function</code></td>
+    <td>[props.t]</td><td><code>translate</code></td><td><code>translate</code></td>
     </tr><tr>
-    <td>props.useGetAuthorization</td><td><code>function</code></td>
+    <td>[props.useGetAuthorization]</td><td><code>useGetAuthorization</code></td><td><code>useGetAuthorization</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~Authentication(props)](#Components.module_Authentication..Authentication) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_Authentication..Authentication.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_Authentication..Authentication.defaultProps) : <code>Object</code>
-
-<a name="Components.module_Authentication..Authentication.propTypes"></a>
-
-#### Authentication.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>Authentication</code>](#Components.module_Authentication..Authentication)  
-<a name="Components.module_Authentication..Authentication.defaultProps"></a>
-
-#### Authentication.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>Authentication</code>](#Components.module_Authentication..Authentication)  
 <a name="Authentication.module_AuthenticationContext"></a>
 
 ## AuthenticationContext
@@ -350,9 +327,7 @@ Banner alert messages for a product view.
 
 * [BannerMessages](#Components.module_BannerMessages)
     * [~BannerMessageVariant](#Components.module_BannerMessages..BannerMessageVariant) : <code>Object</code>
-    * [~BannerMessages(props)](#Components.module_BannerMessages..BannerMessages) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_BannerMessages..BannerMessages.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_BannerMessages..BannerMessages.defaultProps) : <code>Object</code>
+    * [~BannerMessages(props)](#Components.module_BannerMessages..BannerMessages) ⇒ <code>JSX.Element</code>
 
 <a name="Components.module_BannerMessages..BannerMessageVariant"></a>
 
@@ -362,43 +337,26 @@ Banner message variants.
 **Kind**: inner constant of [<code>BannerMessages</code>](#Components.module_BannerMessages)  
 <a name="Components.module_BannerMessages..BannerMessages"></a>
 
-### BannerMessages~BannerMessages(props) ⇒ <code>React.ReactNode</code>
+### BannerMessages~BannerMessages(props) ⇒ <code>JSX.Element</code>
 Render banner messages.
 
 **Kind**: inner method of [<code>BannerMessages</code>](#Components.module_BannerMessages)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.useBannerMessages</td><td><code>function</code></td>
+    <td>[props.useBannerMessages]</td><td><code>useBannerMessages</code></td><td><code>useBannerMessages</code></td>
     </tr><tr>
-    <td>props.useRemoveBannerMessages</td><td><code>function</code></td>
+    <td>[props.useRemoveBannerMessages]</td><td><code>useRemoveBannerMessages</code></td><td><code>useRemoveBannerMessages</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~BannerMessages(props)](#Components.module_BannerMessages..BannerMessages) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_BannerMessages..BannerMessages.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_BannerMessages..BannerMessages.defaultProps) : <code>Object</code>
-
-<a name="Components.module_BannerMessages..BannerMessages.propTypes"></a>
-
-#### BannerMessages.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>BannerMessages</code>](#Components.module_BannerMessages..BannerMessages)  
-<a name="Components.module_BannerMessages..BannerMessages.defaultProps"></a>
-
-#### BannerMessages.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>BannerMessages</code>](#Components.module_BannerMessages..BannerMessages)  
 <a name="BannerMessages.module_BannerMessagesContext"></a>
 
 ## BannerMessagesContext
