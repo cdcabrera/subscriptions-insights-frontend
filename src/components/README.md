@@ -4336,51 +4336,28 @@ Primary product display component, and config context provider.
     </tr>  </tbody>
 </table>
 
-
-* [ProductView](#Components.module_ProductView)
-    * [~ProductView(props)](#Components.module_ProductView..ProductView) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_ProductView..ProductView.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_ProductView..ProductView.defaultProps) : <code>Object</code>
-
 <a name="Components.module_ProductView..ProductView"></a>
 
-### ProductView~ProductView(props) ⇒ <code>React.ReactNode</code>
+### ProductView~ProductView(props) ⇒ <code>JSX.Element</code>
 Display products.
 
 **Kind**: inner method of [<code>ProductView</code>](#Components.module_ProductView)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.t</td><td><code>function</code></td>
+    <td>[props.t]</td><td><code>translate</code></td><td><code>translate</code></td>
     </tr><tr>
-    <td>props.useRouteDetail</td><td><code>function</code></td>
+    <td>[props.useRouteDetail]</td><td><code>routerContext.useRouteDetail</code></td><td><code>routerContext.useRouteDetail</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~ProductView(props)](#Components.module_ProductView..ProductView) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_ProductView..ProductView.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_ProductView..ProductView.defaultProps) : <code>Object</code>
-
-<a name="Components.module_ProductView..ProductView.propTypes"></a>
-
-#### ProductView.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>ProductView</code>](#Components.module_ProductView..ProductView)  
-<a name="Components.module_ProductView..ProductView.defaultProps"></a>
-
-#### ProductView.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>ProductView</code>](#Components.module_ProductView..ProductView)  
 <a name="ProductView.module_ProductViewContext"></a>
 
 ## ProductViewContext
@@ -4779,14 +4756,12 @@ Return an export query for subscriptions.
 ## ProductViewMissing
 
 * [ProductViewMissing](#ProductView.module_ProductViewMissing)
-    * [~ProductViewMissing(props)](#ProductView.module_ProductViewMissing..ProductViewMissing) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#ProductView.module_ProductViewMissing..ProductViewMissing.propTypes) : <code>Object</code>
-        * [.defaultProps](#ProductView.module_ProductViewMissing..ProductViewMissing.defaultProps) : <code>Object</code>
+    * [~ProductViewMissing(props)](#ProductView.module_ProductViewMissing..ProductViewMissing) ⇒ <code>JSX.Element</code>
     * ["onNavigate" (path)](#event_onNavigate) ⇒ <code>void</code>
 
 <a name="ProductView.module_ProductViewMissing..ProductViewMissing"></a>
 
-### ProductViewMissing~ProductViewMissing(props) ⇒ <code>React.ReactNode</code>
+### ProductViewMissing~ProductViewMissing(props) ⇒ <code>JSX.Element</code>
 Render a missing product view.
 
 **Kind**: inner method of [<code>ProductViewMissing</code>](#ProductView.module_ProductViewMissing)  
@@ -4794,40 +4769,23 @@ Render a missing product view.
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.availableProductsRedirect</td><td><code>number</code></td>
+    <td>[props.availableProductsRedirect]</td><td><code>number</code></td><td><code>4</code></td>
     </tr><tr>
-    <td>props.t</td><td><code>function</code></td>
+    <td>[props.t]</td><td><code>translate</code></td><td><code>translate</code></td>
     </tr><tr>
-    <td>props.useNavigate</td><td><code>function</code></td>
+    <td>[props.useNavigate]</td><td><code>routerContext.useNavigate</code></td><td><code>routerContext.useNavigate</code></td>
     </tr><tr>
-    <td>props.useRouteDetail</td><td><code>function</code></td>
+    <td>[props.useRouteDetail]</td><td><code>routerContext.useRouteDetail</code></td><td><code>routerContext.useRouteDetail</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~ProductViewMissing(props)](#ProductView.module_ProductViewMissing..ProductViewMissing) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#ProductView.module_ProductViewMissing..ProductViewMissing.propTypes) : <code>Object</code>
-    * [.defaultProps](#ProductView.module_ProductViewMissing..ProductViewMissing.defaultProps) : <code>Object</code>
-
-<a name="ProductView.module_ProductViewMissing..ProductViewMissing.propTypes"></a>
-
-#### ProductViewMissing.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>ProductViewMissing</code>](#ProductView.module_ProductViewMissing..ProductViewMissing)  
-<a name="ProductView.module_ProductViewMissing..ProductViewMissing.defaultProps"></a>
-
-#### ProductViewMissing.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>ProductViewMissing</code>](#ProductView.module_ProductViewMissing..ProductViewMissing)  
 <a name="event_onNavigate"></a>
 
 ### "onNavigate" (path) ⇒ <code>void</code>
