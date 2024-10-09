@@ -3878,16 +3878,11 @@ Render skeleton and spinner loaders.
 ## MessageView
 Page empty state message display.
 
-
-* [MessageView](#Components.module_MessageView)
-    * [~MessageView(props)](#Components.module_MessageView..MessageView) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_MessageView..MessageView.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_MessageView..MessageView.defaultProps) : <code>Object</code>
-
 <a name="Components.module_MessageView..MessageView"></a>
 
-### MessageView~MessageView(props) ⇒ <code>React.ReactNode</code>
+### MessageView~MessageView(props) ⇒ <code>JSX.Element</code>
 Render a message view, page empty state.
+Note: PF EmptyStateIcon registers as function, we compensate for PF by allowing a ReactNode or Function.
 
 **Kind**: inner method of [<code>MessageView</code>](#Components.module_MessageView)  
 <table>
@@ -3912,23 +3907,6 @@ Render a message view, page empty state.
     </tr>  </tbody>
 </table>
 
-
-* [~MessageView(props)](#Components.module_MessageView..MessageView) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_MessageView..MessageView.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_MessageView..MessageView.defaultProps) : <code>Object</code>
-
-<a name="Components.module_MessageView..MessageView.propTypes"></a>
-
-#### MessageView.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>MessageView</code>](#Components.module_MessageView..MessageView)  
-<a name="Components.module_MessageView..MessageView.defaultProps"></a>
-
-#### MessageView.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>MessageView</code>](#Components.module_MessageView..MessageView)  
 <a name="Components.module_MinHeight"></a>
 
 ## MinHeight
