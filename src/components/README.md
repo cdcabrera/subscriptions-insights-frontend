@@ -2911,13 +2911,16 @@ Base inventory table card.
 
 
 * [InventoryCard](#Components.module_InventoryCard)
-    * [~InventoryCard(props)](#Components.module_InventoryCard..InventoryCard) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_InventoryCard..InventoryCard.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_InventoryCard..InventoryCard.defaultProps) : <code>Object</code>
+    * [~InventoryCard(props)](#Components.module_InventoryCard..InventoryCard) ⇒ <code>JSX.Element</code>
+    * [~useGetInventory](#Components.module_InventoryCard..useGetInventory) ⇒ <code>Object</code>
+    * [~useInventoryCardActions](#Components.module_InventoryCard..useInventoryCardActions) ⇒ <code>React.ReactNode</code>
+    * [~useParseFiltersSettings](#Components.module_InventoryCard..useParseFiltersSettings) ⇒ <code>Object</code>
+    * [~useOnPage](#Components.module_InventoryCard..useOnPage) ⇒ <code>function</code>
+    * [~useOnColumnSort](#Components.module_InventoryCard..useOnColumnSort) ⇒ <code>function</code>
 
 <a name="Components.module_InventoryCard..InventoryCard"></a>
 
-### InventoryCard~InventoryCard(props) ⇒ <code>React.ReactNode</code>
+### InventoryCard~InventoryCard(props) ⇒ <code>JSX.Element</code>
 Set up inventory cards. Expand filters with base settings.
 
 **Kind**: inner method of [<code>InventoryCard</code>](#Components.module_InventoryCard)  
@@ -2925,46 +2928,49 @@ Set up inventory cards. Expand filters with base settings.
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.isDisabled</td><td><code>boolean</code></td>
+    <td>[props.isDisabled]</td><td><code>boolean</code></td><td><code>false</code></td>
     </tr><tr>
-    <td>props.t</td><td><code>function</code></td>
+    <td>[props.t]</td><td><code>translate</code></td><td><code>translate</code></td>
     </tr><tr>
-    <td>props.useGetInventory</td><td><code>function</code></td>
+    <td>props.useGetInventory</td><td><code>useGetInventory</code></td><td></td>
     </tr><tr>
-    <td>props.useInventoryCardActions</td><td><code>function</code></td>
+    <td>props.useInventoryCardActions</td><td><code>useInventoryCardActions</code></td><td></td>
     </tr><tr>
-    <td>props.useParseFiltersSettings</td><td><code>function</code></td>
+    <td>props.useParseFiltersSettings</td><td><code>useParseFiltersSettings</code></td><td></td>
     </tr><tr>
-    <td>props.useOnPage</td><td><code>function</code></td>
+    <td>props.useOnPage</td><td><code>useOnPage</code></td><td></td>
     </tr><tr>
-    <td>props.useOnColumnSort</td><td><code>function</code></td>
+    <td>props.useOnColumnSort</td><td><code>useOnColumnSort</code></td><td></td>
     </tr>  </tbody>
 </table>
 
+<a name="Components.module_InventoryCard..useGetInventory"></a>
 
-* [~InventoryCard(props)](#Components.module_InventoryCard..InventoryCard) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_InventoryCard..InventoryCard.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_InventoryCard..InventoryCard.defaultProps) : <code>Object</code>
+### InventoryCard~useGetInventory ⇒ <code>Object</code>
+**Kind**: inner typedef of [<code>InventoryCard</code>](#Components.module_InventoryCard)  
+<a name="Components.module_InventoryCard..useInventoryCardActions"></a>
 
-<a name="Components.module_InventoryCard..InventoryCard.propTypes"></a>
+### InventoryCard~useInventoryCardActions ⇒ <code>React.ReactNode</code>
+**Kind**: inner typedef of [<code>InventoryCard</code>](#Components.module_InventoryCard)  
+<a name="Components.module_InventoryCard..useParseFiltersSettings"></a>
 
-#### InventoryCard.propTypes : <code>Object</code>
-Prop types.
+### InventoryCard~useParseFiltersSettings ⇒ <code>Object</code>
+**Kind**: inner typedef of [<code>InventoryCard</code>](#Components.module_InventoryCard)  
+<a name="Components.module_InventoryCard..useOnPage"></a>
 
-**Kind**: static property of [<code>InventoryCard</code>](#Components.module_InventoryCard..InventoryCard)  
-<a name="Components.module_InventoryCard..InventoryCard.defaultProps"></a>
+### InventoryCard~useOnPage ⇒ <code>function</code>
+**Kind**: inner typedef of [<code>InventoryCard</code>](#Components.module_InventoryCard)  
+<a name="Components.module_InventoryCard..useOnColumnSort"></a>
 
-#### InventoryCard.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>InventoryCard</code>](#Components.module_InventoryCard..InventoryCard)  
+### InventoryCard~useOnColumnSort ⇒ <code>function</code>
+**Kind**: inner typedef of [<code>InventoryCard</code>](#Components.module_InventoryCard)  
 <a name="InventoryCard.module_InventoryCardHelpers"></a>
 
 ## InventoryCardHelpers
@@ -3048,60 +3054,36 @@ Parse an inventory API response against available filters, query parameters, and
     </tr>  </tbody>
 </table>
 
-
-* [InventoryCardInstances](#Components.module_InventoryCardInstances)
-    * [~InventoryCardInstances(props)](#Components.module_InventoryCardInstances..InventoryCardInstances) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_InventoryCardInstances..InventoryCardInstances.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_InventoryCardInstances..InventoryCardInstances.defaultProps) : <code>Object</code>
-
 <a name="Components.module_InventoryCardInstances..InventoryCardInstances"></a>
 
-### InventoryCardInstances~InventoryCardInstances(props) ⇒ <code>React.ReactNode</code>
+### InventoryCardInstances~InventoryCardInstances(props) ⇒ <code>JSX.Element</code>
 An instances' system inventory component.
 
 **Kind**: inner method of [<code>InventoryCardInstances</code>](#Components.module_InventoryCardInstances)  
-**Emits**: [<code>onColumnSort</code>](#event_onColumnSort), [<code>onPage</code>](#event_onPage)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.isDisabled</td><td><code>boolean</code></td>
+    <td>[props.isDisabled]</td><td><code>boolean</code></td><td><code>helpers.UI_DISABLED_TABLE_INSTANCES</code></td>
     </tr><tr>
-    <td>props.useGetInventory</td><td><code>function</code></td>
+    <td>[props.useGetInventory]</td><td><code>useGetInstancesInventory</code></td><td><code>useGetInstancesInventory</code></td>
     </tr><tr>
-    <td>props.useOnPage</td><td><code>function</code></td>
+    <td>[props.useInventoryCardActions]</td><td><code>useInventoryCardActionsInstances</code></td><td><code>useInventoryCardActionsInstances</code></td>
     </tr><tr>
-    <td>props.useOnColumnSort</td><td><code>function</code></td>
+    <td>[props.useOnPage]</td><td><code>useOnPageInstances</code></td><td><code>useOnPageInstances</code></td>
     </tr><tr>
-    <td>props.useProductInventoryConfig</td><td><code>function</code></td>
+    <td>[props.useOnColumnSort]</td><td><code>useOnColumnSortInstances</code></td><td><code>useOnColumnSortInstances</code></td>
     </tr><tr>
-    <td>props.useProductInventoryQuery</td><td><code>function</code></td>
+    <td>[props.useParseFiltersSettings]</td><td><code>useParseInstancesFiltersSettings</code></td><td><code>useParseInstancesFiltersSettings</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~InventoryCardInstances(props)](#Components.module_InventoryCardInstances..InventoryCardInstances) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_InventoryCardInstances..InventoryCardInstances.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_InventoryCardInstances..InventoryCardInstances.defaultProps) : <code>Object</code>
-
-<a name="Components.module_InventoryCardInstances..InventoryCardInstances.propTypes"></a>
-
-#### InventoryCardInstances.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>InventoryCardInstances</code>](#Components.module_InventoryCardInstances..InventoryCardInstances)  
-<a name="Components.module_InventoryCardInstances..InventoryCardInstances.defaultProps"></a>
-
-#### InventoryCardInstances.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>InventoryCardInstances</code>](#Components.module_InventoryCardInstances..InventoryCardInstances)  
 <a name="InventoryCardInstances.module_InventoryCardInstancesContext"></a>
 
 ## InventoryCardInstancesContext
@@ -3332,60 +3314,36 @@ On event update state for inventory.
     </tr>  </tbody>
 </table>
 
-
-* [InventoryCardSubscriptions](#Components.module_InventoryCardSubscriptions)
-    * [~InventoryCardSubscriptions(props)](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions.defaultProps) : <code>Object</code>
-
 <a name="Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions"></a>
 
-### InventoryCardSubscriptions~InventoryCardSubscriptions(props) ⇒ <code>React.ReactNode</code>
+### InventoryCardSubscriptions~InventoryCardSubscriptions(props) ⇒ <code>JSX.Element</code>
 A subscriptions' system inventory component.
 
 **Kind**: inner method of [<code>InventoryCardSubscriptions</code>](#Components.module_InventoryCardSubscriptions)  
-**Emits**: [<code>onColumnSort</code>](#event_onColumnSort), [<code>onPage</code>](#event_onPage)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.isDisabled</td><td><code>boolean</code></td>
+    <td>[props.isDisabled]</td><td><code>boolean</code></td><td><code>helpers.UI_DISABLED_TABLE_SUBSCRIPTIONS</code></td>
     </tr><tr>
-    <td>props.useGetInventory</td><td><code>function</code></td>
+    <td>[props.useGetInventory]</td><td><code>useGetSubscriptionsInventory</code></td><td><code>useGetSubscriptionsInventory</code></td>
     </tr><tr>
-    <td>props.useOnPage</td><td><code>function</code></td>
+    <td>[props.useInventoryCardActions]</td><td><code>useInventoryCardActionsSubscriptions</code></td><td><code>useInventoryCardActionsSubscriptions</code></td>
     </tr><tr>
-    <td>props.useOnColumnSort</td><td><code>function</code></td>
+    <td>[props.useOnPage]</td><td><code>useOnPageSubscriptions</code></td><td><code>useOnPageSubscriptions</code></td>
     </tr><tr>
-    <td>props.useProductInventoryConfig</td><td><code>function</code></td>
+    <td>[props.useOnColumnSort]</td><td><code>useOnColumnSortSubscriptions</code></td><td><code>useOnColumnSortSubscriptions</code></td>
     </tr><tr>
-    <td>props.useProductInventoryQuery</td><td><code>function</code></td>
+    <td>[props.useParseFiltersSettings]</td><td><code>useParseSubscriptionsFiltersSettings</code></td><td><code>useParseSubscriptionsFiltersSettings</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~InventoryCardSubscriptions(props)](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions.defaultProps) : <code>Object</code>
-
-<a name="Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions.propTypes"></a>
-
-#### InventoryCardSubscriptions.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>InventoryCardSubscriptions</code>](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions)  
-<a name="Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions.defaultProps"></a>
-
-#### InventoryCardSubscriptions.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>InventoryCardSubscriptions</code>](#Components.module_InventoryCardSubscriptions..InventoryCardSubscriptions)  
 <a name="InventoryCardSubscriptions.module_InventoryCardSubscriptionsContext"></a>
 
 ## InventoryCardSubscriptionsContext
@@ -3616,15 +3574,9 @@ Guests inventory table wrapper.
     </tr>  </tbody>
 </table>
 
-
-* [InventoryGuests](#Components.module_InventoryGuests)
-    * [~InventoryGuests(props)](#Components.module_InventoryGuests..InventoryGuests) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_InventoryGuests..InventoryGuests.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_InventoryGuests..InventoryGuests.defaultProps) : <code>Object</code>
-
 <a name="Components.module_InventoryGuests..InventoryGuests"></a>
 
-### InventoryGuests~InventoryGuests(props) ⇒ <code>React.ReactNode</code>
+### InventoryGuests~InventoryGuests(props) ⇒ <code>JSX.Element</code>
 A system inventory guests component.
 
 **Kind**: inner method of [<code>InventoryGuests</code>](#Components.module_InventoryGuests)  
@@ -3632,44 +3584,27 @@ A system inventory guests component.
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.defaultPerPage</td><td><code>number</code></td>
+    <td>[props.defaultPerPage]</td><td><code>number</code></td><td><code>5</code></td>
     </tr><tr>
-    <td>props.id</td><td><code>string</code></td>
+    <td>props.id</td><td><code>string</code></td><td></td>
     </tr><tr>
-    <td>props.numberOfGuests</td><td><code>number</code></td>
+    <td>props.numberOfGuests</td><td><code>number</code></td><td></td>
     </tr><tr>
-    <td>props.useGetInventory</td><td><code>function</code></td>
+    <td>[props.useGetInventory]</td><td><code>useGetGuestsInventory</code></td><td><code>useGetGuestsInventory</code></td>
     </tr><tr>
-    <td>props.useOnScroll</td><td><code>function</code></td>
+    <td>[props.useOnScroll]</td><td><code>useOnScroll</code></td><td><code>useOnScroll</code></td>
     </tr><tr>
-    <td>props.t</td><td><code>function</code></td>
+    <td>[props.t]</td><td><code>translate</code></td><td><code>translate</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~InventoryGuests(props)](#Components.module_InventoryGuests..InventoryGuests) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_InventoryGuests..InventoryGuests.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_InventoryGuests..InventoryGuests.defaultProps) : <code>Object</code>
-
-<a name="Components.module_InventoryGuests..InventoryGuests.propTypes"></a>
-
-#### InventoryGuests.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>InventoryGuests</code>](#Components.module_InventoryGuests..InventoryGuests)  
-<a name="Components.module_InventoryGuests..InventoryGuests.defaultProps"></a>
-
-#### InventoryGuests.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>InventoryGuests</code>](#Components.module_InventoryGuests..InventoryGuests)  
 <a name="InventoryGuests.module_InventoryGuestsContext"></a>
 
 ## InventoryGuestsContext
