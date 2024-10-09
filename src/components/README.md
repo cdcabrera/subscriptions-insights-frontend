@@ -3750,53 +3750,6 @@ On scroll, dispatch type.
 <a name="InventoryTabs.module_InventoryTab"></a>
 
 ## InventoryTab
-
-* [InventoryTab](#InventoryTabs.module_InventoryTab)
-    * [~InventoryTab(props)](#InventoryTabs.module_InventoryTab..InventoryTab) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#InventoryTabs.module_InventoryTab..InventoryTab.propTypes) : <code>Object</code>
-        * [.defaultProps](#InventoryTabs.module_InventoryTab..InventoryTab.defaultProps) : <code>Object</code>
-
-<a name="InventoryTabs.module_InventoryTab..InventoryTab"></a>
-
-### InventoryTab~InventoryTab(props) ⇒ <code>React.ReactNode</code>
-A tab pass-through component for passing props to InventoryTabs.
-
-**Kind**: inner method of [<code>InventoryTab</code>](#InventoryTabs.module_InventoryTab)  
-<table>
-  <thead>
-    <tr>
-      <th>Param</th><th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-<tr>
-    <td>props</td><td><code>object</code></td>
-    </tr><tr>
-    <td>props.active</td><td><code>boolean</code></td>
-    </tr><tr>
-    <td>props.children</td><td><code>React.ReactNode</code></td>
-    </tr><tr>
-    <td>props.title</td><td><code>string</code></td>
-    </tr>  </tbody>
-</table>
-
-
-* [~InventoryTab(props)](#InventoryTabs.module_InventoryTab..InventoryTab) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#InventoryTabs.module_InventoryTab..InventoryTab.propTypes) : <code>Object</code>
-    * [.defaultProps](#InventoryTabs.module_InventoryTab..InventoryTab.defaultProps) : <code>Object</code>
-
-<a name="InventoryTabs.module_InventoryTab..InventoryTab.propTypes"></a>
-
-#### InventoryTab.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>InventoryTab</code>](#InventoryTabs.module_InventoryTab..InventoryTab)  
-<a name="InventoryTabs.module_InventoryTab..InventoryTab.defaultProps"></a>
-
-#### InventoryTab.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>InventoryTab</code>](#InventoryTabs.module_InventoryTab..InventoryTab)  
 <a name="Components.module_InventoryTabs"></a>
 
 ## InventoryTabs
@@ -3820,9 +3773,7 @@ An inventory tabs display with state. Consume Tabs.
 
 * [InventoryTabs](#Components.module_InventoryTabs)
     * [~useOnTab(options)](#Components.module_InventoryTabs..useOnTab) ⇒ <code>function</code>
-    * [~InventoryTabs(props)](#Components.module_InventoryTabs..InventoryTabs) ⇒ <code>React.ReactNode</code> \| <code>null</code>
-        * [.propTypes](#Components.module_InventoryTabs..InventoryTabs.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_InventoryTabs..InventoryTabs.defaultProps) : <code>Object</code>
+    * [~InventoryTabs(props)](#Components.module_InventoryTabs..InventoryTabs) ⇒ <code>JSX.Element</code> \| <code>null</code>
 
 <a name="Components.module_InventoryTabs..useOnTab"></a>
 
@@ -3840,15 +3791,15 @@ Update tab state.
 <tr>
     <td>options</td><td><code>object</code></td>
     </tr><tr>
-    <td>options.useDispatch</td><td><code>function</code></td>
+    <td>options.useDispatch</td><td><code>storeHooks.reactRedux.useDispatch</code></td>
     </tr><tr>
-    <td>options.useProduct</td><td><code>function</code></td>
+    <td>options.useProduct</td><td><code>useProduct</code></td>
     </tr>  </tbody>
 </table>
 
 <a name="Components.module_InventoryTabs..InventoryTabs"></a>
 
-### InventoryTabs~InventoryTabs(props) ⇒ <code>React.ReactNode</code> \| <code>null</code>
+### InventoryTabs~InventoryTabs(props) ⇒ <code>JSX.Element</code> \| <code>null</code>
 An inventory tabs component.
 Render inventory tabs using Inventory tab passed props only.
 
@@ -3857,48 +3808,31 @@ Render inventory tabs using Inventory tab passed props only.
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.activeTab</td><td><code>number</code></td>
+    <td>[props.activeTab]</td><td><code>number</code></td><td><code>0</code></td>
     </tr><tr>
-    <td>props.children</td><td><code>React.ReactNode</code></td>
+    <td>props.children</td><td><code>React.ReactNode</code></td><td></td>
     </tr><tr>
-    <td>props.defaultActiveTab</td><td><code>number</code></td>
+    <td>[props.defaultActiveTab]</td><td><code>number</code></td><td><code>0</code></td>
     </tr><tr>
-    <td>props.isDisabled</td><td><code>boolean</code></td>
+    <td>[props.isDisabled]</td><td><code>boolean</code></td><td><code>helpers.UI_DISABLED_TABLE</code></td>
     </tr><tr>
-    <td>props.t</td><td><code>function</code></td>
+    <td>[props.t]</td><td><code>translate</code></td><td><code>translate</code></td>
     </tr><tr>
-    <td>props.useOnTab</td><td><code>function</code></td>
+    <td>[props.useOnTab]</td><td><code>useOnTab</code></td><td><code>useOnTab</code></td>
     </tr><tr>
-    <td>props.useProduct</td><td><code>function</code></td>
+    <td>[props.useProduct]</td><td><code>useProduct</code></td><td><code>useProduct</code></td>
     </tr><tr>
-    <td>props.useSelector</td><td><code>function</code></td>
+    <td>[props.useSelector]</td><td><code>storeHooks.reactRedux.useSelector</code></td><td><code>storeHooks.reactRedux.useSelector</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~InventoryTabs(props)](#Components.module_InventoryTabs..InventoryTabs) ⇒ <code>React.ReactNode</code> \| <code>null</code>
-    * [.propTypes](#Components.module_InventoryTabs..InventoryTabs.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_InventoryTabs..InventoryTabs.defaultProps) : <code>Object</code>
-
-<a name="Components.module_InventoryTabs..InventoryTabs.propTypes"></a>
-
-#### InventoryTabs.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>InventoryTabs</code>](#Components.module_InventoryTabs..InventoryTabs)  
-<a name="Components.module_InventoryTabs..InventoryTabs.defaultProps"></a>
-
-#### InventoryTabs.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>InventoryTabs</code>](#Components.module_InventoryTabs..InventoryTabs)  
 <a name="Components.module_Loader"></a>
 
 ## Loader

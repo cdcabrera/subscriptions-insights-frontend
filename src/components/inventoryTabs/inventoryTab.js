@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 /**
  * @memberof InventoryTabs
  * @module InventoryTab
@@ -16,25 +14,5 @@ import PropTypes from 'prop-types';
  */
 // eslint-disable-next-line no-unused-vars
 const InventoryTab = ({ active, children, title }) => children;
-
-/**
- * Prop types.
- *
- * @type {{children: React.ReactNode, className: string}}
- */
-InventoryTab.propTypes = {
-  children: PropTypes.node.isRequired,
-  active: PropTypes.bool,
-  title: PropTypes.node.isRequired
-};
-
-/**
- * Default props.
- *
- * @type {{className: string}}
- */
-InventoryTab.defaultProps = {
-  active: false
-};
 
 export { InventoryTab as default, InventoryTab };
