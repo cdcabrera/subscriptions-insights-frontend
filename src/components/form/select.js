@@ -298,14 +298,14 @@ const formatButtonParentProps = (formattedButtonProps = {}) => {
  *     selected: (boolean|undefined),
  *     isDisabledAllowEvent: (boolean|undefined),
  *     isDisabled: (boolean|undefined),
- *     title: (string|undefined),
+ *     title: (unknown|undefined),
  *     value: unknown
  *     }|Array<{
  *     description: (unknown|undefined),
  *     selected: (boolean|undefined),
  *     isDisabledAllowEvent: (boolean|undefined),
  *     isDisabled: (boolean|undefined),
- *     title: (string|undefined),
+ *     title: (unknown|undefined),
  *     value: unknown
  *     }>|Array<{string}>} [props.options=[]]
  * @param {string} [props.placeholder='Select option']
