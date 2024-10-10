@@ -674,53 +674,44 @@ Graph layer status.
 ## ChartElements
 
 * [ChartElements](#Chart.module_ChartElements)
-    * [~ChartElements(props)](#Chart.module_ChartElements..ChartElements) ⇒ <code>React.ReactNode</code>
-        * _static_
-            * [.propTypes](#Chart.module_ChartElements..ChartElements.propTypes) : <code>Object</code>
-            * [.defaultProps](#Chart.module_ChartElements..ChartElements.defaultProps) : <code>Object</code>
-        * _inner_
-            * [~VictoryVoronoiCursorContainer](#Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer)
+    * [~InterpolationTypes](#Chart.module_ChartElements..InterpolationTypes) : <code>Object</code>
+    * [~chartElementsDefaults](#Chart.module_ChartElements..chartElementsDefaults) : <code>Object</code>
+    * [~ChartElements(props)](#Chart.module_ChartElements..ChartElements) ⇒ <code>JSX.Element</code>
+        * [~VictoryVoronoiCursorContainer](#Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer)
+    * [~ChartTypeDefault](#Chart.module_ChartElements..ChartTypeDefault) : <code>object</code>
 
+<a name="Chart.module_ChartElements..InterpolationTypes"></a>
+
+### ChartElements~InterpolationTypes : <code>Object</code>
+Available chart interpolation types
+
+**Kind**: inner constant of [<code>ChartElements</code>](#Chart.module_ChartElements)  
+<a name="Chart.module_ChartElements..chartElementsDefaults"></a>
+
+### ChartElements~chartElementsDefaults : <code>Object</code>
+Chart elements default prop settings
+
+**Kind**: inner constant of [<code>ChartElements</code>](#Chart.module_ChartElements)  
 <a name="Chart.module_ChartElements..ChartElements"></a>
 
-### ChartElements~ChartElements(props) ⇒ <code>React.ReactNode</code>
+### ChartElements~ChartElements(props) ⇒ <code>JSX.Element</code>
 Aggregate, generate, a compatible Victory chart element/facet component.
 
 **Kind**: inner method of [<code>ChartElements</code>](#Chart.module_ChartElements)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.chartTypeDefaults</td><td><code>object</code></td>
+    <td>[props.chartTypeDefaults]</td><td><code>chartElementsDefaults</code></td><td><code>chartElementsDefaults</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~ChartElements(props)](#Chart.module_ChartElements..ChartElements) ⇒ <code>React.ReactNode</code>
-    * _static_
-        * [.propTypes](#Chart.module_ChartElements..ChartElements.propTypes) : <code>Object</code>
-        * [.defaultProps](#Chart.module_ChartElements..ChartElements.defaultProps) : <code>Object</code>
-    * _inner_
-        * [~VictoryVoronoiCursorContainer](#Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer)
-
-<a name="Chart.module_ChartElements..ChartElements.propTypes"></a>
-
-#### ChartElements.propTypes : <code>Object</code>
-Prop types
-
-**Kind**: static property of [<code>ChartElements</code>](#Chart.module_ChartElements..ChartElements)  
-<a name="Chart.module_ChartElements..ChartElements.defaultProps"></a>
-
-#### ChartElements.defaultProps : <code>Object</code>
-Default props
-
-**Kind**: static property of [<code>ChartElements</code>](#Chart.module_ChartElements..ChartElements)  
 <a name="Chart.module_ChartElements..ChartElements..VictoryVoronoiCursorContainer"></a>
 
 #### ChartElements~VictoryVoronoiCursorContainer
@@ -728,6 +719,28 @@ Note: both cursor and voronoiDimension attrs required if the need is to have...
 the tooltip populate consistently without being "near" a chart element y axis point
 
 **Kind**: inner constant of [<code>ChartElements</code>](#Chart.module_ChartElements..ChartElements)  
+<a name="Chart.module_ChartElements..ChartTypeDefault"></a>
+
+### ChartElements~ChartTypeDefault : <code>object</code>
+**Kind**: inner typedef of [<code>ChartElements</code>](#Chart.module_ChartElements)  
+**Properties**
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>component</td><td><code>ChartArea</code> | <code>ChartLine</code> | <code>ChartThreshold</code></td>
+    </tr><tr>
+    <td>[interpolation]</td><td><code>InterpolationTypes</code></td>
+    </tr><tr>
+    <td>[animate]</td><td><code>Object</code></td>
+    </tr>  </tbody>
+</table>
+
 <a name="Chart.module_ChartHelpers"></a>
 
 ## ChartHelpers
@@ -946,15 +959,20 @@ Generate x,y props.
 
 * [ChartIcon](#Chart.module_ChartIcon)
     * [~IconSize](#Chart.module_ChartIcon..IconSize) : <code>Object</code>
+    * [~IconSymbol](#Chart.module_ChartIcon..IconSymbol) : <code>Object</code>
     * [~getSize(size)](#Chart.module_ChartIcon..getSize) ⇒ <code>string</code>
-    * [~ChartIcon(props)](#Chart.module_ChartIcon..ChartIcon) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Chart.module_ChartIcon..ChartIcon.propTypes) : <code>Object</code>
-        * [.defaultProps](#Chart.module_ChartIcon..ChartIcon.defaultProps) : <code>Object</code>
+    * [~ChartIcon(props)](#Chart.module_ChartIcon..ChartIcon) ⇒ <code>JSX.Element</code>
 
 <a name="Chart.module_ChartIcon..IconSize"></a>
 
 ### ChartIcon~IconSize : <code>Object</code>
 Consistent icon sizing.
+
+**Kind**: inner constant of [<code>ChartIcon</code>](#Chart.module_ChartIcon)  
+<a name="Chart.module_ChartIcon..IconSymbol"></a>
+
+### ChartIcon~IconSymbol : <code>Object</code>
+Consistent icon symbols
 
 **Kind**: inner constant of [<code>ChartIcon</code>](#Chart.module_ChartIcon)  
 <a name="Chart.module_ChartIcon..getSize"></a>
@@ -978,79 +996,39 @@ Emulate pf icon sizing for custom SVGs
 
 <a name="Chart.module_ChartIcon..ChartIcon"></a>
 
-### ChartIcon~ChartIcon(props) ⇒ <code>React.ReactNode</code>
+### ChartIcon~ChartIcon(props) ⇒ <code>JSX.Element</code>
 Render an icon for use outside of Victory charts.
 
 **Kind**: inner method of [<code>ChartIcon</code>](#Chart.module_ChartIcon)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.fill</td><td><code>string</code></td>
+    <td>[props.fill]</td><td><code>string</code></td><td></td>
     </tr><tr>
-    <td>props.symbol</td><td><code>string</code></td>
+    <td>[props.symbol]</td><td><code>string</code> | <code>IconSymbol</code></td><td><code>&quot;IconSymbol.square&quot;</code></td>
     </tr><tr>
-    <td>props.size</td><td><code>string</code></td>
+    <td>[props.size]</td><td><code>string</code> | <code>IconSize</code></td><td><code>&quot;IconSize.sm&quot;</code></td>
     </tr><tr>
-    <td>props.title</td><td><code>string</code></td>
+    <td>[props.title]</td><td><code>string</code></td><td></td>
     </tr>  </tbody>
 </table>
 
-
-* [~ChartIcon(props)](#Chart.module_ChartIcon..ChartIcon) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Chart.module_ChartIcon..ChartIcon.propTypes) : <code>Object</code>
-    * [.defaultProps](#Chart.module_ChartIcon..ChartIcon.defaultProps) : <code>Object</code>
-
-<a name="Chart.module_ChartIcon..ChartIcon.propTypes"></a>
-
-#### ChartIcon.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>ChartIcon</code>](#Chart.module_ChartIcon..ChartIcon)  
-<a name="Chart.module_ChartIcon..ChartIcon.defaultProps"></a>
-
-#### ChartIcon.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>ChartIcon</code>](#Chart.module_ChartIcon..ChartIcon)  
 <a name="Chart.module_ChartLegend"></a>
 
 ## ChartLegend
-
-* [ChartLegend](#Chart.module_ChartLegend)
-    * [~ChartLegend()](#Chart.module_ChartLegend..ChartLegend) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Chart.module_ChartLegend..ChartLegend.propTypes)
-        * [.defaultProps](#Chart.module_ChartLegend..ChartLegend.defaultProps)
-
 <a name="Chart.module_ChartLegend..ChartLegend"></a>
 
-### ChartLegend~ChartLegend() ⇒ <code>React.ReactNode</code>
+### ChartLegend~ChartLegend() ⇒ <code>JSX.Element</code> \| <code>null</code>
 Wrapper for rendering an HTML based legend.
 
 **Kind**: inner method of [<code>ChartLegend</code>](#Chart.module_ChartLegend)  
-
-* [~ChartLegend()](#Chart.module_ChartLegend..ChartLegend) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Chart.module_ChartLegend..ChartLegend.propTypes)
-    * [.defaultProps](#Chart.module_ChartLegend..ChartLegend.defaultProps)
-
-<a name="Chart.module_ChartLegend..ChartLegend.propTypes"></a>
-
-#### ChartLegend.propTypes
-Prop types.
-
-**Kind**: static property of [<code>ChartLegend</code>](#Chart.module_ChartLegend..ChartLegend)  
-<a name="Chart.module_ChartLegend..ChartLegend.defaultProps"></a>
-
-#### ChartLegend.defaultProps
-Default props.
-
-**Kind**: static property of [<code>ChartLegend</code>](#Chart.module_ChartLegend..ChartLegend)  
 <a name="Chart.module_ChartTooltip"></a>
 
 ## ChartTooltip
