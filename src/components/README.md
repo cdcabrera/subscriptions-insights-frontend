@@ -3888,22 +3888,22 @@ Note: PF EmptyStateIcon registers as function, we compensate for PF by allowing 
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.children</td><td><code>React.ReactNode</code></td>
+    <td>[props.children]</td><td><code>React.ReactNode</code></td><td></td>
     </tr><tr>
-    <td>props.icon</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>[props.icon]</td><td><code>React.ReactNode</code> | <code>function</code></td><td></td>
     </tr><tr>
-    <td>props.message</td><td><code>string</code></td>
+    <td>[props.message]</td><td><code>string</code></td><td></td>
     </tr><tr>
-    <td>props.pageTitle</td><td><code>string</code></td>
+    <td>[props.pageTitle]</td><td><code>string</code></td><td><code>&quot;helpers.UI_DISPLAY_NAME&quot;</code></td>
     </tr><tr>
-    <td>props.title</td><td><code>string</code></td>
+    <td>[props.title]</td><td><code>string</code></td><td></td>
     </tr>  </tbody>
 </table>
 
@@ -5265,12 +5265,6 @@ Apply an onSort handler.
 <a name="Table.module_TableEmpty"></a>
 
 ## TableEmpty
-
-* [TableEmpty](#Table.module_TableEmpty)
-    * [~TableEmpty(props)](#Table.module_TableEmpty..TableEmpty) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Table.module_TableEmpty..TableEmpty.propTypes) : <code>Object</code>
-        * [.defaultProps](#Table.module_TableEmpty..TableEmpty.defaultProps) : <code>Object</code>
-
 <a name="Table.module_TableEmpty..TableEmpty"></a>
 
 ### TableEmpty~TableEmpty(props) ⇒ <code>React.ReactNode</code>
@@ -5280,44 +5274,27 @@ Render an empty table component. Apply an empty version of an actual HTML table 
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.ariaLabel</td><td><code>string</code></td>
+    <td>[props.ariaLabel]</td><td><code>string</code></td><td></td>
     </tr><tr>
-    <td>props.icon</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>[props.icon]</td><td><code>React.ReactNode</code> | <code>function</code></td><td></td>
     </tr><tr>
-    <td>props.message</td><td><code>React.ReactNode</code></td>
+    <td>props.message</td><td><code>React.ReactNode</code></td><td></td>
     </tr><tr>
-    <td>props.tableHeading</td><td><code>string</code></td>
+    <td>[props.tableHeading]</td><td><code>string</code></td><td><code>&quot;&#x27;h2&#x27;&quot;</code></td>
     </tr><tr>
-    <td>props.title</td><td><code>React.ReactNode</code></td>
+    <td>props.title</td><td><code>React.ReactNode</code></td><td></td>
     </tr><tr>
-    <td>props.variant</td><td><code>string</code></td>
+    <td>[props.variant]</td><td><code>EmptyStateVariant</code></td><td><code>EmptyStateVariant.sm</code></td>
     </tr>  </tbody>
 </table>
 
-
-* [~TableEmpty(props)](#Table.module_TableEmpty..TableEmpty) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Table.module_TableEmpty..TableEmpty.propTypes) : <code>Object</code>
-    * [.defaultProps](#Table.module_TableEmpty..TableEmpty.defaultProps) : <code>Object</code>
-
-<a name="Table.module_TableEmpty..TableEmpty.propTypes"></a>
-
-#### TableEmpty.propTypes : <code>Object</code>
-Prop types.
-
-**Kind**: static property of [<code>TableEmpty</code>](#Table.module_TableEmpty..TableEmpty)  
-<a name="Table.module_TableEmpty..TableEmpty.defaultProps"></a>
-
-#### TableEmpty.defaultProps : <code>Object</code>
-Default props.
-
-**Kind**: static property of [<code>TableEmpty</code>](#Table.module_TableEmpty..TableEmpty)  
 <a name="Table.module_TableHelpers"></a>
 
 ## TableHelpers

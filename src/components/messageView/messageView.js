@@ -15,16 +15,16 @@ import { helpers } from '../../common';
  * Note: PF EmptyStateIcon registers as function, we compensate for PF by allowing a ReactNode or Function.
  *
  * @param {object} props
- * @param {React.ReactNode} props.children
- * @param {React.ReactNode|Function} props.icon
- * @param {string} props.message
- * @param {string} props.pageTitle
- * @param {string} props.title
+ * @param {React.ReactNode} [props.children]
+ * @param {React.ReactNode|Function} [props.icon]
+ * @param {string} [props.message]
+ * @param {string} [props.pageTitle=helpers.UI_DISPLAY_NAME]
+ * @param {string} [props.title]
  * @returns {JSX.Element}
  */
-const MessageView = ({ children, icon, message, pageTitle, title }) => (
+const MessageView = ({ children, icon, message, pageTitle = helpers.UI_DISPLAY_NAME, title }) => (
   <PageLayout>
-    <PageHeader>{pageTitle || helpers.UI_DISPLAY_NAME}</PageHeader>
+    <PageHeader>{pageTitle}</PageHeader>
     <PageSection>
       {children ?? (
         <EmptyState variant={EmptyStateVariant.full} className="fadein">
