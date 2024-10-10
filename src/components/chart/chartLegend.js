@@ -45,14 +45,4 @@ const ChartLegend = () => {
   );
 };
 
-/**
- * Prop types.
- */
-ChartLegend.propTypes = {};
-
-/**
- * Default props.
- */
-ChartLegend.defaultProps = {};
-
 export { ChartLegend as default, ChartLegend };
