@@ -1,42 +1,164 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ChartElements Component should handle basic element settings from context: chart elements 1`] = `
-<ChartElements
-  chartTypeDefaults={
+<Chart
+  animate={
     {
-      "area": {
-        "animate": {
-          "duration": 250,
-          "onLoad": {
-            "duration": 250,
-          },
-        },
-        "component": [Function],
-        "interpolation": "monotoneX",
-      },
-      "line": {
-        "animate": {
-          "duration": 250,
-          "onLoad": {
-            "duration": 250,
-          },
-        },
-        "component": [Function],
-        "interpolation": "monotoneX",
-      },
-      "threshold": {
-        "animate": {
-          "duration": 100,
-          "onLoad": {
-            "duration": 100,
-          },
-        },
-        "component": [Function],
-        "interpolation": "step",
-      },
+      "duration": 0,
     }
   }
-/>
+  containerComponent={
+    <VictoryvoronoicursorContainer
+      cursorDimension="x"
+      labelComponent={
+        <VictoryTooltip
+          active={false}
+          centerOffset={
+            {
+              "x": 0,
+              "y": 0,
+            }
+          }
+          dx={0}
+          dy={0}
+          flyoutComponent={<Flyout />}
+          flyoutStyle={
+            {
+              "fill": "transparent",
+              "stroke": "transparent",
+            }
+          }
+          groupComponent={<g />}
+          labelComponent={<Unknown />}
+          renderInPortal={true}
+          y={0}
+        />
+      }
+      labels={[Function]}
+      mouseFollowTooltips={true}
+      voronoiDimension="x"
+      voronoiPadding={50}
+    />
+  }
+  domain={
+    {
+      "y": [
+        0,
+        3,
+      ],
+    }
+  }
+  padding={
+    {
+      "bottom": 75,
+      "left": 55,
+      "right": 55,
+      "top": 50,
+    }
+  }
+  themeColor="blue"
+  width={0}
+>
+  <ChartAxis
+    animate={false}
+    fixLabelOverlap={true}
+    tickFormat={[Function]}
+    tickValues={
+      [
+        1,
+        2,
+      ]
+    }
+  />
+  <ChartAxis
+    animate={false}
+    dependentAxis={true}
+    orientation="left"
+    showGrid={true}
+    style={
+      {
+        "axis": {},
+        "tickLabels": {},
+      }
+    }
+    tickFormat={[Function]}
+  />
+  <ChartArea
+    animate={
+      {
+        "duration": 250,
+        "onLoad": {
+          "duration": 250,
+        },
+      }
+    }
+    data={
+      [
+        {
+          "x": 1,
+          "xAxisLabel": "1 x axis label",
+          "y": 1,
+        },
+        {
+          "x": 2,
+          "xAxisLabel": "2 x axis label",
+          "y": 2,
+        },
+      ]
+    }
+    interpolation="monotoneX"
+    name="chart-ipsumGraph-"
+    style={
+      {
+        "data": {
+          "fill": "#ipsum",
+          "stroke": "#lorem",
+          "strokeDasharray": "4,3",
+          "strokeWidth": 3,
+        },
+      }
+    }
+    y={[Function]}
+  />
+  <Memo(VictoryStack)>
+    <ChartArea
+      animate={
+        {
+          "duration": 250,
+          "onLoad": {
+            "duration": 250,
+          },
+        }
+      }
+      data={
+        [
+          {
+            "x": 1,
+            "xAxisLabel": "1 x axis label",
+            "y": 1,
+          },
+          {
+            "x": 2,
+            "xAxisLabel": "2 x axis label",
+            "y": 2,
+          },
+        ]
+      }
+      interpolation="monotoneX"
+      name="chart-loremGraph-"
+      style={
+        {
+          "data": {
+            "fill": "#ipsum",
+            "stroke": "#lorem",
+            "strokeWidth": 2,
+          },
+        }
+      }
+      y={[Function]}
+    />
+  </Memo(VictoryStack)>
+</Chart>
 `;
 
 exports[`ChartElements Component should render a basic component: basic 1`] = `
@@ -81,7 +203,7 @@ exports[`ChartElements Component should render a basic component: basic 1`] = `
     <svg
       height="300"
       role="img"
-      style="pointer-events: all; width: 100%; height: 100%;"
+      style="width: 100%; height: 100%; pointer-events: all;"
       viewBox="0 0 450 300"
       width="450"
     >
@@ -426,11 +548,11 @@ exports[`ChartElements Component should render a basic component: basic 1`] = `
       </g>
     </svg>
     <div
-      style="z-index: 99; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"
+      style="width: 100%; height: 100%; z-index: 99; position: absolute; top: 0px; left: 0px;"
     >
       <svg
         height="300"
-        style="overflow: visible; width: 100%; height: 100%;"
+        style="width: 100%; height: 100%; overflow: visible;"
         viewBox="0 0 450 300"
         width="450"
       />
