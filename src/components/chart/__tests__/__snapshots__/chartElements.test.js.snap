@@ -1,179 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ChartElements Component should handle basic element settings from context: chart elements 1`] = `
-<Chart
-  animate={
+<ChartElements
+  chartTypeDefaults={
     {
-      "duration": 0,
-    }
-  }
-  containerComponent={
-    <VictoryVoronoiCursorContainer
-      activateData={true}
-      activateLabels={true}
-      className="VictoryContainer"
-      cursorComponent={<LineSegment />}
-      cursorDimension="x"
-      cursorLabelComponent={<VictoryLabel />}
-      cursorLabelOffset={
-        {
-          "x": 5,
-          "y": -10,
-        }
-      }
-      labelComponent={
-        <VictoryTooltip
-          active={false}
-          centerOffset={
-            {
-              "x": 0,
-              "y": 0,
-            }
-          }
-          dx={0}
-          dy={0}
-          flyoutComponent={<Flyout />}
-          flyoutStyle={
-            {
-              "fill": "transparent",
-              "stroke": "transparent",
-            }
-          }
-          groupComponent={<g />}
-          labelComponent={<Unknown />}
-          renderInPortal={true}
-          y={0}
-        />
-      }
-      labels={[Function]}
-      mouseFollowTooltips={true}
-      portalComponent={<Portal />}
-      portalZIndex={99}
-      responsive={true}
-      role="img"
-      voronoiDimension="x"
-      voronoiPadding={50}
-    />
-  }
-  domain={
-    {
-      "y": [
-        0,
-        3,
-      ],
-    }
-  }
-  padding={
-    {
-      "bottom": 75,
-      "left": 55,
-      "right": 55,
-      "top": 50,
-    }
-  }
-  themeColor="blue"
-  width={0}
->
-  <ChartAxis
-    animate={false}
-    fixLabelOverlap={true}
-    tickFormat={[Function]}
-    tickValues={
-      [
-        1,
-        2,
-      ]
-    }
-  />
-  <ChartAxis
-    animate={false}
-    dependentAxis={true}
-    orientation="left"
-    showGrid={true}
-    style={
-      {
-        "axis": {},
-        "tickLabels": {},
-      }
-    }
-    tickFormat={[Function]}
-  />
-  <ChartArea
-    animate={
-      {
-        "duration": 250,
-        "onLoad": {
-          "duration": 250,
-        },
-      }
-    }
-    data={
-      [
-        {
-          "x": 1,
-          "xAxisLabel": "1 x axis label",
-          "y": 1,
-        },
-        {
-          "x": 2,
-          "xAxisLabel": "2 x axis label",
-          "y": 2,
-        },
-      ]
-    }
-    interpolation="monotoneX"
-    name="chart-ipsumGraph-"
-    style={
-      {
-        "data": {
-          "fill": "#ipsum",
-          "stroke": "#lorem",
-          "strokeDasharray": "4,3",
-          "strokeWidth": 3,
-        },
-      }
-    }
-    y={[Function]}
-  />
-  <Memo(VictoryStack)>
-    <ChartArea
-      animate={
-        {
+      "area": {
+        "animate": {
           "duration": 250,
           "onLoad": {
             "duration": 250,
           },
-        }
-      }
-      data={
-        [
-          {
-            "x": 1,
-            "xAxisLabel": "1 x axis label",
-            "y": 1,
+        },
+        "component": [Function],
+        "interpolation": "monotoneX",
+      },
+      "line": {
+        "animate": {
+          "duration": 250,
+          "onLoad": {
+            "duration": 250,
           },
-          {
-            "x": 2,
-            "xAxisLabel": "2 x axis label",
-            "y": 2,
+        },
+        "component": [Function],
+        "interpolation": "monotoneX",
+      },
+      "threshold": {
+        "animate": {
+          "duration": 100,
+          "onLoad": {
+            "duration": 100,
           },
-        ]
-      }
-      interpolation="monotoneX"
-      name="chart-loremGraph-"
-      style={
-        {
-          "data": {
-            "fill": "#ipsum",
-            "stroke": "#lorem",
-            "strokeWidth": 2,
-          },
-        }
-      }
-      y={[Function]}
-    />
-  </Memo(VictoryStack)>
-</Chart>
+        },
+        "component": [Function],
+        "interpolation": "step",
+      },
+    }
+  }
+/>
 `;
 
 exports[`ChartElements Component should render a basic component: basic 1`] = `
