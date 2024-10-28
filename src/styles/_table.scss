@@ -1,3 +1,5 @@
+@use 'app' as app;
+
 .curiosity {
   /**
    * FixMe: PF CSS, appears updating resources causes an issue with an aggressive selector
@@ -18,17 +20,6 @@
      */
     &__td a {
       user-select: auto;
-    }
-
-    @media (min-width: $pf-global--breakpoint--md) {
-      // Class defined in "components/table/tableHelpers.js"
-      &__td.pf-m-width {
-        @for $tdWidth from 0 through 100 {
-          &-#{$tdWidth} {
-            width: percentage(div($tdWidth, 100));
-          }
-        }
-      }
     }
   }
 
@@ -68,7 +59,7 @@
     overflow-y: hidden;
     padding-bottom: inherit;
 
-    @media (max-width: $pf-global--breakpoint--md) {
+    @media (max-width: app.$pf-global--breakpoint--md) {
       overflow-y: auto;
     }
   }

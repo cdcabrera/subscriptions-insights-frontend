@@ -1717,69 +1717,6 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
  *     {
  *       "data" : [
  *         {
- *           "insights_id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
- *           "inventory_id": "d6214a0b-b344-4778-831c-d53dcacb2da3",
- *           "display_name": "guest01.example.com",
- *           "subscription_manager_id": "adafd9d5-5b00-42fa-a6c9-75801d45cc6d",
- *           "last_seen": "2020-04-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-dcef6e970852",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-dcef6e970852",
- *           "display_name": "guest02.example.com",
- *           "subscription_manager_id": "b101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "display_name": "guest03.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "498cff02-8b4b-46f8-a655-XLef312123456",
- *           "inventory_id": "498cff02-8b4b-46f8-a655-XLef312123456",
- *           "display_name": "guest04.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "display_name": "guest05.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "display_name": "guest06.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "display_name": "guest07.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "display_name": "guest08.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
- *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
- *           "display_name": "guest09.example.com",
- *           "subscription_manager_id": "c101a72f-1859-4489-acb8-d6d31c2578c4",
- *           "last_seen": "2020-07-01T00:00:00Z"
- *         },
- *         {
  *           "insights_id": "9358e312-1c9f-42f4-8910-XLef312123456",
  *           "inventory_id": "9358e312-1c9f-42f4-8910-XLef312123456",
  *           "display_name": "guest10.example.com",
@@ -1794,7 +1731,7 @@ const getGraphCapacity = (id, params = {}, options = {}) => {
  *         "next": "/api/rhsm-subscriptions/v1/instances/a283ffb6-e0f3-4dbe-9732-ccfdb297ba07/guests?offset=5&limit=5"
  *       },
  *       "meta": {
- *         "count": 70
+ *         "count": 1
  *       }
  *     }
  *
@@ -1892,7 +1829,7 @@ const getInstancesInventoryGuests = (id, params = {}, options = {}) => {
  *           "last_seen": "2022-10-03T00:00:00Z"
  *         },
  *         {
- *           "number_of_guests": 70,
+ *           "number_of_guests": 1,
  *           "category": "cloud",
  *           "billing_provider": "red hat",
  *           "cloud_provider": "aws",

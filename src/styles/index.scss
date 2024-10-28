@@ -1,57 +1,42 @@
 // Framework
-@import '~@redhat-cloud-services/frontend-components-utilities/index';
-@import '~@patternfly/patternfly/sass-utilities/all';
-
+@use '~@redhat-cloud-services/frontend-components-utilities/index' as *;
+@use '~@patternfly/patternfly/sass-utilities/all' as * ;
+// @use '~@patternfly/patternfly/sass-utilities/all' as pf;
 // Remap variables, avoid search and replaces.
-$pf-global--breakpoint--sm: $pf-v5-global--breakpoint--sm;
-$pf-global--breakpoint--md: $pf-v5-global--breakpoint--md;
-$pf-global--breakpoint--lg: $pf-v5-global--breakpoint--lg;
+// $pf-global--breakpoint--sm: $pf-v5-global--breakpoint--sm;
+// $pf-global--breakpoint--md: $pf-v5-global--breakpoint--md;
+// $pf-global--breakpoint--lg: $pf-v5-global--breakpoint--lg;
 
-.curiosity {
-  --pf-global--BackgroundColor--dark-100: var(--pf-v5-global--BackgroundColor--dark-100);
-  --pf-global--BackgroundColor--light-300: var(--pf-v5-global--BackgroundColor--light-300);
-  --pf-global--BackgroundColor--100: var(--pf-v5-global--BackgroundColor--100);
+//$pf-v5-global--breakpoint--xs: 0 !default;
+//$pf-v5-global--breakpoint--sm: 576px !default;
+//$pf-v5-global--breakpoint--md: 768px !default;
+//$pf-v5-global--breakpoint--lg: 992px !default;
+//$pf-v5-global--breakpoint--xl: 1200px !default;
+//$pf-v5-global--breakpoint--2xl: 1450px !default;
 
-  --pf-global--Color--light-100: var(--pf-v5-global--Color--light-100);
+// $pf-global--breakpoint--sm: 576px;
+// $pf-global--breakpoint--md: 768px;
+// $pf-global--breakpoint--lg: 992px;
 
-  --pf-global--palette--blue-300: var(--pf-v5-global--palette--blue-300);
-  --pf-global--palette--black-400: var(--pf-v5-global--palette--black-400);
-  --pf-global--palette--black-500: var(--pf-v5-global--palette--black-500);
-  --pf-global--palette--black-900: var(--pf-v5-global--palette--black-900);
-  --pf-global--palette--black-1000: var(--pf-v5-global--palette--black-1000);
-
-  --pf-global--FontSize--md: var(--pf-v5-global--FontSize--md);
-  --pf-global--FontSize--xs: var(--pf-v5-global--FontSize--xs);
-  --pf-global--FontSize--3xl: var(--pf-v5-global--FontSize--3xl);
-
-  --pf-global--spacer--sm: var(--pf-v5-global--spacer--sm);
-  --pf-global--spacer--md: var(--pf-v5-global--spacer--md);
-  --pf-global--spacer--lg: var(--pf-v5-global--spacer--lg);
-
-  --pf-c-card--child--PaddingBottom: var(--pf-v5-c-card--child--PaddingBottom);
-
-  --pf-global--BorderWidth--sm: var(--pf-v5-global--BorderWidth--sm);
-  --pf-global--BorderColor--100: var(--pf-v5-global--BorderColor--100);
-
-  --pf-c-page__main-section--PaddingLeft: var(--pf-v5-c-page__main-section--PaddingLeft);
-  --pf-c-page__main-section--PaddingRight: var(--pf-v5-c-page__main-section--PaddingRight);
-}
+@use 'app';
 
 // Component tweaks, nice to have, overlooked styles
-@import 'card';
-@import 'tabs';
-@import 'select'; // deprecated component tweaks
-@import 'table';
-@import 'toolbar';
-@import 'tooltip';
+@use 'card';
+@use 'tabs';
+@use 'select'; // deprecated component tweaks
+@use 'table';
+/*
+@use 'toolbar';
+@use 'tooltip';
 
 // App and enhancements
-@import 'banner-messages';
-@import 'fade';
-@import 'icon';
-@import 'skeleton';
-@import 'page-layout';
-@import 'graph';
-@import 'inventory';
-@import 'optin';
-@import 'errors';
+@use 'banner-messages';
+@use 'fade';
+@use 'icon';
+@use 'skeleton';
+@use 'page-layout';
+@use 'graph';
+@use 'inventory';
+@use 'optin';
+@use 'errors';
+*/
