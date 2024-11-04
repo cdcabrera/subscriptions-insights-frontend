@@ -2,19 +2,6 @@ import moxios from 'moxios';
 import { serviceConfig } from '../serviceConfig';
 
 describe('ServiceConfig', () => {
-  // Return a promise, or promise like, response for errors
-  const returnPromiseAsync = async promiseAsyncCall => {
-    let response;
-
-    try {
-      response = await promiseAsyncCall();
-    } catch (e) {
-      response = e.response || e.message || e;
-    }
-
-    return response;
-  };
-
   // JSON stringify, and replace functions as strings
   const stringifyConfig = config =>
     JSON.stringify(
@@ -31,13 +18,13 @@ describe('ServiceConfig', () => {
   beforeAll(() => {
     moxios.install();
 
-    moxios.stubRequest(/\/(test|pollSuccess).*?/, {
+    moxios.stubRequest(/\/(test).*?/, {
       status: 200,
       responseText: 'success',
       timeout: 0
     });
 
-    moxios.stubRequest(/\/(error|pollError).*?/, {
+    moxios.stubRequest(/\/(error).*?/, {
       status: 404,
       responseText: 'error',
       timeout: 0
@@ -67,6 +54,42 @@ describe('ServiceConfig', () => {
     config.push(stringifyConfig(responseOne.request.config));
 
     expect(config).toMatchSnapshot('response configs');
+  });
+});
+
+describe('ServiceConfig, cancelling and caching', () => {
+  // Return a promise, or promise like, response for errors
+  const returnPromiseAsync = async promiseAsyncCall => {
+    let response;
+
+    try {
+      response = await promiseAsyncCall();
+    } catch (e) {
+      response = e.response || e.message || e;
+    }
+
+    return response;
+  };
+
+  beforeAll(() => {
+    moxios.install();
+
+    moxios.stubRequest(/\/(test).*?/, {
+      status: 200,
+      responseText: 'success',
+      timeout: 0
+    });
+
+    moxios.stubRequest(/\/(error).*?/, {
+      status: 404,
+      responseText: 'error',
+      timeout: 0
+    });
+  });
+
+  afterAll(() => {
+    moxios.uninstall();
+    jest.clearAllMocks();
   });
 
   it('should handle cancelling service calls', async () => {
@@ -169,6 +192,42 @@ describe('ServiceConfig', () => {
 
     expect(responses).toMatchSnapshot('cached responses, emulated 304');
   });
+});
+
+describe('ServiceConfig, transforming', () => {
+  // Return a promise, or promise like, response for errors
+  const returnPromiseAsync = async promiseAsyncCall => {
+    let response;
+
+    try {
+      response = await promiseAsyncCall();
+    } catch (e) {
+      response = e.response || e.message || e;
+    }
+
+    return response;
+  };
+
+  beforeAll(() => {
+    moxios.install();
+
+    moxios.stubRequest(/\/(test).*?/, {
+      status: 200,
+      responseText: 'success',
+      timeout: 0
+    });
+
+    moxios.stubRequest(/\/(error).*?/, {
+      status: 404,
+      responseText: 'error',
+      timeout: 0
+    });
+  });
+
+  afterAll(() => {
+    moxios.uninstall();
+    jest.clearAllMocks();
+  });
 
   it('should handle transforming service call responses', async () => {
     const responses = [];
@@ -252,6 +311,29 @@ describe('ServiceConfig', () => {
     responses.push(responseFour.map(({ reason }) => reason.message));
 
     expect(responses).toMatchSnapshot('transformed responses');
+  });
+});
+
+describe('ServiceConfig, polling', () => {
+  beforeAll(() => {
+    moxios.install();
+
+    moxios.stubRequest(/\/(test|pollSuccess).*?/, {
+      status: 200,
+      responseText: 'success',
+      timeout: 0
+    });
+
+    moxios.stubRequest(/\/(error|pollError).*?/, {
+      status: 404,
+      responseText: 'error',
+      timeout: 0
+    });
+  });
+
+  afterAll(() => {
+    moxios.uninstall();
+    jest.clearAllMocks();
   });
 
   it('should handle polling service calls', async () => {
@@ -372,7 +454,10 @@ describe('ServiceConfig', () => {
         count
       })),
       output: {
-        pollConfig: { ...locationOutput.config.poll, location: Function.prototype },
+        pollConfig: {
+          ...locationOutput.config.poll,
+          location: Function.prototype
+        },
         data: locationOutput.data
       }
     }).toMatchSnapshot('custom location');
@@ -505,45 +590,51 @@ describe('ServiceConfig', () => {
     expect(consoleSpyError.mock.calls).toMatchSnapshot('status of a status error');
     consoleSpyError.mockClear();
   });
+});
 
-  it('should allow passing a function and emulating a service call', async () => {
-    const responses = [];
+describe('ServiceConfig, functions as emulated service calls', () => {
+  // Return a promise, or promise like, response for errors
+  const returnPromiseAsync = async promiseAsyncCall => {
+    let response;
 
-    // First, pass a regular function similar to any service call
-    const responseOne = await serviceConfig.axiosServiceCall({
+    try {
+      response = await promiseAsyncCall();
+    } catch (e) {
+      response = e.response || e.message || e;
+    }
+
+    return response;
+  };
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should allow emulating a service call', async () => {
+    const response = await serviceConfig.axiosServiceCall({
       cache: true,
       url: () => 'lorem.ipsum'
     });
-    responses.push(responseOne.data);
 
-    // Second, pass a function similar to any service call, schema transform
-    const responseTwo = await serviceConfig.axiosServiceCall({
+    expect(response.data).toMatchSnapshot('emulated');
+  });
+
+  it('should allow applying transformation', async () => {
+    const responseSchemaTransform = await serviceConfig.axiosServiceCall({
       cache: true,
       url: () => Promise.resolve('lorem.ipsum'),
       schema: [successResponse => `${successResponse}-function-schema-transform`]
     });
-    responses.push(responseTwo.data);
+    expect(responseSchemaTransform.data).toMatchSnapshot('schema transform');
 
-    // Third, pass a function similar to any service call, transform
-    const responseThree = await serviceConfig.axiosServiceCall({
+    const responseFunctionTransform = await serviceConfig.axiosServiceCall({
       cache: true,
       url: () => Promise.resolve('lorem.ipsum'),
       transform: [successResponse => `${successResponse}-function-transform`]
     });
-    responses.push(responseThree.data);
+    expect(responseFunctionTransform.data).toMatchSnapshot('function transform');
 
-    // Fourth, use error then return cached response
-    const responseFour = await returnPromiseAsync(async () =>
-      serviceConfig.axiosServiceCall({
-        cache: true,
-        url: () => Promise.reject(new Error('dolor.sit'))
-      })
-    );
-
-    responses.push(responseFour.data);
-
-    // Fifth, use reject error with transform
-    const responseFive = await returnPromiseAsync(async () =>
+    const responseError = await returnPromiseAsync(async () =>
       serviceConfig.axiosServiceCall({
         cache: true,
         url: () => Promise.reject(new Error('dolor.sit')),
@@ -553,11 +644,10 @@ describe('ServiceConfig', () => {
         ]
       })
     );
-
-    responses.push(responseFive.data);
+    expect(responseError.data).toMatchSnapshot('error transform');
 
     // Sixth, use reject string with transform
-    const responseSix = await returnPromiseAsync(async () =>
+    const responseErrorStringTransform = await returnPromiseAsync(async () =>
       serviceConfig.axiosServiceCall({
         cache: true,
         url: () => Promise.reject('dolor.sit'), // eslint-disable-line
@@ -567,9 +657,16 @@ describe('ServiceConfig', () => {
         ]
       })
     );
+    expect(responseErrorStringTransform.data).toMatchSnapshot('error string transform');
+  });
 
-    responses.push(responseSix.data);
-
-    expect(responses).toMatchSnapshot('function responses');
+  it('should allow errors and returning a cached response', async () => {
+    const errorCachedResponse = await returnPromiseAsync(async () =>
+      serviceConfig.axiosServiceCall({
+        cache: true,
+        url: () => Promise.reject(new Error('dolor.sit'))
+      })
+    );
+    expect(errorCachedResponse.data).toMatchSnapshot('error, cached');
   });
 });
