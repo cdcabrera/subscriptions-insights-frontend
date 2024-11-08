@@ -507,71 +507,128 @@ PF Charts/Victory area, and line, charts generator.
 
 
 * [Chart](#Components.module_Chart)
-    * [~Chart(props)](#Components.module_Chart..Chart) ⇒ <code>React.ReactNode</code>
-        * [.propTypes](#Components.module_Chart..Chart.propTypes) : <code>Object</code>
-        * [.defaultProps](#Components.module_Chart..Chart.defaultProps) : <code>Object</code>
+    * [~Chart(props)](#Components.module_Chart..Chart) ⇒ <code>JSX.Element</code>
+    * [~ChartPadding](#Components.module_Chart..ChartPadding) : <code>object</code>
+    * [~ChartDataSet](#Components.module_Chart..ChartDataSet) : <code>object</code>
 
 <a name="Components.module_Chart..Chart"></a>
 
-### Chart~Chart(props) ⇒ <code>React.ReactNode</code>
+### Chart~Chart(props) ⇒ <code>JSX.Element</code>
 Return a chart and elements with a context provider.
 
 **Kind**: inner method of [<code>Chart</code>](#Components.module_Chart)  
 <table>
   <thead>
     <tr>
-      <th>Param</th><th>Type</th>
+      <th>Param</th><th>Type</th><th>Default</th>
     </tr>
   </thead>
   <tbody>
 <tr>
-    <td>props</td><td><code>object</code></td>
+    <td>props</td><td><code>object</code></td><td></td>
     </tr><tr>
-    <td>props.chartLegend</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>[props.chartLegend]</td><td><code>React.ReactNode</code> | <code>function</code></td><td></td>
     </tr><tr>
-    <td>props.chartTooltip</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>[props.chartTooltip]</td><td><code>React.ReactNode</code> | <code>function</code></td><td></td>
     </tr><tr>
-    <td>props.dataSets</td><td><code>Array</code></td>
+    <td>[props.dataSets]</td><td><code>Array.&lt;ChartDataSet&gt;</code></td><td><code>[]</code></td>
     </tr><tr>
-    <td>props.padding</td><td><code>object</code></td>
+    <td>[props.padding]</td><td><code>ChartPadding</code></td><td><code>{bottom:75, left:55, right:55, top:50 }</code></td>
     </tr><tr>
-    <td>props.themeColor</td><td><code>string</code></td>
+    <td>[props.themeColor]</td><td><code>string</code> | <code>ChartThemeColor</code></td><td><code>&quot;ChartThemeColor.blue&quot;</code></td>
     </tr><tr>
-    <td>props.xAxisChartLabel</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>[props.xAxisChartLabel]</td><td><code>React.ReactNode</code> | <code>function</code></td><td></td>
     </tr><tr>
-    <td>props.yAxisChartLabel</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    <td>[props.yAxisChartLabel]</td><td><code>React.ReactNode</code> | <code>function</code></td><td></td>
     </tr><tr>
-    <td>props.xAxisFixLabelOverlap</td><td><code>boolean</code></td>
+    <td>[props.xAxisFixLabelOverlap]</td><td><code>boolean</code></td><td><code>true</code></td>
     </tr><tr>
-    <td>props.xAxisLabelIncrement</td><td><code>number</code></td>
+    <td>[props.xAxisLabelIncrement]</td><td><code>number</code></td><td><code>1</code></td>
     </tr><tr>
-    <td>props.xAxisTickFormat</td><td><code>function</code></td>
+    <td>[props.xAxisTickFormat]</td><td><code>function</code></td><td></td>
     </tr><tr>
-    <td>props.yAxisTickFormat</td><td><code>function</code></td>
+    <td>[props.yAxisTickFormat]</td><td><code>function</code></td><td></td>
     </tr><tr>
-    <td>props.xValueFormat</td><td><code>function</code></td>
+    <td>[props.xValueFormat]</td><td><code>function</code></td><td></td>
     </tr><tr>
-    <td>props.yValueFormat</td><td><code>function</code></td>
+    <td>[props.yValueFormat]</td><td><code>function</code></td><td></td>
     </tr>  </tbody>
 </table>
 
+<a name="Components.module_Chart..ChartPadding"></a>
 
-* [~Chart(props)](#Components.module_Chart..Chart) ⇒ <code>React.ReactNode</code>
-    * [.propTypes](#Components.module_Chart..Chart.propTypes) : <code>Object</code>
-    * [.defaultProps](#Components.module_Chart..Chart.defaultProps) : <code>Object</code>
+### Chart~ChartPadding : <code>object</code>
+**Kind**: inner typedef of [<code>Chart</code>](#Components.module_Chart)  
+**Properties**
 
-<a name="Components.module_Chart..Chart.propTypes"></a>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>bottom</td><td><code>number</code></td>
+    </tr><tr>
+    <td>left</td><td><code>number</code></td>
+    </tr><tr>
+    <td>right</td><td><code>number</code></td>
+    </tr><tr>
+    <td>top</td><td><code>number</code></td>
+    </tr>  </tbody>
+</table>
 
-#### Chart.propTypes : <code>Object</code>
-Prop types.
+<a name="Components.module_Chart..ChartDataSet"></a>
 
-**Kind**: static property of [<code>Chart</code>](#Components.module_Chart..Chart)  
-<a name="Components.module_Chart..Chart.defaultProps"></a>
+### Chart~ChartDataSet : <code>object</code>
+**Kind**: inner typedef of [<code>Chart</code>](#Components.module_Chart)  
+**Properties**
 
-#### Chart.defaultProps : <code>Object</code>
-Default props.
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>data</td><td><code>Array.&lt;{x: number, y: (number|undefined), xAxisLabel: (number|string|Date|undefined)}&gt;</code></td>
+    </tr><tr>
+    <td>[animate]</td><td><code>boolean</code> | <code>object</code></td>
+    </tr><tr>
+    <td>[chartType]</td><td><code>ChartTypeVariant</code></td>
+    </tr><tr>
+    <td>[fill]</td><td><code>string</code></td>
+    </tr><tr>
+    <td>[stroke]</td><td><code>string</code></td>
+    </tr><tr>
+    <td>[strokeWidth]</td><td><code>number</code></td>
+    </tr><tr>
+    <td>[strokeDasharray]</td><td><code>string</code></td>
+    </tr><tr>
+    <td>[themeColor]</td><td><code>string</code></td>
+    </tr><tr>
+    <td>[themeVariant]</td><td><code>string</code></td>
+    </tr><tr>
+    <td>id</td><td><code>string</code></td>
+    </tr><tr>
+    <td>[interpolation]</td><td><code>string</code></td>
+    </tr><tr>
+    <td>[style]</td><td><code>object</code></td>
+    </tr><tr>
+    <td>[isStacked]</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>[xAxisChartLabel]</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    </tr><tr>
+    <td>[yAxisChartLabel]</td><td><code>React.ReactNode</code> | <code>function</code></td>
+    </tr><tr>
+    <td>[xAxisUseDataSet]</td><td><code>boolean</code></td>
+    </tr><tr>
+    <td>[yAxisUseDataSet]</td><td><code>boolean</code></td>
+    </tr>  </tbody>
+</table>
 
-**Kind**: static property of [<code>Chart</code>](#Components.module_Chart..Chart)  
 <a name="Chart.module_ChartAxisLabel"></a>
 
 ## ChartAxisLabel
