@@ -86,7 +86,7 @@
     "@patternfly/react-table": "5.4.14",
     "@patternfly/react-tokens": "5.4.1",
     "@redhat-cloud-services/frontend-components": "5.2.3",
-    "@redhat-cloud-services/frontend-components-notifications": "4.1.1",
+    "@redhat-cloud-services/frontend-components-notifications": "4.1.14",
     "@redhat-cloud-services/frontend-components-utilities": "4.0.19",
     "axios": "^1.7.7",
     "classnames": "^2.5.1",
